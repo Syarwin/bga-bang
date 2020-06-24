@@ -1,257 +1,177 @@
 /**
  *------
  * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
- * bang implementation : © <Your name here> <Your email address here>
+ * Bang implementation : © <Your name here> <Your email address here>
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
  * -----
  *
- * bang.js
+ * Bang.js
  *
- * bang user interface script
- * 
+ * Bang user interface script
+ *
  * In this file, you are describing the logic of your user interface, in Javascript language.
  *
  */
 
-define([
-    "dojo","dojo/_base/declare",
-    "ebg/core/gamegui",
-    "ebg/counter"
-],
-function (dojo, declare) {
-    return declare("bgagame.bang", ebg.core.gamegui, {
-        constructor: function(){
-            console.log('bang constructor');
-              
-            // Here, you can init the global variables of your user interface
-            // Example:
-            // this.myGlobalValue = 0;
+//# sourceURL=santorini.js
+//@ sourceURL=santorini.js
+var isDebug = true;
+var debug = isDebug ? console.info.bind(window.console) : function () { };
+define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], function (dojo, declare) {
+  return declare("bgagame.bang", ebg.core.gamegui, {
 
-        },
-        
-        /*
-            setup:
-            
-            This method must set up the game user interface according to current game situation specified
-            in parameters.
-            
-            The method is called each time the game interface is displayed to a player, ie:
-            _ when the game starts
-            _ when a player refreshes the game page (F5)
-            
-            "gamedatas" argument contains all datas retrieved by your "getAllDatas" PHP method.
-        */
-        
-        setup: function( gamedatas )
-        {
-            console.log( "Starting game setup" );
-            
-            // Setting up player boards
-            for( var player_id in gamedatas.players )
-            {
-                var player = gamedatas.players[player_id];
-                         
-                // TODO: Setting up players boards if needed
-            }
-            
-            // TODO: Set up your game interface here, according to "gamedatas"
-            
- 
-            // Setup game notifications to handle (see "setupNotifications" method below)
-            this.setupNotifications();
+/*
+ * Constructor
+ */
+constructor: function () { },
 
-            console.log( "Ending game setup" );
-        },
-       
+/*
+ * Setup:
+ *  This method set up the game user interface according to current game situation specified in parameters
+ *  The method is called each time the game interface is displayed to a player, ie: when the game starts and when a player refreshes the game page (F5)
+ *
+ * Params :
+ *  - mixed gamedatas : contains all datas retrieved by the getAllDatas PHP method.
+ */
+setup: function (gamedatas) {
+  var _this = this;
+  debug('SETUP', gamedatas);
 
-        ///////////////////////////////////////////////////
-        //// Game & client states
-        
-        // onEnteringState: this method is called each time we are entering into a new game state.
-        //                  You can use this method to perform some user interface changes at this moment.
-        //
-        onEnteringState: function( stateName, args )
-        {
-            console.log( 'Entering state: '+stateName );
-            
-            switch( stateName )
-            {
-            
-            /* Example:
-            
-            case 'myGameState':
-            
-                // Show some HTML block at this game state
-                dojo.style( 'my_html_block_id', 'display', 'block' );
-                
-                break;
-           */
-           
-           
-            case 'dummmy':
-                break;
-            }
-        },
+  // Setup player's board
+  gamedatas.fplayers.forEach(function(player){
+//    dojo.place( _this.format_block( 'jstpl_player_panel', player) , 'overall_player_board_' + player.id );
+//    player.tiles.forEach(_this.addTile.bind(_this));
+  });
 
-        // onLeavingState: this method is called each time we are leaving a game state.
-        //                 You can use this method to perform some user interface changes at this moment.
-        //
-        onLeavingState: function( stateName )
-        {
-            console.log( 'Leaving state: '+stateName );
-            
-            switch( stateName )
-            {
-            
-            /* Example:
-            
-            case 'myGameState':
-            
-                // Hide the HTML block we are displaying only during this game state
-                dojo.style( 'my_html_block_id', 'display', 'none' );
-                
-                break;
-           */
-           
-           
-            case 'dummmy':
-                break;
-            }               
-        }, 
 
-        // onUpdateActionButtons: in this method you can manage "action buttons" that are displayed in the
-        //                        action status bar (ie: the HTML links in the status bar).
-        //        
-        onUpdateActionButtons: function( stateName, args )
-        {
-            console.log( 'onUpdateActionButtons: '+stateName );
-                      
-            if( this.isCurrentPlayerActive() )
-            {            
-                switch( stateName )
-                {
-/*               
-                 Example:
- 
-                 case 'myGameState':
-                    
-                    // Add 3 action buttons in the action status bar:
-                    
-                    this.addActionButton( 'button_1_id', _('Button 1 label'), 'onMyMethodToCall1' ); 
-                    this.addActionButton( 'button_2_id', _('Button 2 label'), 'onMyMethodToCall2' ); 
-                    this.addActionButton( 'button_3_id', _('Button 3 label'), 'onMyMethodToCall3' ); 
-                    break;
+  // Setup game notifications
+  this.setupNotifications();
+},
+
+
+
+/*
+ * onEnteringState:
+ * 	this method is called each time we are entering into a new game state.
+ * params:
+ *  - str stateName : name of the state we are entering
+ *  - mixed args : additional information
+ */
+onEnteringState: function (stateName, args) {
+  debug('Entering state: ' + stateName, args);
+
+  // Stop here if it's not the current player's turn for some states
+//  if (["playerBuild"].includes(stateName) && !this.isCurrentPlayerActive()) return;
+
+  // Call appropriate method
+  var methodName = "onEnteringState" + stateName.charAt(0).toUpperCase() + stateName.slice(1);
+  if (this[methodName] !== undefined)
+    this[methodName](args.args);
+},
+
+
+
+/*
+ * onLeavingState:
+ * 	this method is called each time we are leaving a game state.
+ *
+ * params:
+ *  - str stateName : name of the state we are leaving
+ */
+onLeavingState: function (stateName) {
+  debug('Leaving state: ' + stateName);
+  this.clearPossible();
+},
+
+
+/*
+ * onUpdateActionButtons:
+ * 	called by BGA framework before onEnteringState
+ *  in this method you can manage "action buttons" that are displayed in the action status bar (ie: the HTML links in the status bar).
+ */
+onUpdateActionButtons: function (stateName, args, suppressTimers) {
+  debug('Update action buttons: ' + stateName, args); // Make sure it the player's turn
+
+  if (!this.isCurrentPlayerActive())
+    return;
+
+/*
+  if (stateName == "confirmTurn") {
+    this.addActionButton('buttonConfirm', _('Confirm'), 'onClickConfirm', null, false, 'blue');
+    this.addActionButton('buttonCancel', _('Restart turn'), 'onClickCancel', null, false, 'gray');
+    if (!suppressTimers)
+      this.startActionTimer('buttonConfirm');
+  }
 */
-                }
-            }
-        },        
-
-        ///////////////////////////////////////////////////
-        //// Utility methods
-        
-        /*
-        
-            Here, you can defines some utility methods that you can use everywhere in your javascript
-            script.
-        
-        */
+},
 
 
-        ///////////////////////////////////////////////////
-        //// Player's action
-        
-        /*
-        
-            Here, you are defining methods to handle player's action (ex: results of mouse click on 
-            game objects).
-            
-            Most of the time, these methods:
-            _ check the action is possible at this game state.
-            _ make a call to the game server
-        
-        */
-        
-        /* Example:
-        
-        onMyMethodToCall1: function( evt )
-        {
-            console.log( 'onMyMethodToCall1' );
-            
-            // Preventing default browser reaction
-            dojo.stopEvent( evt );
 
-            // Check that this action is possible (see "possibleactions" in states.inc.php)
-            if( ! this.checkAction( 'myAction' ) )
-            {   return; }
 
-            this.ajaxcall( "/bang/bang/myAction.html", { 
-                                                                    lock: true, 
-                                                                    myArgument1: arg1, 
-                                                                    myArgument2: arg2,
-                                                                    ...
-                                                                 }, 
-                         this, function( result ) {
-                            
-                            // What to do after the server call if it succeeded
-                            // (most of the time: nothing)
-                            
-                         }, function( is_error) {
 
-                            // What to do after the server call in anyway (success or failure)
-                            // (most of the time: nothing)
+////////////////////////////////
+////////////////////////////////
+/////////    Utils    //////////
+////////////////////////////////
+////////////////////////////////
 
-                         } );        
-        },        
-        
-        */
 
-        
-        ///////////////////////////////////////////////////
-        //// Reaction to cometD notifications
+/*
+ * clearPossible:	clear every clickable space
+ */
+clearPossible: function clearPossible() {
+  this.removeActionButtons();
+  this.onUpdateActionButtons(this.gamedatas.gamestate.name, this.gamedatas.gamestate.args);
+},
 
-        /*
-            setupNotifications:
-            
-            In this method, you associate each of your game notifications with your local method to handle it.
-            
-            Note: game notification names correspond to "notifyAllPlayers" and "notifyPlayer" calls in
-                  your bang.game.php file.
-        
-        */
-        setupNotifications: function()
-        {
-            console.log( 'notifications subscriptions setup' );
-            
-            // TODO: here, associate your game notifications with local methods
-            
-            // Example 1: standard notification handling
-            // dojo.subscribe( 'cardPlayed', this, "notif_cardPlayed" );
-            
-            // Example 2: standard notification handling + tell the user interface to wait
-            //            during 3 seconds after calling the method in order to let the players
-            //            see what is happening in the game.
-            // dojo.subscribe( 'cardPlayed', this, "notif_cardPlayed" );
-            // this.notifqueue.setSynchronous( 'cardPlayed', 3000 );
-            // 
-        },  
-        
-        // TODO: from this point and below, you can write your game notifications handling methods
-        
-        /*
-        Example:
-        
-        notif_cardPlayed: function( notif )
-        {
-            console.log( 'notif_cardPlayed' );
-            console.log( notif );
-            
-            // Note: notif.args contains the arguments specified during you "notifyAllPlayers" / "notifyPlayer" PHP call
-            
-            // TODO: play the card in the user interface.
-        },    
-        
-        */
-   });             
+
+/*
+ * takeAction: default AJAX call with locked interface
+ */
+takeAction: function (action, data, callback) {
+  data = data || {};
+  data.lock = true;
+  callback = callback || function (res) { };
+  this.ajaxcall("/bang/bang/" + action + ".html", data, this, callback);
+},
+
+
+/*
+ * slideTemporary: a wrapper of slideTemporaryObject using Promise
+ */
+slideTemporary: function (template, data, container, sourceId, targetId, duration, delay) {
+  var _this = this;
+  return new Promise(function (resolve, reject) {
+    var animation = _this.slideTemporaryObject(_this.format_block(template, data), container, sourceId, targetId, duration, delay);
+    setTimeout(function(){
+      resolve();
+    }, duration + delay)
+  });
+},
+
+
+///////////////////////////////////////////////////
+//////   Reaction to cometD notifications   ///////
+///////////////////////////////////////////////////
+
+/*
+ * setupNotifications:
+ *  In this method, you associate each of your game notifications with your local method to handle it.
+ *	Note: game notification names correspond to "notifyAllPlayers" and "notifyPlayer" in the santorini.game.php file.
+ */
+setupNotifications: function () {
+  var notifs = [
+//    ['build', 1000],
+  ];
+
+  var _this = this;
+  notifs.forEach(function (notif) {
+    dojo.subscribe(notif[0], _this, "notif_" + notif[0]);
+    _this.notifqueue.setSynchronous(notif[0], notif[1]);
+  });
+}
+
+   });
 });

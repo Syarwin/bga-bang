@@ -7,7 +7,7 @@
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
  * -----
- * 
+ *
  * states.inc.php
  *
  * bang game states description
@@ -49,63 +49,83 @@
 
 //    !! It is not a good idea to modify this file when a game is running !!
 
- 
-$machinestates = array(
 
-    // The initial state. Please do not modify.
-    1 => array(
-        "name" => "gameSetup",
-        "description" => "",
-        "type" => "manager",
-        "action" => "stGameSetup",
-        "transitions" => array( "" => 2 )
-    ),
-    
-    // Note: ID=2 => your first state
+$machinestates = [
+  /*
+   * BGA framework initial state. Do not modify.
+   */
+  ST_GAME_SETUP => [
+    'name' => 'gameSetup',
+    'description' => '',
+    'type' => 'manager',
+    'action' => 'stGameSetup',
+    'transitions' => [
+      '' => ST_NEXT_PLAYER,
+    ],
+  ],
 
-    2 => array(
-    		"name" => "playerTurn",
-    		"description" => clienttranslate('${actplayer} must play a card or pass'),
-    		"descriptionmyturn" => clienttranslate('${you} must play a card or pass'),
-    		"type" => "activeplayer",
-    		"possibleactions" => array( "playCard", "pass" ),
-    		"transitions" => array( "playCard" => 2, "pass" => 2 )
-    ),
-    
-/*
-    Examples:
-    
-    2 => array(
-        "name" => "nextPlayer",
-        "description" => '',
-        "type" => "game",
-        "action" => "stNextPlayer",
-        "updateGameProgression" => true,   
-        "transitions" => array( "endGame" => 99, "nextPlayer" => 10 )
-    ),
-    
-    10 => array(
-        "name" => "playerTurn",
-        "description" => clienttranslate('${actplayer} must play a card or pass'),
-        "descriptionmyturn" => clienttranslate('${you} must play a card or pass'),
-        "type" => "activeplayer",
-        "possibleactions" => array( "playCard", "pass" ),
-        "transitions" => array( "playCard" => 2, "pass" => 2 )
-    ), 
 
-*/    
-   
-    // Final state.
-    // Please do not modify.
-    99 => array(
-        "name" => "gameEnd",
-        "description" => clienttranslate("End of game"),
-        "type" => "manager",
-        "action" => "stGameEnd",
-        "args" => "argGameEnd"
-    )
+  ST_NEXT_PLAYER => [
+    'name' => 'nextPlayer',
+    'description' => '',
+    'type' => 'game',
+    'action' => 'stNextPlayer',
+    'transitions' => [
+      'next' => ST_NEXT_PLAYER,
+      'start' => ST_START_OF_TURN,
+      'endgame' => ST_GAME_END,
+    ],
+    'updateGameProgression' => true,
+  ],
 
-);
+  ST_START_OF_TURN => [
+    'name' => 'startOfTurn',
+    'description' => '',
+    'type' => 'game',
+    'action' => 'stStartOfTurn',
+    'transitions' => [
+      'build'  => ST_BUILD,
+      'endgame' => ST_GAME_END,
+    ],
+  ],
 
 
 
+  ST_PRE_END_OF_TURN => [
+    'name' => 'confirmTurn',
+    'description' => clienttranslate('${actplayer} must confirm or restart their turn'),
+    'descriptionmyturn' => clienttranslate('${you} must confirm or restart your turn'),
+    'type' => 'activeplayer',
+    'possibleactions' => ['confirm','cancel'],
+    'transitions' => [
+      'zombiePass' => ST_END_OF_TURN,
+      'endturn'    => ST_END_OF_TURN,
+      'confirm'    => ST_END_OF_TURN,
+      'cancel'     => ST_START_OF_TURN,
+    ],
+  ],
+
+
+  ST_END_OF_TURN => [
+    'name' => 'endOfTurn',
+    'description' => '',
+    'type' => 'game',
+    'action' => 'stEndOfTurn',
+    'transitions' => [
+      'next' => ST_NEXT_PLAYER,
+      'endgame' => ST_GAME_END,
+    ],
+  ],
+
+  /*
+   * BGA framework final state. Do not modify.
+   */
+  ST_GAME_END => [
+    'name' => 'gameEnd',
+    'description' => clienttranslate('End of game'),
+    'type' => 'manager',
+    'action' => 'stGameEnd',
+    'args' => 'argGameEnd'
+  ]
+
+];
