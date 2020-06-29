@@ -36,8 +36,7 @@ class BangPlayerManager extends APP_GameClass
 
 
   /*
-   * powerClasses : for each power Id, the corresponding class name
-   *  (see also constant.inc.php)
+   * characterClasses : for each character Id, the corresponding class name
    */
   public static $classes = [
     LUCKY_DUKE => 'LuckyDuke',

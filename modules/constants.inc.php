@@ -38,6 +38,34 @@ define('FISTFUL_OF_CARDS', 3);
 
 
 /*
+ * Cards
+ */
+ define('BROWN', 0);
+ define('BLUE', 1);
+
+
+define('CARD_BANG', 0);
+define('CARD_GATLING', 1);
+define('CARD_PUNCH', 2);
+define('CARD_SPRINGFIELD', 3);
+define('CARD_CANNON', 4);
+define('CARD_INDIANS', 5);
+define('CARD_DUEL', 6);
+define('CARD_MISSED', 7);
+define('CARD_DODGE', 8);
+define('CARD_BEER', 9);
+define('CARD_WHISKY', 10);
+define('CARD_TEQUILA', 11);
+define('CARD_SALOON', 12);
+define('CARD_CAT_BALOU', 13);
+define('CARD_BRAWL', 14);
+define('CARD_RAG_TIME', 15);
+define('ARD_STAGECOACH', 16);
+define('CARD_WELLS_FARGO', 17);
+define('CARD_GENERAL_STORE', 18);
+
+
+/*
  * Characters
  */
 define('LUCKY_DUKE', 0);

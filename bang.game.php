@@ -18,10 +18,6 @@
 
 
 require_once( APP_GAMEMODULE_PATH.'module/table/table.game.php' );
-require_once('modules/constants.inc.php');
-require_once("modules/BangCards.class.php");
-require_once("modules/BangLog.class.php");
-require_once("modules/BangPlayerManager.class.php");
 
 
 class bang extends Table
@@ -37,7 +33,7 @@ class bang extends Table
 
     // Initialize logger, board and cards
     $this->log   = new BangLog($this);
-    $this->cards = new BangCards($this);
+    $this->cards = new BangCardManager($this);
     $this->playerManager = new BangPlayerManager($this);
   }
 
