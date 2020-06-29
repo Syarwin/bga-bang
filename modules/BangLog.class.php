@@ -73,14 +73,13 @@ class BangLog extends APP_GameClass
    * insert: add a new log entry
    * params:
    *   - $playerId: the player who is making the action
-   *   - $pieceId : the piece whose is making the action
+   *   - $cardId : the card whose is making the action
    *   - string $action : the name of the action
    *   - array $args : action arguments (eg space)
    */
-  public function insert($playerId, $pieceId, $action, $args = [])
+  public function insert($playerId, $cardId, $action, $args = [])
   {
     $playerId = $playerId == -1 ? $this->game->getActivePlayerId() : $playerId;
-    $moveId = self::getUniqueValueFromDB("SELECT `global_value` FROM `global` WHERE `global_id` = 3");
     $round = $this->game->getGameStateValue("currentRound");
 
 /*
@@ -108,7 +107,7 @@ class BangLog extends APP_GameClass
 
     $actionArgs = json_encode($args);
 
-    self::DbQuery("INSERT INTO log (`round`, `move_id`, `player_id`, `piece_id`, `action`, `action_arg`) VALUES ('$round', '$moveId', '$playerId', '$pieceId', '$action', '$actionArgs')");
+    self::DbQuery("INSERT INTO log (`round`, `player_id`, `card_id`, `action`, `action_arg`) VALUES ('$round', '$playerId', '$cardId', '$action', '$actionArgs')");
   }
 
 
@@ -119,6 +118,15 @@ class BangLog extends APP_GameClass
   public function addAction($action, $args = [])
   {
     $this->insert(-1, 0, $action, $args);
+  }
+
+
+  /*
+   * starTurn: logged whenever a player start its turn, very useful to fetch last actions
+   */
+  public function startTurn()
+  {
+    $this->insert(-1, 0, 'startTurn');
   }
 
 

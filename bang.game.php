@@ -36,9 +36,9 @@ class bang extends Table
     ]);
 
     // Initialize logger, board and cards
-    $this->log   = new KingdomBuilderLog($this);
-    $this->cards = new KingdomBuilderCards($this);
-    $this->playerManager = new KingdomBuilderPlayerManager($this);
+    $this->log   = new BangLog($this);
+    $this->cards = new BangCards($this);
+    $this->playerManager = new BangPlayerManager($this);
   }
 
   protected function getGameName()
@@ -58,7 +58,7 @@ class bang extends Table
   {
 		// Initialize board and cards
 //    $optionSetup = intval(self::getGameStateValue('optionSetup'));
-    $this->cards->setupNewGame($players, $optionSetup);
+    $this->cards->setupNewGame($players, 0); //, $optionSetup);
 
     // Initialize players
     $this->playerManager->setupNewGame($players);

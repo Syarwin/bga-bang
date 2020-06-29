@@ -84,24 +84,22 @@ $machinestates = [
     'type' => 'game',
     'action' => 'stStartOfTurn',
     'transitions' => [
-      'build'  => ST_BUILD,
+      'build'  => ST_PLAY_CARD,
       'endgame' => ST_GAME_END,
     ],
   ],
 
 
 
-  ST_PRE_END_OF_TURN => [
+  ST_PLAY_CARD => [
     'name' => 'confirmTurn',
-    'description' => clienttranslate('${actplayer} must confirm or restart their turn'),
-    'descriptionmyturn' => clienttranslate('${you} must confirm or restart your turn'),
+    'description' => clienttranslate('${actplayer} can play a card'),
+    'descriptionmyturn' => clienttranslate('${you} can play a card'),
     'type' => 'activeplayer',
-    'possibleactions' => ['confirm','cancel'],
+    'possibleactions' => ['play','skip'],
     'transitions' => [
       'zombiePass' => ST_END_OF_TURN,
       'endturn'    => ST_END_OF_TURN,
-      'confirm'    => ST_END_OF_TURN,
-      'cancel'     => ST_START_OF_TURN,
     ],
   ],
 

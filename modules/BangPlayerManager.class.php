@@ -1,7 +1,7 @@
 <?php
 
 /*
- * KingdomBuilderPlayerManager: all utility functions concerning players
+ * BangPlayerManager: all utility functions concerning players
  */
 
 require_once('BangPlayer.class.php');
@@ -33,6 +33,45 @@ class BangPlayerManager extends APP_GameClass
       $player->setupNewGame();
     }
   }
+
+
+  /*
+   * powerClasses : for each power Id, the corresponding class name
+   *  (see also constant.inc.php)
+   */
+  public static $classes = [
+    LUCKY_DUKE => 'LuckyDuke',
+    EL_GRINGO => 'ElGringo',
+    SID_KETCHUM => 'SidKetchum',
+    BART_CASSIDY => 'BartCassidy',
+    JOURDONNAIS => 'Jourdonnais',
+    PAUL_REGRET => 'PauLRegret',
+    BLACK_JACK => 'BlackJack',
+    PEDRO_RAMIREZ => 'PedroRamirez',
+    SUZY_LAFAYETTE => 'SuzyLafayette',
+    KIT_CARLSON => 'KitCarlson',
+    VULTURE_SAM => 'VultureSam',
+    JESSE_JONES => 'JesseJones',
+    CALAMITY_JANET => 'CalamityJanet',
+    SLAB_THE_KILLER => 'SlabTheKiller',
+    WILLY_THE_KID => 'WillyTheKid',
+    ROSE_DOOLAN => 'RoseDoolan',
+    MOLLY_STARK => 'MollyStark',
+    APACHE_KID => 'ApacheKid',
+    ELENA_FUENTE => 'ElenaFuente',
+    TEQUILA_JOE => 'TequilaJoe',
+    VERA_CUSTER => 'VeraCuster',
+    BILL_NOFACE => 'BillNoface',
+    HERB_HUNTER => 'HerbHunter',
+    PIXIE_PETE => 'PixiePete',
+    SEAN_MALLORY => 'SeanMallory',
+    PAT_BRENNAN => 'PatBrennan',
+    JOSE_DELGADO => 'JoseDelgado',
+    CHUCK_WENGAM => 'ChuckWengam',
+    BELLE_STAR => 'BelleStar',
+    DOC_HOLYDAY => 'DocHolyday',
+    GREG_DIGGER => 'GregDigger',
+  ];
 
 
   /*

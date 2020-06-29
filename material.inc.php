@@ -18,3 +18,14 @@
  * are available everywhere in your game logic code.
  *
  */
+
+
+require_once("modules/Utils.class.php");
+require_once("modules/BangLog.class.php");
+require_once("modules/BangCards.class.php");
+require_once("modules/BangPlayer.class.php");
+require_once("modules/BangPlayerManager.class.php");
+require_once("modules/BangCharacter.class.php");
+foreach (BangPlayerManager::$classes as $className) {
+  require_once("modules/characters/$className.class.php");
+}

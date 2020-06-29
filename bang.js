@@ -15,8 +15,8 @@
  *
  */
 
-//# sourceURL=santorini.js
-//@ sourceURL=santorini.js
+//# sourceURL=bang.js
+//@ sourceURL=bang.js
 var isDebug = true;
 var debug = isDebug ? console.info.bind(window.console) : function () { };
 define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], function (dojo, declare) {

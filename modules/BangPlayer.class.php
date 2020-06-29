@@ -13,6 +13,8 @@ class BangPlayer extends APP_GameClass
   private $eliminated = false;
   private $zombie = false;
 
+  public $character;
+
   public function __construct($game, $row)
   {
     $this->game = $game;
@@ -46,4 +48,19 @@ class BangPlayer extends APP_GameClass
   public function getColor(){ return $this->color; }
   public function isEliminated(){ return $this->eliminated; }
   public function isZombie(){ return $this->zombie; }
+
+  public function getUiData($currentPlayerId = null)
+  {
+    return [
+      'id'        => $this->id,
+      'no'        => $this->no,
+      'name'      => $this->name,
+      'color'     => $this->color,
+    ];
+  }
+
+  public function startOfTurn()
+  {
+
+  }
 }
