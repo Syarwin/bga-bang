@@ -7,7 +7,7 @@ class YoulGrinner extends BangCharacter {
     $this->id    = YOUL_GRINNER;
     $this->name  = clienttranslate('Youl Grinner');
     $this->text  = [
-      clienttranslate("Before drawing, players with more hand cards than him must give him one card of their choice."),
+      clienttranslate("Before drawing, players with more hand cards than him must give him one card of their choice. "),
 
     ];
     $this->bullets = 4;

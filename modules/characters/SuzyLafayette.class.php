@@ -7,7 +7,7 @@ class SuzyLafayette extends BangCharacter {
     $this->id    = SUZY_LAFAYETTE;
     $this->name  = clienttranslate('Suzy Lafayette');
     $this->text  = [
-      clienttranslate("As soon as she has no cards in her hand, she draws a card from the draw pile."),
+      clienttranslate("As soon as she has no cards in her hand, she draws a card from the draw pile. "),
 
     ];
     $this->bullets = 4;  

@@ -7,7 +7,7 @@ class PorterRockwell extends BangCharacter {
     $this->id    = PORTER_ROCKWELL;
     $this->name  = clienttranslate('Porter Rockwell');
     $this->text  = [
-      clienttranslate("Plays/discards BANG! that can reach any other player."),
+      clienttranslate("Plays/discards BANG! that can reach any other player"),
 
     ];
     $this->bullets = 4;

@@ -7,7 +7,7 @@ class SeanMallory extends BangCharacter {
     $this->id    = SEAN_MALLORY;
     $this->name  = clienttranslate('Sean Mallory');
     $this->text  = [
-      clienttranslate("He may hold in his hand up to 10 cards."),
+      clienttranslate("He may hold in his hand up to 10 cards. "),
 
     ];
     $this->bullets = 3;

@@ -7,7 +7,7 @@ class TerenKill extends BangCharacter {
     $this->id    = TEREN_KILL;
     $this->name  = clienttranslate('Teren Kill');
     $this->text  = [
-      clienttranslate("Each time he would be eliminated 'draw!': if it is not Spades, Teren stays at 1 life point, and draws 1 card."),
+      clienttranslate("Each time he would be eliminated 'draw!': if it is not Spades, Teren stays at 1 life point, and draws 1 card. "),
 
     ];
     $this->bullets = 3;
