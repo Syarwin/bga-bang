@@ -7,7 +7,7 @@ class JoseyBassett extends BangCharacter {
     $this->id    = JOSEY_BASSETT;
     $this->name  = clienttranslate('Josey Bassett');
     $this->text  = [
-      clienttranslate("Draw 2 cards at end of phase 2."),
+      clienttranslate("Draw 2 cards at end of phase 2"),
 
     ];
     $this->bullets = 4;

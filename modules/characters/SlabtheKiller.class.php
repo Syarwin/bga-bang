@@ -7,7 +7,7 @@ class SlabtheKiller extends BangCharacter {
     $this->id    = SLAB_THE_KILLER;
     $this->name  = clienttranslate('Slab the Killer');
     $this->text  = [
-      clienttranslate("Players trying to cancel his BANG! cards need to play 2 Missed!"),
+      clienttranslate("Players trying to cancel his BANG! cards need to play 2 Missed! "),
 
     ];
     $this->bullets = 4;  

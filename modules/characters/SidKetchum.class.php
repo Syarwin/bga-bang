@@ -7,7 +7,7 @@ class SidKetchum extends BangCharacter {
     $this->id    = SID_KETCHUM;
     $this->name  = clienttranslate('Sid Ketchum');
     $this->text  = [
-      clienttranslate("He may discard 2 cards to regain 1 life point."),
+      clienttranslate("He may discard 2 cards to regain 1 life point"),
 
     ];
     $this->bullets = 4;  

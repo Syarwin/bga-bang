@@ -1,13 +1,13 @@
 <?php
 
-class QueenAnne extends BangCharacter {
+class MaggieMae extends BangCharacter {
   public function __construct($game, $playerId)
   {
     parent::__construct($game, $playerId);
-    $this->id    = QUEEN_ANNE;
-    $this->name  = clienttranslate('Queen Anne');
+    $this->id    = MAGGIE_MAE;
+    $this->name  = clienttranslate('Maggie Mae');
     $this->text  = [
-      clienttranslate("Discard card from a player seen within distance 2."),
+      clienttranslate("Take 1 card of that player's cards in play"),
 
     ];
     $this->bullets = 4;
