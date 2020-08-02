@@ -19,7 +19,7 @@
  *
  */
 
-
+require_once("modules/constants.inc.php");
 require_once("modules/Utils.class.php");
 require_once("modules/BangLog.class.php");
 require_once("modules/BangCardManager.class.php");

@@ -1,9 +1,9 @@
 <?php
 
 class BillNoface extends BangCharacter {
-  public function __construct($game, $playerId)
+  public function __construct()
   {
-    parent::__construct($game, $playerId);
+    parent::__construct();
     $this->id    = BILL_NOFACE;
     $this->name  = clienttranslate('Bill Noface');
     $this->text  = [

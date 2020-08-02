@@ -1,9 +1,9 @@
 <?php
 
 class SlabtheKiller extends BangCharacter {
-  public function __construct($game, $playerId)
+  public function __construct()
   {
-    parent::__construct($game, $playerId);
+    parent::__construct();
     $this->id    = SLAB_THE_KILLER;
     $this->name  = clienttranslate('Slab the Killer');
     $this->text  = [

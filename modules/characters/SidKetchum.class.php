@@ -1,9 +1,9 @@
 <?php
 
 class SidKetchum extends BangCharacter {
-  public function __construct($game, $playerId)
+  public function __construct()
   {
-    parent::__construct($game, $playerId);
+    parent::__construct();
     $this->id    = SID_KETCHUM;
     $this->name  = clienttranslate('Sid Ketchum');
     $this->text  = [

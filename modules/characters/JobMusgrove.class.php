@@ -1,9 +1,9 @@
 <?php
 
 class JobMusgrove extends BangCharacter {
-  public function __construct($game, $playerId)
+  public function __construct()
   {
-    parent::__construct($game, $playerId);
+    parent::__construct();
     $this->id    = JOB_MUSGROVE;
     $this->name  = clienttranslate('Job Musgrove');
     $this->text  = [

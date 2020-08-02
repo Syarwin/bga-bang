@@ -24,18 +24,30 @@
 
 class action_bang extends APP_GameAction
 {
-  // Constructor: please do not modify
-  public function __default()
-  {
-    if( self::isArg( 'notifwindow') )
-    {
-      $this->view = "common_notifwindow";
-      $this->viewArgs['table'] = self::getArg( "table", AT_posint, true );
-    }
-    else
-    {
-      $this->view = "bang_bang";
-      self::trace( "Complete reinitialization of board game" );
-    }
-  } 
+	// Constructor: please do not modify
+	public function __default()
+	{
+		if( self::isArg( 'notifwindow') ) {
+			$this->view = "common_notifwindow";
+			$this->viewArgs['table'] = self::getArg( "table", AT_posint, true );
+		}
+		else {
+			$this->view = "bang_bang";
+			self::trace( "Complete reinitialization of board game" );
+		}
+	} 
+	
+	public function playCard() {
+		self::setAjaxMode();		 
+		$id = self::getArg( "id", AT_posint, true );				
+		$result = $this->game->playCard( $id );
+		self::ajaxResponse( );
+	}
+	
+	public function selectOption() {
+		self::setAjaxMode();		 
+		$id = self::getArg( "id", AT_posint, true );				
+		$result = $this->game->selectOption( $id );
+		self::ajaxResponse( );
+	}
 }

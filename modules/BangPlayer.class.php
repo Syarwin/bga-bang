@@ -5,7 +5,6 @@
  */
 class BangPlayer extends APP_GameClass
 {
-  private $game;
   private $id;
   private $no; // natural order
   private $name;
@@ -15,9 +14,8 @@ class BangPlayer extends APP_GameClass
 
   public $character;
 
-  public function __construct($game, $row)
+  public function __construct($row)
   {
-    $this->game = $game;
     $this->id = (int) $row['id'];
     $this->no = (int) $row['no'];
     $this->name = $row['name'];

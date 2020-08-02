@@ -4,14 +4,21 @@
  * State constants
  */
 define('ST_GAME_SETUP', 1);
-
 define('ST_NEXT_PLAYER', 3);
 define('ST_START_OF_TURN', 4);
 define('ST_PLAY_CARD', 5);
-
-define('ST_END_OF_TURN', 7);
-
+define('ST_AWAIT_REACTION',6);
+define('ST_REACT', 7);
+define('ST_END_OF_TURN', 8);
 define('ST_GAME_END', 99);
+
+
+/*
+ * Game States(see sql)
+ */
+define('PLAY_CARD',0);
+define('CHOOSE_PLAYER',1);
+define('WAIT_REACTION',2);
 
 /*
  * Options constants
@@ -44,25 +51,45 @@ define('FISTFUL_OF_CARDS', 3);
  define('BLUE', 1);
 
 
-define('CARD_BANG', 0);
-define('CARD_GATLING', 1);
-define('CARD_PUNCH', 2);
-define('CARD_SPRINGFIELD', 3);
-define('CARD_CANNON', 4);
-define('CARD_INDIANS', 5);
-define('CARD_DUEL', 6);
-define('CARD_MISSED', 7);
-define('CARD_DODGE', 8);
+define('CARD_SCHOFIELD', 0);
+define('CARD_VOLCANIC', 1);
+define('CARD_REMINGTON', 2);
+define('CARD_REV_CARABINE', 3);
+define('CARD_WINCHESTER', 4);
+define('CARD_BANG', 5);
+define('CARD_MISSED', 6);
+define('CARD_STAGECOACH', 7);
+define('CARD_WELLS_FARGO', 8);
 define('CARD_BEER', 9);
-define('CARD_WHISKY', 10);
-define('CARD_TEQUILA', 11);
-define('CARD_SALOON', 12);
-define('CARD_CAT_BALOU', 13);
-define('CARD_BRAWL', 14);
-define('CARD_RAG_TIME', 15);
-define('ARD_STAGECOACH', 16);
-define('CARD_WELLS_FARGO', 17);
-define('CARD_GENERAL_STORE', 18);
+define('CARD_GATLING', 10);
+define('CARD_PANIC', 11);
+define('CARD_CAT_BALOU', 12);
+define('CARD_SALOON', 13);
+define('CARD_DUEL', 14);
+define('CARD_GENERAL_STORE', 15);
+define('CARD_INDIANS', 16);
+define('CARD_JAIL', 17);
+define('CARD_DYNAMITE', 18);
+define('CARD_BARREL', 19);
+define('CARD_SCOPE', 20);
+define('CARD_MUSTANG', 21);
+
+define('CARD_PUNCH', 22);
+define('CARD_SPRINGFIELD', 23);
+define('CARD_CANNON', 24);
+define('CARD_DODGE', 25);
+define('CARD_WHISKY', 26);
+define('CARD_TEQUILA', 27);
+define('CARD_BRAWL', 28);
+define('CARD_RAG_TIME', 29);
+
+/*
+ * Roles
+ */
+define('SHERIFF', 0);
+define('DEPUTY', 1);
+define('OUTLAW',2);
+define('RENEGADE',3);
 
 
 /*
@@ -100,3 +127,23 @@ define('CHUCK_WENGAM', 27);
 define('BELLE_STAR', 28);
 define('DOC_HOLYDAY', 29);
 define('GREG_DIGGER', 30);
+
+/*
+ * Constants for card symbols
+ */
+define('BASIC_ATTACK', 0);
+define('DRAW',1);
+define('DEFENSIVE',2);
+define('DISCARD',3);
+define('LIFE_POINT_MODIFIER',4);
+define('RANGE_INCREASE', 5);
+define('RANGE_DECREASE', 6);
+define('OTHER',7);
+
+define('NONE',0);
+define('INRANGE',1);
+define('SPECIFIC_RANGE',2);
+define('ALL_OTHER',3);
+define('ALL',4);
+define('ANY',5);
+ 
