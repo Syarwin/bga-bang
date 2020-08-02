@@ -1,9 +1,9 @@
 <?php
 
 class CardCatBalou extends BangCard {
-  public function __construct()
+  public function __construct($game, $playerId)
   {
-    parent::__construct();
+    parent::__construct($game, $playerId);
     $this->id    = CARD_CAT_BALOU;
     $this->name  = clienttranslate('Cat Balou');
     $this->text  = "Chosen Player discards a Card of your choice.";

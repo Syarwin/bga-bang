@@ -1,9 +1,9 @@
 <?php
 
 class CardPanic extends BangCard {
-  public function __construct()
+  public function __construct($game, $playerId)
   {
-    parent::__construct();
+    parent::__construct($game, $playerId);
     $this->id    = CARD_PANIC;
     $this->name  = clienttranslate('Panic!');
     $this->text  = "Draw 1 card from the deck or a player within range 1.";

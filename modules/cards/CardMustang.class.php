@@ -1,9 +1,9 @@
 <?php
 
 class CardMustang extends BangCard {
-  public function __construct()
+  public function __construct($game, $playerId)
   {
-    parent::__construct();
+    parent::__construct($game, $playerId);
     $this->id    = CARD_MUSTANG;
     $this->name  = clienttranslate('Mustang');
     $this->text  = "Others view you at distance +1";

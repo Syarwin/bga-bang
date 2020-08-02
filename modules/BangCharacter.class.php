@@ -5,14 +5,31 @@
  */
 class BangCharacter extends APP_GameClass
 {
+  private $game;
+  private $playerId;
+  
+  private $id;
+  private $name;
+  private $text;
+  private $expansion = BASE_GAME;
+  private $implemented = false;
+  private $bullets;
 
-  public function __construct()
+  public function __construct($game, $playerId)
   {
+    $this->game = $game;
+    $this->playerId = $playerId;
   }
 
-  public $name;
-  public $text;
-  public $expansion = BASE_GAME;
-  public $implemented = false;
-  public $bullets;
+  public function getUiData()
+	{
+		return [
+			'id'        => $this->id,
+			'name'      => $this->name,
+			'text'      => $this->text,
+			'bullets'   => $this->bullets,
+		];
+	}
+
+  public function getBullets(){ return $this->bullets; }
 }

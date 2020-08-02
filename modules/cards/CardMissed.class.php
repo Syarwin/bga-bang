@@ -1,9 +1,9 @@
 <?php
 
 class CardMissed extends BangCard {
-  public function __construct()
+  public function __construct($game, $playerId)
   {
-    parent::__construct();
+    parent::__construct($game, $playerId);
     $this->id    = CARD_MISSED;
     $this->name  = clienttranslate('Missed');
     $this->text  = "Discard to avoid an attack";

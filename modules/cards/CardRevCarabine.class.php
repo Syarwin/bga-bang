@@ -1,9 +1,9 @@
 <?php
 
 class CardRevCarabine extends BangCard {
-  public function __construct()
+  public function __construct($game, $playerId)
   {
-    parent::__construct();
+    parent::__construct($game, $playerId);
     $this->id    = CARD_REV_CARABINE;
     $this->name  = clienttranslate('Rev. Carabine');
     $this->text  = "Range: 4";

@@ -1,9 +1,9 @@
 <?php
 
 class KitCarlson extends BangCharacter {
-  public function __construct()
+  public function __construct($game, $playerId)
   {
-    parent::__construct();
+    parent::__construct($game, $playerId);
     $this->id    = KIT_CARLSON;
     $this->name  = clienttranslate('Kit Carlson');
     $this->text  = [

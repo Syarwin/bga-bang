@@ -1,9 +1,9 @@
 <?php
 
 class CardJail extends BangCard {
-  public function __construct()
+  public function __construct($game, $playerId)
   {
-    parent::__construct();
+    parent::__construct($game, $playerId);
     $this->id    = CARD_JAIL;
     $this->name  = clienttranslate('Jail');
     $this->text  = "Equip any player with this. At the start of that players turn reveal top card from the deck. If it''s not heart that player is skipped. Either way, the jail is discarded.";

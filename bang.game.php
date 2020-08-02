@@ -22,8 +22,8 @@ require_once( APP_GAMEMODULE_PATH.'module/table/table.game.php' );
 
 class bang extends Table
 {
-	public function __construct() {
-		parent::__construct();
+	public function __construct($game, $playerId) {
+		parent::__construct($game, $playerId);
 		self::initGameStateLabels([
 //      'optionSetup'  => OPTION_SETUP,
 			'currentRound' => 10,//CURRENT_ROUND,
@@ -31,9 +31,10 @@ class bang extends Table
 		]);
 
 		// Initialize logger, board and cards
-		$this->log   = new BangLog($this);
-		$this->cardManager = new BangCardManager($this);
-		$this->playerManager = new BangPlayerManager($this);
+		$this->log   			= new BangLog($this);
+		$this->cards 			= new BangCardManager($this);
+		$this->characters = new BangCharacterManager($this);
+		$this->players 		= new BangPlayerManager($this);
 	}
 
 	protected function getGameName() {
@@ -49,49 +50,20 @@ class bang extends Table
 	 *  - mixed $options
 	 */
 	protected function setupNewGame($players, $options = []) {
-		// Initialize board and cards
+		// Initialize cards
+		$this->cards->setupNewGame([BASE_GAME]);
 
-		$n = $this->cardManager->setupNewGame([BASE_GAME]);	
-		$deck = range(1,$n);
-		shuffle($deck);
-		$deck = [8,33,7,9,34,1,10,35,2,11,36,3,12,37,4,13,38,5,14,39,6,15,40];
-			// Initialize players
-			$this->playerManager->setupNewGame($players);
-		
-		$roles = array_slice(array(0,2,2,3,1,2,1),0,count($players));
-		shuffle($roles);
-		
-		$characters = range(0,15);
-		shuffle($characters);
-		$i = 0;
-		$values = array();
-		
-		// hand out characters, roles and cards
-		$sql = "INSERT INTO playerinfo(id, role, character_id, current_lp, max_lp) VALUES";
-		foreach($players as $id => $player) {
-			$char_id = $characters[$i];
-			$char_name = BangPlayerManager::$classes[$char_id];
-			$char  = new $char_name();
-			$role = $roles[$i];
-			$lp = $char->bullets;
-			if($role ==0) {
-				$lp++;
-				$sheriff = $id;
-			}
-			$values[] = "($id, $role, $char_id, $lp)";
-			$i++;			
-			$cards = array_splice($deck,0,$lp);
-			self::DbQuery("UPDATE cards SET card_position = $id, card_onHand=1 WHERE id IN (" . implode(",", $cards) . ")");
-		}
-		self::DbQuery("INSERT INTO playerinfo(id, role, character_id, max_hp) VALUES" . implode(",",$values));
-		$sql .= implode(",", $values);
+		// Initialize players
+		$this->players->setupNewGame($players);
 
-		self::DbQuery("INSERT INTO game(game_state, game_player, game_bangplayed) VALUES(0,$sheriff,0)");
-		// Active first player to play
-		
+// TODO : add some comments
+		$sheriff = $this->players->getSheriff()->getId();
+		self::DbQuery("INSERT INTO game(game_state, game_player, game_bangplayed) VALUES(0,{$sheriff},0)");
+
+		// Active first player to play = sheriff
 		self::setGameStateInitialValue('firstPlayer', $sheriff);
 		self::setGameStateInitialValue('currentRound', 0);
-		$this->gamestate->changeActivePlayer( $sheriff );
+		$this->gamestate->changeActivePlayer($sheriff);
 	}
 
 	/*
@@ -100,25 +72,23 @@ class bang extends Table
 	 *  The method is called each time the game interface is displayed to a player, ie: when the game starts and when a player refreshes the game page (F5)
 	 */
 	protected function getAllDatas() {
-		$result = array();		
 		$currentPlayerId = self::getCurrentPlayerId();
-		$result['active'] = self::getActivePlayerId();
-		$result['currentID'] = $currentPlayerId;
-		$result['players'] = BangPlayerManager::getUiData();
-		$result['deck'] = BangCardManager::getDeckCount();
-		$result['sheriff'] = BangPlayerManager::getSheriff();
-		$result['turn'] = BangPlayerManager::getPlayerTurn();
-		$result['hand'] = BangCardManager::getHand($currentPlayerId);
-		$result['cardsInPlay'] = BangCardManager::getCardsInPlay();
-		
-		$result['args'] = self::getObjectListFromDB("SELECT game_state, game_text msg, game_options, game_player, game_card card From game")[0]; 
+		$data = [
+			'players' 	 => $this->players->getUiData($currentPlayerId),
+			'cards' 		 => $this->cards->getUiData(),
+			'characters' => $this->characters->getUiData(),
+			'deck' 			 => $this->cards->getDeckCount(),
+//???		$result['turn'] = BangPlayerManager::getPlayerTurn();
+		];
+/*
+		$result['args'] = self::getObjectListFromDB("SELECT game_state, game_text msg, game_options, game_player, game_card card From game")[0];
 		$t = str_replace(";",",",$result['args']['game_options']);
 		if($result['args']['game_state']==1) {
 			$result['args']['targets'] = self::getCollectionFromDB("SELECT player_id, player_name name, player_color color FROM player WHERE player_id in ($t)");
-			$result['args']['count'] = count($result['args']['targets'])+1;			
+			$result['args']['count'] = count($result['args']['targets'])+1;
 		}
-		
-		return $result;
+*/
+		return $data;
 	}
 
 	/*
@@ -128,14 +98,13 @@ class bang extends Table
 	 */
 	public function getGameProgression() {
 		// TODO
-//    return count($this->board->getPlacedPieces()) / 100;
-		return 0.3;
+		return 10;
 	}
 
 
 //////////////////////////////////////////////////////////////////////////////
 //////////// Player actions
-//////////// 
+////////////
 	function playCard($id) {
 		// check for active cards
 		self::checkAction( 'play' );
@@ -153,7 +122,7 @@ class bang extends Table
 		}
 		if(isset($res['nextState'])) $this->gamestate->nextState( $res['nextState'] );
 	}
-	
+
 	function selectOption($id) {
 		$game = self::getObjectListFromDB("SELECT * FROM game")[0];
 		$card = BangCardManager::createCard($game['game_card']);
@@ -224,7 +193,7 @@ class bang extends Table
 		if($game['game_state'] == PLAY_CARD) {
 			$this->gamestate->changeActivePlayer( $game['game_player'] );
 			$this->gamestate->nextState( "finishedReaction" );
-		} else { //WAIT_REACTION			
+		} else { //WAIT_REACTION
 			$this->gamestate->changeActivePlayer( $game['game_target'] );
 			$this->gamestate->nextState( "awaitReaction" );
 		}

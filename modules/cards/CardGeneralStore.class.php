@@ -1,9 +1,9 @@
 <?php
 
 class CardGeneralStore extends BangCard {
-  public function __construct()
+  public function __construct($game, $playerId)
   {
-    parent::__construct();
+    parent::__construct($game, $playerId);
     $this->id    = CARD_GENERAL_STORE;
     $this->name  = clienttranslate('General Store');
     $this->text  = "Reveal as many cards as players left. Each player chooses one, starting with you";

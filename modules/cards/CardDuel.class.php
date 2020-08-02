@@ -1,9 +1,9 @@
 <?php
 
 class CardDuel extends BangCard {
-  public function __construct()
+  public function __construct($game, $playerId)
   {
-    parent::__construct();
+    parent::__construct($game, $playerId);
     $this->id    = CARD_DUEL;
     $this->name  = clienttranslate('Duel');
     $this->text  = "A target player discards a BANG! then you, etc. First player failing to discard a BANG! loses 1 life point.";

@@ -1,4 +1,5 @@
-<?php $gameinfos = array (
+<?php
+$gameinfos = [
   'designer' => 'Emiliano Sciarra',
   'artist' => 'Alex Pierangelini',
   'year' => 2002,
@@ -29,4 +30,5 @@
   'tags' =>  [2],
   'is_sandbox' => false,
   'turnControl' => 'simple',
-); ?>
+];
+?>

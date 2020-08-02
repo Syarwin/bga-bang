@@ -1,9 +1,9 @@
 <?php
 
 class CardBarrel extends BangCard {
-  public function __construct()
+  public function __construct($game, $playerId)
   {
-    parent::__construct();
+    parent::__construct($game, $playerId);
     $this->id    = CARD_BARREL;
     $this->name  = clienttranslate('Barrel');
     $this->text  = "Reveal top card from the deck when you're attacked. If it's a heart it's a miss.";

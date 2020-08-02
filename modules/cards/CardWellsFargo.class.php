@@ -1,9 +1,9 @@
 <?php
 
 class CardWellsFargo extends BangCard {
-  public function __construct()
+  public function __construct($game, $playerId)
   {
-    parent::__construct();
+    parent::__construct($game, $playerId);
     $this->id    = CARD_WELLS_FARGO;
     $this->name  = clienttranslate('Wells Fargo');
     $this->text  = "Draw 3 cards.";

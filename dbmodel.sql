@@ -19,48 +19,32 @@ CREATE TABLE IF NOT EXISTS `log` (
   PRIMARY KEY (`log_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
------------ type -------------------------
--- 1x: action
--- 2x: Equipment
--- 30: weapon
--- 10: bang
--- x1: evade
--- x2: rest
--- 99: character
------------ position ---------------------
---  >0: player id
--- -1: deck
--- -2: discard
--- -3: active
------------ value ---------------------
--- xC: Clovers
--- xS: Pikes
--- xD: Spades
--- xH: Hearts
-CREATE TABLE IF NOT EXISTS `cards` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `card_id` int NOT NULL,
-  `card_type` int NOT NULL,
-  `card_name` text NOT NULL,
-  `card_text` text NOT NULL,
-  `card_value` text NOT NULL,
-  `card_position` int NOT NULL, 
-  `card_onHand` tinyint NOT NULL,
-  PRIMARY KEY (`id`)
+
+-- see constants.inc.php --
+ALTER TABLE `player` ADD `player_role` INT(1) UNSIGNED NOT NULL;
+ALTER TABLE `player` ADD `player_bullets` INT(1) UNSIGNED NOT NULL;
+
+
+-- the deck of character : only usefull on the setup --
+CREATE TABLE IF NOT EXISTS `characters` (
+  `card_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `card_type` varchar(16) NOT NULL,
+  `card_type_arg` int(11) NOT NULL,
+  `card_location` varchar(16) NOT NULL,
+  `card_location_arg` int(11) NOT NULL,
+  PRIMARY KEY (`card_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
------------ roles ---------------------
--- 0: Sheriff
--- 1: Deputy
--- 2: Outlaw
--- 3: Renegade 
-CREATE TABLE IF NOT EXISTS `playerinfo` (
-  `id` int unsigned NOT NULL, 
-  `role` int NOT NULL,
-  `character_id` int NOT NULL,
-  `max_hp` int NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- the deck of cards --
+CREATE TABLE IF NOT EXISTS `cards` (
+  `card_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `card_type` varchar(16) NOT NULL,
+  `card_type_arg` int(11) NOT NULL,
+  `card_location` varchar(16) NOT NULL,
+  `card_location_arg` int(11) NOT NULL,
+  PRIMARY KEY (`card_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
 
 ----------- game table ----------------
 -- game_state: current state of the game, see below
@@ -75,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `playerinfo` (
 -- 2: wait for reaction
 CREATE TABLE IF NOT EXISTS `game` (
   `game_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `game_state` int NOT NULL, 
+  `game_state` int NOT NULL,
   `game_text` text,
   `game_options` text,
   `game_card` int,

@@ -13,8 +13,6 @@
  *
  */
 
-@import url(../../../css/csslayer.css); /* Note: you must not use any @import directive other than this one */
-
 .playarea {
 	width: 100%;
 	height:250px;
@@ -28,11 +26,11 @@
 .right { right:0px; }
 
 .center {
-	position:absolute; 
-	left:0px; 
-	top:0px; 
-	right:0px; 
-	bottom:0px; 
+	position:absolute;
+	left:0px;
+	top:0px;
+	right:0px;
+	bottom:0px;
 	margin:auto;
 }
 
@@ -42,8 +40,8 @@ h3 {
 
 .mrow {
 	display:flex;
-	flex-direction:row; 
-	flex-grow:1; 
+	flex-direction:row;
+	flex-grow:1;
 	align-items: center;
 	justify-content: space-evenly;
 }

@@ -1,9 +1,9 @@
 <?php
 
 class VultureSam extends BangCharacter {
-  public function __construct()
+  public function __construct($game, $playerId)
   {
-    parent::__construct();
+    parent::__construct($game, $playerId);
     $this->id    = VULTURE_SAM;
     $this->name  = clienttranslate('Vulture Sam');
     $this->text  = [

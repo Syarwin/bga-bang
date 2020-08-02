@@ -1,9 +1,9 @@
 <?php
 
 class LauraBillion extends BangCharacter {
-  public function __construct()
+  public function __construct($game, $playerId)
   {
-    parent::__construct();
+    parent::__construct($game, $playerId);
     $this->id    = LAURA_BILLION;
     $this->name  = clienttranslate('Laura Billion');
     $this->text  = [

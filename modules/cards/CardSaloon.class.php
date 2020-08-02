@@ -1,9 +1,9 @@
 <?php
 
 class CardSaloon extends BangCard {
-  public function __construct()
+  public function __construct($game, $playerId)
   {
-    parent::__construct();
+    parent::__construct($game, $playerId);
     $this->id    = CARD_SALOON;
     $this->name  = clienttranslate('Missed');
     $this->text  = "All players regain 1 life point.";

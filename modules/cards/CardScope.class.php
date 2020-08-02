@@ -1,9 +1,9 @@
 <?php
 
 class CardScope extends BangCard {
-  public function __construct()
+  public function __construct($game, $playerId)
   {
-    parent::__construct();
+    parent::__construct($game, $playerId);
     $this->id    = CARD_SCOPE;
     $this->name  = clienttranslate('Scope');
     $this->text  = "You view others at distance -1";

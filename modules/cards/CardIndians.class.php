@@ -1,9 +1,9 @@
 <?php
 
 class CardIndians extends BangCard {
-  public function __construct()
+  public function __construct($game, $playerId)
   {
-    parent::__construct();
+    parent::__construct($game, $playerId);
     $this->id    = CARD_INDIANS;
     $this->name  = clienttranslate('Indians!');
     $this->text  = "All other players discard a BANG! or lose 1 life point.";

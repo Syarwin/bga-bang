@@ -86,10 +86,10 @@ define('CARD_RAG_TIME', 29);
 /*
  * Roles
  */
-define('SHERIFF', 0);
-define('DEPUTY', 1);
-define('OUTLAW',2);
-define('RENEGADE',3);
+define('SHERIFF', 1);
+define('DEPUTY',  2);
+define('OUTLAW',  3);
+define('RENEGADE',4);
 
 
 /*
@@ -146,4 +146,3 @@ define('SPECIFIC_RANGE',2);
 define('ALL_OTHER',3);
 define('ALL',4);
 define('ANY',5);
- 

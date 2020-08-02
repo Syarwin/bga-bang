@@ -1,9 +1,9 @@
 <?php
 
 class CardWinchester extends BangCard {
-  public function __construct()
+  public function __construct($game, $playerId)
   {
-    parent::__construct();
+    parent::__construct($game, $playerId);
     $this->id    = CARD_WINCHESTER;
     $this->name  = clienttranslate('Winchester');
     $this->text  = "Range: 5";

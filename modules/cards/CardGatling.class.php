@@ -1,9 +1,9 @@
 <?php
 
 class CardGatling extends BangCard {
-  public function __construct()
+  public function __construct($game, $playerId)
   {
-    parent::__construct();
+    parent::__construct($game, $playerId);
     $this->id    = CARD_GATLING;
     $this->name  = clienttranslate('Gatling');
     $this->text  = "A Bang to al other players";

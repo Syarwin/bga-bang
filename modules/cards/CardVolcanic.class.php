@@ -1,9 +1,9 @@
 <?php
 
 class CardVolcanic extends BangCard {
-  public function __construct()
+  public function __construct($game, $playerId)
   {
-    parent::__construct();
+    parent::__construct($game, $playerId);
     $this->id    = CARD_VOLCANIC;
     $this->name  = clienttranslate('Volcanic');
     $this->text  = "Range: 1<br>You can play any number of BANG!";

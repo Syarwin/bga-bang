@@ -1,9 +1,9 @@
 <?php
 
 class JohnnyPope extends BangCharacter {
-  public function __construct()
+  public function __construct($game, $playerId)
   {
-    parent::__construct();
+    parent::__construct($game, $playerId);
     $this->id    = JOHNNY_POPE;
     $this->name  = clienttranslate('Johnny Pope');
     $this->text  = [
@@ -11,6 +11,6 @@ class JohnnyPope extends BangCharacter {
 
     ];
     $this->bullets = 4;
-    $this->expansion = ROBBERTS_ROOST;  
+    $this->expansion = ROBBERTS_ROOST;
   }
 }
