@@ -84,7 +84,7 @@ $machinestates = [
 		'type' => 'game',
 		'action' => 'stStartOfTurn',
 		'transitions' => [
-			'build'	=> ST_PLAY_CARD,
+			'play'	=> ST_PLAY_CARD,
 			'endgame' => ST_GAME_END,
 		],
 	],
@@ -92,27 +92,31 @@ $machinestates = [
 
 
 	ST_PLAY_CARD => [
-		'name' => 'confirmTurn',
+		'name' => 'playCard',
 		'description' => clienttranslate('${actplayer} can play a card'),
 		'descriptionmyturn' => clienttranslate('${you} can play a card'),
 		'type' => 'activeplayer',
+		'args' => 'argPlayCard',
 		'possibleactions' => ['play','skip'],
 		'transitions' => [
 			'zombiePass' => ST_END_OF_TURN,
 			'endturn'		=> ST_END_OF_TURN,
-			'awaitReaction' => ST_AWAIT_REACTION
+			'awaitReaction' => ST_AWAIT_REACTION,
 		],
 	],
-	
+
 	ST_AWAIT_REACTION => [
 		'name' => 'awaitReaction',
 		'description' => '',
 		'type' => 'game',
 		'action' => 'awaitReaction',
-		'updateGameProgression' => true,	 
-		'transitions' => ['awaitReaction' => ST_REACT, 'finishedReaction' => ST_PLAY_CARD]
+		'updateGameProgression' => true,
+		'transitions' => [
+			'awaitReaction' => ST_REACT,
+			'finishedReaction' => ST_PLAY_CARD
+		]
 	],
-	
+
 	ST_REACT => [
 		'name' => 'react',
 		'description' => clienttranslate('${actplayer} must react'),

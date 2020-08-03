@@ -47,8 +47,13 @@ define('FISTFUL_OF_CARDS', 3);
 /*
  * Cards
  */
- define('BROWN', 0);
- define('BLUE', 1);
+define('BROWN', 0);
+define('BLUE', 1);
+
+define('SPADE', 0);
+define('HEART', 1);
+define('DIAMOND', 2);
+define('CLUB', 3);
 
 
 define('CARD_SCHOFIELD', 0);

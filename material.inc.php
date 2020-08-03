@@ -19,21 +19,4 @@
  *
  */
 
-require_once("modules/constants.inc.php");
-require_once("modules/Utils.class.php");
-require_once("modules/BangLog.class.php");
-
-require_once("modules/BangCardManager.class.php");
-require_once("modules/BangCard.class.php");
-foreach (BangCardManager::$classes as $className) {
-  require_once("modules/cards/$className.class.php");
-}
-
-require_once("modules/BangPlayerManager.class.php");
-require_once("modules/BangPlayer.class.php");
-
-require_once("modules/BangCharacterManager.class.php");
-require_once("modules/BangCharacter.class.php");
-foreach (BangCharacterManager::$classes as $className) {
-  require_once("modules/characters/$className.class.php");
-}
+require_once("modules/includes.php");

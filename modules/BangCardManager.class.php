@@ -56,46 +56,82 @@ class BangCardManager extends APP_GameClass
 
 
     $values = [];
-    foreach (array_keys(self::$classes) as $cardId) {
-			// TODO : several copies of each card
-      $values[] = ['type' => $cardId, 'type_arg' => '0', 'nbr' => 1];
+    foreach ($this->getAll() as $card) {
+			foreach($expansions as $expansion){
+				if(!array_key_exists($expansion, $card->getCopies()))
+					continue;
+
+				foreach($card->getCopies()[$expansion] as $copy){
+					$values[] = ['type' => $card->getId(), 'type_arg' => $this->encodeTypeArg($copy), 'nbr' => 1];
+				}
+			}
     }
     $this->cards->createCards($values, 'deck');
 	}
 
 	/**
+	 * encode/decode : allow to go from copy in the format '10S' to a int and vice-versa
+	 */
+	public static function encodeTypeArg($copy)
+	{
+		$value = ['A' => 1, '2' => 2, '3' => 3, '4' => 4, '5' => 5, '6' => 6, '7' => 7, '8' => 8, '9' => 9, '10' => 10, 'J' => 11, 'Q' => 12, 'K' => 13];
+		$color = ['S' => SPADE, 'H' => HEART, 'D' => DIAMOND, 'C' => CLUB];
+		$cardValue = $value[substr($copy, 0, -1)];
+		$cardColor = $color[substr($copy, -1)];
+		return 14*$cardColor + $cardValue;
+	}
+
+	public static function decodeCardValue($typeArg)
+	{
+		return $typeArg % 14;
+	}
+
+	public static function decodeCardColor($typeArg)
+	{
+		return (int) floor($typeArg / 14);
+	}
+
+
+	/**
+	 * formatCard : allow to turn a card from php deck component to something we like better
+	 */
+	public static function formatCard($card)
+	{
+		return [
+			'id' => $card,
+			'type' => $card['type'],
+			'color' => self::decodeCardColor((int) $card['type_arg']),
+			'value' => self::decodeCardValue((int) $card['type_arg']),
+		];
+	}
+
+	private function formatCards($cards)
+	{
+		return array_map(array('BangCardManager','formatCard'), $cards);
+	}
+
+
+	/**
 	 * getDeckCount : Returns the number of cards in the Deck
 	 */
-	public static function getDeckCount() {
+	public function getDeckCount() {
 		return count($this->cards->getCardsInLocation('deck'));
 	}
 
 	/**
-	  * getHand : Returns the cards of a players hand as array containing card_id, card_type, card_name, card_text
-	  */
-	public static function getHand($id) {
-		return self::getObjectListFromDB("SELECT id, card_type, card_name, card_text FROM cards WHERE card_position=$id AND card_onHand=1");
+	 * getHand : Returns the cards of a players hand
+	 */
+	public function getCardsInHand($playerId) {
+		return $this->formatCards($this->cards->getCardsInLocation('hand', $playerId));
 	}
 
 	/**
-	 * getCardsInPlay : returns all Cards in play as array containing card_type, card_name, card_text, card_position(e.g. the player they belong to)
+	 * getCardsInPlay : returns all cards in play of a player
 	 */
-	public static function getCardsInPlay() {
-		self::getObjectListFromDB("SELECT card_type, card_name, card_text, card_position FROM cards WHERE card_position>0 AND card_onHand=0");
+	public function getCardsInPlay($playerId) {
+		return $this->formatCards($this->cards->getCardsInLocation('inplay', $playerId));
 	}
 
-	/**
-	 * getEquipment : returns all equipment Cards a player has in play
-	 */
-	public static function getEquipment() {
-		$res = self::getDoubleKeyCollectionFromDb("SELECT card_position, id, card_id FROM cards WHERE card_position>0 AND card_onHand=0", true);
-		$cards = array();
-		foreach($res as $pid=>$arr) {
-			$cards[$pid] = array();
-			foreach($arr as $id=>$card_id) $cards[$pid][] = new $classes[$card_id]();
-		}
-		return $cards;
-	}
 
 	/*
 	 * cardClasses : for each card Id, the corresponding class name
@@ -141,7 +177,7 @@ class BangCardManager extends APP_GameClass
   public function getUiData()
   {
     $ui = [];
-    foreach ($this->getAkk() as $card) {
+    foreach ($this->getAll() as $card) {
       $ui[$card->getId()] = $card->getUiData();
     }
     return $ui;
@@ -149,35 +185,45 @@ class BangCardManager extends APP_GameClass
 
 
 	/*
-   * getAll: return all characters (even those not available in this game)
+   * getAll: return all type of cards
    */
   public function getAll()
   {
-    return array_map(function ($id){
-      return $this->getCard($id, null);
+    return array_map(function ($type){
+      return $this->getCardByType($type, null);
     }, array_keys(self::$classes));
   }
 
 
 
 	/*
-   * getCard: factory function to create a card by ID
-	 *	TODO: handle color/value
+   * getCardOfType: factory function to create a card given its type
    */
-  public function getCard($cardId, $playerId = null)
+  public function getCardByType($cardType, $playerId = null)
   {
-    if (!isset(self::$classes[$cardId])) {
-      throw new BgaVisibleSystemException("getCard: Unknown card $cardId (player: $playerId)");
+    if (!isset(self::$classes[$cardType])) {
+      throw new BgaVisibleSystemException("getCardByType: Unknown card $cardType (player: $playerId)");
     }
-    return new self::$classes[$cardId]($this->game, $playerId);
+    return new self::$classes[$cardType]($this->game, $playerId);
   }
 
 
-/*
-???
-	public function createCard($id) {
-		$card_id = self::getUniqueValueFromDB("SELECT card_id FROM cards WHERE id=$id");
-		return new self::$classes[$card_id]();
+	/*
+   * getCard: factory function to create a card by ID
+   */
+  public function getCard($cardId, $playerId = null)
+  {
+		$card = $this->cards->getCard($cardId);
+    if (is_null($card)) {
+      throw new BgaVisibleSystemException("getCard: can't find card $cardId (player: $playerId)");
+    }
+    return $this->getCardByType($card['type']);
+  }
+
+
+
+	public function drawCards($n, $playerId)
+	{
+		$this->cards->pickCards($n, 'deck', $playerId);
 	}
-*/
 }

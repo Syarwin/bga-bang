@@ -18,12 +18,12 @@
 
 
 require_once( APP_GAMEMODULE_PATH.'module/table/table.game.php' );
-
+require_once("modules/includes.php");
 
 class bang extends Table
 {
-	public function __construct($game, $playerId) {
-		parent::__construct($game, $playerId);
+	public function __construct()
+	{
 		self::initGameStateLabels([
 //      'optionSetup'  => OPTION_SETUP,
 			'currentRound' => 10,//CURRENT_ROUND,
@@ -34,10 +34,11 @@ class bang extends Table
 		$this->log   			= new BangLog($this);
 		$this->cards 			= new BangCardManager($this);
 		$this->characters = new BangCharacterManager($this);
-		$this->players 		= new BangPlayerManager($this);
+		$this->bplayers 	= new BangPlayerManager($this);
 	}
 
-	protected function getGameName() {
+	protected function getGameName()
+	{
 		return "bang";
 	}
 
@@ -49,15 +50,17 @@ class bang extends Table
 	 *  - array $players
 	 *  - mixed $options
 	 */
-	protected function setupNewGame($players, $options = []) {
+	protected function setupNewGame($players, $options = [])
+	{
 		// Initialize cards
 		$this->cards->setupNewGame([BASE_GAME]);
+		$this->characters->setupNewGame([BASE_GAME]);
 
 		// Initialize players
-		$this->players->setupNewGame($players);
+		$this->bplayers->setupNewGame($players);
 
 // TODO : add some comments
-		$sheriff = $this->players->getSheriff()->getId();
+		$sheriff = $this->bplayers->getSheriff()->getId();
 		self::DbQuery("INSERT INTO game(game_state, game_player, game_bangplayed) VALUES(0,{$sheriff},0)");
 
 		// Active first player to play = sheriff
@@ -71,10 +74,11 @@ class bang extends Table
 	 *  Gather all informations about current game situation (visible by the current player).
 	 *  The method is called each time the game interface is displayed to a player, ie: when the game starts and when a player refreshes the game page (F5)
 	 */
-	protected function getAllDatas() {
+	protected function getAllDatas()
+	{
 		$currentPlayerId = self::getCurrentPlayerId();
 		$data = [
-			'players' 	 => $this->players->getUiData($currentPlayerId),
+			'bplayers' 	 => $this->bplayers->getUiData($currentPlayerId),
 			'cards' 		 => $this->cards->getUiData(),
 			'characters' => $this->characters->getUiData(),
 			'deck' 			 => $this->cards->getDeckCount(),
@@ -96,7 +100,8 @@ class bang extends Table
 	 *  Compute and return the current game progression approximation
 	 *  This method is called each time we are in a game state with the "updateGameProgression" property set to true
 	 */
-	public function getGameProgression() {
+	public function getGameProgression()
+	{
 		// TODO
 		return 10;
 	}
@@ -105,6 +110,7 @@ class bang extends Table
 //////////////////////////////////////////////////////////////////////////////
 //////////// Player actions
 ////////////
+/*
 	function playCard($id) {
 		// check for active cards
 		self::checkAction( 'play' );
@@ -147,15 +153,15 @@ class bang extends Table
 	/*
 	 * stNextPlayer: go to next player
 	 */
-	public function stNextPlayer() {
-		/*
+	public function stNextPlayer()
+	{
 		$pId = $this->activeNextPlayer();
 		self::giveExtraTime($pId);
 		if (self::getGamestateValue("firstPlayer") == $pId) {
 			$n = (int) self::getGamestateValue('currentRound') + 1;
 			self::setGamestateValue("currentRound", $n);
 		}
-		*/
+
 		$this->gamestate->nextState('start');
 	}
 
@@ -163,18 +169,23 @@ class bang extends Table
 	/*
 	 * stStartOfTurn: called at the beggining of each player turn
 	 */
-	public function stStartOfTurn() {
+	public function stStartOfTurn()
+	{
 		$this->log->startTurn();
-		$this->playerManager->getPlayer()->startOfTurn();
-		$this->gamestate->nextState("build");
+
+//		$this->playerManager->getPlayer()->endOfTurn();
+
+		// TODO : handle start of turn cards such as prison and dynamtie
+		$this->gamestate->nextState("play");
 	}
 
 
 	/*
 	 * stEndOfTurn: called at the end of each player turn
 	 */
-	public function stEndOfTurn() {
-		$this->playerManager->getPlayer()->endOfTurn();
+	public function stEndOfTurn()
+	{
+//		$this->playerManager->getPlayer()->endOfTurn();
 		$this->stCheckEndOfGame();
 		$this->gamestate->nextState('next');
 	}
@@ -183,11 +194,13 @@ class bang extends Table
 	/*
 	 * stCheckEndOfGame: check if the game is finished
 	 */
-	public function stCheckEndOfGame() {
+	public function stCheckEndOfGame()
+	{
 		return false;
 	}
 
 
+/*
 	public function awaitReaction() {
 		$game = self::getObjectListFromDB("SELECT * FROM game")[0];
 		if($game['game_state'] == PLAY_CARD) {
@@ -198,27 +211,13 @@ class bang extends Table
 			$this->gamestate->nextState( "awaitReaction" );
 		}
 	}
-	/*
-	 * announceWin: TODO
-	 *
-	public function announceWin($playerId, $win = true) {
-		$players = $win ? $this->playerManager->getTeammates($playerId) : $this->playerManager->getOpponents($playerId);
-		if (count($players) == 2) {
-			self::notifyAllPlayers('message', clienttranslate('${player_name} and ${player_name2} win!'), [
-				'player_name' => $players[0]->getName(),
-				'player_name2' => $players[1]->getName(),
-			]);
-		} else {
-			self::notifyAllPlayers('message', clienttranslate('${player_name} wins!'), [
-				'player_name' => $players[0]->getName(),
-			]);
-		}
-		self::DbQuery("UPDATE player SET player_score = 1 WHERE player_team = {$players[0]->getTeam()}");
-		$this->gamestate->nextState('endgame');
+	*/
+
+
+	public function argPlayCard()
+	{
+		return [];
 	}
-*/
-
-
 
 	////////////////////////////////////
 	////////////   Zombie   ////////////
@@ -228,9 +227,10 @@ class bang extends Table
 	 *   This method is called each time it is the turn of a player who has quit the game (= "zombie" player).
 	 *   You can do whatever you want in order to make sure the turn of this player ends appropriately
 	 */
-	public function zombieTurn($state, $activePlayer) {
+	public function zombieTurn($state, $activePlayer)
+	{
 		if (array_key_exists('zombiePass', $state['transitions'])) {
-			$this->playerManager->eliminate($activePlayer);
+			$this->bplayer->eliminate($activePlayer);
 			$this->gamestate->nextState('zombiePass');
 		} else {
 			throw new BgaVisibleSystemException('Zombie player ' . $activePlayer . ' stuck in unexpected state ' . $state['name']);

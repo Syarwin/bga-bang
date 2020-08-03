@@ -5,15 +5,15 @@
  */
 class BangCharacter extends APP_GameClass
 {
-  private $game;
-  private $playerId;
-  
-  private $id;
-  private $name;
-  private $text;
-  private $expansion = BASE_GAME;
-  private $implemented = false;
-  private $bullets;
+  protected $game;
+  protected $playerId;
+
+  protected $id;
+  protected $name;
+  protected $text;
+  protected $expansion = BASE_GAME;
+  protected $implemented = false;
+  protected $bullets;
 
   public function __construct($game, $playerId)
   {

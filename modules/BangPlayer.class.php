@@ -44,7 +44,7 @@ class BangPlayer extends APP_GameClass
     $this->setBullets($bullets);
 
     // Draw initial cards in hand
-    $this->game->cards->pickCards($bullets, 'deck', $this->id);
+    $this->game->cards->drawCards($bullets, $this->id);
   }
 
 
@@ -60,7 +60,7 @@ class BangPlayer extends APP_GameClass
 
   public function getUiData($currentPlayerId = null)
   {
-    $data = [
+    return [
       'id'        => $this->id,
       'no'        => $this->no,
       'name'      => $this->name,
@@ -68,7 +68,7 @@ class BangPlayer extends APP_GameClass
       'role'      => ($this->id == $currentPlayerId)? $this->role : NULL,
       'character' => $this->getCharacter(),
       'bullets'   => $this->bullets,
-      'hand'      => ($this->id == $currentPlayerId)? $this->getCardsInHand() : [], // TODO : return the number of cards in hand
+      'hand'      => ($this->id == $currentPlayerId)? $this->getCardsInHand() : count($this->getCardsInHand()),
       'board'     => $this->getCardsInPlay(),
     ];
   }
@@ -76,16 +76,16 @@ class BangPlayer extends APP_GameClass
 
   public function setBullets($bullets)
   {
-    self::DbQuery("UPDATE player SET player_bullets = $bullets WHERE id = {$this->id}");
+    self::DbQuery("UPDATE player SET player_bullets = $bullets WHERE player_id = {$this->id}");
   }
 
   public function getCardsInHand()
   {
-    return []; // TODO
+    return $this->game->cards->getCardsInHand($this->id);
   }
 
   public function getCardsInPlay()
   {
-    return []; // TODO
+    return $this->game->cards->getCardsInPlay($this->id);
   }
 }

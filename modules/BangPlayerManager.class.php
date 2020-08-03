@@ -29,14 +29,16 @@ class BangPlayerManager extends APP_GameClass
 		$values = [];
 		$i = 0;
 		foreach ($players as $pId => $player) {
-			$color = $gameInfos['player_colors'][$i++];
-			$values[] = "('" . $pId . "','$color','" . $player['player_canal'] . "','" . addslashes($player['player_name']) . "','" . addslashes($player['player_avatar']) . "', ". $role[$i] . ", 0)";
+			$color = $gameInfos['player_colors'][$i];
+			$role = $roles[$i];
+			$values[] = "('$pId','$color','" . $player['player_canal'] . "','" . addslashes($player['player_name']) . "','" . addslashes($player['player_avatar']) . "', '$role', 0)";
+			$i++;
 		}
 		self::DbQuery($sql . implode($values, ','));
 		$this->game->reloadPlayersBasicInfos();
 
 		// Setup each player : add character and draw cards
-		foreach($this->getPlayers() as $player){
+		foreach($this->get() as $player){
 			$player->setupNewGame();
 		}
 	}
@@ -49,7 +51,7 @@ class BangPlayerManager extends APP_GameClass
 	 */
 	public function get($playerId = null)
 	{
-		$sql = "SELECT player_id id, player_color color, player_name name, player_score score, player_zombie zombie, player_eliminated eliminated, player_no no, player_role role FROM player";
+		$sql = "SELECT player_id id, player_color color, player_name name, player_score score, player_zombie zombie, player_eliminated eliminated, player_no no, player_role role, player_bullets bullets FROM player";
 		if (!is_null($playerId)){
 			$playerIds = is_array($playerIds)? $playerIds : [$playerIds];
 			$sql .= " WHERE player_id IN ('" . implode("','", $playerIds) . "')";
@@ -99,12 +101,6 @@ class BangPlayerManager extends APP_GameClass
 		return self::getObjectListFromDB($sql);
 	}
 
-	/**
-	 * getSheriff : Returns the id of the Sheriff
-	 */
-	public static function getSheriff() {
-		return self::getUniqueValueFromDB( "SELECT id FROM playerinfo WHERE role=0" );
-	}
 
 	/**
 	 * getPlayerTurn : Returns the id of the player whos turn it is

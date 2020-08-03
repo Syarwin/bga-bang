@@ -104,7 +104,7 @@ class BangCharacterManager extends APP_GameClass
    */
 	public function getCharacterOfPlayer($playerId)
   {
-		$cards = $this->characters->getCardsInLocation('hand', $playerId);
+		$cards = array_values($this->characters->getCardsInLocation('hand', $playerId));
 		if(count($cards) != 1){
 			throw new BgaVisibleSystemException("getCharacterOfPlayer : player $playerId don't have a single character associated");
 		}

@@ -36,16 +36,16 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], functi
 		 *	- mixed gamedatas : contains all datas retrieved by the getAllDatas PHP method.
 		 */
 		setup: function (gamedatas) {
-			var _this = this;
 			debug('SETUP', gamedatas);
 
+/*
 			// Setting up player boards
 			for( var player_id in gamedatas.players ) {
 				var player = gamedatas.players[player_id];
 				var name = player.player_name;
-				if(player_id == gamedatas.sheriff) name += " (S)";	// todo design for sheriff			
+				if(player_id == gamedatas.sheriff) name += " (S)";	// todo design for sheriff
 				name += " (" + player.character + ")";
-				
+
 				document.getElementById('title_' + player_id).innerHTML = name;
 				document.getElementById('title_' + player_id).style.color = "#" + player.player_color;
 				 //this.setText("#handCount_" + player_id, player.hand);
@@ -53,12 +53,12 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], functi
 				this.addTooltipHtml('title_' + player_id, this.createTooltip(player.character, player.powers[0]));	 //todo how does the translate work?
 				this.setText("#deck", gamedatas.deck);
 				document.getElementById('playarea_' + gamedatas.currentID).classList.add("self");
-					
+
 			}
-			this.fillHand(gamedatas.hand);	
+			this.fillHand(gamedatas.hand);
 			for( var i in gamedatas.cardsInPlay) {
 				var card = gamedatas.cardsInPlay[i];
-				
+
 				var div = document.createElement("DIV");
 				div.classList.add("card");
 				div.id = "card_" + card.id;
@@ -70,7 +70,7 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], functi
 			var h = playareas.children[0].children.length * 400;
 			playareas.style.height = h + "px";
 			h += 350;
-			
+
 			board.style.height = h + "px";
 			if(gamedatas.currentID == gamedatas.active) {
 				switch(gamedatas.args.game_state) {
@@ -82,8 +82,10 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], functi
 						break;
 				}
 			}
-			
+
 			dojo.query('#checkDesc').connect('onclick',this,'toggleDesc');
+*/
+
 
 			// Setup game notifications
 			this.setupNotifications();
@@ -135,90 +137,81 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], functi
 
 			if (!this.isCurrentPlayerActive())
 				return;
-
-		/*
-			if (stateName == "confirmTurn") {
-				this.addActionButton('buttonConfirm', _('Confirm'), 'onClickConfirm', null, false, 'blue');
-				this.addActionButton('buttonCancel', _('Restart turn'), 'onClickCancel', null, false, 'gray');
-				if (!suppressTimers)
-					this.startActionTimer('buttonConfirm');
-			}
-		*/
 		},
 
 
 
 
 
-		////////////////////////////////
-		////////////////////////////////
-		/////////		Utils		//////////
-		////////////////////////////////
-		////////////////////////////////
+////////////////////////////////
+////////////////////////////////
+/////////		Utils		////////////
+////////////////////////////////
+////////////////////////////////
 		resize: function(event) {
-			
-			
+
+
 		},
-		
+
 		createTooltip: function(name, desc) {
 			var div = document.createElement("DIV");
 			div.classList.add("tooltip");
 			div.innerHTML = "<h3>" + name + "</h3>" + desc;
-			
+
 			var tmp = document.createElement("DIV");
 			tmp.appendChild(div);
-			
-			
-			
+
+
+
 			return tmp.innerHTML;
 		},
-		
+
 		setText: function(query, value) {
 			dojo.query(query).forEach(function(node, index, arr){
 				node.innerHTML = value;
 			  });
 		},
-		
+
 		removeOptions: function() {
 			var options = document.getElementById("options");
 			while(options.children.length > 1) options.children[1].remove();
-			options.style.display = "none";	
+			options.style.display = "none";
 		},
-        
+
         getCurrentId: function() {
 			return document.getElementsByClassName("self")[0].id.split("_")[1];
 		},
-		
+
 		getBGPosition: function(pos) {
 			var x = pos%10;
 			var y = Math.floor(pos/10);
 			return "-" + Math.floor(x*157.6) + "px -" + (y*244) + "px";
 		},
-		
+
 		fillHand: function(cards) {
 			var hand = document.getElementById("yourHand");
 			while(hand.children.length>0) hand.children[0].remove();
 			for( var i in cards) {
 				var card = cards[i];
-				
+
 				var div = document.createElement("DIV");
 				div.classList.add("bigcard");
 				div.classList.add("card");
 				div.id = "card_" + card.id;
 				var pos = parseInt(card.id)+20;
 				div.style.backgroundPosition = this.getBGPosition(pos);
-				
+
 				var desc = document.createElement("P");
 				desc.classList.add("description");
 				desc.innerHTML = card.card_text;
 				div.appendChild(desc);
-				
+
 				hand.appendChild(div);
 				this.addTooltipHtml(div.id, this.createTooltip(card.card_name, card.card_text));
 			}
 			dojo.query('.card').connect('onclick',this,'onChooseCard');
 		},
-		
+
 		///////////////////////////////////////////////////
         //// Player's action
 		onChooseCard: function( evt ) {
@@ -234,12 +227,12 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], functi
 				return;
 			}
 		},
-		
+
 		onSelectOption: function( evt ) {
 			dojo.stopEvent(evt);
 			var id = evt.currentTarget.id.split('_')[1];
 			this.removeOptions();
-			this.ajaxcall("/bang/bang/selectOption.html", {id:id}, this, function(result){});	
+			this.ajaxcall("/bang/bang/selectOption.html", {id:id}, this, function(result){});
 		},
 
 		/*
@@ -283,6 +276,9 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], functi
 				dojo.query(".description").forEach(function(node,idx,arr){ node.style.display = "none";});
 			}
 		},
+
+
+
 		///////////////////////////////////////////////////
 		//////	 Reaction to cometD notifications	 ///////
 		///////////////////////////////////////////////////
@@ -299,16 +295,16 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], functi
 				['cardPlayed', 500],
 				['chooseReaction', 500],
 				['handChange', 500],
-				['lostLife', 500]				
+				['lostLife', 500]
 			];
-			
+
 			var _this = this;
 			notifs.forEach(function (notif) {
 				dojo.subscribe(notif[0], _this, "notif_" + notif[0]);
 				_this.notifqueue.setSynchronous(notif[0], notif[1]);
 			});
 		},
-		
+
 		/** just for troubleshooting */
 		notif_debug:function(notif) {
 			console.log('DEBUG');
@@ -327,25 +323,25 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], functi
 			var options = document.getElementById("options");
 			options.style.removeProperty("display");
 			var rect = document.getElementById('board').getBoundingClientRect();
-			var height = (Object.keys(notif.args.targets).length+1-options.children.length)*40;			
+			var height = (Object.keys(notif.args.targets).length+1-options.children.length)*40;
 			while(options.children.length > 1) options.children[1].remove();
-			
+
 			for( var id in notif.args.targets) {
-				var p = dojo.place( this.format_block( 'jstpl_option', { 
-					name: notif.args.targets[id].name, 
-					id:id, 
+				var p = dojo.place( this.format_block( 'jstpl_option', {
+					name: notif.args.targets[id].name,
+					id:id,
 					color:notif.args.targets[id].color
 				} ) , 'options' );
 				dojo.connect(p,"onclick", this, "onSelectOption");
 			}
 			dojo.animateProperty({node:"board", properties:{height: rect.height + height}}).play();
-			
+
 			document.getElementById('optionsTitle').innerHTML = notif.args.msg;
 			dojo.query(".card").forEach(function(node, idx, arr) {node.style.removeProperty("border")});
 			document.getElementById('card_'+notif.args.card).style.border = "5px solid red";
 		},
-        
-        
+
+
 		/**
 		 * called when a player played a card
 		 * notif.args: [
@@ -355,13 +351,13 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], functi
 		 */
 		notif_cardPlayed: function(notif) {
 			// if the following element exists it's the current player who played it
-			var card = document.getElementById('card_' + notif.args.card);			
+			var card = document.getElementById('card_' + notif.args.card);
 			var r = null;
 			if(card == null) {
 				card = document.getElementById('hand_' + notif.args.player);
 				p = 3;
 				r = card.getBoundingClientRect();
-				
+
 			} else {
 				var p = 2;
 				r = card.getBoundingClientRect();
@@ -369,33 +365,33 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], functi
 				r.height -= 10;
 				r.x += 5;
 				r.y += 5;
-				card.remove();				
+				card.remove();
 			}
 			var e = document.getElementById('handCount_' + notif.args.player);
 			e.innerHTML = parseInt(e.innerHTML) - 1;
-			
+
 			//todo reveal
-			
+
 			var rect = document.getElementById('board').getBoundingClientRect();
 			var pos = this.getBGPosition(parseInt(notif.args.card)+20);
 			console.log(pos);
-			e = dojo.place( this.format_block( 'jstpl_card', {		
+			e = dojo.place( this.format_block( 'jstpl_card', {
 				pos: pos,
 				x:r.x-rect.x,
 				y:r.y-rect.y
 			} ) , 'board' );
-			
+
 			dojo.animateProperty({node:"tmpcard", properties:{
 					scale:2, //doesn't work...
 					top: 400,
 					left: rect.width/2 - r.width/2
 				},
-				onEnd: function() {						
+				onEnd: function() {
 						e.remove();
 					}
 				}).play();
 		},
-		
+
 		/**
 		 * called when a player attacked this player and he may react
 		 * notif.args: [
@@ -407,10 +403,10 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], functi
 			options.style.removeProperty("display");
 			//options.style.height = "0px";
 			var rect = document.getElementById('board').getBoundingClientRect();
-			var height = 80;	
-			var p = dojo.place( this.format_block( 'jstpl_option', { 
-					name: "pass", 
-					id:999, 
+			var height = 80;
+			var p = dojo.place( this.format_block( 'jstpl_option', {
+					name: "pass",
+					id:999,
 					color:"000"
 				} ) , 'options' );
 			dojo.connect(p,"onclick", this, "onSelectOption");
@@ -432,7 +428,7 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], functi
 		 * ]
 		 */
 		notif_handChange: function(notif) {
-			
+
 			var current = this.getCurrentId();
 			var rect = document.getElementById("board").getBoundingClientRect();
 			var origin = null;
@@ -448,33 +444,33 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], functi
 						dest.y = rect.y+20;
 					}
 					if(notif.args.loose==current) {
-						origin = document.getElementById("hand_"+notif.args.loose).getBoundingClientRect();						
+						origin = document.getElementById("hand_"+notif.args.loose).getBoundingClientRect();
 					}
 				} else {
-					origin = new DOMRect(rect.width/2-dest.width/2, rect.height/2-dest.height/2);					
+					origin = new DOMRect(rect.width/2-dest.width/2, rect.height/2-dest.height/2);
 				}
-				
+
 			} else {
 				if(notif.args.loose==current) {
-					origin = document.getElementById("card_"+notif.args.card.id).getBoundingClientRect();					
+					origin = document.getElementById("card_"+notif.args.card.id).getBoundingClientRect();
 					document.getElementById("card_"+notif.args.card.id).destroy();
 				} else {
-					origin = document.getElementById("hand"+notif.args.card.loose).getBoundingClientRect();					
+					origin = document.getElementById("hand"+notif.args.card.loose).getBoundingClientRect();
 				}
-				dest = new DOMRect(rect.width/2-origin.width/2, rect.height/2-origin.height/2);					
+				dest = new DOMRect(rect.width/2-origin.width/2, rect.height/2-origin.height/2);
 			}
-			e = dojo.place( this.format_block( 'jstpl_card', {	
+			e = dojo.place( this.format_block( 'jstpl_card', {
 						   width: origin.width,
 						   height: origin.height,
 						   x:origin.x-rect.x,
 						   y:origin.y-rect.y
 					} ) , 'board' );
-			dojo.animateProperty({node:"tmpcard", 
+			dojo.animateProperty({node:"tmpcard",
 					properties: {
 						left:dest.x-rect.x,
 						top:dest.y-rect.y},
 					onEnd: function() {
-						for(var id in notif.cards) {				
+						for(var id in notif.cards) {
 							document.getElementById('handCount_'+id).innerHTML=notif.hands[id];
 						}
 						if(notif.args.gain==current) fillHand();
@@ -484,7 +480,7 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], functi
 			if(notif.args.hand != null)
 				this.fillHand(notif.args.hand);
 		},
-		
+
 		/**
 		 * called when any player lost a life
 		 * notif.args: [

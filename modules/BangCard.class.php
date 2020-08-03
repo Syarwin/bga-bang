@@ -5,15 +5,15 @@
  */
 class BangCard extends APP_GameClass
 {
-	private $game;
-	private $playerId;
-	private $id;
-	private $name;
-	private $text;
-	private $copies = [];
-	private $type; // see dbmodel.sql
-	private $color;
-	private $effect; // array with type, impact and sometimes range
+	protected $game;
+	protected $playerId;
+	protected $id;
+	protected $name;
+	protected $text;
+	protected $copies = [];
+	protected $type; // see dbmodel.sql
+	protected $color;
+	protected $effect; // array with type, impact and sometimes range
 
 
 	// TODO : handle the exact copy
@@ -24,7 +24,8 @@ class BangCard extends APP_GameClass
 	}
 
 // TODO : add all the needed getters
-// ----
+	public function getId(){ return $this->id; }
+	public function getCopies(){ return $this->copies; }
 
 
 	public function getUiData()
