@@ -31,7 +31,6 @@ ALTER TABLE `player` ADD `player_bullets` INT(1) UNSIGNED NOT NULL;
 -- 10: bang
 -- x1: evade
 -- x2: rest
--- 99: character
 ----------- position ---------------------
 --  >0: player id
 -- -1: deck
