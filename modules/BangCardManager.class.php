@@ -6,6 +6,7 @@
 class BangCardManager extends APP_GameClass
 {
 	public $game;
+	public static $deck = null;
 	public function __construct($game)
 	{
 		$this->game = $game;
@@ -16,69 +17,78 @@ class BangCardManager extends APP_GameClass
 		$this->terrains->autoreshuffle = true;
 */
 	}
-	
+
 	public function setupNewGame($expansions)
 	{
-		$sql = 'INSERT INTO cards(card_id, card_type, card_name, card_text, card_value, card_position, card_onHand) VALUES';
-		$values = array();
+		self::$deck = self::getNew("module.common.deck");
+		self::$deck->init("card");
+
+		$cards = [];
 		foreach(self::$classes as $id => $name) {
 			$card = new $name();
 			foreach($expansions as $exp) {
 				foreach($card->copies[$exp] as $value) {
-					$text = str_replace("'","''",$card->text);
-					$values[] = "('" . implode("','", [$id, $card->type, $card->name, $text, $value, -1, 0]) . "')";
+					$cards[] = ['type' => $value, 'type_arg' => $id, 'nbr' => 1];
 				}
 			}
 		}
-		$sql .= implode(",",$values);
-		self::DbQuery($sql);
+		self::$deck->createCards($cards, 'deck');
 		return count($values);
 	}
-	
+
 	/**
 	 * getDeckCount : Returns the number of cards in the Deck
 	 */
-	public static function getDeckCount() {
-		return self::getUniqueValueFromDB( "SELECT COUNT(*) FROM cards WHERE card_position=-1" );
+	public static function countCards($location, $player=null) {
+		if($player==null)
+			return self::$deck->countCardsInLocation($location);
+		else
+			return self::$deck->countCardsInLocation($location, $player);
 	}
+
 	
+
 	/**
-	  * getHand : Returns the cards of a players hand as array containing card_id, card_type, card_name, card_text
+	  * getHand : Returns the cards of a players hand
 	  */
 	public static function getHand($id) {
-		return self::getObjectListFromDB("SELECT id, card_type, card_name, card_text FROM cards WHERE card_position=$id AND card_onHand=1");
+		return self::$deck->getCardsInLocation('hand' $player_id);
 	}
-	
+
 	/**
-	 * getCardsInPlay : returns all Cards in play as array containing card_type, card_name, card_text, card_position(e.g. the player they belong to)
+	 * getCardsInPlay : returns all Cards in play
 	 */
 	public static function getCardsInPlay() {
-		self::getObjectListFromDB("SELECT card_type, card_name, card_text, card_position FROM cards WHERE card_position>0 AND card_onHand=0");
+		return self::$deck->getCardsInLocation('inPlay');
 	}
-	
+
 	/**
-	 * getEquipment : returns all equipment Cards a player has in play
+	 * getEquipment : returns all equipment Cards the players has in play as array: id => cards
 	 */
 	public static function getEquipment() {
-		$res = self::getDoubleKeyCollectionFromDb("SELECT card_position, id, card_id FROM cards WHERE card_position>0 AND card_onHand=0", true);
-		$cards = array();
-		foreach($res as $pid=>$arr) {
-			$cards[$pid] = array();
-			foreach($arr as $id=>$card_id) $cards[$pid][] = new $classes[$card_id]();
+		$cards = [];
+		$players = BangPlayerManager::getPlayers();
+		foreach($players as $id => $char) {
+			$cards[$id] = self::getCardsInLocation('inPlay');
 		}
 		return $cards;
 	}
-	
+
 	/*
 	 *
 	 */
 	public static function getCard($id, $game=null) {
-		$card_id = self::getUniqueValueFromDB("SELECT card_id FROM cards WHERE id=$id");
+		$card_id = self::$deck->getCard($id);
 		$name = self::$classes[$card_id];
 		$card = new $name();
 		$card->$id = $id;
 		if($game != null) $card->game = $game;
 		return $card;
+	}
+
+
+	public static function moveCard($id, $location, $arg=0) {
+		self::$deck->moveCard($id, $location, $arg);
 	}
 
 	/*
@@ -89,25 +99,25 @@ class BangCardManager extends APP_GameClass
 		CARD_VOLCANIC => 'CardVolcanic',
 		CARD_REMINGTON => 'CardRemington',
 		CARD_REV_CARABINE => 'CardRevCarabine',
-		CARD_WINCHESTER => 'CardWinchester',		
+		CARD_WINCHESTER => 'CardWinchester',
 		CARD_BANG => 'CardBang',
 		CARD_MISSED => 'CardMissed',
 		CARD_STAGECOACH => 'CardStagecoach',
 		CARD_WELLS_FARGO => 'CardWellsFargo',
-		CARD_BEER => 'CardBeer',		
+		CARD_BEER => 'CardBeer',
 		CARD_GATLING => 'CardGatling',
-		CARD_PANIC => 'CardPanic',	
+		CARD_PANIC => 'CardPanic',
 		CARD_CAT_BALOU => 'CardCatBalou',
 		CARD_DUEL => 'CardDuel',
 		CARD_SALOON => 'CardSaloon',
-		CARD_GENERAL_STORE => 'CardGeneralStore',		
+		CARD_GENERAL_STORE => 'CardGeneralStore',
 		CARD_INDIANS => 'CardIndians',
 		CARD_JAIL => 'CardJail',
 		CARD_DYNAMITE => 'CardDynamite',
 		CARD_BARREL => 'CardBarrel',
 		CARD_SCOPE => 'CardScope',
 		CARD_MUSTANG => 'CardMustang'
-		
+
 		/*CARD_PUNCH => 'CardPunch',
 		CARD_SPRINGFIELD => 'CardSpringfield',
 		CARD_CANNON => 'CardCannon',
@@ -117,6 +127,6 @@ class BangCardManager extends APP_GameClass
 		CARD_BRAWL => 'CardBrawl',
 		CARD_RAG_TIME => 'CardRagTime',*/
 	];
-	
+
 
 }

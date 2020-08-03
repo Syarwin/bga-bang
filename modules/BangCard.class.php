@@ -19,13 +19,13 @@ class BangCard extends APP_GameClass
 	public $effect; // array with type, impact and sometimes range
 
 	public function isPlayable() { return true; }
-	
+
 	/**
 	 * play : default function to play a card that. Can be used for cards that have only symbols
 	 */
 	public function play($player) {
 		$players = BangPlayerManager::getPlayers();
-		
+
 		switch ($this->effect['type']) {
 			case BASIC_ATTACK:
 				$range = 0;
@@ -67,32 +67,35 @@ class BangCard extends APP_GameClass
 		}
 		return true;
 	}
-	
+
 	public function react($id, $player) {
 		if($this->game->getGameStateValue('state')==PLAY_CARD) {
 			switch($this->effect['type']) {
-				case BASIC_ATTACK:					
+				case BASIC_ATTACK:
 					$player->attack([$id]);
-					$name = self::getUniqueValueFromDB("SELECT player_name FROM player WHERE player_id=" . $player->player);
+					$name = BangPlayerManager::getPlayer($player->player)->name;
 					$card_name = $this->name;
 					$this->game->notifyAllPlayers('cardPlayed', "$name played $card_name.", array('card' => $this->id, 'player' => $player->player));
+					BangCardManager::moveCard($this->id, 'discard');
 					return true;
 			}
 		} elseif($this->game->getGameStateValue('state') == WAIT_REACTION ) {
-			$player_name = self::getUniqueValueFromDB("SELECT player_name FROM player WHERE player_id=" . $player->id);
+			$player_name = BangPlayerManager::getPlayer($player->player)->name;
 			switch($this->effect['type']) {
 				case BASIC_ATTACK:
 					if($id == 999) {
 						$player->looseLife($this->game->getGameStateValue('currentTurn'));
+
 					} else {
-						$card = self::getObjectListFromDB("SELECT card_type type,card_name name FROM cards WHERE id=" . $this->id)[0];
+						$card = BangCardManager::getCard($id);
 						if($card['type'] == 11) {
-							self:DbQuery("UPDATE cards SET position=-2 WHERE id=" . $this->id);
+							BangCardManager::moveCard($card->id, 'discard');
+
 							$this->game->setGameStateValue('state',0);
-							
-							self::notifyAllPlayers('cardPlayed', "$player_name used " . $card->name, array('card' => $card, 'player' => $player->id));
+
+							self::notifyAllPlayers('cardPlayed', "$player_name used " . $card->name, array('card' => $card->id, 'player' => $player->id));
 							$this->game->gamestate->nextState( "awaitReaction" );
-							
+
 						} else {
 							//todo show error
 						}
@@ -101,20 +104,20 @@ class BangCard extends APP_GameClass
 			}
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	public function createDebug($args) {
 		return ['notifs'=>[['notif'=>'debug', 'msg'=>'', 'args'=>$args]]];
 	}

@@ -19,23 +19,23 @@ class BangPlayerManager extends APP_GameClass
 		self::DbQuery('DELETE FROM player');
 		$gameInfos = $this->game->getGameinfos();
 		$sql = 'INSERT INTO player (player_id, player_color, player_canal, player_name, player_avatar, player_bullets, player_score, player_role, player_character) VALUES ';
-		
+
 		$deck = range(1,$decksize);
 		shuffle($deck);
 		$deck = [8,33,7,9,34,1,10,35,2,11,36,3,12,37,4,13,38,5,14,39,6,15,40]; //only for testing
 		$roles = array_slice(array(0,2,2,3,1,2,1),0,count($players));
 		shuffle($roles);
-		
+
 		$characters = self::getCharactersByExpansion($expansions);
 		shuffle($characters);
-		
+
 		$values = [];
 		$i = 0;
 		foreach ($players as $pId => $player) {
 			$color = $gameInfos['player_colors'][$i];
 			$canal = $player['player_canal'];
 			$name = $player['player_name'];
-			$avatar = addslashes($player['player_avatar']);				
+			$avatar = addslashes($player['player_avatar']);
 			$name = addslashes($player['player_name']);
 			$role = $roles[$i];
 			$char_id = $characters[$i++];
@@ -53,7 +53,7 @@ class BangPlayerManager extends APP_GameClass
 		$this->game->reloadPlayersBasicInfos();
 		return $sheriff;
 	}
-	
+
 
 
 
@@ -61,9 +61,9 @@ class BangPlayerManager extends APP_GameClass
 	/*
 	 * getPlayer : returns the SantoriniPlayer object for the given player ID
 	 */
-	public function getPlayer($playerId = null)
+	public static function getPlayer($playerId/* = null*/)
 	{
-		$playerId = $playerId ?? $this->game->getActivePlayerId();
+		//$playerId = $playerId ?? $this->game->getActivePlayerId();
 		$players = $this->getPlayers([$playerId]);
 		return $players[0];
 	}
@@ -71,7 +71,7 @@ class BangPlayerManager extends APP_GameClass
 	/*
 	 * getPlayers : Returns array of SantoriniPlayer objects for all/specified player IDs
 	 */
-	public function getPlayers($playerIds = null)
+	public static function getPlayers($playerIds = null)
 	{
 		$sql = "SELECT player_id id, player_color color, player_name name, player_score score, player_zombie zombie, player_eliminated eliminated, player_no no FROM player";
 		if (is_array($playerIds)) {
@@ -86,7 +86,7 @@ class BangPlayerManager extends APP_GameClass
 		}
 		return $players;
 	}
-	
+
 	/**
 	 * returns an array of the ids of all living players
 	 */
@@ -95,24 +95,24 @@ class BangPlayerManager extends APP_GameClass
 		if($exept != null) $sql.= " AND player_id != $exept";
 		return self::getObjectListFromDB($sql);
 	}
-	
+
 	/**
 	 * getSheriff : Returns the id of the Sheriff
 	 */
 	public static function getSheriff() {
 		return self::getUniqueValueFromDB( "SELECT player_id FROM player WHERE player_role=0" );
 	}
-	
-	
-	
+
+
+
 	/**
 	 * getCharacters : returns an associative array with all players and their characters (player_id => character_id)
 	 */
 	public static function getCharacters() {
 		return self::getCollectionFromDB("SELECT player_id, player_character FROM player");
 	}
-	
-	
+
+
 
 	/*
 	 * getPlayerCount: return the number of players
@@ -133,7 +133,7 @@ class BangPlayerManager extends APP_GameClass
 		}
 		$players = self::getCollectionFromDb($sql);
 
-		
+
 		foreach ($players as $id=>$player) {
 			$char = new BangPlayerManager::$classes[$player['player_character']]();
 			$players[$id]['character'] = $char->name;
@@ -142,7 +142,7 @@ class BangPlayerManager extends APP_GameClass
 		}
 		return $players;
 	}
-	
+
 	public static function getCharactersByExpansion($expansions) {
 		$characters = [
 			BASE_GAME => range(0,15)
@@ -152,15 +152,15 @@ class BangPlayerManager extends APP_GameClass
 		foreach($expansions as $exp) $res = array_merge($characters[$exp],$res);
 		return $res;
 	}
-	
+
 	/**
 	 * getDistance : returns all players within a given range to a player
 	 */
 	public static function getPlayersInRange($player, $range) {
-		
+
 		return $targets;
 	}
-	
+
 	/**
 	 * returns an instance of the character id
 	 * $id: either the character id or the player id, in case of latter, 3rd param need to be true
@@ -180,7 +180,7 @@ class BangPlayerManager extends APP_GameClass
 		$char->player = $pid;
 		return $char;
 	}
-	
+
 	/*
 	 * characterClasses : for each character Id, the corresponding class name
 	 */
@@ -201,7 +201,7 @@ class BangPlayerManager extends APP_GameClass
 		SLAB_THE_KILLER => 'SlabtheKiller',
 		WILLY_THE_KID => 'WillytheKid',
 		ROSE_DOOLAN => 'RoseDoolan',
-		
+
 		/*MOLLY_STARK => 'MollyStark',
 		APACHE_KID => 'ApacheKid',
 		ELENA_FUENTE => 'ElenaFuente',

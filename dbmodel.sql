@@ -24,32 +24,13 @@ ALTER TABLE `player` ADD `player_role` INT(1) UNSIGNED NOT NULL;
 ALTER TABLE `player` ADD `player_character` INT(1) UNSIGNED NOT NULL;
 ALTER TABLE `player` ADD `player_bullets` INT(1) UNSIGNED NOT NULL;
 
------------ type -------------------------
--- 1x: action
--- 2x: Equipment
--- 30: weapon
--- 10: bang
--- x1: evade
--- x2: rest
------------ position ---------------------
---  >0: player id
--- -1: deck
--- -2: discard
--- -3: active
--- -4-n depending on active card
------------ value ---------------------
--- xC: Clovers
--- xS: Pikes
--- xD: Spades
--- xH: Hearts
-CREATE TABLE IF NOT EXISTS `cards` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `card_id` int NOT NULL,
-  `card_type` int NOT NULL,
-  `card_name` text NOT NULL,
-  `card_text` text NOT NULL,
-  `card_value` text NOT NULL,
-  `card_position` int NOT NULL, 
-  `card_onHand` tinyint NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+
+CREATE TABLE IF NOT EXISTS `card` (
+  `card_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `card_type` varchar(16) NOT NULL,
+  `card_type_arg` int(11) NOT NULL,
+  `card_location` varchar(16) NOT NULL,
+  `card_location_arg` int(11) NOT NULL,
+  PRIMARY KEY (`card_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
