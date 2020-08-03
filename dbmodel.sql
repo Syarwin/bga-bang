@@ -54,28 +54,3 @@ CREATE TABLE IF NOT EXISTS `cards` (
   `card_onHand` tinyint NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
-
-
-
------------ game table ----------------
--- game_state: current state of the game, see below
--- game_text and game_options: if a player is required to choose an option(for ex. a target)
--- game_card: the id of the card that is currently handled
--- game_target: the target of the active card
--- game_player: the player whos turn it is
--- game_bangPlayed`: whether the card Bang has been played this turn
------------ state ---------------------
--- 0: play card
--- 1: choose player
--- 2: wait for reaction
-CREATE TABLE IF NOT EXISTS `game` (
-  `game_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `game_state` int NOT NULL, 
-  `game_text` text,
-  `game_options` text,
-  `game_card` int,
-  `game_target` int,
-  `game_player` int NOT NULL,
-  `game_bangPlayed` tinyint NOT NULL,
-  PRIMARY KEY (`game_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;

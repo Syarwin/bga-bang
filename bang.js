@@ -70,18 +70,8 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], functi
 			var h = playareas.children[0].children.length * 400;
 			playareas.style.height = h + "px";
 			h += 350;
-			
 			board.style.height = h + "px";
-			if(gamedatas.currentID == gamedatas.active) {
-				switch(gamedatas.args.game_state) {
-					case "1":
-						this.notif_choosePlayer(gamedatas);
-						break;
-					case "2":
-						this.notif_chooseReaction(gamedatas);
-						break;
-				}
-			}
+			
 			
 			dojo.query('#checkDesc').connect('onclick',this,'toggleDesc');
 
@@ -324,6 +314,7 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], functi
 		 * ]
 		 */
 		notif_choosePlayer: function(notif) {
+			debug('notif_choosePlayer', notif);
 			var options = document.getElementById("options");
 			options.style.removeProperty("display");
 			var rect = document.getElementById('board').getBoundingClientRect();

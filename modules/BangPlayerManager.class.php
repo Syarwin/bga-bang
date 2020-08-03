@@ -33,21 +33,21 @@ class BangPlayerManager extends APP_GameClass
 		$i = 0;
 		foreach ($players as $pId => $player) {
 			$color = $gameInfos['player_colors'][$i];
-			$canal = $player['player_canal']
-			$name = BangPlayerManager::$classes[$char_id];
+			$canal = $player['player_canal'];
+			$name = $player['player_name'];
 			$avatar = addslashes($player['player_avatar']);				
 			$name = addslashes($player['player_name']);
-			$role = $roles[$i++];
-			$char_id = $characters[$i];
+			$role = $roles[$i];
+			$char_id = $characters[$i++];
 			$char  = self::getCharacter($char_id);
 			$bullets = $char->bullets;
 			if($role == SHERIFF) {
 				$bullets++;
-				$sheriff = $id;
+				$sheriff = $pId;
 			}
 			$values[] = "($pId, '$color','$canal','$name','$avatar', $bullets, $bullets, $role, $char_id)";
-			$cards = array_splice($deck,0,$lp);
-			self::DbQuery("UPDATE cards SET card_position = $pid, card_onHand=1 WHERE id IN (" . implode(",", $cards) . ")");
+			$cards = array_splice($deck,0,$bullets);
+			self::DbQuery("UPDATE cards SET card_position = $pId, card_onHand=1 WHERE id IN (" . implode(",", $cards) . ")");
 		}
 		self::DbQuery($sql . implode($values, ','));
 		$this->game->reloadPlayersBasicInfos();
@@ -100,21 +100,16 @@ class BangPlayerManager extends APP_GameClass
 	 * getSheriff : Returns the id of the Sheriff
 	 */
 	public static function getSheriff() {
-		return self::getUniqueValueFromDB( "SELECT id FROM playerinfo WHERE role=0" );
+		return self::getUniqueValueFromDB( "SELECT player_id FROM player WHERE player_role=0" );
 	}
 	
-	/**
-	 * getPlayerTurn : Returns the id of the player whos turn it is
-	 */
-	public static function getPlayerTurn() {
-		return self::getUniqueValueFromDB("SELECT game_player FROM game");
-	}
+	
 	
 	/**
 	 * getCharacters : returns an associative array with all players and their characters (player_id => character_id)
 	 */
 	public static function getCharacters() {
-		return self::getCollectionFromDB("SELECT id, character_id FROM playerinfo");
+		return self::getCollectionFromDB("SELECT player_id, player_character FROM player");
 	}
 	
 	
@@ -131,9 +126,8 @@ class BangPlayerManager extends APP_GameClass
 	/*
 	 * getUiData : get all ui data of all players : id, hp, max_hp no, player_name, player_color, character, powers(character effect), hand(count)
 	 */
-	public static function getUiData($playerIds = null)
-	{
-		$sql = "SELECT player_id, player_score hp, max_hp, player_name, player_color, character_id FROM player LEFT JOIN playerinfo ON player.player_id = playerinfo.id";
+	public static function getUiData($playerIds = null)	{
+		$sql = "SELECT player_id, player_score hp, player_bullets, player_name, player_color, player_character FROM player";
 		if (is_array($playerIds)) {
 			$sql .= " WHERE player_id IN ('" . implode("','", $playerIds) . "')";
 		}
@@ -141,7 +135,7 @@ class BangPlayerManager extends APP_GameClass
 
 		
 		foreach ($players as $id=>$player) {
-			$char = new BangPlayerManager::$classes[$player['character_id']]();
+			$char = new BangPlayerManager::$classes[$player['player_character']]();
 			$players[$id]['character'] = $char->name;
 			$players[$id]['powers'] = $char->text;
 			$players[$id]['hand'] = self::getUniqueValueFromDB("SELECT COUNT(*) FROM cards WHERE card_position=$id");
@@ -149,14 +143,14 @@ class BangPlayerManager extends APP_GameClass
 		return $players;
 	}
 	
-		public static getCharactersByExpansion($expansions) {
+	public static function getCharactersByExpansion($expansions) {
 		$characters = [
-			BASE_GAME => range(0,15),
+			BASE_GAME => range(0,15)
 			// add new expansions
-		]
+		];
 		$res = [];
 		foreach($expansions as $exp) $res = array_merge($characters[$exp],$res);
-		
+		return $res;
 	}
 	
 	/**
@@ -174,7 +168,8 @@ class BangPlayerManager extends APP_GameClass
 	 * $usePlayerid: whether the first param is the player id.
 	 *
 	 */
-	public static function getCharacter($id, $game=null, $usePlayerid=false) {
+	public static function getCharacter($id, $game=null, $queryplayer=false) {
+		$pid = -1;
 		if($queryplayer) {
 			$pid = $id;
 			$id = self::getUniqueValueFromDB("SELECT player_character FROM player WHERE player_id = $id");

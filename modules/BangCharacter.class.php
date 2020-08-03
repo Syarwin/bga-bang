@@ -21,28 +21,21 @@ class BangCharacter extends APP_GameClass
 	public function playCard($id) {
 		$card = BangCardManager::getCard($id);
 		$card->id = $id;
-		$res = $card->play($player_id);
-		$notifs = $res['notifs'];
-		
+		if($card->play($this)) {			
+			$name = self::getUniqueValueFromDB("SELECT player_name FROM player WHERE player_id=" . $this->player);
+			$this->game->notifyAllPlayers('cardPlayed', "$name played $card_name.", array('card' => $card, 'player' => $attacker));
+		}
 	}
 	
 	public function selectOption($id) {
-		$card = BangCardManager::createCard($game->getGameStateValue('game_card'), $this->game);
-		$card->react($id, $this->player);
+		$card = BangCardManager::getCard($this->game->getGameStateValue('currentCard'), $this->game);
+		$card->react($id, $this);
 	}
 	
 	
-	/**
-	 * getRange : Returns the range of player
-	 */
-	public static function getRange($pid) {
-		$cards = self::getObjectListFromDB("SELECT card_id FROM cards WHERE card_position=$pid AND card_onHand=false");
-		if(count($cards)>0) {
-			$card = new BangCardManager::$classes[$card[0]]();
-			return $effect['range'];
-		}
-		return 1;
-	}
+	
+	
+	
 	
 	/**
 	 * returns the current distance to an enmy.
@@ -51,7 +44,7 @@ class BangCharacter extends APP_GameClass
 	public function getDistanceTo($enemy) {
 		$positions = array_flip(self::getObjectListFromDB("SELECT player_id from player WHERE player_eliminated=0 ORDER BY player_no", true));
 		$pos1 = $positions[$this->player];
-		$pos2 = $positions[$enemy]
+		$pos2 = $positions[$enemy];
 		if($pos2 < $pos1) {
 			$temp = $pos2;
 			$pos2 = $pos1;
@@ -71,15 +64,92 @@ class BangCharacter extends APP_GameClass
 				if($card->effect['type'] = RANGE_INCREASE) $dist++;
 			}
 		}
+		return $dist;
 	}
 	
 	public function getPlayersInRange($range) {
 		$targets = array();
-		$characters = self::getCharacters();
-		for($characters as $id=>$char) {
-			$dist = BangPlayerManager::getCharacter($id, $this->game, true).getDistanceTo($this->player);
+		$characters = BangPlayerManager::getCharacters();
+		foreach($characters as $id=>$char) {
+			if($id==$this->player) continue;
+			$dist = BangPlayerManager::getCharacter($id, $this->game, true)->getDistanceTo($this->player);
 			if($dist <= $range) $targets[] = $id;
 		}
 		return $targets;
 	}
+	
+	/**
+	 * ask the player, which target
+	 */
+	function askForTarget($targets, $card) {		
+		$id = $this->player;
+		$t = implode(",",$targets);
+		$names = self::getCollectionFromDB("SELECT player_id, player_name name, player_color color FROM player WHERE player_id in ($t)");		
+		$this->game->notifyPlayer($id, 'choosePlayer', '', array('msg' => 'Choose player', 'targets' => $names, 'card' => $card));
+		$this->game->setGameStateValue('currentCard', $card);
+	}
+	
+	/**
+	 * attack : performs an attack on all given players
+	 */
+	public function attack($player_ids) {
+		if(count($player_ids) == 1) {
+			$id = $player_ids[0];
+			$target = BangPlayerManager::getCharacter($id, $this->game, true);
+			$target->askReaction($this->player);		
+			
+		}
+		foreach($player_ids as $player_id) {			
+			
+		}		
+	}
+	
+	/**
+	 * ask a player for reactions
+	 */
+	function askReaction($attacker) {	
+		$id = $this->player;
+		$name = self::getUniqueValueFromDB("SELECT player_name FROM player WHERE player_id=$id");
+		$attacker_name = self::getUniqueValueFromDB("SELECT player_name FROM player WHERE player_id=$attacker");
+		$cards = self::getObjectListFromDB("SELECT card_id hand FROM cards WHERE card_position=$id AND card_type%10=1",true);
+		$onHand = self::getUniqueValueFromDB("SELECT count(*) hand FROM cards WHERE card_position=$id AND card_onHand=1");
+		
+		
+		if($onHand > 0 || count($cards>0))  {
+			$this->game->setGameStateValue('state',WAIT_REACTION);
+			$this->game->setGameStateValue('target',$id);
+			$this->game->gamestate->nextState('awaitReaction');
+		} else {
+			$this->looseLife($attacker);
+			$this->game->setGameStateValue('state',PLAY_CARD);
+		}
+		
+	}
+	
+	public function looseLife($byPlayer=-1) {
+		$id = $this->player;
+		$hp = self::getUniqueValueFromDB("SELECT player_score FROM player WHERE player_id=$id")-1;	
+		
+		$name = self::getUniqueValueFromDB("SELECT player_name FROM player WHERE player_id=$id");
+		$this->game->notifyAllPlayers('lostLife', "$name lost a life", ['id'=>$id, 'hp'=>$hp]);
+		self::DbQuery("UPDATE player SET player_score=$hp WHERE player_id= ". $id);		
+		$characters = BangPlayerManager::getCharacters();
+		$char = characters[$id];		
+		
+	}
+	
+	/**
+	 * getRange : Returns the range of players weapon
+	 */
+	public function getRange() {
+		$id = $this->player;
+		$cards = self::getObjectListFromDB("SELECT card_id FROM cards WHERE card_position=$id AND card_onHand=false");
+		if(count($cards)>0) {
+			$card = new BangCardManager::$classes[$card[0]]();
+			return $effect['range'];
+		}
+		return 1;
+	}
+	
+	
 }

@@ -31,7 +31,8 @@ class bang extends Table
 			'state'			=> 12,
 			'currentTurn'  => 13, //id of the player who's turn it is(Not always the active player) 
 			'currentCard'  => 14, //id of the card that has been played
-			'bangPlayed' => 15 // whether a bang has been played this turn
+			'bangPlayed' => 15, // whether a bang has been played this turn
+			'target'	=> 16
 		]);
 
 		// Initialize logger, board and cards
@@ -58,14 +59,9 @@ class bang extends Table
 		$expansions = [BASE_GAME];
 		$n = $this->cardManager->setupNewGame($expansions);	
 		
-			// Initialize players
+		// Initialize players
 		$sheriff = $this->playerManager->setupNewGame($players, $expansions, $n);
 		
-		
-		
-		
-
-		self::DbQuery("INSERT INTO game(game_state, game_player, game_bangplayed) VALUES(0,$sheriff,0)");
 		// Active first player to play
 		
 		self::setGameStateInitialValue('firstPlayer', $sheriff);
@@ -86,16 +82,12 @@ class bang extends Table
 		$result['players'] = BangPlayerManager::getUiData();
 		$result['deck'] = BangCardManager::getDeckCount();
 		$result['sheriff'] = BangPlayerManager::getSheriff();
-		$result['turn'] = BangPlayerManager::getPlayerTurn();
+		$result['turn'] = $this->getGameStateValue('state');
 		$result['hand'] = BangCardManager::getHand($currentPlayerId);
 		$result['cardsInPlay'] = BangCardManager::getCardsInPlay();
 		
-		$result['args'] = self::getObjectListFromDB("SELECT game_state, game_text msg, game_options, game_player, game_card card From game")[0]; 
-		$t = str_replace(";",",",$result['args']['game_options']);
-		if($result['args']['game_state']==1) {
-			$result['args']['targets'] = self::getCollectionFromDB("SELECT player_id, player_name name, player_color color FROM player WHERE player_id in ($t)");
-			$result['args']['count'] = count($result['args']['targets'])+1;			
-		}
+		
+		
 		
 		return $result;
 	}
@@ -119,7 +111,7 @@ class bang extends Table
 		// check for active cards
 		self::checkAction( 'play' );
 		$player_id = self::getCurrentPlayerId();
-		$char = BangPlayerManager::getCharacter($player_id);
+		$char = BangPlayerManager::getCharacter($player_id, $this, true);
 		$char->playCard($id);
 		//$card = BangCardManager::createCard($id);
 		
@@ -127,7 +119,7 @@ class bang extends Table
 	
 	function selectOption($id) {
 		$player_id = self::getCurrentPlayerId();
-		$char = BangPlayerManager::getCharacter($player_id);
+		$char = BangPlayerManager::getCharacter($player_id, $this, true);
 		$char->selectOption($id);
 	}
 
@@ -182,12 +174,12 @@ class bang extends Table
 
 
 	public function awaitReaction() {
-		$game = self::getObjectListFromDB("SELECT * FROM game")[0];
-		if($game['game_state'] == PLAY_CARD) {
-			$this->gamestate->changeActivePlayer( $game['game_player'] );
+		
+		if($this->getGameStateValue('state') == PLAY_CARD) {
+			$this->gamestate->changeActivePlayer( $this->getGameStateValue('currentTurn') );
 			$this->gamestate->nextState( "finishedReaction" );
 		} else { //WAIT_REACTION			
-			$this->gamestate->changeActivePlayer( $game['game_target'] );
+			$this->gamestate->changeActivePlayer( $this->getGameStateValue('target'));
 			$this->gamestate->nextState( "awaitReaction" );
 		}
 	}
