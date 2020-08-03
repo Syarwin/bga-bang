@@ -19,20 +19,20 @@ class BangCardManager extends APP_GameClass
 	
 	public function setupNewGame($expansions)
 	{
-	$sql = 'INSERT INTO cards(card_id, card_type, card_name, card_text, card_value, card_position, card_onHand) VALUES';
-	$values = array();
-	foreach(self::$classes as $id => $name) {
-		$card = new $name();
-		foreach($expansions as $exp) {
-			foreach($card->copies[$exp] as $value) {
-				$text = str_replace("'","''",$card->text);
-				$values[] = "('" . implode("','", [$id, $card->type, $card->name, $text, $value, -1, 0]) . "')";
+		$sql = 'INSERT INTO cards(card_id, card_type, card_name, card_text, card_value, card_position, card_onHand) VALUES';
+		$values = array();
+		foreach(self::$classes as $id => $name) {
+			$card = new $name();
+			foreach($expansions as $exp) {
+				foreach($card->copies[$exp] as $value) {
+					$text = str_replace("'","''",$card->text);
+					$values[] = "('" . implode("','", [$id, $card->type, $card->name, $text, $value, -1, 0]) . "')";
+				}
 			}
 		}
-	}
-	$sql .= implode(",",$values);
-	self::DbQuery($sql);
-	return count($values);
+		$sql .= implode(",",$values);
+		self::DbQuery($sql);
+		return count($values);
 	}
 	
 	/**
@@ -67,6 +67,18 @@ class BangCardManager extends APP_GameClass
 			foreach($arr as $id=>$card_id) $cards[$pid][] = new $classes[$card_id]();
 		}
 		return $cards;
+	}
+	
+	/*
+	 *
+	 */
+	public static function getCard($id, $game=null) {
+		$card_id = self::getUniqueValueFromDB("SELECT card_id FROM cards WHERE id=$id");
+		$name = self::$classes[$card_id];
+		$card = new $name();
+		$card->$id = $id;
+		if($game != null) $card->game = $game;
+		return $card;
 	}
 
 	/*
@@ -105,10 +117,6 @@ class BangCardManager extends APP_GameClass
 		CARD_BRAWL => 'CardBrawl',
 		CARD_RAG_TIME => 'CardRagTime',*/
 	];
-
-	public function createCard($id) {
-		$card_id = self::getUniqueValueFromDB("SELECT card_id FROM cards WHERE id=$id");
-		return new self::$classes[$card_id]();
-	}
+	
 
 }

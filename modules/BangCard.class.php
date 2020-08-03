@@ -41,7 +41,7 @@ class BangCard extends APP_GameClass
 						$choose = false;
 						break;
 					case INRANGE:
-						$player_ids = $this->getPlayersInRange($player, $this->getRange($player));
+						$player_ids = $this->getPlayersInRange($player, BangCharacter::getRange($player));
 						break;
 					case SPECIFIC_RANGE:
 						$player_ids = $this->getPlayersInRange($player, $this->effect['range']);
@@ -53,7 +53,7 @@ class BangCard extends APP_GameClass
 				if($choose) {
 					return $this->askForTarget($player_ids, $player);
 				} else {
-					return $this->attack($player_ids, $game, $player);
+					return $this->attack($player_ids, $player);
 				}
 				break;
 			case DRAW:
@@ -64,33 +64,28 @@ class BangCard extends APP_GameClass
 		
 	}
 	
-	public function react($id, $game, $player) {
-		if($game['game_state']==CHOOSE_PLAYER) {
+	public function react($id, $player) {
+		if($this->game->getGameStateValue('state')==CHOOSE_PLAYER) {
 			switch($this->effect['type']) {
 				case BASIC_ATTACK:					
-					return $this->attack([$id], $game, $player);
+					return $this->attack([$id], $player);
 					break;
 			}
-		} elseif($game['game_state'] == WAIT_REACTION ) {
+		} elseif($this->game->getGameStateValue('state') == WAIT_REACTION ) {
 			$player_name = self::getUniqueValueFromDB("SELECT player_name FROM player WHERE player_id=" . $player);
 			switch($this->effect['type']) {
 				case BASIC_ATTACK:
 					if($id == 999) {
-						$this->looseLife($player, $player_name, $game['game_player']);
+						$this->looseLife($player, $player_name, $this->game->getGameStateValue('currentTurn'));
 					} else {
 						$card = self::getObjectListFromDB("SELECT card_type type,card_name name FROM cards WHERE id=" . $this->id)[0];
-						if($card->type == 11) {
+						if($card['type'] == 11) {
 							self:DbQuery("UPDATE cards SET position=-2 WHERE id=" . $this->id);
+							$this->game->setGameStateValue('state',0);
 							
-							self::DbQuery("UPDATE game SET game_state=0");
-							//self::notifyAllPlayers('cardPlayed', "$player_name used " . $card->name, array('card' => $card, 'player' => self::getCurrentPlayerId()));
-							//$this->gamestate->nextState( "awaitReaction" );
-							return [
-								'nextState' => 'awaitReaction',
-								'notifs' => [
-									['notif' => 'cardPlayed', 'msg' => "$player_name used " . $card->name, 'args' => ['card' => $card, 'player' => $player]]
-								]
-							];
+							self::notifyAllPlayers('cardPlayed', "$player_name used " . $card->name, array('card' => $card, 'player' => self::getCurrentPlayerId()));
+							$this->game->gamestate->nextState( "awaitReaction" );
+							
 						} else {
 							//todo show error
 						}
@@ -100,53 +95,9 @@ class BangCard extends APP_GameClass
 		}
 	}
 	
-	/**
-	 * getRange : Returns the range of player
-	 */
-	public function getRange($player) {
-		$cards = self::getObjectListFromDB("SELECT card_id FROM cards WHERE card_position=$player AND card_onHand=false");
-		if(count($cards)>0) {
-			$card = new BangCardManager::$classes[$card[0]]();
-			return $effects->range;
-		}
-		return 1;
-	}
 	
-	/**
-	 * getDistance : returns all players within a given range to a player
-	 */
-	public function getPlayersInRange($player, $range) {
-		$targets = array();
-		$characters = BangPlayerManager::getCharacters();
-		$equipment = BangCardManager::getEquipment($player);
-		$decrease = 0;		
-		if(isset($equipment[$player])) {
-			foreach($equipment[$player] as $card) {
-				if($card->effects->type==RANGE_DECREASE) $decrease += 1;
-			}		
-		}
-		if($characters[$player] == ROSE_DOOLAN) $decrease += 1;
-		
-		$positions = array_flip(self::getObjectListFromDB("SELECT player_id from player WHERE player_eliminated=0 ORDER BY player_no", true));
-		
-		foreach($positions as $player_id => $pos) {
-			if($player==$player_id) continue;
-			$min = min($positions[$player], $pos);
-			$max = max($positions[$player], $pos);
-			$dist = min($max-$min,count($positions)+$min-$max);
-			
-			if(isset($equipment[$player_id])) {
-				$cards = $equipment[$player_id];
-				foreach($cards as $card_id => $card) {
-					if($card->effects['type']==RANGE_INCREASE) $dist += 1;
-				}
-			}
-			if($characters[$player_id] == PAUL_REGRET) $dist += 1;
-			if($range >= $dist-$decrease) 
-				$targets[] = $player_id;
-		}
-		return $targets;
-	}
+	
+	
 	
 	/**
 	 * ask the player, which target
@@ -184,7 +135,7 @@ class BangCard extends APP_GameClass
 	/**
 	 * attack : performs an attack on all given players
 	 */
-	public function attack($player_ids, $game, $player) {
+	public function attack($player_ids, $player) {
 		$player_name = self::getUniqueValueFromDB("SELECT player_name FROM player WHERE player_id=".$game['game_player']);
 		if(count($player_ids) == 1) {
 			$id = $player_ids[0];

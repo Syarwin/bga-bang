@@ -19,6 +19,11 @@ CREATE TABLE IF NOT EXISTS `log` (
   PRIMARY KEY (`log_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
+-- see constants.inc.php --
+ALTER TABLE `player` ADD `player_role` INT(1) UNSIGNED NOT NULL;
+ALTER TABLE `player` ADD `player_character` INT(1) UNSIGNED NOT NULL;
+ALTER TABLE `player` ADD `player_bullets` INT(1) UNSIGNED NOT NULL;
+
 ----------- type -------------------------
 -- 1x: action
 -- 2x: Equipment
@@ -32,6 +37,7 @@ CREATE TABLE IF NOT EXISTS `log` (
 -- -1: deck
 -- -2: discard
 -- -3: active
+-- -4-n depending on active card
 ----------- value ---------------------
 -- xC: Clovers
 -- xS: Pikes
@@ -49,18 +55,7 @@ CREATE TABLE IF NOT EXISTS `cards` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
------------ roles ---------------------
--- 0: Sheriff
--- 1: Deputy
--- 2: Outlaw
--- 3: Renegade 
-CREATE TABLE IF NOT EXISTS `playerinfo` (
-  `id` int unsigned NOT NULL, 
-  `role` int NOT NULL,
-  `character_id` int NOT NULL,
-  `max_hp` int NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 ----------- game table ----------------
 -- game_state: current state of the game, see below

@@ -26,8 +26,12 @@ class bang extends Table
 		parent::__construct();
 		self::initGameStateLabels([
 //      'optionSetup'  => OPTION_SETUP,
-			'currentRound' => 10,//CURRENT_ROUND,
-			'firstPlayer'  => 11,//FIRST_PLAYER,
+			'currentRound' => 10,
+			'firstPlayer'  => 11,
+			'state'			=> 12,
+			'currentTurn'  => 13, //id of the player who's turn it is(Not always the active player) 
+			'currentCard'  => 14, //id of the card that has been played
+			'bangPlayed' => 15 // whether a bang has been played this turn
 		]);
 
 		// Initialize logger, board and cards
@@ -51,40 +55,15 @@ class bang extends Table
 	protected function setupNewGame($players, $options = []) {
 		// Initialize board and cards
 
-		$n = $this->cardManager->setupNewGame([BASE_GAME]);	
-		$deck = range(1,$n);
-		shuffle($deck);
-		$deck = [8,33,7,9,34,1,10,35,2,11,36,3,12,37,4,13,38,5,14,39,6,15,40];
+		$expansions = [BASE_GAME];
+		$n = $this->cardManager->setupNewGame($expansions);	
+		
 			// Initialize players
-			$this->playerManager->setupNewGame($players);
+		$sheriff = $this->playerManager->setupNewGame($players, $expansions, $n);
 		
-		$roles = array_slice(array(0,2,2,3,1,2,1),0,count($players));
-		shuffle($roles);
 		
-		$characters = range(0,15);
-		shuffle($characters);
-		$i = 0;
-		$values = array();
 		
-		// hand out characters, roles and cards
-		$sql = "INSERT INTO playerinfo(id, role, character_id, current_lp, max_lp) VALUES";
-		foreach($players as $id => $player) {
-			$char_id = $characters[$i];
-			$char_name = BangPlayerManager::$classes[$char_id];
-			$char  = new $char_name();
-			$role = $roles[$i];
-			$lp = $char->bullets;
-			if($role ==0) {
-				$lp++;
-				$sheriff = $id;
-			}
-			$values[] = "($id, $role, $char_id, $lp)";
-			$i++;			
-			$cards = array_splice($deck,0,$lp);
-			self::DbQuery("UPDATE cards SET card_position = $id, card_onHand=1 WHERE id IN (" . implode(",", $cards) . ")");
-		}
-		self::DbQuery("INSERT INTO playerinfo(id, role, character_id, max_hp) VALUES" . implode(",",$values));
-		$sql .= implode(",", $values);
+		
 
 		self::DbQuery("INSERT INTO game(game_state, game_player, game_bangplayed) VALUES(0,$sheriff,0)");
 		// Active first player to play
@@ -140,33 +119,16 @@ class bang extends Table
 		// check for active cards
 		self::checkAction( 'play' );
 		$player_id = self::getCurrentPlayerId();
+		$char = BangPlayerManager::getCharacter($player_id);
+		$char->playCard($id);
 		//$card = BangCardManager::createCard($id);
-		$card = new CardBang();
-		$card->id = $id;
-		$res = $card->play($player_id);
-		$notifs = $res['notifs'];
-		foreach($notifs as $notif) {
-			if(isset($notif['recipient']))
-				self::notifyPlayer($notif['recipient'], $notif['notif'], $notif['msg'], $notif['args']);
-			else
-				self::notifyAllPlayers($notif['notif'], $notif['msg'], $notif['args']);
-		}
-		if(isset($res['nextState'])) $this->gamestate->nextState( $res['nextState'] );
+		
 	}
 	
 	function selectOption($id) {
-		$game = self::getObjectListFromDB("SELECT * FROM game")[0];
-		$card = BangCardManager::createCard($game['game_card']);
-		$card->id = $game['game_card'];
-		$res = $card->react($id, $game, self::getCurrentPlayerId());
-		$notifs = $res['notifs'];
-		foreach($notifs as $notif) {
-			if(isset($notif['recipient']))
-				self::notifyPlayer($notif['recipient'], $notif['notif'], $notif['msg'], $notif['args']);
-			else
-				self::notifyAllPlayers($notif['notif'], $notif['msg'], $notif['args']);
-		}
-		if(isset($res['nextState'])) $this->gamestate->nextState( $res['nextState'] );
+		$player_id = self::getCurrentPlayerId();
+		$char = BangPlayerManager::getCharacter($player_id);
+		$char->selectOption($id);
 	}
 
 
