@@ -68,9 +68,9 @@ class BangPlayerManager extends APP_GameClass
 
 
 	/*
-	 * getCurrent : return BangPlayer object of current player
+	 * getActive : return BangPlayer object of active player
 	 */
-	public function getCurrent()
+	public function getActive()
 	{
 		$players = $this->getPlayers([$this->game->getActivePlayerId()]);
 		return $players[0];

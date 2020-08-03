@@ -26,8 +26,8 @@ class bang extends Table
 	{
 		self::initGameStateLabels([
 //      'optionSetup'  => OPTION_SETUP,
-			'currentRound' => 10,//CURRENT_ROUND,
-			'firstPlayer'  => 11,//FIRST_PLAYER,
+			'currentRound' => CURRENT_ROUND,
+			'firstPlayer'  => FIRST_PLAYER,
 		]);
 
 		// Initialize logger, board and cards
@@ -200,24 +200,40 @@ class bang extends Table
 	}
 
 
-/*
-	public function awaitReaction() {
-		$game = self::getObjectListFromDB("SELECT * FROM game")[0];
-		if($game['game_state'] == PLAY_CARD) {
-			$this->gamestate->changeActivePlayer( $game['game_player'] );
-			$this->gamestate->nextState( "finishedReaction" );
-		} else { //WAIT_REACTION
-			$this->gamestate->changeActivePlayer( $game['game_target'] );
-			$this->gamestate->nextState( "awaitReaction" );
-		}
-	}
-	*/
 
-
+	////////////////////////////////////
+	//////////   Play a card   /////////
+	////////////////////////////////////
 	public function argPlayCard()
 	{
-		return [];
+		$ids = [];
+		foreach($this->bplayers->getActive()->getCardsInHand() as $card){
+			if($card->isPlayable()){
+				$ids[] = $card->getId();
+			}
+		}
+
+		return [
+			'_private' => [
+				'active' => ['cards' => $ids]
+			],
+		];
 	}
+
+	/*
+		public function awaitReaction() {
+			$game = self::getObjectListFromDB("SELECT * FROM game")[0];
+			if($game['game_state'] == PLAY_CARD) {
+				$this->gamestate->changeActivePlayer( $game['game_player'] );
+				$this->gamestate->nextState( "finishedReaction" );
+			} else { //WAIT_REACTION
+				$this->gamestate->changeActivePlayer( $game['game_target'] );
+				$this->gamestate->nextState( "awaitReaction" );
+			}
+		}
+		*/
+
+
 
 	////////////////////////////////////
 	////////////   Zombie   ////////////
