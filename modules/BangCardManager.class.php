@@ -71,7 +71,7 @@ class BangCardManager extends APP_GameClass
 		$cards = [];
 		$bplayers = BangPlayerManager::getPlayers();
 		foreach($bplayers as $id => $char) {
-			$cards[$id] = self::getCardsInLocation('inPlay');
+			$cards[$id] = self::getDeck()->getCardsInLocation('inPlay');
 		}
 		return $cards;
 	}
@@ -81,10 +81,10 @@ class BangCardManager extends APP_GameClass
 	 */
 	public static function getCard($id, $game=null) {
 		$c = self::getDeck()->getCard($id);
-		$card_id = $c['card_type_arg'];
+		$card_id = $c['type_arg'];
 		$name = self::$classes[$card_id];
 		$card = new $name($id, $game);
-		$card->setCopy($c['card_type']);
+		$card->setCopy($c['type']);
 		return $card;
 	}
 

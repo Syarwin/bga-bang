@@ -26,6 +26,7 @@ class BangCharacter extends APP_GameClass
 	public function getText() {return $this->text;}
 	public function getExpansion() {return $this->expansion;}
 	public function getBullets() {return $this->bullets;}
+	public function getPlayer() {return $this->player;}
 
 	public function playCard($id) {
 		$card = BangCardManager::getCard($id);
@@ -92,7 +93,7 @@ class BangCharacter extends APP_GameClass
 	function askForTarget($targets, $card) {
 		$id = $this->player;
 		$t = implode(",",$targets);
-		$bplayers = BangPlayerManager::getPlayers($targets);
+		$bplayers = array_values(BangPlayerManager::getPlayers($targets, true));
 		$this->game->notifyPlayer($id, 'choosePlayer', '', array('msg' => 'Choose player', 'targets' => $bplayers, 'card' => $card));
 		$this->game->setGameStateValue('currentCard', $card);
 	}
@@ -117,9 +118,6 @@ class BangCharacter extends APP_GameClass
 	 */
 	function askReaction($attacker) {
 		$id = $this->player;
-		$bplayers = BangPlayerManager::getPlayers([$id, $attacker], false);
-		$name = $bplayers[$id];
-		$attacker_name = $bplayers[$attacker];
 		$onHand = BangCardManager::countCards('hand', $id);
 		// todo barrel
 

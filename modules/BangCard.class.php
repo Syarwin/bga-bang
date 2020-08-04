@@ -42,7 +42,7 @@ class BangCard extends APP_GameClass
 	 * play : default function to play a card that. Can be used for cards that have only symbols
 	 */
 	public function play($player) {
-		$bplayers = BangPlayerManager::getPlayers();
+		//$bplayers = BangPlayerManager::getPlayers();
 
 		switch ($this->effect['type']) {
 			case BASIC_ATTACK:
@@ -91,9 +91,9 @@ class BangCard extends APP_GameClass
 			switch($this->effect['type']) {
 				case BASIC_ATTACK:
 					$player->attack([$id]);
-					$name = BangPlayerManager::getPlayer($player->player)->getName();
+					$name = BangPlayerManager::getPlayer($player->getPlayer())->getName();
 					$card_name = $this->getName();
-					$this->game->notifyAllPlayers('cardPlayed', "$name played $card_name.", array('card' => $this->id, 'player' => $player->player));
+					$this->game->notifyAllPlayers('cardPlayed', "$name played $card_name.", array('card' => $this->id, 'player' => $player->getPlayer()));
 					BangCardManager::moveCard($this->id, 'discard');
 					return true;
 			}

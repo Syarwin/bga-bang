@@ -150,7 +150,7 @@ class BangPlayerManager extends APP_GameClass
 			if($full) {
 				$cards = BangCardManager::getHand($player['id']);
 				$hand = [];
-				foreach($cards as $card) $hand[] = ['type' => $card['type'], 'type_arg' => $card['type_arg']];
+				foreach($cards as $card) $hand[] = ['type' => $card['type'], 'type_arg' => $card['type_arg'], 'id'=>$card['id']];
 				$bplayers[$i]['hand'] = array_values($hand);
 			} else $bplayers[$i]['hand'] = BangCardManager::countCards('hand',$player['id']);
 		}
