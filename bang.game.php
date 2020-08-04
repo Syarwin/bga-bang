@@ -29,7 +29,7 @@ class bang extends Table
 			'currentRound' => 10,
 			'firstPlayer'  => 11,
 			'state'			=> 12,
-			'currentTurn'  => 13, //id of the player who's turn it is(Not always the active player) 
+			'currentTurn'  => 13, //id of the player who's turn it is(Not always the active player)
 			'currentCard'  => 14, //id of the card that has been played
 			'bangPlayed' => 15, // whether a bang has been played this turn
 			'target'	=> 16
@@ -50,20 +50,20 @@ class bang extends Table
 	 * setupNewGame:
 	 *  This method is called only once, when a new game is launched.
 	 * params:
-	 *  - array $players
+	 *  - array $bplayers
 	 *  - mixed $options
 	 */
-	protected function setupNewGame($players, $options = []) {
+	protected function setupNewGame($bplayers, $options = []) {
 		// Initialize board and cards
 
 		$expansions = [BASE_GAME];
-		$n = $this->cardManager->setupNewGame($expansions);	
-		
+		$this->cardManager->setupNewGame($expansions);
+
 		// Initialize players
-		$sheriff = $this->playerManager->setupNewGame($players, $expansions, $n);
-		
+		$sheriff = $this->playerManager->setupNewGame($bplayers, $expansions);
+
 		// Active first player to play
-		
+
 		self::setGameStateInitialValue('firstPlayer', $sheriff);
 		self::setGameStateInitialValue('currentRound', 0);
 		$this->gamestate->changeActivePlayer( $sheriff );
@@ -75,20 +75,16 @@ class bang extends Table
 	 *  The method is called each time the game interface is displayed to a player, ie: when the game starts and when a player refreshes the game page (F5)
 	 */
 	protected function getAllDatas() {
-		$result = array();		
+		$result = array();
 		$currentPlayerId = self::getCurrentPlayerId();
 		$result['active'] = self::getActivePlayerId();
-		$result['currentID'] = $currentPlayerId;
-		$result['players'] = BangPlayerManager::getUiData();
-		$result['deck'] = BangCardManager::getDeckCount();
+		$result['bplayers'] = array_values(BangPlayerManager::getUiData()); // id => [hp, max_hp no, name, color, character, powers(character effect), hand(count), cardsInPlay]
+		$result['currentPlayer'] = BangPlayerManager::getUiData([$currentPlayerId], true)[0]; // above + role and 'hand' is an array of cards
+		$result['deck'] = BangCardManager::countCards('deck');
 		$result['sheriff'] = BangPlayerManager::getSheriff();
-		$result['turn'] = $this->getGameStateValue('state');
-		$result['hand'] = BangCardManager::getHand($currentPlayerId);
-		$result['cardsInPlay'] = BangCardManager::getCardsInPlay();
-		
-		
-		
-		
+		$result['turn'] = $this->getGameStateValue('currentTurn');
+		$result['cards'] = array_values($this->cardManager->getUIData());
+
 		return $result;
 	}
 
@@ -106,7 +102,7 @@ class bang extends Table
 
 //////////////////////////////////////////////////////////////////////////////
 //////////// Player actions
-//////////// 
+////////////
 	function playCard($id) {
 		// check for active cards
 		self::checkAction( 'play' );
@@ -114,9 +110,9 @@ class bang extends Table
 		$char = BangPlayerManager::getCharacter($player_id, $this, true);
 		$char->playCard($id);
 		//$card = BangCardManager::createCard($id);
-		
+
 	}
-	
+
 	function selectOption($id) {
 		$player_id = self::getCurrentPlayerId();
 		$char = BangPlayerManager::getCharacter($player_id, $this, true);
@@ -150,7 +146,7 @@ class bang extends Table
 	 */
 	public function stStartOfTurn() {
 		$this->log->startTurn();
-		$this->playerManager->getPlayer()->startOfTurn();
+		BangPlayerManager::getPlayer(self::getActivePlayerId())->startOfTurn();
 		$this->gamestate->nextState("build");
 	}
 
@@ -174,11 +170,11 @@ class bang extends Table
 
 
 	public function awaitReaction() {
-		
+
 		if($this->getGameStateValue('state') == PLAY_CARD) {
 			$this->gamestate->changeActivePlayer( $this->getGameStateValue('currentTurn') );
 			$this->gamestate->nextState( "finishedReaction" );
-		} else { //WAIT_REACTION			
+		} else { //WAIT_REACTION
 			$this->gamestate->changeActivePlayer( $this->getGameStateValue('target'));
 			$this->gamestate->nextState( "awaitReaction" );
 		}
@@ -187,18 +183,18 @@ class bang extends Table
 	 * announceWin: TODO
 	 *
 	public function announceWin($playerId, $win = true) {
-		$players = $win ? $this->playerManager->getTeammates($playerId) : $this->playerManager->getOpponents($playerId);
-		if (count($players) == 2) {
+		$bplayers = $win ? $this->playerManager->getTeammates($playerId) : $this->playerManager->getOpponents($playerId);
+		if (count($bplayers) == 2) {
 			self::notifyAllPlayers('message', clienttranslate('${player_name} and ${player_name2} win!'), [
-				'player_name' => $players[0]->getName(),
-				'player_name2' => $players[1]->getName(),
+				'player_name' => $bplayers[0]->getName(),
+				'player_name2' => $bplayers[1]->getName(),
 			]);
 		} else {
 			self::notifyAllPlayers('message', clienttranslate('${player_name} wins!'), [
-				'player_name' => $players[0]->getName(),
+				'player_name' => $bplayers[0]->getName(),
 			]);
 		}
-		self::DbQuery("UPDATE player SET player_score = 1 WHERE player_team = {$players[0]->getTeam()}");
+		self::DbQuery("UPDATE player SET player_score = 1 WHERE player_team = {$bplayers[0]->getTeam()}");
 		$this->gamestate->nextState('endgame');
 	}
 */

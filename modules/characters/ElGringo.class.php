@@ -1,11 +1,11 @@
 <?php
 
 class ElGringo extends BangCharacter {
-  public function __construct()
+  public function __construct($pid=null, $game=null)
   {
-    parent::__construct();
+    parent::__construct($pid, $game);
     $this->id    = EL_GRINGO;
-    $this->name  = clienttranslate('El Gringo');
+    $this->name = clienttranslate('El Gringo');
     $this->text  = [
       clienttranslate("Each time he loses a life point due to a card played by another player, he draws a random card from the hands of that player "),
 
@@ -26,8 +26,8 @@ class ElGringo extends BangCharacter {
 			$hands = self::getCollectionFromDB("SELECT card_position, COUNT(*) FROM cards WHERE card_position>0 GROUP BY card_position", true);
 			$name = self::getUniqueValueFromDB("SELECT player_name FROM player WHERE player_id=" . $this->id);
 			self::DbQuery("UPDATE cards SET card_position=$id WHERE card_id=" . $card['id']);
-			$players = BangPlayerManager::getPlayers();
-			foreach($players as $player) {
+			$bplayers = BangPlayerManager::getPlayers();
+			foreach($bplayers as $player) {
 				$pid = $player['id'];
 				if($pid==$id) {
 					$hand = BangCardManager::getHand($pid);

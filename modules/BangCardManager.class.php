@@ -7,33 +7,33 @@ class BangCardManager extends APP_GameClass
 {
 	public $game;
 	public static $deck = null;
-	public function __construct($game)
-	{
-		$this->game = $game;
 
-/*
-		$this->terrains = $this->game->getNew("module.common.deck");
-		$this->terrains->init("terrains");
-		$this->terrains->autoreshuffle = true;
-*/
+	public function __construct($game)	{
+		$this->game = $game;
 	}
 
 	public function setupNewGame($expansions)
 	{
-		self::$deck = self::getNew("module.common.deck");
-		self::$deck->init("card");
-
 		$cards = [];
 		foreach(self::$classes as $id => $name) {
 			$card = new $name();
 			foreach($expansions as $exp) {
-				foreach($card->copies[$exp] as $value) {
+				foreach($card->getCopies()[$exp] as $value) {
 					$cards[] = ['type' => $value, 'type_arg' => $id, 'nbr' => 1];
 				}
 			}
 		}
-		self::$deck->createCards($cards, 'deck');
-		return count($values);
+		self::getDeck()->createCards($cards, 'deck');
+		self::getDeck()->shuffle('deck');
+	}
+
+	private static function getDeck() {
+		if(self::$deck==null) {
+				self::$deck = self::getNew("module.common.deck");
+				self::$deck->init("card");
+				self::$deck->autoreshuffle = true;
+		}
+		return self::$deck;
 	}
 
 	/**
@@ -41,25 +41,27 @@ class BangCardManager extends APP_GameClass
 	 */
 	public static function countCards($location, $player=null) {
 		if($player==null)
-			return self::$deck->countCardsInLocation($location);
+			return self::getDeck()->countCardsInLocation($location);
 		else
-			return self::$deck->countCardsInLocation($location, $player);
+			return self::getDeck()->countCardsInLocation($location, $player);
 	}
 
-	
+
 
 	/**
 	  * getHand : Returns the cards of a players hand
 	  */
 	public static function getHand($id) {
-		return self::$deck->getCardsInLocation('hand' $player_id);
+		return self::getDeck()->getCardsInLocation('hand', $id);
 	}
 
 	/**
 	 * getCardsInPlay : returns all Cards in play
 	 */
-	public static function getCardsInPlay() {
-		return self::$deck->getCardsInLocation('inPlay');
+	public static function getCardsInPlay($player_id = null) {
+		if($player_id == null)
+				return self::getDeck()->getCardsInLocation('inPlay');
+		return self::getDeck()->getCardsInLocation('inPlay', $player_id);
 	}
 
 	/**
@@ -67,8 +69,8 @@ class BangCardManager extends APP_GameClass
 	 */
 	public static function getEquipment() {
 		$cards = [];
-		$players = BangPlayerManager::getPlayers();
-		foreach($players as $id => $char) {
+		$bplayers = BangPlayerManager::getPlayers();
+		foreach($bplayers as $id => $char) {
 			$cards[$id] = self::getCardsInLocation('inPlay');
 		}
 		return $cards;
@@ -78,17 +80,21 @@ class BangCardManager extends APP_GameClass
 	 *
 	 */
 	public static function getCard($id, $game=null) {
-		$card_id = self::$deck->getCard($id);
+		$c = self::getDeck()->getCard($id);
+		$card_id = $c['card_type_arg'];
 		$name = self::$classes[$card_id];
-		$card = new $name();
-		$card->$id = $id;
-		if($game != null) $card->game = $game;
+		$card = new $name($id, $game);
+		$card->setCopy($c['card_type']);
 		return $card;
 	}
 
 
 	public static function moveCard($id, $location, $arg=0) {
-		self::$deck->moveCard($id, $location, $arg);
+		self::getDeck()->moveCard($id, $location, $arg);
+	}
+
+	public static function deal($player, $amount){
+		self::getDeck()->pickCards($amount, 'deck', $player);
 	}
 
 	/*
@@ -128,5 +134,37 @@ class BangCardManager extends APP_GameClass
 		CARD_RAG_TIME => 'CardRagTime',*/
 	];
 
+	public function getUiData()
+	{
+		$ui = [];
+		foreach ($this->getAll() as $card) {
+			$ui[] = $card->getUiData();
+		}
+		return $ui;
+	}
+
+
+	/*
+	 * getAll: return all type of cards
+	 */
+	public function getAll()
+	{
+		return array_map(function ($type){
+			return $this->getCardByType($type);
+		}, array_keys(self::$classes));
+	}
+
+
+
+	/*
+	 * getCardOfType: factory function to create a card given its type
+	 */
+	public function getCardByType($cardType)
+	{
+		if (!isset(self::$classes[$cardType])) {
+			throw new BgaVisibleSystemException("getCardByType: Unknown card $cardType");
+		}
+		return new self::$classes[$cardType]();
+	}
 
 }

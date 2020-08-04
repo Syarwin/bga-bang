@@ -1,13 +1,13 @@
 <?php
 
 class LauraBillion extends BangCharacter {
-  public function __construct()
+  public function __construct($pid=null, $game=null)
   {
-    parent::__construct();
+    parent::__construct($pid, $game);
     $this->id    = LAURA_BILLION;
-    $this->name  = clienttranslate('Laura Billion');
+    $this->name = clienttranslate('Laura Billion');
     $this->text  = [
-      clienttranslate("“Draw!” Royals=all brown, green, and orange cards used during turn are redrawn at beginning of next turn"),
+      clienttranslate("“Draw!�? Royals=all brown, green, and orange cards used during turn are redrawn at beginning of next turn"),
 
     ];
     $this->bullets = 3;

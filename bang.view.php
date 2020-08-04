@@ -34,19 +34,19 @@ class view_bang_bang extends game_view
 
   function build_page( $viewArgs ) {
     // Get players & players number
-    $players = $this->game->loadPlayersBasicInfos();
-    $players_nbr = count( $players );
+    $bplayers = $this->game->loadPlayersBasicInfos();
+    $bplayers_nbr = count( $bplayers );
 
 	$player_sorted = array();
-	foreach($players as $k => $row) {
+	foreach($bplayers as $k => $row) {
 		$player_sorted[intval($row['player_no'])] = $row;
 	}
 	
 	//$width = 450;
 	$height = 20;				
-	$n = floor($players_nbr / 2);
+	$n = floor($bplayers_nbr / 2);
 	$this->page->begin_block( "bang_bang", "playarealeft" );
-	for($x = $players_nbr-1; $x >= $n; $x--) $this->page->insert_block("playarealeft", array('X' => $player_sorted[$x+1]['player_id']));
+	for($x = $bplayers_nbr-1; $x >= $n; $x--) $this->page->insert_block("playarealeft", array('X' => $player_sorted[$x+1]['player_id']));
 	
 	$this->page->begin_block( "bang_bang", "playarearight" );
 	for($x = 0; $x < $n; $x++) $this->page->insert_block("playarearight", array('X' => $player_sorted[$x+1]['player_id']));

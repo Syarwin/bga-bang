@@ -10,6 +10,7 @@ class BangPlayer extends APP_GameClass
   private $name;
   private $color;
   private $eliminated = false;
+  private $hp;
   private $zombie = false;
 
   public $character;
@@ -22,7 +23,16 @@ class BangPlayer extends APP_GameClass
     $this->color = $row['color'];
     $this->eliminated = $row['eliminated'] == 1;
     $this->zombie = $row['zombie'] == 1;
+    $this->hp = $row['score'];
   }
+
+  public function save() {
+    $eliminated = 0;
+    if($this->eliminated) $eliminated = 1;
+    $sql = "UPDATE players SET player_eliminated=$eliminated, player_score=" . $this->score;
+    self::DbQuery($sql);
+  }
+
 
 
   public function setupNewGame()
@@ -44,15 +54,19 @@ class BangPlayer extends APP_GameClass
   public function getNo(){ return $this->no; }
   public function getName(){ return $this->name; }
   public function getColor(){ return $this->color; }
+  public function getHp(){ return $this->hp; }
   public function isEliminated(){ return $this->eliminated; }
   public function isZombie(){ return $this->zombie; }
+
+  public function setHp($hp){ $this->hp = $hp; }
+  public function eliminate(){ $this->eliminated = false; }
 
   public function getUiData($currentPlayerId = null)
   {
     return [
       'id'        => $this->id,
       'no'        => $this->no,
-      'name'      => $this->name,
+      'name'      => $this->getName(),
       'color'     => $this->color,
     ];
   }

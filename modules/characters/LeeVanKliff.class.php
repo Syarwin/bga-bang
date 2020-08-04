@@ -1,11 +1,11 @@
 <?php
 
 class LeeVanKliff extends BangCharacter {
-  public function __construct()
+  public function __construct($pid=null, $game=null)
   {
-    parent::__construct();
+    parent::__construct($pid, $game);
     $this->id    = LEE_VAN_KLIFF;
-    $this->name  = clienttranslate('Lee Van Kliff');
+    $this->name = clienttranslate('Lee Van Kliff');
     $this->text  = [
       clienttranslate("During his turn, he may discard a BANG! to repeat the effect of a brown-bordered card he just played. "),
 

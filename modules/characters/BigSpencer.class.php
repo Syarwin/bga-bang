@@ -1,11 +1,11 @@
 <?php
 
 class BigSpencer extends BangCharacter {
-  public function __construct()
+  public function __construct($pid=null, $game=null)
   {
-    parent::__construct();
+    parent::__construct($pid, $game);
     $this->id    = BIG_SPENCER;
-    $this->name  = clienttranslate('Big Spencer');
+    $this->name = clienttranslate('Big Spencer');
     $this->text  = [
       clienttranslate("He starts with 5 cards. He can't play Missed!. "),
 

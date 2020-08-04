@@ -6,25 +6,43 @@
 class BangCard extends APP_GameClass
 {
 
-	public function __construct(){
+	public function __construct($id=null, $game=null){
+		$this->game=$game;
+		$this->id=$id;
 	}
 
-	public $id;
-	public $name;
-	public $text;
-	public $copies = [];
-	public $implemented = false;
-	public $type; // see dbmodel.sql
-	public $color;
-	public $effect; // array with type, impact and sometimes range
+  protected $type;
+	protected $id;
+	protected $name;
+	protected $text;
+	protected $copies = [];
+	protected $color;
+	protected $effect; // array with type, impact and sometimes range
+	protected $game;
+	protected $copy;
 
-	public function isPlayable() { return true; }
+
+
+
+	public function getId(){ return $this->id; }
+	public function getType(){ return $this->type; }
+	public function getCopy(){ return $this->copy; }
+	public function getEffectType(){ return $this->effect['type']; }
+	public function getName(){ return $this->name; }
+	public function getText(){ return $this->text; }
+	public function getCopies(){ return $this->copies; }
+	public function getEffect(){ return $this->effect; }
+	public function isEquipment(){return $this->color == BLUE;}
+	public function isAction(){return $this->color == BROWN;}
+
+	public function setCopy($copy) {$this->copy = $copy;}
+	//public function isPlayable() { return true; }
 
 	/**
 	 * play : default function to play a card that. Can be used for cards that have only symbols
 	 */
 	public function play($player) {
-		$players = BangPlayerManager::getPlayers();
+		$bplayers = BangPlayerManager::getPlayers();
 
 		switch ($this->effect['type']) {
 			case BASIC_ATTACK:
@@ -73,14 +91,14 @@ class BangCard extends APP_GameClass
 			switch($this->effect['type']) {
 				case BASIC_ATTACK:
 					$player->attack([$id]);
-					$name = BangPlayerManager::getPlayer($player->player)->name;
-					$card_name = $this->name;
+					$name = BangPlayerManager::getPlayer($player->player)->getName();
+					$card_name = $this->getName();
 					$this->game->notifyAllPlayers('cardPlayed', "$name played $card_name.", array('card' => $this->id, 'player' => $player->player));
 					BangCardManager::moveCard($this->id, 'discard');
 					return true;
 			}
 		} elseif($this->game->getGameStateValue('state') == WAIT_REACTION ) {
-			$player_name = BangPlayerManager::getPlayer($player->player)->name;
+			$player_name = BangPlayerManager::getPlayer($player->player)->getName();
 			switch($this->effect['type']) {
 				case BASIC_ATTACK:
 					if($id == 999) {
@@ -93,7 +111,7 @@ class BangCard extends APP_GameClass
 
 							$this->game->setGameStateValue('state',0);
 
-							self::notifyAllPlayers('cardPlayed', "$player_name used " . $card->name, array('card' => $card->id, 'player' => $player->id));
+							self::notifyAllPlayers('cardPlayed', "$player_name used " . $card->getName(), array('card' => $card->id, 'player' => $player->id));
 							$this->game->gamestate->nextState( "awaitReaction" );
 
 						} else {
@@ -107,12 +125,9 @@ class BangCard extends APP_GameClass
 
 
 
-
-
-
-
-
-
+	public function getUIData() {
+		return ['type_arg'=>$this->type, 'type' => $this->copy];
+	}
 
 
 

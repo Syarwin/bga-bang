@@ -1,14 +1,13 @@
 <?php
 
 class CardBang extends BangCard {
-  public function __construct()
+  public function __construct($id=null, $game=null)
   {
-    parent::__construct();
-    $this->id    = CARD_BANG;
+    parent::__construct($id, $game);
+    $this->type    = CARD_BANG;
     $this->name  = clienttranslate('BANG!');
     $this->text  = "A Bang to a player in range. Can usually only be played once per turn";
     $this->color = BROWN; //BROWN, BLUE, GREEN
-	$this->type  = 10;
     $this->effect = ['type' => BASIC_ATTACK, // BASIC_ATTACK, DRAW, DEFENSIVE, DISCARD, LIFE_POINT_MODIFIER, RANGE_INCREASE, RANGE_DECREASE, OTHER
 					'range' => 0,
 					'impacts' => INRANGE // NONE, INRANGE, SPECIFIC_RANGE, ALL_OTHER, ALL, ANY
@@ -22,4 +21,3 @@ class CardBang extends BangCard {
     ];
   }
 }
-

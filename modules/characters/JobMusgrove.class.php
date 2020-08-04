@@ -1,13 +1,13 @@
 <?php
 
 class JobMusgrove extends BangCharacter {
-  public function __construct()
+  public function __construct($pid=null, $game=null)
   {
-    parent::__construct();
+    parent::__construct($pid, $game);
     $this->id    = JOB_MUSGROVE;
-    $this->name  = clienttranslate('Job Musgrove');
+    $this->name = clienttranslate('Job Musgrove');
     $this->text  = [
-      clienttranslate("May “draw!” Royals=discard card from attacker's hand"),
+      clienttranslate("May “draw!�? Royals=discard card from attacker's hand"),
 
     ];
     $this->bullets = 4;

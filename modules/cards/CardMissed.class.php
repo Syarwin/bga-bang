@@ -1,14 +1,13 @@
 <?php
 
 class CardMissed extends BangCard {
-  public function __construct()
+  public function __construct($id=null, $game=null)
   {
-    parent::__construct();
-    $this->id    = CARD_MISSED;
+    parent::__construct($id, $game);
+    $this->type    = CARD_MISSED;
     $this->name  = clienttranslate('Missed');
     $this->text  = "Discard to avoid an attack";
     $this->color = BROWN; //BROWN, BLUE, GREEN
-	$this->type  = 11;
     $this->effect = ['type' => DEFENSIVE, // BASIC_ATTACK, DRAW, DEFENSIVE, DISCARD, LIFE_POINT_MODIFIER, RANGE_INCREASE, RANGE_DECREASE, OTHER
 					]; 
     
@@ -20,4 +19,3 @@ class CardMissed extends BangCard {
     ];
   }
 }
-

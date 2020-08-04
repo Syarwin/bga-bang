@@ -1,11 +1,11 @@
 <?php
 
 class MollyStark extends BangCharacter {
-  public function __construct()
+  public function __construct($pid=null, $game=null)
   {
-    parent::__construct();
+    parent::__construct($pid, $game);
     $this->id    = MOLLY_STARK;
-    $this->name  = clienttranslate('Molly Stark');
+    $this->name = clienttranslate('Molly Stark');
     $this->text  = [
       clienttranslate("Each time she plays or voluntarily discards a card when it is not her turn (e.g. Missed!, Beer, or BANG! during
 Indians!), she draws one card from the deck."),

@@ -1,11 +1,11 @@
 <?php
 
 class FlintDixon extends BangCharacter {
-  public function __construct()
+  public function __construct($pid=null, $game=null)
   {
-    parent::__construct();
+    parent::__construct($pid, $game);
     $this->id    = FLINT_DIXON;
-    $this->name  = clienttranslate('Flint Dixon');
+    $this->name = clienttranslate('Flint Dixon');
     $this->text  = [
       clienttranslate("Target must discard BANG! or take hit"),
 
