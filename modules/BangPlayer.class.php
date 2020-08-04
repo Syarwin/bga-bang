@@ -17,36 +17,15 @@ class BangPlayer extends APP_GameClass
 
   public function __construct($row)
   {
-    $this->id = (int) $row['id'];
-    $this->no = (int) $row['no'];
-    $this->name = $row['name'];
-    $this->color = $row['color'];
-    $this->eliminated = $row['eliminated'] == 1;
-    $this->zombie = $row['zombie'] == 1;
-    $this->hp = $row['score'];
-  }
-
-  public function save() {
-    $eliminated = 0;
-    if($this->eliminated) $eliminated = 1;
-    $sql = "UPDATE players SET player_eliminated=$eliminated, player_score=" . $this->score;
-    self::DbQuery($sql);
-  }
-
-
-
-  public function setupNewGame()
-  {
-/*
-    $sqlSettlements = 'INSERT INTO piece (player_id, location) VALUES ';
-    $values = [];
-    for($i = 0; $i < 40; $i++){
-      $values[] = "('" . $this->id . "','hand')";
-    }
-    self::DbQuery($sqlSettlements . implode($values, ','));
-
-    $this->drawTerrain();
-*/
+    $this->id = (int) $row['player_id'];
+    $this->no = (int) $row['player_no'];
+    $this->name = $row['player_name'];
+    $this->color = $row['player_color'];
+    $this->eliminated = $row['player_eliminated'] == 1;
+    $this->zombie = $row['player_zombie'] == 1;
+    $this->hp = $row['player_score'];
+    $this->role = $row['player_role'];
+    $this->character = $char = new BangPlayerManager::$classes[$row['player_character']]();
   }
 
 
@@ -55,6 +34,7 @@ class BangPlayer extends APP_GameClass
   public function getName(){ return $this->name; }
   public function getColor(){ return $this->color; }
   public function getHp(){ return $this->hp; }
+  public function getRole(){ return $this->role; }
   public function isEliminated(){ return $this->eliminated; }
   public function isZombie(){ return $this->zombie; }
 
@@ -63,12 +43,27 @@ class BangPlayer extends APP_GameClass
 
   public function getUiData($currentPlayerId = null)
   {
+
+    $current = $this->id == $currentPlayer;
+
     return [
       'id'        => $this->id,
       'no'        => $this->no,
       'name'      => $this->getName(),
       'color'     => $this->color,
+      'hand' => ($current) ? BangCardManager::getHand($currentPlayer) : BangCardManager::countCards('hand', $currentPlayer),
+      'role' => ($current || $this->role==SHERIFF) ? $this->role : null,
+      'character' => $this->character->getName(),
+      'powers' => $this->character->getText(),
+      'bullets' => $this->character->getBullets()
     ];
+  }
+
+  public function save() {
+    $eliminated = 0;
+    if($this->eliminated) $eliminated = 1;
+    $sql = "UPDATE players SET player_eliminated=$eliminated, player_score=" . $this->score;
+    self::DbQuery($sql);
   }
 
   public function startOfTurn()

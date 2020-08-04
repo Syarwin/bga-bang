@@ -134,10 +134,10 @@ class BangCardManager extends APP_GameClass
 		CARD_RAG_TIME => 'CardRagTime',*/
 	];
 
-	public function getUiData()
+	public static function getUiData()
 	{
 		$ui = [];
-		foreach ($this->getAll() as $card) {
+		foreach (self::getAll() as $card) {
 			$ui[] = $card->getUiData();
 		}
 		return $ui;
@@ -147,10 +147,10 @@ class BangCardManager extends APP_GameClass
 	/*
 	 * getAll: return all type of cards
 	 */
-	public function getAll()
+	public static function getAll()
 	{
 		return array_map(function ($type){
-			return $this->getCardByType($type);
+			return self::getCardByType($type);
 		}, array_keys(self::$classes));
 	}
 
@@ -159,7 +159,7 @@ class BangCardManager extends APP_GameClass
 	/*
 	 * getCardOfType: factory function to create a card given its type
 	 */
-	public function getCardByType($cardType)
+	public static function getCardByType($cardType)
 	{
 		if (!isset(self::$classes[$cardType])) {
 			throw new BgaVisibleSystemException("getCardByType: Unknown card $cardType");

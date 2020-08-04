@@ -60,7 +60,7 @@ class bang extends Table
 		$this->cardManager->setupNewGame($expansions);
 
 		// Initialize players
-		$sheriff = $this->playerManager->setupNewGame($bplayers, $expansions);
+		$sheriff = BangPlayerManager::setupNewGame($bplayers, $expansions, $this);
 
 		// Active first player to play
 
@@ -78,10 +78,10 @@ class bang extends Table
 		$result = array();
 		$currentPlayerId = self::getCurrentPlayerId();
 		$result['active'] = self::getActivePlayerId();
-		$result['bplayers'] = array_values(BangPlayerManager::getUiData()); // id => [hp, max_hp no, name, color, character, powers(character effect), hand(count), cardsInPlay]
-		$result['currentPlayer'] = BangPlayerManager::getUiData([$currentPlayerId], true)[0]; // above + role and 'hand' is an array of cards
+		$result['bplayers'] = array_values(BangPlayerManager::getUiData(null, $currentPlayerId)); // id => [hp, max_hp no, name, color, character, powers(character effect), hand(count), cardsInPlay]
+		//$result['currentPlayer'] = BangPlayerManager::getUiData([$currentPlayerId], true)[0]; // above + role and 'hand' is an array of cards
 		$result['deck'] = BangCardManager::countCards('deck');
-		$result['sheriff'] = BangPlayerManager::getSheriff();
+		//$result['sheriff'] = BangPlayerManager::getSheriff();
 		$result['turn'] = $this->getGameStateValue('currentTurn');
 		$result['cards'] = array_values($this->cardManager->getUIData());
 

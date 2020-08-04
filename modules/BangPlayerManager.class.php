@@ -8,16 +8,10 @@ require_once('BangPlayer.class.php');
 
 class BangPlayerManager extends APP_GameClass
 {
-	public $game;
-	public function __construct($game)
-	{
-		$this->game = $game;
-	}
 
-
-	public function setupNewGame($bplayers, $expansions)	{
+	public function setupNewGame($bplayers, $expansions, $game)	{
 		self::DbQuery('DELETE FROM player');
-		$gameInfos = $this->game->getGameinfos();
+		$gameInfos = $game->getGameinfos();
 		$sql = 'INSERT INTO player (player_id, player_color, player_canal, player_name, player_avatar, player_bullets, player_score, player_role, player_character) VALUES ';
 
 		$deck = [8,33,7,9,34,1,10,35,2,11,36,3,12,37,4,13,38,5,14,39,6,15,40]; //only for testing
@@ -47,7 +41,7 @@ class BangPlayerManager extends APP_GameClass
 			BangCardManager::deal($pId,$bullets);
 		}
 		self::DbQuery($sql . implode($values, ','));
-		$this->game->reloadPlayersBasicInfos();
+		$game->reloadPlayersBasicInfos();
 		return $sheriff;
 	}
 
@@ -60,7 +54,6 @@ class BangPlayerManager extends APP_GameClass
 	 */
 	public static function getPlayer($playerId/* = null*/)
 	{
-		//$playerId = $playerId ?? $this->game->getActivePlayerId();
 		$bplayers = self::getPlayers([$playerId]);
 		return $bplayers[0];
 	}
@@ -71,7 +64,7 @@ class BangPlayerManager extends APP_GameClass
 	 */
 	public static function getPlayers($playerIds = null, $asArrayCollection = false)
 	{
-		$sql = "SELECT player_id id, player_color color, player_name name, player_score score, player_zombie zombie, player_eliminated eliminated, player_no no FROM player";
+		$sql = "SELECT * FROM player" ;
 		if (is_array($playerIds)) {
 			$sql .= " WHERE player_id IN ('" . implode("','", $playerIds) . "')";
 		}
@@ -131,30 +124,13 @@ class BangPlayerManager extends APP_GameClass
 	/*
 	 * getUiData : get all ui data of all players : id, hp, max_hp no, name, color, character, powers(character effect), hand(count)  [if $full then also role]
 	 */
-	public static function getUiData($playerIds = null, $full=false)	{
-		$sql = "SELECT player_id id, player_score hp, player_bullets bullets, player_name name, player_color color, player_character" ;
-		if($full) $sql .= ", player_role role";
-		$sql .= " FROM player";
-		if (is_array($playerIds)) {
-			$sql .= " WHERE player_id IN ('" . implode("','", $playerIds) . "')";
+	public static function getUiData($playerIds = null, $currentPlayer)	{
+		$bplayers = self::getPlayers();
+		$uidata = [];
+		foreach ($bplayers as $player) {
+			$uidata[] = $player->getUiData();
 		}
-		$bplayers = self::getObjectListFromDB($sql);
-
-
-		foreach ($bplayers as $i=>$player) {
-			$char = new BangPlayerManager::$classes[$player['player_character']]();
-			$bplayers[$i]['character'] = $char->getName();
-			$bplayers[$i]['powers'] = $char->getText();
-
-
-			if($full) {
-				$cards = BangCardManager::getHand($player['id']);
-				$hand = [];
-				foreach($cards as $card) $hand[] = ['type' => $card['type'], 'type_arg' => $card['type_arg'], 'id'=>$card['id']];
-				$bplayers[$i]['hand'] = array_values($hand);
-			} else $bplayers[$i]['hand'] = BangCardManager::countCards('hand',$player['id']);
-		}
-		return $bplayers;
+		return $uidata;
 	}
 
 	public static function getCharactersByExpansion($expansions) {
