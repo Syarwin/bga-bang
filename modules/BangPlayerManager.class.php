@@ -128,9 +128,9 @@ class BangPlayerManager extends APP_GameClass
 		$bplayers = self::getPlayers();
 		$uidata = [];
 		foreach ($bplayers as $player) {
-			$uidata[] = $player->getUiData();
+			$uidata[] = $player->getUiData($currentPlayer);
 		}
-		return $uidata;
+		return array_values($uidata);
 	}
 
 	public static function getCharactersByExpansion($expansions) {

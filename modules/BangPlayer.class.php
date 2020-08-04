@@ -44,14 +44,14 @@ class BangPlayer extends APP_GameClass
   public function getUiData($currentPlayerId = null)
   {
 
-    $current = $this->id == $currentPlayer;
+    $current = $this->id == $currentPlayerId;
 
     return [
       'id'        => $this->id,
       'no'        => $this->no,
       'name'      => $this->getName(),
       'color'     => $this->color,
-      'hand' => ($current) ? BangCardManager::getHand($currentPlayer) : BangCardManager::countCards('hand', $currentPlayer),
+      'hand' => ($current) ? array_values(BangCardManager::getHand($currentPlayerId)) : BangCardManager::countCards('hand', $currentPlayerId),
       'role' => ($current || $this->role==SHERIFF) ? $this->role : null,
       'character' => $this->character->getName(),
       'powers' => $this->character->getText(),
