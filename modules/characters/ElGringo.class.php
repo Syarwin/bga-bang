@@ -30,11 +30,11 @@ class ElGringo extends BangCharacter {
 			foreach($bplayers as $player) {
 				$pid = $player->getId();
 				if($pid==$id) {
-					$hand = BangCardManager::getHand($pid);
+					$hand = array_values(BangCardManager::getHand($pid));
 					$this->game->notifyPlayer($pid, 'handChange', "you steal a card from your attacker",
 									['hands'=>$hands, 'hand'=>$hand, 'card' => $card, 'gain'=>$id, 'loose'=>$byPlayer]);
 				} elseif($pid==$byPlayer) {
-					$hand = BangCardManager::getHand($pid);
+					$hand = array_values(BangCardManager::getHand($pid));
 					$this->game->notifyPlayer($pid, 'handChange', "$name steals a card from you",
 									['hands'=>$hands, 'hand'=>$hand, 'card' => $card, 'gain'=>$id, 'loose'=>$byPlayer]);
 				} else {

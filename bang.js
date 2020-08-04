@@ -38,11 +38,12 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], functi
 		setup: function (gamedatas) {
 			var _this = this;
 			debug('SETUP', gamedatas);
+      var myId = gamedatas.currentPlayer.id;
 
 			// Setting up player boards
       gamedatas.bplayers.forEach( player => {
-        var name = player.player_name;
-				if(player.id == gamedatas.sheriff) name += " (S)";	// todo design for sheriff
+        var name = player.name;
+				if(player.id == gamedatas.sheriff) name += " (S)";	// todo replaye with design for sheriff
 				name += " (" + player.character + ")";
 
 				document.getElementById('title_' + player.id).innerHTML = name;
@@ -286,7 +287,6 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], functi
 				['debug',500],
 				['choosePlayer', 500],
 				['cardPlayed', 500],
-				['chooseReaction', 500],
 				['handChange', 500],
 				['lostLife', 500]
 			];
@@ -320,14 +320,14 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], functi
 			var height = (Object.keys(notif.args.targets).length+1-options.children.length)*40;
 			while(options.children.length > 1) options.children[1].remove();
 
-			for( var id in notif.args.targets) {
-				var p = dojo.place( this.format_block( 'jstpl_option', {
-					name: notif.args.targets[id].name,
-					id:id,
-					color:notif.args.targets[id].color
+      notif.args.targets.forEach( player => {
+        var p = dojo.place( this.format_block( 'jstpl_option', {
+					name: player.name,
+					id: player.id,
+					color: player.color
 				} ) , 'options' );
 				dojo.connect(p,"onclick", this, "onSelectOption");
-			}
+      })
 			dojo.animateProperty({node:"board", properties:{height: rect.height + height}}).play();
 
 			document.getElementById('optionsTitle').innerHTML = notif.args.msg;
@@ -386,30 +386,7 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], functi
 				}).play();
 		},
 
-		/**
-		 * called when a player attacked this player and he may react
-		 * notif.args: [
-		 *		msg: the msg asking for a reaction
-		 * ]
-		 */
-		notif_chooseReaction: function(notif) {
-			var options = document.getElementById("options");
-			options.style.removeProperty("display");
-			//options.style.height = "0px";
-			var rect = document.getElementById('board').getBoundingClientRect();
-			var height = 80;
-			var p = dojo.place( this.format_block( 'jstpl_option', {
-					name: "pass",
-					id:999,
-					color:"000"
-				} ) , 'options' );
-			dojo.connect(p,"onclick", this, "onSelectOption");
-			console.log(rect.height + height);
-			document.getElementById('options').style.height = 0;
-			dojo.animateProperty({node:"board", properties:{height: rect.height + height}}).play();
-			dojo.animateProperty({node:"options", properties:{height: height}}).play();
-			document.getElementById('optionsTitle').innerHTML = notif.args.msg;
-		},
+
 
 		/**
 		 * called when any player gained or lost a card

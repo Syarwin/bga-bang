@@ -171,12 +171,12 @@ class BangPlayerManager extends APP_GameClass
 	 * returns an instance of the character id
 	 * $id: either the character id or the player id, in case of latter, 3rd param need to be true
 	 * $game: optional the bang.class instance
-	 * $usePlayerid: whether the first param is the player id.
+	 * $queryCharacter: whether the first param is the player id.
 	 *
 	 */
-	public static function getCharacter($id, $game=null, $queryplayer=false) {
+	public static function getCharacter($id, $game=null, $queryCharacter=false) {
 		$pid = -1;
-		if($queryplayer) {
+		if($queryCharacter) {
 			$pid = $id;
 			$id = self::getUniqueValueFromDB("SELECT player_character FROM player WHERE player_id = $id");
 		}
