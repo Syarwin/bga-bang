@@ -27,6 +27,12 @@ class BangCard extends APP_GameClass
 	public function getId(){ return $this->id; }
 	public function getType(){ return $this->type; }
 	public function getCopy(){ return $this->copy; }
+
+	// TODO : convert str to int ? (J => 11, Q => 12, K => 13 ?)
+	public function getValue(){ return substr($this->copy, 0, -1); }
+	// TODO : convert str to php constants
+	public function getColor(){ return substr($this->copy, -1); }
+
 	public function getEffectType(){ return $this->effect['type']; }
 	public function getName(){ return $this->name; }
 	public function getText(){ return $this->text; }
@@ -126,7 +132,11 @@ class BangCard extends APP_GameClass
 
 
 	public function getUIData() {
-		return ['type_arg'=>$this->type, 'type' => $this->copy];
+		return [
+			'type' => $this->type,
+			'name' => $this->name,
+			'text' => $this->text,
+		];
 	}
 
 

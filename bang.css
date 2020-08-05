@@ -13,71 +13,112 @@
  *
  */
 
-@import url(../../../css/csslayer.css); /* Note: you must not use any @import directive other than this one */
-
-.playarea {
-	width: 100%;
-	height:250px;
-	background-color:#fff8;
-	display:flex;
-	flex-direction: column;
-	align-items:center;
+ @font-face {
+     font-family: 'Perdido';
+     src: url('img/fonts/PerdidoDemo.woff2') format('woff2'),
+         url('img/fonts/PerdidoDemo.woff') format('woff'),
+         url('img/fonts/PerdidoDemo.ttf') format('truetype');
+     font-weight: normal;
+     font-style: normal;
+     font-display: swap;
 }
 
-.left { left:0px; }
-.right { right:0px; }
 
-.center {
-	position:absolute; 
-	left:0px; 
-	top:0px; 
-	right:0px; 
-	bottom:0px; 
-	margin:auto;
-}
-
-h3 {
-	height:20px;
-}
-
-.mrow {
-	display:flex;
-	flex-direction:row; 
-	flex-grow:1; 
-	align-items: center;
-	justify-content: space-evenly;
-}
-
-.card {
-	width: 118px;
-	height: 183px;
-	background-image:url(img/cardback.jpg);
-	border-radius:15px;
-}
-
-.bigcard {
-	width: 158px;
-	height: 244px;
-	background-image:url(img/cardfronts.png);
+div#board {
+	width:100%;
+	min-height:800px;
 	position:relative;
+	display:grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
-.tooltip {
-	width:10vw;
-	height:auto;
-	background-color:#ffffff88;
+div#hand {
+	background-color:rgba(255,255,255,0.5);
+	border-radius: 5px;
+	grid-row:1;
+	grid-column:1 / 5;
+	height:210px;
+	display:flex;
+	flex-flow:row;
 }
 
-.self {
-	background-color:white;
+div.bang-card {
+	position:relative;
+	width:125px;
+	height:200px;
+	margin:5px;
+	background-image:url("img/card_borders.png");
+	background-size:cover;
 }
 
-.description {
-	position: absolute;
-	bottom: 20px;
-	background: white;
-	left: 20px;
-	width: 120px;
-	height: 100px;
-	display:none;
+div.bang-card[data-type="0"],
+div.bang-card[data-type="1"],
+div.bang-card[data-type="2"],
+div.bang-card[data-type="3"],
+div.bang-card[data-type="4"] { background-position:100% center; }
+
+div.bang-card[data-type="5"],
+div.bang-card[data-type="6"],
+div.bang-card[data-type="7"],
+div.bang-card[data-type="8"],
+div.bang-card[data-type="9"],
+div.bang-card[data-type="10"],
+div.bang-card[data-type="11"],
+div.bang-card[data-type="12"],
+div.bang-card[data-type="13"],
+div.bang-card[data-type="14"] { background-position:33.33% center; }
+
+div.bang-card[data-type="15"],
+div.bang-card[data-type="16"],
+div.bang-card[data-type="17"],
+div.bang-card[data-type="18"],
+div.bang-card[data-type="19"],
+div.bang-card[data-type="20"],
+div.bang-card[data-type="21"] { background-position:66.66% center; }
+
+
+div.bang-card .card-name {
+	position:absolute;
+	top: 10px;
+	left: 10px;
+	width: 105px;
+	height: 40px;
+	text-align: center;
+	font-family: "Perdido";
+	font-size: 24px;
+	letter-spacing: -1.5px;
 }
+
+
+div.bang-card .card-background {
+	position:absolute;
+	top: 34px;
+	left: 10px;
+	width: 105px;
+	height: 105px;
+	background-image:url("img/card_backgrounds.jpg");
+	background-size:cover;
+}
+
+div.bang-card[data-type="0"] .card-background { background-position:calc(0 * 100% / 21) center; }
+div.bang-card[data-type="1"] .card-background { background-position:calc(1 * 100% / 21) center; }
+div.bang-card[data-type="2"] .card-background { background-position:calc(2 * 100% / 21) center; }
+div.bang-card[data-type="3"] .card-background { background-position:calc(3 * 100% / 21) center; }
+div.bang-card[data-type="4"] .card-background { background-position:calc(4 * 100% / 21) center; }
+div.bang-card[data-type="5"] .card-background { background-position:calc(5 * 100% / 21) center; }
+div.bang-card[data-type="6"] .card-background { background-position:calc(6 * 100% / 21) center; }
+div.bang-card[data-type="7"] .card-background { background-position:calc(7 * 100% / 21) center; }
+div.bang-card[data-type="8"] .card-background { background-position:calc(8 * 100% / 21) center; }
+div.bang-card[data-type="9"] .card-background { background-position:calc(9 * 100% / 21) center; }
+div.bang-card[data-type="10"] .card-background { background-position:calc(10 * 100% / 21) center; }
+div.bang-card[data-type="11"] .card-background { background-position:calc(11 * 100% / 21) center; }
+div.bang-card[data-type="12"] .card-background { background-position:calc(12 * 100% / 21) center; }
+div.bang-card[data-type="13"] .card-background { background-position:calc(13 * 100% / 21) center; }
+div.bang-card[data-type="14"] .card-background { background-position:calc(14 * 100% / 21) center; }
+div.bang-card[data-type="15"] .card-background { background-position:calc(15 * 100% / 21) center; }
+div.bang-card[data-type="16"] .card-background { background-position:calc(16 * 100% / 21) center; }
+div.bang-card[data-type="17"] .card-background { background-position:calc(17 * 100% / 21) center; }
+div.bang-card[data-type="18"] .card-background { background-position:calc(18 * 100% / 21) center; }
+div.bang-card[data-type="19"] .card-background { background-position:calc(19 * 100% / 21) center; }
+div.bang-card[data-type="20"] .card-background { background-position:calc(20 * 100% / 21) center; }
+div.bang-card[data-type="21"] .card-background { background-position:calc(21 * 100% / 21) center; }

@@ -48,11 +48,26 @@ class BangCardManager extends APP_GameClass
 
 
 
+
+	public static function formatCard($card){
+		return [
+			'id' => $card['id'],
+			'type' => $card['type_arg'],
+			'color' => substr($card['type'], -1),
+			'value' => substr($card['type'], 0, -1),
+		];
+	}
+
+	public static function formatCards($cards){
+		return array_values(array_map(['BangCardManager', 'formatCard'], $cards));
+	}
+
+
 	/**
 	  * getHand : Returns the cards of a players hand
 	  */
 	public static function getHand($id) {
-		return self::getDeck()->getCardsInLocation('hand', $id);
+		return self::formatCards(self::getDeck()->getCardsInLocation('hand', $id));
 	}
 
 	/**
@@ -60,8 +75,8 @@ class BangCardManager extends APP_GameClass
 	 */
 	public static function getCardsInPlay($player_id = null) {
 		if($player_id == null)
-				return self::getDeck()->getCardsInLocation('inPlay');
-		return self::getDeck()->getCardsInLocation('inPlay', $player_id);
+				return self::formatCards(self::getDeck()->getCardsInLocation('inPlay'));
+		return self::formatCards(self::getDeck()->getCardsInLocation('inPlay', $player_id));
 	}
 
 	/**
