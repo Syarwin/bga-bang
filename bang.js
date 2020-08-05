@@ -39,22 +39,28 @@ setup: function (gamedatas) {
 	debug('SETUP', gamedatas);
 
 	// Setting up player boards
+  var nPlayers = gamedatas.bplayers.length;
+  dojo.attr("board", "data-players", nPlayers); // Usefull to setup the layout
+
+  // Usefull to reorder player board around the current player
+  var currentPlayerNo = gamedatas.bplayers.reduce((carry, player) => (player.id == this.player_id)? player.no : carry, 0);
+
   gamedatas.bplayers.forEach( player => {
     let isCurrent = player.id == this.player_id;
 
     if(player.role == null) player.role = 'hidden';
+    player.no = (player.no + nPlayers - currentPlayerNo) % nPlayers;
     player.handCount = isCurrent? player.hand.length : player.hand;
+
+    dojo.place(this.format_block('jstpl_player', player), 'board');
+
+    // TODO
+    //player.inplay.forEach(card => this.addCard(card, 'player-board-' + player.id));
 
     if(isCurrent){
       dojo.place(this.format_block('jstpl_hand', {}), 'board');
       player.hand.forEach(card => this.addCard(card, 'hand') );
     }
-
-    dojo.place(this.format_block('jstpl_player', player), 'board');
-    // TODO : document.getElementById('handCount_' + player.id).innerHTML = player.hand;
-
-    // TODO
-    //player.inplay.forEach(card => this.addCard(card, 'player-board-' + player.id));
   });
 
   // Formatting cards
@@ -89,6 +95,17 @@ onEnteringState: function (stateName, args) {
 		this[methodName](args.args);
 },
 
+/*
+ * onLeavingState:
+ * 	this method is called each time we are leaving a game state.
+ *
+ * params:
+ *	- str stateName : name of the state we are leaving
+ */
+onLeavingState: function (stateName) {
+	debug('Leaving state: ' + stateName);
+	this.clearPossible();
+},
 
 
 /*
@@ -176,7 +193,6 @@ clearPossible: function clearPossible() {
 	this.onUpdateActionButtons(this.gamedatas.gamestate.name, this.gamedatas.gamestate.args);
 },
 
-
 /*
  * takeAction: default AJAX call with locked interface
  */
@@ -187,6 +203,15 @@ takeAction: function (action, data, callback) {
 	this.ajaxcall("/bang/bang/" + action + ".html", data, this, callback);
 },
 
+/*
+ * takeAction: default AJAX call with locked interface
+ */
+takeAction: function (action, data, callback) {
+	data = data || {};
+	data.lock = true;
+	callback = callback || function (res) { };
+	this.ajaxcall("/bang/bang/" + action + ".html", data, this, callback);
+},
 
 /*
  * slideTemporary: a wrapper of slideTemporaryObject using Promise
@@ -201,6 +226,18 @@ slideTemporary: function (template, data, container, sourceId, targetId, duratio
 	});
 },
 
+/*
+ * slideTemporary: a wrapper of slideTemporaryObject using Promise
+ */
+slideTemporary: function (template, data, container, sourceId, targetId, duration, delay) {
+	var _this = this;
+	return new Promise(function (resolve, reject) {
+		var animation = _this.slideTemporaryObject(_this.format_block(template, data), container, sourceId, targetId, duration, delay);
+		setTimeout(function(){
+			resolve();
+		}, duration + delay)
+	});
+},
 
 /*
  * getCard: factory function that create a card
@@ -223,6 +260,56 @@ getCard: function(ocard) {
 addCard: function(ocard, container){
   var card = this.getCard(ocard);
   debug(card);
+  // TODO : add tooltip
+  dojo.place(this.format_block('jstpl_card', card), container);
+},
+
+
+
+///////////////////////////////////////////////////
+//////	 Reaction to cometD notifications	 ///////
+///////////////////////////////////////////////////
+
+/*
+ * setupNotifications:
+ *	In this method, you associate each of your game notifications with your local method to handle it.
+ *	Note: game notification names correspond to "notifyAllPlayers" and "notifyPlayer" in the santorini.game.php file.
+ */
+setupNotifications: function () {
+	var notifs = [
+		['debug',500],
+		['choosePlayer', 500],
+		['cardPlayed', 500],
+		['handChange', 500],
+		['lostLife', 500]
+	];
+
+	notifs.forEach(notif => {
+		dojo.subscribe(notif[0], this, "notif_" + notif[0]);
+		this.notifqueue.setSynchronous(notif[0], notif[1]);
+	});
+},
+
+/*
+ * getCard: factory function that create a card
+ */
+getCard: function(ocard) {
+  // Gets a card object ready to use in UI templates
+  var card = this.gamedatas.cards[ocard.type] || {
+    id: 0,
+    type: 0,
+    name: '',
+  };
+  card.id = ocard.id;
+  card.color = ocard.color;
+  card.value = ocard.value;
+
+  return card;
+},
+
+
+addCard: function(ocard, container){
+  var card = this.getCard(ocard);
   // TODO : add tooltip
   dojo.place(this.format_block('jstpl_card', card), container);
 },

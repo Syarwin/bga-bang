@@ -1,0 +1,190 @@
+/**
+ *------
+ * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
+ * bang implementation : © <Your name here> <Your email address here>
+ *
+ * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
+ * See http://en.boardgamearena.com/#!doc/Studio for more information.
+ * -----
+ *
+ * bang.css
+ *
+ * bang stylesheet
+ *
+ */
+
+ @font-face {
+     font-family: 'Perdido';
+     src: url('img/fonts/PerdidoDemo.woff2') format('woff2'),
+         url('img/fonts/PerdidoDemo.woff') format('woff'),
+         url('img/fonts/PerdidoDemo.ttf') format('truetype');
+     font-weight: normal;
+     font-style: normal;
+     font-display: swap;
+}
+
+$transparentWhite:rgba(255,255,255,0.5);
+$darkgray: rgba(100,100,100, 0.8);
+
+$numberOfCards:21;
+$guns: 0,1,2,3,4;
+$actions: 5,6,7,8,9,10,11,12,13,14;
+$equipments: 15,16,17,18,19,20,21;
+
+
+$layoutBig:(
+  4:(
+    0:("col" : 3, "row" : 2, "align": center),
+    1:("col" : 5, "row" : 3, "align": left),
+    2:("col" : 3, "row" : 4, "align": center),
+    3:("col" : 1, "row" : 3, "align": right),
+  ),
+  5:(
+    0:("col" : 3, "row" : 2, "align": center),
+    1:("col" : 5, "row" : 3, "align": left),
+    2:("col" : 4, "row" : 5, "align": center),
+    3:("col" : 2, "row" : 5, "align": center),
+    4:("col" : 1, "row" : 3, "align": right),
+  )
+);
+
+div#board {
+	width:100%;
+	min-height:800px;
+	position:relative;
+	display:grid;
+	grid-template-columns: repeat(6, 1fr);
+
+  div#hand {
+  	background-color:$transparentWhite;
+  	border-radius: 5px;
+  	grid-row:1;
+  	grid-column:1 / span 6;
+  	height:210px;
+  	display:flex;
+  	flex-flow:row;
+  }
+
+  .bang-player {
+    display:flex;
+    flex-flow:row;
+    align-items: center;
+    grid-row-end:span 2;
+    grid-column-end:span 2;
+  }
+
+  // TODO : add media query
+  @each $nPlayers, $layout in $layoutBig {
+    &[data-players="#{$nPlayers}"] .bang-player {
+      @each $i, $place in $layout {
+        &[data-no="#{$i}"] {
+          grid-column-start: map-get($place, 'col');
+          grid-row-start: map-get($place, 'row');
+
+          @if map-get($place, 'align') == left   { justify-content: flex-start; }
+          @if map-get($place, 'align') == center { justify-content: center; }
+          @if map-get($place, 'align') == right  { justify-content: flex-end; }
+        }
+      }
+    }
+  }
+
+
+  .bang-player-container {
+    width:96%;
+    height:96%;
+    background-color:$transparentWhite;
+    border-radius:5px;
+    border:1px solid $darkgray;
+    box-shadow: 1px 1px 5px $darkgray;
+    display:flex;
+
+    .player-inplay {
+      flex-grow:1;
+    }
+
+    .player-info {
+      position:relative;
+      width:123px;
+      height:100%;
+      background-image:url("img/card_borders.png");
+      background-size:cover;
+
+      .player-character-name {
+        font-family: "Perdido";
+        width: 100%;
+        margin-top: 13px;
+        text-align: center;
+        font-size: 16px;
+        letter-spacing:-1px;
+      }
+
+      .player-bullets {
+        position:absolute;
+        width:30px;
+        right:-3px;
+        top:40px;
+
+        .bullet {
+          width: 35px;
+          height: 13px;
+          background-image: url("img/bullet.png");
+          background-size: cover;
+          margin: 1px 0px;
+          transform: rotate(13deg);
+          background-position:0% 100%;
+        }
+
+        @for $maxBullets from 3 through 6 {
+          @for $n from $maxBullets + 1 through 6 {
+            &[data-max-bullets="#{$maxBullets}"] .bullet:nth-child(#{$n}) { display:none; }
+          }
+        }
+
+        @for $bullets from 0 through 6 {
+          @for $n from 1 through $bullets {
+            &[data-bullets="#{$bullets}"] .bullet:nth-child(#{$n}) { background-position:0 0; }
+          }
+        }
+      }
+    }
+  }
+
+  div.bang-card {
+  	position:relative;
+  	width:125px;
+  	height:200px;
+  	margin:5px;
+  	background-image:url("img/card_borders.png");
+  	background-size:cover;
+
+    @each $card in $actions    { &[data-type="#{$card}"] { background-position:1 * 100% / 3 center; } }
+    @each $card in $equipments { &[data-type="#{$card}"] { background-position:2 * 100% / 3 center; } }
+    @each $card in $guns       { &[data-type="#{$card}"] { background-position:3 * 100% / 3 center; } }
+
+    .card-name {
+    	position:absolute;
+    	top: 10px;
+    	left: 10px;
+    	width: 105px;
+    	height: 40px;
+    	text-align: center;
+    	font-family: "Perdido";
+    	font-size: 24px;
+    	letter-spacing: -1.5px;
+    }
+
+    .card-background {
+    	position:absolute;
+    	top: 34px;
+    	left: 10px;
+    	width: 105px;
+    	height: 105px;
+    	background-image:url("img/card_backgrounds.jpg");
+    	background-size:cover;
+    }
+    @for $i from 0 through $numberOfCards {
+      &[data-type="#{$i}"] .card-background { background-position:$i * 100% / $numberOfCards center; }
+    }
+  }
+}
