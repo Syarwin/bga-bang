@@ -5,68 +5,106 @@
  */
 class BangCardManager extends APP_GameClass
 {
-	public $game;
-	public function __construct($game)
-	{
-		$this->game = $game;
+	private static $deck = null;
 
-/*
-		$this->terrains = $this->game->getNew("module.common.deck");
-		$this->terrains->init("terrains");
-		$this->terrains->autoreshuffle = true;
-*/
+	private static function getDeck() {
+		if(self::$deck==null) {
+				self::$deck = self::getNew("module.common.deck");
+				self::$deck->init("card");
+				self::$deck->autoreshuffle = true;
+		}
+		return self::$deck;
 	}
-	
-	public function setupNewGame($expansions)
-	{
-	$sql = 'INSERT INTO cards(card_id, card_type, card_name, card_text, card_value, card_position, card_onHand) VALUES';
-	$values = array();
-	foreach(self::$classes as $id => $name) {
-		$card = new $name();
-		foreach($expansions as $exp) {
-			foreach($card->copies[$exp] as $value) {
-				$text = str_replace("'","''",$card->text);
-				$values[] = "('" . implode("','", [$id, $card->type, $card->name, $text, $value, -1, 0]) . "')";
+
+	public static function setupNewGame($expansions)	{
+		$cards = [];
+		foreach(self::$classes as $id => $name) {
+			$card = new $name();
+			foreach($expansions as $exp) {
+				foreach($card->getCopies()[$exp] as $value) {
+					$cards[] = ['type' => $value, 'type_arg' => $id, 'nbr' => 1];
+				}
 			}
 		}
+		self::getDeck()->createCards($cards, 'deck');
+		self::getDeck()->shuffle('deck');
 	}
-	$sql .= implode(",",$values);
-	self::DbQuery($sql);
-	return count($values);
-	}
-	
+
+
 	/**
 	 * getDeckCount : Returns the number of cards in the Deck
 	 */
-	public static function getDeckCount() {
-		return self::getUniqueValueFromDB( "SELECT COUNT(*) FROM cards WHERE card_position=-1" );
+	public static function countCards($location, $player=null) {
+		if($player==null)
+			return self::getDeck()->countCardsInLocation($location);
+		else
+			return self::getDeck()->countCardsInLocation($location, $player);
 	}
-	
+
+	public static function formatCard($card){
+		return [
+			'id' => $card['id'],
+			'type' => $card['type'],
+			'color' => substr($card['type_arg'], -1),
+			'value' => substr($card['type_arg'], 0, -1),
+		];
+	}
+
+	public static function formatCards($cards){
+		return array_values(array_map(['BangCardManager', 'formatCard'], $cards));
+	}
+
 	/**
-	  * getHand : Returns the cards of a players hand as array containing card_id, card_type, card_name, card_text
+	  * getHand : Returns the cards of a players hand
 	  */
 	public static function getHand($id) {
-		return self::getObjectListFromDB("SELECT id, card_type, card_name, card_text FROM cards WHERE card_position=$id AND card_onHand=1");
+		return self::formatCards(self::getDeck()->getCardsInLocation('hand', $id));
 	}
-	
+
 	/**
-	 * getCardsInPlay : returns all Cards in play as array containing card_type, card_name, card_text, card_position(e.g. the player they belong to)
+	 * getCardsInPlay : returns all Cards in play
 	 */
-	public static function getCardsInPlay() {
-		self::getObjectListFromDB("SELECT card_type, card_name, card_text, card_position FROM cards WHERE card_position>0 AND card_onHand=0");
+	public static function getCardsInPlay($player_id = null) {
+		if($player_id == null)
+				return self::formatCards(self::getDeck()->getCardsInLocation('inPlay'));
+		return self::formatCards(self::getDeck()->getCardsInLocation('inPlay', $player_id));
 	}
-	
+
 	/**
-	 * getEquipment : returns all equipment Cards a player has in play
+	 * getEquipment : returns all equipment Cards the players has in play as array: id => cards
 	 */
 	public static function getEquipment() {
-		$res = self::getDoubleKeyCollectionFromDb("SELECT card_position, id, card_id FROM cards WHERE card_position>0 AND card_onHand=0", true);
-		$cards = array();
-		foreach($res as $pid=>$arr) {
-			$cards[$pid] = array();
-			foreach($arr as $id=>$card_id) $cards[$pid][] = new $classes[$card_id]();
+		$cards = [];
+		$bplayers = BangPlayerManager::getPlayers();
+		foreach($bplayers as $id => $char) {
+			$cards[$id] = self::getDeck()->getCardsInLocation('inPlay');
 		}
 		return $cards;
+	}
+
+	public static function toObjects($array) {
+		$cards = [];
+		for($array as $row) $cards[] = self::getCard($row['id']);
+	}
+
+	/*
+	 *
+	 */
+	public static function getCard($id) {
+		$c = self::getDeck()->getCard($id);
+		$card_id = $c['type'];
+		$name = self::$classes[$card_id];
+		$card = new $name($id);
+		$card->setCopy($c['type_arg']);
+		return $card;
+	}
+
+	public static function moveCard($id, $location, $arg=0) {
+		self::getDeck()->moveCard($id, $location, $arg);
+	}
+
+	public static function deal($player, $amount){
+		self::getDeck()->pickCards($amount, 'deck', $player);
 	}
 
 	/*
@@ -77,25 +115,25 @@ class BangCardManager extends APP_GameClass
 		CARD_VOLCANIC => 'CardVolcanic',
 		CARD_REMINGTON => 'CardRemington',
 		CARD_REV_CARABINE => 'CardRevCarabine',
-		CARD_WINCHESTER => 'CardWinchester',		
+		CARD_WINCHESTER => 'CardWinchester',
 		CARD_BANG => 'CardBang',
 		CARD_MISSED => 'CardMissed',
 		CARD_STAGECOACH => 'CardStagecoach',
 		CARD_WELLS_FARGO => 'CardWellsFargo',
-		CARD_BEER => 'CardBeer',		
+		CARD_BEER => 'CardBeer',
 		CARD_GATLING => 'CardGatling',
-		CARD_PANIC => 'CardPanic',	
+		CARD_PANIC => 'CardPanic',
 		CARD_CAT_BALOU => 'CardCatBalou',
 		CARD_DUEL => 'CardDuel',
 		CARD_SALOON => 'CardSaloon',
-		CARD_GENERAL_STORE => 'CardGeneralStore',		
+		CARD_GENERAL_STORE => 'CardGeneralStore',
 		CARD_INDIANS => 'CardIndians',
 		CARD_JAIL => 'CardJail',
 		CARD_DYNAMITE => 'CardDynamite',
 		CARD_BARREL => 'CardBarrel',
 		CARD_SCOPE => 'CardScope',
 		CARD_MUSTANG => 'CardMustang'
-		
+
 		/*CARD_PUNCH => 'CardPunch',
 		CARD_SPRINGFIELD => 'CardSpringfield',
 		CARD_CANNON => 'CardCannon',
@@ -106,9 +144,31 @@ class BangCardManager extends APP_GameClass
 		CARD_RAG_TIME => 'CardRagTime',*/
 	];
 
-	public function createCard($id) {
-		$card_id = self::getUniqueValueFromDB("SELECT card_id FROM cards WHERE id=$id");
-		return new self::$classes[$card_id]();
+	public static function getUiData() {
+		$ui = [];
+		foreach (self::getAll() as $card) {
+			$ui[] = $card->getUiData();
+		}
+		return $ui;
+	}
+
+	/*
+	 * getAll: return all type of cards
+	 */
+	public static function getAll()	{
+		return array_map(function ($type){
+			return self::getCardByType($type);
+		}, array_keys(self::$classes));
+	}
+
+	/*
+	 * getCardOfType: factory function to create a card given its type
+	 */
+	public static function getCardByType($cardType)	{
+		if (!isset(self::$classes[$cardType])) {
+			throw new BgaVisibleSystemException("getCardByType: Unknown card $cardType");
+		}
+		return new self::$classes[$cardType]();
 	}
 
 }

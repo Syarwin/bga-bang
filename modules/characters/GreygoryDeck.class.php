@@ -1,11 +1,11 @@
 <?php
 
-class GreygoryDeck extends BangCharacter {
-  public function __construct()
+class GreygoryDeck extends BangPlayer {
+  public function __construct($row = null)
   {
-    parent::__construct();
-    $this->id    = GREYGORY_DECK;
-    $this->name  = clienttranslate('Greygory Deck');
+    parent::__construct($row);
+    $this->character    = GREYGORY_DECK;
+    $this->character_name = clienttranslate('Greygory Deck');
     $this->text  = [
       clienttranslate("At the start of his turn, he may draw 2 characters at random. He has all the abilities of the drawn characters. "),
 

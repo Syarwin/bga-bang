@@ -1,14 +1,13 @@
 <?php
 
 class CardBarrel extends BangCard {
-  public function __construct()
+  public function __construct($id=null)
   {
-    parent::__construct();
-    $this->id    = CARD_BARREL;
+    parent::__construct($id);
+    $this->type    = CARD_BARREL;
     $this->name  = clienttranslate('Barrel');
     $this->text  = "Reveal top card from the deck when you're attacked. If it's a heart it's a miss.";
     $this->color = BLUE; //BROWN, BLUE, GREEN
-	$this->type  = 21;
     $this->effect = ['type' => DEFENSIVE, // BASIC_ATTACK, DRAW, DEFENSIVE, DISCARD, LIFE_POINT_MODIFIER, RANGE_INCREASE, RANGE_DECREASE, OTHER
 					]; 
     
@@ -20,4 +19,3 @@ class CardBarrel extends BangCard {
     ];
   }
 }
-

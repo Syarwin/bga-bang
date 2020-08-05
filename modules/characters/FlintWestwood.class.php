@@ -1,11 +1,11 @@
 <?php
 
-class FlintWestwood extends BangCharacter {
-  public function __construct()
+class FlintWestwood extends BangPlayer {
+  public function __construct($row = null)
   {
-    parent::__construct();
-    $this->id    = FLINT_WESTWOOD;
-    $this->name  = clienttranslate('Flint Westwood');
+    parent::__construct($row);
+    $this->character    = FLINT_WESTWOOD;
+    $this->character_name = clienttranslate('Flint Westwood');
     $this->text  = [
       clienttranslate("During his turn, he may trade 1 card from hand with 2 cards at random from the hand of another player. "),
 

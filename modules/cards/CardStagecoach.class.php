@@ -1,14 +1,13 @@
 <?php
 
 class CardStagecoach extends BangCard {
-  public function __construct()
+  public function __construct($id=null)
   {
-    parent::__construct();
-    $this->id    = CARD_STAGECOACH;
+    parent::__construct($id);
+    $this->type    = CARD_STAGECOACH;
     $this->name  = clienttranslate('Stagecoach!');
     $this->text  = "Draw 2 cards.";
     $this->color = BROWN; //BROWN, BLUE, GREEN
-	$this->type  = 12;
     $this->effect = ['type' => DRAW, // BASIC_ATTACK, DRAW, DEFENSIVE, DISCARD, LIFE_POINT_MODIFIER, RANGE_INCREASE, RANGE_DECREASE, OTHER
 					'amount' => 2,
 					'impacts' => NONE // NONE, INRANGE, SPECIFIC_RANGE, ALL_OTHER, ALL, ANY
@@ -22,4 +21,3 @@ class CardStagecoach extends BangCard {
     ];
   }
 }
-

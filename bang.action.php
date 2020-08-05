@@ -35,19 +35,20 @@ class action_bang extends APP_GameAction
 			$this->view = "bang_bang";
 			self::trace( "Complete reinitialization of board game" );
 		}
-	} 
-	
+	}
+
 	public function playCard() {
-		self::setAjaxMode();		 
-		$id = self::getArg( "id", AT_posint, true );				
-		$result = $this->game->playCard( $id );
+		self::setAjaxMode();
+		$id = self::getArg( "id", AT_posint, true );
+		$id = self::getArg( "targets", AT_numberlist, false );
+		$result = $this->game->playCard($id, $targets);
 		self::ajaxResponse( );
 	}
-	
-	public function selectOption() {
-		self::setAjaxMode();		 
-		$id = self::getArg( "id", AT_posint, true );				
-		$result = $this->game->selectOption( $id );
+
+	public function react() {
+		self::setAjaxMode();
+		$id = self::getArg( "id", AT_posint, true );
+		$result = $this->game->react($id);
 		self::ajaxResponse( );
 	}
 }

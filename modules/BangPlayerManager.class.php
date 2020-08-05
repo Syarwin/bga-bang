@@ -8,32 +8,106 @@ require_once('BangPlayer.class.php');
 
 class BangPlayerManager extends APP_GameClass
 {
-	public $game;
-	public function __construct($game)
-	{
-		$this->game = $game;
-	}
 
-
-	public function setupNewGame($players)
-	{
+	public static function setupNewGame($bplayers, $expansions)	{
 		self::DbQuery('DELETE FROM player');
-		$gameInfos = $this->game->getGameinfos();
-		$sql = 'INSERT INTO player (player_id, player_color, player_canal, player_name, player_avatar) VALUES ';
+		$gameInfos = bang::instance->getGameinfos();
+		$sql = 'INSERT INTO player (player_id, player_color, player_canal, player_name, player_avatar, player_bullets, player_score, player_role, player_character) VALUES ';
+
+		$roles = array_slice(array(0,2,2,3,1,2,1),0,count($bplayers));
+		shuffle($roles);
+
+		$characters = self::getCharactersByExpansion($expansions);
+		shuffle($characters);
+
 		$values = [];
 		$i = 0;
-		foreach ($players as $pId => $player) {
-			$color = $gameInfos['player_colors'][$i++];
-			$values[] = "('" . $pId . "','$color','" . $player['player_canal'] . "','" . addslashes($player['player_name']) . "','" . addslashes($player['player_avatar']) . "')";
+		foreach ($bplayers as $pId => $player) {
+			$color = $gameInfos['player_colors'][$i];
+			$canal = $player['player_canal'];
+			$name = $player['player_name'];
+			$avatar = addslashes($player['player_avatar']);
+			$name = addslashes($player['player_name']);
+			$role = $roles[$i];
+			$char_id = $characters[$i++];
+			$char  = new self::$classes[$char_id]();
+			$bullets = $char->getBullets();
+			if($role == SHERIFF) {
+				$bullets++;
+				$sheriff = $pId;
+			}
+			$values[] = "($pId, '$color','$canal','$name','$avatar', $bullets, $bullets, $role, $char_id)";
+			BangCardManager::deal($pId,$bullets);
 		}
 		self::DbQuery($sql . implode($values, ','));
-		$this->game->reloadPlayersBasicInfos();
-
-		foreach($this->getPlayers() as $player){
-			$player->setupNewGame();
-		}
+		$game->reloadPlayersBasicInfos();
+		return $sheriff;
 	}
 
+	/*
+	 * getPlayer : returns the SantoriniPlayer object for the given player ID
+	 */
+	public static function getPlayer($playerId)	{
+		$bplayers = self::getPlayers([$playerId]);
+		return $bplayers[0];
+	}
+
+	/*
+	 * getPlayers : Returns array of SantoriniPlayer objects for all/specified player IDs
+	 * if $asArrayCollection is set to true it return the result as a map $id=>array
+	 */
+	public static function getPlayers($playerIds = null, $asArrayCollection = false) {
+		$sql = "SELECT * FROM player" ;
+		if (is_array($playerIds)) {
+			$sql .= " WHERE player_id IN ('" . implode("','", $playerIds) . "')";
+		}
+		if($asArrayCollection) return self::getCollectionFromDB($sql);
+		$rows = self::getObjectListFromDB($sql);
+
+		$bplayers = [];
+		foreach ($rows as $row) {
+			$bplayers[] = new self::$classes[$row['character']]($row);
+		}
+		return $bplayers;
+	}
+
+  /*
+	 * returns an array with positions of all living players . the values won't always be the same as player_no, but a complete sequence [0,#numberOflivingplayers)
+	 */
+	public static function getPlayerPositions() {
+		return array_flip(self::getObjectListFromDB("SELECT player_id from player WHERE player_eliminated=0 ORDER BY player_no", true));
+	}
+
+	/**
+	 * returns an array of the ids of all living players
+	 */
+	public static function getLivingPlayers($exept = null) {
+		$sql = "SELECT player_id FROM player WHERE player_eliminated=0";
+		if($exept != null) $sql.= " AND player_id != $exept";
+		return self::getObjectListFromDB($sql);
+	}
+
+	/*
+	 * getUiData : get all ui data of all players : id, hp, max_hp no, name, color, character, powers(character effect), hand(count)  [if $full then also role]
+	 */
+	public static function getUiData($playerIds = null, $currentPlayer)	{
+		$bplayers = self::getPlayers();
+		$uidata = [];
+		foreach ($bplayers as $player) {
+			$uidata[] = $player->getUiData($currentPlayer);
+		}
+		return array_values($uidata);
+	}
+
+	public static function getCharactersByExpansion($expansions) {
+		$characters = [
+			BASE_GAME => range(0,15)
+			// add new expansions
+		];
+		$res = [];
+		foreach($expansions as $exp) $res = array_merge($characters[$exp],$res);
+		return $res;
+	}
 
 	/*
 	 * characterClasses : for each character Id, the corresponding class name
@@ -55,7 +129,7 @@ class BangPlayerManager extends APP_GameClass
 		SLAB_THE_KILLER => 'SlabtheKiller',
 		WILLY_THE_KID => 'WillytheKid',
 		ROSE_DOOLAN => 'RoseDoolan',
-		
+
 		/*MOLLY_STARK => 'MollyStark',
 		APACHE_KID => 'ApacheKid',
 		ELENA_FUENTE => 'ElenaFuente',
@@ -73,95 +147,4 @@ class BangPlayerManager extends APP_GameClass
 		GREG_DIGGER => 'GregDigger',*/
 	];
 
-
-	/*
-	 * getPlayer : returns the SantoriniPlayer object for the given player ID
-	 */
-	public function getPlayer($playerId = null)
-	{
-		$playerId = $playerId ?? $this->game->getActivePlayerId();
-		$players = $this->getPlayers([$playerId]);
-		return $players[0];
-	}
-
-	/*
-	 * getPlayers : Returns array of SantoriniPlayer objects for all/specified player IDs
-	 */
-	public function getPlayers($playerIds = null)
-	{
-		$sql = "SELECT player_id id, player_color color, player_name name, player_score score, player_zombie zombie, player_eliminated eliminated, player_no no FROM player";
-		if (is_array($playerIds)) {
-			$sql .= " WHERE player_id IN ('" . implode("','", $playerIds) . "')";
-		}
-		$rows = self::getObjectListFromDB($sql);
-
-		$players = [];
-		foreach ($rows as $row) {
-			$player = new BangPlayer($row);
-			$players[] = $player;
-		}
-		return $players;
-	}
-	
-	/**
-	 * returns an array of the ids of all living players
-	 */
-	public static function getLivingPlayers($exept = null) {
-		$sql = "SELECT player_id FROM player WHERE player_eliminated=0";
-		if($exept != null) $sql.= " AND player_id != $exept";
-		return self::getObjectListFromDB($sql);
-	}
-	
-	/**
-	 * getSheriff : Returns the id of the Sheriff
-	 */
-	public static function getSheriff() {
-		return self::getUniqueValueFromDB( "SELECT id FROM playerinfo WHERE role=0" );
-	}
-	
-	/**
-	 * getPlayerTurn : Returns the id of the player whos turn it is
-	 */
-	public static function getPlayerTurn() {
-		return self::getUniqueValueFromDB("SELECT game_player FROM game");
-	}
-	
-	/**
-	 * getCharacters : returns an associative array with all players and their characters (player_id => character_id)
-	 */
-	public static function getCharacters() {
-		return self::getCollectionFromDB("SELECT id, character_id FROM playerinfo");
-	}
-	
-	
-
-	/*
-	 * getPlayerCount: return the number of players
-	 */
-	public static function getPlayerCount()
-	{
-		return intval(self::getUniqueValueFromDB("SELECT COUNT(*) FROM player"));
-	}
-
-
-	/*
-	 * getUiData : get all ui data of all players : id, hp, max_hp no, player_name, player_color, character, powers(character effect), hand(count)
-	 */
-	public static function getUiData($playerIds = null)
-	{
-		$sql = "SELECT player_id, player_score hp, max_hp, player_name, player_color, character_id FROM player LEFT JOIN playerinfo ON player.player_id = playerinfo.id";
-		if (is_array($playerIds)) {
-			$sql .= " WHERE player_id IN ('" . implode("','", $playerIds) . "')";
-		}
-		$players = self::getCollectionFromDb($sql);
-
-		
-		foreach ($players as $id=>$player) {
-			$char = new BangPlayerManager::$classes[$player['character_id']]();
-			$players[$id]['character'] = $char->name;
-			$players[$id]['powers'] = $char->text;
-			$players[$id]['hand'] = self::getUniqueValueFromDB("SELECT COUNT(*) FROM cards WHERE card_position=$id");
-		}
-		return $players;
-	}
 }

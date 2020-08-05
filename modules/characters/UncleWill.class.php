@@ -1,11 +1,11 @@
 <?php
 
-class UncleWill extends BangCharacter {
-  public function __construct()
+class UncleWill extends BangPlayer {
+  public function __construct($row = null)
   {
-    parent::__construct();
-    $this->id    = UNCLE_WILL;
-    $this->name  = clienttranslate('Uncle Will');
+    parent::__construct($row);
+    $this->character    = UNCLE_WILL;
+    $this->character_name = clienttranslate('Uncle Will');
     $this->text  = [
       clienttranslate("Once during his turn, he may play any card from hand as a General Store. "),
 

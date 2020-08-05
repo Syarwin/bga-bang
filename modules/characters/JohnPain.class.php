@@ -1,11 +1,11 @@
 <?php
 
-class JohnPain extends BangCharacter {
-  public function __construct()
+class JohnPain extends BangPlayer {
+  public function __construct($row = null)
   {
-    parent::__construct();
-    $this->id    = JOHN_PAIN;
-    $this->name  = clienttranslate('John Pain');
+    parent::__construct($row);
+    $this->character    = JOHN_PAIN;
+    $this->character_name = clienttranslate('John Pain');
     $this->text  = [
       clienttranslate("If he has less than 6 cards in hand, each time any player draws!, John adds the card just drawn to his hand."),
 

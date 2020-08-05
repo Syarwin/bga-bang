@@ -1,11 +1,11 @@
 <?php
 
-class GregDigger extends BangCharacter {
-  public function __construct()
+class GregDigger extends BangPlayer {
+  public function __construct($row = null)
   {
-    parent::__construct();
-    $this->id    = GREG_DIGGER;
-    $this->name  = clienttranslate('Greg Digger');
+    parent::__construct($row);
+    $this->character    = GREG_DIGGER;
+    $this->character_name = clienttranslate('Greg Digger');
     $this->text  = [
       clienttranslate("Each time another player is eliminated, he regains 2 life points. "),
 

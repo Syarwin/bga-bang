@@ -1,11 +1,11 @@
 <?php
 
-class SlabtheKiller extends BangCharacter {
-  public function __construct()
+class SlabtheKiller extends BangPlayer {
+  public function __construct($row = null)
   {
-    parent::__construct();
-    $this->id    = SLAB_THE_KILLER;
-    $this->name  = clienttranslate('Slab the Killer');
+    parent::__construct($row);
+    $this->character    = SLAB_THE_KILLER;
+    $this->character_name = clienttranslate('Slab the Killer');
     $this->text  = [
       clienttranslate("Players trying to cancel his BANG! cards need to play 2 Missed! "),
 

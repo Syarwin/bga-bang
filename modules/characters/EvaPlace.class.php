@@ -1,11 +1,11 @@
 <?php
 
-class EvaPlace extends BangCharacter {
-  public function __construct()
+class EvaPlace extends BangPlayer {
+  public function __construct($row = null)
   {
-    parent::__construct();
-    $this->id    = EVA_PLACE;
-    $this->name  = clienttranslate('Eva Place');
+    parent::__construct($row);
+    $this->character    = EVA_PLACE;
+    $this->character_name = clienttranslate('Eva Place');
     $this->text  = [
       clienttranslate("Card becomes trap; may have 2 out at a time. When acted against, a trap must activate; she chooses which 1."),
 

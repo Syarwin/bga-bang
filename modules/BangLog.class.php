@@ -22,7 +22,7 @@ class BangLog extends APP_GameClass
   /*
    * initStats: initialize statistics to 0 at start of game
    */
-  public function initStats($players)
+  public function initStats($bplayers)
   {
     /*
     $this->game->initStat('table', 'move', 0);
@@ -30,7 +30,7 @@ class BangLog extends APP_GameClass
     $this->game->initStat('table', 'buildDome', 0);
     $this->game->initStat('table', 'buildTower', 0);
 
-    foreach ($players as $pId => $player) {
+    foreach ($bplayers as $pId => $player) {
       $this->game->initStat('player', 'playerPower', 0, $pId);
       $this->game->initStat('player', 'usePower', 0, $pId);
       $this->game->initStat('player', 'move', 0, $pId);

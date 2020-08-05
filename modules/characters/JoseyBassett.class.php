@@ -1,11 +1,11 @@
 <?php
 
-class JoseyBassett extends BangCharacter {
-  public function __construct()
+class JoseyBassett extends BangPlayer {
+  public function __construct($row = null)
   {
-    parent::__construct();
-    $this->id    = JOSEY_BASSETT;
-    $this->name  = clienttranslate('Josey Bassett');
+    parent::__construct($row);
+    $this->character    = JOSEY_BASSETT;
+    $this->character_name = clienttranslate('Josey Bassett');
     $this->text  = [
       clienttranslate("Draw 2 cards at end of phase 2"),
 

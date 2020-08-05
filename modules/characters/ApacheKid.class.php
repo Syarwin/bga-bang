@@ -1,11 +1,11 @@
 <?php
 
-class ApacheKid extends BangCharacter {
-  public function __construct()
+class ApacheKid extends BangPlayer {
+  public function __construct($row = null)
   {
-    parent::__construct();
-    $this->id    = APACHE_KID;
-    $this->name  = clienttranslate('Apache Kid');
+    parent::__construct($row);
+    $this->character    = APACHE_KID;
+    $this->character_name = clienttranslate('Apache Kid');
     $this->text  = [
       clienttranslate("Cards of Diamonds played by other players do not affect him. "),
 

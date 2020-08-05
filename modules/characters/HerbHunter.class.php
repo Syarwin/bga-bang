@@ -1,11 +1,11 @@
 <?php
 
-class HerbHunter extends BangCharacter {
-  public function __construct()
+class HerbHunter extends BangPlayer {
+  public function __construct($row = null)
   {
-    parent::__construct();
-    $this->id    = HERB_HUNTER;
-    $this->name  = clienttranslate('Herb Hunter');
+    parent::__construct($row);
+    $this->character    = HERB_HUNTER;
+    $this->character_name = clienttranslate('Herb Hunter');
     $this->text  = [
       clienttranslate("Each time another player is eliminated, he draws 2 extra cards. "),
 

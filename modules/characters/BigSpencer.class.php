@@ -1,11 +1,11 @@
 <?php
 
-class BigSpencer extends BangCharacter {
-  public function __construct()
+class BigSpencer extends BangPlayer {
+  public function __construct($row = null)
   {
-    parent::__construct();
-    $this->id    = BIG_SPENCER;
-    $this->name  = clienttranslate('Big Spencer');
+    parent::__construct($row);
+    $this->character    = BIG_SPENCER;
+    $this->character_name = clienttranslate('Big Spencer');
     $this->text  = [
       clienttranslate("He starts with 5 cards. He can't play Missed!. "),
 

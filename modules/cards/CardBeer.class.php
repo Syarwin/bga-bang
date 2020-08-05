@@ -1,14 +1,13 @@
 <?php
 
 class CardBeer extends BangCard {
-  public function __construct()
+  public function __construct($id=null)
   {
-    parent::__construct();
-    $this->id    = CARD_BEER;
+    parent::__construct($id);
+    $this->type    = CARD_BEER;
     $this->name  = clienttranslate('Beer');
     $this->text  = "Regain one life point";
     $this->color = BROWN; //BROWN, BLUE, GREEN
-	$this->type  = 12;
     $this->effect = ['type' => LIFE_POINT_MODIFIER, // BASIC_ATTACK, DRAW, DEFENSIVE, DISCARD, LIFE_POINT_MODIFIER, RANGE_INCREASE, RANGE_DECREASE, OTHER
 					'amount' => 1,
 					'impacts' => NONE // NONE, INRANGE, SPECIFIC_RANGE, ALL_OTHER, ALL, ANY
@@ -22,4 +21,3 @@ class CardBeer extends BangCard {
     ];
   }
 }
-

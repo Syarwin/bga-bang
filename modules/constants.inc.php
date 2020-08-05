@@ -23,8 +23,10 @@ define('WAIT_REACTION',2);
 /*
  * Options constants
  */
-//define('OPTION_SETUP', 102);
-//define('BASIC', 0);
+define('OPTIONS_NONE',0)
+define('OPTION_CARD', 1);
+define('OPTION_CARDS', 2);
+define('OPTION_PLAYER', 3);
 //define('RANDOM', 1);
 
 /*
@@ -131,14 +133,17 @@ define('GREG_DIGGER', 30);
 /*
  * Constants for card symbols
  */
-define('BASIC_ATTACK', 0);
-define('DRAW',1);
-define('DEFENSIVE',2);
+define('OTHER',0);
+define('BASIC_ATTACK', 1);
+define('DRAW',2);
 define('DISCARD',3);
 define('LIFE_POINT_MODIFIER',4);
 define('RANGE_INCREASE', 5);
 define('RANGE_DECREASE', 6);
-define('OTHER',7);
+define('DEFENSIVE',7);
+define('WEAPON', 8);
+define('STARTOFTURN', 9);
+
 
 define('NONE',0);
 define('INRANGE',1);
@@ -146,4 +151,3 @@ define('SPECIFIC_RANGE',2);
 define('ALL_OTHER',3);
 define('ALL',4);
 define('ANY',5);
- 
