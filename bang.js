@@ -39,22 +39,28 @@ setup: function (gamedatas) {
 	debug('SETUP', gamedatas);
 
 	// Setting up player boards
+  var nPlayers = gamedatas.bplayers.length;
+  dojo.attr("board", "data-players", nPlayers); // Usefull to setup the layout
+
+  // Usefull to reorder player board around the current player
+  var currentPlayerNo = gamedatas.bplayers.reduce((carry, player) => (player.id == this.player_id)? player.no : carry, 0);
+
   gamedatas.bplayers.forEach( player => {
     let isCurrent = player.id == this.player_id;
 
     if(player.role == null) player.role = 'hidden';
+    player.no = (player.no + nPlayers - currentPlayerNo) % nPlayers;
     player.handCount = isCurrent? player.hand.length : player.hand;
+
+    dojo.place(this.format_block('jstpl_player', player), 'board');
+
+    // TODO
+    //player.inplay.forEach(card => this.addCard(card, 'player-board-' + player.id));
 
     if(isCurrent){
       dojo.place(this.format_block('jstpl_hand', {}), 'board');
       player.hand.forEach(card => this.addCard(card, 'hand') );
     }
-
-    dojo.place(this.format_block('jstpl_player', player), 'board');
-    // TODO : document.getElementById('handCount_' + player.id).innerHTML = player.hand;
-
-    // TODO
-    //player.inplay.forEach(card => this.addCard(card, 'player-board-' + player.id));
   });
 
   // Formatting cards

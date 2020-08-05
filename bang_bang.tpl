@@ -7,9 +7,11 @@ var jstpl_hand = `<div id="hand">
 </div>
 `;
 
-var jstpl_player = `<div class='player-board' id='player-board-\${id}' data-role="\${role}">
-	<div class='player-name' style="color:#\${color}">\${name}</div>
-	<div class='player-cards'>\${handCount}</div>
+var jstpl_player = `<div class='bang-player' id='bang-player-\${id}' data-role="\${role}" data-no="\${no}">
+	<div class='bang-player-container'>
+		<div class='player-name' style="color:#\${color}">\${name}</div>
+		<div class='player-cards'>\${handCount}</div>
+	</div>
 </div>`;
 
 
