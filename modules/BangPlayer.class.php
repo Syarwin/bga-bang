@@ -55,7 +55,8 @@ class BangPlayer extends APP_GameClass
       'role' => ($current || $this->role==SHERIFF) ? $this->role : null,
       'character' => $this->character->getName(),
       'powers' => $this->character->getText(),
-      'bullets' => $this->character->getBullets()
+      'bullets' => $this->character->getBullets(),
+      'hp' => $this->hp,
     ];
   }
 

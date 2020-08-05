@@ -228,7 +228,6 @@ getCard: function(ocard) {
 
 addCard: function(ocard, container){
   var card = this.getCard(ocard);
-  debug(card);
   // TODO : add tooltip
   dojo.place(this.format_block('jstpl_card', card), container);
 },

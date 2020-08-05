@@ -9,8 +9,21 @@ var jstpl_hand = `<div id="hand">
 
 var jstpl_player = `<div class='bang-player' id='bang-player-\${id}' data-role="\${role}" data-no="\${no}">
 	<div class='bang-player-container'>
-		<div class='player-name' style="color:#\${color}">\${name}</div>
-		<div class='player-cards'>\${handCount}</div>
+		<div class='player-inplay'>
+			<div class='player-name' style="color:#\${color}">\${name}</div>
+			<div class='player-cards'>\${handCount}</div>
+		</div>
+		<div class='player-info'>
+			<div class="player-character-name">\${character}</div>
+			<ul class='player-bullets' id='player-bullets-\${id}' data-max-bullets="\${bullets}" data-bullets="\${hp}">
+				<li class='bullet'></li>
+				<li class='bullet'></li>
+				<li class='bullet'></li>
+				<li class='bullet'></li>
+				<li class='bullet'></li>
+				<li class='bullet'></li>
+			</ul>
+		</div>
 	</div>
 </div>`;
 
