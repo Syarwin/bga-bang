@@ -85,6 +85,7 @@ class BangCardManager extends APP_GameClass
 	public static function toObjects($array) {
 		$cards = [];
 		foreach($array as $row) $cards[] = self::getCard($row['id']);
+		return $cards;
 	}
 
 	/*

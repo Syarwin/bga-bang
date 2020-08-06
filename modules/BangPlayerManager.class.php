@@ -40,7 +40,7 @@ class BangPlayerManager extends APP_GameClass
 			BangCardManager::deal($pId,$bullets);
 		}
 		self::DbQuery($sql . implode($values, ','));
-		$game->reloadPlayersBasicInfos();
+		bang::$instance->reloadPlayersBasicInfos();
 		return $sheriff;
 	}
 
@@ -57,7 +57,10 @@ class BangPlayerManager extends APP_GameClass
 	 * if $asArrayCollection is set to true it return the result as a map $id=>array
 	 */
 	public static function getPlayers($playerIds = null, $asArrayCollection = false) {
-		$sql = "SELECT * FROM player" ;
+		$columns = ["id", "no", "name", "color", "eliminated", "score", "zombie", "role", "character", "bullets"];
+		$sqlcolumns = [];
+		foreach($columns as $col) $sqlcolumns[] = "player_$col";
+		$sql = "SELECT " . implode(", ", $sqlcolumns) . " FROM player" ;
 		if (is_array($playerIds)) {
 			$sql .= " WHERE player_id IN ('" . implode("','", $playerIds) . "')";
 		}
@@ -66,7 +69,7 @@ class BangPlayerManager extends APP_GameClass
 
 		$bplayers = [];
 		foreach ($rows as $row) {
-			$bplayers[] = new self::$classes[$row['character']]($row);
+			$bplayers[] = new self::$classes[$row['player_character']]($row);
 		}
 		return $bplayers;
 	}

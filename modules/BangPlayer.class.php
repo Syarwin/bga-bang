@@ -24,13 +24,14 @@ class BangPlayer extends APP_GameClass
   public function __construct($row) {
     if($row != null) {
       $this->id = $row['player_id'];
-      $this->no = $row['player_no'];
+      $this->no = (int)$row['player_no'];
       $this->name = $row['player_name'];
       $this->color = $row['player_color'];
       $this->eliminated = $row['player_eliminated'] == 1;
-      $this->hp = $row['player_score'];
+      $this->hp = (int)$row['player_score'];
       $this->zombie = $row['player_zombie'] == 1;
       $this->role = $row['player_role'];
+      $this->bullets = (int)$row['player_bullets'];
     }
   }
 
@@ -58,13 +59,13 @@ class BangPlayer extends APP_GameClass
       'no'        => $this->no,
       'name'      => $this->getName(),
       'color'     => $this->color,
-      'hand' => ($current) ? array_values(BangCardManager::getHand($currentPlayerId)) : BangCardManager::countCards('hand', $currentPlayerId),
+      'hand' => ($current) ? array_values(BangCardManager::getHand($currentPlayerId)) : BangCardManager::countCards('hand', $this->id),
       'role' => ($current || $this->role==SHERIFF) ? $this->role : null,
-      'character' => $this->character->getName(),
-      'characterId' => $this->character->getId(),
-      'powers' => $this->character->getText(),
-      'bullets' => $this->character->getBullets(),
+      'characterId' => $this->character,
+      'character' => $this->character_name,
+      'powers' => $this->text,
       'hp' => $this->hp,
+      'bullets' => $this->bullets
     ];
   }
 
@@ -95,9 +96,9 @@ class BangPlayer extends APP_GameClass
 	}
 
   public function getHandOptions() {
-    $hand = BangCardManager::toObjects(BangCardManager::getHand($this->id))
+    $hand = BangCardManager::toObjects(BangCardManager::getHand($this->id));
     $options = [];
-    for($hand as $card) {
+    foreach($hand as $card) {
       $options[] = ['id'=>$card->getId(), 'options'=>$card->getPlayOptions($this)];
     }
     return array_values($options);
@@ -136,7 +137,8 @@ class BangPlayer extends APP_GameClass
   public function getPlayersInRange($range) {
 		$targets = array();
 		$bplayers = BangPlayerManager::getPlayers();
-		foreach($bplayers as $id=>$char) {
+		foreach($bplayers as $player) {
+      $id = $player->id;
 			if($id==$this->id) continue;
 			$dist = BangPlayerManager::getPlayer($id)->getDistanceTo($this->id);
 			if($dist <= $range) $targets[] = $id;
@@ -192,7 +194,7 @@ class BangPlayer extends APP_GameClass
 	 */
 	public function getRange() {
 		$cards = BangCardManager::getCardsInPlay($this->id);
-		for($cards as $cid=>$card) {
+		foreach($cards as $cid=>$card) {
 			$effect = BangCardManager::getCard($cid)->getEffect();
 			if(($effect['type']) == WEAPON) return $effect['range'];
 		}

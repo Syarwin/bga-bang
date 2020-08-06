@@ -44,7 +44,6 @@ setup: function (gamedatas) {
 
   // Usefull to reorder player board around the current player
   var currentPlayerNo = gamedatas.bplayers.reduce((carry, player) => (player.id == this.player_id)? player.no : carry, 0);
-
   gamedatas.bplayers.forEach( player => {
     let isCurrent = player.id == this.player_id;
 
