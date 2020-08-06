@@ -58,8 +58,8 @@ setup: function (gamedatas) {
     //player.inplay.forEach(card => this.addCard(card, 'player-board-' + player.id));
 
     if(isCurrent){
-      dojo.place(this.format_block('jstpl_hand', {}), 'board');
-      player.hand.forEach(card => this.addCard(card, 'hand') );
+      dojo.place(this.format_block('jstpl_hand', { role : player.role }), 'board');
+      player.hand.forEach(card => this.addCard(card, 'hand-cards') );
     }
   });
 
