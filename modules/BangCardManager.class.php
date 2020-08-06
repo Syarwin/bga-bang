@@ -84,27 +84,7 @@ class BangCardManager extends APP_GameClass
 
 	public static function toObjects($array) {
 		$cards = [];
-		for($array as $row) $cards[] = self::getCard($row['id']);
-	}
-
-	/*
-	 *
-	 */
-	public static function getCard($id) {
-		$c = self::getDeck()->getCard($id);
-		$card_id = $c['type'];
-		$name = self::$classes[$card_id];
-		$card = new $name($id);
-		$card->setCopy($c['type_arg']);
-		return $card;
-	}
-
-	public static function moveCard($id, $location, $arg=0) {
-		self::getDeck()->moveCard($id, $location, $arg);
-	}
-
-	public static function deal($player, $amount){
-		self::getDeck()->pickCards($amount, 'deck', $player);
+		foreach($array as $row) $cards[] = self::getCard($row['id']);
 	}
 
 	/*

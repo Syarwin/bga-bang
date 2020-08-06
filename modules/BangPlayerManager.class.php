@@ -11,7 +11,7 @@ class BangPlayerManager extends APP_GameClass
 
 	public static function setupNewGame($bplayers, $expansions)	{
 		self::DbQuery('DELETE FROM player');
-		$gameInfos = bang::instance->getGameinfos();
+		$gameInfos = bang::$instance->getGameinfos();
 		$sql = 'INSERT INTO player (player_id, player_color, player_canal, player_name, player_avatar, player_bullets, player_score, player_role, player_character) VALUES ';
 
 		$roles = array_slice(array(0,2,2,3,1,2,1),0,count($bplayers));

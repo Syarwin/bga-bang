@@ -23,7 +23,7 @@ define('WAIT_REACTION',2);
 /*
  * Options constants
  */
-define('OPTIONS_NONE',0)
+define('OPTIONS_NONE',0);
 define('OPTION_CARD', 1);
 define('OPTION_CARDS', 2);
 define('OPTION_PLAYER', 3);

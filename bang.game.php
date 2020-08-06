@@ -25,7 +25,7 @@ class bang extends Table
 	public static $instance = null;
 	public function __construct() {
 		parent::__construct();
-		self::instance = $this;
+		self::$instance = $this;
 		self::initGameStateLabels([
 //      'optionSetup'  => OPTION_SETUP,
 			'currentRound' => 10,

@@ -15,7 +15,7 @@ class BangPlayer extends APP_GameClass
   protected $role;
   // --character properties
 	protected $character; //the int-constant
-  protected $character_name
+  protected $character_name;
 	protected $text;
 	protected $bullets;
   protected $expansion = BASE_GAME;
@@ -165,12 +165,12 @@ class BangPlayer extends APP_GameClass
 		// todo barrel
 
 		if($onHand > 0)  {
-			bang::instance->setGameStateValue('state',WAIT_REACTION);
-			bang::instance->setGameStateValue('target',$id);
-			bang::instance->gamestate->nextState('awaitReaction');
+			bang::$instance->setGameStateValue('state',WAIT_REACTION);
+			bang::$instance->setGameStateValue('target',$id);
+			bang::$instance->gamestate->nextState('awaitReaction');
 		} else {
 			$this->looseLife($attacker);
-			bang::instance->setGameStateValue('state',PLAY_CARD);
+			bang::$instance->setGameStateValue('state',PLAY_CARD);
 		}
 	}
 

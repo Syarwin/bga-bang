@@ -48,7 +48,7 @@ class BangCard extends APP_GameClass
 	public function play($player, $targets) {
  		switch ($this->effect['type']) {
  			case BASIC_ATTACK:
- 				$ids = ()$this->effect['impacts'] == ALL_OTHER) ? PlayerManager::getLivingPlayers($player->id): targets;
+ 				$ids = ($this->effect['impacts'] == ALL_OTHER) ? PlayerManager::getLivingPlayers($player->id): targets;
  				$player->attack(ids);
 
  				break;
@@ -69,13 +69,13 @@ class BangCard extends APP_GameClass
 		switch($this->effect['type']) {
 			case BASIC_ATTACK:
 				if($id == 999) {
-					$player->looseLife(bang::instance->getGameStateValue('currentTurn'));
+					$player->looseLife(bang::$instance->getGameStateValue('currentTurn'));
 				} else {
 					$card = BangCardManager::getCard($id);
 					BangCardManager::moveCard($card->id, 'discard');
-					bang::instance->setGameStateValue('state',0);
+					bang::$instance->setGameStateValue('state',0);
 					BangNotificationManager::cardPlayed($card, $player);
-					bang::instance->gamestate->nextState( "awaitReaction" );
+					bang::$instance->gamestate->nextState( "awaitReaction" );
 				}
 				break;
 		}
@@ -104,8 +104,8 @@ class BangCard extends APP_GameClass
 					return null;
 			return ['type' => OPTIONS_NONE];
 	 	case BROWN:
+			$type = -1;
 			switch ($this->effect['type']) {
-				$type = -1;
 				case BASIC_ATTACK:
 				case LIFE_POINT_MODIFIER:
 					if ($this->effect['impacts'] == ALL || $this->effect['impacts'] == ALL_OTHER) {
