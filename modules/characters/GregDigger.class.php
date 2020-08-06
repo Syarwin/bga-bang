@@ -3,7 +3,6 @@
 class GregDigger extends BangPlayer {
   public function __construct($row = null)
   {
-    parent::__construct($row);
     $this->character    = GREG_DIGGER;
     $this->character_name = clienttranslate('Greg Digger');
     $this->text  = [
@@ -12,5 +11,6 @@ class GregDigger extends BangPlayer {
     ];
     $this->bullets = 4;
     $this->expansion = DODGE_CITY;  
+    parent::__construct($row);
   }
 }

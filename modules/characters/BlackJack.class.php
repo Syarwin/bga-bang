@@ -3,7 +3,6 @@
 class BlackJack extends BangPlayer {
   public function __construct($row = null)
   {
-    parent::__construct($row);
     $this->character    = BLACK_JACK;
     $this->character_name = clienttranslate('Black Jack');
     $this->text  = [
@@ -11,5 +10,6 @@ class BlackJack extends BangPlayer {
 
     ];
     $this->bullets = 4;  
+    parent::__construct($row);
   }
 }

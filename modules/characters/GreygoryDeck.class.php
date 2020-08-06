@@ -3,7 +3,6 @@
 class GreygoryDeck extends BangPlayer {
   public function __construct($row = null)
   {
-    parent::__construct($row);
     $this->character    = GREYGORY_DECK;
     $this->character_name = clienttranslate('Greygory Deck');
     $this->text  = [
@@ -12,5 +11,6 @@ class GreygoryDeck extends BangPlayer {
     ];
     $this->bullets = 4;
     $this->expansion = WILD_WEST_SHOW;  
+    parent::__construct($row);
   }
 }

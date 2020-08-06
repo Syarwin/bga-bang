@@ -3,7 +3,6 @@
 class MollyStark extends BangPlayer {
   public function __construct($row = null)
   {
-    parent::__construct($row);
     $this->character    = MOLLY_STARK;
     $this->character_name = clienttranslate('Molly Stark');
     $this->text  = [
@@ -14,5 +13,6 @@ Indians!), she draws one card from the deck."),
     ];
     $this->bullets = 4;
     $this->expansion = DODGE_CITY;
+    parent::__construct($row);
   }
 }

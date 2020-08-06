@@ -3,7 +3,6 @@
 class ElGringo extends BangPlayer {
   public function __construct($row = null)
   {
-    parent::__construct($row);
     $this->character    = EL_GRINGO;
     $this->character_name = clienttranslate('El Gringo');
     $this->text  = [
@@ -11,6 +10,7 @@ class ElGringo extends BangPlayer {
 
     ];
     $this->bullets = 3;
+    parent::__construct($row);
   }
 
   public function looseLife($byPlayer=-1) {

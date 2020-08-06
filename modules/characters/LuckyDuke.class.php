@@ -3,7 +3,6 @@
 class LuckyDuke extends BangPlayer {
   public function __construct($row = null)
   {
-    parent::__construct($row);
     $this->character    = LUCKY_DUKE;
     $this->character_name = clienttranslate('Lucky Duke');
     $this->text  = [
@@ -11,5 +10,6 @@ class LuckyDuke extends BangPlayer {
       clienttranslate("Discard both cards afterwards.")
     ];
     $this->bullets = 4;
+    parent::__construct($row);
   }
 }

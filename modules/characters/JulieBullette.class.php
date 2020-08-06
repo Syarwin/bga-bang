@@ -3,7 +3,6 @@
 class JulieBullette extends BangPlayer {
   public function __construct($row = null)
   {
-    parent::__construct($row);
     $this->character    = JULIE_BULLETTE;
     $this->character_name = clienttranslate('Julie Bullette');
     $this->text  = [
@@ -12,5 +11,6 @@ class JulieBullette extends BangPlayer {
     ];
     $this->bullets = 4;
     $this->expansion = ROBBERTS_ROOST;  
+    parent::__construct($row);
   }
 }

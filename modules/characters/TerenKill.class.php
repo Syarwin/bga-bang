@@ -3,7 +3,6 @@
 class TerenKill extends BangPlayer {
   public function __construct($row = null)
   {
-    parent::__construct($row);
     $this->character    = TEREN_KILL;
     $this->character_name = clienttranslate('Teren Kill');
     $this->text  = [
@@ -12,5 +11,6 @@ class TerenKill extends BangPlayer {
     ];
     $this->bullets = 3;
     $this->expansion = WILD_WEST_SHOW;  
+    parent::__construct($row);
   }
 }

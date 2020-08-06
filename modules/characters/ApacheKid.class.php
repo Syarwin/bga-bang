@@ -3,7 +3,6 @@
 class ApacheKid extends BangPlayer {
   public function __construct($row = null)
   {
-    parent::__construct($row);
     $this->character    = APACHE_KID;
     $this->character_name = clienttranslate('Apache Kid');
     $this->text  = [
@@ -12,5 +11,6 @@ class ApacheKid extends BangPlayer {
     ];
     $this->bullets = 3;
     $this->expansion = DODGE_CITY;  
+    parent::__construct($row);
   }
 }

@@ -3,7 +3,6 @@
 class Jourdonnais extends BangPlayer {
   public function __construct($row = null)
   {
-    parent::__construct($row);
     $this->character    = JOURDONNAIS;
     $this->character_name = clienttranslate('Jourdonnais');
     $this->text  = [
@@ -11,5 +10,6 @@ class Jourdonnais extends BangPlayer {
 
     ];
     $this->bullets = 4;  
+    parent::__construct($row);
   }
 }
