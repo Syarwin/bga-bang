@@ -13,8 +13,11 @@ var jstpl_player = `<div class='bang-player' id='bang-player-\${id}' data-role="
 			<div class='player-name' style="color:#\${color}">\${name}</div>
 			<div class='player-cards'>\${handCount}</div>
 		</div>
-		<div class='player-info'>
+		<div class='player-info' data-character='\${characterId}'>
 			<div class="player-character-name">\${character}</div>
+			<div class="player-character-background"></div>
+			\${powers}
+
 			<ul class='player-bullets' id='player-bullets-\${id}' data-max-bullets="\${bullets}" data-bullets="\${hp}">
 				<li class='bullet'></li>
 				<li class='bullet'></li>

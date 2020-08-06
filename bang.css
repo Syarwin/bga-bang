@@ -32,13 +32,16 @@ div#board {
     grid-column: 1 / span 6;
     height: 210px;
     display: flex;
-    flex-flow: row; }
+    flex-flow: row;
+    align-items: center;
+    justify-content: center; }
   div#board .bang-player {
     display: flex;
     flex-flow: row;
     align-items: center;
     grid-row-end: span 2;
-    grid-column-end: span 2; }
+    grid-column-end: span 2;
+    max-height: 206px; }
   div#board[data-players="4"] .bang-player[data-no="0"] {
     grid-column-start: 3;
     grid-row-start: 2;
@@ -80,8 +83,8 @@ div#board {
     height: 96%;
     background-color: rgba(255, 255, 255, 0.5);
     border-radius: 5px;
-    border: 1px solid rgba(100, 100, 100, 0.8);
-    box-shadow: 1px 1px 5px rgba(100, 100, 100, 0.8);
+    border: 1px solid rgba(50, 50, 50, 0.8);
+    box-shadow: 1px 1px 5px rgba(50, 50, 50, 0.8);
     display: flex; }
     div#board .bang-player-container .player-inplay {
       flex-grow: 1; }
@@ -90,17 +93,61 @@ div#board {
       width: 123px;
       height: 100%;
       background-image: url("img/card_borders.png");
-      background-size: cover; }
+      background-size: cover;
+      border-left: 1px solid rgba(50, 50, 50, 0.8); }
       div#board .bang-player-container .player-info .player-character-name {
         font-family: "Perdido";
         width: 100%;
         margin-top: 13px;
         text-align: center;
-        font-size: 16px; }
+        font-size: 16px;
+        letter-spacing: -1px; }
+      div#board .bang-player-container .player-info .player-character-background {
+        width: 105px;
+        height: 105px;
+        margin: 2px auto;
+        background-image: url("img/card_characters.jpg");
+        background-size: cover; }
+      div#board .bang-player-container .player-info[data-character="0"] .player-character-background {
+        background-position: 0% center; }
+      div#board .bang-player-container .player-info[data-character="1"] .player-character-background {
+        background-position: 6.6666666667% center; }
+      div#board .bang-player-container .player-info[data-character="2"] .player-character-background {
+        background-position: 13.3333333333% center; }
+      div#board .bang-player-container .player-info[data-character="3"] .player-character-background {
+        background-position: 20% center; }
+      div#board .bang-player-container .player-info[data-character="4"] .player-character-background {
+        background-position: 26.6666666667% center; }
+      div#board .bang-player-container .player-info[data-character="5"] .player-character-background {
+        background-position: 33.3333333333% center; }
+      div#board .bang-player-container .player-info[data-character="6"] .player-character-background {
+        background-position: 40% center; }
+      div#board .bang-player-container .player-info[data-character="7"] .player-character-background {
+        background-position: 46.6666666667% center; }
+      div#board .bang-player-container .player-info[data-character="8"] .player-character-background {
+        background-position: 53.3333333333% center; }
+      div#board .bang-player-container .player-info[data-character="9"] .player-character-background {
+        background-position: 60% center; }
+      div#board .bang-player-container .player-info[data-character="10"] .player-character-background {
+        background-position: 66.6666666667% center; }
+      div#board .bang-player-container .player-info[data-character="11"] .player-character-background {
+        background-position: 73.3333333333% center; }
+      div#board .bang-player-container .player-info[data-character="12"] .player-character-background {
+        background-position: 80% center; }
+      div#board .bang-player-container .player-info[data-character="13"] .player-character-background {
+        background-position: 86.6666666667% center; }
+      div#board .bang-player-container .player-info[data-character="14"] .player-character-background {
+        background-position: 93.3333333333% center; }
+      div#board .bang-player-container .player-info[data-character="15"] .player-character-background {
+        background-position: 100% center; }
+      div#board .bang-player-container .player-info p {
+        font-size: 8px;
+        width: 105px;
+        margin: 2px auto; }
       div#board .bang-player-container .player-info .player-bullets {
         position: absolute;
         width: 30px;
-        right: -3px;
+        right: -8px;
         top: 40px; }
         div#board .bang-player-container .player-info .player-bullets .bullet {
           width: 35px;
