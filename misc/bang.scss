@@ -24,8 +24,9 @@
 }
 
 $transparentWhite:rgba(255,255,255,0.5);
-$darkgray: rgba(100,100,100, 0.8);
+$darkgray: rgba(50,50,50, 0.8);
 
+$numberOfCharacters:15;
 $numberOfCards:21;
 $guns: 0,1,2,3,4;
 $actions: 5,6,7,8,9,10,11,12,13,14;
@@ -63,6 +64,8 @@ div#board {
   	height:210px;
   	display:flex;
   	flex-flow:row;
+    align-items: center;
+    justify-content: center;
   }
 
   .bang-player {
@@ -71,6 +74,7 @@ div#board {
     align-items: center;
     grid-row-end:span 2;
     grid-column-end:span 2;
+    max-height:206px;
   }
 
   // TODO : add media query
@@ -109,6 +113,7 @@ div#board {
       height:100%;
       background-image:url("img/card_borders.png");
       background-size:cover;
+      border-left:1px solid $darkgray;
 
       .player-character-name {
         font-family: "Perdido";
@@ -119,10 +124,27 @@ div#board {
         letter-spacing:-1px;
       }
 
+      .player-character-background {
+        width: 105px;
+        height: 105px;
+        margin: 2px auto;
+        background-image:url("img/card_characters.jpg");
+      	background-size:cover;
+      }
+      @for $i from 0 through $numberOfCharacters {
+        &[data-character="#{$i}"] .player-character-background { background-position:$i * 100% / $numberOfCharacters center; }
+      }
+
+      p {
+        font-size:8px;
+        width: 105px;
+        margin: 2px auto;
+      }
+
       .player-bullets {
         position:absolute;
         width:30px;
-        right:-3px;
+        right:-8px;
         top:40px;
 
         .bullet {

@@ -51,6 +51,7 @@ setup: function (gamedatas) {
     if(player.role == null) player.role = 'hidden';
     player.no = (player.no + nPlayers - currentPlayerNo) % nPlayers;
     player.handCount = isCurrent? player.hand.length : player.hand;
+    player.powers = '<p>' + player.powers.join('</p><p>') + '</p>';
 
     dojo.place(this.format_block('jstpl_player', player), 'board');
 

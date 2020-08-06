@@ -60,9 +60,11 @@ class BangPlayer extends APP_GameClass
       'color'     => $this->color,
       'hand' => ($current) ? array_values(BangCardManager::getHand($currentPlayerId)) : BangCardManager::countCards('hand', $currentPlayerId),
       'role' => ($current || $this->role==SHERIFF) ? $this->role : null,
-      'character' => $this->character_name,
-      'powers' => $this->text,
-      'bullets' => $this->bullets
+      'character' => $this->character->getName(),
+      'characterId' => $this->character->getId(),
+      'powers' => $this->character->getText(),
+      'bullets' => $this->character->getBullets(),
+      'hp' => $this->hp,
     ];
   }
 
