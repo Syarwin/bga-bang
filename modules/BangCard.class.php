@@ -99,10 +99,11 @@ class BangCard extends APP_GameClass
 	 switch ($this->color) {
 	 	case BLUE:
 	 		$cardsInPlay = BangCardManager::getCardsInPlay($player->getId());
-			foreach($cardsInPlay as $card)
-				if($card['type'] == $this->type)
+			return ['type' => OPTIONS_NONE, '$cardsInPlay' => BangCardManager::formatCards($cardsInPlay), 'type' => 'type'];
+			/*foreach($cardsInPlay as $card)
+				if($card->type == $this->type)
 					return null;
-			return ['type' => OPTIONS_NONE];
+			return ['type' => OPTIONS_NONE];*/
 	 	case BROWN:
 			$type = -1;
 			switch ($this->effect['type']) {

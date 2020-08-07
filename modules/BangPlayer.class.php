@@ -97,6 +97,7 @@ class BangPlayer extends APP_GameClass
 
   public function getHandOptions() {
     $hand = BangCardManager::toObjects(BangCardManager::getHand($this->id));
+
     $options = [];
     foreach($hand as $card) {
       $options[] = ['id'=>$card->getId(), 'options'=>$card->getPlayOptions($this)];
@@ -194,8 +195,8 @@ class BangPlayer extends APP_GameClass
 	 */
 	public function getRange() {
 		$cards = BangCardManager::getCardsInPlay($this->id);
-		foreach($cards as $cid=>$card) {
-			$effect = BangCardManager::getCard($cid)->getEffect();
+		foreach($cards as $card) {
+			$effect = BangCardManager::$card->getEffect();
 			if(($effect['type']) == WEAPON) return $effect['range'];
 		}
 		return 1;

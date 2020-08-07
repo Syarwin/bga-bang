@@ -66,8 +66,8 @@ class BangCardManager extends APP_GameClass
 	 */
 	public static function getCardsInPlay($player_id = null) {
 		if($player_id == null)
-				return self::formatCards(self::getDeck()->getCardsInLocation('inPlay'));
-		return self::formatCards(self::getDeck()->getCardsInLocation('inPlay', $player_id));
+				return self::toObjects(self::getDeck()->getCardsInLocation('inPlay'));
+		return self::toObjects(self::getDeck()->getCardsInLocation('inPlay', $player_id));
 	}
 
 	/**
@@ -93,10 +93,10 @@ class BangCardManager extends APP_GameClass
 	 */
 	public static function getCard($id, $game=null) {
 		$c = self::getDeck()->getCard($id);
-		$card_id = $c['type_arg'];
+		$card_id = $c['type'];
 		$name = self::$classes[$card_id];
 		$card = new $name($id, $game);
-		$card->setCopy($c['type']);
+		$card->setCopy($c['type_arg']);
 		return $card;
 	}
 
