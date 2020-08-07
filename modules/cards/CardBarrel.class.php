@@ -6,13 +6,12 @@ class CardBarrel extends BangCard {
     parent::__construct($id);
     $this->type    = CARD_BARREL;
     $this->name  = clienttranslate('Barrel');
-    $this->text  = "Reveal top card from the deck when you're attacked. If it's a heart it's a miss.";
-    $this->color = BLUE; //BROWN, BLUE, GREEN
-    $this->effect = ['type' => DEFENSIVE, // BASIC_ATTACK, DRAW, DEFENSIVE, DISCARD, LIFE_POINT_MODIFIER, RANGE_INCREASE, RANGE_DECREASE, OTHER
-					]; 
-    
-
-    
+    $this->text  = clienttranslate("Reveal top card from the deck when you're attacked. If it's a heart it's a miss.");
+    $this->color = BLUE;
+    $this->effect = ['type' => DEFENSIVE ];
+    $this->symbols = [
+      [SYMBOL_DRAW_HEART, SYMBOL_MISSED]
+    ];
     $this->copies = [
       BASE_GAME => [ 'QS', 'KS' ],
       DODGE_CITY => [ ],

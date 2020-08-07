@@ -131,7 +131,7 @@ define('DOC_HOLYDAY', 29);
 define('GREG_DIGGER', 30);
 
 /*
- * Constants for card symbols
+ * Constants for card effects
  */
 define('OTHER',0);
 define('BASIC_ATTACK', 1);
@@ -151,3 +151,24 @@ define('SPECIFIC_RANGE',2);
 define('ALL_OTHER',3);
 define('ALL',4);
 define('ANY',5);
+
+
+/*
+ * Constants for card symbols
+ */
+define('SYMBOL_BANG',0);
+define('SYMBOL_MISSED',1);
+define('SYMBOL_LIFEPOINT',2);
+define('SYMBOL_DISCARD',3);
+define('SYMBOL_DRAW',4);
+define('SYMBOL_ANY',5);
+define('SYMBOL_OTHER',6);
+define('SYMBOL_INRANGE',7);
+define('SYMBOL_RANGE1',8);
+define('SYMBOL_RANGE2',9);
+define('SYMBOL_RANGE3',10);
+define('SYMBOL_RANGE4',11);
+define('SYMBOL_RANGE5',12);
+define('SYMBOL_BOOK',13);
+define('SYMBOL_DRAW_HEART',14);
+define('SYMBOL_DYNAMITE',15);
