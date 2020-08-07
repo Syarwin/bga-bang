@@ -85,6 +85,8 @@ define('CARD_TEQUILA', 27);
 define('CARD_BRAWL', 28);
 define('CARD_RAG_TIME', 29);
 
+define('PASS', 999); //has to be bigger than the maximum number of cards in the game
+
 /*
  * Roles
  */

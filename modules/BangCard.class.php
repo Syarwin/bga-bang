@@ -25,6 +25,12 @@ class BangCard extends APP_GameClass
 
 	public function getId(){ return $this->id; }
 	public function getType(){ return $this->type; }
+	public function getName(){ return $this->name; }
+	public function getText(){ return $this->text; }
+	public function getEffect(){ return $this->effect; }
+	public function getSymbols(){ return $this->symbols; }
+	public function getColor(){ return $this->color; }
+	public function getCopies(){ return $this->copies; }
 	public function getCopy(){ return $this->copy; }
 
 	// TODO : convert str to int ? (J => 11, Q => 12, K => 13 ?)
@@ -33,11 +39,6 @@ class BangCard extends APP_GameClass
 	public function getCopyColor(){ return substr($this->copy, -1); }
 
 	public function getEffectType(){ return $this->effect['type']; }
-	public function getName(){ return $this->name; }
-	public function getText(){ return $this->text; }
-	public function getSymbols(){ return $this->symbols; }
-	public function getCopies(){ return $this->copies; }
-	public function getEffect(){ return $this->effect; }
 	public function isEquipment(){return $this->color == BLUE;}
 	public function isAction(){return $this->color == BROWN;}
 
@@ -50,8 +51,8 @@ class BangCard extends APP_GameClass
 	public function play($player, $targets) {
  		switch ($this->effect['type']) {
  			case BASIC_ATTACK:
- 				$ids = ($this->effect['impacts'] == ALL_OTHER) ? PlayerManager::getLivingPlayers($player->id): targets;
- 				$player->attack(ids);
+ 				$ids = ($this->effect['impacts'] == ALL_OTHER) ? PlayerManager::getLivingPlayers($player->id) : $targets;
+ 				$player->attack($ids);
 
  				break;
  			case DRAW:
@@ -62,7 +63,6 @@ class BangCard extends APP_GameClass
  				return false;
  			break;
  		}
-		BangNotificationManager::cardPlayed($this, $card, $targets);
  		return true;
 	}
 
@@ -76,11 +76,11 @@ class BangCard extends APP_GameClass
 					$card = BangCardManager::getCard($id);
 					BangCardManager::moveCard($card->id, 'discard');
 					bang::$instance->setGameStateValue('state',0);
-					BangNotificationManager::cardPlayed($card, $player);
 					bang::$instance->gamestate->nextState( "awaitReaction" );
 				}
 				break;
 		}
+		return true;
 	}
 
   /**
@@ -95,6 +95,15 @@ class BangCard extends APP_GameClass
 			'name' => $this->name,
 			'text' => $this->text,
 			'symbols' => $this->symbols
+		];
+	}
+
+	public function format() {
+		return [
+			'id' => $this->id,
+			'type' => $this->type,
+			'color' => substr($this->copy, -1),
+			'value' => substr($this->copy, 0, -1),
 		];
 	}
 
@@ -120,6 +129,7 @@ class BangCard extends APP_GameClass
 				case DRAW:
 				case DISCARD:
 					$type = ($this->effect['impacts'] == ALL_OTHER) ? OPTION_CARDS : OPTION_CARD;
+					break;
 				case DEFENSIVE:
 					return null;
 				default:
@@ -139,6 +149,9 @@ class BangCard extends APP_GameClass
 					break;
 				case ANY:
 					$player_ids = PlayerManager::getLivingPlayers();
+					break;
+				case NONE:
+					$player_ids = [];
 					break;
 			}
 			$deck = ($type == OPTION_CARD && $this->effect['type'] == DRAW);

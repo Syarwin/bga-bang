@@ -47,10 +47,12 @@ var jstpl_card = `<div class="bang-card" id="bang-card-\${id}" data-type="\${typ
 </div>`;
 
 var jstpl_cardTooltip = `<div class="bang-card-tooltip">
-	<div class="bang-card" id="bang-card-tooltip-\${id}" data-type="\${type}">
-			<div class="card-name">\${name}</div>
-			<div class="card-background"></div>
-			<div class="card-symbols"></div>
+	<div class="bang-card-tooltip-sizing">
+		<div class="bang-card" id="bang-card-tooltip-\${id}" data-type="\${type}">
+				<div class="card-name">\${name}</div>
+				<div class="card-background"></div>
+				<div class="card-symbols">\${symbols}</div>
+		</div>
 	</div>
 	<p>
 	\${text}
