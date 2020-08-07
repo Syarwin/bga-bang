@@ -30,7 +30,7 @@ div#board {
     border-radius: 5px;
     grid-row: 1;
     grid-column: 1 / span 6;
-    height: 210px;
+    height: 215px;
     display: flex;
     flex-flow: row; }
     div#board div#hand div#role-container {
@@ -122,9 +122,10 @@ div#board {
       div#board .bang-player .bang-player-container .player-info .player-character-name {
         font-family: "Perdido";
         width: 100%;
+        max-height: 22px;
         margin-top: 12px;
         text-align: center;
-        font-size: 18px;
+        font-size: 17px;
         transform: scale(0.8, 1.3);
         transform-origin: top center; }
       div#board .bang-player .bang-player-container .player-info .player-character-background {
@@ -291,118 +292,130 @@ div#board {
     content: "5"; }
   div#board .bang-player[data-bullets="6"] .player-cards .player-maxhand::before {
     content: "6"; }
-  div#board div.bang-card {
-    position: relative;
-    width: 125px;
-    height: 200px;
-    margin: 5px;
-    background-image: url("img/card_borders.png");
+
+div.bang-card-tooltip div.bang-card {
+  transform: scale(1); }
+
+div.bang-card {
+  position: relative;
+  width: 125px;
+  height: 200px;
+  margin: 5px;
+  background-image: url("img/card_borders.png");
+  background-size: cover; }
+  div.bang-card.unselectable {
+    opacity: 0.5;
+    cursor: not-allowed; }
+  div.bang-card.selectable {
+    cursor: pointer; }
+    div.bang-card.selectable:hover {
+      transform: scale(1.05);
+      transform-origin: center center; }
+  div.bang-card[data-type="5"] {
+    background-position: 33.3333333333% center; }
+  div.bang-card[data-type="6"] {
+    background-position: 33.3333333333% center; }
+  div.bang-card[data-type="7"] {
+    background-position: 33.3333333333% center; }
+  div.bang-card[data-type="8"] {
+    background-position: 33.3333333333% center; }
+  div.bang-card[data-type="9"] {
+    background-position: 33.3333333333% center; }
+  div.bang-card[data-type="10"] {
+    background-position: 33.3333333333% center; }
+  div.bang-card[data-type="11"] {
+    background-position: 33.3333333333% center; }
+  div.bang-card[data-type="12"] {
+    background-position: 33.3333333333% center; }
+  div.bang-card[data-type="13"] {
+    background-position: 33.3333333333% center; }
+  div.bang-card[data-type="14"] {
+    background-position: 33.3333333333% center; }
+  div.bang-card[data-type="15"] {
+    background-position: 66.6666666667% center; }
+  div.bang-card[data-type="16"] {
+    background-position: 66.6666666667% center; }
+  div.bang-card[data-type="17"] {
+    background-position: 66.6666666667% center; }
+  div.bang-card[data-type="18"] {
+    background-position: 66.6666666667% center; }
+  div.bang-card[data-type="19"] {
+    background-position: 66.6666666667% center; }
+  div.bang-card[data-type="20"] {
+    background-position: 66.6666666667% center; }
+  div.bang-card[data-type="21"] {
+    background-position: 66.6666666667% center; }
+  div.bang-card[data-type="0"] {
+    background-position: 100% center; }
+  div.bang-card[data-type="1"] {
+    background-position: 100% center; }
+  div.bang-card[data-type="2"] {
+    background-position: 100% center; }
+  div.bang-card[data-type="3"] {
+    background-position: 100% center; }
+  div.bang-card[data-type="4"] {
+    background-position: 100% center; }
+  div.bang-card .card-name {
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    font-family: "Perdido";
+    font-size: 23px;
+    transform: scale(0.8, 1.3);
+    transform-origin: top center; }
+  div.bang-card .card-background {
+    position: absolute;
+    top: 34px;
+    left: 10px;
+    width: 105px;
+    height: 105px;
+    background-image: url("img/card_backgrounds.jpg");
     background-size: cover; }
-    div#board div.bang-card[data-type="5"] {
-      background-position: 33.3333333333% center; }
-    div#board div.bang-card[data-type="6"] {
-      background-position: 33.3333333333% center; }
-    div#board div.bang-card[data-type="7"] {
-      background-position: 33.3333333333% center; }
-    div#board div.bang-card[data-type="8"] {
-      background-position: 33.3333333333% center; }
-    div#board div.bang-card[data-type="9"] {
-      background-position: 33.3333333333% center; }
-    div#board div.bang-card[data-type="10"] {
-      background-position: 33.3333333333% center; }
-    div#board div.bang-card[data-type="11"] {
-      background-position: 33.3333333333% center; }
-    div#board div.bang-card[data-type="12"] {
-      background-position: 33.3333333333% center; }
-    div#board div.bang-card[data-type="13"] {
-      background-position: 33.3333333333% center; }
-    div#board div.bang-card[data-type="14"] {
-      background-position: 33.3333333333% center; }
-    div#board div.bang-card[data-type="15"] {
-      background-position: 66.6666666667% center; }
-    div#board div.bang-card[data-type="16"] {
-      background-position: 66.6666666667% center; }
-    div#board div.bang-card[data-type="17"] {
-      background-position: 66.6666666667% center; }
-    div#board div.bang-card[data-type="18"] {
-      background-position: 66.6666666667% center; }
-    div#board div.bang-card[data-type="19"] {
-      background-position: 66.6666666667% center; }
-    div#board div.bang-card[data-type="20"] {
-      background-position: 66.6666666667% center; }
-    div#board div.bang-card[data-type="21"] {
-      background-position: 66.6666666667% center; }
-    div#board div.bang-card[data-type="0"] {
-      background-position: 100% center; }
-    div#board div.bang-card[data-type="1"] {
-      background-position: 100% center; }
-    div#board div.bang-card[data-type="2"] {
-      background-position: 100% center; }
-    div#board div.bang-card[data-type="3"] {
-      background-position: 100% center; }
-    div#board div.bang-card[data-type="4"] {
-      background-position: 100% center; }
-    div#board div.bang-card .card-name {
-      position: absolute;
-      top: 10px;
-      width: 100%;
-      height: 40px;
-      text-align: center;
-      font-family: "Perdido";
-      font-size: 23px;
-      transform: scale(0.8, 1.3);
-      transform-origin: top center; }
-    div#board div.bang-card .card-background {
-      position: absolute;
-      top: 34px;
-      left: 10px;
-      width: 105px;
-      height: 105px;
-      background-image: url("img/card_backgrounds.jpg");
-      background-size: cover; }
-    div#board div.bang-card[data-type="0"] .card-background {
-      background-position: 0% center; }
-    div#board div.bang-card[data-type="1"] .card-background {
-      background-position: 4.7619047619% center; }
-    div#board div.bang-card[data-type="2"] .card-background {
-      background-position: 9.5238095238% center; }
-    div#board div.bang-card[data-type="3"] .card-background {
-      background-position: 14.2857142857% center; }
-    div#board div.bang-card[data-type="4"] .card-background {
-      background-position: 19.0476190476% center; }
-    div#board div.bang-card[data-type="5"] .card-background {
-      background-position: 23.8095238095% center; }
-    div#board div.bang-card[data-type="6"] .card-background {
-      background-position: 28.5714285714% center; }
-    div#board div.bang-card[data-type="7"] .card-background {
-      background-position: 33.3333333333% center; }
-    div#board div.bang-card[data-type="8"] .card-background {
-      background-position: 38.0952380952% center; }
-    div#board div.bang-card[data-type="9"] .card-background {
-      background-position: 42.8571428571% center; }
-    div#board div.bang-card[data-type="10"] .card-background {
-      background-position: 47.619047619% center; }
-    div#board div.bang-card[data-type="11"] .card-background {
-      background-position: 52.380952381% center; }
-    div#board div.bang-card[data-type="12"] .card-background {
-      background-position: 57.1428571429% center; }
-    div#board div.bang-card[data-type="13"] .card-background {
-      background-position: 61.9047619048% center; }
-    div#board div.bang-card[data-type="14"] .card-background {
-      background-position: 66.6666666667% center; }
-    div#board div.bang-card[data-type="15"] .card-background {
-      background-position: 71.4285714286% center; }
-    div#board div.bang-card[data-type="16"] .card-background {
-      background-position: 76.1904761905% center; }
-    div#board div.bang-card[data-type="17"] .card-background {
-      background-position: 80.9523809524% center; }
-    div#board div.bang-card[data-type="18"] .card-background {
-      background-position: 85.7142857143% center; }
-    div#board div.bang-card[data-type="19"] .card-background {
-      background-position: 90.4761904762% center; }
-    div#board div.bang-card[data-type="20"] .card-background {
-      background-position: 95.2380952381% center; }
-    div#board div.bang-card[data-type="21"] .card-background {
-      background-position: 100% center; }
+  div.bang-card[data-type="0"] .card-background {
+    background-position: 0% center; }
+  div.bang-card[data-type="1"] .card-background {
+    background-position: 4.7619047619% center; }
+  div.bang-card[data-type="2"] .card-background {
+    background-position: 9.5238095238% center; }
+  div.bang-card[data-type="3"] .card-background {
+    background-position: 14.2857142857% center; }
+  div.bang-card[data-type="4"] .card-background {
+    background-position: 19.0476190476% center; }
+  div.bang-card[data-type="5"] .card-background {
+    background-position: 23.8095238095% center; }
+  div.bang-card[data-type="6"] .card-background {
+    background-position: 28.5714285714% center; }
+  div.bang-card[data-type="7"] .card-background {
+    background-position: 33.3333333333% center; }
+  div.bang-card[data-type="8"] .card-background {
+    background-position: 38.0952380952% center; }
+  div.bang-card[data-type="9"] .card-background {
+    background-position: 42.8571428571% center; }
+  div.bang-card[data-type="10"] .card-background {
+    background-position: 47.619047619% center; }
+  div.bang-card[data-type="11"] .card-background {
+    background-position: 52.380952381% center; }
+  div.bang-card[data-type="12"] .card-background {
+    background-position: 57.1428571429% center; }
+  div.bang-card[data-type="13"] .card-background {
+    background-position: 61.9047619048% center; }
+  div.bang-card[data-type="14"] .card-background {
+    background-position: 66.6666666667% center; }
+  div.bang-card[data-type="15"] .card-background {
+    background-position: 71.4285714286% center; }
+  div.bang-card[data-type="16"] .card-background {
+    background-position: 76.1904761905% center; }
+  div.bang-card[data-type="17"] .card-background {
+    background-position: 80.9523809524% center; }
+  div.bang-card[data-type="18"] .card-background {
+    background-position: 85.7142857143% center; }
+  div.bang-card[data-type="19"] .card-background {
+    background-position: 90.4761904762% center; }
+  div.bang-card[data-type="20"] .card-background {
+    background-position: 95.2380952381% center; }
+  div.bang-card[data-type="21"] .card-background {
+    background-position: 100% center; }
 
 /*# sourceMappingURL=bang.css.map */
