@@ -87,7 +87,7 @@ onEnteringState: function (stateName, args) {
 	debug('Entering state: ' + stateName, args);
 
 	// Stop here if it's not the current player's turn for some states
-//	if (["playerBuild"].includes(stateName) && !this.isCurrentPlayerActive()) return;
+	if (["playCard"].includes(stateName) && !this.isCurrentPlayerActive()) return;
 
 	// Call appropriate method
 	var methodName = "onEnteringState" + stateName.charAt(0).toUpperCase() + stateName.slice(1);
@@ -165,11 +165,11 @@ makeCardSelectable: function(){
 },
 
 onClickCard: function(card){
-  debug(card);
+  debug('CARD', card);
   // TODO : check
 
   if(this.checkAction('play'))
-    this.takeAction("playCard", { id:card.id });
+    this.takeAction("playCard", { id:card.id, targets:"2331794" });
   else if(this.checkAction('react'))
     this.takeAction("selectOption", { id:card.id });
 },
@@ -345,45 +345,7 @@ notif_choosePlayer: function(notif) {
  */
 notif_cardPlayed: function(notif) {
 	// if the following element exists it's the current player who played it
-	var card = document.getElementById('card_' + notif.args.card);
-	var r = null;
-	if(card == null) {
-		card = document.getElementById('hand_' + notif.args.player);
-		p = 3;
-		r = card.getBoundingClientRect();
 
-	} else {
-		var p = 2;
-		r = card.getBoundingClientRect();
-		r.width -= 10;
-		r.height -= 10;
-		r.x += 5;
-		r.y += 5;
-		card.remove();
-	}
-	var e = document.getElementById('handCount_' + notif.args.player);
-	e.innerHTML = parseInt(e.innerHTML) - 1;
-
-	//todo reveal
-
-	var rect = document.getElementById('board').getBoundingClientRect();
-	var pos = this.getBGPosition(parseInt(notif.args.card)+20);
-	console.log(pos);
-	e = dojo.place( this.format_block( 'jstpl_card', {
-		pos: pos,
-		x:r.x-rect.x,
-		y:r.y-rect.y
-	} ) , 'board' );
-
-	dojo.animateProperty({node:"tmpcard", properties:{
-			scale:2, //doesn't work...
-			top: 400,
-			left: rect.width/2 - r.width/2
-		},
-		onEnd: function() {
-				e.remove();
-			}
-		}).play();
 },
 
 

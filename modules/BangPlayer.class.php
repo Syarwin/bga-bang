@@ -59,7 +59,7 @@ class BangPlayer extends APP_GameClass
       'no'        => $this->no,
       'name'      => $this->getName(),
       'color'     => $this->color,
-      'hand' => ($current) ? array_values(BangCardManager::getHand($currentPlayerId)) : BangCardManager::countCards('hand', $this->id),
+      'hand' => ($current) ? array_values(BangCardManager::getHand($currentPlayerId, true)) : BangCardManager::countCards('hand', $this->id),
       'role' => ($current || $this->role==SHERIFF) ? $this->role : null,
       'characterId' => $this->character,
       'character' => $this->character_name,
@@ -74,7 +74,7 @@ class BangPlayer extends APP_GameClass
    */
   public function save() {
     $eliminated = ($this->eliminated) ? 1 : 0;
-    $sql = "UPDATE players SET player_eliminated=$eliminated, player_score=" . $this->score;
+    $sql = "UPDATE player SET player_eliminated=$eliminated, player_score=" . $this->hp;
     self::DbQuery($sql);
   }
 
@@ -82,21 +82,21 @@ class BangPlayer extends APP_GameClass
 
   }
 
-  public function playCard($id) {
+  public function playCard($id, $targets) {
 		$card = BangCardManager::getCard($id);
-		if($card->play($this)) {
-			$name = $this->name;
-			BangNotificationManager::cardPlayed($card, $this);
-		}
+		if($card->play($this, $targets))
+			BangNotificationManager::cardPlayed($card, $this, $targets);
+
 	}
 
 	public function selectOption($id) {
 		$card = BangCardManager::getCard(bang::$instance->getGameStateValue('currentCard'));
-		$card->react($id, $this);
+		if($card->react($id, $this))
+        BangNotificationManager::cardPlayed($card, $this);
 	}
 
   public function getHandOptions() {
-    $hand = BangCardManager::toObjects(BangCardManager::getHand($this->id));
+    $hand = BangCardManager::getHand($this->id);
 
     $options = [];
     foreach($hand as $card) {
@@ -154,7 +154,7 @@ class BangPlayer extends APP_GameClass
     if(count($player_ids) == 1) {
       $id = $player_ids[0];
       $target = BangPlayerManager::getPlayer($id);
-      $target->askReaction($this->player);
+      $target->askReaction($this->id);
     }
     foreach($player_ids as $player_id) {
       // todo use multiactive?
@@ -165,7 +165,7 @@ class BangPlayer extends APP_GameClass
 	 * ask a player for reactions
 	 */
 	public function askReaction($attacker) {
-		$id = $this->player;
+		$id = $this->id;
 		$onHand = BangCardManager::countCards('hand', $id);
 		// todo barrel
 
@@ -178,6 +178,15 @@ class BangPlayer extends APP_GameClass
 			bang::$instance->setGameStateValue('state',PLAY_CARD);
 		}
 	}
+
+  public function getDefensiveCards() {
+    $hand = BangCardManager::getHand($this->id);
+    $res = [];
+    foreach($hand as $card) {
+      if($card->getColor() == BROWN && $card->getEffectType() == DEFENSIVE) $res[] = $card->getID();
+    }
+    return array_values($res);
+  }
 
 	public function looseLife($byPlayer=-1) {
 		$this->hp--;

@@ -24,6 +24,7 @@ require_once("modules/Utils.class.php");
 require_once("modules/BangLog.class.php");
 require_once("modules/BangCardManager.class.php");
 require_once("modules/BangCard.class.php");
+require_once("modules/BangNotificationManager.class.php");
 foreach (BangCardManager::$classes as $className) {
   require_once("modules/cards/$className.class.php");
 }

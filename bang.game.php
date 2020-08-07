@@ -119,6 +119,10 @@ class bang extends Table
 		$char->selectOption($id);
 	}
 
+	function endTurn($cards) {
+
+	}
+
 
 
 	////////////////////////////////////////////////
@@ -202,6 +206,14 @@ class bang extends Table
 		return [
 			'_private' => [
 				'active' => BangPlayerManager::getPlayer(self::getActivePlayerId())->getHandOptions()
+			]
+		];
+	}
+
+	public function argReact() {
+		return [
+			'_private' => [
+				'active' => BangPlayerManager::getPlayer(self::getActivePlayerId())->getDefensiveCards()
 			]
 		];
 	}

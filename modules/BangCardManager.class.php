@@ -22,7 +22,7 @@ class BangCardManager extends APP_GameClass
 			$card = new $name();
 			foreach($expansions as $exp) {
 				foreach($card->getCopies()[$exp] as $value) {
-					$cards[] = ['type' => $value, 'type_arg' => $id, 'nbr' => 1];
+					$cards[] = ['type' => $id, 'type_arg' => $value, 'nbr' => 1];
 				}
 			}
 		}
@@ -57,8 +57,10 @@ class BangCardManager extends APP_GameClass
 	/**
 	  * getHand : Returns the cards of a players hand
 	  */
-	public static function getHand($id) {
-		return self::formatCards(self::getDeck()->getCardsInLocation('hand', $id));
+	public static function getHand($id, $formatted=false) {
+		$cards = self::getDeck()->getCardsInLocation('hand', $id);
+		if($formatted) return self::formatCards($cards);
+		return self::toObjects($cards);
 	}
 
 	/**

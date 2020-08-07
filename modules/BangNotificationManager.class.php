@@ -6,9 +6,9 @@
 class BangNotificationManager extends APP_GameClass {
 
   public static function cardPlayed($card, $player, $targets=[]) {
-    var $msg = $card->getArgsMessage($targets);
-    var $name = $card->getName();
-    bang::$instance->notifyAllPlayers('cardPlayed', $player->getName() . " played $name.$msg", array('card' => $card, 'player' => $attacker));
+    $msg = $card->getArgsMessage($targets);
+    $name = $card->getName();
+    bang::$instance->notifyAllPlayers('cardPlayed', $player->getName() . " played $name.$msg", array('card' => $card->format(), 'player' => $player));
   }
 
   public static function lostLife($player) {
