@@ -92,7 +92,7 @@ class BangCard extends APP_GameClass
 			'type' => $this->type,
 			'name' => $this->name,
 			'text' => $this->text,
-			'effect' => $this->effect,
+			'effect' => $this->effect
 		];
 	}
 
