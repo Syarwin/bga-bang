@@ -58,13 +58,6 @@ setup: function (gamedatas) {
   // Formatting cards
   Object.values(gamedatas.cards).forEach(card => {
     card.name = card.name.toUpperCase();
-    card.symbols = card.symbols.map(line =>
-      "<div class='row-sybmols'>"
-      + line.map(symbol => {
-        return (parseInt(Number(symbol)) == symbol)? ("<span class='symbol' data-symbol='" + symbol + "'></span>") : ("<span class='text'>" + symbol + "</span>");
-      }).join("")
-      + "</div>"
-    ).join("");
   });
 
 
