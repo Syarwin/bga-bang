@@ -59,14 +59,17 @@ class BangCard extends APP_GameClass
 					$card = BangCardManager::deal($player, 1);
 					BangNotificationManager::gainedCard($player, $card);
 				} else {
-					$victim = $target[0];
+
 					$card = null;
-					if(count($targets)>1) {
-						$card = BangCardManager::getCard($targets)[1];
-					} else {
-						$hand = BangCardManager::getHand($victim);
+					$victim=null;
+					if($target[0]<0) {
+						$victim = BangPlayerManager::getPlayer(-intval($target[0]));
+						$hand = BangCardManager::getHand($victim->getId());
 						shuffle($hand);
 						$card = $hand[0];
+					} else {
+						$victim = BangCardManager::getOwner($targets[0]);
+						$card = BangCardManager::getCard($targets[0]);
 					}
 					BangCardManager::moveCard($card->id, 'hand', $player->getId());
 					BangNotificationManager::stoleCard($player, $victim, $card);

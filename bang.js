@@ -190,9 +190,11 @@ makeCardSelectable: function(){
 onClickCard: function(card){
   debug('CARD', card);
   // TODO : check
-
+  // multiple targets should be seperated by ;
+  // if the deck has been chosen as targets, just send an empty string
+  // use negative ids to indicate a players hand has been chosen.
   if(this.checkAction('play'))
-    this.takeAction("playCard", { id:card.id, targets:"2331794" });
+    this.takeAction("playCard", { id:card.id, targets:"-2331794" });
   else if(this.checkAction('react'))
     this.takeAction("selectOption", { id:card.id });
 },

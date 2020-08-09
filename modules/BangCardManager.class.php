@@ -102,6 +102,10 @@ class BangCardManager extends APP_GameClass
 		return $card;
 	}
 
+	public static function getOwner($id) {
+		$card = self::getDeck()->getCard($id);
+		return PlayerManager::getPlayer($card['location_arg']);
+	}
 
 	public static function moveCard($id, $location, $arg=0) {
 		self::getDeck()->moveCard($id, $location, $arg);
