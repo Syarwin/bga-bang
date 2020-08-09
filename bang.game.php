@@ -116,7 +116,7 @@ class bang extends Table
 	function react($id) {
 		$player_id = self::getCurrentPlayerId();
 		$char = BangPlayerManager::getPlayer($player_id);
-		$char->selectOption($id);
+		$char->react($id);
 	}
 
 	function endTurn($cards) {

@@ -51,11 +51,47 @@ class BangCard extends APP_GameClass
  			case BASIC_ATTACK:
  				$ids = ($this->effect['impacts'] == ALL_OTHER) ? PlayerManager::getLivingPlayers($player->id) : $targets;
  				$player->attack($ids);
-
  				break;
  			case DRAW:
+				if(count($targets)==0) { //draw from deck
+					$card = BangCardManager::deal($player, 1);
+					BangNotificationManager::gainedCard($player, $card);
+				} else {
+					$victim = $target[0];
+					$card = null;
+					if(count($targets)>1) {
+						$card = BangCardManager::getCard($targets)[1];
+					} else {
+						$hand = BangCardManager::getHand($victim);
+						shuffle($hand);
+						$card = $hand[0];
+					}
+					BangCardManager::moveCard($card->id, 'hand', $player->getId());
+					BangNotificationManager::stoleCard($player, $victim, $card);
+				}
+				break;
  			case DISCARD:
+				$victim = $target[0];
+				$card = null;
+				if(count($targets)>1) {
+					$card = BangCardManager::getCard($targets)[1];
+				} else {
+					$hand = BangCardManager::getHand($victim);
+					shuffle($hand);
+					$card = $hand[0];
+				}
+				BangCardManager::moveCard($card->id, 'discard');
+				BangNotificationManager::discardedCard($victim, $card);
+				break;
  			case LIFE_POINT_MODIFIER:
+				$target = count($targets)>0 ? BangPlayerManager::getPlayer($targets[0]) : $player;
+				$hp = $target->getHp();
+				$bullets = $target->getBullets();
+				$amount = $this->effect['amount'];
+				if($hp+$amount > $bullets) $amount = $bullets - $hp;
+				$target->setHp($hp+$amount);
+				$target->save();
+				BangNotificationManager::gainedLife($player, $amount);
  				break;
  			default:
  				return false;
@@ -68,7 +104,7 @@ class BangCard extends APP_GameClass
 		$player_name = BangPlayerManager::getPlayer($player->player)->getName();
 		switch($this->effect['type']) {
 			case BASIC_ATTACK:
-				if($id == 999) {
+				if($id == PASS) {
 					$player->looseLife(bang::$instance->getGameStateValue('currentTurn'));
 				} else {
 					$card = BangCardManager::getCard($id);
@@ -122,6 +158,7 @@ class BangCard extends APP_GameClass
 					if ($this->effect['impacts'] == ALL || $this->effect['impacts'] == ALL_OTHER) {
 						return ['type' => OPTIONS_NONE];
 					}
+
 					$type = OPTION_PLAYER;
 					break;
 				case DRAW:
@@ -153,6 +190,14 @@ class BangCard extends APP_GameClass
 					break;
 			}
 			$deck = ($type == OPTION_CARD && $this->effect['type'] == DRAW);
+			if($this->getEffectType == LIFE_POINT_MODIFIER) {
+				$players = BangPlayerManager::getPlayers($player_id);
+				$filtered_ids = []
+				foreach($players as $p)
+					if($p->getHp() < $p->getBullets()) $filtered_ids[] = $p->getId();
+				if(count($filtered_ids) == 0) return null;
+				$player_ids = $filtered_ids;
+			}
 			return ['type' => $type, 'targets' => array_values($player_ids), 'deck'=>$deck];
 
 	 		break;

@@ -84,15 +84,17 @@ class BangPlayer extends APP_GameClass
 
   public function playCard($id, $targets) {
 		$card = BangCardManager::getCard($id);
-		if($card->play($this, $targets))
-			BangNotificationManager::cardPlayed($card, $this, $targets);
-
+    if($card->getColor() == BROWN)
+        BangCardManager::moveCard($id, 'discard');    
+		if($card->play($this, $targets)) {
+			BangNotificationManager::cardPlayed($this, $card, $targets);
+    }
 	}
 
-	public function selectOption($id) {
+	public function react($id) {
 		$card = BangCardManager::getCard(bang::$instance->getGameStateValue('currentCard'));
 		if($card->react($id, $this))
-        BangNotificationManager::cardPlayed($card, $this);
+        BangNotificationManager::cardPlayed($this, $card);
 	}
 
   public function getHandOptions() {

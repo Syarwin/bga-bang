@@ -108,7 +108,7 @@ class BangCardManager extends APP_GameClass
 	}
 
 	public static function deal($player, $amount){
-		self::getDeck()->pickCards($amount, 'deck', $player);
+		return toObjects(self::getDeck()->pickCards($amount, 'deck', $player));
 	}
 
 	/*
