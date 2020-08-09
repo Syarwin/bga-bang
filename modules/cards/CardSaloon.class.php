@@ -4,17 +4,19 @@ class CardSaloon extends BangCard {
   public function __construct($id=null)
   {
     parent::__construct($id);
-    $this->type    = CARD_SALOON;
+    $this->type  = CARD_SALOON;
     $this->name  = clienttranslate('Missed');
-    $this->text  = "All players regain 1 life point.";
-    $this->color = BROWN; //BROWN, BLUE, GREEN
-    $this->effect = ['type' => LIFE_POINT_MODIFIER, // BASIC_ATTACK, DRAW, DEFENSIVE, DISCARD, LIFE_POINT_MODIFIER, RANGE_INCREASE, RANGE_DECREASE, OTHER
-					'amount' => 1,
-					'impacts' => ALL // NONE, INRANGE, SPECIFIC_RANGE, ALL_OTHER, ALL, ANY
-					]; 
-    
-
-    
+    $this->text  = clienttranslate("All players regain 1 life point.");
+    $this->color = BROWN;
+    $this->effect = [
+      'type' => LIFE_POINT_MODIFIER,
+			'amount' => 1,
+			'impacts' => ALL
+  	];
+    $this->symbols = [
+      [SYMBOL_LIFEPOINT, SYMBOL_OTHER],
+      [SYMBOL_LIFEPOINT]
+    ];
     $this->copies = [
       BASE_GAME => [ '5H' ],
       DODGE_CITY => [ ],

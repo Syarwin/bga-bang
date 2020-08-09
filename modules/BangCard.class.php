@@ -14,6 +14,7 @@ class BangCard extends APP_GameClass
   protected $type;
 	protected $name;
 	protected $text;
+	protected $symbols;
 	protected $color;
 	protected $effect; // array with type, impact and sometimes range
 	protected $copies = [];
@@ -27,6 +28,7 @@ class BangCard extends APP_GameClass
 	public function getName(){ return $this->name; }
 	public function getText(){ return $this->text; }
 	public function getEffect(){ return $this->effect; }
+	public function getSymbols(){ return $this->symbols; }
 	public function getColor(){ return $this->color; }
 	public function getCopies(){ return $this->copies; }
 	public function getCopy(){ return $this->copy; }
@@ -128,7 +130,7 @@ class BangCard extends APP_GameClass
 			'type' => $this->type,
 			'name' => $this->name,
 			'text' => $this->text,
-			'effect' => $this->effect
+			'symbols' => $this->symbols
 		];
 	}
 

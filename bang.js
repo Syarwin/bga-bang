@@ -25,7 +25,24 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], functi
 /*
  * Constructor
  */
-constructor: function () { },
+constructor: function () {
+  this._OTHER = 0;
+  this._BASIC_ATTACK = 1;
+  this._DRAW = 2;
+  this._DISCARD = 3;
+  this._LIFE_POINT_MODIFIER = 4;
+  this._RANGE_INCREASE = 5;
+  this._RANGE_DECREASE = 6;
+  this._DEFENSIVE = 7;
+  this._WEAPON = 8;
+
+  this._NONE = 0;
+  this._INRANGE = 1;
+  this._SPECIFIC_RANGE = 2;
+  this._ALL_OTHER = 3;
+  this._ALL = 4;
+  this._ANY = 5;
+},
 
 /*
  * Setup:
@@ -37,6 +54,19 @@ constructor: function () { },
  */
 setup: function (gamedatas) {
 	debug('SETUP', gamedatas);
+
+  // Formatting cards
+  Object.values(gamedatas.cards).forEach(card => {
+    card.name = card.name.toUpperCase();
+    card.symbols = card.symbols.map(line =>
+      "<div class='row-sybmols'>"
+      + line.map(symbol => {
+        return (parseInt(Number(symbol)) == symbol)? ("<span class='symbol' data-symbol='" + symbol + "'></span>") : ("<span class='text'>" + symbol + "</span>");
+      }).join("")
+      + "</div>"
+    ).join("");
+  });
+
 
 	// Setting up player boards
   var nPlayers = gamedatas.bplayers.length;
@@ -61,13 +91,6 @@ setup: function (gamedatas) {
       dojo.place(this.format_block('jstpl_hand', { role : player.role }), 'board');
       player.hand.forEach(card => this.addCard(card, 'hand-cards') );
     }
-  });
-
-  // Formatting cards
-  Object.values(gamedatas.cards).forEach(card => {
-    card.name = card.name.toUpperCase();
-    // TODO
-    // card.symbols = ...
   });
 
 	// Setup game notifications

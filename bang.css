@@ -19,6 +19,12 @@
   font-weight: normal;
   font-style: normal;
   font-display: swap; }
+@font-face {
+  font-family: 'Palatino Linotype';
+  src: url("PalatinoLinotype-Italic.woff2") format("woff2"), url("PalatinoLinotype-Italic.woff") format("woff"), url("PalatinoLinotype-Italic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap; }
 div#board {
   width: 100%;
   min-height: 800px;
@@ -293,8 +299,14 @@ div#board {
   div#board .bang-player[data-bullets="6"] .player-cards .player-maxhand::before {
     content: "6"; }
 
-div.bang-card-tooltip div.bang-card {
-  transform: scale(1); }
+div.bang-card-tooltip div.bang-card-tooltip-sizing {
+  width: 250px;
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+  div.bang-card-tooltip div.bang-card-tooltip-sizing div.bang-card {
+    transform: scale(2); }
 
 div.bang-card {
   position: relative;
@@ -417,5 +429,62 @@ div.bang-card {
     background-position: 95.2380952381% center; }
   div.bang-card[data-type="21"] .card-background {
     background-position: 100% center; }
+  div.bang-card .card-symbols {
+    position: absolute;
+    top: 137px;
+    left: 10px;
+    width: 105px;
+    height: 52px;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center; }
+    div.bang-card .card-symbols .row-sybmols {
+      display: flex;
+      flex-flow: row;
+      align-items: center;
+      justify-content: center; }
+      div.bang-card .card-symbols .row-sybmols .text {
+        font-family: 'Palatino Linotype';
+        font-size: 6px;
+        font-style: italic; }
+      div.bang-card .card-symbols .row-sybmols .symbol {
+        width: 59px;
+        height: 51px;
+        background-image: url("img/card_symbols.jpg");
+        background-size: cover;
+        flex-shrink: 0; }
+        div.bang-card .card-symbols .row-sybmols .symbol[data-symbol="0"] {
+          background-position: 0% center; }
+        div.bang-card .card-symbols .row-sybmols .symbol[data-symbol="1"] {
+          background-position: 6.6666666667% center; }
+        div.bang-card .card-symbols .row-sybmols .symbol[data-symbol="2"] {
+          background-position: 13.3333333333% center; }
+        div.bang-card .card-symbols .row-sybmols .symbol[data-symbol="3"] {
+          background-position: 20% center; }
+        div.bang-card .card-symbols .row-sybmols .symbol[data-symbol="4"] {
+          background-position: 26.6666666667% center; }
+        div.bang-card .card-symbols .row-sybmols .symbol[data-symbol="5"] {
+          background-position: 33.3333333333% center; }
+        div.bang-card .card-symbols .row-sybmols .symbol[data-symbol="6"] {
+          background-position: 40% center; }
+        div.bang-card .card-symbols .row-sybmols .symbol[data-symbol="7"] {
+          background-position: 46.6666666667% center; }
+        div.bang-card .card-symbols .row-sybmols .symbol[data-symbol="8"] {
+          background-position: 53.3333333333% center; }
+        div.bang-card .card-symbols .row-sybmols .symbol[data-symbol="9"] {
+          background-position: 60% center; }
+        div.bang-card .card-symbols .row-sybmols .symbol[data-symbol="10"] {
+          background-position: 66.6666666667% center; }
+        div.bang-card .card-symbols .row-sybmols .symbol[data-symbol="11"] {
+          background-position: 73.3333333333% center; }
+        div.bang-card .card-symbols .row-sybmols .symbol[data-symbol="12"] {
+          background-position: 80% center; }
+        div.bang-card .card-symbols .row-sybmols .symbol[data-symbol="13"] {
+          background-position: 86.6666666667% center; }
+        div.bang-card .card-symbols .row-sybmols .symbol[data-symbol="14"] {
+          background-position: 93.3333333333% center; }
+        div.bang-card .card-symbols .row-sybmols .symbol[data-symbol="15"] {
+          background-position: 100% center; }
 
 /*# sourceMappingURL=bang.css.map */
