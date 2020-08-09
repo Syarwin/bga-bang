@@ -100,7 +100,7 @@ $machinestates = [
 		'possibleactions' => ['play','endTurn'],
 		'transitions' => [
 			'zombiePass' => ST_END_OF_TURN,
-			'endturn'		=> ST_END_OF_TURN,
+			'endTurn'		=> ST_END_OF_TURN,
 			'awaitReaction' => ST_AWAIT_REACTION
 		],
 	],

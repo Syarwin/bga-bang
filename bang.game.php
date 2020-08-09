@@ -120,7 +120,10 @@ class bang extends Table
 	}
 
 	function endTurn($cards) {
-
+		foreach ($cards as $card) {
+			BangCardManager::moveCard($card, 'discard');
+		}
+		$this->gamestate->nextState('endTurn');
 	}
 
 

@@ -76,7 +76,7 @@ class BangCardManager extends APP_GameClass
 		foreach($bplayers as $id => $char) {
 			$cards[$id] = self::getDeck()->getCardsInLocation('inPlay');
 		}
-		return $cards;
+		return self::toObjects($cards);
 	}
 
 	public static function toObjects($array) {
