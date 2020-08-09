@@ -25,8 +25,8 @@ define('WAIT_REACTION',2);
  */
 define('OPTIONS_NONE',0);
 define('OPTION_CARD', 1);
-define('OPTION_CARDS', 2);
-define('OPTION_PLAYER', 3);
+define('OPTION_PLAYER', 2);
+//define('OPTION_CARDS', 2);
 //define('RANDOM', 1);
 
 /*
