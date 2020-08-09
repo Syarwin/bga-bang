@@ -40,16 +40,24 @@ var jstpl_player = `<div class='bang-player' id='bang-player-\${id}' data-role="
 </div>`;
 
 
-var jstpl_card = `<div class="bang-card" id="bang-card-\${id}" data-type="\${type}">
+var jstpl_card = `<div class="bang-card" id="bang-card-\${id}" data-id="\${id}" data-type="\${type}">
 		<div class="card-name">\${name}</div>
 		<div class="card-background"></div>
+		<div class="card-copy">
+			<span class="card-copy-value">\${value}</span>
+			<span class="card-copy-color" data-color="\${color}"></span>
+		</div>
 </div>`;
 
 var jstpl_cardTooltip = `<div class="bang-card-tooltip">
 	<div class="bang-card-tooltip-sizing">
 		<div class="bang-card" id="bang-card-tooltip-\${id}" data-type="\${type}">
-				<div class="card-name">\${name}</div>
-				<div class="card-background"></div>
+			<div class="card-name">\${name}</div>
+			<div class="card-background"></div>
+			<div class="card-copy">
+				<span class="card-copy-value">\${value}</span>
+				<span class="card-copy-color" data-color="\${color}"></span>
+			</div>
 		</div>
 	</div>
 	<p>
