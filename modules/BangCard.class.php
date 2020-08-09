@@ -195,7 +195,7 @@ class BangCard extends APP_GameClass
 			}
 			$deck = ($type == OPTION_CARD && $this->effect['type'] == DRAW);
 			if($this->getEffectType() == LIFE_POINT_MODIFIER) {
-				$players = BangPlayerManager::getPlayers($player_id);
+				$players = BangPlayerManager::getPlayers($player_ids);
 				$filtered_ids = [];
 				foreach($players as $p)
 					if($p->getHp() < $p->getBullets()) $filtered_ids[] = $p->getId();

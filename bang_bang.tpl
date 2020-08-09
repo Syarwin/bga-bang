@@ -43,7 +43,6 @@ var jstpl_player = `<div class='bang-player' id='bang-player-\${id}' data-role="
 var jstpl_card = `<div class="bang-card" id="bang-card-\${id}" data-type="\${type}">
 		<div class="card-name">\${name}</div>
 		<div class="card-background"></div>
-		<div class="card-symbols">\${symbols}</div>
 </div>`;
 
 var jstpl_cardTooltip = `<div class="bang-card-tooltip">
@@ -51,7 +50,6 @@ var jstpl_cardTooltip = `<div class="bang-card-tooltip">
 		<div class="bang-card" id="bang-card-tooltip-\${id}" data-type="\${type}">
 				<div class="card-name">\${name}</div>
 				<div class="card-background"></div>
-				<div class="card-symbols">\${symbols}</div>
 		</div>
 	</div>
 	<p>
