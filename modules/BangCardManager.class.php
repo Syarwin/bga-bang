@@ -42,12 +42,7 @@ class BangCardManager extends APP_GameClass
 	}
 
 	public static function formatCard($card){
-		return [
-			'id' => $card['id'],
-			'type' => $card['type'],
-			'color' => substr($card['type_arg'], -1),
-			'value' => substr($card['type_arg'], 0, -1),
-		];
+		return $card->format();
 	}
 
 	public static function formatCards($cards){

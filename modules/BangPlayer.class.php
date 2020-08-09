@@ -79,13 +79,14 @@ class BangPlayer extends APP_GameClass
   }
 
   public function startOfTurn() {
-
+    $cards = BangCardManager::deal($this, 2);
+    BangNotificationManager::gainedCard($this, $cards);
   }
 
   public function playCard($id, $targets) {
 		$card = BangCardManager::getCard($id);
     if($card->getColor() == BROWN)
-        BangCardManager::moveCard($id, 'discard');    
+        BangCardManager::moveCard($id, 'discard');
 		if($card->play($this, $targets)) {
 			BangNotificationManager::cardPlayed($this, $card, $targets);
     }
