@@ -16,7 +16,7 @@ class BangNotificationManager extends APP_GameClass {
   }
 
   public static function gainedLife($player, $amount) {
-    $msg  = $amount == 1 ? " gained a life point." : " gained $amount life points."
+    $msg  = $amount == 1 ? " gained a life point." : " gained $amount life points.";
     bang::$instance->notifyAllPlayers('gainedLife', $player->getName() . $msg, ['id'=>$player->getId(), 'hp'=>$player->getHp()]);
   }
 
