@@ -6,7 +6,7 @@ class CardPanic extends BangCard {
     parent::__construct($id);
     $this->type  = CARD_PANIC;
     $this->name  = clienttranslate('Panic!');
-    $this->text  = clienttranslate("Draw 1 card from the deck or a player within range 1.");
+    $this->text  = clienttranslate("Draw 1 card from a player within range 1.");
     $this->color = BROWN;
     $this->effect = [
       'type' => DRAW,

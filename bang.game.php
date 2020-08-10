@@ -54,7 +54,6 @@ class bang extends Table
 	 */
 	protected function setupNewGame($bplayers, $options = []) {
 		// Initialize board and cards
-
 		$expansions = [BASE_GAME];
 		BangCardManager::setupNewGame($expansions);
 
@@ -84,6 +83,7 @@ class bang extends Table
 		//$result['sheriff'] = BangPlayerManager::getSheriff();
 		$result['turn'] = $this->getGameStateValue('currentTurn');
 		$result['cards'] = array_values(BangCardManager::getUIData());
+		//Utils::die(["data"]);
 		return $result;
 	}
 
@@ -102,12 +102,12 @@ class bang extends Table
 //////////////////////////////////////////////////////////////////////////////
 //////////// Player actions
 ////////////
-	function playCard($id, $targets) {
+	function playCard($id, $args) {
 		// check for active cards
 		self::checkAction( 'play' );
 		$player_id = self::getCurrentPlayerId();
 		$char = BangPlayerManager::getPlayer($player_id);
-		$char->playCard($id, $targets);
+		$char->playCard($id, $args);
 		//$card = BangCardManager::createCard($id);
 
 	}
@@ -157,6 +157,7 @@ class bang extends Table
 		$player->startOfTurn();
 		//$this->gamestate->changeActivePlayer($this->setGameStateValue('turn', $id));
 		$this->gamestate->nextState("play");
+
 	}
 
 
@@ -212,6 +213,7 @@ class bang extends Table
 	}
 */
 	public function argPlayCards() {
+		//Utils::die(["args"]);
 		return [
 			'_private' => [
 				'active' => BangPlayerManager::getPlayer(self::getActivePlayerId())->getHandOptions()
