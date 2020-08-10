@@ -238,10 +238,10 @@ div#board {
       }
     }
 
-    @for $i from 0 through 6 {
+    @for $i from 0 through 10 {
       &[data-hand="#{$i}"] .player-cards .player-handcount::before { content:"#{$i}"; }
     }
-    @for $i from 0 through 6 {
+    @for $i from 0 through 10 {
       &[data-bullets="#{$i}"] .player-cards .player-maxhand::before { content:"#{$i}"; }
     }
   }
@@ -282,6 +282,10 @@ div.bang-card {
       transform-origin: center center;
     }
   }
+  &.selected {
+    transform:scale(1.05);
+    transform-origin: center center;
+  }
 
   @each $card in $actions    { &[data-type="#{$card}"] { background-position:1 * 100% / 3 center; } }
   @each $card in $equipments { &[data-type="#{$card}"] { background-position:2 * 100% / 3 center; } }
@@ -310,5 +314,36 @@ div.bang-card {
   }
   @for $i from 0 through $numberOfCards {
     &[data-type="#{$i}"] .card-background { background-position:$i * 100% / $numberOfCards center; }
+  }
+
+  .card-copy {
+    position: absolute;
+    bottom: -3px;
+    left: 4px;
+    font-size: 20px;
+    text-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white;
+
+    .card-copy-color {
+      margin-left:-2px;
+    }
+    .card-copy-color::before {
+      font-size:25px;
+    }
+    .card-copy-color[data-color="D"]::before {
+      content:"♦";
+      color:red;
+    }
+    .card-copy-color[data-color="H"]::before {
+      content:"♥";
+      color:red;
+    }
+    .card-copy-color[data-color="S"]::before {
+      content:"♠";
+      color:black;
+    }
+    .card-copy-color[data-color="C"]::before {
+      content:"♣";
+      color:black;
+    }
   }
 }

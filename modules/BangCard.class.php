@@ -148,7 +148,7 @@ class BangCard extends APP_GameClass
 	 switch ($this->color) {
 	 	case BLUE:
 	 		$cardsInPlay = BangCardManager::getCardsInPlay($player->getId());
-			return ['type' => OPTIONS_NONE, '$cardsInPlay' => BangCardManager::formatCards($cardsInPlay), 'type' => 'type'];
+			return ['type' => OPTIONS_NONE];
 			/*foreach($cardsInPlay as $card)
 				if($card->type == $this->type)
 					return null;
@@ -201,7 +201,11 @@ class BangCard extends APP_GameClass
 				if(count($filtered_ids) == 0) return null;
 				$player_ids = $filtered_ids;
 			}
-			return ['type' => $type, 'targets' => array_values($player_ids), 'deck'=>$deck];
+			return [
+				'type' => $type,
+				'targets' => array_values($player_ids),
+				'deck' => $deck
+			];
 
 	 		break;
 	 }

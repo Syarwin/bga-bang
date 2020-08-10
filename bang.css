@@ -284,6 +284,14 @@ div#board {
     content: "5"; }
   div#board .bang-player[data-hand="6"] .player-cards .player-handcount::before {
     content: "6"; }
+  div#board .bang-player[data-hand="7"] .player-cards .player-handcount::before {
+    content: "7"; }
+  div#board .bang-player[data-hand="8"] .player-cards .player-handcount::before {
+    content: "8"; }
+  div#board .bang-player[data-hand="9"] .player-cards .player-handcount::before {
+    content: "9"; }
+  div#board .bang-player[data-hand="10"] .player-cards .player-handcount::before {
+    content: "10"; }
   div#board .bang-player[data-bullets="0"] .player-cards .player-maxhand::before {
     content: "0"; }
   div#board .bang-player[data-bullets="1"] .player-cards .player-maxhand::before {
@@ -298,6 +306,14 @@ div#board {
     content: "5"; }
   div#board .bang-player[data-bullets="6"] .player-cards .player-maxhand::before {
     content: "6"; }
+  div#board .bang-player[data-bullets="7"] .player-cards .player-maxhand::before {
+    content: "7"; }
+  div#board .bang-player[data-bullets="8"] .player-cards .player-maxhand::before {
+    content: "8"; }
+  div#board .bang-player[data-bullets="9"] .player-cards .player-maxhand::before {
+    content: "9"; }
+  div#board .bang-player[data-bullets="10"] .player-cards .player-maxhand::before {
+    content: "10"; }
 
 div.bang-card-tooltip div.bang-card-tooltip-sizing {
   width: 250px;
@@ -323,6 +339,9 @@ div.bang-card {
     div.bang-card.selectable:hover {
       transform: scale(1.05);
       transform-origin: center center; }
+  div.bang-card.selected {
+    transform: scale(1.05);
+    transform-origin: center center; }
   div.bang-card[data-type="5"] {
     background-position: 33.3333333333% center; }
   div.bang-card[data-type="6"] {
@@ -429,5 +448,27 @@ div.bang-card {
     background-position: 95.2380952381% center; }
   div.bang-card[data-type="21"] .card-background {
     background-position: 100% center; }
+  div.bang-card .card-copy {
+    position: absolute;
+    bottom: -3px;
+    left: 4px;
+    font-size: 20px;
+    text-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white; }
+    div.bang-card .card-copy .card-copy-color {
+      margin-left: -2px; }
+    div.bang-card .card-copy .card-copy-color::before {
+      font-size: 25px; }
+    div.bang-card .card-copy .card-copy-color[data-color="D"]::before {
+      content: "♦";
+      color: red; }
+    div.bang-card .card-copy .card-copy-color[data-color="H"]::before {
+      content: "♥";
+      color: red; }
+    div.bang-card .card-copy .card-copy-color[data-color="S"]::before {
+      content: "♠";
+      color: black; }
+    div.bang-card .card-copy .card-copy-color[data-color="C"]::before {
+      content: "♣";
+      color: black; }
 
 /*# sourceMappingURL=bang.css.map */

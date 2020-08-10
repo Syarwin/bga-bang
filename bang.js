@@ -129,11 +129,6 @@ onLeavingState: function (stateName) {
 onUpdateActionButtons: function (stateName, args, suppressTimers) {
 	debug('Update action buttons: ' + stateName, args);
 
-  if(stateName == "playCard"){
-    this.gamedatas.gamestate.descriptionmyturn = _("You can play a card");
-    this.updatePageTitle();
-  }
-
 	if (!this.isCurrentPlayerActive()) // Make sure the player is active
 		return;
 
@@ -180,6 +175,9 @@ makeCardSelectable: function(cards, action){
     dojo.removeClass("bang-card-" + card.id, "unselectable");
     dojo.addClass("bang-card-" + card.id, "selectable");
   });
+
+  this.gamedatas.gamestate.descriptionmyturn = _("You can play a card");
+  this.updatePageTitle();
 },
 
 
@@ -193,8 +191,8 @@ onClickCard: function(ocard){
   var card = this._selectableCards.find(o => o.id == ocard.id);
   if(!card) return;
 
-  if(action == "selectCard")   this.onClickCardSelectCard(card);
-  if(action == "selectOption") this.onClickCardSelectOption(card);
+  if(this._action == "selectCard")   this.onClickCardSelectCard(card);
+  if(this._action == "selectOption") this.onClickCardSelectOption(card);
 },
 
 
@@ -202,11 +200,13 @@ onClickCard: function(ocard){
  * Triggered whenever a player clicked on a selectable card to play
  */
 onClickCardSelectCard: function(card){
+  dojo.query("#hand .bang-card").removeClass("selectable").addClass("unselectable");
+  dojo.removeClass("bang-card-" + card.id, "unselectable");
+  dojo.addClass("bang-card-" + card.id, "selected");
   this._selectedCard = card;
 
   // What kind of target ?
-  this._selectedOption = {};
-  let OPTIONs_NONE = 0, OPTION_CARD = 1, OPTION_PLAYER = 2;
+  let OPTIONS_NONE = 0, OPTION_CARD = 1, OPTION_PLAYER = 2;
   if(card.options.type == OPTIONS_NONE) {
     this.onSelectOption();
   } else if(card.options.type == OPTION_PLAYER) {
@@ -231,10 +231,14 @@ onClickCancelCardSelected: function(cards){
 onSelectOption: function(){
   if(!this.checkAction('play')) return;
 
-  this.takeAction("playCard", {
+  var data = {
     id:this._selectedCard.id,
-    option:JSON.stringify(this._selectedOption)
-  });
+    player:this._selectedPlayer,
+    optionType:this._selectedOptionType,
+    optionArg:this._selectedOptionArg,
+  };
+  debug(data);
+  this.takeAction("playCard", data);
 },
 
 
@@ -254,7 +258,7 @@ makePlayersSelectable: function(players){
 
   this._selectablePlayers = players;
   this._selectablePlayers.forEach(playerId => {
-    this.addActionButton('buttonSelectPlayer' + playerId, this.gamedatas.players[playerId].name, () => onClickPlayer(playerId), null, false, 'blue');
+    this.addActionButton('buttonSelectPlayer' + playerId, this.gamedatas.players[playerId].name, () => this.onClickPlayer(playerId), null, false, 'blue');
     // TODO : make selectable
   });
 },
@@ -266,10 +270,8 @@ onClickPlayer: function(playerId){
   if(!this._selectablePlayers.includes(playerId))
     return;
 
-  this._selectedOption = {
-    type:"player",
-    id:playerId,
-  };
+  this._selectedOptionType = "player";
+  this._selectedPlayer = playerId;
   this.onSelectOption();
 },
 
@@ -309,11 +311,9 @@ makePlayersCardsSelectable: function(players, deck){
 
 
 onClickCardSelectOption: function(card){
-  this._selectedOption = {
-    type:"card",
-    playerId:card.playerId,
-    id:card.id,
-  };
+  this._selectedPlayer = card.playerId;
+  this._selectedOptionType = "card";
+  this._selectedOptionArg = card.id;
   this.onSelectOption();
 },
 
@@ -330,9 +330,10 @@ clearPossible: function () {
   this._selectableCards = [];
   this._selectablePlayers = [];
   this._selectedCard = null;
-  this._selectedOption = null;
-  dojo.query(".bang-card").removeClass("unselectable");
-  dojo.query(".bang-card").removeClass("selectable");
+  this._selectedPlayer = null;
+  this._selectedOptionType = null;
+  this._selectedOptionArg = null;
+  dojo.query(".bang-card").removeClass("unselectable selectable selected");
 
 	this.removeActionButtons();
 	this.onUpdateActionButtons(this.gamedatas.gamestate.name, this.gamedatas.gamestate.args);
