@@ -114,7 +114,6 @@ class BangCard extends APP_GameClass
 				} else {
 					$card = BangCardManager::getCard($id);
 					BangCardManager::moveCard($card->id, 'discard');
-					bang::$instance->setGameStateValue('state',0);
 					bang::$instance->gamestate->nextState( "awaitReaction" );
 				}
 				break;

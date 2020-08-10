@@ -44,10 +44,13 @@ class BangPlayerManager extends APP_GameClass
 		return $sheriff;
 	}
 
+
+
 	/*
 	 * getPlayer : returns the SantoriniPlayer object for the given player ID
 	 */
 	public static function getPlayer($playerId)	{
+
 		$bplayers = self::getPlayers([$playerId]);
 		return $bplayers[0];
 	}
@@ -64,6 +67,7 @@ class BangPlayerManager extends APP_GameClass
 		if (is_array($playerIds)) {
 			$sql .= " WHERE player_id IN ('" . implode("','", $playerIds) . "')";
 		}
+		
 		if($asArrayCollection) return self::getCollectionFromDB($sql);
 		$rows = self::getObjectListFromDB($sql);
 
@@ -88,6 +92,16 @@ class BangPlayerManager extends APP_GameClass
 		$sql = "SELECT player_id FROM player WHERE player_eliminated=0";
 		if($exept != null) $sql.= " AND player_id != $exept";
 		return self::getObjectListFromDB($sql);
+	}
+
+	public static function preparePlayerActivation($playerIds) {
+		self::DbQuery("UPDATE player SET activate=0");
+		$ids = implode(",", $playerIds);
+		self::DbQuery("UPDATE player SET activate=1 WHERE player_id in($ids)");
+	}
+
+	public static function getPlayersForActivation() {
+		return self::getObjectListFromDB("SELECT player_id FROM player WHERE player_activate=1");
 	}
 
 	/*

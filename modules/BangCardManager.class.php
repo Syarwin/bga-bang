@@ -53,9 +53,9 @@ class BangCardManager extends APP_GameClass
 	  * getHand : Returns the cards of a players hand
 	  */
 	public static function getHand($id, $formatted=false) {
-		$cards = self::getDeck()->getCardsInLocation('hand', $id);
+		$cards = self::toObjects(self::getDeck()->getCardsInLocation('hand', $id));
 		if($formatted) return self::formatCards($cards);
-		return self::toObjects($cards);
+		return $cards;
 	}
 
 	/**
@@ -74,9 +74,9 @@ class BangCardManager extends APP_GameClass
 		$cards = [];
 		$bplayers = BangPlayerManager::getPlayers();
 		foreach($bplayers as $id => $char) {
-			$cards[$id] = self::getDeck()->getCardsInLocation('inPlay');
+			$cards[$id] = self::toObjects(self::getDeck()->getCardsInLocation('inPlay'));
 		}
-		return self::toObjects($cards);
+		return $cards;
 	}
 
 	public static function toObjects($array) {
