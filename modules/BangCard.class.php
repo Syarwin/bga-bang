@@ -73,7 +73,7 @@ class BangCard extends APP_GameClass
 
  			case DISCARD:
 				$victim = BangPlayerManager::getPlayer($target['player']);
-				$card = $victim->getRandomCardInHand();
+				$card = ($target['type'] == 'hand')? $victim->getRandomCardInHand() : BangCardManager::getCard($targets["arg"]);
 				BangCardManager::moveCard($card->id, 'discard');
 				BangNotificationManager::discardedCards($victim, [$card]);
 				break;
@@ -137,13 +137,17 @@ class BangCard extends APP_GameClass
 
   public function getPlayOptions($player) {
 	 switch ($this->color) {
+		/*** Blue card : can be played unless duplicate ***/
 	 	case BLUE:
 	 		$cardsInPlay = BangCardManager::getCardsInPlay($player->getId());
 			return ['type' => OPTIONS_NONE];
+			// TODO : forbid duplicates
 			/*foreach($cardsInPlay as $card)
 				if($card->type == $this->type)
 					return null;
 			return ['type' => OPTIONS_NONE];*/
+
+		/*** Brown card : first compute the type and then the possible players ***/
 	 	case BROWN:
 			$type = -1;
 			switch ($this->effect['type']) {
@@ -155,16 +159,20 @@ class BangCard extends APP_GameClass
 
 					$type = OPTION_PLAYER;
 					break;
+
 				case DRAW:
 				case DISCARD:
-					$type = /*($this->effect['impacts'] == ALL_OTHER) ? OPTION_CARDS :*/ OPTION_CARD;
+					$type = OPTION_CARD;
 					break;
+
 				case DEFENSIVE:
 					return null;
+
 				default:
 					return ['type' => OPTIONS_NONE];
 				break;
 			}
+
 			$player_ids = [];
 			switch($this->effect['impacts']) {
 				case ALL_OTHER:
@@ -183,7 +191,7 @@ class BangCard extends APP_GameClass
 					$player_ids = [];
 					break;
 			}
-			$deck = ($type == OPTION_CARD && $this->effect['type'] == DRAW);
+
 			if($this->getEffectType() == LIFE_POINT_MODIFIER) {
 				$players = BangPlayerManager::getPlayers($player_ids);
 				$filtered_ids = [];
@@ -192,15 +200,16 @@ class BangCard extends APP_GameClass
 				if(count($filtered_ids) == 0) return null;
 				$player_ids = $filtered_ids;
 			}
+
 			return [
 				'type' => $type,
 				'targets' => array_values($player_ids),
-				'deck' => $deck
 			];
 
 	 		break;
 	 }
  }
+
 
 
 }
