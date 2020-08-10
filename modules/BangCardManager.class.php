@@ -42,12 +42,7 @@ class BangCardManager extends APP_GameClass
 	}
 
 	public static function formatCard($card){
-		return [
-			'id' => $card['id'],
-			'type' => $card['type'],
-			'color' => substr($card['type_arg'], -1),
-			'value' => substr($card['type_arg'], 0, -1),
-		];
+		return $card->format();
 	}
 
 	public static function formatCards($cards){
@@ -58,9 +53,9 @@ class BangCardManager extends APP_GameClass
 	  * getHand : Returns the cards of a players hand
 	  */
 	public static function getHand($id, $formatted=false) {
-		$cards = self::getDeck()->getCardsInLocation('hand', $id);
+		$cards = self::toObjects(self::getDeck()->getCardsInLocation('hand', $id));
 		if($formatted) return self::formatCards($cards);
-		return self::toObjects($cards);
+		return $cards;
 	}
 
 	/**
@@ -79,7 +74,7 @@ class BangCardManager extends APP_GameClass
 		$cards = [];
 		$bplayers = BangPlayerManager::getPlayers();
 		foreach($bplayers as $id => $char) {
-			$cards[$id] = self::getDeck()->getCardsInLocation('inPlay');
+			$cards[$id] = self::toObjects(self::getDeck()->getCardsInLocation('inPlay'));
 		}
 		return $cards;
 	}
@@ -113,6 +108,14 @@ class BangCardManager extends APP_GameClass
 
 	public static function deal($player, $amount){
 		return self::toObjects(self::getDeck()->pickCards($amount, 'deck', $player));
+	}
+
+  // only for testing
+	public static function dealCard($player, $type) {
+		//$cards = self::getDeck()->getCardsOfType($type);
+		$sql = "SELECT card_id FROM card WHERE card_type=$type";
+		$cards = self::getObjectListFromDB("SELECT card_id FROM card WHERE card_type=$type", true);
+		self::getDeck()->moveCard($cards[0], 'hand', $player);
 	}
 
 	/*

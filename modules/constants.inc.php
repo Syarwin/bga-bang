@@ -8,8 +8,11 @@ define('ST_NEXT_PLAYER', 3);
 define('ST_START_OF_TURN', 4);
 define('ST_PLAY_CARD', 5);
 define('ST_AWAIT_REACTION',6);
-define('ST_REACT', 7);
-define('ST_END_OF_TURN', 8);
+define('ST_AWAIT_MULTIREACTION',7);
+define('ST_REACT', 8);
+define('ST_MULTIREACT', 9);
+define('ST_END_REACT', 10);
+define('ST_END_OF_TURN', 10);
 define('ST_GAME_END', 99);
 
 
@@ -25,8 +28,8 @@ define('WAIT_REACTION',2);
  */
 define('OPTIONS_NONE',0);
 define('OPTION_CARD', 1);
-define('OPTION_CARDS', 2);
-define('OPTION_PLAYER', 3);
+define('OPTION_PLAYER', 2);
+//define('OPTION_CARDS', 2);
 //define('RANDOM', 1);
 
 /*

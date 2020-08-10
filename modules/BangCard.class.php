@@ -86,7 +86,7 @@ class BangCard extends APP_GameClass
 					$card = $hand[0];
 				}
 				BangCardManager::moveCard($card->id, 'discard');
-				BangNotificationManager::discardedCard($victim, $card);
+				BangNotificationManager::discardedCards($victim, [$card]);
 				break;
  			case LIFE_POINT_MODIFIER:
 				$target = count($targets)>0 ? BangPlayerManager::getPlayer($targets[0]) : $player;
@@ -114,7 +114,6 @@ class BangCard extends APP_GameClass
 				} else {
 					$card = BangCardManager::getCard($id);
 					BangCardManager::moveCard($card->id, 'discard');
-					bang::$instance->setGameStateValue('state',0);
 					bang::$instance->gamestate->nextState( "awaitReaction" );
 				}
 				break;
@@ -132,7 +131,7 @@ class BangCard extends APP_GameClass
 		return [
 			'type' => $this->type,
 			'name' => $this->name,
-			'text' => $this->text,
+			'text' => $this->text
 		];
 	}
 
@@ -167,7 +166,7 @@ class BangCard extends APP_GameClass
 					break;
 				case DRAW:
 				case DISCARD:
-					$type = ($this->effect['impacts'] == ALL_OTHER) ? OPTION_CARDS : OPTION_CARD;
+					$type = /*($this->effect['impacts'] == ALL_OTHER) ? OPTION_CARDS :*/ OPTION_CARD;
 					break;
 				case DEFENSIVE:
 					return null;

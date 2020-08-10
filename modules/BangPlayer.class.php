@@ -79,13 +79,14 @@ class BangPlayer extends APP_GameClass
   }
 
   public function startOfTurn() {
-
+    $cards = BangCardManager::deal($this->id, 2);
+    BangNotificationManager::gainedCard($this, $cards);
   }
 
   public function playCard($id, $targets) {
 		$card = BangCardManager::getCard($id);
     if($card->getColor() == BROWN)
-        BangCardManager::moveCard($id, 'discard');    
+        BangCardManager::moveCard($id, 'discard');
 		if($card->play($this, $targets)) {
 			BangNotificationManager::cardPlayed($this, $card, $targets);
     }
@@ -153,13 +154,35 @@ class BangPlayer extends APP_GameClass
    * attack : performs an attack on all given players
    */
   public function attack($player_ids) {
-    if(count($player_ids) == 1) {
-      $id = $player_ids[0];
-      $target = BangPlayerManager::getPlayer($id);
-      $target->askReaction($this->id);
+    $reactions = [];
+    $equipment = BangCardManager::getEquipment();
+    foreach ($player_ids as $id) {
+      $onHand = BangCardManager::countCards('hand', $id);
+      $missed = false;
+      foreach ($equipment[$id] as $card) {
+        if($card->getEffectType() == DEFENSIVE) {
+          if($crad->play()) {
+            $missed = true;
+            break;
+          }
+        }
+      }
+      if($missed) continue;
+
+      if($onHand > 0)  {
+  			$reactions[] = $id;
+  		} else {
+  			$this->looseLife($attacker);
+  		}
     }
-    foreach($player_ids as $player_id) {
-      // todo use multiactive?
+
+    if(count($reactions) == 1) {
+			bang::$instance->setGameStateValue('target',$reactions[0]);
+			bang::$instance->gamestate->nextState('awaitReaction');
+
+    } elseif(count($reactions) > 1) {
+      BangPlayerManager::preparePlayerActivation($reactions);
+      bang::$instance->gamestate->nextState('awaitMultiReaction');
     }
   }
 
@@ -172,12 +195,10 @@ class BangPlayer extends APP_GameClass
 		// todo barrel
 
 		if($onHand > 0)  {
-			bang::$instance->setGameStateValue('state',WAIT_REACTION);
 			bang::$instance->setGameStateValue('target',$id);
 			bang::$instance->gamestate->nextState('awaitReaction');
 		} else {
 			$this->looseLife($attacker);
-			bang::$instance->setGameStateValue('state',PLAY_CARD);
 		}
 	}
 

@@ -97,11 +97,12 @@ $machinestates = [
 		'descriptionmyturn' => clienttranslate('${you} can play a card'),
 		'type' => 'activeplayer',
 		'args' => 'argPlayCards',
-		'possibleactions' => ['play','endTurn'],
+		'possibleactions' => ['play', 'endTurn'],
 		'transitions' => [
 			'zombiePass' => ST_END_OF_TURN,
-			'endturn'		=> ST_END_OF_TURN,
-			'awaitReaction' => ST_AWAIT_REACTION
+			'endTurn'		=> ST_END_OF_TURN,
+			'awaitReaction' => ST_AWAIT_REACTION,
+			'awaitMultiReaction' => ST_AWAIT_MULTIREACTION
 		],
 	],
 
@@ -109,7 +110,7 @@ $machinestates = [
 		'name' => 'awaitReaction',
 		'description' => '',
 		'type' => 'game',
-		'action' => 'awaitReaction',
+		'action' => 'stAwaitReaction',
 		'updateGameProgression' => true,
 		'transitions' => ['awaitReaction' => ST_REACT, 'finishedReaction' => ST_PLAY_CARD]
 	],
@@ -120,11 +121,40 @@ $machinestates = [
 		'descriptionmyturn' => clienttranslate('${you} must react'),
 		'type' => 'activeplayer',
 		'args' => 'argReact',
+		'possibleactions' => ['react', 'pass'],
+		'transitions' => [
+			'react' => ST_END_REACT
+		]
+	],
+
+	ST_AWAIT_MULTIREACTION => [
+		'name' => 'awaitMultiReaction',
+		'description' => '',
+		'type' => 'game',
+		'action' => 'stAwaitMultiReaction',
+		'updateGameProgression' => true,
+		'transitions' => ['awaitReaction' => ST_MULTIREACT]
+	],
+
+	ST_MULTIREACT => [
+		'name' => 'multiReact',
+		'description' => clienttranslate('${actplayer} must react'),
+		'descriptionmyturn' => clienttranslate('${you} must react'),
+		'type' => 'multipleactiveplayer',
+		'args' => 'argMultiReact',
 		'possibleactions' => ['react','pass'],
 		'transitions' => [
-			'react' => ST_AWAIT_REACTION,
-			'zombiePass' => ST_AWAIT_REACTION
+			'finishedReaction' => ST_END_REACT
 		]
+	],
+
+	ST_END_REACT => [
+		'name' => 'endReaction',
+		'description' => '',
+		'type' => 'game',
+		'action' => 'stEndReaction',
+		'updateGameProgression' => true,
+		'transitions' => ['finishedReaction' => ST_PLAY_CARD]
 	],
 
 
