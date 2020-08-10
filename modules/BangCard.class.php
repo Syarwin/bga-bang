@@ -48,56 +48,47 @@ class BangCard extends APP_GameClass
 	/**
 	 * play : default function to play a card that. Can be used for cards that have only symbols
 	 */
-	public function play($player, $targets) {
+	public function play($player, $target) {
  		switch ($this->effect['type']) {
  			case BASIC_ATTACK:
- 				$ids = ($this->effect['impacts'] == ALL_OTHER) ? PlayerManager::getLivingPlayers($player->id) : $targets;
- 				$player->attack($ids);
+ 				$opponentsIds = ($this->effect['impacts'] == ALL_OTHER) ? PlayerManager::getLivingPlayers($player->id) : [$target["player"]];
+ 				$player->attack($opponentsIds);
  				break;
+
  			case DRAW:
-				if(count($targets)==0) { //draw from deck
+				// Draw from deck
+				if(is_null($target['player'])) {
+					// TODO : what about cards that make you draw several card ??
 					$card = BangCardManager::deal($player, 1);
 					BangNotificationManager::gainedCard($player, $card);
-				} else {
 
-					$card = null;
-					$victim=null;
-					if($target[0]<0) {
-						$victim = BangPlayerManager::getPlayer(-intval($target[0]));
-						$hand = BangCardManager::getHand($victim->getId());
-						shuffle($hand);
-						$card = $hand[0];
-					} else {
-						$victim = BangCardManager::getOwner($targets[0]);
-						$card = BangCardManager::getCard($targets[0]);
-					}
+				// Draw from someone's else hand/inplay
+				} else {
+					$victim = BangPlayerManager::getPlayer($target['player']);
+					$card = ($target['type'] == 'hand')? $victim->getRandomCardInHand() : BangCardManager::getCard($targets["arg"]);
 					BangCardManager::moveCard($card->id, 'hand', $player->getId());
 					BangNotificationManager::stoleCard($player, $victim, $card);
 				}
 				break;
+
  			case DISCARD:
-				$victim = $target[0];
-				$card = null;
-				if(count($targets)>1) {
-					$card = BangCardManager::getCard($targets)[1];
-				} else {
-					$hand = BangCardManager::getHand($victim);
-					shuffle($hand);
-					$card = $hand[0];
-				}
+				$victim = BangPlayerManager::getPlayer($target['player']);
+				$card = $victim->getRandomCardInHand();
 				BangCardManager::moveCard($card->id, 'discard');
 				BangNotificationManager::discardedCards($victim, [$card]);
 				break;
+
  			case LIFE_POINT_MODIFIER:
-				$target = count($targets)>0 ? BangPlayerManager::getPlayer($targets[0]) : $player;
+				$target = is_null($target['player'])? $player : BangPlayerManager::getPlayer($target['player']);
 				$hp = $target->getHp();
 				$bullets = $target->getBullets();
 				$amount = $this->effect['amount'];
-				if($hp+$amount > $bullets) $amount = $bullets - $hp;
-				$target->setHp($hp+$amount);
+				if($hp + $amount > $bullets) $amount = $bullets - $hp;
+				$target->setHp($hp + $amount);
 				$target->save();
 				BangNotificationManager::gainedLife($player, $amount);
  				break;
+
  			default:
  				return false;
  			break;

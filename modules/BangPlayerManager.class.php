@@ -48,10 +48,9 @@ class BangPlayerManager extends APP_GameClass
 
 
 	/*
-	 * getPlayer : returns the SantoriniPlayer object for the given player ID
+	 * getPlayer : returns the BangPlayer object for the given player ID
 	 */
 	public static function getPlayer($playerId)	{
-
 		$bplayers = self::getPlayers([$playerId]);
 		return $bplayers[0];
 	}

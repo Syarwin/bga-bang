@@ -102,13 +102,16 @@ class bang extends Table
 //////////////////////////////////////////////////////////////////////////////
 //////////// Player actions
 ////////////
-	function playCard($id, $targets) {
+	function playCard($id, $target) {
+		self::checkAction('play');
+		// TODO : check for cheating
+		// $arg = $this->argPlayCards();
+		// if(!in_array($id, $arg))....
+
 		// check for active cards
-		self::checkAction( 'play' );
-		$player_id = self::getCurrentPlayerId();
-		$char = BangPlayerManager::getPlayer($player_id);
-		$char->playCard($id, $targets);
-		//$card = BangCardManager::createCard($id);
+		$playerId = self::getCurrentPlayerId();
+		$player = BangPlayerManager::getPlayer($playerId);
+		$player->playCard($id, $target);
 
 	}
 

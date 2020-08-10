@@ -212,7 +212,7 @@ onClickCardSelectCard: function(card){
   } else if(card.options.type == OPTION_PLAYER) {
     this.makePlayersSelectable(card.options.targets);
   } else if(card.options.type == OPTION_CARD){
-    this.makePlayersCardSelectable(card.options.targets, card.option.deck);
+    this.makePlayersCardSelectable(card.options.targets);
   }
 },
 
@@ -284,9 +284,9 @@ onClickPlayer: function(playerId){
 /*
  * Make some players' cards selectable with sometimes the deck
  */
-makePlayersCardsSelectable: function(players, deck){
+makePlayersCardsSelectable: function(players){
   this.removeActionButtons();
-  this.gamedatas.gamestate.descriptionmyturn = _("You must choose a card or a deck");
+  this.gamedatas.gamestate.descriptionmyturn = _("You must choose a card in play or a hand");
   this.updatePageTitle();
   this.addActionButton('buttonCancel', _('Undo'), () => this.onClickCancelCardSelected(this._selectableCards), null, false, 'gray');
 
