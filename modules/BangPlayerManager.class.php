@@ -40,6 +40,7 @@ class BangPlayerManager extends APP_GameClass
 			BangCardManager::deal($pId,$bullets);
 		}
 		self::DbQuery($sql . implode($values, ','));
+		//BangCardManager::dealCard($sheriff, CARD_GATLING);
 		bang::$instance->reloadPlayersBasicInfos();
 		return $sheriff;
 	}
@@ -67,7 +68,7 @@ class BangPlayerManager extends APP_GameClass
 		if (is_array($playerIds)) {
 			$sql .= " WHERE player_id IN ('" . implode("','", $playerIds) . "')";
 		}
-		
+
 		if($asArrayCollection) return self::getCollectionFromDB($sql);
 		$rows = self::getObjectListFromDB($sql);
 

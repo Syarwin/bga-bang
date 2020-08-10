@@ -110,6 +110,14 @@ class BangCardManager extends APP_GameClass
 		return self::toObjects(self::getDeck()->pickCards($amount, 'deck', $player));
 	}
 
+  // only for testing
+	public static function dealCard($player, $type) {
+		//$cards = self::getDeck()->getCardsOfType($type);
+		$sql = "SELECT card_id FROM card WHERE card_type=$type";
+		$cards = self::getObjectListFromDB("SELECT card_id FROM card WHERE card_type=$type", true);
+		self::getDeck()->moveCard($cards[0], 'hand', $player);
+	}
+
 	/*
 	 * cardClasses : for each card Id, the corresponding class name
 	 */
