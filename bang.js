@@ -87,7 +87,7 @@ onEnteringState: function (stateName, args) {
 	debug('Entering state: ' + stateName, args);
 
 	// Stop here if it's not the current player's turn for some states
-	if (["playCard"].includes(stateName) && !this.isCurrentPlayerActive()) return;
+	if (["playCard", "react"].includes(stateName) && !this.isCurrentPlayerActive()) return;
 
 	// Call appropriate method
 	var methodName = "onEnteringState" + stateName.charAt(0).toUpperCase() + stateName.slice(1);
@@ -237,7 +237,7 @@ onSelectOption: function(){
     optionType:this._selectedOptionType,
     optionArg:this._selectedOptionArg,
   };
-  debug(data);
+
   this.takeAction("playCard", data);
 },
 
@@ -312,11 +312,32 @@ makePlayersCardsSelectable: function(players, deck){
 
 onClickCardSelectOption: function(card){
   this._selectedPlayer = card.playerId;
-  this._selectedOptionType = "card";
+  this._selectedOptionType = "inplay";
   this._selectedOptionArg = card.id;
   this.onSelectOption();
 },
 
+
+
+
+/************
+*** REACT ***
+************/
+
+/*
+ * React state : active player can play cards from his hand in reaction
+ */
+onEnteringStateReact: function(args){
+  var cards = args._private.filter(card => card.options != null);
+  this.makeCardSelectable(cards, "selectCard");
+  this.addActionButton('buttonSkip', _('Pass'), () => this.onClickPass(), null, false, 'blue');
+},
+
+
+onClickPass: function(){
+  this.checkAction('pass');
+  this.takeAction("pass");
+},
 
 ////////////////////////////////
 ////////////////////////////////
@@ -405,10 +426,7 @@ addCard: function(ocard, container){
 setupNotifications: function () {
 	var notifs = [
 		['debug',500],
-		['choosePlayer', 500],
-		['cardPlayed', 500],
-		['handChange', 500],
-		['lostLife', 500]
+		['cardPlayed', 1000],
 	];
 
 	notifs.forEach(notif => {
@@ -424,129 +442,55 @@ notif_debug:function(notif) {
 },
 
 
-
-/**
- * called when the player has to choose another player as target from something
- * notif.args: [
- * 		msg: the message to asking to choose
- *		targets: the names of the possible targets
- *		card: the id of the card that triggered this selection
- * ]
+/*
+ * notification sent to all players when someone plays a card
  */
-notif_choosePlayer: function(notif) {
-	debug('notif_choosePlayer', notif);
-	var options = document.getElementById("options");
-	options.style.removeProperty("display");
-	var rect = document.getElementById('board').getBoundingClientRect();
-	var height = (Object.keys(notif.args.targets).length+1-options.children.length)*40;
-	while(options.children.length > 1) options.children[1].remove();
-
-  notif.args.targets.forEach( player => {
-    var p = dojo.place( this.format_block( 'jstpl_option', {
-			name: player.name,
-			id: player.id,
-			color: player.color
-		} ) , 'options' );
-		dojo.connect(p,"onclick", this, "onSelectOption");
-  })
-	dojo.animateProperty({node:"board", properties:{height: rect.height + height}}).play();
-
-	document.getElementById('optionsTitle').innerHTML = notif.args.msg;
-	dojo.query(".card").forEach(function(node, idx, arr) {node.style.removeProperty("border")});
-	document.getElementById('card_'+notif.args.card).style.border = "5px solid red";
+notif_cardPlayed: function(n) {
+  debug("Notif: card played", n);
+  var card = n.args.card;
+  var playerId = n.args.player;
+  this.addCard(card, "player-inplay-" + playerId);
 },
 
-
-/**
- * called when a player played a card
- * notif.args: [
- *		player: the id of the player who played it
- *		card: the id of the card that was played
- * ]
- */
-notif_cardPlayed: function(notif) {
-	// if the following element exists it's the current player who played it
-
+/*
+* notification sent to all players when a player looses or gains hp
+*/
+notif_updateHP: function(notif) {
+ var playerId = notif.args.player;
+ // if you need only one of those, tell me which one
+ var amount = notif.args.amount;
+ var newHP = notif.args.hp;
+ var oldHP = newHP - amount;
 },
 
+/*
+* notification sent only to the player who got Cards to his Hand
+*/
+notif_cardsGained: function(notif) {
+ var cards = notif.args.cards; //array of gained cards all having id, type, color, value (the last 2 are from type_arg)
+ if(notif.args.src == 'deck') {
 
-
-/**
- * called when any player gained or lost a card
- * notif.args: [
- *		hands: the amount of cards in each players hand
- *		hand: the cards(id, card_name, card_text) of the current player (only if they changed)
- *		card: the card that was gained/lost (only for that player)
- *		gain: the id of the player who gained the card (if any)
- *		loose: the id of the player who lost the card (if any)
- * ]
- */
-notif_handChange: function(notif) {
-
-	var current = this.getCurrentId();
-	var rect = document.getElementById("board").getBoundingClientRect();
-	var origin = null;
-	var dest = null;
-	if(notif.args.gain > 0) {
-		var e = null;
-		dest = document.getElementById("hand_"+notif.args.gain).getBoundingClientRect();
-		var r = null;
-		if(notif.args.loose > 0) {
-			origin = document.getElementById("hand_"+notif.args.loose).getBoundingClientRect();
-			if(notif.args.gain==current) {
-				dest.x = rect.width/2-origin.width/2;
-				dest.y = rect.y+20;
-			}
-			if(notif.args.loose==current) {
-				origin = document.getElementById("hand_"+notif.args.loose).getBoundingClientRect();
-			}
-		} else {
-			origin = new DOMRect(rect.width/2-dest.width/2, rect.height/2-dest.height/2);
-		}
-
-	} else {
-		if(notif.args.loose==current) {
-			origin = document.getElementById("card_"+notif.args.card.id).getBoundingClientRect();
-			document.getElementById("card_"+notif.args.card.id).destroy();
-		} else {
-			origin = document.getElementById("hand"+notif.args.card.loose).getBoundingClientRect();
-		}
-		dest = new DOMRect(rect.width/2-origin.width/2, rect.height/2-origin.height/2);
-	}
-	e = dojo.place( this.format_block( 'jstpl_card', {
-				   width: origin.width,
-				   height: origin.height,
-				   x:origin.x-rect.x,
-				   y:origin.y-rect.y
-			} ) , 'board' );
-	dojo.animateProperty({node:"tmpcard",
-			properties: {
-				left:dest.x-rect.x,
-				top:dest.y-rect.y},
-			onEnd: function() {
-				for(var id in notif.cards) {
-					document.getElementById('handCount_'+id).innerHTML=notif.hands[id];
-				}
-				if(notif.args.gain==current) fillHand();
-				e.remove();
-			}
-		}).play();
-	if(notif.args.hand != null)
-		this.fillHand(notif.args.hand);
+ } else {
+   var playerId = notif.args.src;
+ }
 },
 
+/*
+* notification sent only to the player who lost Cards from his and or playarea
+*/
+notif_cardsLost: function(notif) {
+ var cards = notif.args.cards; //array of the ids of the lost cards
+},
 
-/**
- * called when any player lost a life
- * notif.args: [
- *		id: the id of the player who lost a life
- *		hp: the remaining hp
- * ]
- */
-notif_lostLife: function(notif) {
-	// todo
-}
-
+/*
+* notification sent to all players when the hand count of a player changed
+*/
+notif_updateHand: function(notif) {
+ var playerId = notif.args.player;
+ var amount = notif.args.amount;
+ var currentHandCount = 0; //todo get the currently displayed value
+ var newHandCount = currentHandCount + amount;
+},
 
 
 	});

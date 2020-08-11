@@ -15,7 +15,7 @@ var jstpl_hand = `<div id="hand">
 `;
 var jstpl_player = `<div class='bang-player' id='bang-player-\${id}' data-role="\${role}" data-no="\${no}" data-max-bullets="\${bullets}" data-bullets="\${hp}" data-hand="\${handCount}">
 	<div class='bang-player-container'>
-		<div class='player-inplay'>
+		<div class='player-inplay' id="player-inplay-\${id}">
 		</div>
 		<div class='player-info' data-character='\${characterId}'>
 			<div class="player-character-name">\${character}</div>
