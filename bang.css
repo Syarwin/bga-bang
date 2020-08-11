@@ -539,7 +539,8 @@ div.bang-card {
     height: 34px;
     text-align: center;
     font-family: "Perdido";
-    font-size: 19.55px;
+    font-size: 17.85px;
+    letter-spacing: -1px;
     transform: scale(0.8, 1.3);
     transform-origin: top center; }
   div.bang-card .card-background {

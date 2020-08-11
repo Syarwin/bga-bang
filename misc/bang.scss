@@ -172,8 +172,8 @@ div#board {
         border-radius:7px;
       }
 
-      #discard {
-        div.bangtim-card { margin:0px }
+      #discard div.bangtim-card {
+        margin:0px;
       }
     }
   }
@@ -352,7 +352,8 @@ div.bang-card {
   	height: $cardH / 5;
   	text-align: center;
   	font-family: "Perdido";
-  	font-size: $cardH * 23 / 200;
+  	font-size: $cardH * 21 / 200;
+    letter-spacing: -1px;
     transform: scale(0.8,1.3);
     transform-origin: top center;
   }

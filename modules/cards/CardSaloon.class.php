@@ -5,7 +5,7 @@ class CardSaloon extends BangCard {
   {
     parent::__construct($id);
     $this->type  = CARD_SALOON;
-    $this->name  = clienttranslate('Missed');
+    $this->name  = clienttranslate('Saloon');
     $this->text  = clienttranslate("All players regain 1 life point.");
     $this->color = BROWN;
     $this->effect = [

@@ -429,6 +429,7 @@ setupNotifications: function () {
 	var notifs = [
 		['debug',500],
 		['cardPlayed', 1000],
+    ['updateHP', 500],
 	];
 
 	notifs.forEach(notif => {
@@ -459,7 +460,7 @@ notif_cardPlayed: function(n) {
 */
 notif_updateHP: function(n) {
   debug("Notif: hp changed", n);
-  dojo.attr("bang-player-" + n.args.player, "bullets", n.args.hp);
+  dojo.attr("bang-player-" + n.args.id, "data-bullets", n.args.hp);
 },
 
 /*
