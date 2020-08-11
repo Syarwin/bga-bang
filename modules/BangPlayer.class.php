@@ -83,7 +83,7 @@ class BangPlayer extends APP_GameClass
    */
   public function save() {
     $eliminated = ($this->eliminated) ? 1 : 0;
-    $sql = "UPDATE player SET player_eliminated=$eliminated, player_score=" . $this->hp;
+    $sql = "UPDATE player SET player_eliminated=$eliminated, player_score=" . $this->hp . " WHERE player_id = ". $this->id;
     self::DbQuery($sql);
   }
 
