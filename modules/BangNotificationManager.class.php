@@ -5,15 +5,17 @@
  */
 class BangNotificationManager extends APP_GameClass {
 
-  public static function cardPlayed($player, $card, $target = []) {
+  public static function cardPlayed($player, $card, $args = []) {
 
     bang::$instance->notifyAllPlayers('cardPlayed', clienttranslate('${player_name} plays ${card_name}${card_msg}'), [
       'i18n' => ['card_name', 'card_msg'],
       'player_name' => $player->getName(),
       'card_name' => $card->getName(),
-      'card_msg' => $card->getArgsMessage($target),
+      'card_msg' => $card->getArgsMessage($args),
       'card' => $card->format(),
-      'player' => $player->getId()
+      'player' => $player->getId(),
+      'targetPlayer' => $args['player'],
+      'target' => $card->isEquipment() ? 'inPlay' : 'discard'
     ]);
   }
 
