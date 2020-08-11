@@ -138,7 +138,7 @@ $machinestates = [
 
 	ST_MULTIREACT => [
 		'name' => 'multiReact',
-		'description' => clienttranslate('${actplayer} must react'),
+		'description' => clienttranslate('waiting for reactions'),
 		'descriptionmyturn' => clienttranslate('${you} must react'),
 		'type' => 'multipleactiveplayer',
 		'args' => 'argMultiReact',

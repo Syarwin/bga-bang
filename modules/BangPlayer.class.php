@@ -44,11 +44,20 @@ class BangPlayer extends APP_GameClass
   public function isEliminated(){ return $this->eliminated; }
   public function isZombie(){ return $this->zombie; }
 
-  public function getText() {return $this->text;}
-  public function getExpansion() {return $this->expansion;}
-  public function getBullets() {return $this->bullets;}
-
-
+  public function getText() { return $this->text;}
+  public function getExpansion() { return $this->expansion;}
+  public function getBullets() { return $this->bullets;}
+  public function getCardsInHand(){ return BangCardManager::getHand($this->id); }
+  public function getRandomCardInHand(){
+    $cards = self::getCardsInHand();
+    if(empty($cards)){
+      throw new BgaVisibleSystemException("Cannot draw a card in an empty hand");
+    }
+    shuffle($cards);
+    return $cards[0];
+  }
+  public function getCardsInPlay(){ return BangCardManager::getCardsInPlay($this->id); }
+  public function countCardsInHand() { return BangCardManager::countCards("hand", $this->id);}
 
   public function setHp($hp){ $this->hp = $hp; }
 
@@ -83,12 +92,16 @@ class BangPlayer extends APP_GameClass
     BangNotificationManager::gainedCard($this, $cards);
   }
 
-  public function playCard($id, $targets) {
+  public function playCard($id, $args) {
+
 		$card = BangCardManager::getCard($id);
-    if($card->getColor() == BROWN)
-        BangCardManager::moveCard($id, 'discard');
-		if($card->play($this, $targets)) {
-			BangNotificationManager::cardPlayed($this, $card, $targets);
+    if($card->getColor() == BROWN){
+      BangCardManager::moveCard($id, 'discard');
+    }
+
+    // TODO : can return false ? In what cases ? Raise exception ?
+		if($card->play($this, $args)) {
+			BangNotificationManager::cardPlayed($this, $card, $args);
     }
 	}
 
@@ -153,33 +166,27 @@ class BangPlayer extends APP_GameClass
   /**
    * attack : performs an attack on all given players
    */
-  public function attack($player_ids) {
+  public function attack($playerIds) {
     $reactions = [];
-    $equipment = BangCardManager::getEquipment();
-    foreach ($player_ids as $id) {
-      $onHand = BangCardManager::countCards('hand', $id);
-      $missed = false;
-      foreach ($equipment[$id] as $card) {
-        if($card->getEffectType() == DEFENSIVE) {
-          if($crad->play()) {
-            $missed = true;
-            break;
-          }
-        }
-      }
-      if($missed) continue;
+    foreach(BangPlayerManager::getPlayers($playerIds) as $player){
+      // Player has defensive equipment ? (eg Barrel)
+      $missedWithEquipment = array_reduce($player->getCardsInPlay(), function($missed, $card){
+        return $missed || ($card->getEffectType() == DEFENSIVE && $card->play());
+      });
+      if($missedWithEquipment) continue;
 
-      if($onHand > 0)  {
-  			$reactions[] = $id;
+      // Otherwise, player has at least one card in hand ?
+      if($player->countCardsInHand() > 0)  {
+  			$reactions[] = $player->id; // Give him a chance to (pretend to) react
   		} else {
-  			$this->looseLife($attacker);
+  			$this->looseLife($player); // Lost life immediatly
   		}
     }
 
+    // Go to corresponding state
     if(count($reactions) == 1) {
-			bang::$instance->setGameStateValue('target',$reactions[0]);
+			bang::$instance->setGameStateValue('target', $reactions[0]);
 			bang::$instance->gamestate->nextState('awaitReaction');
-
     } elseif(count($reactions) > 1) {
       BangPlayerManager::preparePlayerActivation($reactions);
       bang::$instance->gamestate->nextState('awaitMultiReaction');

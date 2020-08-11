@@ -107,6 +107,7 @@ class bang extends Table
 		self::checkAction( 'play' );
 		$player_id = self::getCurrentPlayerId();
 		$char = BangPlayerManager::getPlayer($player_id);
+		
 		$char->playCard($id, $args);
 		//$card = BangCardManager::createCard($id);
 
@@ -186,7 +187,8 @@ class bang extends Table
 
 	public function stAwaitMultiReaction() {
 		$players = BangPlayerManager::getPlayersForActivation();
-		$this->gamestate->setPlayersMultiactive( $players, 'awaitReaction', true );
+		if(!$this->gamestate->setPlayersMultiactive( $players, 'awaitReaction', true ))
+				$this->gamestate->nextState("awaitReaction");
 	}
 
 	public function stEndReaction() {
@@ -231,9 +233,10 @@ class bang extends Table
 
 	public function argMultiReact() {
 		$players = $this->gamestate->getActivePlayerList();
+
 		$args = array_map(function ($playerid){
 			return BangPlayerManager::getPlayer($playerid)->getDefensiveCards();
-		}, array_keys($players));
+		}, array_values($players));
 		return [
 			'_private' => $players
 		];

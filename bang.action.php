@@ -44,11 +44,10 @@ class action_bang extends APP_GameAction
 		$optionType = self::getArg( "optionType", AT_alphanum, false);
 		$optionArg = self::getArg( "optionArg", AT_posint, false);
 		$args = [
+			'type'   => $optionType,
 			'player' => $player,
-			'type' => $optionType,
-			'target' => $optionArg,
+			'arg' 	 => $optionArg,
 		];
-		Utils::die($args);
 		$result = $this->game->playCard($id, $args);
 		self::ajaxResponse( );
 	}

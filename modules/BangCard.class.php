@@ -48,12 +48,15 @@ class BangCard extends APP_GameClass
 	/**
 	 * play : default function to play a card that. Can be used for cards that have only symbols
 	 */
+
 	public function play($player, $args) {
  		switch ($this->effect['type']) {
  			case BASIC_ATTACK:
- 				$ids = ($this->effect['impacts'] == ALL_OTHER) ? PlayerManager::getLivingPlayers($player->id) : [$args['player']];
+ 				$ids = ($this->effect['impacts'] == ALL_OTHER) ? BangPlayerManager::getLivingPlayers($player->getId()) : [$args['player']];
+
  				$player->attack($ids);
  				break;
+
  			case DRAW:
 			case DISCARD:
 				$victim = null;
@@ -68,7 +71,7 @@ class BangCard extends APP_GameClass
 						$victim = BangPlayerManager::getPlayer($args['player']);
 						$card = BangCardManager::getCard($args['target']);
 					default: //deck
-						$card = BangCardManager::deal($player, $this->effect['amount']);
+						$card = BangCardManager::deal($player->getId(), $this->effect['amount']);
 						BangNotificationManager::gainedCard($player, $card);
 						return true;
 						break;
@@ -81,18 +84,19 @@ class BangCard extends APP_GameClass
 					BangNotificationManager::discardedCards($victim, [$card]);
 				}
 				break;
+
  			case LIFE_POINT_MODIFIER:
-				$target = $args['player'] == null ? $player : BangPlayerManager::getPlayer($args['player']);
+
+
+				$target = is_null($args['player'])? $player : BangPlayerManager::getPlayer($args['player']);
 				$hp = $target->getHp();
 				$bullets = $target->getBullets();
 				$amount = $this->effect['amount'];
-				if($hp+$amount > $bullets) $amount = $bullets - $hp;
-				$target->setHp($hp+$amount);
+				if($hp + $amount > $bullets) $amount = $bullets - $hp;
+				$target->setHp($hp + $amount);
 				$target->save();
 				BangNotificationManager::gainedLife($player, $amount);
  				break;
- 			default:
- 				return false;
  			break;
  		}
  		return true;
@@ -118,7 +122,13 @@ class BangCard extends APP_GameClass
 	 * can be overwritten to add an additional Message to the played card notification.
 	 * this message should start with a space
 	 */
-	public function getArgsMessage($args) {return "";}
+	public function getArgsMessage($args) {
+		if(!is_null($args['player']) ) {
+			$name = BangPlayerManager::getPlayer($args['player'])->getName();
+			return " and chooses $name as target";
+		}
+		return "";
+	}
 
 	public function getUIData() {
 		return [
@@ -141,36 +151,36 @@ class BangCard extends APP_GameClass
 	 switch ($this->color) {
 	 	case BLUE:
 	 		$cardsInPlay = BangCardManager::getCardsInPlay($player->getId());
-			return ['type' => OPTIONS_NONE];
+			return ['type' => OPTION_NONE];
 			/*foreach($cardsInPlay as $card)
 				if($card->type == $this->type)
 					return null;
-			return ['type' => OPTIONS_NONE];*/
+			return ['type' => OPTION_NONE];*/
 	 	case BROWN:
 			$type = -1;
 			switch ($this->effect['type']) {
 				case BASIC_ATTACK:
 				case LIFE_POINT_MODIFIER:
 					if ($this->effect['impacts'] == ALL || $this->effect['impacts'] == ALL_OTHER) {
-						return ['type' => OPTIONS_NONE];
+						return ['type' => OPTION_NONE];
 					}
 
 					$type = OPTION_PLAYER;
 					break;
 				case DRAW:
 				case DISCARD:
-					$type = /*($this->effect['impacts'] == ALL_OTHER) ? OPTION_CARDS :*/ OPTION_CARD;
+					$type = ($this->effect['impacts'] == NONE) ? OPTION_NONE : OPTION_CARD;
 					break;
 				case DEFENSIVE:
 					return null;
 				default:
-					return ['type' => OPTIONS_NONE];
+					return ['type' => OPTION_NONE];
 				break;
 			}
 			$player_ids = [];
 			switch($this->effect['impacts']) {
 				case ALL_OTHER:
-					$player_ids = PlayerManager::getLivingPlayers($player->id);
+					$player_ids = BangPlayerManager::getLivingPlayers($player->id);
 					break;
 				case INRANGE:
 					$player_ids = $player->getPlayersInRange($player->getRange());
@@ -179,7 +189,7 @@ class BangCard extends APP_GameClass
 					$player_ids = $player->getPlayersInRange($this->effect['range']);
 					break;
 				case ANY:
-					$player_ids = PlayerManager::getLivingPlayers();
+					$player_ids = BangPlayerManager::getLivingPlayers();
 					break;
 				case NONE:
 					$player_ids = [];
@@ -190,7 +200,7 @@ class BangCard extends APP_GameClass
 				$filtered_ids = [];
 				foreach($players as $p)
 					if($p->getHp() < $p->getBullets()) $filtered_ids[] = $p->getId();
-				if(count($filtered_ids) == 0) return null;
+				if(count($filtered_ids) == 0) return ['type' => OPTION_NONE];
 				$player_ids = $filtered_ids;
 			}
 			return [
