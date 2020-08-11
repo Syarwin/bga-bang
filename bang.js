@@ -45,6 +45,9 @@ setup: function (gamedatas) {
   });
 
 
+  // Adding deck/discard
+  dojo.place(this.format_block('jstpl_table', { }), 'board');
+
 	// Setting up player boards
   var nPlayers = gamedatas.bplayers.length;
   dojo.attr("board", "data-players", nPlayers); // Usefull to setup the layout
@@ -328,8 +331,7 @@ onClickCardSelectOption: function(card){
  * React state : active player can play cards from his hand in reaction
  */
 onEnteringStateReact: function(args){
-  var cards = args._private.filter(card => card.options != null);
-  this.makeCardSelectable(cards, "selectCard");
+  this.makeCardSelectable(args._private, "selectCard");
   this.addActionButton('buttonSkip', _('Pass'), () => this.onClickPass(), null, false, 'blue');
 },
 
@@ -449,18 +451,15 @@ notif_cardPlayed: function(n) {
   debug("Notif: card played", n);
   var card = n.args.card;
   var playerId = n.args.player;
-  this.addCard(card, "player-inplay-" + playerId);
+  this.addCard(card, "discard");
 },
 
 /*
 * notification sent to all players when a player looses or gains hp
 */
-notif_updateHP: function(notif) {
- var playerId = notif.args.player;
- // if you need only one of those, tell me which one
- var amount = notif.args.amount;
- var newHP = notif.args.hp;
- var oldHP = newHP - amount;
+notif_updateHP: function(n) {
+  debug("Notif: hp changed", n);
+  dojo.attr("bang-player-" + n.args.player, "bullets", n.args.hp);
 },
 
 /*

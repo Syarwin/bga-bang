@@ -36,19 +36,19 @@ div#board {
     border-radius: 5px;
     grid-row: 1;
     grid-column: 1 / span 6;
-    height: 215px;
+    height: 185px;
     display: flex;
     flex-flow: row; }
     div#board div#hand div#role-container {
       flex-grow: 0;
-      width: 140px;
+      width: 121.25px;
       display: flex;
       align-items: center;
       justify-content: center;
       background-color: white; }
       div#board div#hand div#role-container div#role-card {
-        height: 200px;
-        width: 124px;
+        height: 170px;
+        width: 105.25px;
         background-image: url("img/roles.png");
         background-size: cover; }
       div#board div#hand div#role-container[data-role="0"] div#role-card {
@@ -65,52 +65,82 @@ div#board {
       flex-flow: row;
       align-items: center;
       justify-content: center; }
-  div#board .bang-player {
+  div#board .bang-player, div#board #table {
     display: flex;
     flex-flow: row;
     align-items: center;
     grid-row-end: span 2;
     grid-column-end: span 2;
-    max-height: 206px; }
+    max-height: 190px;
+    min-height: 190px; }
+  div#board[data-players="4"] #table {
+    grid-column-start: 3;
+    grid-row-start: 4; }
   div#board[data-players="4"] .bang-player[data-no="0"] {
     grid-column-start: 3;
     grid-row-start: 2;
     justify-content: center; }
   div#board[data-players="4"] .bang-player[data-no="1"] {
     grid-column-start: 5;
-    grid-row-start: 3;
+    grid-row-start: 4;
     justify-content: flex-start; }
   div#board[data-players="4"] .bang-player[data-no="2"] {
     grid-column-start: 3;
-    grid-row-start: 4;
+    grid-row-start: 6;
     justify-content: center; }
   div#board[data-players="4"] .bang-player[data-no="3"] {
     grid-column-start: 1;
-    grid-row-start: 3;
+    grid-row-start: 4;
     justify-content: flex-end; }
+  div#board[data-players="5"] #table {
+    grid-column-start: 3;
+    grid-row-start: 3; }
   div#board[data-players="5"] .bang-player[data-no="0"] {
     grid-column-start: 3;
     grid-row-start: 2;
     justify-content: center; }
   div#board[data-players="5"] .bang-player[data-no="1"] {
     grid-column-start: 5;
-    grid-row-start: 3;
+    grid-row-start: 4;
     justify-content: flex-start; }
   div#board[data-players="5"] .bang-player[data-no="2"] {
     grid-column-start: 4;
-    grid-row-start: 5;
+    grid-row-start: 6;
     justify-content: center; }
   div#board[data-players="5"] .bang-player[data-no="3"] {
     grid-column-start: 2;
-    grid-row-start: 5;
+    grid-row-start: 6;
     justify-content: center; }
   div#board[data-players="5"] .bang-player[data-no="4"] {
     grid-column-start: 1;
-    grid-row-start: 3;
+    grid-row-start: 4;
     justify-content: flex-end; }
+  div#board #table {
+    justify-content: center; }
+    div#board #table #table-container {
+      width: 242.5px;
+      height: 185px;
+      background-color: rgba(255, 255, 255, 0.5);
+      border-radius: 5px;
+      border: 1px solid rgba(50, 50, 50, 0.8);
+      box-shadow: 1px 1px 5px rgba(50, 50, 50, 0.8);
+      display: flex;
+      flex-flow: row;
+      align-items: center;
+      justify-content: space-around; }
+      div#board #table #table-container #deck, div#board #table #table-container #discard {
+        width: 106.25px;
+        height: 170px; }
+      div#board #table #table-container #deck {
+        background-image: url("img/cardback.jpg");
+        background-size: cover;
+        background-position: center center;
+        border-radius: 7px; }
+      div#board #table #table-container #discard div.bangtim-card {
+        margin: 0px; }
   div#board .bang-player .bang-player-container {
     width: 96%;
-    height: 96%;
+    height: 180px;
     background-color: rgba(255, 255, 255, 0.5);
     border-radius: 5px;
     border: 1px solid rgba(50, 50, 50, 0.8);
@@ -120,24 +150,26 @@ div#board {
       flex-grow: 1; }
     div#board .bang-player .bang-player-container .player-info {
       position: relative;
-      width: 123px;
+      width: 113.266509434px;
       height: 100%;
       background-image: url("img/card_borders.png");
       background-size: cover;
-      border-left: 1px solid rgba(50, 50, 50, 0.8); }
+      border-left: 1px solid rgba(50, 50, 50, 0.8);
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px; }
       div#board .bang-player .bang-player-container .player-info .player-character-name {
         font-family: "Perdido";
         width: 100%;
         max-height: 22px;
-        margin-top: 12px;
+        margin-top: 11px;
         text-align: center;
-        font-size: 17px;
+        font-size: 15px;
         transform: scale(0.8, 1.3);
         transform-origin: top center; }
       div#board .bang-player .bang-player-container .player-info .player-character-background {
-        width: 105px;
-        height: 105px;
-        margin: 4px auto;
+        width: 90.2122641509px;
+        height: 89.25px;
+        margin: 5px auto;
         background-image: url("img/card_characters.jpg");
         background-size: cover; }
       div#board .bang-player .bang-player-container .player-info[data-character="0"] .player-character-background {
@@ -314,10 +346,124 @@ div#board {
     content: "9"; }
   div#board .bang-player[data-bullets="10"] .player-cards .player-maxhand::before {
     content: "10"; }
+  div#board .bang-player[data-bullets="0"][data-hand="1"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="0"][data-hand="2"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="0"][data-hand="3"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="0"][data-hand="4"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="0"][data-hand="5"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="0"][data-hand="6"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="0"][data-hand="7"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="0"][data-hand="8"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="0"][data-hand="9"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="0"][data-hand="10"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="1"][data-hand="2"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="1"][data-hand="3"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="1"][data-hand="4"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="1"][data-hand="5"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="1"][data-hand="6"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="1"][data-hand="7"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="1"][data-hand="8"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="1"][data-hand="9"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="1"][data-hand="10"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="2"][data-hand="3"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="2"][data-hand="4"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="2"][data-hand="5"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="2"][data-hand="6"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="2"][data-hand="7"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="2"][data-hand="8"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="2"][data-hand="9"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="2"][data-hand="10"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="3"][data-hand="4"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="3"][data-hand="5"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="3"][data-hand="6"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="3"][data-hand="7"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="3"][data-hand="8"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="3"][data-hand="9"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="3"][data-hand="10"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="4"][data-hand="5"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="4"][data-hand="6"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="4"][data-hand="7"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="4"][data-hand="8"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="4"][data-hand="9"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="4"][data-hand="10"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="5"][data-hand="6"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="5"][data-hand="7"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="5"][data-hand="8"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="5"][data-hand="9"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="5"][data-hand="10"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="6"][data-hand="7"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="6"][data-hand="8"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="6"][data-hand="9"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="6"][data-hand="10"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="7"][data-hand="8"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="7"][data-hand="9"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="7"][data-hand="10"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="8"][data-hand="9"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="8"][data-hand="10"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="9"][data-hand="10"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="10"][data-hand="11"] .player-cards {
+    color: red; }
+  div#board .bang-player[data-bullets="10"][data-hand="10"] .player-cards {
+    color: red; }
 
 div.bang-card-tooltip div.bang-card-tooltip-sizing {
-  width: 250px;
-  height: 400px;
+  width: 212.5px;
+  height: 340px;
   display: flex;
   justify-content: center;
   align-items: center; }
@@ -326,8 +472,8 @@ div.bang-card-tooltip div.bang-card-tooltip-sizing {
 
 div.bang-card {
   position: relative;
-  width: 125px;
-  height: 200px;
+  width: 106.25px;
+  height: 170px;
   margin: 5px;
   background-image: url("img/card_borders.png");
   background-size: cover; }
@@ -388,20 +534,20 @@ div.bang-card {
     background-position: 100% center; }
   div.bang-card .card-name {
     position: absolute;
-    top: 12px;
+    top: 10.2px;
     width: 100%;
-    height: 40px;
+    height: 34px;
     text-align: center;
     font-family: "Perdido";
-    font-size: 23px;
+    font-size: 19.55px;
     transform: scale(0.8, 1.3);
     transform-origin: top center; }
   div.bang-card .card-background {
     position: absolute;
-    top: 42px;
-    left: 10px;
-    width: 105px;
-    height: 149px;
+    top: 35.7px;
+    left: 8.5px;
+    width: 89.25px;
+    height: 126.65px;
     background-image: url("img/card_backgrounds.jpg");
     background-size: cover; }
   div.bang-card[data-type="0"] .card-background {
@@ -452,12 +598,12 @@ div.bang-card {
     position: absolute;
     bottom: -3px;
     left: 4px;
-    font-size: 20px;
+    font-size: 17px;
     text-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white; }
     div.bang-card .card-copy .card-copy-color {
       margin-left: -2px; }
     div.bang-card .card-copy .card-copy-color::before {
-      font-size: 25px; }
+      font-size: 21.25px; }
     div.bang-card .card-copy .card-copy-color[data-color="D"]::before {
       content: "♦";
       color: red; }
