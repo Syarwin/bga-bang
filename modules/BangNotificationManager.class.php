@@ -13,7 +13,7 @@ class BangNotificationManager extends APP_GameClass {
       'card_name' => $card->getName(),
       'card_msg' => $card->getArgsMessage($target),
       'card' => $card->format(),
-      'player' => $player
+      'player' => $player->getId()
     ]);
   }
 
