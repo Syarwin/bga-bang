@@ -218,9 +218,11 @@ class bang extends Table
 */
 	public function argPlayCards() {
 		//Utils::die(["args"]);
+		$cards = BangPlayerManager::getPlayer(self::getActivePlayerId())->getHandOptions();
+		$cards = array_filter($cards, function($card) { return !is_null($card['options']);});
 		return [
 			'_private' => [
-				'active' => BangPlayerManager::getPlayer(self::getActivePlayerId())->getHandOptions()
+				'active' => array_values($cards)
 			]
 		];
 	}
