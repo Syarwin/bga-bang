@@ -103,7 +103,7 @@ class BangCard extends APP_GameClass
 	}
 
 	public function react($id, $player) {
-		$player_name = BangPlayerManager::getPlayer($player->player)->getName();
+		$player_name = BangPlayerManager::getPlayer($player->getId())->getName();
 		switch($this->effect['type']) {
 			case BASIC_ATTACK:
 				if($id == PASS) {
@@ -111,7 +111,7 @@ class BangCard extends APP_GameClass
 				} else {
 					$card = BangCardManager::getCard($id);
 					BangCardManager::moveCard($card->id, 'discard');
-					bang::$instance->gamestate->nextState( "awaitReaction" );
+					BangNotificationManager::cardPlayed($player, $card);
 				}
 				break;
 		}

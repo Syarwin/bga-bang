@@ -107,7 +107,7 @@ class bang extends Table
 		self::checkAction( 'play' );
 		$player_id = self::getCurrentPlayerId();
 		$char = BangPlayerManager::getPlayer($player_id);
-		
+
 		$char->playCard($id, $args);
 		//$card = BangCardManager::createCard($id);
 
@@ -156,6 +156,7 @@ class bang extends Table
 		$id = self::getActivePlayerId();
 		$player = BangPlayerManager::getPlayer($id);
 		$player->startOfTurn();
+		$this->setGameStateValue('currentTurn', $id);
 		//$this->gamestate->changeActivePlayer($this->setGameStateValue('turn', $id));
 		$this->gamestate->nextState("play");
 
@@ -166,7 +167,7 @@ class bang extends Table
 	 * stEndOfTurn: called at the end of each player turn
 	 */
 	public function stEndOfTurn() {
-		$this->playerManager->getPlayer()->endOfTurn();
+		//$this->playerManager->getPlayer()->endOfTurn();
 		$this->stCheckEndOfGame();
 		$this->gamestate->nextState('next');
 	}
@@ -192,7 +193,8 @@ class bang extends Table
 	}
 
 	public function stEndReaction() {
-		$this->gamestate.changeActivePlayer($this->getGameStateValue('turn'));
+		$this->gamestate->changeActivePlayer($this->getGameStateValue('currentTurn'));
+		bang::$instance->gamestate->nextState( "finishedReaction" );
 	}
 
 	/*

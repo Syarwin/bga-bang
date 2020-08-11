@@ -99,16 +99,20 @@ class BangPlayer extends APP_GameClass
       BangCardManager::moveCard($id, 'discard');
     }
 
-    // TODO : can return false ? In what cases ? Raise exception ?
-		if($card->play($this, $args)) {
-			BangNotificationManager::cardPlayed($this, $card, $args);
-    }
+		$card->play($this, $args);
+		BangNotificationManager::cardPlayed($this, $card, $args);
+    bang::$instance->setGameStateValue('currentCard', $id);
+
 	}
 
 	public function react($id) {
 		$card = BangCardManager::getCard(bang::$instance->getGameStateValue('currentCard'));
-		if($card->react($id, $this))
-        BangNotificationManager::cardPlayed($this, $card);
+		$card->react($id, $this);
+    if(bang::$instance->gamestate->state()['name'] == 'multiReact')
+      bang::$instance->gamestate->setPlayerNonMultiactive($this->getId(), 'finishedReaction');
+    else
+      bang::$instance->gamestate->nextState( "react" );
+
 	}
 
   public function getHandOptions() {
