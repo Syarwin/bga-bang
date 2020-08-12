@@ -74,16 +74,15 @@ class bang extends Table
 	 *  The method is called each time the game interface is displayed to a player, ie: when the game starts and when a player refreshes the game page (F5)
 	 */
 	protected function getAllDatas() {
-		$result = array();
 		$currentPlayerId = self::getCurrentPlayerId();
-		$result['active'] = self::getActivePlayerId();
-		$result['bplayers'] = array_values(BangPlayerManager::getUiData(null, $currentPlayerId)); // id => [hp, max_hp no, name, color, character, powers(character effect), hand(count), cardsInPlay]
-		//$result['currentPlayer'] = BangPlayerManager::getUiData([$currentPlayerId], true)[0]; // above + role and 'hand' is an array of cards
-		$result['deck'] = BangCardManager::countCards('deck');
-		$result['discard'] = BangCardManager::getLastDiscarded();
-		//$result['sheriff'] = BangPlayerManager::getSheriff();
-		$result['turn'] = $this->getGameStateValue('currentTurn');
-		$result['cards'] = array_values(BangCardManager::getUIData());
+		$result = [
+			'active' => self::getActivePlayerId(),
+			'bplayers' => array_values(BangPlayerManager::getUiData(null, $currentPlayerId)), // id => [hp, max_hp no, name, color, character, powers(character effect), hand(count), cardsInPlay]
+			'deck' => BangCardManager::countCards('deck'),
+			'discard' => BangCardManager::getLastDiscarded(),
+			'turn' => $this->getGameStateValue('currentTurn'),
+			'cards' => array_values(BangCardManager::getUIData()),
+		];
 		return $result;
 	}
 

@@ -51,6 +51,18 @@ div#board {
         width: 105.25px;
         background-image: url("img/roles.png");
         background-size: cover; }
+        div#board div#hand div#role-container div#role-card div#role-name {
+          width: 100%;
+          font-family: "Perdido";
+          font-size: 23px;
+          text-align: center;
+          margin-top: 9px; }
+        div#board div#hand div#role-container div#role-card div#role-text {
+          font-family: 'Palatino Linotype';
+          font-style: italic;
+          font-size: 9px;
+          margin-top: 98px;
+          text-align: center; }
       div#board div#hand div#role-container[data-role="0"] div#role-card {
         background-position: 0% center; }
       div#board div#hand div#role-container[data-role="1"] div#role-card {
@@ -94,7 +106,7 @@ div#board {
     justify-content: flex-end; }
   div#board[data-players="5"] #table {
     grid-column-start: 3;
-    grid-row-start: 3; }
+    grid-row-start: 4; }
   div#board[data-players="5"] .bang-player[data-no="0"] {
     grid-column-start: 3;
     grid-row-start: 2;
@@ -130,14 +142,92 @@ div#board {
       justify-content: space-around; }
       div#board #table #table-container #deck, div#board #table #table-container #discard {
         width: 106.25px;
-        height: 170px; }
+        height: 170px;
+        position: relative; }
       div#board #table #table-container #deck {
         background-image: url("img/cardback.jpg");
         background-size: cover;
         background-position: center center;
-        border-radius: 7px; }
-      div#board #table #table-container #discard div.bangtim-card {
-        margin: 0px; }
+        border-radius: 7px;
+        font-size: 30px;
+        text-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white;
+        display: flex;
+        align-items: center;
+        justify-content: center; }
+      div#board #table #table-container #discard div.bang-card {
+        margin: 0px;
+        opacity: 1 !important;
+        position: absolute;
+        top: 0;
+        left: 0; }
+  div#board div.bang-character-tooltip div.bang-character-tooltip-sizing {
+    width: 226.5330188679px;
+    height: 360px;
+    display: flex;
+    justify-content: center;
+    align-items: center; }
+    div#board div.bang-character-tooltip div.bang-character-tooltip-sizing div.player-info {
+      transform: scale(2); }
+  div#board .player-info {
+    position: relative;
+    width: 113.266509434px;
+    height: 180px;
+    background-image: url("img/card_borders.png");
+    background-size: cover;
+    border-left: 1px solid rgba(50, 50, 50, 0.8);
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px; }
+    div#board .player-info .player-character-name {
+      font-family: "Perdido";
+      width: 100%;
+      max-height: 22px;
+      margin-top: 11px;
+      text-align: center;
+      font-size: 15px;
+      transform: scale(0.8, 1.3);
+      transform-origin: top center; }
+    div#board .player-info .player-character-background {
+      width: 90.2122641509px;
+      height: 89.25px;
+      margin: 5px auto;
+      background-image: url("img/card_characters.jpg");
+      background-size: cover; }
+    div#board .player-info[data-character="0"] .player-character-background {
+      background-position: 0% center; }
+    div#board .player-info[data-character="1"] .player-character-background {
+      background-position: 6.6666666667% center; }
+    div#board .player-info[data-character="2"] .player-character-background {
+      background-position: 13.3333333333% center; }
+    div#board .player-info[data-character="3"] .player-character-background {
+      background-position: 20% center; }
+    div#board .player-info[data-character="4"] .player-character-background {
+      background-position: 26.6666666667% center; }
+    div#board .player-info[data-character="5"] .player-character-background {
+      background-position: 33.3333333333% center; }
+    div#board .player-info[data-character="6"] .player-character-background {
+      background-position: 40% center; }
+    div#board .player-info[data-character="7"] .player-character-background {
+      background-position: 46.6666666667% center; }
+    div#board .player-info[data-character="8"] .player-character-background {
+      background-position: 53.3333333333% center; }
+    div#board .player-info[data-character="9"] .player-character-background {
+      background-position: 60% center; }
+    div#board .player-info[data-character="10"] .player-character-background {
+      background-position: 66.6666666667% center; }
+    div#board .player-info[data-character="11"] .player-character-background {
+      background-position: 73.3333333333% center; }
+    div#board .player-info[data-character="12"] .player-character-background {
+      background-position: 80% center; }
+    div#board .player-info[data-character="13"] .player-character-background {
+      background-position: 86.6666666667% center; }
+    div#board .player-info[data-character="14"] .player-character-background {
+      background-position: 93.3333333333% center; }
+    div#board .player-info[data-character="15"] .player-character-background {
+      background-position: 100% center; }
+  div#board .bang-player.turn .bang-player-container {
+    border: 1px solid blue; }
+  div#board .bang-player.inactive {
+    opacity: 0.6; }
   div#board .bang-player .bang-player-container {
     width: 96%;
     height: 180px;
@@ -148,96 +238,40 @@ div#board {
     display: flex; }
     div#board .bang-player .bang-player-container .player-inplay {
       flex-grow: 1; }
-    div#board .bang-player .bang-player-container .player-info {
-      position: relative;
-      width: 113.266509434px;
-      height: 100%;
-      background-image: url("img/card_borders.png");
-      background-size: cover;
-      border-left: 1px solid rgba(50, 50, 50, 0.8);
-      border-top-right-radius: 5px;
-      border-bottom-right-radius: 5px; }
-      div#board .bang-player .bang-player-container .player-info .player-character-name {
-        font-family: "Perdido";
-        width: 100%;
-        max-height: 22px;
-        margin-top: 11px;
-        text-align: center;
-        font-size: 15px;
-        transform: scale(0.8, 1.3);
-        transform-origin: top center; }
-      div#board .bang-player .bang-player-container .player-info .player-character-background {
-        width: 90.2122641509px;
-        height: 89.25px;
-        margin: 5px auto;
-        background-image: url("img/card_characters.jpg");
-        background-size: cover; }
-      div#board .bang-player .bang-player-container .player-info[data-character="0"] .player-character-background {
-        background-position: 0% center; }
-      div#board .bang-player .bang-player-container .player-info[data-character="1"] .player-character-background {
-        background-position: 6.6666666667% center; }
-      div#board .bang-player .bang-player-container .player-info[data-character="2"] .player-character-background {
-        background-position: 13.3333333333% center; }
-      div#board .bang-player .bang-player-container .player-info[data-character="3"] .player-character-background {
-        background-position: 20% center; }
-      div#board .bang-player .bang-player-container .player-info[data-character="4"] .player-character-background {
-        background-position: 26.6666666667% center; }
-      div#board .bang-player .bang-player-container .player-info[data-character="5"] .player-character-background {
-        background-position: 33.3333333333% center; }
-      div#board .bang-player .bang-player-container .player-info[data-character="6"] .player-character-background {
-        background-position: 40% center; }
-      div#board .bang-player .bang-player-container .player-info[data-character="7"] .player-character-background {
-        background-position: 46.6666666667% center; }
-      div#board .bang-player .bang-player-container .player-info[data-character="8"] .player-character-background {
-        background-position: 53.3333333333% center; }
-      div#board .bang-player .bang-player-container .player-info[data-character="9"] .player-character-background {
-        background-position: 60% center; }
-      div#board .bang-player .bang-player-container .player-info[data-character="10"] .player-character-background {
-        background-position: 66.6666666667% center; }
-      div#board .bang-player .bang-player-container .player-info[data-character="11"] .player-character-background {
-        background-position: 73.3333333333% center; }
-      div#board .bang-player .bang-player-container .player-info[data-character="12"] .player-character-background {
-        background-position: 80% center; }
-      div#board .bang-player .bang-player-container .player-info[data-character="13"] .player-character-background {
-        background-position: 86.6666666667% center; }
-      div#board .bang-player .bang-player-container .player-info[data-character="14"] .player-character-background {
-        background-position: 93.3333333333% center; }
-      div#board .bang-player .bang-player-container .player-info[data-character="15"] .player-character-background {
-        background-position: 100% center; }
-      div#board .bang-player .bang-player-container .player-info .player-name {
-        text-align: center; }
-      div#board .bang-player .bang-player-container .player-info .player-cards {
-        text-align: center; }
-        div#board .bang-player .bang-player-container .player-info .player-cards .player-hand-card {
-          display: inline-block;
-          width: 22px;
-          height: 22px;
-          background-image: url("img/cards.svg");
-          background-size: contain;
-          background-repeat: no-repeat;
-          vertical-align: bottom; }
-      div#board .bang-player .bang-player-container .player-info .player-bullets {
-        position: absolute;
-        width: 30px;
-        right: -8px;
-        top: 40px; }
-        div#board .bang-player .bang-player-container .player-info .player-bullets .bullet {
-          width: 35px;
-          height: 13px;
-          background-image: url("img/bullet.png");
-          background-size: cover;
-          margin: 1px 0px;
-          transform: rotate(13deg);
-          background-position: 0% 100%; }
-      div#board .bang-player .bang-player-container .player-info .player-star {
-        display: none;
-        position: absolute;
-        top: -17px;
-        right: -12px;
-        width: 30px;
-        height: 34px;
-        background-image: url("img/sheriff.svg");
-        background-size: cover; }
+    div#board .bang-player .bang-player-container .player-info .player-name {
+      text-align: center; }
+    div#board .bang-player .bang-player-container .player-info .player-cards {
+      text-align: center; }
+      div#board .bang-player .bang-player-container .player-info .player-cards .player-hand-card {
+        display: inline-block;
+        width: 22px;
+        height: 22px;
+        background-image: url("img/cards.svg");
+        background-size: contain;
+        background-repeat: no-repeat;
+        vertical-align: bottom; }
+    div#board .bang-player .bang-player-container .player-info .player-bullets {
+      position: absolute;
+      width: 30px;
+      right: -8px;
+      top: 40px; }
+      div#board .bang-player .bang-player-container .player-info .player-bullets .bullet {
+        width: 35px;
+        height: 13px;
+        background-image: url("img/bullet.png");
+        background-size: cover;
+        margin: 1px 0px;
+        transform: rotate(13deg);
+        background-position: 0% 100%; }
+    div#board .bang-player .bang-player-container .player-info .player-star {
+      display: none;
+      position: absolute;
+      top: -17px;
+      right: -12px;
+      width: 30px;
+      height: 34px;
+      background-image: url("img/sheriff.svg");
+      background-size: cover; }
   div#board .bang-player[data-role="0"] .bang-player-container .player-info .player-star {
     display: block; }
   div#board .bang-player[data-max-bullets="3"] .bang-player-container .player-info .player-bullets .bullet:nth-child(4) {
@@ -477,6 +511,10 @@ div.bang-card {
   margin: 5px;
   background-image: url("img/card_borders.png");
   background-size: cover; }
+  div.bang-card[data-type="empty"] {
+    background: none !important; }
+    div.bang-card[data-type="empty"] div {
+      display: none; }
   div.bang-card.unselectable {
     opacity: 0.5;
     cursor: not-allowed; }

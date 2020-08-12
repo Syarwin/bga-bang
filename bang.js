@@ -46,7 +46,8 @@ setup: function (gamedatas) {
 
 
   // Adding deck/discard
-  dojo.place(this.format_block('jstpl_table', { }), 'board');
+  dojo.place(this.format_block('jstpl_table', { deck : gamedatas.deck }), 'board');
+  this.addCard(gamedatas.discard, "discard");
 
 	// Setting up player boards
   var nPlayers = gamedatas.bplayers.length;
@@ -63,20 +64,26 @@ setup: function (gamedatas) {
     player.powers = '<p>' + player.powers.join('</p><p>') + '</p>';
 
     dojo.place(this.format_block('jstpl_player', player), 'board');
-
-    // TODO
-    //player.inplay.forEach(card => this.addCard(card, 'player-board-' + player.id));
+    this.addTooltipHtml("player-character-" + player.id, this.format_block( 'jstpl_characterTooltip',  player));
+    player.inPlay.forEach(card => this.addCard(card, 'player-inplay-' + player.id));
 
     if(isCurrent){
-      dojo.place(this.format_block('jstpl_hand', { role : player.role }), 'board');
+      let role = this.getRole(player.role);
+      dojo.place(this.format_block('jstpl_hand', role), 'board');
       player.hand.forEach(card => this.addCard(card, 'hand-cards') );
+      this.addTooltip("role-card", role["role-text"], '');
     }
   });
+
+  this.setTurn(gamedatas.turn);
 
 	// Setup game notifications
 	this.setupNotifications();
 },
 
+setTurn: function(playerId){
+  dojo.addClass("bang-player-" + playerId, "turn");
+},
 
 
 /*
@@ -88,6 +95,10 @@ setup: function (gamedatas) {
  */
 onEnteringState: function (stateName, args) {
 	debug('Entering state: ' + stateName, args);
+
+  dojo.query(".bang-player").addClass("inactive");
+  // TODO : handle multiple active
+  dojo.removeClass("bang-player-" + args.active_player, "inactive");
 
 	// Stop here if it's not the current player's turn for some states
 	if (["playCard", "react"].includes(stateName) && !this.isCurrentPlayerActive()) return;
@@ -167,7 +178,7 @@ onEnteringStatePlayCard: function(args){
  */
 makeCardSelectable: function(cards, action){
   this._action = action;
-  if(this.action == "selectCard"){
+  if(this._action == "selectCard"){
     dojo.query("#hand .bang-card").addClass("unselectable");
   } else {
     dojo.query(".bang-card").addClass("unselectable");
@@ -415,6 +426,34 @@ addCard: function(ocard, container){
 },
 
 
+/*
+ * getRole: factory function that return a role
+ */
+getRole: function(roleId){
+  const roles = {
+    0: {
+      "role":0,
+      "role-name": _("Sheriff"),
+      "role-text": _("Kill all the Outlaws and the Renegade!")
+    },
+    1:{
+      "role":1,
+      "role-name":_("Vice"),
+      "role-text":_("Protect the Sheriff! Kill all the Outlaws and the Renegade!"),
+    },
+    2:{
+      "role":2,
+      "role-name":_("Outlaw"),
+      "role-text":_("Kill the Sheriff!"),
+    },
+    3:{
+      "role":3,
+      "role-name":_("Renegade"),
+      "role-text":_("Be the last one in play!"),
+    },
+  };
+  return roles[roleId];
+},
 
 ///////////////////////////////////////////////////
 //////	 Reaction to cometD notifications	 ///////
@@ -428,7 +467,7 @@ addCard: function(ocard, container){
 setupNotifications: function () {
 	var notifs = [
 		['debug',500],
-		['cardPlayed', 1000],
+		['cardPlayed', 2000],
     ['updateHP', 500],
 	];
 
@@ -446,21 +485,67 @@ notif_debug:function(notif) {
 
 
 /*
- * notification sent to all players when someone plays a card
- */
-notif_cardPlayed: function(n) {
-  debug("Notif: card played", n);
-  var card = n.args.card;
-  var playerId = n.args.player;
-  this.addCard(card, "discard");
-},
-
-/*
 * notification sent to all players when a player looses or gains hp
 */
 notif_updateHP: function(n) {
   debug("Notif: hp changed", n);
   dojo.attr("bang-player-" + n.args.id, "data-bullets", n.args.hp);
+},
+
+/*
+* notification sent to all players when the hand count of a player changed
+*/
+notif_updateHand: function(n) {
+  debug("Notif: update handcount of player", n);
+  var currentHandCount = parseInt(dojo.attr("bang-player-" + n.args.player, "data-hand")),
+      newHandCount = currentHandCount + parseInt(n.args.amount);
+  dojo.attr("bang-player-" + n.args.player, "data-hand", newHandCount);
+},
+
+
+
+/*
+ * notification sent to all players when someone plays a card
+ */
+notif_cardPlayed: function(n) {
+  debug("Notif: card played", n);
+  var playerId = n.args.player,
+      target = n.args.target,
+      targetPlayer = n.args.targetPlayer;
+
+  if(!targetPlayer && target == "inPlay")
+    targetPlayer = playerId;
+
+  var card = this.getCard(n.args.card);
+  card.id = -1;
+
+  var sourceId = "player-character-" + playerId;
+  if(this.player_id == playerId){
+    sourceId = "bang-card-" + n.args.card.id;
+    dojo.attr(sourceId, "data-type", "empty");
+    setTimeout(() => dojo.destroy(sourceId), 700);
+  }
+
+  if(targetPlayer){
+    var targetId = (target == "inPlay"? "player-inplay-" : "player-character-") + targetPlayer
+    this.slideTemporary('jstpl_card', card, "board", sourceId, targetId, 1000, 0)
+    .then(() => {
+      // Add the card in front of player
+      if(target == "inPlay"){
+        this.addCard(n.args.card, targetId)
+      }
+      // Put the card in the discard pile
+      else {
+        this.slideTemporary('jstpl_card', card, "board", targetId, "discard", 1000, 0)
+        .then(() => this.addCard(n.args.card, "discard"));
+      }
+    });
+  }
+  // Directly to discard
+  else {
+    this.slideTemporary('jstpl_card', card, "board", sourceId, "discard", 1000, 0)
+    .then(() => this.addCard(n.args.card, "discard"));
+  }
 },
 
 /*
@@ -482,15 +567,6 @@ notif_cardsLost: function(notif) {
  var cards = notif.args.cards; //array of the ids of the lost cards
 },
 
-/*
-* notification sent to all players when the hand count of a player changed
-*/
-notif_updateHand: function(notif) {
- var playerId = notif.args.player;
- var amount = notif.args.amount;
- var currentHandCount = 0; //todo get the currently displayed value
- var newHandCount = currentHandCount + amount;
-},
 
 
 	});

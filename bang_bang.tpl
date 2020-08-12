@@ -6,8 +6,8 @@
 var jstpl_hand = `<div id="hand">
 	<div id="role-container" data-role="\${role}">
 		<div id="role-card">
-			<div id="role-name"></div>
-			<div id="role-text"></div>
+			<div id="role-name">\${role-name}</div>
+			<div id="role-text">\${role-text}</div>
 		</div>
 	</div>
 	<div id="hand-cards"></div>
@@ -16,7 +16,7 @@ var jstpl_hand = `<div id="hand">
 
 var jstpl_table = `<div id="table">
 	<div id="table-container">
-		<div id="deck"></div>
+		<div id="deck">\${deck}</div>
 		<div id="discard"></div>
 	</div>
 </div>
@@ -26,7 +26,7 @@ var jstpl_player = `<div class='bang-player' id='bang-player-\${id}' data-role="
 	<div class='bang-player-container'>
 		<div class='player-inplay' id="player-inplay-\${id}">
 		</div>
-		<div class='player-info' data-character='\${characterId}'>
+		<div id="player-character-\${id}" class='player-info' data-character='\${characterId}'>
 			<div class="player-character-name">\${character}</div>
 			<div class="player-character-background"></div>
 			<div class='player-name' style="color:#\${color}">\${name}</div>
@@ -44,6 +44,16 @@ var jstpl_player = `<div class='bang-player' id='bang-player-\${id}' data-role="
 				<li class='bullet'></li>
 			</ul>
 			<div class="player-star"></div>
+		</div>
+	</div>
+</div>`;
+
+var jstpl_characterTooltip = `<div class="bang-character-tooltip">
+	<div class="bang-character-tooltip-sizing">
+		<div class='player-info' data-character='\${characterId}'>
+			<div class="player-character-name">\${character}</div>
+			<div class="player-character-background"></div>
+			<div class='player-character-powers'>\${powers}</div>
 		</div>
 	</div>
 </div>`;

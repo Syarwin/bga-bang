@@ -54,17 +54,16 @@ class BangCardManager extends APP_GameClass
 	  */
 	public static function getHand($playerId, $formatted = false) {
 		$cards = self::toObjects(self::getDeck()->getCardsInLocation('hand', $playerId));
-		if($formatted) return self::formatCards($cards);
-		return $cards;
+		return $formatted? self::formatCards($cards) : $cards;
 	}
 
 	/**
 	 * getCardsInPlay : returns all Cards in play
 	 */
-	public static function getCardsInPlay($playerId = null) {
-		if(is_null($playerId))
-				return self::toObjects(self::getDeck()->getCardsInLocation('inPlay'));
-		return self::toObjects(self::getDeck()->getCardsInLocation('inPlay', $playerId));
+	public static function getCardsInPlay($playerId = null, $formatted = false) {
+		$cards = is_null($playerId)? self::getDeck()->getCardsInLocation('inPlay') : self::getDeck()->getCardsInLocation('inPlay', $playerId);
+		$cards = self::toObjects($cards);
+		return $formatted? self::formatCards($cards) : $cards;
 	}
 
 	/**

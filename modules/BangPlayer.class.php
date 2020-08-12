@@ -68,8 +68,9 @@ class BangPlayer extends APP_GameClass
       'no'        => $this->no,
       'name'      => $this->getName(),
       'color'     => $this->color,
-      'hand' => ($current) ? array_values(BangCardManager::getHand($currentPlayerId, true)) : BangCardManager::countCards('hand', $this->id),
+      'hand' => ($current) ? array_values(BangCardManager::getHand($this->id, true)) : BangCardManager::countCards('hand', $this->id),
       'role' => ($current || $this->role==SHERIFF) ? $this->role : null,
+      'inPlay' => array_values(BangCardManager::getCardsInPlay($this->id, true)),
       'characterId' => $this->character,
       'character' => $this->character_name,
       'powers' => $this->text,
@@ -102,6 +103,10 @@ class BangPlayer extends APP_GameClass
 		$card = BangCardManager::getCard($id);
     if($card->getColor() == BROWN){
       BangCardManager::playCard($id);
+    }
+    // TODO : improve this
+    else if ($card->getColor() == BLUE){
+      BangCardManager::moveCard($id, 'inPlay', $this->id);
     }
 		BangNotificationManager::cardPlayed($this, $card, $args);
     bang::$instance->setGameStateValue('currentCard', $id);
@@ -243,12 +248,10 @@ class BangPlayer extends APP_GameClass
 	 * getRange : Returns the range of players weapon
 	 */
 	public function getRange() {
-		$cards = BangCardManager::getCardsInPlay($this->id);
-		foreach($cards as $card) {
-			$effect = BangCardManager::$card->getEffect();
-			if(($effect['type']) == WEAPON) return $effect['range'];
-		}
-		return 1;
+    return array_reduce($this->getCardsInPlay(), function($range, $card){
+      $effect = $card->getEffect();
+      return ($effect['type'] == WEAPON)? $effect['range'] : $range;
+		}, 1);
 	}
 
 }

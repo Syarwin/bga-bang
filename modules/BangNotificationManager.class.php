@@ -57,25 +57,22 @@ class BangNotificationManager extends APP_GameClass {
 
   // TODO : make it translatable
   public static function discardedCards($player, $cards) {
-    $msg  = "";
-    $cardIds = [];
-    foreach($cards as $idx=>$card) {
-      if($idx==0) $msg = " discards ";
-      elseif($idx==count($cards-1)) $msg .= " and ";
-      else $msg .= ', ';
-      $msg .= $card->getName();
-      $cardIds[] = $card->getId();
+    foreach($cards as $card){
+      bang::$instance->notifyPlayer($player->getId(), "cardsLost", '', [
+        'cards' => [$card->format()]
+      ]);
+      bang::$instance->notifyAllPlayers("updateHand", clienttranslate('${player_name} discard ${card_name}'), [
+        'i18n' => ['card_name'],
+        'player_name' => $player->getName(),
+        'card_name' => $card->getName(),
+        'id' => $player->getId(),
+        'amount' => -1
+      ]);
     }
-    bang::$instance->notifyPlayer($player->getId(), "cardsLost", '', ['cards'=>$cardIds]);
-    bang::$instance->notifyAllPlayers("updateHand", $player->getName() . "$msg.", ['id'=>$player->getId(), 'diff'=>-count($cards)]);
   }
 
 
   public static function stoleCard($receiver, $victim, $card, $equipped) {
-
-    if($equipped) $msg .= " stole " . $card->getName() . " from " . $victim->getName();
-    else $msg .= " stole a card from " . $victim->getName();
-
     bang::$instance->notifyPlayer($player->getId(), "cardsGained", '', [
       'id' => $player->getId(),
       'cards' => [$card->format()],
