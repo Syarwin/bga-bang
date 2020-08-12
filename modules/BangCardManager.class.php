@@ -71,7 +71,8 @@ class BangCardManager extends APP_GameClass
 	 * getCardsInPlay : returns all Cards in play
 	 */
 	public static function getLastDiscarded() {
-		return self::resToObject(self::getDeck()->getCardOnTop('discard'))->format();
+		$card = self::getDeck()->getCardOnTop('discard');
+		return is_null($card) ? null : self::resToObject($card)->format();
 	}
 
 	/**

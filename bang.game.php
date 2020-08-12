@@ -84,7 +84,6 @@ class bang extends Table
 		//$result['sheriff'] = BangPlayerManager::getSheriff();
 		$result['turn'] = $this->getGameStateValue('currentTurn');
 		$result['cards'] = array_values(BangCardManager::getUIData());
-		//Utils::die(["data"]);
 		return $result;
 	}
 
@@ -218,7 +217,6 @@ class bang extends Table
 	}
 */
 	public function argPlayCards() {
-		//Utils::die(["args"]);
 		$cards = BangPlayerManager::getPlayer(self::getActivePlayerId())->getHandOptions();
 		$cards = array_filter($cards, function($card) { return !is_null($card['options']);});
 		return [
