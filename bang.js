@@ -47,7 +47,8 @@ setup: function (gamedatas) {
 
   // Adding deck/discard
   dojo.place(this.format_block('jstpl_table', { deck : gamedatas.deck }), 'board');
-  this.addCard(gamedatas.discard, "discard");
+  if(gamedatas.discard)
+    this.addCard(gamedatas.discard, "discard");
 
 	// Setting up player boards
   var nPlayers = gamedatas.bplayers.length;
