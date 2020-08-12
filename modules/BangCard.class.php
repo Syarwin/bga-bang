@@ -80,7 +80,7 @@ class BangCard extends APP_GameClass
 					BangCardManager::moveCard($card->id, 'hand', $player->getId());
 					BangNotificationManager::stoleCard($player, $victim, $card);
 				} else {
-					BangCardManager::moveCard($card->id, 'discard');
+					BangCardManager::playCard($card->id);
 					BangNotificationManager::discardedCards($victim, [$card]);
 				}
 				break;
@@ -110,12 +110,11 @@ class BangCard extends APP_GameClass
 					$player->looseLife(bang::$instance->getGameStateValue('currentTurn'));
 				} else {
 					$card = BangCardManager::getCard($id);
-					BangCardManager::moveCard($card->id, 'discard');
+					BangCardManager::playCard($card->id);
 					BangNotificationManager::cardPlayed($player, $card);
 				}
 				break;
 		}
-		return true;
 	}
 
   /**
@@ -123,7 +122,7 @@ class BangCard extends APP_GameClass
 	 * this message should start with a space
 	 */
 	public function getArgsMessage($args) {
-		if(!is_null($args['player']) ) {
+		if(isset($args['player']) && !is_null($args['player']) ) {
 			$name = BangPlayerManager::getPlayer($args['player'])->getName();
 			return " and chooses $name as target";
 		}

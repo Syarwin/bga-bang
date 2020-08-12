@@ -68,6 +68,13 @@ class BangCardManager extends APP_GameClass
 	}
 
 	/**
+	 * getCardsInPlay : returns all Cards in play
+	 */
+	public static function getLastDiscarded() {
+		return self::resToObject(self::getDeck()->getCardOnTop('discard'))->format();
+	}
+
+	/**
 	 * getEquipment : returns all equipment Cards the players has in play as array: id => cards
 	 */
 	public static function getEquipment() {
@@ -81,19 +88,27 @@ class BangCardManager extends APP_GameClass
 
 	public static function toObjects($array) {
 		$cards = [];
-		foreach($array as $row) $cards[] = self::getCard($row['id']);
+		foreach($array as $row) $cards[] = self::resToObject($row);
 		return $cards;
 	}
 
 	/*
 	 *
 	 */
-	public static function getCard($id, $game=null) {
+	public static function getCard($id) {
 		$c = self::getDeck()->getCard($id);
 		$card_id = $c['type'];
 		$name = self::$classes[$card_id];
-		$card = new $name($id, $game);
+		$card = new $name($id);
 		$card->setCopy($c['type_arg']);
+		return $card;
+	}
+
+	private static function resToObject($row) {
+		$card_id = $row['type'];
+		$name = self::$classes[$card_id];
+		$card = new $name($row['id']);
+		$card->setCopy($row['type_arg']);
 		return $card;
 	}
 
@@ -104,6 +119,10 @@ class BangCardManager extends APP_GameClass
 
 	public static function moveCard($id, $location, $arg=0) {
 		self::getDeck()->moveCard($id, $location, $arg);
+	}
+
+	public static function playCard($id) {
+		self::getDeck()->playCard($id);
 	}
 
 	public static function deal($player, $amount){

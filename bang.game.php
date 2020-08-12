@@ -80,6 +80,7 @@ class bang extends Table
 		$result['bplayers'] = array_values(BangPlayerManager::getUiData(null, $currentPlayerId)); // id => [hp, max_hp no, name, color, character, powers(character effect), hand(count), cardsInPlay]
 		//$result['currentPlayer'] = BangPlayerManager::getUiData([$currentPlayerId], true)[0]; // above + role and 'hand' is an array of cards
 		$result['deck'] = BangCardManager::countCards('deck');
+		$result['discard'] = BangCardManager::getLastDiscarded();
 		//$result['sheriff'] = BangPlayerManager::getSheriff();
 		$result['turn'] = $this->getGameStateValue('currentTurn');
 		$result['cards'] = array_values(BangCardManager::getUIData());
@@ -121,7 +122,7 @@ class bang extends Table
 
 	function endTurn($cards) {
 		foreach ($cards as $card) {
-			BangCardManager::moveCard($card, 'discard');
+			BangCardManager::playCard($card);
 		}
 		$this->gamestate->nextState('endTurn');
 	}

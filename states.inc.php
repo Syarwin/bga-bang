@@ -121,7 +121,7 @@ $machinestates = [
 		'descriptionmyturn' => clienttranslate('${you} must react'),
 		'type' => 'activeplayer',
 		'args' => 'argReact',
-		'possibleactions' => ['react', 'pass'],
+		'possibleactions' => ['play', 'pass'],
 		'transitions' => [
 			'react' => ST_END_REACT
 		]

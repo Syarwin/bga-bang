@@ -16,14 +16,14 @@ class ElGringo extends BangPlayer {
   public function looseLife($byPlayer=-1) {
 		parent::looseLife($byPlayer);
 		$id = $this->id;
-		if($byPlayer > -1) {
+		/*if($byPlayer > -1) {
 			$player = self::getObjectListFromDB("SELECT player_id FROM player", true);
-			$cards = self::getObjectListFromDB("SELECT card_id id, card_name name FROM cards WHERE card_position=$byPlayer AND card_onHand=1");
+			$cards = self::getObjectListFromDB("SELECT card_id id, card_name name FROM card WHERE card_position=$byPlayer AND card_onHand=1");
 
 			$n = rand(0,count($cards)-1);
 			$card = $cards[$n];
 
-			$hands = self::getCollectionFromDB("SELECT card_position, COUNT(*) FROM cards WHERE card_position>0 GROUP BY card_position", true);
+			$hands = self::getCollectionFromDB("SELECT card_position, COUNT(*) FROM card WHERE card_position>0 GROUP BY card_position", true);
 			$name = self::getUniqueValueFromDB("SELECT player_name FROM player WHERE player_id=" . $this->id);
 			self::DbQuery("UPDATE cards SET card_position=$id WHERE card_id=" . $card['id']);
 			$bplayers = BangPlayerManager::getPlayers();
@@ -42,6 +42,6 @@ class ElGringo extends BangPlayer {
 									['hands'=>$hands, 'gain'=>$id, 'loose'=>$byPlayer]);
 				}
 			}
-		}
+		}*/
 	}
 }

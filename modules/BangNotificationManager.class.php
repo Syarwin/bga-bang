@@ -14,7 +14,7 @@ class BangNotificationManager extends APP_GameClass {
       'card_msg' => $card->getArgsMessage($args),
       'card' => $card->format(),
       'player' => $player->getId(),
-      'targetPlayer' => $args['player'],
+      'targetPlayer' => isset($args['player']) ? $args['player'] : null,
       'target' => $card->isEquipment() ? 'inPlay' : 'discard'
     ]);
   }

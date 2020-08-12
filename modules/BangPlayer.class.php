@@ -83,7 +83,7 @@ class BangPlayer extends APP_GameClass
    */
   public function save() {
     $eliminated = ($this->eliminated) ? 1 : 0;
-    $sql = "UPDATE player SET player_eliminated=$eliminated, player_score=" . $this->hp . " WHERE player_id = ". $this->id;
+    $sql = "UPDATE player SET player_eliminated=$eliminated, player_score=" . $this->hp;
     self::DbQuery($sql);
   }
 
@@ -93,10 +93,15 @@ class BangPlayer extends APP_GameClass
   }
 
   public function playCard($id, $args) {
+    $state = bang::$instance->gamestate->state()['name'];
+    if($state == 'multiReact' || $state == 'react') {
+      $this->react($id);
+      return;
+    }
 
 		$card = BangCardManager::getCard($id);
     if($card->getColor() == BROWN){
-      BangCardManager::moveCard($id, 'discard');
+      BangCardManager::playCard($id);
     }
 		BangNotificationManager::cardPlayed($this, $card, $args);
     bang::$instance->setGameStateValue('currentCard', $id);
@@ -107,11 +112,12 @@ class BangPlayer extends APP_GameClass
 	public function react($id) {
 		$card = BangCardManager::getCard(bang::$instance->getGameStateValue('currentCard'));
 		$card->react($id, $this);
+    bang::$instance->notifyAllPlayers('debug', bang::$instance->gamestate->state()['name'], []);
     if(bang::$instance->gamestate->state()['name'] == 'multiReact')
       bang::$instance->gamestate->setPlayerNonMultiactive($this->getId(), 'finishedReaction');
-    else
+    else {
       bang::$instance->gamestate->nextState( "react" );
-
+    }
 	}
 
   public function getHandOptions() {
@@ -216,7 +222,8 @@ class BangPlayer extends APP_GameClass
     $hand = BangCardManager::getHand($this->id);
     $res = [];
     foreach($hand as $card) {
-      if($card->getColor() == BROWN && $card->getEffectType() == DEFENSIVE) $res[] = $card->getID();
+      if($card->getColor() == BROWN && $card->getEffectType() == DEFENSIVE)
+        $res[] = ['id' => $card->getID(), 'options' => ['type' => OPTION_NONE]];
     }
     return array_values($res);
   }
