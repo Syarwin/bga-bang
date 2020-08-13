@@ -110,7 +110,9 @@ class BangPlayer extends APP_GameClass
     }
 		BangNotificationManager::cardPlayed($this, $card, $args);
     bang::$instance->setGameStateValue('currentCard', $id);
-    $card->play($this, $args);
+    if($card->play($this, $args)) {
+      bang::$instance->gamestate->nextState( "continuePlaying" );
+    }
 
 	}
 
@@ -201,10 +203,13 @@ class BangPlayer extends APP_GameClass
     if(count($reactions) == 1) {
 			bang::$instance->setGameStateValue('target', $reactions[0]);
 			bang::$instance->gamestate->nextState('awaitReaction');
+      return false;
     } elseif(count($reactions) > 1) {
       BangPlayerManager::preparePlayerActivation($reactions);
       bang::$instance->gamestate->nextState('awaitMultiReaction');
+      return false;
     }
+    return true;
   }
 
 	/**

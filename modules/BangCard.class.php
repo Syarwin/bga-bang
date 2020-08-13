@@ -1,4 +1,4 @@
-<?php
+	<?php
 
 /*
  * BangCard: base class to handle characters
@@ -47,14 +47,14 @@ class BangCard extends APP_GameClass
 
 	/**
 	 * play : default function to play a card that. Can be used for cards that have only symbols
+	 * return: true if the game should continue the play loop, false if another state was called
 	 */
-
 	public function play($player, $args) {
  		switch ($this->effect['type']) {
  			case BASIC_ATTACK:
  				$ids = ($this->effect['impacts'] == ALL_OTHER) ? BangPlayerManager::getLivingPlayers($player->getId()) : [$args['player']];
 
- 				$player->attack($ids);
+ 				return $player->attack($ids);
  				break;
 
  			case DRAW:

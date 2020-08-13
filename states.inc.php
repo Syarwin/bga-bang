@@ -102,7 +102,8 @@ $machinestates = [
 			'zombiePass' => ST_END_OF_TURN,
 			'endTurn'		=> ST_END_OF_TURN,
 			'awaitReaction' => ST_AWAIT_REACTION,
-			'awaitMultiReaction' => ST_AWAIT_MULTIREACTION
+			'awaitMultiReaction' => ST_AWAIT_MULTIREACTION,
+			'continuePlaying' => ST_PLAY_CARD
 		],
 	],
 

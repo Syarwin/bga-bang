@@ -78,7 +78,7 @@ class BangNotificationManager extends APP_GameClass {
       'cards' => [$card->format()],
       'src' => $victim->getId()
     ]);
-    bang::$instance->notifyPlayer($player->getId(), "cardsLost", '', [
+    bang::$instance->notifyPlayer($victim->getId(), "cardsLost", '', [
       'id' => $player->getId(),
       'cards' => [$card->format()],
       'src' => $victim->getId()
@@ -98,8 +98,8 @@ class BangNotificationManager extends APP_GameClass {
     }
 
     // TODO : weird stuff with count()
-//    bang::$instance->notifyAllPlayers("updateHand", $msg, ['id'=>$player->getId(), 'amount'=>count()]);
-//    bang::$instance->notifyAllPlayers("updateHand", '', ['id'=>$player->getId(), 'amount'=>count()]);
+    bang::$instance->notifyAllPlayers("updateHand", $msg, ['id'=>$player->getId(), 'amount'=>count($cards)]);
+    bang::$instance->notifyAllPlayers("updateHand", '', ['id'=>$victim->getId(), 'amount'=>-count($cards)]);
   }
 
 }
