@@ -102,12 +102,12 @@ class BangPlayer extends APP_GameClass
     }
 
 		$card = BangCardManager::getCard($id);
-		BangNotificationManager::cardPlayed($this, $card, $args);
+    $newState = $card->play($this, $args);
     bang::$instance->setGameStateValue('currentCard', $id);
-    if($card->play($this, $args)) {
-      bang::$instance->gamestate->nextState( "continuePlaying" );
+    BangNotificationManager::cardPlayed($this, $card, $args);
+    if($newState){
+      bang::$instance->gamestate->nextState("continuePlaying");
     }
-
 	}
 
 	public function react($id) {
@@ -139,12 +139,8 @@ class BangPlayer extends APP_GameClass
     $positions = BangPlayerManager::getPlayerPositions();
     $pos1 = $positions[$this->getId()];
     $pos2 = $positions[$enemy->getId()];
-    if($pos2 < $pos1) {
-      $temp = $pos2;
-      $pos2 = $pos1;
-      $pos1 = $temp;
-    }
-    $dist = min($pos2-$pos1, $pos1-$pos2+count($positions));
+    $d = abs($pos2 - $pos1);
+    $dist = min($d, count($positions) - $d);
     foreach($this->getCardsInPlay() as $card) {
       if($card->getEffect()['type'] = RANGE_DECREASE) $dist--;
     }
@@ -256,6 +252,7 @@ class BangPlayer extends APP_GameClass
     $weapon = $this->getWeapon();
     if(!is_null($weapon)) {
       BangCardManager::playCard($weapon->getId());
+      BangNotificationManager::discardedCard($this, $weapon, true);
     }
   }
 }

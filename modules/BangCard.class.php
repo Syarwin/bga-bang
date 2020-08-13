@@ -51,7 +51,7 @@ class BangCard extends APP_GameClass
 	 */
 	public function play($player, $args) {
 		if($this->color == BROWN){
-			BangCardManager::playCard($id);
+			BangCardManager::playCard($this->id);
 		}	else if ($this->color == BLUE) {
 			// If the card is a weapon, make sure to discard existing weapon
 			if ($this->effect['type'] == WEAPON) {

@@ -55,19 +55,25 @@ class BangNotificationManager extends APP_GameClass {
     ]);
   }
 
-  // TODO : make it translatable
-  public static function discardedCards($player, $cards) {
+  public static function discardedCard($player, $card, $silent = false) {
+    bang::$instance->notifyPlayer($player->getId(), "cardLost", '', [
+      'card' => $card->format()
+    ]);
+    if($silent)
+      return;
+
+    bang::$instance->notifyAllPlayers("updateHand", clienttranslate('${player_name} discard ${card_name}'), [
+      'i18n' => ['card_name'],
+      'player_name' => $player->getName(),
+      'card_name' => $card->getName(),
+      'id' => $player->getId(),
+      'amount' => -1
+    ]);
+  }
+
+  public static function discardedCards($player, $cards, $silent = false) {
     foreach($cards as $card){
-      bang::$instance->notifyPlayer($player->getId(), "cardsLost", '', [
-        'cards' => [$card->format()]
-      ]);
-      bang::$instance->notifyAllPlayers("updateHand", clienttranslate('${player_name} discard ${card_name}'), [
-        'i18n' => ['card_name'],
-        'player_name' => $player->getName(),
-        'card_name' => $card->getName(),
-        'id' => $player->getId(),
-        'amount' => -1
-      ]);
+      self::discardedCard($player, $card, $silent);
     }
   }
 

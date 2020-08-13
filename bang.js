@@ -402,14 +402,14 @@ slideTemporary: function (template, data, container, sourceId, targetId, duratio
 /*
  * getCard: factory function that create a card
  */
-getCard: function(ocard) {
+getCard: function(ocard, eraseId) {
   // Gets a card object ready to use in UI templates
   var card = this.gamedatas.cards[ocard.type] || {
     id: 0,
     type: 0,
     name: '',
   };
-  card.id = ocard.id;
+  card.id = eraseId? -1 : ocard.id;
   card.color = ocard.color;
   card.value = ocard.value;
 
@@ -469,6 +469,7 @@ setupNotifications: function () {
 	var notifs = [
 		['debug',500],
 		['cardPlayed', 2000],
+    ['cardLost', 1000],
     ['updateHP', 500],
 	];
 
@@ -517,9 +518,7 @@ notif_cardPlayed: function(n) {
   if(!targetPlayer && target == "inPlay")
     targetPlayer = playerId;
 
-  var card = this.getCard(n.args.card);
-  card.id = -1;
-
+  var card = this.getCard(n.args.card, true);
   var sourceId = "player-character-" + playerId;
   if(this.player_id == playerId){
     sourceId = "bang-card-" + n.args.card.id;
@@ -562,10 +561,23 @@ notif_cardsGained: function(notif) {
 },
 
 /*
-* notification sent only to the player who lost Cards from his and or playarea
+* notification sent only to the player who lost Card from his and or playarea
 */
-notif_cardsLost: function(notif) {
- var cards = notif.args.cards; //array of the ids of the lost cards
+notif_cardLost: function(n) {
+  debug("Notif: card lost", n);
+  var sourceId = "bang-card-" + n.args.card.id;
+
+  if($(sourceId)){
+    dojo.attr(sourceId, "data-type", "empty");
+    setTimeout(() => dojo.destroy(sourceId), 700);
+
+    var card = this.getCard(n.args.card, true);
+    this.slideTemporary('jstpl_card', card, "board", sourceId, "discard", 1000, 0)
+    .then(() => this.addCard(n.args.card, "discard"));
+  }
+  else {
+    // Discard card happens here ??
+  }
 },
 
 

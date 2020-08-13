@@ -237,7 +237,9 @@ div#board {
     box-shadow: 1px 1px 5px rgba(50, 50, 50, 0.8);
     display: flex; }
     div#board .bang-player .bang-player-container .player-inplay {
-      flex-grow: 1; }
+      flex-grow: 1;
+      display: flex;
+      flex-flow: row; }
     div#board .bang-player .bang-player-container .player-info .player-name {
       text-align: center; }
     div#board .bang-player .bang-player-container .player-info .player-cards {
