@@ -44,6 +44,7 @@ class BangPlayer extends APP_GameClass
   public function isEliminated(){ return $this->eliminated; }
   public function isZombie(){ return $this->zombie; }
 
+  public function getPosition(){ return BangPlayerManager::getPlayerPositions()[$this->id]; }
   public function getText() { return $this->text;}
   public function getExpansion() { return $this->expansion;}
   public function getBullets() { return $this->bullets;}
@@ -136,40 +137,34 @@ class BangPlayer extends APP_GameClass
    */
   public function getDistanceTo($enemy) {
     $positions = BangPlayerManager::getPlayerPositions();
-    $pos1 = $positions[$this->id];
-    $pos2 = $positions[$enemy];
+    $pos1 = $positions[$this->getId()];
+    $pos2 = $positions[$enemy->getId()];
     if($pos2 < $pos1) {
       $temp = $pos2;
       $pos2 = $pos1;
       $pos1 = $temp;
     }
     $dist = min($pos2-$pos1, $pos1-$pos2+count($positions));
-    $equipment = BangCardManager::getEquipment();
-    if(isset($equipment[$this->id])) {
-      foreach($equipment[$this->id] as $cid) {
-        $card = BangCardManager::getCard($cid);
-        if($card->getEffect()['type'] = RANGE_DECREASE) $dist--;
-      }
+    foreach($this->getCardsInPlay() as $card) {
+      if($card->getEffect()['type'] = RANGE_DECREASE) $dist--;
     }
-    if(isset($equipment[$enemy])) {
-      foreach($equipment[$enemy] as $cid) {
-        $card = BangCardManager::getCard($cid);
-        if($card->getEffect()['type'] = RANGE_INCREASE) $dist++;
-      }
+    foreach($enemy->getCardsInPlay() as $card) {
+      if($card->getEffect()['type'] = RANGE_INCREASE) $dist++;
     }
     return $dist;
   }
 
+  public function isInRange($enemy, $range){
+    return $enemy->getDistanceTo($this) <= $range;
+  }
+
   public function getPlayersInRange($range) {
-		$targets = array();
-		$bplayers = BangPlayerManager::getPlayers();
-		foreach($bplayers as $player) {
-      $id = $player->id;
-			if($id==$this->id) continue;
-			$dist = BangPlayerManager::getPlayer($id)->getDistanceTo($this->id);
-			if($dist <= $range) $targets[] = $id;
-		}
-		return $targets;
+		$targets = BangPlayerManager::getPlayers();
+    Utils::filter($targets, function($player) use ($range){
+      return $player->id != $this->id && $this->isInRange($player, $range);
+    });
+
+    return array_map(function($target){ return $target->getId(); }, $targets);
 	}
 
   /**
@@ -246,10 +241,21 @@ class BangPlayer extends APP_GameClass
 	 * getRange : Returns the range of players weapon
 	 */
 	public function getRange() {
-    return array_reduce($this->getCardsInPlay(), function($range, $card){
-      $effect = $card->getEffect();
-      return ($effect['type'] == WEAPON)? $effect['range'] : $range;
-		}, 1);
+    $weapon = $this->getWeapon();
+    return is_null($weapon)? 1 : $weapon->getEffect()['range'];
 	}
 
+  public function getWeapon(){
+    return array_reduce($this->getCardsInPlay(), function($weapon, $card){
+      $effect = $card->getEffect();
+      return ($effect['type'] == WEAPON) ? $card : $weapon;
+    }, null);
+  }
+
+  public function discardWeapon(){
+    $weapon = $this->getWeapon();
+    if(!is_null($weapon)) {
+      BangCardManager::playCard($weapon->getId());
+    }
+  }
 }
