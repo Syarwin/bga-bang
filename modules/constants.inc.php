@@ -12,6 +12,7 @@ define('ST_AWAIT_MULTIREACTION',7);
 define('ST_REACT', 8);
 define('ST_MULTIREACT', 9);
 define('ST_END_REACT', 10);
+define('ST_DISCARD_EXCESS', 12);
 define('ST_END_OF_TURN', 11);
 define('ST_GAME_END', 99);
 

@@ -125,6 +125,9 @@ class BangCardManager extends APP_GameClass
 	public static function playCard($id) {
 		self::getDeck()->playCard($id);
 	}
+	public static function discardCard($id) {
+		self::playCard($id);
+	}
 
 	public static function deal($player, $amount){
 		return self::toObjects(self::getDeck()->pickCards($amount, 'deck', $player));

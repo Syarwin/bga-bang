@@ -228,6 +228,10 @@ div#board {
     border: 1px solid blue; }
   div#board .bang-player.inactive {
     opacity: 0.6; }
+  div#board .bang-player.selectable {
+    opacity: 1; }
+    div#board .bang-player.selectable .player-info {
+      cursor: pointer; }
   div#board .bang-player .bang-player-container {
     width: 96%;
     height: 180px;
@@ -527,7 +531,10 @@ div.bang-card {
       transform-origin: center center; }
   div.bang-card.selected {
     transform: scale(1.05);
-    transform-origin: center center; }
+    transform-origin: center center;
+    border: 2px solid red;
+    border-radius: 7px;
+    background-color: red; }
   div.bang-card[data-type="5"] {
     background-position: 33.3333333333% center; }
   div.bang-card[data-type="6"] {

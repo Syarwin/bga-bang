@@ -263,6 +263,13 @@ div#board {
       opacity:0.6;
     }
 
+    &.selectable {
+      opacity:1;
+      .player-info {
+        cursor:pointer;
+      }
+    }
+
     .bang-player-container {
       width:96%;
       height:$cardH + 10px;
@@ -401,6 +408,9 @@ div.bang-card {
   &.selected {
     transform:scale(1.05);
     transform-origin: center center;
+    border: 2px solid red;
+    border-radius: 7px;
+    background-color: red;
   }
 
   @each $card in $actions    { &[data-type="#{$card}"] { background-position:1 * 100% / 3 center; } }

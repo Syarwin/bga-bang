@@ -61,10 +61,24 @@ class action_bang extends APP_GameAction
 
 	public function endTurn() {
 		self::setAjaxMode();
-		$targets = explode(";",self::getArg( "targets", AT_numberlist, false ));
-		$result = $this->game->endTurn($cards);
+		$result = $this->game->endTurn();
 		self::ajaxResponse( );
 	}
+
+	public function cancelEndTurn() {
+		self::setAjaxMode();
+		$result = $this->game->cancelEndTurn();
+		self::ajaxResponse( );
+	}
+
+
+	public function discardExcess() {
+		self::setAjaxMode();
+		$cards = explode(";",self::getArg("cards", AT_numberlist, false));
+		$result = $this->game->discardExcess($cards);
+		self::ajaxResponse( );
+	}
+
 
 	public function pass() {
 		self::setAjaxMode();

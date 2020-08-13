@@ -48,7 +48,7 @@ class BangPlayer extends APP_GameClass
   public function getText() { return $this->text;}
   public function getExpansion() { return $this->expansion;}
   public function getBullets() { return $this->bullets;}
-  public function getCardsInHand(){ return BangCardManager::getHand($this->id); }
+  public function getCardsInHand($formatted = false){ return BangCardManager::getHand($this->id, $formatted); }
   public function getRandomCardInHand(){
     $cards = self::getCardsInHand();
     if(empty($cards)){
@@ -122,12 +122,12 @@ class BangPlayer extends APP_GameClass
 	}
 
   public function getHandOptions() {
-    $hand = BangCardManager::getHand($this->id);
-
-    $options = [];
-    foreach($hand as $card) {
-      $options[] = ['id'=>$card->getId(), 'options'=>$card->getPlayOptions($this)];
-    }
+    $options = array_map(function($card){
+      return [
+        'id' => $card->getId(),
+        'options' => $card->getPlayOptions($this)
+      ];
+    }, $this->getCardsInHand() );
     return array_values($options);
   }
 
@@ -171,7 +171,7 @@ class BangPlayer extends APP_GameClass
     foreach(BangPlayerManager::getPlayers($playerIds) as $player){
       // Player has defensive equipment ? (eg Barrel)
       $missedWithEquipment = array_reduce($player->getCardsInPlay(), function($missed, $card){
-        return $missed || ($card->getEffectType() == DEFENSIVE && $card->play());
+        return $missed? true : ($card->getEffectType() == DEFENSIVE && $card->play());
       });
       if($missedWithEquipment) continue;
 
@@ -251,7 +251,7 @@ class BangPlayer extends APP_GameClass
   public function discardWeapon(){
     $weapon = $this->getWeapon();
     if(!is_null($weapon)) {
-      BangCardManager::playCard($weapon->getId());
+      BangCardManager::discardCard($weapon->getId());
       BangNotificationManager::discardedCard($this, $weapon, true);
     }
   }
