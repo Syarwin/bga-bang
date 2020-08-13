@@ -80,8 +80,9 @@ class BangCardManager extends APP_GameClass
 	public static function getEquipment() {
 		$cards = [];
 		$bplayers = BangPlayerManager::getPlayers();
-		foreach($bplayers as $id => $char) {
-			$cards[$id] = self::toObjects(self::getDeck()->getCardsInLocation('inPlay'));
+		foreach($bplayers as $player) {
+			$id = $player->getId();
+			$cards[$id] = self::toObjects(self::getDeck()->getCardsInLocation('inPlay', $id));
 		}
 		return $cards;
 	}

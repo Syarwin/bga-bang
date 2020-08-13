@@ -50,6 +50,25 @@ class BangCard extends APP_GameClass
 	 * return: true if the game should continue the play loop, false if another state was called
 	 */
 	public function play($player, $args) {
+		if($this->color == BROWN){
+			BangCardManager::playCard($id);
+		}	else if ($this->color == BLUE) {
+			if ($this->effect['type'] == WEAPON) {
+				$equipment = BangCardManager::getEquipment()[$player->getId()];
+				$weapon = array_reduce($equipment, function($weapon, $card){
+		      $effect = $card->getEffect();
+		      return ($effect['type'] == WEAPON) ? $card : $weapon;
+				}, null);
+				if(!is_null($weapon)) {
+					BangCardManager::playCard($weapon->id);
+				}
+			}
+			BangCardManager::moveCard($this->id, 'inPlay', $player->getId());
+			return true;
+
+		}
+
+
  		switch ($this->effect['type']) {
  			case BASIC_ATTACK:
  				$ids = ($this->effect['impacts'] == ALL_OTHER) ? BangPlayerManager::getLivingPlayers($player->getId()) : [$args['player']];
@@ -70,13 +89,14 @@ class BangCard extends APP_GameClass
 					case 'card':
 						$victim = BangPlayerManager::getPlayer($args['player']);
 						$card = BangCardManager::getCard($args['target']);
+						break;
 					default: //deck
 						$card = BangCardManager::deal($player->getId(), $this->effect['amount']);
 						BangNotificationManager::gainedCard($player, $card);
 						return true;
 						break;
 				}
-				if($this->effect['type']==DRAW) { //draw from deck
+				if($this->effect['type']==DRAW) {
 					BangCardManager::moveCard($card->id, 'hand', $player->getId());
 					BangNotificationManager::stoleCard($player, $victim, $card);
 				} else {

@@ -101,13 +101,6 @@ class BangPlayer extends APP_GameClass
     }
 
 		$card = BangCardManager::getCard($id);
-    if($card->getColor() == BROWN){
-      BangCardManager::playCard($id);
-    }
-    // TODO : improve this
-    else if ($card->getColor() == BLUE){
-      BangCardManager::moveCard($id, 'inPlay', $this->id);
-    }
 		BangNotificationManager::cardPlayed($this, $card, $args);
     bang::$instance->setGameStateValue('currentCard', $id);
     if($card->play($this, $args)) {
