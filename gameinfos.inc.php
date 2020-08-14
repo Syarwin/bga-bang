@@ -20,7 +20,7 @@
   'luck' => 3,
   'strategy' => 3,
   'diplomacy' => 3,
-  'player_colors' => ['ff0000', '008000', '0000ff', 'ffa500', '773300'],
+  'player_colors' => ['ff0000', '008000', '0000ff', 'ffa500', '773300', 'ffff00', 'ff00ff'],
   'favorite_colors_support' => true,
   'game_interface_width' => [
     'min' => 740,
