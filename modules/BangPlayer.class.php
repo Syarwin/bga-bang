@@ -103,7 +103,7 @@ class BangPlayer extends APP_GameClass
 
 		$card = BangCardManager::getCard($id);
     BangNotificationManager::cardPlayed($this, $card, $args);
-    bang::$instance->setGameStateValue('currentCard', $id);    
+    bang::$instance->setGameStateValue('currentCard', $id);
     if($card->play($this, $args)){
       bang::$instance->gamestate->nextState("continuePlaying");
     }
@@ -131,7 +131,7 @@ class BangPlayer extends APP_GameClass
   }
 
   /**
-   * returns the current distance to an enmy.
+   * returns the current distance to an enmy from the view of the enemy
    * should not be called on the player checking for targets but on the other players
    */
   public function getDistanceTo($enemy) {
@@ -140,11 +140,11 @@ class BangPlayer extends APP_GameClass
     $pos2 = $positions[$enemy->getId()];
     $d = abs($pos2 - $pos1);
     $dist = min($d, count($positions) - $d);
-    foreach($this->getCardsInPlay() as $card) {
-      if($card->getEffect()['type'] = RANGE_DECREASE) $dist--;
-    }
     foreach($enemy->getCardsInPlay() as $card) {
-      if($card->getEffect()['type'] = RANGE_INCREASE) $dist++;
+      if($card->getEffect()['type'] == RANGE_DECREASE) $dist--;
+    }
+    foreach($this->getCardsInPlay() as $card) {
+      if($card->getEffect()['type'] == RANGE_INCREASE) $dist++;
     }
     return $dist;
   }

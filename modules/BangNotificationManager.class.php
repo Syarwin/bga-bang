@@ -80,13 +80,13 @@ class BangNotificationManager extends APP_GameClass {
 
 
   public static function stoleCard($receiver, $victim, $card, $equipped) {
-    bang::$instance->notifyPlayer($player->getId(), "cardsGained", '', [
-      'playerId' => $player->getId(),
+    bang::$instance->notifyPlayer($receiver->getId(), "cardsGained", '', [
+      'playerId' => $receiver->getId(),
       'cards' => [$card->format()],
       'src' => $victim->getId()
     ]);
     bang::$instance->notifyPlayer($victim->getId(), "cardsLost", '', [
-      'playerId' => $player->getId(),
+      'playerId' => $receiver->getId(),
       'cards' => [$card->format()],
       'src' => $victim->getId()
     ]);
@@ -95,7 +95,7 @@ class BangNotificationManager extends APP_GameClass {
     $msg = $equipped? clienttranslate('${player_name} stole ${card_name} from ${victim_name}')
                     : clienttranslate('${player_name} stole a card from ${victim_name}');
     $data = [
-      'playerId'=> $receveir->getId(),
+      'playerId'=> $receiver->getId(),
       'player_name' => $receiver->getName(),
       'victim_name' => $victim->getName(),
     ];
@@ -105,8 +105,8 @@ class BangNotificationManager extends APP_GameClass {
     }
 
     // TODO : weird stuff with count()
-    bang::$instance->notifyAllPlayers("updateHand", $msg, ['playerId'=>$player->getId(), 'amount'=>count($cards)]);
-    bang::$instance->notifyAllPlayers("updateHand", '', ['playerId'=>$victim->getId(), 'amount'=>-count($cards)]);
+    bang::$instance->notifyAllPlayers("updateHand", $msg, ['playerId'=>$receiver->getId(), 'amount'=>1]);
+    bang::$instance->notifyAllPlayers("updateHand", '', ['playerId'=>$victim->getId(), 'amount'=>-1]);
   }
 
 }
