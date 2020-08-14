@@ -128,6 +128,7 @@ class bang extends Table
 		$player = BangPlayerManager::getPlayer($id);
 		$player->startOfTurn();
 		$this->setGameStateValue('currentTurn', $id);
+		$this->setGameStateValue('bangPlayed', 0);
 		//$this->gamestate->changeActivePlayer($this->setGameStateValue('turn', $id));
 		$this->gamestate->nextState("play");
 

@@ -21,4 +21,17 @@ class CardBang extends BangCard {
       DODGE_CITY => [ '8S', '5C', '6C', 'KC'],
     ];
   }
+
+  public function play($player, $args) {
+    bang::$instance->setGameStateValue('bangPlayed', 1);
+    parent::play($player, $args);
+  }
+
+  public function getPlayOptions($player) {
+    if($player->hasUnlimitedBangs() || bang::$instance->getGameStateValue('bangPlayed') == 0) {
+      return parent::getPlayOptions($player);
+    }
+    return null;
+  }
+
 }

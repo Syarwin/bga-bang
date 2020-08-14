@@ -255,4 +255,9 @@ class BangPlayer extends APP_GameClass
       BangNotificationManager::discardedCard($this, $weapon, true);
     }
   }
+
+  public function hasUnlimitedBangs() {
+    $weapon = $this->getWeapon();
+    return !is_null($weapon) && $weapon->getType() == CARD_VOLCANIC;
+  }
 }
