@@ -102,10 +102,9 @@ class BangPlayer extends APP_GameClass
     }
 
 		$card = BangCardManager::getCard($id);
-    $newState = $card->play($this, $args);
-    bang::$instance->setGameStateValue('currentCard', $id);
     BangNotificationManager::cardPlayed($this, $card, $args);
-    if($newState){
+    bang::$instance->setGameStateValue('currentCard', $id);    
+    if($card->play($this, $args)){
       bang::$instance->gamestate->nextState("continuePlaying");
     }
 	}

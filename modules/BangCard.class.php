@@ -72,8 +72,9 @@ class BangCard extends APP_GameClass
  			case DRAW:
 			case DISCARD:
 				$victim = null;
+				//Utils::die($args);
 				switch ($args['type']) {
-					case 'deck':
+					case 'player':
 						$victim = BangPlayerManager::getPlayer($args['player']);
 						$hand = BangCardManager::getHand($victim->getId());
 						shuffle($hand);
@@ -81,7 +82,7 @@ class BangCard extends APP_GameClass
 						break;
 					case 'card':
 						$victim = BangPlayerManager::getPlayer($args['player']);
-						$card = BangCardManager::getCard($args['target']);
+						$card = BangCardManager::getCard($args['player']);
 						break;
 					default: //deck
 						$card = BangCardManager::deal($player->getId(), $this->effect['amount']);
