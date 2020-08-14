@@ -231,7 +231,15 @@ div#board {
   div#board .bang-player.selectable {
     opacity: 1; }
     div#board .bang-player.selectable .player-info {
-      cursor: pointer; }
+      cursor: pointer;
+      animation: borderBlink 2s infinite; }
+@keyframes borderBlink {
+  0% {
+    border: 1px dashed white; }
+  50% {
+    border: 1px dashed black; }
+  100% {
+    border: 1px dashed white; } }
   div#board .bang-player .bang-player-container {
     width: 96%;
     height: 180px;
@@ -518,6 +526,7 @@ div.bang-card {
   background-image: url("img/card_borders.png");
   background-size: cover; }
   div.bang-card[data-type="empty"] {
+    border: none !important;
     background: none !important; }
     div.bang-card[data-type="empty"] div {
       display: none; }
@@ -535,6 +544,8 @@ div.bang-card {
     border: 2px solid red;
     border-radius: 7px;
     background-color: red; }
+  div.bang-card[data-type="back"] {
+    background-image: url("img/cardback.jpg"); }
   div.bang-card[data-type="5"] {
     background-position: 33.3333333333% center; }
   div.bang-card[data-type="6"] {

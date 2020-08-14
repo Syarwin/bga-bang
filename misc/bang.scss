@@ -267,6 +267,13 @@ div#board {
       opacity:1;
       .player-info {
         cursor:pointer;
+        animation:borderBlink 2s infinite;
+
+        @keyframes borderBlink {
+          0%   { border: 1px dashed white; }
+          50%  { border: 1px dashed black; }
+          100% { border: 1px dashed white; }
+        }
       }
     }
 
@@ -387,6 +394,7 @@ div.bang-card {
 	background-size:cover;
 
   &[data-type="empty"] {
+    border:none !important;
     background:none !important;
     div {
       display:none;
@@ -413,6 +421,7 @@ div.bang-card {
     background-color: red;
   }
 
+  &[data-type="back"] { background-image:url("img/cardback.jpg"); }
   @each $card in $actions    { &[data-type="#{$card}"] { background-position:1 * 100% / 3 center; } }
   @each $card in $equipments { &[data-type="#{$card}"] { background-position:2 * 100% / 3 center; } }
   @each $card in $guns       { &[data-type="#{$card}"] { background-position:3 * 100% / 3 center; } }

@@ -40,8 +40,10 @@ setup: function (gamedatas) {
 	debug('SETUP', gamedatas);
 
   // Formatting cards
+  this._cards = [];
   Object.values(gamedatas.cards).forEach(card => {
     card.name = card.name.toUpperCase();
+    this._cards[card.type] = card;
   });
 
 
@@ -479,7 +481,7 @@ getCardAndDestroy: function(card, val){
  */
 getCard: function(ocard, eraseId) {
   // Gets a card object ready to use in UI templates
-  var card = this.gamedatas.cards[ocard.type] || {
+  var card = this._cards[ocard.type] || {
     id: 0,
     type: 0,
     name: '',
@@ -491,6 +493,15 @@ getCard: function(ocard, eraseId) {
   return card;
 },
 
+getBackCard:function(){
+  return {
+    id:-1,
+    color:0,
+    value:0,
+    name:'',
+    type:"back",
+  };
+},
 
 addCard: function(ocard, container){
   var card = this.getCard(ocard);
@@ -545,6 +556,7 @@ setupNotifications: function () {
 		['debug',500],
 		['cardPlayed', 2000],
     ['cardLost', 1000],
+    ['cardsGained', 1000],
     ['updateHP', 500],
     ['updateHand', 500],
 	];
@@ -613,15 +625,16 @@ notif_cardPlayed: function(n) {
 },
 
 /*
-* notification sent only to the player who got Cards to his Hand
+* notification sent to all players when someone gained a card (from deck or from someone else hand/inplay)
 */
-notif_cardsGained: function(notif) {
- var cards = notif.args.cards; //array of gained cards all having id, type, color, value (the last 2 are from type_arg)
- if(notif.args.src == 'deck') {
-
- } else {
-   var playerId = notif.args.src;
- }
+notif_cardsGained: function(n) {
+  debug("Notif: cards gained", n);
+  for(var i = 0; i < n.args.amount; i++){
+    var card = n.args.cards[i]? this.getCard(n.args.cards[i]) : this.getBackCard();
+    let sourceId = n.args.src == 'deck'? "deck" : ("player-character-" + n.args.src);
+    let targetId = this.player_id == n.args.playerId ? "hand" : ("player-character-" + n.args.playerId);
+    this.slideTemporary("jstpl_card", card, "board", sourceId, targetId, 700, 10*i);
+  }
 },
 
 /*
