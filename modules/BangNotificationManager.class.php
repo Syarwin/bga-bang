@@ -17,6 +17,12 @@ class BangNotificationManager extends APP_GameClass {
       'targetPlayer' => isset($args['player']) ? $args['player'] : null,
       'target' => $card->isEquipment() ? 'inPlay' : 'discard'
     ]);
+
+    bang::$instance->notifyAllPlayers("updateHand", '', [
+      'player_name' => $player->getName(),
+      'playerId' => $player->getId(),
+      'amount' => 1,
+    ]);
   }
 
   public static function lostLife($player, $amount = 1) {
@@ -40,20 +46,26 @@ class BangNotificationManager extends APP_GameClass {
     ]);
   }
 
-  public static function gainedCard($player, $cards) {
+  public static function gainedCards($player, $cards) {
     $amount = count($cards);
     $msg  = $amount == 1 ? clienttranslate('${player_name} draws a card') : clienttranslate('${player_name} draws ${amount} cards');
     $formattedCards = array_map(function($card){ return $card->getUIData(); }, $cards);
-    bang::$instance->notifyPlayer($player->getId(), "cardsGained", '', [
-      'cards' => $formattedCards,
-      'src' => 'deck'
-    ]);
+    foreach(BangPlayerManager::getPlayers() as $bplayer){
+      bang::$instance->notifyPlayer($bplayer->getId(), "cardsGained", '', [
+        'playerId' => $player->getId(),
+        'amount' => $amount,
+        'cards' => $player->getId() == $bplayer->getId()? $formattedCards : [],
+        'src' => 'deck'
+      ]);
+    }
+
     bang::$instance->notifyAllPlayers("updateHand", $msg, [
       'player_name' => $player->getName(),
       'playerId' => $player->getId(),
       'amount' => $amount,
     ]);
   }
+
 
   public static function discardedCard($player, $card, $silent = false) {
     bang::$instance->notifyAllPlayers("cardLost", '', [
@@ -104,9 +116,9 @@ class BangNotificationManager extends APP_GameClass {
       $data['card_name'] = $card->getName();
     }
 
-    // TODO : weird stuff with count()
-    bang::$instance->notifyAllPlayers("updateHand", $msg, ['playerId'=>$receiver->getId(), 'amount'=>1]);
-    bang::$instance->notifyAllPlayers("updateHand", '', ['playerId'=>$victim->getId(), 'amount'=>-1]);
+    // TODO : fix this
+//    bang::$instance->notifyAllPlayers("updateHand", $msg, ['playerId'=>$receiver->getId(), 'amount'=>1]);
+//    bang::$instance->notifyAllPlayers("updateHand", '', ['playerId'=>$victim->getId(), 'amount'=>-1]);
   }
 
 }

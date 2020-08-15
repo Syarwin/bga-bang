@@ -26,6 +26,12 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], functi
  * Constructor
  */
 constructor: function () {
+  this._selectableCards = [];
+  this._selectablePlayers = [];
+  this._selectedCard = null;
+  this._selectedPlayer = null;
+  this._selectedOptionType = null;
+  this._selectedOptionArg = null;
 },
 
 /*
@@ -40,8 +46,10 @@ setup: function (gamedatas) {
 	debug('SETUP', gamedatas);
 
   // Formatting cards
+  this._cards = [];
   Object.values(gamedatas.cards).forEach(card => {
     card.name = card.name.toUpperCase();
+    this._cards[card.type] = card;
   });
 
 
@@ -85,7 +93,8 @@ setup: function (gamedatas) {
 },
 
 setTurn: function(playerId){
-  dojo.addClass("bang-player-" + playerId, "turn");
+  dojo.query("div.bang-player-container").style("border", "1px solid rgba(50,50,50,0.8)");
+  dojo.query("#bang-player-" + playerId + " .bang-player-container").style("border", "2px solid #" + this.gamedatas.players[playerId].color);
 },
 
 
@@ -104,6 +113,8 @@ onEnteringState: function (stateName, args) {
   if(args.type == "multipleactiveplayer")
     activePlayers = args.multiactive;
   activePlayers.forEach(playerId => dojo.removeClass("bang-player-" + playerId, "inactive") );
+  if(stateName == "playCard")
+    this.setTurn(args.active_player);
 
 	// Stop here if it's not the current player's turn for some states
 	if (["playCard", "react"].includes(stateName) && !this.isCurrentPlayerActive()) return;
@@ -455,9 +466,9 @@ slideTemporary: function (template, data, container, sourceId, targetId, duratio
 	});
 },
 
-slideTemporaryToDiscard: function(card, sourceId){
+slideTemporaryToDiscard: function(card, sourceId, duration){
   var ocard = this.getCard(card, true);
-  this.slideTemporary('jstpl_card', ocard, "board", sourceId, "discard", 1000, 0)
+  this.slideTemporary('jstpl_card', ocard, "board", sourceId, "discard", duration || 1000, 0)
   .then(() => this.addCard(card, "discard"));
 },
 
@@ -479,7 +490,7 @@ getCardAndDestroy: function(card, val){
  */
 getCard: function(ocard, eraseId) {
   // Gets a card object ready to use in UI templates
-  var card = this.gamedatas.cards[ocard.type] || {
+  var card = this._cards[ocard.type] || {
     id: 0,
     type: 0,
     name: '',
@@ -491,6 +502,15 @@ getCard: function(ocard, eraseId) {
   return card;
 },
 
+getBackCard:function(){
+  return {
+    id:-1,
+    color:0,
+    value:0,
+    name:'',
+    type:"back",
+  };
+},
 
 addCard: function(ocard, container){
   var card = this.getCard(ocard);
@@ -543,10 +563,11 @@ getRole: function(roleId){
 setupNotifications: function () {
 	var notifs = [
 		['debug',500],
-		['cardPlayed', 2000],
+		['cardPlayed', 1500],
     ['cardLost', 1000],
-    ['updateHP', 500],
-    ['updateHand', 500],
+    ['cardsGained', 1200],
+    ['updateHP', 200],
+    ['updateHand', 200],
 	];
 
 	notifs.forEach(notif => {
@@ -596,32 +617,37 @@ notif_cardPlayed: function(n) {
   var card = this.getCard(n.args.card, true);
   var sourceId = this.getCardAndDestroy(n.args.card, "player-character-" + playerId);
   if(targetPlayer){
+    var duration = target == "inPlay"? 1500: 800;
     var targetId = (target == "inPlay"? "player-inplay-" : "player-character-") + targetPlayer
-    this.slideTemporary('jstpl_card', card, "board", sourceId, targetId, 1000, 0)
+    this.slideTemporary('jstpl_card', card, "board", sourceId, targetId, duration, 0)
     .then(() => {
       // Add the card in front of player
       if(target == "inPlay")
         this.addCard(n.args.card, targetId)
       // Put the card in the discard pile
       else
-        this.slideTemporaryToDiscard(n.args.card, targetId);
+        this.slideTemporaryToDiscard(n.args.card, targetId, 800);
     });
   }
   // Directly to discard
   else
-    this.slideTemporaryToDiscard(n.args.card, sourceId);
+    this.slideTemporaryToDiscard(n.args.card, sourceId, 1500);
 },
 
 /*
-* notification sent only to the player who got Cards to his Hand
+* notification sent to all players when someone gained a card (from deck or from someone else hand/inplay)
 */
-notif_cardsGained: function(notif) {
- var cards = notif.args.cards; //array of gained cards all having id, type, color, value (the last 2 are from type_arg)
- if(notif.args.src == 'deck') {
+notif_cardsGained: function(n) {
+  debug("Notif: cards gained", n);
+  for(var i = 0; i < n.args.amount; i++){
+    var card = n.args.cards[i]? this.getCard(n.args.cards[i]) : this.getBackCard();
+    let sourceId = n.args.src == 'deck'? "deck" : ("player-character-" + n.args.src);
+    let targetId = this.player_id == n.args.playerId ? "hand" : ("player-character-" + n.args.playerId);
+    this.slideTemporary("jstpl_card", card, "board", sourceId, targetId, 800, 120*i);
+  }
 
- } else {
-   var playerId = notif.args.src;
- }
+  if(n.args.src == "deck")
+    $("deck").innerHTML = parseInt($("deck").innerHTML) - n.args.amount;
 },
 
 /*

@@ -91,7 +91,7 @@ class BangPlayer extends APP_GameClass
 
   public function startOfTurn() {
     $cards = BangCardManager::deal($this->id, 2);
-    BangNotificationManager::gainedCard($this, $cards);
+    BangNotificationManager::gainedCards($this, $cards);
   }
 
   public function playCard($id, $args) {

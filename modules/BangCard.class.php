@@ -86,8 +86,8 @@ class BangCard extends APP_GameClass
 						$card = BangCardManager::getCard($args['arg']);
 						break;
 					default: //deck
-						$card = BangCardManager::deal($player->getId(), $this->effect['amount']);
-						BangNotificationManager::gainedCard($player, $card);
+						$cards = BangCardManager::deal($player->getId(), $this->effect['amount']);
+						BangNotificationManager::gainedCards($player, $cards);
 						return true;
 						break;
 				}

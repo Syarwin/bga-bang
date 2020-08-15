@@ -21,7 +21,7 @@
   font-display: swap; }
 @font-face {
   font-family: 'Palatino Linotype';
-  src: url("PalatinoLinotype-Italic.woff2") format("woff2"), url("PalatinoLinotype-Italic.woff") format("woff"), url("PalatinoLinotype-Italic.ttf") format("truetype");
+  src: url("img/fonts/PalatinoLinotype-Italic.woff2") format("woff2"), url("img/fonts/PalatinoLinotype-Italic.woff") format("woff"), url("img/fonts/PalatinoLinotype-Italic.ttf") format("truetype");
   font-weight: normal;
   font-style: italic;
   font-display: swap; }
@@ -224,14 +224,27 @@ div#board {
       background-position: 93.3333333333% center; }
     div#board .player-info[data-character="15"] .player-character-background {
       background-position: 100% center; }
-  div#board .bang-player.turn .bang-player-container {
-    border: 1px solid blue; }
   div#board .bang-player.inactive {
     opacity: 0.6; }
   div#board .bang-player.selectable {
     opacity: 1; }
     div#board .bang-player.selectable .player-info {
-      cursor: pointer; }
+      cursor: pointer;
+      animation: borderBlink 0.9s infinite; }
+      div#board .bang-player.selectable .player-info:hover {
+        animation: none;
+        border: 1px solid red; }
+@keyframes borderBlink {
+  0% {
+    border: 1px dashed white; }
+  49% {
+    border: 1px dashed white; }
+  50% {
+    border: 1px dashed black; }
+  99% {
+    border: 1px dashed black; }
+  100% {
+    border: 1px dashed white; } }
   div#board .bang-player .bang-player-container {
     width: 96%;
     height: 180px;
@@ -518,6 +531,7 @@ div.bang-card {
   background-image: url("img/card_borders.png");
   background-size: cover; }
   div.bang-card[data-type="empty"] {
+    border: none !important;
     background: none !important; }
     div.bang-card[data-type="empty"] div {
       display: none; }
@@ -535,6 +549,11 @@ div.bang-card {
     border: 2px solid red;
     border-radius: 7px;
     background-color: red; }
+  div.bang-card[data-type="back"] {
+    background-image: url("img/cardback.jpg");
+    border-radius: 10px; }
+    div.bang-card[data-type="back"] div {
+      display: none; }
   div.bang-card[data-type="5"] {
     background-position: 33.3333333333% center; }
   div.bang-card[data-type="6"] {
