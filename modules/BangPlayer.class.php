@@ -169,13 +169,12 @@ class BangPlayer extends APP_GameClass
     $reactions = [];
     foreach(BangPlayerManager::getPlayers($playerIds) as $player){
       // Player has defensive equipment ? (eg Barrel)
-      $missedWithEquipment = array_reduce($player->getCardsInPlay(), function($missed, $card){
-        return $missed? true : ($card->getEffectType() == DEFENSIVE && $card->play());
+      $canUseEquipment = array_reduce($player->getCardsInPlay(), function($missed, $card){
+        return $missed? true : ($card->getEffectType() == DEFENSIVE);
       });
-      if($missedWithEquipment) continue;
 
       // Otherwise, player has at least one card in hand ?
-      if($player->countCardsInHand() > 0)  {
+      if($player->countCardsInHand() > 0 || $canUseEquipment)  {
   			$reactions[] = $player->id; // Give him a chance to (pretend to) react
   		} else {
   			$this->looseLife($player); // Lost life immediatly
