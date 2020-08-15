@@ -17,6 +17,12 @@ class BangNotificationManager extends APP_GameClass {
       'targetPlayer' => isset($args['player']) ? $args['player'] : null,
       'target' => $card->isEquipment() ? 'inPlay' : 'discard'
     ]);
+
+    bang::$instance->notifyAllPlayers("updateHand", '', [
+      'player_name' => $player->getName(),
+      'playerId' => $player->getId(),
+      'amount' => 1,
+    ]);
   }
 
   public static function lostLife($player, $amount = 1) {
@@ -59,6 +65,7 @@ class BangNotificationManager extends APP_GameClass {
       'amount' => $amount,
     ]);
   }
+
 
   public static function discardedCard($player, $card, $silent = false) {
     bang::$instance->notifyAllPlayers("cardLost", '', [
@@ -109,9 +116,9 @@ class BangNotificationManager extends APP_GameClass {
       $data['card_name'] = $card->getName();
     }
 
-    // TODO : weird stuff with count()
-    bang::$instance->notifyAllPlayers("updateHand", $msg, ['playerId'=>$receiver->getId(), 'amount'=>1]);
-    bang::$instance->notifyAllPlayers("updateHand", '', ['playerId'=>$victim->getId(), 'amount'=>-1]);
+    // TODO : fix this
+//    bang::$instance->notifyAllPlayers("updateHand", $msg, ['playerId'=>$receiver->getId(), 'amount'=>1]);
+//    bang::$instance->notifyAllPlayers("updateHand", '', ['playerId'=>$victim->getId(), 'amount'=>-1]);
   }
 
 }
