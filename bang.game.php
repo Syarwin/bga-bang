@@ -98,51 +98,23 @@ class bang extends Table
 	}
 
 
-//////////////////////////////////////////////////////////////////////////////
-//////////// Player actions
-////////////
-	function playCard($id, $args) {
-		// check for active cards
-		self::checkAction( 'play' );
-		$player_id = self::getCurrentPlayerId();
-		$char = BangPlayerManager::getPlayer($player_id);
-
-		$char->playCard($id, $args);
-		//$card = BangCardManager::createCard($id);
-
-	}
-
-	function react($id) {
-		$player_id = self::getCurrentPlayerId();
-		$char = BangPlayerManager::getPlayer($player_id);
-		$char->react($id);
-	}
-
-	function endTurn($cards) {
-		foreach ($cards as $card) {
-			BangCardManager::playCard($card);
-		}
-		$this->gamestate->nextState('endTurn');
-	}
 
 
 
-	////////////////////////////////////////////////
-	////////////   Next player / Win   ////////////
-	////////////////////////////////////////////////
+	//////////////////////////////////////////////////////
+	////////////   Next player / Start turn   ////////////
+	//////////////////////////////////////////////////////
 
 	/*
 	 * stNextPlayer: go to next player
 	 */
 	public function stNextPlayer() {
-		/*
 		$pId = $this->activeNextPlayer();
 		self::giveExtraTime($pId);
 		if (self::getGamestateValue("firstPlayer") == $pId) {
 			$n = (int) self::getGamestateValue('currentRound') + 1;
 			self::setGamestateValue("currentRound", $n);
 		}
-		*/
 		$this->gamestate->nextState('start');
 	}
 
@@ -156,11 +128,100 @@ class bang extends Table
 		$player = BangPlayerManager::getPlayer($id);
 		$player->startOfTurn();
 		$this->setGameStateValue('currentTurn', $id);
+		$this->setGameStateValue('bangPlayed', 0);
 		//$this->gamestate->changeActivePlayer($this->setGameStateValue('turn', $id));
 		$this->gamestate->nextState("play");
 
 	}
 
+
+
+/************************
+ **** playCard state ****
+ ***********************/
+	public function argPlayCards() {
+		$cards = BangPlayerManager::getPlayer(self::getActivePlayerId())->getHandOptions();
+		Utils::filter($cards, function($card) { return !is_null($card['options']); });
+		return [
+			'_private' => [
+				'active' => $cards
+			]
+		];
+	}
+
+
+	function playCard($id, $args) {
+		self::checkAction('play');
+		$character = BangPlayerManager::getPlayer(self::getCurrentPlayerId());
+		$character->playCard($id, $args);
+	}
+
+
+/*********************
+ **** react state ****
+ ********************/
+	 public function argReact() {
+ 		return [
+ 			'_private' => [
+ 				'active' => BangPlayerManager::getPlayer(self::getActivePlayerId())->getDefensiveCards()
+ 			]
+ 		];
+ 	}
+
+ 	public function argMultiReact() {
+ 		$players = $this->gamestate->getActivePlayerList();
+
+ 		$args = array_map(function ($playerid){
+ 			return BangPlayerManager::getPlayer($playerid)->getDefensiveCards();
+ 		}, array_values($players));
+ 		return [
+ 			'_private' => $players
+ 		];
+ 	}
+
+
+	function react($id) {
+ 		$character = BangPlayerManager::getPlayer(self::getCurrentPlayerId());
+ 		$character->react($id);
+ 	}
+
+
+
+
+/*****************************************
+ **** endOfTurn / discardExcess state ****
+ ****************************************/
+	public function endTurn() {
+		$player = BangPlayerManager::getPlayer(self::getCurrentPlayerId());
+		$newState = ($player->countCardsInHand() > $player->getHp())? "discardExcess" : "endTurn";
+		$this->gamestate->nextState($newState);
+ 	}
+
+
+	public function argDiscardExcess(){
+		$player = BangPlayerManager::getPlayer(self::getActivePlayerId());
+		return [
+			'amount' => $player->countCardsInHand() - $player->getHp(),
+			'_private' => [
+				'active' => $player->getCardsInHand(true),
+			]
+		];
+	}
+
+	public function cancelEndTurn(){
+		$this->gamestate->nextState("cancel");
+	}
+
+
+	public function discardExcess($cardIds){
+		$cards = array_map(function($id){
+			BangCardManager::discardCard($id);
+			return BangCardManager::getCard($id);
+		}, $cardIds);
+		$player = BangPlayerManager::getPlayer(self::getActivePlayerId());
+		BangNotificationManager::discardedCards($player, $cards);
+		$this->gamestate->nextState("endTurn");
+	}
 
 	/*
 	 * stEndOfTurn: called at the end of each player turn
@@ -215,34 +276,6 @@ class bang extends Table
 		$this->gamestate->nextState('endgame');
 	}
 */
-	public function argPlayCards() {
-		$cards = BangPlayerManager::getPlayer(self::getActivePlayerId())->getHandOptions();
-		$cards = array_filter($cards, function($card) { return !is_null($card['options']);});
-		return [
-			'_private' => [
-				'active' => array_values($cards)
-			]
-		];
-	}
-
-	public function argReact() {
-		return [
-			'_private' => [
-				'active' => BangPlayerManager::getPlayer(self::getActivePlayerId())->getDefensiveCards()
-			]
-		];
-	}
-
-	public function argMultiReact() {
-		$players = $this->gamestate->getActivePlayerList();
-
-		$args = array_map(function ($playerid){
-			return BangPlayerManager::getPlayer($playerid)->getDefensiveCards();
-		}, array_values($players));
-		return [
-			'_private' => $players
-		];
-	}
 
 
 	////////////////////////////////////

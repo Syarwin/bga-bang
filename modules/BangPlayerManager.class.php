@@ -40,7 +40,8 @@ class BangPlayerManager extends APP_GameClass
 			BangCardManager::deal($pId,$bullets);
 		}
 		self::DbQuery($sql . implode($values, ','));
-		BangCardManager::dealCard($sheriff, CARD_WINCHESTER);
+		BangCardManager::dealCard($sheriff, CARD_GATLING);
+		BangCardManager::dealCard($sheriff, CARD_SALOON);
 		BangCardManager::dealCard($sheriff, CARD_VOLCANIC);
 		bang::$instance->reloadPlayersBasicInfos();
 		return $sheriff;
@@ -89,10 +90,11 @@ class BangPlayerManager extends APP_GameClass
 	/**
 	 * returns an array of the ids of all living players
 	 */
-	public static function getLivingPlayers($exept = null) {
+	public static function getLivingPlayers($exept = null, $asPlayerObjects = false) {
 		$sql = "SELECT player_id FROM player WHERE player_eliminated=0";
 		if($exept != null) $sql.= " AND player_id != $exept";
-		return self::getObjectListFromDB($sql, true);
+		$ids = self::getObjectListFromDB($sql, true);
+		return $asPlayerObjects ? self::getPlayers($ids) : $ids;
 	}
 
 	public static function preparePlayerActivation($playerIds) {

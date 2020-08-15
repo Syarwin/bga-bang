@@ -125,6 +125,9 @@ class BangCardManager extends APP_GameClass
 	public static function playCard($id) {
 		self::getDeck()->playCard($id);
 	}
+	public static function discardCard($id) {
+		self::playCard($id);
+	}
 
 	public static function deal($player, $amount){
 		return self::toObjects(self::getDeck()->pickCards($amount, 'deck', $player));
@@ -155,8 +158,8 @@ class BangCardManager extends APP_GameClass
 		CARD_GATLING => 'CardGatling',
 		CARD_PANIC => 'CardPanic',
 		CARD_CAT_BALOU => 'CardCatBalou',
-		CARD_DUEL => 'CardDuel',
 		CARD_SALOON => 'CardSaloon',
+		CARD_DUEL => 'CardDuel',
 		CARD_GENERAL_STORE => 'CardGeneralStore',
 		CARD_INDIANS => 'CardIndians',
 		CARD_JAIL => 'CardJail',

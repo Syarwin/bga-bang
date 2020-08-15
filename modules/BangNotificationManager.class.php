@@ -13,7 +13,7 @@ class BangNotificationManager extends APP_GameClass {
       'card_name' => $card->getName(),
       'card_msg' => $card->getArgsMessage($args),
       'card' => $card->format(),
-      'player' => $player->getId(),
+      'playerId' => $player->getId(),
       'targetPlayer' => isset($args['player']) ? $args['player'] : null,
       'target' => $card->isEquipment() ? 'inPlay' : 'discard'
     ]);
@@ -23,7 +23,7 @@ class BangNotificationManager extends APP_GameClass {
     $msg  = $amount == 1 ? clienttranslate('${player_name} looses a life point') : clienttranslate('${player_name} looses ${amount} life points');
     bang::$instance->notifyAllPlayers('updateHP', $msg, [
       'player_name' => $player->getName(),
-      'id' => $player->getId(),
+      'playerId' => $player->getId(),
       'hp' => $player->getHp(),
       'amount' => -$amount
     ]);
@@ -35,7 +35,7 @@ class BangNotificationManager extends APP_GameClass {
     bang::$instance->notifyAllPlayers('updateHP', $msg, [
       'player_name' => $player->getName(),
       'amount' => $amount,
-      'id' => $player->getId(),
+      'playerId' => $player->getId(),
       'hp'=>$player->getHp()
     ]);
   }
@@ -50,14 +50,15 @@ class BangNotificationManager extends APP_GameClass {
     ]);
     bang::$instance->notifyAllPlayers("updateHand", $msg, [
       'player_name' => $player->getName(),
-      'id' => $player->getId(),
+      'playerId' => $player->getId(),
       'amount' => $amount,
     ]);
   }
 
   public static function discardedCard($player, $card, $silent = false) {
     bang::$instance->notifyAllPlayers("cardLost", '', [
-      'card' => $card->format()
+      'playerId' => $player->getId(),
+      'card' => $card->format(),
     ]);
     if($silent)
       return;
@@ -66,7 +67,7 @@ class BangNotificationManager extends APP_GameClass {
       'i18n' => ['card_name'],
       'player_name' => $player->getName(),
       'card_name' => $card->getName(),
-      'id' => $player->getId(),
+      'playerId' => $player->getId(),
       'amount' => -1
     ]);
   }
@@ -79,13 +80,13 @@ class BangNotificationManager extends APP_GameClass {
 
 
   public static function stoleCard($receiver, $victim, $card, $equipped) {
-    bang::$instance->notifyPlayer($player->getId(), "cardsGained", '', [
-      'id' => $player->getId(),
+    bang::$instance->notifyPlayer($receiver->getId(), "cardsGained", '', [
+      'playerId' => $receiver->getId(),
       'cards' => [$card->format()],
       'src' => $victim->getId()
     ]);
     bang::$instance->notifyPlayer($victim->getId(), "cardsLost", '', [
-      'id' => $player->getId(),
+      'playerId' => $receiver->getId(),
       'cards' => [$card->format()],
       'src' => $receiver->getId()
     ]);
@@ -94,7 +95,7 @@ class BangNotificationManager extends APP_GameClass {
     $msg = $equipped? clienttranslate('${player_name} stole ${card_name} from ${victim_name}')
                     : clienttranslate('${player_name} stole a card from ${victim_name}');
     $data = [
-      'id'=> $receveir->getId(),
+      'playerId'=> $receiver->getId(),
       'player_name' => $receiver->getName(),
       'victim_name' => $victim->getName(),
     ];
@@ -104,8 +105,8 @@ class BangNotificationManager extends APP_GameClass {
     }
 
     // TODO : weird stuff with count()
-    bang::$instance->notifyAllPlayers("updateHand", $msg, ['id'=>$player->getId(), 'amount'=>count($cards)]);
-    bang::$instance->notifyAllPlayers("updateHand", '', ['id'=>$victim->getId(), 'amount'=>-count($cards)]);
+    bang::$instance->notifyAllPlayers("updateHand", $msg, ['playerId'=>$receiver->getId(), 'amount'=>1]);
+    bang::$instance->notifyAllPlayers("updateHand", '', ['playerId'=>$victim->getId(), 'amount'=>-1]);
   }
 
 }

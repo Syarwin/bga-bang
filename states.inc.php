@@ -101,6 +101,7 @@ $machinestates = [
 		'transitions' => [
 			'zombiePass' => ST_END_OF_TURN,
 			'endTurn'		=> ST_END_OF_TURN,
+			'discardExcess' => ST_DISCARD_EXCESS,
 			'awaitReaction' => ST_AWAIT_REACTION,
 			'awaitMultiReaction' => ST_AWAIT_MULTIREACTION,
 			'continuePlaying' => ST_PLAY_CARD
@@ -158,6 +159,20 @@ $machinestates = [
 		'transitions' => ['finishedReaction' => ST_PLAY_CARD]
 	],
 
+
+	ST_DISCARD_EXCESS => [
+		'name' => 'discardExcess',
+		'description' => clienttranslate('${actplayer} must discard ${amount} cards before ending its turn'),
+		'descriptionmyturn' => clienttranslate('${you} must discard ${amount} cards before ending your turn'),
+		'type' => 'activeplayer',
+		'args' => 'argDiscardExcess',
+		'possibleactions' => ['cancel', 'discard'],
+		'transitions' => [
+			'zombiePass' => ST_END_OF_TURN,
+			'endTurn'		=> ST_END_OF_TURN,
+			'cancel' 		=> ST_PLAY_CARD,
+		],
+	],
 
 	ST_END_OF_TURN => [
 		'name' => 'endOfTurn',

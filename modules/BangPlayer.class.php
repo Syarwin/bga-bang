@@ -48,7 +48,7 @@ class BangPlayer extends APP_GameClass
   public function getText() { return $this->text;}
   public function getExpansion() { return $this->expansion;}
   public function getBullets() { return $this->bullets;}
-  public function getCardsInHand(){ return BangCardManager::getHand($this->id); }
+  public function getCardsInHand($formatted = false){ return BangCardManager::getHand($this->id, $formatted); }
   public function getRandomCardInHand(){
     $cards = self::getCardsInHand();
     if(empty($cards)){
@@ -102,10 +102,9 @@ class BangPlayer extends APP_GameClass
     }
 
 		$card = BangCardManager::getCard($id);
-    $newState = $card->play($this, $args);
-    bang::$instance->setGameStateValue('currentCard', $id);
     BangNotificationManager::cardPlayed($this, $card, $args);
-    if($newState){
+    bang::$instance->setGameStateValue('currentCard', $id);
+    if($card->play($this, $args)){
       bang::$instance->gamestate->nextState("continuePlaying");
     }
 	}
@@ -122,17 +121,17 @@ class BangPlayer extends APP_GameClass
 	}
 
   public function getHandOptions() {
-    $hand = BangCardManager::getHand($this->id);
-
-    $options = [];
-    foreach($hand as $card) {
-      $options[] = ['id'=>$card->getId(), 'options'=>$card->getPlayOptions($this)];
-    }
+    $options = array_map(function($card){
+      return [
+        'id' => $card->getId(),
+        'options' => $card->getPlayOptions($this)
+      ];
+    }, $this->getCardsInHand() );
     return array_values($options);
   }
 
   /**
-   * returns the current distance to an enmy.
+   * returns the current distance to an enmy from the view of the enemy
    * should not be called on the player checking for targets but on the other players
    */
   public function getDistanceTo($enemy) {
@@ -141,11 +140,11 @@ class BangPlayer extends APP_GameClass
     $pos2 = $positions[$enemy->getId()];
     $d = abs($pos2 - $pos1);
     $dist = min($d, count($positions) - $d);
-    foreach($this->getCardsInPlay() as $card) {
-      if($card->getEffect()['type'] = RANGE_DECREASE) $dist--;
-    }
     foreach($enemy->getCardsInPlay() as $card) {
-      if($card->getEffect()['type'] = RANGE_INCREASE) $dist++;
+      if($card->getEffect()['type'] == RANGE_DECREASE) $dist--;
+    }
+    foreach($this->getCardsInPlay() as $card) {
+      if($card->getEffect()['type'] == RANGE_INCREASE) $dist++;
     }
     return $dist;
   }
@@ -171,7 +170,7 @@ class BangPlayer extends APP_GameClass
     foreach(BangPlayerManager::getPlayers($playerIds) as $player){
       // Player has defensive equipment ? (eg Barrel)
       $missedWithEquipment = array_reduce($player->getCardsInPlay(), function($missed, $card){
-        return $missed || ($card->getEffectType() == DEFENSIVE && $card->play());
+        return $missed? true : ($card->getEffectType() == DEFENSIVE && $card->play());
       });
       if($missedWithEquipment) continue;
 
@@ -251,8 +250,13 @@ class BangPlayer extends APP_GameClass
   public function discardWeapon(){
     $weapon = $this->getWeapon();
     if(!is_null($weapon)) {
-      BangCardManager::playCard($weapon->getId());
+      BangCardManager::discardCard($weapon->getId());
       BangNotificationManager::discardedCard($this, $weapon, true);
     }
+  }
+
+  public function hasUnlimitedBangs() {
+    $weapon = $this->getWeapon();
+    return !is_null($weapon) && $weapon->getType() == CARD_VOLCANIC;
   }
 }
