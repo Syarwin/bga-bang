@@ -56,7 +56,7 @@ class BangNotificationManager extends APP_GameClass {
   }
 
   public static function discardedCard($player, $card, $silent = false) {
-    bang::$instance->notifyPlayer($player->getId(), "cardLost", '', [
+    bang::$instance->notifyAllPlayers("cardLost", '', [
       'card' => $card->format()
     ]);
     if($silent)
@@ -87,7 +87,7 @@ class BangNotificationManager extends APP_GameClass {
     bang::$instance->notifyPlayer($victim->getId(), "cardsLost", '', [
       'id' => $player->getId(),
       'cards' => [$card->format()],
-      'src' => $victim->getId()
+      'src' => $receiver->getId()
     ]);
 
 
