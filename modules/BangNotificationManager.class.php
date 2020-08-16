@@ -121,4 +121,8 @@ class BangNotificationManager extends APP_GameClass {
 //    bang::$instance->notifyAllPlayers("updateHand", '', ['playerId'=>$victim->getId(), 'amount'=>-1]);
   }
 
+  public static function updateOptions($player, $args) {
+    bang::$instance->notifyPlayer($player->getId(), 'debug', '', $args);
+  }
+
 }

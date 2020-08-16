@@ -170,12 +170,12 @@ class bang extends Table
 
  	public function argMultiReact() {
  		$players = $this->gamestate->getActivePlayerList();
-
- 		$args = array_map(function ($playerid){
- 			return BangPlayerManager::getPlayer($playerid)->getDefensiveCards();
- 		}, array_values($players));
+		$args = [];
+		foreach ($players as $id) {
+			$args[$id] = BangPlayerManager::getPlayer($id)->getDefensiveCards();
+		}
  		return [
- 			'_private' => $players
+ 			'_private' => $args
  		];
  	}
 

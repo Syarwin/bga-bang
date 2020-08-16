@@ -128,11 +128,16 @@ class BangCard extends APP_GameClass
 					$player->looseLife(bang::$instance->getGameStateValue('currentTurn'));
 				} else {
 					$card = BangCardManager::getCard($id);
-					BangCardManager::playCard($card->id);
 					BangNotificationManager::cardPlayed($player, $card);
+					if($card->color==BROWN) {
+						BangCardManager::playCard($card->id);
+					} else {
+						return $card->play($player, []);
+					}
 				}
 				break;
 		}
+		return true;
 	}
 
   /**

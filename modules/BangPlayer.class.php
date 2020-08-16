@@ -111,12 +111,15 @@ class BangPlayer extends APP_GameClass
 
 	public function react($id) {
 		$card = BangCardManager::getCard(bang::$instance->getGameStateValue('currentCard'));
-		$card->react($id, $this);
-    bang::$instance->notifyAllPlayers('debug', bang::$instance->gamestate->state()['name'], []);
-    if(bang::$instance->gamestate->state()['name'] == 'multiReact')
-      bang::$instance->gamestate->setPlayerNonMultiactive($this->getId(), 'finishedReaction');
-    else {
-      bang::$instance->gamestate->nextState( "react" );
+		if($card->react($id, $this)) {
+      if(bang::$instance->gamestate->state()['name'] == 'multiReact')
+        bang::$instance->gamestate->setPlayerNonMultiactive($this->getId(), 'finishedReaction');
+      else {
+        bang::$instance->gamestate->nextState( "react" );
+      }
+    } else {
+      $args = $this->getDefensiveCards();
+      BangNotificationManager::updateOptions($this, $args);
     }
 	}
 
@@ -217,6 +220,12 @@ class BangPlayer extends APP_GameClass
       if($card->getColor() == BROWN && $card->getEffectType() == DEFENSIVE)
         $res[] = ['id' => $card->getID(), 'options' => ['type' => OPTION_NONE]];
     }
+    // todo if barrel has not been played yet {
+      $card = array_reduce($this->getCardsInPlay(), function($barrel, $card){
+        return ($card->getType() == CARD_BARREL) ? $card : $barrel;
+      }, null);
+      if(!is_null($card)) $res[] = ['id' => $card->getID(), 'options' => ['type' => OPTION_NONE]];
+    // }
     return array_values($res);
   }
 

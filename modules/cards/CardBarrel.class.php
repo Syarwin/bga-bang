@@ -17,4 +17,8 @@ class CardBarrel extends BangCard {
       DODGE_CITY => [ ],
     ];
   }
+
+  public function play($player, $args) {
+    return false;
+  }
 }

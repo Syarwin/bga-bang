@@ -117,7 +117,7 @@ onEnteringState: function (stateName, args) {
     this.setTurn(args.active_player);
 
 	// Stop here if it's not the current player's turn for some states
-	if (["playCard", "react"].includes(stateName) && !this.isCurrentPlayerActive()) return;
+	if (["playCard", "react", "multiReact"].includes(stateName) && !this.isCurrentPlayerActive()) return;
 
 	// Call appropriate method
 	var methodName = "onEnteringState" + stateName.charAt(0).toUpperCase() + stateName.slice(1);
@@ -355,6 +355,14 @@ onClickCardSelectOption: function(card){
  * React state : active player can play cards from his hand in reaction
  */
 onEnteringStateReact: function(args){
+  this.makeCardSelectable(args._private, "selectCard");
+  this.addActionButton('buttonSkip', _('Pass'), () => this.onClickPass(), null, false, 'blue');
+},
+
+/*
+ * Multi React state : active player can play cards from his hand in reaction
+ */
+onEnteringStateMultiReact: function(args){
   this.makeCardSelectable(args._private, "selectCard");
   this.addActionButton('buttonSkip', _('Pass'), () => this.onClickPass(), null, false, 'blue');
 },
