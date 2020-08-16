@@ -125,4 +125,21 @@ class BangNotificationManager extends APP_GameClass {
     bang::$instance->notifyPlayer($player->getId(), 'debug', '', $args);
   }
 
+  public static function drawCard($player, $card, $src) {
+    $colors = ['H'=>'Hearts ', 'C' => 'Clubs ', 'D' => 'Diamonds ', 'S' => 'Spades '];
+    $format = $card->format();
+
+    bang::$instance->notifyAllPlayers('debug', '${player_name} draws ${card_name} (${card_value}) for ${src_name}.', [
+      'player_name' => $player->getName(),
+      'card_name' => $card->getName(),
+      'card_value' => $colors[$format['color']] . $format['value'],
+      'src_name' => $src->getName(),
+      'card' => $format
+    ]);
+  }
+
+  public static function tell($msg) {
+    bang::$instance->notifyAllPlayers('debug', $msg, []);
+  }
+
 }

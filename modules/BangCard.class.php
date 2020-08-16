@@ -120,6 +120,11 @@ class BangCard extends APP_GameClass
  		return true;
 	}
 
+/**
+ * function to overwrite by blue cards like barrel, jail, dynamite
+ */
+	public function activate($player) {return true;}
+
 	public function react($id, $player) {
 		$player_name = BangPlayerManager::getPlayer($player->getId())->getName();
 		switch($this->effect['type']) {
@@ -132,7 +137,7 @@ class BangCard extends APP_GameClass
 					if($card->color==BROWN) {
 						BangCardManager::playCard($card->id);
 					} else {
-						return $card->play($player, []);
+						return $card->activate($player);
 					}
 				}
 				break;

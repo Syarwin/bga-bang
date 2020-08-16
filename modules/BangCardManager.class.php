@@ -30,6 +30,41 @@ class BangCardManager extends APP_GameClass
 		self::getDeck()->shuffle('deck');
 	}
 
+	public static function formatCard($card){
+		return $card->format();
+	}
+
+	public static function formatCards($cards){
+		return array_values(array_map(['BangCardManager', 'formatCard'], $cards));
+	}
+
+	public static function toObjects($array) {
+		$cards = [];
+		foreach($array as $row) $cards[] = self::resToObject($row);
+		return $cards;
+	}
+
+	/*
+	*
+	*/
+	public static function getCard($id) {
+		$c = self::getDeck()->getCard($id);
+		$card_id = $c['type'];
+		$name = self::$classes[$card_id];
+		$card = new $name($id);
+		$card->setCopy($c['type_arg']);
+		return $card;
+	}
+
+	private static function resToObject($row) {
+		$card_id = $row['type'];
+		$name = self::$classes[$card_id];
+		$card = new $name($row['id']);
+		$card->setCopy($row['type_arg']);
+		return $card;
+	}
+
+
 
 	/**
 	 * getDeckCount : Returns the number of cards in the Deck
@@ -39,14 +74,6 @@ class BangCardManager extends APP_GameClass
 			return self::getDeck()->countCardsInLocation($location);
 		else
 			return self::getDeck()->countCardsInLocation($location, $player);
-	}
-
-	public static function formatCard($card){
-		return $card->format();
-	}
-
-	public static function formatCards($cards){
-		return array_values(array_map(['BangCardManager', 'formatCard'], $cards));
 	}
 
 	/**
@@ -87,31 +114,6 @@ class BangCardManager extends APP_GameClass
 		return $cards;
 	}
 
-	public static function toObjects($array) {
-		$cards = [];
-		foreach($array as $row) $cards[] = self::resToObject($row);
-		return $cards;
-	}
-
-	/*
-	 *
-	 */
-	public static function getCard($id) {
-		$c = self::getDeck()->getCard($id);
-		$card_id = $c['type'];
-		$name = self::$classes[$card_id];
-		$card = new $name($id);
-		$card->setCopy($c['type_arg']);
-		return $card;
-	}
-
-	private static function resToObject($row) {
-		$card_id = $row['type'];
-		$name = self::$classes[$card_id];
-		$card = new $name($row['id']);
-		$card->setCopy($row['type_arg']);
-		return $card;
-	}
 
 	public static function getOwner($id) {
 		$card = self::getDeck()->getCard($id);
@@ -125,12 +127,19 @@ class BangCardManager extends APP_GameClass
 	public static function playCard($id) {
 		self::getDeck()->playCard($id);
 	}
+
 	public static function discardCard($id) {
 		self::playCard($id);
 	}
 
 	public static function deal($player, $amount){
 		return self::toObjects(self::getDeck()->pickCards($amount, 'deck', $player));
+	}
+
+	public static function draw() {
+		$card = self::resToObject(self::getDeck()->getCardOnTop('deck'));
+		self::playCard($card->getId());
+		return $card;
 	}
 
   // only for testing
@@ -140,6 +149,8 @@ class BangCardManager extends APP_GameClass
 		$cards = self::getObjectListFromDB("SELECT card_id FROM card WHERE card_type=$type", true);
 		self::getDeck()->moveCard($cards[0], 'hand', $player);
 	}
+
+
 
 	/*
 	 * cardClasses : for each card Id, the corresponding class name
