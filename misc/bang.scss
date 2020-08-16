@@ -331,6 +331,12 @@ div#board {
             margin: 1px 0px;
             transform: rotate(13deg);
             background-position:0% 100%;
+
+            &.pulse {
+              animation-duration: 1.8s;
+              animation-name: pulsate;
+              animation-iteration-count: 3;
+            }
           }
         }
 
@@ -360,15 +366,15 @@ div#board {
       }
     }
 
-    @for $i from 0 through 10 {
+    @for $i from 0 through 20 {
       &[data-hand="#{$i}"] .player-cards .player-handcount::before { content:"#{$i}"; }
     }
-    @for $i from 0 through 10 {
+    @for $i from 0 through 7 {
       &[data-bullets="#{$i}"] .player-cards .player-maxhand::before { content:"#{$i}"; }
     }
 
-    @for $i from 0 through 10 {
-      @for $j from $i + 1 through 10 {
+    @for $i from 0 through 7 {
+      @for $j from $i + 1 through 20 {
         &[data-bullets="#{$i}"][data-hand="#{$j}"] .player-cards { color:red; }
       }
     }
@@ -493,5 +499,16 @@ div.bang-card {
       content:"♣";
       color:black;
     }
+  }
+}
+
+@keyframes pulsate {
+  0% {
+    transform:rotate(13deg) scale(1);
+    box-shadow: 0 0 0 2px red;
+  }
+  50% {
+    transform:rotate(13deg) scale(1.1);
+    box-shadow: 0 0 0 10px transparent;
   }
 }

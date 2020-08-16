@@ -117,7 +117,7 @@ onEnteringState: function (stateName, args) {
     this.setTurn(args.active_player);
 
 	// Stop here if it's not the current player's turn for some states
-	if (["playCard", "react", "multiReact"].includes(stateName) && !this.isCurrentPlayerActive()) return;
+	if (["playCard", "react", "multiReact", "discardExcess"].includes(stateName) && !this.isCurrentPlayerActive()) return;
 
 	// Call appropriate method
 	var methodName = "onEnteringState" + stateName.charAt(0).toUpperCase() + stateName.slice(1);
@@ -561,6 +561,12 @@ getRole: function(roleId){
   return roles[roleId];
 },
 
+
+incHandCount: function(playerId, amount){
+  var currentHandCount = parseInt(dojo.attr("bang-player-" + playerId, "data-hand")),
+      newHandCount = currentHandCount + parseInt(amount);
+  dojo.attr("bang-player-" + playerId, "data-hand", newHandCount);
+},
 ///////////////////////////////////////////////////
 //////	 Reaction to cometD notifications	 ///////
 ///////////////////////////////////////////////////
@@ -598,6 +604,14 @@ notif_debug:function(notif) {
 */
 notif_updateHP: function(n) {
   debug("Notif: hp changed", n);
+  var currentHp = dojo.attr("bang-player-" + n.args.playerId, "data-bullets");
+  dojo.query("#bang-player-" + n.args.playerId + " .bullet").forEach( (bullet, id) => {
+    if( (currentHp <= id && id < n.args.hp) || (n.args.hp <= id && id < currentHp) ){
+      dojo.removeClass(bullet, "pulse");
+      bullet.offsetWidth;
+      dojo.addClass(bullet, "pulse");
+    }
+  });
   dojo.attr("bang-player-" + n.args.playerId, "data-bullets", n.args.hp);
 },
 
@@ -606,9 +620,7 @@ notif_updateHP: function(n) {
 */
 notif_updateHand: function(n) {
   debug("Notif: update handcount of player", n);
-  var currentHandCount = parseInt(dojo.attr("bang-player-" + n.args.playerId, "data-hand")),
-      newHandCount = currentHandCount + parseInt(n.args.amount);
-  dojo.attr("bang-player-" + n.args.playerId, "data-hand", newHandCount);
+  this.incHandCount(n.args.playerId, n.args.amount);
 },
 
 
@@ -649,22 +661,25 @@ notif_cardPlayed: function(n) {
 */
 notif_cardsGained: function(n) {
   debug("Notif: cards gained", n);
-  for(var i = 0; i < n.args.amount; i++){
-    let card = n.args.cards[i]? this.getCard(n.args.cards[i]) : this.getBackCard();
-    let sourceId = n.args.src == 'deck'? "deck" : ("player-character-" + n.args.src);
+  var cards = n.args.cards.length > 0? n.args.cards.map(o => this.getCard(o)) : Array.apply(null, {length : n.args.amount}).map(o => this.getBackCard());
+  cards.forEach((card, i) => {
+    let sourceId = (n.args.src == "deck")? "deck" : this.getCardAndDestroy(card, "player-character-" + n.args.victimId);
     let targetId = this.player_id == n.args.playerId ? "hand" : ("player-character-" + n.args.playerId);
     this.slideTemporary("jstpl_card", card, "board", sourceId, targetId, 800, 120*i).then(() => {
       if(targetId != "hand") return;
-      this.addCard(card, 'hand-cards')
+      this.addCard(card, 'hand-cards');
     });
-  }
+  });
 
+  this.incHandCount(n.args.playerId, n.args.amount);
   if(n.args.src == "deck")
     $("deck").innerHTML = parseInt($("deck").innerHTML) - n.args.amount;
+  else
+    this.incHandCount(n.args.victimId, -n.args.amount);
 },
 
 /*
-* notification sent only to the player who lost Card from his and or playarea
+* notification sent to all players when someone discard a card
 */
 notif_cardLost: function(n) {
   debug("Notif: card lost", n);
