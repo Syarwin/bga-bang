@@ -49,7 +49,7 @@ class BangNotificationManager extends APP_GameClass {
   public static function gainedCards($player, $cards) {
     $amount = count($cards);
     $msg  = $amount == 1 ? clienttranslate('${player_name} draws a card') : clienttranslate('${player_name} draws ${amount} cards');
-    $formattedCards = array_map(function($card){ return $card->getUIData(); }, $cards);
+    $formattedCards = array_map(function($card){ return $card->format(); }, $cards);
     foreach(BangPlayerManager::getPlayers() as $bplayer){
       bang::$instance->notifyPlayer($bplayer->getId(), "cardsGained", '', [
         'playerId' => $player->getId(),

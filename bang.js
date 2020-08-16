@@ -167,6 +167,9 @@ onUpdateActionButtons: function (stateName, args) {
 
   if (stateName == "discardExcess")
 		this.addActionButton('buttonCancelEnd', _('Cancel'), 'onClickCancelEndTurn', null, false, 'gray');
+
+  if (stateName == "react" || stateName == "multiReact")
+    this.addActionButton('buttonSkip', _('Pass'), () => this.onClickPass(), null, false, 'blue');
 },
 
 
@@ -356,7 +359,6 @@ onClickCardSelectOption: function(card){
  */
 onEnteringStateReact: function(args){
   this.makeCardSelectable(args._private, "selectCard");
-  this.addActionButton('buttonSkip', _('Pass'), () => this.onClickPass(), null, false, 'blue');
 },
 
 /*
@@ -364,7 +366,6 @@ onEnteringStateReact: function(args){
  */
 onEnteringStateMultiReact: function(args){
   this.makeCardSelectable(args._private, "selectCard");
-  this.addActionButton('buttonSkip', _('Pass'), () => this.onClickPass(), null, false, 'blue');
 },
 
 
@@ -437,6 +438,7 @@ onClickConfirmDiscardExcess: function(){
  * clearPossible:	clear every clickable space
  */
 clearPossible: function () {
+  debug("Clearing everything");
   this._selectableCards = [];
   this._selectablePlayers = [];
   this._selectedCard = null;
@@ -648,10 +650,13 @@ notif_cardPlayed: function(n) {
 notif_cardsGained: function(n) {
   debug("Notif: cards gained", n);
   for(var i = 0; i < n.args.amount; i++){
-    var card = n.args.cards[i]? this.getCard(n.args.cards[i]) : this.getBackCard();
+    let card = n.args.cards[i]? this.getCard(n.args.cards[i]) : this.getBackCard();
     let sourceId = n.args.src == 'deck'? "deck" : ("player-character-" + n.args.src);
     let targetId = this.player_id == n.args.playerId ? "hand" : ("player-character-" + n.args.playerId);
-    this.slideTemporary("jstpl_card", card, "board", sourceId, targetId, 800, 120*i);
+    this.slideTemporary("jstpl_card", card, "board", sourceId, targetId, 800, 120*i).then(() => {
+      if(targetId != "hand") return;
+      this.addCard(card, 'hand-cards')
+    });
   }
 
   if(n.args.src == "deck")
