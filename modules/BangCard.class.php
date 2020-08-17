@@ -238,7 +238,7 @@ class BangCard extends APP_GameClass
 
 	 		break;
 	 }
- }
+ 	}
 
 	public function getReactionCards($player) {
 		return $player->getDefensiveCards();

@@ -34,6 +34,7 @@ class bang extends Table
 			'currentTurn'  => 13, //id of the player who's turn it is(Not always the active player)
 			'currentCard'  => 14, //id of the card that has been played
 			'bangPlayed' => 15, // whether a bang has been played this turn
+			'cardArg' => 16, // a variable that can be used differently by any card (example duel)
 		]);
 
 		// Initialize logger, board and cards

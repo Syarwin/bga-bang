@@ -214,21 +214,7 @@ class BangPlayer extends APP_GameClass
   }
 
 
-  /**
-  * ask a player for reactions
-  */
-  public function askReaction($attacker) {
-    $id = $this->id;
-    $onHand = BangCardManager::countCards('hand', $id);
-    // todo barrel
 
-    if($onHand > 0)  {
-      bang::$instance->setGameStateValue('target',$id);
-      bang::$instance->gamestate->nextState('awaitReaction');
-    } else {
-      $this->looseLife($attacker);
-    }
-  }
 
   /**
    * attack : performs an attack on all given players
@@ -254,7 +240,7 @@ class BangPlayer extends APP_GameClass
 
     // Go to corresponding state
     if(count($reactions) == 1) {
-			bang::$instance->setGameStateValue('target', $reactions[0]);
+      bang::$instance->setGameStateValue('target', $reactions[0]);
 			bang::$instance->gamestate->nextState('awaitReaction');
       return false;
     } elseif(count($reactions) > 1) {

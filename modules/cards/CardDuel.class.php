@@ -21,4 +21,38 @@ class CardDuel extends BangCard {
       DODGE_CITY => [ ],
     ];
   }
+
+  public function play($player, $args) {
+    BangCardManager::playCard($this->id);
+    bang::$instance->setGameStateValue('cardArg', $args['player']);
+    return $player->attack([$args['player']], false);
+  }
+
+  public function react($id, $player) {
+    $player_name = BangPlayerManager::getPlayer($player->getId())->getName();
+    $pid = bang::$instance->getGameStateValue('currentTurn');
+    if($pid == $player->getId()) $pid = bang::$instance->getGameStateValue('cardArg');
+    if($id == PASS) {
+      $player->looseLife(bang::$instance->getGameStateValue('currentTurn'));
+      return true;
+    } else {
+      $card = BangCardManager::getCard($id);
+      BangNotificationManager::discardedCard($player, $card);
+      BangCardManager::playCard($card->id);
+      $player->attack([$pid], false);
+      return false;
+    }
+  }
+
+  public function getReactionCards($player) {
+    return $player->getBangCards();
+  }
+
+  public function getPlayOptions($player) {
+		$player_ids = BangPlayerManager::getLivingPlayers($player->getID());
+		return [
+			'type' => OPTION_PLAYER,
+			'targets' => array_values($player_ids)
+		];
+ 	}
 }
