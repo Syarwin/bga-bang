@@ -9,7 +9,22 @@ class CalamityJanet extends BangPlayer {
       clienttranslate("She can play BANG! cards as Missed! cards and vice versa. "),
 
     ];
-    $this->bullets = 4;  
+    $this->bullets = 4;
     parent::__construct($row);
   }
+
+  public function getBangCards() {
+    $res = parent::getBangCards();
+    $hand = BangCardManager::getHand($this->id);
+    foreach($hand as $card) {
+      if($card->getType() == MISSED)
+        $res[] = ['id' => $card->getID(), 'options' => ['type' => OPTION_NONE]];
+    }
+    return $res;
+  }
+
+  public function getDefensiveCards() {
+    return array_merge(parent::getDefensiveCards(), parent::getBangCards());
+  }
+
 }

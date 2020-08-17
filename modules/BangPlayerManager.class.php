@@ -142,22 +142,22 @@ class BangPlayerManager extends APP_GameClass
 	 * characterClasses : for each character Id, the corresponding class name
 	 */
 	public static $classes = [
-		LUCKY_DUKE => 'LuckyDuke',
-		EL_GRINGO => 'ElGringo',
-		SID_KETCHUM => 'SidKetchum',
-		BART_CASSIDY => 'BartCassidy',
-		JOURDONNAIS => 'Jourdonnais',
-		PAUL_REGRET => 'PaulRegret',
-		BLACK_JACK => 'BlackJack',
-		PEDRO_RAMIREZ => 'PedroRamirez',
-		SUZY_LAFAYETTE => 'SuzyLafayette',
-		KIT_CARLSON => 'KitCarlson',
-		VULTURE_SAM => 'VultureSam',
-		JESSE_JONES => 'JesseJones',
-		CALAMITY_JANET => 'CalamityJanet',
-		SLAB_THE_KILLER => 'SlabtheKiller',
-		WILLY_THE_KID => 'WillytheKid',
-		ROSE_DOOLAN => 'RoseDoolan',
+		LUCKY_DUKE => 'LuckyDuke', // todo 1
+		EL_GRINGO => 'ElGringo', // todo 1
+		SID_KETCHUM => 'SidKetchum', // todo 2
+		BART_CASSIDY => 'BartCassidy', // done
+		JOURDONNAIS => 'Jourdonnais', // todo 1
+		PAUL_REGRET => 'PaulRegret', // done
+		BLACK_JACK => 'BlackJack', // todo 2
+		PEDRO_RAMIREZ => 'PedroRamirez', // todo 2
+		SUZY_LAFAYETTE => 'SuzyLafayette', // todo 1
+		KIT_CARLSON => 'KitCarlson', // todo 2
+		VULTURE_SAM => 'VultureSam', // todo 1
+		JESSE_JONES => 'JesseJones', // todo 2
+		CALAMITY_JANET => 'CalamityJanet', // done
+		SLAB_THE_KILLER => 'SlabtheKiller', // todo 2
+		WILLY_THE_KID => 'WillytheKid', // done
+		ROSE_DOOLAN => 'RoseDoolan', // done
 
 		/*MOLLY_STARK => 'MollyStark',
 		APACHE_KID => 'ApacheKid',

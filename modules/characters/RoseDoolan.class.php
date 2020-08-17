@@ -9,7 +9,11 @@ class RoseDoolan extends BangPlayer {
       clienttranslate("She sees all players at distance -1"),
 
     ];
-    $this->bullets = 4;  
+    $this->bullets = 4;
     parent::__construct($row);
+  }
+
+  public function isInRange($enemy, $range){
+    return parent::isInRange($enemy, $range+1);
   }
 }

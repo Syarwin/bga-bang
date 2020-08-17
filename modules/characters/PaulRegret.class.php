@@ -9,7 +9,11 @@ class PaulRegret extends BangPlayer {
       clienttranslate("All players see him at a distance +1"),
 
     ];
-    $this->bullets = 3;  
+    $this->bullets = 3;
     parent::__construct($row);
+  }
+
+  public function getDistanceTo($enemy) {
+    return parent::getDistanceTo($enemy)+1;
   }
 }

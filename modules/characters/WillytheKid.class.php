@@ -9,7 +9,9 @@ class WillytheKid extends BangPlayer {
       clienttranslate("He can play any number of BANG! during his turn. "),
 
     ];
-    $this->bullets = 4;  
+    $this->bullets = 4;
     parent::__construct($row);
   }
+
+  public function hasUnlimitedBangs() { return true; }
 }
