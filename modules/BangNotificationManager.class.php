@@ -57,16 +57,10 @@ class BangNotificationManager extends APP_GameClass {
         'playerId' => $player->getId(),
         'amount' => $amount,
         'cards' => $player->getId() == $bplayer->getId()? $formattedCards : [],
-        'src' => 'deck'
+        'src' => 'deck',
+        'target' => 'hand',
       ]);
     }
-
-    /* wird schon bei cardsGained geupdatet...
-    bang::$instance->notifyAllPlayers("updateHand", $msg, [
-      'player_name' => $player->getName(),
-      'playerId' => $player->getId(),
-      'amount' => $amount,
-    ]);*/
   }
 
 
@@ -107,6 +101,7 @@ class BangNotificationManager extends APP_GameClass {
         'amount' => 1,
         'cards' => $show? [$card->format()] : [],
         'src' => $victim->getId(),
+        'target' => 'hand',
       ];
       if($show){
         $data['i18n'] = ['card_name'];
@@ -132,33 +127,40 @@ class BangNotificationManager extends APP_GameClass {
 
   // todo implement and change parameter for notification name
   /**
-   * drawing a card for crads like barrel, jail, etc.
+   * drawing a card for cards like barrel, jail, etc.
    */
   public static function drawCard($player, $card, $src) {
-    $colors = ['H'=>'Hearts ', 'C' => 'Clubs ', 'D' => 'Diamonds ', 'S' => 'Spades '];
+    $colors = ['H' => clienttranslate('Hearts'), 'C' => clienttranslate('Clubs'), 'D' => clienttranslate('Diamonds'), 'S' => clienttranslate('Spades')];
     $format = $card->format();
-    $src_name = ($src instanceof BangCard) ? $src->getName() : $src->getCharName() . "'s effect'";
+    $src_name = ($src instanceof BangCard) ? $src->getName() : $src->getCharName();
 
-    bang::$instance->notifyAllPlayers('debug', '${player_name} draws ${card_name} (${card_value}) for ${src_name}.', [
+    bang::$instance->notifyAllPlayers('drawCard', '${player_name} draws ${card_name} (${card_color} ${card_value}) for ${src_name}\'s effect.', [
+      'i18n' => ['card_name', 'card_color', 'src_name'],
       'player_name' => $player->getName(),
       'card_name' => $card->getName(),
-      'card_value' => $colors[$format['color']] . $format['value'],
+      'card_value' => $format['value'],
+      'card_color' => $colors[$format['color']],
       'src_name' => $src_name,
+      'src_id' => $src->getId(),
       'card' => $format
     ]);
   }
 
-  // todo implement and change parameter for notification name
   /**
    * When a card moves from one player(inplay) to another player(inplay).
    * Probably needed only for dynamite
    */
-  public static function moveCard($card, $target) {
-    bang::$instance->notifyAllPlayers('debug', '${card_name} moves to ${player_name}', [
+  public static function moveCard($card, $player, $target) {
+    bang::$instance->notifyAllPlayers('cardsGained', '${card_name} moves to ${player_name}', [
+      'i18n' => ['card_name'],
       'card_name' => $card->getName(),
       'player_name' => $target->getName(),
-      'card' => $card->format(),
-      'target' => $target->getId()
+      'playerId' => $target->getId(),
+      'victimId' => $player->getId(),
+      'target' => 'inPlay',
+      'src' => $player->getId(),
+      'cards' => [$card->format()],
+      'amount' => 1,
     ]);
   }
 

@@ -35,7 +35,7 @@ class CardDynamite extends BangCard {
     } else {
       $next = BangPlayerManager::getNextPlayer($player->getId());
       BangCardManager::moveCard($this->id, 'inPlay', $next->getId());
-      BangNotificationManager::moveCard($this, $next);
+      BangNotificationManager::moveCard($this, $player, $next);
       return false;
     }
   }

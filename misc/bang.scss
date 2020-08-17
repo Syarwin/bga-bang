@@ -200,6 +200,7 @@ div#board {
         position:absolute;
         top:0;
         left:0;
+        transform-origin: -7% 50%;
       }
     }
   }
@@ -402,8 +403,16 @@ div.bang-card {
 	width:$cardW;
 	height:$cardH;
 	margin:5px;
-	background-image:url("img/card_borders.png");
-	background-size:cover;
+  transition: transform .5s ease-in-out;
+  transform-origin: 50% 50%;
+  transform-style: preserve-3d;
+  &.flipped {
+    transform:rotateY(180deg);
+  }
+  &[data-type="back"] {
+    transform:rotateY(180deg);
+  }
+
 
   &[data-type="empty"] {
     border:none !important;
@@ -433,71 +442,88 @@ div.bang-card {
     background-color: red;
   }
 
-  &[data-type="back"] {
+
+  .card-back, .card-front {
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    backface-visibility: hidden;
+  }
+
+  .card-back {
     background-image:url("img/cardback.jpg");
+    background-size:cover;
+    transform: rotateY(180deg);
     border-radius:10px;
-    div {
-      display:none;
-    }
-  }
-  @each $card in $actions    { &[data-type="#{$card}"] { background-position:1 * 100% / 3 center; } }
-  @each $card in $equipments { &[data-type="#{$card}"] { background-position:2 * 100% / 3 center; } }
-  @each $card in $guns       { &[data-type="#{$card}"] { background-position:3 * 100% / 3 center; } }
-
-  .card-name {
-  	position:absolute;
-  	top: 12 * $cardH / 200;
-  	width: 100%;
-  	height: $cardH / 5;
-  	text-align: center;
-  	font-family: "Perdido";
-  	font-size: $cardH * 21 / 200;
-    letter-spacing: -1px;
-    transform: scale(0.8,1.3);
-    transform-origin: top center;
+    z-index:2;
   }
 
-  .card-background {
-  	position:absolute;
-  	top: $cardH * 42 / 200;
-  	left: $cardW * 10 / 125;
-  	width: $cardW * 105 / 125;
-  	height: $cardH * 149 / 200;
-  	background-image:url("img/card_backgrounds.jpg");
-  	background-size:cover;
-  }
+  @each $card in $actions    { &[data-type="#{$card}"] .card-front { background-position:1 * 100% / 3 center; } }
+  @each $card in $equipments { &[data-type="#{$card}"] .card-front { background-position:2 * 100% / 3 center; } }
+  @each $card in $guns       { &[data-type="#{$card}"] .card-front { background-position:3 * 100% / 3 center; } }
+
   @for $i from 0 through $numberOfCards {
     &[data-type="#{$i}"] .card-background { background-position:$i * 100% / $numberOfCards center; }
   }
 
-  .card-copy {
-    position: absolute;
-    bottom: -3px;
-    left: 4px;
-    font-size: $cardH / 10;
-    text-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white;
+  .card-front {
+    background-image:url("img/card_borders.png");
+    background-size:cover;
 
-    .card-copy-color {
-      margin-left:-2px;
+    .card-name {
+    	position:absolute;
+    	top: 12 * $cardH / 200;
+    	width: 100%;
+    	height: $cardH / 5;
+    	text-align: center;
+    	font-family: "Perdido";
+    	font-size: $cardH * 21 / 200;
+      letter-spacing: -1px;
+      transform: scale(0.8,1.3);
+      transform-origin: top center;
     }
-    .card-copy-color::before {
-      font-size:$cardH / 8;
+
+    .card-background {
+    	position:absolute;
+    	top: $cardH * 42 / 200;
+    	left: $cardW * 10 / 125;
+    	width: $cardW * 105 / 125;
+    	height: $cardH * 149 / 200;
+    	background-image:url("img/card_backgrounds.jpg");
+    	background-size:cover;
     }
-    .card-copy-color[data-color="D"]::before {
-      content:"♦";
-      color:red;
-    }
-    .card-copy-color[data-color="H"]::before {
-      content:"♥";
-      color:red;
-    }
-    .card-copy-color[data-color="S"]::before {
-      content:"♠";
-      color:black;
-    }
-    .card-copy-color[data-color="C"]::before {
-      content:"♣";
-      color:black;
+
+    .card-copy {
+      position: absolute;
+      bottom: -3px;
+      left: 4px;
+      font-size: $cardH / 10;
+      text-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white;
+
+      .card-copy-color {
+        margin-left:-2px;
+      }
+      .card-copy-color::before {
+        font-size:$cardH / 8;
+      }
+      .card-copy-color[data-color="D"]::before {
+        content:"♦";
+        color:red;
+      }
+      .card-copy-color[data-color="H"]::before {
+        content:"♥";
+        color:red;
+      }
+      .card-copy-color[data-color="S"]::before {
+        content:"♠";
+        color:black;
+      }
+      .card-copy-color[data-color="C"]::before {
+        content:"♣";
+        color:black;
+      }
     }
   }
 }

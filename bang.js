@@ -467,9 +467,8 @@ takeAction: function (action, data, callback) {
  * slideTemporary: a wrapper of slideTemporaryObject using Promise
  */
 slideTemporary: function (template, data, container, sourceId, targetId, duration, delay) {
-	var _this = this;
-	return new Promise(function (resolve, reject) {
-		var animation = _this.slideTemporaryObject(_this.format_block(template, data), container, sourceId, targetId, duration, delay);
+	return new Promise((resolve, reject) => {
+		var animation = this.slideTemporaryObject(this.format_block(template, data), container, sourceId, targetId, duration, delay);
 		setTimeout(function(){
 			resolve();
 		}, duration + delay)
@@ -508,6 +507,7 @@ getCard: function(ocard, eraseId) {
   card.id = eraseId? -1 : ocard.id;
   card.color = ocard.color;
   card.value = ocard.value;
+  card.flipped = (typeof ocard.flipped == "undefined" || !ocard.flipped)? "" : "flipped";
 
   return card;
 },
@@ -519,6 +519,7 @@ getBackCard:function(){
     value:0,
     name:'',
     type:"back",
+    flipped:true,
   };
 },
 
@@ -582,6 +583,7 @@ setupNotifications: function () {
 		['cardPlayed', 1500],
     ['cardLost', 1000],
     ['cardsGained', 1200],
+    ['drawCard', 1000],
     ['updateHP', 200],
     ['updateHand', 200],
 	];
@@ -664,7 +666,7 @@ notif_cardsGained: function(n) {
   var cards = n.args.cards.length > 0? n.args.cards.map(o => this.getCard(o)) : Array.apply(null, {length : n.args.amount}).map(o => this.getBackCard());
   cards.forEach((card, i) => {
     let sourceId = (n.args.src == "deck")? "deck" : this.getCardAndDestroy(card, "player-character-" + n.args.victimId);
-    let targetId = this.player_id == n.args.playerId ? "hand" : ("player-character-" + n.args.playerId);
+    let targetId = n.args.target == "hand"? (this.player_id == n.args.playerId ? "hand" : ("player-character-" + n.args.playerId)) : ("player-inplay-" + n.args.playerId);
     this.slideTemporary("jstpl_card", card, "board", sourceId, targetId, 800, 120*i).then(() => {
       if(targetId != "hand") return;
       this.addCard(card, 'hand-cards');
@@ -688,6 +690,15 @@ notif_cardLost: function(n) {
 },
 
 
+notif_drawCard: function(n){
+  debug("Notif: card drawn", n);
+  var card = n.args.card;
+  card.flipped = true;
+  dojo.addClass("bang-card-" + n.args.src_id, "selected");
+  this.addCard(card, "discard");
+  setTimeout(() => dojo.removeClass("bang-card-" + card.id, "flipped"), 100);
+  setTimeout(() => dojo.removeClass("bang-card-" + n.args.src_id, "selected"), 1000);
+},
 
 	});
 });
