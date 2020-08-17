@@ -41,12 +41,14 @@ class BangPlayerManager extends APP_GameClass
 		}
 		self::DbQuery($sql . implode($values, ','));
 		BangCardManager::dealCard($sheriff, CARD_BARREL);
-		BangCardManager::dealCard($sheriff, CARD_DYNAMITE);
+		BangCardManager::dealCard($sheriff, CARD_JAIL, 1);
 		bang::$instance->reloadPlayersBasicInfos();
 		return $sheriff;
 	}
 
-
+	public static function getSherrifId() {
+		return self::getUniqueValueFromDB("SELECT player_id FROM player WHERE player_role=" . SHERIFF);
+	}
 
 	/*
 	 * getPlayer : returns the BangPlayer object for the given player ID
@@ -90,8 +92,9 @@ class BangPlayerManager extends APP_GameClass
 	 * returns an array of the ids of all living players
 	 */
 	public static function getLivingPlayers($exept = null, $asPlayerObjects = false) {
-		$sql = "SELECT player_id FROM player WHERE player_eliminated=0 ORDER BY player_no";
+		$sql = "SELECT player_id FROM player WHERE player_eliminated=0";
 		if($exept != null) $sql.= " AND player_id != $exept";
+		$sql .= " ORDER BY player_no";
 		$ids = self::getObjectListFromDB($sql, true);
 		return $asPlayerObjects ? self::getPlayers($ids) : $ids;
 	}
