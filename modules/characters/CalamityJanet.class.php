@@ -17,14 +17,14 @@ class CalamityJanet extends BangPlayer {
     $res = parent::getBangCards();
     $hand = BangCardManager::getHand($this->id);
     foreach($hand as $card) {
-      if($card->getType() == MISSED)
-        $res[] = ['id' => $card->getID(), 'options' => ['type' => OPTION_NONE]];
+      if($card->getType() == CARD_MISSED)
+        $res['cards'][] = ['id' => $card->getID(), 'options' => ['type' => OPTION_NONE]];
     }
     return $res;
   }
 
-  public function getDefensiveCards() {
-    return array_merge(parent::getDefensiveCards(), parent::getBangCards());
+  public function getDefensiveOptions() {
+    return array_merge_recursive(parent::getDefensiveOptions(), parent::getBangCards());
   }
 
 }

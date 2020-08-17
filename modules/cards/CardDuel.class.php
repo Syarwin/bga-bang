@@ -44,7 +44,7 @@ class CardDuel extends BangCard {
     }
   }
 
-  public function getReactionCards($player) {
+  public function getReactionOptions($player) {
     return $player->getBangCards();
   }
 

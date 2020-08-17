@@ -1,0 +1,8 @@
+- implement Notification for BangNotificationManager::updateOptions
+- implement Notification for BangNotificationManager::drawCard
+- implement Notification for BangNotificationManager::moveCard
+- playable cards are no longer contained directly in the state args but in the index cards.(js is already adjusted to that)
+	In addition there is the index character.
+	if this is not null, it can be either OPTION_NONE(=0) or OPTION_CARDS(=3)
+	in the second case the player will need to select 2 Hand Cards to discard.
+	The action to be called is named useAbility and should be used like discardExcess

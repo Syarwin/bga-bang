@@ -142,11 +142,11 @@ class BangPlayerManager extends APP_GameClass
 	 * characterClasses : for each character Id, the corresponding class name
 	 */
 	public static $classes = [
-		LUCKY_DUKE => 'LuckyDuke', // todo 1
-		EL_GRINGO => 'ElGringo', // todo 1
-		SID_KETCHUM => 'SidKetchum', // todo 2
+		LUCKY_DUKE => 'LuckyDuke', // todo 2
+		EL_GRINGO => 'ElGringo', // tested(with Bang!)
+		SID_KETCHUM => 'SidKetchum', // done
 		BART_CASSIDY => 'BartCassidy', // done
-		JOURDONNAIS => 'Jourdonnais', // todo 1
+		JOURDONNAIS => 'Jourdonnais', // done
 		PAUL_REGRET => 'PaulRegret', // done
 		BLACK_JACK => 'BlackJack', // todo 2
 		PEDRO_RAMIREZ => 'PedroRamirez', // todo 2
@@ -154,10 +154,10 @@ class BangPlayerManager extends APP_GameClass
 		KIT_CARLSON => 'KitCarlson', // todo 2
 		VULTURE_SAM => 'VultureSam', // todo 1
 		JESSE_JONES => 'JesseJones', // todo 2
-		CALAMITY_JANET => 'CalamityJanet', // done
+		CALAMITY_JANET => 'CalamityJanet', // tested
 		SLAB_THE_KILLER => 'SlabtheKiller', // todo 2
 		WILLY_THE_KID => 'WillytheKid', // done
-		ROSE_DOOLAN => 'RoseDoolan', // done
+		ROSE_DOOLAN => 'RoseDoolan', // tested
 
 		/*MOLLY_STARK => 'MollyStark',
 		APACHE_KID => 'ApacheKid',

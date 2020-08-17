@@ -41,6 +41,7 @@ class BangPlayer extends APP_GameClass
   public function getColor(){ return $this->color; }
   public function getHp(){ return $this->hp; }
   public function getRole(){ return $this->role; }
+  public function getCharName() { return $this->character_name; }
   public function isEliminated(){ return $this->eliminated; }
   public function isZombie(){ return $this->zombie; }
 
@@ -119,11 +120,12 @@ class BangPlayer extends APP_GameClass
         bang::$instance->gamestate->nextState( "react" );
       }
     } else {
-      $args = $this->getDefensiveCards();
+      $args = $this->getDefensiveOptions();
       BangNotificationManager::updateOptions($this, $args);
     }
 	}
 
+  public function useAbility($args) {}
 
   public function getBangCards() {
     $hand = BangCardManager::getHand($this->id);
@@ -132,10 +134,10 @@ class BangPlayer extends APP_GameClass
       if($card->getType() == CARD_BANG)
         $res[] = ['id' => $card->getID(), 'options' => ['type' => OPTION_NONE]];
     }
-    return array_values($res);
+    return ['cards'=>array_values($res), 'character' => null];
   }
 
-  public function getDefensiveCards() {
+  public function getDefensiveOptions() {
     $hand = BangCardManager::getHand($this->id);
     $res = [];
     foreach($hand as $card) {
@@ -148,7 +150,7 @@ class BangPlayer extends APP_GameClass
     }, null);
     if(!is_null($card)) $res[] = ['id' => $card->getID(), 'options' => ['type' => OPTION_NONE]];
 
-    return array_values($res);
+    return ['cards'=>array_values($res), 'character' => null];
   }
 
   /**
@@ -177,7 +179,8 @@ class BangPlayer extends APP_GameClass
         'options' => $card->getPlayOptions($this)
       ];
     }, $this->getCardsInHand() );
-    return array_values($options);
+    Utils::filter($options, function($card) { return !is_null($card['options']); });
+    return ['cards'=>array_values($options), 'character' => null];
   }
 
   /**
@@ -231,7 +234,7 @@ class BangPlayer extends APP_GameClass
       if($player->countCardsInHand() > 0 || $canUseEquipment)  {
   			$reactions[] = $player->id; // Give him a chance to (pretend to) react
   		} else {
-  			$this->looseLife($player); // Lost life immediatly
+  			$player->looseLife($this); // Lost life immediatly
   		}
     }
 

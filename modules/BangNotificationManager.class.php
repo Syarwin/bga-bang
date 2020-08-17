@@ -118,8 +118,8 @@ class BangNotificationManager extends APP_GameClass {
   }
 
   // todo change notif name
-  public static function tell($msg) {
-    bang::$instance->notifyAllPlayers('debug', $msg, []);
+  public static function tell($msg, $args=[]) {
+    bang::$instance->notifyAllPlayers('debug', $msg, $args);
   }
 
   // todo implement and change parameter for notification name
@@ -137,12 +137,13 @@ class BangNotificationManager extends APP_GameClass {
   public static function drawCard($player, $card, $src) {
     $colors = ['H'=>'Hearts ', 'C' => 'Clubs ', 'D' => 'Diamonds ', 'S' => 'Spades '];
     $format = $card->format();
+    $src_name = ($src instanceof BangCard) ? $src->getName() : $src->getCharName() . "'s effect'";
 
     bang::$instance->notifyAllPlayers('debug', '${player_name} draws ${card_name} (${card_value}) for ${src_name}.', [
       'player_name' => $player->getName(),
       'card_name' => $card->getName(),
       'card_value' => $colors[$format['color']] . $format['value'],
-      'src_name' => $src->getName(),
+      'src_name' => $src_name,
       'card' => $format
     ]);
   }

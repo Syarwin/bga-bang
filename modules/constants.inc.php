@@ -30,7 +30,7 @@ define('WAIT_REACTION',2);
 define('OPTION_NONE',0);
 define('OPTION_CARD', 1);
 define('OPTION_PLAYER', 2);
-//define('OPTION_CARDS', 2);
+define('OPTION_CARDS', 3);
 //define('RANDOM', 1);
 
 /*

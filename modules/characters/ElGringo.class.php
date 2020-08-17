@@ -13,35 +13,16 @@ class ElGringo extends BangPlayer {
     parent::__construct($row);
   }
 
-  public function looseLife($byPlayer=-1) {
-		parent::looseLife($byPlayer);
+  public function looseLife($attacker=-1) {
+		parent::looseLife($attacker);
 		$id = $this->id;
-		/*if($byPlayer > -1) {
-			$player = self::getObjectListFromDB("SELECT player_id FROM player", true);
-			$cards = self::getObjectListFromDB("SELECT card_id id, card_name name FROM card WHERE card_position=$byPlayer AND card_onHand=1");
+		if(!is_null($attacker)) {
 
-			$n = rand(0,count($cards)-1);
-			$card = $cards[$n];
-
-			$hands = self::getCollectionFromDB("SELECT card_position, COUNT(*) FROM card WHERE card_position>0 GROUP BY card_position", true);
-			$name = self::getUniqueValueFromDB("SELECT player_name FROM player WHERE player_id=" . $this->id);
-			self::DbQuery("UPDATE cards SET card_position=$id WHERE card_id=" . $card['id']);
-			$bplayers = BangPlayerManager::getPlayers();
-			foreach($bplayers as $player) {
-				$pid = $player->getId();
-				if($pid==$id) {
-					$hand = array_values(BangCardManager::getHand($pid, true));
-					bang::$instance->notifyPlayer($pid, 'handChange', "you steal a card from your attacker",
-									['hands'=>$hands, 'hand'=>$hand, 'card' => $card, 'gain'=>$id, 'loose'=>$byPlayer]);
-				} elseif($pid==$byPlayer) {
-					$hand = array_values(BangCardManager::getHand($pid, true));
-					bang::$instance->notifyPlayer($pid, 'handChange', "$name steals a card from you",
-									['hands'=>$hands, 'hand'=>$hand, 'card' => $card, 'gain'=>$id, 'loose'=>$byPlayer]);
-				} else {
-					bang::$instance->notifyPlayer($pid, 'handChange', "$name steals a card from his attacker",
-									['hands'=>$hands, 'gain'=>$id, 'loose'=>$byPlayer]);
-				}
-			}
-		}*/
+			$hand = $attacker->getCardsInHand();
+      shuffle($hand);
+			$card = $hand[0];
+      BangCardManager::moveCard($card->getId(), 'hand', $this->getId());
+			BangNotificationManager::stoleCard($this, $attacker, $card, false);
+		}
 	}
 }

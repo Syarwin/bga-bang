@@ -41,7 +41,7 @@ class CardIndians extends BangCard {
 		return true;
 	}
 
-  public function getReactionCards($player) {
+  public function getReactionOptions($player) {
 		return $player->getBangCards();
 	}
 

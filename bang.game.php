@@ -35,6 +35,7 @@ class bang extends Table
 			'currentCard'  => 14, //id of the card that has been played
 			'bangPlayed' => 15, // whether a bang has been played this turn
 			'cardArg' => 16, // a variable that can be used differently by any card (example duel)
+			'JourdonnaisUsedSkill' => 17
 		]);
 
 		// Initialize logger, board and cards
@@ -151,7 +152,7 @@ class bang extends Table
  ***********************/
 	public function argPlayCards() {
 		$cards = BangPlayerManager::getPlayer(self::getActivePlayerId())->getHandOptions();
-		Utils::filter($cards, function($card) { return !is_null($card['options']); });
+
 		return [
 			'_private' => [
 				'active' => $cards
@@ -170,21 +171,23 @@ class bang extends Table
 /*********************
  **** react state ****
  ********************/
-	 public function argReact() {
-		 $card = BangCardManager::getCard(self::getGameStateValue('currentCard'));
-		 return [
-			 '_private' => [
-				 'active' => $card->getReactionCards(BangPlayerManager::getPlayer(self::getActivePlayerId()))
-			 ]
-		 ];
- 	}
+ public function argReact() {
+	 $card = BangCardManager::getCard(self::getGameStateValue('currentCard'));
+	 $options = $card->getReactionOptions(BangPlayerManager::getPlayer(self::getActivePlayerId()));
+	 
+	 return [
+		 '_private' => [
+			 'active' => $options
+		 ]
+	 ];
+ }
 
  	public function argMultiReact() {
  		$players = $this->gamestate->getActivePlayerList();
 		$card = BangCardManager::getCard(self::getGameStateValue('currentCard'));
 		$args = [];
 		foreach ($players as $id) {
-			$args[$id] = $card->getReactionCards(BangPlayerManager::getPlayer($id));
+			$args[$id] = $card->getReactionOptions(BangPlayerManager::getPlayer($id));
 		}
  		return [
  			'_private' => $args
@@ -197,7 +200,10 @@ class bang extends Table
  		$character->react($id);
  	}
 
-
+	public function useAbility($args) {
+		$id = self::getCurrentPlayerId();
+		BangPlayerManager::getPlayer($id)->useAbility($args);
+	}
 
 
 /*****************************************
@@ -255,6 +261,7 @@ class bang extends Table
 
 	public function stAwaitReaction() {
 		BangCardManager::resetPlayedColumn();
+		$this->setGameStateValue('JourdonnaisUsedSkill', 0);
 		$this->gamestate->changeActivePlayer( $this->getGameStateValue('target') );
 		$this->gamestate->nextState("awaitReaction");
 	}

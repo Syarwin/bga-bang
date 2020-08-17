@@ -131,7 +131,7 @@ class BangCard extends APP_GameClass
 		switch($this->effect['type']) {
 			case BASIC_ATTACK:
 				if($id == PASS) {
-					$player->looseLife(bang::$instance->getGameStateValue('currentTurn'));
+					$player->looseLife(BangPlayerManager::getPlayer(bang::$instance->getGameStateValue('currentTurn')));
 				} else {
 					$card = BangCardManager::getCard($id);
 					BangNotificationManager::cardPlayed($player, $card);
@@ -240,8 +240,8 @@ class BangCard extends APP_GameClass
 	 }
  	}
 
-	public function getReactionCards($player) {
-		return $player->getDefensiveCards();
+	public function getReactionOptions($player) {
+		return $player->getDefensiveOptions();
 	}
 
 }

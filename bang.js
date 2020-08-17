@@ -184,7 +184,7 @@ onUpdateActionButtons: function (stateName, args) {
  */
 onEnteringStatePlayCard: function(args){
   // TODO : do it on server's side
-  var cards = args._private.filter(card => card.options != null);
+  var cards = args._private.cards.filter(card => card.options != null);
   this.makeCardSelectable(cards, "selectCard");
 },
 
@@ -358,14 +358,14 @@ onClickCardSelectOption: function(card){
  * React state : active player can play cards from his hand in reaction
  */
 onEnteringStateReact: function(args){
-  this.makeCardSelectable(args._private, "selectCard");
+  this.makeCardSelectable(args._private.cards, "selectCard");
 },
 
 /*
  * Multi React state : active player can play cards from his hand in reaction
  */
 onEnteringStateMultiReact: function(args){
-  this.makeCardSelectable(args._private, "selectCard");
+  this.makeCardSelectable(args._private.cards, "selectCard");
 },
 
 

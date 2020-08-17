@@ -86,5 +86,12 @@ class action_bang extends APP_GameAction
 		self::ajaxResponse( );
 	}
 
+	public function useAbility() {
+		self::setAjaxMode();
+		$cards = explode(";",self::getArg("cards", AT_numberlist, false));
+		$result = $this->game->useAbility($cards);
+		self::ajaxResponse( );
+	}
+
 
 }
