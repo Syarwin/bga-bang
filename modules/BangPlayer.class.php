@@ -213,9 +213,6 @@ class BangPlayer extends APP_GameClass
     return $enemy->getDistanceTo($this) <= $range;
   }
 
-
-
-
   /**
    * attack : performs an attack on all given players
    */
@@ -265,7 +262,7 @@ class BangPlayer extends APP_GameClass
     return $card;
   }
 
-  public function eliminate($byPlayer = -1){
+  public function eliminate($byPlayer = null){
     $this->eliminated = true;
   }
 
@@ -273,12 +270,12 @@ class BangPlayer extends APP_GameClass
    * reduces the life points of a player by 1.
    * return: whether the player was eliminated
    */
-  public function looseLife($byPlayer=-1) {
+  public function looseLife($byPlayer=null) {
 		$this->hp--;
 		$this->save();
     BangNotificationManager::lostLife($this);
     if($this->hp == 0) {
-      $this->eliminate();
+      $this->eliminate($byPlayer);
       return true;
     }
     return false;

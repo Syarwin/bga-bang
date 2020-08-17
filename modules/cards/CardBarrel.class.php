@@ -22,7 +22,6 @@ class CardBarrel extends BangCard {
     $card = $player->draw($args, $this);
     if(is_null($card)) return;
     BangCardManager::markAsPlayed($this->id);
-    BangNotificationManager::drawCard($player, $card, $this);
     if ($card->format()['color'] == 'H') {
       BangNotificationManager::tell('Barrel blocked the attack');
       return true;

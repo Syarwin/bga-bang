@@ -128,7 +128,8 @@ class bang extends Table
 		$id = self::getActivePlayerId();
 		$player = BangPlayerManager::getPlayer($id);
 		$equipment = $player->getCardsInPlay();
-
+		// make sure dynamite gets handled before jail
+		Utils::sort($equipment, function($a, $b) { return $a->getType() < $b->getType();});
     foreach($equipment as $card) {
       if($card->getEffectType() == STARTOFTURN && $card->activate($player)) {
         $this->gamestate->nextState("skip");

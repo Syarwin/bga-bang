@@ -192,8 +192,8 @@ class BangCardManager extends APP_GameClass
 		CARD_DUEL => 'CardDuel',
 		CARD_GENERAL_STORE => 'CardGeneralStore',
 		CARD_INDIANS => 'CardIndians',
-		CARD_JAIL => 'CardJail',
 		CARD_DYNAMITE => 'CardDynamite',
+		CARD_JAIL => 'CardJail',
 		CARD_BARREL => 'CardBarrel',
 		CARD_SCOPE => 'CardScope',
 		CARD_MUSTANG => 'CardMustang'

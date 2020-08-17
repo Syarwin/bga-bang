@@ -53,6 +53,7 @@ class BangNotificationManager extends APP_GameClass {
     $formattedCards = array_map(function($card){ return $card->format(); }, $cards);
     foreach(BangPlayerManager::getPlayers() as $bplayer){
       bang::$instance->notifyPlayer($bplayer->getId(), "cardsGained", $msg, [
+        'player_name' => $player->getName(),
         'playerId' => $player->getId(),
         'amount' => $amount,
         'cards' => $player->getId() == $bplayer->getId()? $formattedCards : [],
@@ -116,11 +117,23 @@ class BangNotificationManager extends APP_GameClass {
     }
   }
 
+  // todo change notif name
+  public static function tell($msg) {
+    bang::$instance->notifyAllPlayers('debug', $msg, []);
+  }
 
+  // todo implement and change parameter for notification name
+  /**
+   * updating reaction options with arguments formatted as usual
+   */
   public static function updateOptions($player, $args) {
     bang::$instance->notifyPlayer($player->getId(), 'debug', '', $args);
   }
 
+  // todo implement and change parameter for notification name
+  /**
+   * drawing a card for crads like barrel, jail, etc.
+   */
   public static function drawCard($player, $card, $src) {
     $colors = ['H'=>'Hearts ', 'C' => 'Clubs ', 'D' => 'Diamonds ', 'S' => 'Spades '];
     $format = $card->format();
@@ -134,8 +147,18 @@ class BangNotificationManager extends APP_GameClass {
     ]);
   }
 
-  public static function tell($msg) {
-    bang::$instance->notifyAllPlayers('debug', $msg, []);
+  // todo implement and change parameter for notification name
+  /**
+   * When a card moves from one player(inplay) to another player(inplay).
+   * Probably needed only for dynamite
+   */
+  public static function moveCard($card, $target) {
+    bang::$instance->notifyAllPlayers('debug', '${card_name} moves to ${player_name}', [
+      'card_name' => $card->getName(),
+      'player_name' => $target->getName(),
+      'card' => $card->format(),
+      'target' => $target->getId()
+    ]);
   }
 
 }

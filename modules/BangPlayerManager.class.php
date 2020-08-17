@@ -36,12 +36,12 @@ class BangPlayerManager extends APP_GameClass
 				$bullets++;
 				$sheriff = $pId;
 			}
-			$values[] = "($pId, '$color','$canal','$name','$avatar', $bullets, $bullets-1, $role, $char_id)";
+			$values[] = "($pId, '$color','$canal','$name','$avatar', $bullets, $bullets, $role, $char_id)";
 			BangCardManager::deal($pId,$bullets);
 		}
 		self::DbQuery($sql . implode($values, ','));
-		BangCardManager::dealCard($sheriff, CARD_JAIL);
-		BangCardManager::dealCard($sheriff, CARD_BANG,1);
+		BangCardManager::dealCard($sheriff, CARD_BARREL);
+		BangCardManager::dealCard($sheriff, CARD_DYNAMITE);
 		bang::$instance->reloadPlayersBasicInfos();
 		return $sheriff;
 	}
@@ -90,11 +90,21 @@ class BangPlayerManager extends APP_GameClass
 	 * returns an array of the ids of all living players
 	 */
 	public static function getLivingPlayers($exept = null, $asPlayerObjects = false) {
-		$sql = "SELECT player_id FROM player WHERE player_eliminated=0";
+		$sql = "SELECT player_id FROM player WHERE player_eliminated=0 ORDER BY player_no";
 		if($exept != null) $sql.= " AND player_id != $exept";
 		$ids = self::getObjectListFromDB($sql, true);
 		return $asPlayerObjects ? self::getPlayers($ids) : $ids;
 	}
+
+
+	  public static function getNextPlayer($id) {
+	    $players = self::getLivingPlayers();
+			foreach($players as $idx => $pid) {
+				if($pid == $id)
+					return self::getPlayer($idx==count($players)-1 ? $players[0] : $players[$idx+1]);
+			}
+	  }
+
 
 	public static function preparePlayerActivation($playerIds) {
 		self::DbQuery("UPDATE player SET player_activate=0");
