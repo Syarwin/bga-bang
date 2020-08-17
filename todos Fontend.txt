@@ -1,5 +1,4 @@
 - implement Notification for BangNotificationManager::updateOptions
-- implement Notification for BangNotificationManager::drawCard
 - implement Notification for BangNotificationManager::moveCard
 - playable cards are no longer contained directly in the state args but in the index cards.(js is already adjusted to that)
 	In addition there is the index character.
