@@ -127,6 +127,14 @@ class bang extends Table
 		$this->log->startTurn();
 		$id = self::getActivePlayerId();
 		$player = BangPlayerManager::getPlayer($id);
+		$equipment = $player->getCardsInPlay();
+
+    foreach($equipment as $card) {
+      if($card->getEffectType() == STARTOFTURN && $card->activate($player)) {
+        $this->gamestate->nextState("skip");
+				return;
+      }
+    }
 		$player->startOfTurn();
 		$this->setGameStateValue('currentTurn', $id);
 		$this->setGameStateValue('bangPlayed', 0);

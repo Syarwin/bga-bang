@@ -259,19 +259,29 @@ class BangPlayer extends APP_GameClass
     }
   }
 
-  public function draw($args) {
-    return BangCardManager::draw();
+  public function draw($args, $src) {
+    $card = BangCardManager::draw();
+    BangNotificationManager::drawCard($this, $card, $src);
+    return $card;
   }
 
   public function eliminate($byPlayer = -1){
     $this->eliminated = true;
   }
 
-	public function looseLife($byPlayer=-1) {
+  /**
+   * reduces the life points of a player by 1.
+   * return: whether the player was eliminated
+   */
+  public function looseLife($byPlayer=-1) {
 		$this->hp--;
-    if($this->hp == 0) $this->eliminate();
 		$this->save();
     BangNotificationManager::lostLife($this);
+    if($this->hp == 0) {
+      $this->eliminate();
+      return true;
+    }
+    return false;
 	}
 
 }

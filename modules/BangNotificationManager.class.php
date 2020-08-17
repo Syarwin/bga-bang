@@ -52,7 +52,7 @@ class BangNotificationManager extends APP_GameClass {
     $msg  = $amount == 1 ? clienttranslate('${player_name} draws a card') : clienttranslate('${player_name} draws ${amount} cards');
     $formattedCards = array_map(function($card){ return $card->format(); }, $cards);
     foreach(BangPlayerManager::getPlayers() as $bplayer){
-      bang::$instance->notifyPlayer($bplayer->getId(), "cardsGained", '', [
+      bang::$instance->notifyPlayer($bplayer->getId(), "cardsGained", $msg, [
         'playerId' => $player->getId(),
         'amount' => $amount,
         'cards' => $player->getId() == $bplayer->getId()? $formattedCards : [],
@@ -60,11 +60,12 @@ class BangNotificationManager extends APP_GameClass {
       ]);
     }
 
+    /* wird schon bei cardsGained geupdatet...
     bang::$instance->notifyAllPlayers("updateHand", $msg, [
       'player_name' => $player->getName(),
       'playerId' => $player->getId(),
       'amount' => $amount,
-    ]);
+    ]);*/
   }
 
 

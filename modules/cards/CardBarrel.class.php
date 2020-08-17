@@ -19,7 +19,7 @@ class CardBarrel extends BangCard {
   }
 
   public function activate($player, $args=[]) {
-    $card = $player->draw($args);
+    $card = $player->draw($args, $this);
     if(is_null($card)) return;
     BangCardManager::markAsPlayed($this->id);
     BangNotificationManager::drawCard($player, $card, $this);

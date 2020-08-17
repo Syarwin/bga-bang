@@ -17,4 +17,32 @@ class CardJail extends BangCard {
       DODGE_CITY => [ ],
     ];
   }
+
+  public function play($player, $args) {
+		BangCardManager::moveCard($this->id, 'inPlay',$args['player']);
+		return true;
+  }
+
+  public function getPlayOptions($player) {
+		$player_ids = BangPlayerManager::getLivingPlayers($player->getID());
+		return [
+			'type' => OPTION_PLAYER,
+			'targets' => array_values($player_ids)
+		];
+ 	}
+
+  public function activate($player, $args=[]) {
+    $card = $player->draw($args, $this);
+    if(is_null($card)) return;
+    BangCardManager::playCard($this->id);
+    $name = $player->getName();
+    BangNotificationManager::discardedCard($player, $this, true);
+    if ($card->format()['color'] == 'H') {
+      BangNotificationManager::tell("$name can make his turn");
+      return false;
+    } else {
+      BangNotificationManager::tell("$name is skipped");
+      return true;
+    }
+  }
 }
