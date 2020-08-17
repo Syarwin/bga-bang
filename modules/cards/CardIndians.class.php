@@ -21,4 +21,28 @@ class CardIndians extends BangCard {
       DODGE_CITY => [ ],
     ];
   }
+
+  public function play($player, $args) {
+    BangCardManager::playCard($this->id);
+    $ids = BangPlayerManager::getLivingPlayers($player->getId());
+    return $player->attack($ids, false);
+  }
+
+  public function react($id, $player) {
+		$player_name = BangPlayerManager::getPlayer($player->getId())->getName();
+
+		if($id == PASS) {
+			$player->looseLife(bang::$instance->getGameStateValue('currentTurn'));
+		} else {
+			$card = BangCardManager::getCard($id);
+			BangNotificationManager::discardedCard($player, $card);
+      BangCardManager::playCard($card->id);
+		}
+		return true;
+	}
+
+  public function getReactionCards($player) {
+		return $player->getBangCards();
+	}
+
 }

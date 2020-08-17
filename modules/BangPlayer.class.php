@@ -125,20 +125,29 @@ class BangPlayer extends APP_GameClass
 	}
 
 
+  public function getBangCards() {
+    $hand = BangCardManager::getHand($this->id);
+    $res = [];
+    foreach($hand as $card) {
+      if($card->getType() == CARD_BANG)
+        $res[] = ['id' => $card->getID(), 'options' => ['type' => OPTION_NONE]];
+    }
+    return array_values($res);
+  }
 
   public function getDefensiveCards() {
     $hand = BangCardManager::getHand($this->id);
     $res = [];
     foreach($hand as $card) {
       if($card->getColor() == BROWN && $card->getEffectType() == DEFENSIVE)
-      $res[] = ['id' => $card->getID(), 'options' => ['type' => OPTION_NONE]];
+        $res[] = ['id' => $card->getID(), 'options' => ['type' => OPTION_NONE]];
     }
 
     $card = array_reduce($this->getCardsInPlay(), function($barrel, $card){
       return ($card->getType() == CARD_BARREL && !$card->wasPlayed()) ? $card : $barrel;
     }, null);
     if(!is_null($card)) $res[] = ['id' => $card->getID(), 'options' => ['type' => OPTION_NONE]];
-    
+
     return array_values($res);
   }
 
@@ -224,13 +233,16 @@ class BangPlayer extends APP_GameClass
   /**
    * attack : performs an attack on all given players
    */
-  public function attack($playerIds) {
+  public function attack($playerIds, $checkBarrel=true) {
     $reactions = [];
     foreach(BangPlayerManager::getPlayers($playerIds) as $player){
       // Player has defensive equipment ? (eg Barrel)
-      $canUseEquipment = array_reduce($player->getCardsInPlay(), function($missed, $card){
-        return $missed? true : ($card->getEffectType() == DEFENSIVE);
-      });
+      $canUseEquipment = false;
+      if($checkBarrel) {
+        $canUseEquipment = array_reduce($player->getCardsInPlay(), function($missed, $card){
+          return $missed? true : ($card->getEffectType() == DEFENSIVE);
+        });
+      }
 
       // Otherwise, player has at least one card in hand ?
       if($player->countCardsInHand() > 0 || $canUseEquipment)  {

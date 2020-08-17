@@ -161,18 +161,20 @@ class bang extends Table
  **** react state ****
  ********************/
 	 public function argReact() {
- 		return [
- 			'_private' => [
- 				'active' => BangPlayerManager::getPlayer(self::getActivePlayerId())->getDefensiveCards()
- 			]
- 		];
+		 $card = BangCardManager::getCard(self::getGameStateValue('currentCard'));
+		 return [
+			 '_private' => [
+				 'active' => $card->getReactionCards(BangPlayerManager::getPlayer(self::getActivePlayerId()))
+			 ]
+		 ];
  	}
 
  	public function argMultiReact() {
  		$players = $this->gamestate->getActivePlayerList();
+		$card = BangCardManager::getCard(self::getGameStateValue('currentCard'));
 		$args = [];
 		foreach ($players as $id) {
-			$args[$id] = BangPlayerManager::getPlayer($id)->getDefensiveCards();
+			$args[$id] = $card->getReactionCards(BangPlayerManager::getPlayer($id));
 		}
  		return [
  			'_private' => $args

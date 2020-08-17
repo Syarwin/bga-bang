@@ -240,5 +240,8 @@ class BangCard extends APP_GameClass
 	 }
  }
 
+	public function getReactionCards($player) {
+		return $player->getDefensiveCards();
+	}
 
 }
