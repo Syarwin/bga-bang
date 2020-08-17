@@ -32,6 +32,7 @@ class BangCard extends APP_GameClass
 	public function getColor(){ return $this->color; }
 	public function getCopies(){ return $this->copies; }
 	public function getCopy(){ return $this->copy; }
+	public function wasPlayed(){ return BangCardManager::wasPlayed($this->id);}
 
 	// TODO : convert str to int ? (J => 11, Q => 12, K => 13 ?)
 	public function getCopyValue(){ return substr($this->copy, 0, -1); }
@@ -123,7 +124,7 @@ class BangCard extends APP_GameClass
 /**
  * function to overwrite by blue cards like barrel, jail, dynamite
  */
-	public function activate($player) {return true;}
+	public function activate($player, $args=[]) {return true;}
 
 	public function react($id, $player) {
 		$player_name = BangPlayerManager::getPlayer($player->getId())->getName();

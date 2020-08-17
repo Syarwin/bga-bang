@@ -89,6 +89,7 @@ class BangPlayer extends APP_GameClass
     self::DbQuery($sql);
   }
 
+
   public function startOfTurn() {
     $cards = BangCardManager::deal($this->id, 2);
     BangNotificationManager::gainedCards($this, $cards);
@@ -123,14 +124,22 @@ class BangPlayer extends APP_GameClass
     }
 	}
 
-  public function getHandOptions() {
-    $options = array_map(function($card){
-      return [
-        'id' => $card->getId(),
-        'options' => $card->getPlayOptions($this)
-      ];
-    }, $this->getCardsInHand() );
-    return array_values($options);
+
+
+  public function getDefensiveCards() {
+    $hand = BangCardManager::getHand($this->id);
+    $res = [];
+    foreach($hand as $card) {
+      if($card->getColor() == BROWN && $card->getEffectType() == DEFENSIVE)
+      $res[] = ['id' => $card->getID(), 'options' => ['type' => OPTION_NONE]];
+    }
+
+    $card = array_reduce($this->getCardsInPlay(), function($barrel, $card){
+      return ($card->getType() == CARD_BARREL && !$card->wasPlayed()) ? $card : $barrel;
+    }, null);
+    if(!is_null($card)) $res[] = ['id' => $card->getID(), 'options' => ['type' => OPTION_NONE]];
+    
+    return array_values($res);
   }
 
   /**
@@ -152,10 +161,19 @@ class BangPlayer extends APP_GameClass
     return $dist;
   }
 
-  public function isInRange($enemy, $range){
-    return $enemy->getDistanceTo($this) <= $range;
+  public function getHandOptions() {
+    $options = array_map(function($card){
+      return [
+        'id' => $card->getId(),
+        'options' => $card->getPlayOptions($this)
+      ];
+    }, $this->getCardsInHand() );
+    return array_values($options);
   }
 
+  /**
+  * getRange : Returns the range of players weapon
+  */
   public function getPlayersInRange($range) {
 		$targets = BangPlayerManager::getPlayers();
     Utils::filter($targets, function($player) use ($range){
@@ -164,6 +182,44 @@ class BangPlayer extends APP_GameClass
 
     return array_map(function($target){ return $target->getId(); }, $targets);
 	}
+
+  public function getRange() {
+    $weapon = $this->getWeapon();
+    return is_null($weapon)? 1 : $weapon->getEffect()['range'];
+  }
+
+  public function getWeapon(){
+    return array_reduce($this->getCardsInPlay(), function($weapon, $card){
+      $effect = $card->getEffect();
+      return ($effect['type'] == WEAPON) ? $card : $weapon;
+    }, null);
+  }
+
+  public function hasUnlimitedBangs() {
+    $weapon = $this->getWeapon();
+    return !is_null($weapon) && $weapon->getType() == CARD_VOLCANIC;
+  }
+
+  public function isInRange($enemy, $range){
+    return $enemy->getDistanceTo($this) <= $range;
+  }
+
+
+  /**
+  * ask a player for reactions
+  */
+  public function askReaction($attacker) {
+    $id = $this->id;
+    $onHand = BangCardManager::countCards('hand', $id);
+    // todo barrel
+
+    if($onHand > 0)  {
+      bang::$instance->setGameStateValue('target',$id);
+      bang::$instance->gamestate->nextState('awaitReaction');
+    } else {
+      $this->looseLife($attacker);
+    }
+  }
 
   /**
    * attack : performs an attack on all given players
@@ -197,36 +253,20 @@ class BangPlayer extends APP_GameClass
     return true;
   }
 
-	/**
-	 * ask a player for reactions
-	 */
-	public function askReaction($attacker) {
-		$id = $this->id;
-		$onHand = BangCardManager::countCards('hand', $id);
-		// todo barrel
-
-		if($onHand > 0)  {
-			bang::$instance->setGameStateValue('target',$id);
-			bang::$instance->gamestate->nextState('awaitReaction');
-		} else {
-			$this->looseLife($attacker);
-		}
-	}
-
-  public function getDefensiveCards() {
-    $hand = BangCardManager::getHand($this->id);
-    $res = [];
-    foreach($hand as $card) {
-      if($card->getColor() == BROWN && $card->getEffectType() == DEFENSIVE)
-        $res[] = ['id' => $card->getID(), 'options' => ['type' => OPTION_NONE]];
+  public function discardWeapon(){
+    $weapon = $this->getWeapon();
+    if(!is_null($weapon)) {
+      BangCardManager::discardCard($weapon->getId());
+      BangNotificationManager::discardedCard($this, $weapon, true);
     }
-    // todo if barrel has not been played yet {
-      $card = array_reduce($this->getCardsInPlay(), function($barrel, $card){
-        return ($card->getType() == CARD_BARREL) ? $card : $barrel;
-      }, null);
-      if(!is_null($card)) $res[] = ['id' => $card->getID(), 'options' => ['type' => OPTION_NONE]];
-    // }
-    return array_values($res);
+  }
+
+  public function draw($args) {
+    return BangCardManager::draw();
+  }
+
+  public function eliminate($byPlayer = -1){
+    $this->eliminated = true;
   }
 
 	public function looseLife($byPlayer=-1) {
@@ -236,35 +276,4 @@ class BangPlayer extends APP_GameClass
     BangNotificationManager::lostLife($this);
 	}
 
-  public function eliminate($byPlayer = -1){
-    $this->eliminated = true;
-  }
-
-	/**
-	 * getRange : Returns the range of players weapon
-	 */
-	public function getRange() {
-    $weapon = $this->getWeapon();
-    return is_null($weapon)? 1 : $weapon->getEffect()['range'];
-	}
-
-  public function getWeapon(){
-    return array_reduce($this->getCardsInPlay(), function($weapon, $card){
-      $effect = $card->getEffect();
-      return ($effect['type'] == WEAPON) ? $card : $weapon;
-    }, null);
-  }
-
-  public function discardWeapon(){
-    $weapon = $this->getWeapon();
-    if(!is_null($weapon)) {
-      BangCardManager::discardCard($weapon->getId());
-      BangNotificationManager::discardedCard($this, $weapon, true);
-    }
-  }
-
-  public function hasUnlimitedBangs() {
-    $weapon = $this->getWeapon();
-    return !is_null($weapon) && $weapon->getType() == CARD_VOLCANIC;
-  }
 }

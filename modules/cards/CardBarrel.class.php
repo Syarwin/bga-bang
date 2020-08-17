@@ -18,8 +18,10 @@ class CardBarrel extends BangCard {
     ];
   }
 
-  public function activate($player) {
-    $card = BangCardManager::draw();
+  public function activate($player, $args=[]) {
+    $card = $player->draw($args);
+    if(is_null($card)) return;
+    BangCardManager::markAsPlayed($this->id);
     BangNotificationManager::drawCard($player, $card, $this);
     if ($card->format()['color'] == 'H') {
       BangNotificationManager::tell('Barrel blocked the attack');

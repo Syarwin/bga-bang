@@ -143,11 +143,30 @@ class BangCardManager extends APP_GameClass
 	}
 
   // only for testing
-	public static function dealCard($player, $type) {
+	public static function dealCard($player, $type, $playerOffset = 0) {
 		//$cards = self::getDeck()->getCardsOfType($type);
+		if($playerOffset>0) {
+			$no = self::getUniqueValueFromDB("SELECT player_no FROM player WHERE player_id=$player");
+			$count = self::getUniqueValueFromDB("SELECT COUNT(*) FROM player");
+			$no += $playerOffset;
+			if($no > $count) $no -= $count;
+			$player = self::getUniqueValueFromDB("SELECT player_id FROM player WHERE player_no=$no");
+		}
 		$sql = "SELECT card_id FROM card WHERE card_type=$type";
 		$cards = self::getObjectListFromDB("SELECT card_id FROM card WHERE card_type=$type", true);
 		self::getDeck()->moveCard($cards[0], 'hand', $player);
+	}
+
+	public static function wasPlayed($id) {
+		return self::getUniqueValueFromDB("SELECT card_played FROM card WHERE card_id=$id") == 1;
+	}
+
+	public static function markAsPlayed($id) {
+		self::DbQuery("UPDATE card SET card_played=1 WHERE card_id=$id");
+	}
+
+	public static function resetPlayedColumn() {
+		self::DbQuery("UPDATE card SET card_played=0");
 	}
 
 

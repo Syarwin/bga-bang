@@ -242,11 +242,13 @@ class bang extends Table
 
 
 	public function stAwaitReaction() {
+		BangCardManager::resetPlayedColumn();
 		$this->gamestate->changeActivePlayer( $this->getGameStateValue('target') );
 		$this->gamestate->nextState("awaitReaction");
 	}
 
 	public function stAwaitMultiReaction() {
+		BangCardManager::resetPlayedColumn();
 		$players = BangPlayerManager::getPlayersForActivation();
 		if(!$this->gamestate->setPlayersMultiactive( $players, 'awaitReaction', true ))
 				$this->gamestate->nextState("awaitReaction");
