@@ -25,6 +25,8 @@ class CardJail extends BangCard {
 
   public function getPlayOptions($player) {
 		$player_ids = BangPlayerManager::getLivingPlayers($player->getID());
+    $sherrif = BangPlayerManager::getSherrifId();
+    Utils::filter($player_ids, function($id) use ($sherrif){return $id!=$sherrif;});
 		return [
 			'type' => OPTION_PLAYER,
 			'targets' => array_values($player_ids)
