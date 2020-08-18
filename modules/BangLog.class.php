@@ -6,12 +6,10 @@
  */
 class BangLog extends APP_GameClass
 {
-  public $game;
-  public function __construct($game)
-  {
-    $this->game = $game;
+  public static function getCurrentTurn(){
+    $turns = self::getObjectListFromDb("SELECT turn FROM log WHERE `action` = 'startTurn' ORDER BY log_id DESC");
+    return empty($turns)? 0 : (int) $turns[0]["turn"];
   }
-
 
 ////////////////////////////////
 ////////////////////////////////
@@ -22,7 +20,7 @@ class BangLog extends APP_GameClass
   /*
    * initStats: initialize statistics to 0 at start of game
    */
-  public function initStats($bplayers)
+  public static function initStats($bplayers)
   {
     /*
     $this->game->initStat('table', 'move', 0);
@@ -45,19 +43,19 @@ class BangLog extends APP_GameClass
   /*
    * gameEndStats: compute end-of-game statistics
    */
-  public function gameEndStats()
+  public static function gameEndStats()
   {
 //    $this->game->setStat($this->game->board->getCompleteTowerCount(), 'buildTower');
   }
 
-  public function incrementStats($stats, $value = 1)
+  public static function incrementStats($stats, $value = 1)
   {
     foreach ($stats as $pId => $names) {
       foreach ($names as $name) {
         if ($pId == 'table') {
           $pId = null;
         }
-        $this->game->incStat($value, $name, $pId);
+        bang::$instance::incStat($value, $name, $pId);
       }
     }
   }
@@ -77,10 +75,10 @@ class BangLog extends APP_GameClass
    *   - string $action : the name of the action
    *   - array $args : action arguments (eg space)
    */
-  public function insert($playerId, $cardId, $action, $args = [])
+  public static function insert($playerId, $cardId, $action, $args = [])
   {
-    $playerId = $playerId == -1 ? $this->game->getActivePlayerId() : $playerId;
-    $round = $this->game->getGameStateValue("currentRound");
+    $playerId = $playerId == -1 ? bang::$instance->getActivePlayerId() : $playerId;
+    $turn = self::getCurrentTurn() + ($action == "startTurn"? 1 : 0);
 
 /*
     if ($action == 'move') {
@@ -102,12 +100,12 @@ class BangLog extends APP_GameClass
     }
 */
     if (array_key_exists('stats', $args)) {
-      $this->incrementStats($args['stats']);
+      self::incrementStats($args['stats']);
     }
 
     $actionArgs = json_encode($args);
 
-    self::DbQuery("INSERT INTO log (`round`, `player_id`, `card_id`, `action`, `action_arg`) VALUES ('$round', '$playerId', '$cardId', '$action', '$actionArgs')");
+    self::DbQuery("INSERT INTO log (`turn`, `player_id`, `card_id`, `action`, `action_arg`) VALUES ('$turn', '$playerId', '$cardId', '$action', '$actionArgs')");
   }
 
 
@@ -115,20 +113,24 @@ class BangLog extends APP_GameClass
   /*
    * addAction: add a new action to log
    */
-  public function addAction($action, $args = [])
+  public static function addAction($action, $args = [])
   {
-    $this->insert(-1, 0, $action, $args);
+    self::insert(-1, 0, $action, $args);
   }
 
 
   /*
    * starTurn: logged whenever a player start its turn, very useful to fetch last actions
    */
-  public function startTurn()
+  public static function startTurn()
   {
-    $this->insert(-1, 0, 'startTurn');
+    self::insert(-1, 0, 'startTurn');
   }
 
+  public static function addCardPlayed($player, $card, $args)
+  {
+    self::insert($player->getId(), $card->getId(), "cardPlayed", $args);
+  }
 
 /////////////////////////////////
 /////////////////////////////////
@@ -139,12 +141,32 @@ class BangLog extends APP_GameClass
   /*
    * getLastActions : get works and actions of player (used to cancel previous action)
    */
-  public function getLastActions($actions = ['build', 'usedPower', 'useTile'], $pId = null, $offset = null)
+  public static function getLastActions($actions = ['build', 'usedPower', 'useTile'], $pId = null, $offset = null)
   {
-    $pId = $pId ?? $this->game->getActivePlayerId();
+    $pId = $pId ?? bang::$instance->getActivePlayerId();
     $offset = $offset ?? 0;
     $actionsNames = "'" . implode("','", $actions) . "'";
 
-    return self::getObjectListFromDb("SELECT * FROM log WHERE `action` IN ($actionsNames) AND `player_id` = '$pId' AND `round` = (SELECT round FROM log WHERE `player_id` = $pId AND `action` = 'startTurn' ORDER BY log_id DESC LIMIT 1) - $offset ORDER BY log_id DESC");
+    return self::getObjectListFromDb("SELECT * FROM log WHERE `action` IN ($actionsNames) AND `player_id` = '$pId' AND `turn` = (SELECT turn FROM log WHERE `action` = 'startTurn' ORDER BY log_id DESC LIMIT 1) - $offset ORDER BY log_id DESC");
+  }
+
+  public static function getLastAction($action, $pId = null, $offset = null)
+  {
+    $actions = self::getLastActions([$action], $pId, $offset);
+    return count($actions) > 0 ? json_decode($actions[0]['action_arg'], true) : null;
+  }
+
+
+  public static function getPlayerTurn()
+  {
+    $turn = self::getObjectFromDb("SELECT * FROM log WHERE `action` = 'startTurn' ORDER BY log_id DESC LIMIT 1");
+    return is_null($turn)? null : $turn['player_id'];
+  }
+
+
+  public static function getCurrentCard()
+  {
+    $action = self::getObjectFromDb("SELECT * FROM log WHERE `action` = 'cardPlayed' AND `turn` = (SELECT turn FROM log WHERE `action` = 'startTurn' ORDER BY log_id DESC LIMIT 1) ORDER BY log_id DESC LIMIT 1");
+    return is_null($action)? null : $action["card_id"];
   }
 }

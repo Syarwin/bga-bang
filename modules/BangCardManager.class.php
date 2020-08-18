@@ -56,6 +56,11 @@ class BangCardManager extends APP_GameClass
 		return $card;
 	}
 
+	public static function getCurrentCard(){
+		return self::getCard(BangLog::getCurrentCard());
+	}
+
+
 	private static function resToObject($row) {
 		$card_id = $row['type'];
 		$name = self::$classes[$card_id];
@@ -67,13 +72,20 @@ class BangCardManager extends APP_GameClass
 
 
 	/**
-	 * getDeckCount : Returns the number of cards in the Deck
+	 * countCard : Returns the number of cards in a location
 	 */
-	public static function countCards($location, $player=null) {
+	public static function countCards($location, $player = null) {
 		if($player==null)
 			return self::getDeck()->countCardsInLocation($location);
 		else
 			return self::getDeck()->countCardsInLocation($location, $player);
+	}
+
+	/**
+	 * getDeckCount : Returns the number of cards in the
+	 */
+  public static function getDeckCount(){
+		return self::countCards("deck");
 	}
 
 	/**
@@ -209,11 +221,9 @@ class BangCardManager extends APP_GameClass
 	];
 
 	public static function getUiData() {
-		$ui = [];
-		foreach (self::getAll() as $card) {
-			$ui[] = $card->getUiData();
-		}
-		return $ui;
+		return array_map(function($card){
+			return $card->getUiData();
+		}, self::getAll());
 	}
 
 	/*

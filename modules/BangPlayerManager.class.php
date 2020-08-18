@@ -47,6 +47,14 @@ class BangPlayerManager extends APP_GameClass
 	}
 
 
+	public static function getCurrentTurn($asObject = false){
+		$playerId = BangLog::getPlayerTurn();
+		return $asObject? self::getPlayer($playerId) : $playerId;
+	}
+
+	public static function getActivePlayer(){
+		return self::getPlayer(bang::$instance->getActivePlayerId());
+	}
 
 	/*
 	 * getPlayer : returns the BangPlayer object for the given player ID
@@ -119,13 +127,10 @@ class BangPlayerManager extends APP_GameClass
 	/*
 	 * getUiData : get all ui data of all players : id, hp, max_hp no, name, color, character, powers(character effect), hand(count)  [if $full then also role]
 	 */
-	public static function getUiData($playerIds = null, $currentPlayer)	{
-		$bplayers = self::getPlayers();
-		$uidata = [];
-		foreach ($bplayers as $player) {
-			$uidata[] = $player->getUiData($currentPlayer);
-		}
-		return array_values($uidata);
+	public static function getUiData($currentPlayer)	{
+		return array_map(function($player) use ($currentPlayer){
+			return $player->getUiData($currentPlayer);
+		}, self::getPlayers());
 	}
 
 	public static function getCharactersByExpansion($expansions) {
@@ -133,9 +138,9 @@ class BangPlayerManager extends APP_GameClass
 			BASE_GAME => range(0,15)
 			// add new expansions
 		];
-		$res = [];
-		foreach($expansions as $exp) $res = array_merge($characters[$exp],$res);
-		return $res;
+		return array_reduce($expansions, function($res, $exp) use ($characters){
+			return array_merge($res, $characters[$exp]);
+		}, []);
 	}
 
 	/*

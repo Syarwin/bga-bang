@@ -28,18 +28,11 @@ class bang extends Table
 		self::$instance = $this;
 		self::initGameStateLabels([
 //      'optionSetup'  => OPTION_SETUP,
-			'currentRound' => 10,
-			'firstPlayer'  => 11,
 			'target'	=> 12,
-			'currentTurn'  => 13, //id of the player who's turn it is(Not always the active player)
-			'currentCard'  => 14, //id of the card that has been played
 			'bangPlayed' => 15, // whether a bang has been played this turn
 			'cardArg' => 16, // a variable that can be used differently by any card (example duel)
 			'JourdonnaisUsedSkill' => 17
 		]);
-
-		// Initialize logger, board and cards
-		$this->log   = new BangLog($this);
 	}
 
 	protected function getGameName() {
@@ -61,13 +54,7 @@ class bang extends Table
 
 		// Initialize players
 		$sheriff = BangPlayerManager::setupNewGame($bplayers, $expansions, $this);
-
-		// Active first player to play
-
-		self::setGameStateInitialValue('firstPlayer', $sheriff);
-		self::setGameStateInitialValue('currentRound', 0);
-		$this->gamestate->changeActivePlayer( $sheriff );
-
+		$this->gamestate->changeActivePlayer($sheriff);
 	}
 
 	/*
@@ -76,14 +63,12 @@ class bang extends Table
 	 *  The method is called each time the game interface is displayed to a player, ie: when the game starts and when a player refreshes the game page (F5)
 	 */
 	protected function getAllDatas() {
-		$currentPlayerId = self::getCurrentPlayerId();
 		$result = [
-			'active' => self::getActivePlayerId(),
-			'bplayers' => array_values(BangPlayerManager::getUiData(null, $currentPlayerId)), // id => [hp, max_hp no, name, color, character, powers(character effect), hand(count), cardsInPlay]
-			'deck' => BangCardManager::countCards('deck'),
+			'bplayers' => BangPlayerManager::getUiData(self::getCurrentPlayerId()),
+			'deck' => BangCardManager::getDeckCount(),
 			'discard' => BangCardManager::getLastDiscarded(),
-			'turn' => $this->getGameStateValue('currentTurn'),
-			'cards' => array_values(BangCardManager::getUIData()),
+			'playerTurn' => BangPlayerManager::getCurrentTurn(),
+			'cards' => BangCardManager::getUIData(),
 		];
 		return $result;
 	}
@@ -113,10 +98,6 @@ class bang extends Table
 	public function stNextPlayer() {
 		$pId = $this->activeNextPlayer();
 		self::giveExtraTime($pId);
-		if (self::getGamestateValue("firstPlayer") == $pId) {
-			$n = (int) self::getGamestateValue('currentRound') + 1;
-			self::setGamestateValue("currentRound", $n);
-		}
 		$this->gamestate->nextState('start');
 	}
 
@@ -125,37 +106,30 @@ class bang extends Table
 	 * stStartOfTurn: called at the beggining of each player turn
 	 */
 	public function stStartOfTurn() {
-		$this->log->startTurn();
-		$id = self::getActivePlayerId();
-		$player = BangPlayerManager::getPlayer($id);
-		$equipment = $player->getCardsInPlay();
-		// make sure dynamite gets handled before jail
-		Utils::sort($equipment, function($a, $b) { return $a->getType() > $b->getType();});
-    foreach($equipment as $card) {
-      if($card->getEffectType() == STARTOFTURN && $card->activate($player)) {
-        $this->gamestate->nextState("skip");
-				return;
-      }
-    }
-		$player->startOfTurn();
-		$this->setGameStateValue('currentTurn', $id);
-		$this->setGameStateValue('bangPlayed', 0);
-		//$this->gamestate->changeActivePlayer($this->setGameStateValue('turn', $id));
-		$this->gamestate->nextState("play");
-
+		BangLog::startTurn();
+		$player = BangPlayerManager::getActivePlayer();
+		$newState = $player->startOfTurn();
+		$this->gamestate->nextState($newState);
 	}
 
+
+	/*
+	 * stDrawCards: called after the beggining of each player turn, if the turn was not skipped or if no character's abilities apply
+	 */
+	public function stDrawCards() {
+		$player = BangPlayerManager::getActivePlayer();
+		$player->drawCards(2);
+		$this->gamestate->nextState("play");
+	}
 
 
 /************************
  **** playCard state ****
  ***********************/
 	public function argPlayCards() {
-		$cards = BangPlayerManager::getPlayer(self::getActivePlayerId())->getHandOptions();
-
 		return [
 			'_private' => [
-				'active' => $cards
+				'active' => BangPlayerManager::getActivePlayer()->getHandOptions()
 			]
 		];
 	}
@@ -163,8 +137,9 @@ class bang extends Table
 
 	function playCard($id, $args) {
 		self::checkAction('play');
-		$character = BangPlayerManager::getPlayer(self::getCurrentPlayerId());
-		$character->playCard($id, $args);
+		// TODO : add check to see if the card was indeed playable
+		// if(!in_array($id, $this->argPlayableCards())) ...
+		BangPlayerManager::getActivePlayer()->playCard($id, $args);
 	}
 
 
@@ -172,20 +147,18 @@ class bang extends Table
  **** react state ****
  ********************/
  public function argReact() {
-	 $card = BangCardManager::getCard(self::getGameStateValue('currentCard'));
-	 $options = $card->getReactionOptions(BangPlayerManager::getPlayer(self::getActivePlayerId()));
-
+	 $card = BangCardManager::getCurrentCard();
 	 return [
 		 '_private' => [
-			 'active' => $options
+			 'active' => $card->getReactionOptions(BangPlayerManager::getActivePlayer())
 		 ]
 	 ];
  }
 
  	public function argMultiReact() {
  		$players = $this->gamestate->getActivePlayerList();
-		$card = BangCardManager::getCard(self::getGameStateValue('currentCard'));
-		$args = [];
+		$card = BangCardManager::getCurrentCard();
+		$arg = [];
 		foreach ($players as $id) {
 			$args[$id] = $card->getReactionOptions(BangPlayerManager::getPlayer($id));
 		}
@@ -204,6 +177,27 @@ class bang extends Table
 		$id = self::getCurrentPlayerId();
 		BangPlayerManager::getPlayer($id)->useAbility($args);
 	}
+
+
+	public function stAwaitReaction() {
+		BangCardManager::resetPlayedColumn();
+		$this->setGameStateValue('JourdonnaisUsedSkill', 0);
+		$this->gamestate->changeActivePlayer( $this->getGameStateValue('target') );
+		$this->gamestate->nextState("awaitReaction");
+	}
+
+	public function stAwaitMultiReaction() {
+		BangCardManager::resetPlayedColumn();
+		$players = BangPlayerManager::getPlayersForActivation();
+		if(!$this->gamestate->setPlayersMultiactive( $players, 'awaitReaction', true ))
+				$this->gamestate->nextState("awaitReaction");
+	}
+
+	public function stEndReaction() {
+		$this->gamestate->changeActivePlayer(BangPlayerManager::getCurrentTurn());
+		bang::$instance->gamestate->nextState("finishedReaction");
+	}
+
 
 
 /*****************************************
@@ -259,24 +253,6 @@ class bang extends Table
 	}
 
 
-	public function stAwaitReaction() {
-		BangCardManager::resetPlayedColumn();
-		$this->setGameStateValue('JourdonnaisUsedSkill', 0);
-		$this->gamestate->changeActivePlayer( $this->getGameStateValue('target') );
-		$this->gamestate->nextState("awaitReaction");
-	}
-
-	public function stAwaitMultiReaction() {
-		BangCardManager::resetPlayedColumn();
-		$players = BangPlayerManager::getPlayersForActivation();
-		if(!$this->gamestate->setPlayersMultiactive( $players, 'awaitReaction', true ))
-				$this->gamestate->nextState("awaitReaction");
-	}
-
-	public function stEndReaction() {
-		$this->gamestate->changeActivePlayer($this->getGameStateValue('currentTurn'));
-		bang::$instance->gamestate->nextState( "finishedReaction" );
-	}
 
 	/*
 	 * announceWin: TODO

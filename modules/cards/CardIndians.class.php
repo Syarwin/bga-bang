@@ -32,7 +32,7 @@ class CardIndians extends BangCard {
 		$player_name = BangPlayerManager::getPlayer($player->getId())->getName();
 
 		if($id == PASS) {
-			$player->looseLife(bang::$instance->getGameStateValue('currentTurn'));
+			$player->looseLife(BangPlayerManager::getCurrentTurn());
 		} else {
 			$card = BangCardManager::getCard($id);
 			BangNotificationManager::discardedCard($player, $card);

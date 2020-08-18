@@ -23,15 +23,14 @@ class CardBang extends BangCard {
   }
 
   public function play($player, $args) {
-    bang::$instance->setGameStateValue('bangPlayed', 1);
+    BangLog::addAction("bangPlayed");
     parent::play($player, $args);
   }
 
   public function getPlayOptions($player) {
-    if($player->hasUnlimitedBangs() || bang::$instance->getGameStateValue('bangPlayed') == 0) {
+    if($player->hasUnlimitedBangs() || !$player->hasPlayedBang()) {
       return parent::getPlayOptions($player);
     }
     return null;
   }
-
 }

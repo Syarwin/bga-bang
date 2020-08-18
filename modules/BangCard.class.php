@@ -124,18 +124,17 @@ class BangCard extends APP_GameClass
 /**
  * function to overwrite by blue cards like barrel, jail, dynamite
  */
-	public function activate($player, $args=[]) {return true;}
+	public function activate($player, $args = []) { return null; }
 
 	public function react($id, $player) {
-		$player_name = BangPlayerManager::getPlayer($player->getId())->getName();
 		switch($this->effect['type']) {
 			case BASIC_ATTACK:
 				if($id == PASS) {
-					$player->looseLife(BangPlayerManager::getPlayer(bang::$instance->getGameStateValue('currentTurn')));
+					$player->looseLife(BangPlayerManager::getCurrentTurn(true));
 				} else {
 					$card = BangCardManager::getCard($id);
 					BangNotificationManager::cardPlayed($player, $card);
-					if($card->color==BROWN) {
+					if($card->color == BROWN) {
 						BangCardManager::playCard($card->id);
 					} else {
 						return $card->activate($player);

@@ -84,11 +84,22 @@ $machinestates = [
 		'type' => 'game',
 		'action' => 'stStartOfTurn',
 		'transitions' => [
-			'play'	=> ST_PLAY_CARD,
+			'draw'	=> ST_DRAW_CARDS,
 			'skip' => ST_NEXT_PLAYER,
 			'endgame' => ST_GAME_END,
 		],
 	],
+
+	ST_DRAW_CARDS => [
+		'name' => 'drawCards',
+		'description' => '',
+		'type' => 'game',
+		'action' => 'stDrawCards',
+		'transitions' => [
+			'play'	=> ST_PLAY_CARD,
+		],
+	],
+
 
 
 

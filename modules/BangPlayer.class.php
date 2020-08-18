@@ -92,12 +92,24 @@ class BangPlayer extends APP_GameClass
 
 
   public function startOfTurn() {
-    $cards = BangCardManager::deal($this->id, 2);
+    $equipment = $this->getCardsInPlay();
+		// make sure dynamite gets handled before jail
+		Utils::sort($equipment, function($a, $b) { return $a->getType() > $b->getType();});
+    return array_reduce($equipment, function($state, $card){
+      if($state == 'skip' || $card->getEffectType() != STARTOFTURN) return $state;
+      $newState = $card->activate($this);
+      return $newState ?: $state;
+    }, 'draw');
+  }
+
+  public function drawCards($amount){
+    $cards = BangCardManager::deal($this->id, $amount);
     BangNotificationManager::gainedCards($this, $cards);
   }
 
+
   public function playCard($id, $args) {
-    $state = bang::$instance->gamestate->state()['name'];
+    $state = Utils::getStateName();
     if($state == 'multiReact' || $state == 'react') {
       $this->react($id);
       return;
@@ -105,16 +117,16 @@ class BangPlayer extends APP_GameClass
 
 		$card = BangCardManager::getCard($id);
     BangNotificationManager::cardPlayed($this, $card, $args);
-    bang::$instance->setGameStateValue('currentCard', $id);
+    BangLog::addCardPlayed($this, $card, $args);
     if($card->play($this, $args)){
       bang::$instance->gamestate->nextState("continuePlaying");
     }
 	}
 
 	public function react($id) {
-		$card = BangCardManager::getCard(bang::$instance->getGameStateValue('currentCard'));
+		$card = BangCardManager::getCurrentCard();
 		if($card->react($id, $this)) {
-      if(bang::$instance->gamestate->state()['name'] == 'multiReact')
+      if(Utils::getStateName() == 'multiReact')
         bang::$instance->gamestate->setPlayerNonMultiactive($this->getId(), 'finishedReaction');
       else {
         bang::$instance->gamestate->nextState( "react" );
@@ -214,6 +226,10 @@ class BangPlayer extends APP_GameClass
 
   public function isInRange($enemy, $range){
     return $enemy->getDistanceTo($this) <= $range;
+  }
+
+  public function hasPlayedBang(){
+    return !is_null(BangLog::getLastAction("bangPlayed", $this->id));
   }
 
   /**

@@ -14,8 +14,7 @@ class SidKetchum extends BangPlayer {
   }
 
   public function getHandOptions() {
-    $res = parent::getDefensiveOptions();
-    $card = BangCardManager::getCard(bang::$instance->getGameStateValue('currentCard'));
+    $res = parent::getHandOptions();
     $res['character'] = OPTION_CARDS;
     return $res;
   }

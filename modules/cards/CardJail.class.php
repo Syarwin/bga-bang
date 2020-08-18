@@ -39,10 +39,10 @@ class CardJail extends BangCard {
     BangNotificationManager::discardedCard($player, $this, true);
     if ($card->format()['color'] == 'H') {
       BangNotificationManager::tell("$name can make his turn");
-      return false;
+      return null;
     } else {
       BangNotificationManager::tell("$name is skipped");
-      return true;
+      return "skip";
     }
   }
 }

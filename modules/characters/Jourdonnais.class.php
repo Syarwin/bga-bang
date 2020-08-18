@@ -15,7 +15,7 @@ class Jourdonnais extends BangPlayer {
 
   public function getDefensiveOptions() {
     $res = parent::getDefensiveOptions();
-    $card = BangCardManager::getCard(bang::$instance->getGameStateValue('currentCard'));
+    $card = BangCardManager::getCurrentCard();
     if($card->getType() == CARD_BANG && bang::$instance->getGameStateValue('JourdonnaisUsedSkill')==0)
         $res['character'] = OPTION_NONE;
     return $res;

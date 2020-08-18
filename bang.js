@@ -86,7 +86,7 @@ setup: function (gamedatas) {
     }
   });
 
-  this.setTurn(gamedatas.turn);
+  this.setTurn(gamedatas.playerTurn);
 
 	// Setup game notifications
 	this.setupNotifications();

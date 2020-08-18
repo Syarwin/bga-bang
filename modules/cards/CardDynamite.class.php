@@ -28,15 +28,15 @@ class CardDynamite extends BangCard {
       BangNotificationManager::discardedCard($player, $this, true);
       for($i = 0; $i < 3; $i++) {
         if($player->looseLife()) {
-          return true;
+          return "skip";
         }
       }
-      return false;
+      return null;
     } else {
       $next = BangPlayerManager::getNextPlayer($player->getId());
       BangCardManager::moveCard($this->id, 'inPlay', $next->getId());
       BangNotificationManager::moveCard($this, $player, $next);
-      return false;
+      return null;
     }
   }
 }

@@ -30,4 +30,7 @@ abstract class Utils extends APP_GameClass
     }
   }
 
+  public static function getStateName(){
+    return bang::$instance->gamestate->state()['name'];
+  }
 }

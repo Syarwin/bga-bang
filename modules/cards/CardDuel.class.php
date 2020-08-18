@@ -30,10 +30,10 @@ class CardDuel extends BangCard {
 
   public function react($id, $player) {
     $player_name = BangPlayerManager::getPlayer($player->getId())->getName();
-    $pid = bang::$instance->getGameStateValue('currentTurn');
+    $pid = BangPlayerManager::getCurrentTurn();
     if($pid == $player->getId()) $pid = bang::$instance->getGameStateValue('cardArg');
     if($id == PASS) {
-      $player->looseLife(bang::$instance->getGameStateValue('currentTurn'));
+      $player->looseLife($pid);
       return true;
     } else {
       $card = BangCardManager::getCard($id);
