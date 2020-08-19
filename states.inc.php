@@ -137,6 +137,8 @@ $machinestates = [
 		'args' => 'argReact',
 		'possibleactions' => ['play', 'pass'],
 		'transitions' => [
+			'react' => ST_AWAIT_REACTION,
+			'multiReact' => ST_AWAIT_MULTIREACTION,
 			'finishedReaction' => ST_END_REACT
 		]
 	],

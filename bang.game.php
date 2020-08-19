@@ -28,9 +28,6 @@ class bang extends Table
 		self::$instance = $this;
 		self::initGameStateLabels([
 //      'optionSetup'  => OPTION_SETUP,
-			'target'	=> 12,
-			'bangPlayed' => 15, // whether a bang has been played this turn
-			'cardArg' => 16, // a variable that can be used differently by any card (example duel)
 			'JourdonnaisUsedSkill' => 17
 		]);
 	}

@@ -34,12 +34,6 @@ define('OPTION_PLAYER', 2);
 define('OPTION_CARDS', 3);
 //define('RANDOM', 1);
 
-/*
- * Global game variables
- */
-define('CURRENT_ROUND', 20);
-define('FIRST_PLAYER', 21);
-
 
 
 /*
@@ -159,6 +153,8 @@ define('ALL_OTHER',3);
 define('ALL',4);
 define('ANY',5);
 
+define('CHECK_BARREL', true);
+define('NO_CHECK_BARREL', false);
 
 /*
  * Constants for card symbols

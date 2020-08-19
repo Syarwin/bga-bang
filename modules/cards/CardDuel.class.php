@@ -23,39 +23,42 @@ class CardDuel extends BangBrownCard {
 
 
   /*
-   * 
+   *
    */
-  public function play($player, $args) {
-    BangCardManager::playCard($this->id);
-    bang::$instance->setGameStateValue('cardArg', $args['player']);
-    return $player->attack([$args['player']], false);
+  public function getPlayOptions($player) {
+ 		$player_ids = BangPlayerManager::getLivingPlayers($player->getId());
+ 		return [
+ 			'type' => OPTION_PLAYER,
+ 			'targets' => array_values($player_ids)
+ 		];
   }
 
-  public function react($id, $player) {
-    $player_name = BangPlayerManager::getPlayer($player->getId())->getName();
-    $pid = BangPlayerManager::getCurrentTurn();
-    if($pid == $player->getId()) $pid = bang::$instance->getGameStateValue('cardArg');
-    if($id == PASS) {
-      $player->looseLife($pid);
-      return true;
-    } else {
-      $card = BangCardManager::getCard($id);
-      BangNotificationManager::discardedCard($player, $card);
-      BangCardManager::playCard($card->id);
-      $player->attack([$pid], false);
-      return false;
-    }
+  public function play($player, $args) {
+    $this->discard();
+    BangLog::addAction("duel", ['opponent' => $args['player'] ]);
+    return $player->attack([$args['player']], NO_CHECK_BARREL);
   }
+
 
   public function getReactionOptions($player) {
     return $player->getBangCards();
   }
 
-  public function getPlayOptions($player) {
-		$player_ids = BangPlayerManager::getLivingPlayers($player->getID());
-		return [
-			'type' => OPTION_PLAYER,
-			'targets' => array_values($player_ids)
-		];
- 	}
+  public function getOpponent($player){
+    $p1Id = BangPlayerManager::getCurrentTurn();
+    $p2Id = BangLog::getLastAction("duel")["opponent"];
+    return $player->getId() == $p1Id? $p2Id : $p1Id;
+  }
+
+  public function pass($player){
+    $pId = $this->getOpponent($player);
+    $player->looseLife($pId);
+    return null;
+  }
+
+  public function react($card, $player) {
+    $pId = $this->getOpponent($player);
+    $player->discardCard($card);
+    return $player->attack([$pId], NO_CHECK_BARREL);
+  }
 }

@@ -69,6 +69,7 @@ class BangCard extends APP_GameClass
 
 
 	public function wasPlayed()	{ return BangCardManager::wasPlayed($this->id);	}
+	public function discard() { BangCardManager::discardCard($this); }
 
 
 	/**

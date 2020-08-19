@@ -106,7 +106,7 @@ class BangPlayer extends APP_GameClass
    * Discard a card and notify (with/without a message) it
    */
   public function discardCard($card, $silent = false){
-    BangCardManager::discardCard($card);
+    $card->discard();
     BangNotificationManager::discardedCard($this, $card, $silent);
   }
 
