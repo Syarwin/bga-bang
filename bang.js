@@ -586,6 +586,7 @@ setupNotifications: function () {
     ['drawCard', 1000],
     ['updateHP', 200],
     ['updateHand', 200],
+		['updateOption', 200],
 	];
 
 	notifs.forEach(notif => {
@@ -699,6 +700,14 @@ notif_drawCard: function(n){
   setTimeout(() => dojo.removeClass("bang-card-" + card.id, "flipped"), 100);
   setTimeout(() => dojo.removeClass("bang-card-" + n.args.src_id, "selected"), 1000);
 },
+
+
+
+notif_updateOption: function(n){
+  debug("Notif: update option", n);
+	this.clearPossible();
+	this.makeCardSelectable(n.args.cards, "selectCard");
+},	
 
 	});
 });

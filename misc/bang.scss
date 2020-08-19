@@ -429,12 +429,12 @@ div.bang-card {
 
   &.selectable {
     cursor:pointer;
-    &:hover {
+    &:hover .card-front {
       transform:scale(1.05);
       transform-origin: center center;
     }
   }
-  &.selected {
+  &.selected .card-front {
     transform:scale(1.05);
     transform-origin: center center;
     border: 2px solid red;

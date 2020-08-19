@@ -1,18 +1,11 @@
 <?php
 
-class CardStagecoach extends BangCard {
-  public function __construct($id=null)
-  {
-    parent::__construct($id);
+class CardStagecoach extends BangBrownCard {
+  public function __construct($id = null, $copy = ""){
+    parent::__construct($id, $copy);
     $this->type  = CARD_STAGECOACH;
     $this->name  = clienttranslate('Stagecoach!');
     $this->text  = clienttranslate("Draw 2 cards.");
-    $this->color = BROWN;
-    $this->effect = [
-      'type' => DRAW,
-			'amount' => 2,
-			'impacts' => NONE
-		];
     $this->symbols = [
       [SYMBOL_DRAW, SYMBOL_DRAW]
     ];
@@ -20,5 +13,10 @@ class CardStagecoach extends BangCard {
       BASE_GAME => [ '9D', '9D' ],
       DODGE_CITY => [ ],
     ];
+    $this->effect = [
+      'type' => DRAW,
+			'amount' => 2,
+			'impacts' => NONE
+		];
   }
 }

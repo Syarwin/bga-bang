@@ -5,158 +5,27 @@
  */
 class BangCard extends APP_GameClass
 {
-
-	public function __construct($id=null){
-		$this->id=$id;
+	public function __construct($id = null, $copy = "")
+	{
+		$this->id = $id;
+		$this->copy = $copy;
 	}
 
+	/*
+	 * Attributes
+	 */
 	protected $id;
   protected $type;
 	protected $name;
 	protected $text;
 	protected $symbols;
-	protected $color;
 	protected $effect; // array with type, impact and sometimes range
 	protected $copies = [];
 	protected $copy;
 
-
-
-
-	public function getId(){ return $this->id; }
-	public function getType(){ return $this->type; }
-	public function getName(){ return $this->name; }
-	public function getText(){ return $this->text; }
-	public function getEffect(){ return $this->effect; }
-	public function getSymbols(){ return $this->symbols; }
-	public function getColor(){ return $this->color; }
-	public function getCopies(){ return $this->copies; }
-	public function getCopy(){ return $this->copy; }
-	public function wasPlayed(){ return BangCardManager::wasPlayed($this->id);}
-
-	// TODO : convert str to int ? (J => 11, Q => 12, K => 13 ?)
-	public function getCopyValue(){ return substr($this->copy, 0, -1); }
-	// TODO : convert str to php constants
-	public function getCopyColor(){ return substr($this->copy, -1); }
-
-	public function getEffectType(){ return $this->effect['type']; }
-	public function isEquipment(){return $this->color == BLUE;}
-	public function isAction(){return $this->color == BROWN;}
-
-	public function setCopy($copy) {$this->copy = $copy;}
-	//public function isPlayable() { return true; }
-
-	/**
-	 * play : default function to play a card that. Can be used for cards that have only symbols
-	 * return: true if the game should continue the play loop, false if another state was called
+	/*
+	 * getUiData: used in frontend to display cards
 	 */
-	public function play($player, $args) {
-		if($this->color == BROWN){
-			BangCardManager::playCard($this->id);
-		}	else if ($this->color == BLUE) {
-			// If the card is a weapon, make sure to discard existing weapon
-			if ($this->effect['type'] == WEAPON) {
-				$player->discardWeapon();
-			}
-			BangCardManager::moveCard($this->id, 'inPlay', $player->getId());
-			return true;
-		}
-
-
- 		switch ($this->effect['type']) {
- 			case BASIC_ATTACK:
- 				$ids = ($this->effect['impacts'] == ALL_OTHER) ? BangPlayerManager::getLivingPlayers($player->getId()) : [$args['player']];
-
- 				return $player->attack($ids);
- 				break;
-
- 			case DRAW:
-			case DISCARD:
-				$victim = null;
-				//Utils::die($args);
-				//Utils::die([$this->effect, $args]);
-				switch ($args['type']) {
-					case 'player':
-						$victim = BangPlayerManager::getPlayer($args['player']);
-						$hand = BangCardManager::getHand($victim->getId());
-						shuffle($hand);
-						$card = $hand[0];
-						break;
-					case 'inplay':
-						$victim = BangPlayerManager::getPlayer($args['player']);
-						$card = BangCardManager::getCard($args['arg']);
-						break;
-					default: //deck
-						$cards = BangCardManager::deal($player->getId(), $this->effect['amount']);
-						BangNotificationManager::gainedCards($player, $cards);
-						return true;
-						break;
-				}
-				if($this->effect['type']==DRAW) {
-					BangCardManager::moveCard($card->id, 'hand', $player->getId());
-					BangNotificationManager::stoleCard($player, $victim, $card, $args['type']=='inplay');
-				} else {
-					BangCardManager::playCard($card->id);
-					BangNotificationManager::discardedCards($victim, [$card]);
-				}
-				break;
-
- 			case LIFE_POINT_MODIFIER:
-				$targets = [];
-				if($this->effect['impacts'] == ALL ) $targets = BangPlayerManager::getLivingPlayers(null, true);
-				else $targets[] = is_null($args['player'])? $player : BangPlayerManager::getPlayer($args['player']);
-				foreach($targets as $target) {
-					$hp = $target->getHp();
-					$bullets = $target->getBullets();
-					$amount = $this->effect['amount'];
-					if($hp + $amount > $bullets) $amount = $bullets - $hp;
-					if($amount < 1) continue;
-					$target->setHp($hp + $amount);
-					$target->save();
-					BangNotificationManager::gainedLife($target, $amount);
-				}
- 				break;
- 			break;
- 		}
- 		return true;
-	}
-
-/**
- * function to overwrite by blue cards like barrel, jail, dynamite
- */
-	public function activate($player, $args = []) { return null; }
-
-	public function react($id, $player) {
-		switch($this->effect['type']) {
-			case BASIC_ATTACK:
-				if($id == PASS) {
-					$player->looseLife(BangPlayerManager::getCurrentTurn(true));
-				} else {
-					$card = BangCardManager::getCard($id);
-					BangNotificationManager::cardPlayed($player, $card);
-					if($card->color == BROWN) {
-						BangCardManager::playCard($card->id);
-					} else {
-						return $card->activate($player);
-					}
-				}
-				break;
-		}
-		return true;
-	}
-
-  /**
-	 * can be overwritten to add an additional Message to the played card notification.
-	 * this message should start with a space
-	 */
-	public function getArgsMessage($args) {
-		if(isset($args['player']) && !is_null($args['player']) ) {
-			$name = BangPlayerManager::getPlayer($args['player'])->getName();
-			return " and chooses $name as target";
-		}
-		return "";
-	}
-
 	public function getUIData() {
 		return [
 			'type' => $this->type,
@@ -165,82 +34,110 @@ class BangCard extends APP_GameClass
 		];
 	}
 
+	/*
+	 * format: used in frontend to manipulate cards
+	 */
 	public function format() {
 		return [
 			'id' => $this->id,
 			'type' => $this->type,
-			'color' => substr($this->copy, -1),
-			'value' => substr($this->copy, 0, -1),
+			'color' => $this->getCopyColor(),
+			'value' => $this->getCopyValue(),
 		];
 	}
 
+
+	/*
+	 * Getters
+	 */
+	public function getId()			{ return $this->id; }
+	public function getType()		{ return $this->type; }
+	public function getName()		{ return $this->name; }
+	public function getText()		{ return $this->text; }
+	public function getEffect()	{ return $this->effect; }
+	public function getSymbols(){ return $this->symbols; }
+	public function getCopies()	{ return $this->copies; }
+	public function getCopy()		{ return $this->copy; }
+
+	public function getColor()	{ return null; } // Will be overwrite by Blue/Brown class
+	public function getCopyValue() { return substr($this->copy, 0, -1); }
+	public function getCopyColor() { return substr($this->copy, -1); }
+	public function getEffectType(){ return $this->effect['type']; }
+
+	public function isEquipment(){ return false; }
+	public function isAction()	 { return false; }
+
+
+	public function wasPlayed()	{ return BangCardManager::wasPlayed($this->id);	}
+
+
+	/**
+	 * getPlayOption : default function to know which card can be played by $player
+	 * return: type of option and targets if any
+	 */
   public function getPlayOptions($player) {
-	 switch ($this->color) {
-	 	case BLUE:
-	 		$cardsInPlay = BangCardManager::getCardsInPlay($player->getId());
-			return ['type' => OPTION_NONE];
-			/*foreach($cardsInPlay as $card)
-				if($card->type == $this->type)
-					return null;
-			return ['type' => OPTION_NONE];*/
-	 	case BROWN:
-			$type = -1;
-			switch ($this->effect['type']) {
-				case BASIC_ATTACK:
-				case LIFE_POINT_MODIFIER:
-					if ($this->effect['impacts'] == ALL || $this->effect['impacts'] == ALL_OTHER) {
-						return ['type' => OPTION_NONE];
-					}
+		return [];
+	}
 
-					$type = OPTION_PLAYER;
-					break;
-				case DRAW:
-				case DISCARD:
-					$type = ($this->effect['impacts'] == NONE) ? OPTION_NONE : OPTION_CARD;
-					break;
-				case DEFENSIVE:
-					return null;
-				default:
-					return ['type' => OPTION_NONE];
-				break;
-			}
-			$player_ids = [];
-			switch($this->effect['impacts']) {
-				case ALL_OTHER:
-					$player_ids = BangPlayerManager::getLivingPlayers($player->id);
-					break;
-				case INRANGE:
-					$player_ids = $player->getPlayersInRange($player->getRange());
-					break;
-				case SPECIFIC_RANGE:
-					$player_ids = $player->getPlayersInRange($this->effect['range']);
-					break;
-				case ANY:
-					$player_ids = BangPlayerManager::getLivingPlayers();
-					break;
-				case NONE:
-					$player_ids = [];
-					break;
-			}
-			if($this->getEffectType() == LIFE_POINT_MODIFIER) {
-				$players = BangPlayerManager::getPlayers($player_ids);
-				$filtered_ids = [];
-				foreach($players as $p)
-					if($p->getHp() < $p->getBullets()) $filtered_ids[] = $p->getId();
-				if(count($filtered_ids) == 0) return ['type' => OPTION_NONE];
-				$player_ids = $filtered_ids;
-			}
-			return [
-				'type' => $type,
-				'targets' => array_values($player_ids)
-			];
+	/**
+	 * play : default function to play a card that. Can be used for cards that have only symbols
+	 * return: null if the game should continue the play loop, "stateName" if another state need to be called
+	 */
+	public function play($player, $args) { }
 
-	 		break;
-	 }
- 	}
 
+	/**
+	 * getReactionOptions: default function to handle possible reaction (attack => defense)
+	 * return: list of options (cards/abilities) that can be used
+	 */
 	public function getReactionOptions($player) {
 		return $player->getDefensiveOptions();
 	}
 
+	/**
+	 * react: default function to handle reaction using a card
+	 */
+	public function react($card, $player) {
+		if($this->effect['type'] == BASIC_ATTACK){
+			if($card->getColor() == BROWN) {
+				BangNotificationManager::cardPlayed($player, $card);
+				return BangCardManager::playCard($card->id);
+			} else {
+				// TODO : notification to highlight the card
+				return $card->activate($player);
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * pass: default function to handle reaction by clicking "pass" button
+	 */
+	public function pass($player) {
+		if($this->effect['type'] == BASIC_ATTACK)
+			$player->looseLife();
+
+		return null;
+	}
+
+
+	/**
+	 * function to overwrite by blue cards like barrel, jail, dynamite
+	 */
+	public function activate($player, $args = []) { return null; }
+
+
+  /**
+	 * can be overwritten to add an additional Message to the played card notification.
+	 * this message should start with a space
+	 */
+	 // TODO : not translatable
+	public function getArgsMessage($args) {
+		if(isset($args['player']) && !is_null($args['player']) ) {
+			$name = BangPlayerManager::getPlayer($args['player'])->getName();
+			return " and chooses $name as target";
+		}
+		return "";
+	}
 }

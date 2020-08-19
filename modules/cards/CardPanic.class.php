@@ -1,19 +1,11 @@
 <?php
 
-class CardPanic extends BangCard {
-  public function __construct($id=null)
-  {
-    parent::__construct($id);
+class CardPanic extends BangBrownCard {
+  public function __construct($id = null, $copy = ""){
+    parent::__construct($id, $copy);
     $this->type  = CARD_PANIC;
     $this->name  = clienttranslate('Panic!');
     $this->text  = clienttranslate("Draw 1 card from a player within range 1.");
-    $this->color = BROWN;
-    $this->effect = [
-      'type' => DRAW,
-			'amount' => 1,
-			'range' => 1,
-			'impacts' => SPECIFIC_RANGE
-		];
     $this->symbols = [
       [SYMBOL_DRAW, SYMBOL_RANGE1]
     ];
@@ -21,5 +13,11 @@ class CardPanic extends BangCard {
       BASE_GAME => [ 'JH', 'QH', 'AH', '8D' ],
       DODGE_CITY => [ ],
     ];
+    $this->effect = [
+      'type' => DRAW,
+			'amount' => 1,
+			'range' => 1,
+			'impacts' => SPECIFIC_RANGE
+		];
   }
 }

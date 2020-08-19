@@ -141,13 +141,13 @@ class BangLog extends APP_GameClass
   /*
    * getLastActions : get works and actions of player (used to cancel previous action)
    */
-  public static function getLastActions($actions = ['build', 'usedPower', 'useTile'], $pId = null, $offset = null)
+  public static function getLastActions($actions = [], $pId = null, $offset = null)
   {
-    $pId = $pId ?? bang::$instance->getActivePlayerId();
+    $player = is_null($pId)? "" : "AND `player_id` = '$pId'";
     $offset = $offset ?? 0;
     $actionsNames = "'" . implode("','", $actions) . "'";
 
-    return self::getObjectListFromDb("SELECT * FROM log WHERE `action` IN ($actionsNames) AND `player_id` = '$pId' AND `turn` = (SELECT turn FROM log WHERE `action` = 'startTurn' ORDER BY log_id DESC LIMIT 1) - $offset ORDER BY log_id DESC");
+    return self::getObjectListFromDb("SELECT * FROM log WHERE `action` IN ($actionsNames) $player AND `turn` = (SELECT turn FROM log WHERE `action` = 'startTurn' ORDER BY log_id DESC LIMIT 1) - $offset ORDER BY log_id DESC");
   }
 
   public static function getLastAction($action, $pId = null, $offset = null)

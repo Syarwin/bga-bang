@@ -714,10 +714,10 @@ div.bang-card {
     cursor: not-allowed; }
   div.bang-card.selectable {
     cursor: pointer; }
-    div.bang-card.selectable:hover {
+    div.bang-card.selectable:hover .card-front {
       transform: scale(1.05);
       transform-origin: center center; }
-  div.bang-card.selected {
+  div.bang-card.selected .card-front {
     transform: scale(1.05);
     transform-origin: center center;
     border: 2px solid red;

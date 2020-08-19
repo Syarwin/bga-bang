@@ -1,17 +1,11 @@
 <?php
 
-class CardVolcanic extends BangCard {
-  public function __construct($id=null)
-  {
-    parent::__construct($id);
+class CardVolcanic extends BangBlueCard {
+  public function __construct($id = null, $copy = ""){
+    parent::__construct($id, $copy);
     $this->type  = CARD_VOLCANIC;
     $this->name  = clienttranslate('Volcanic');
     $this->text  = clienttranslate("Range: 1. You can play any number of BANG!");
-    $this->color = BLUE;
-    $this->effect = [
-      'type' => WEAPON,
-      'range' => 1,
-		];
     $this->symbols = [
       [clienttranslate("You can play any number of BANG!")],
       [SYMBOL_RANGE1]
@@ -20,5 +14,9 @@ class CardVolcanic extends BangCard {
       BASE_GAME => [ '10S', '10C' ],
       DODGE_CITY => [ ],
     ];
+    $this->effect = [
+      'type' => WEAPON,
+      'range' => 1,
+		];
   }
 }

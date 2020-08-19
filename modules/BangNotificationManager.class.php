@@ -113,7 +113,7 @@ class BangNotificationManager extends APP_GameClass {
   }
 
   // todo change notif name
-  public static function tell($msg, $args=[]) {
+  public static function tell($msg, $args = []) {
     bang::$instance->notifyAllPlayers('debug', $msg, $args);
   }
 
@@ -122,7 +122,7 @@ class BangNotificationManager extends APP_GameClass {
    * updating reaction options with arguments formatted as usual
    */
   public static function updateOptions($player, $args) {
-    bang::$instance->notifyPlayer($player->getId(), 'debug', '', $args);
+    bang::$instance->notifyPlayer($player->getId(), 'updateOptions', '', $args);
   }
 
   // todo implement and change parameter for notification name

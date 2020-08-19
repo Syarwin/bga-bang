@@ -8,10 +8,10 @@ class BangCardManager extends APP_GameClass
 	private static $deck = null;
 
 	private static function getDeck() {
-		if(self::$deck==null) {
-				self::$deck = self::getNew("module.common.deck");
-				self::$deck->init("card");
-				self::$deck->autoreshuffle = true;
+		if(is_null(self::$deck)) {
+			self::$deck = self::getNew("module.common.deck");
+			self::$deck->init("card");
+			self::$deck->autoreshuffle = true;
 		}
 		return self::$deck;
 	}
@@ -51,8 +51,7 @@ class BangCardManager extends APP_GameClass
 		$c = self::getDeck()->getCard($id);
 		$card_id = $c['type'];
 		$name = self::$classes[$card_id];
-		$card = new $name($id);
-		$card->setCopy($c['type_arg']);
+		$card = new $name($id, $c['type_arg']);
 		return $card;
 	}
 
@@ -64,8 +63,7 @@ class BangCardManager extends APP_GameClass
 	private static function resToObject($row) {
 		$card_id = $row['type'];
 		$name = self::$classes[$card_id];
-		$card = new $name($row['id']);
-		$card->setCopy($row['type_arg']);
+		$card = new $name($row['id'], $row['type_arg']);
 		return $card;
 	}
 
@@ -132,7 +130,9 @@ class BangCardManager extends APP_GameClass
 		return BangPlayerManager::getPlayer($card['location_arg']);
 	}
 
-	public static function moveCard($id, $location, $arg=0) {
+
+	public static function moveCard($mixed, $location, $arg = 0) {
+		$id = ($mixed instanceof BangCard)? $mixed->getId() : $mixed;
 		self::getDeck()->moveCard($id, $location, $arg);
 	}
 
@@ -140,7 +140,8 @@ class BangCardManager extends APP_GameClass
 		self::getDeck()->playCard($id);
 	}
 
-	public static function discardCard($id) {
+	public static function discardCard($mixed) {
+		$id = ($mixed instanceof BangCard)? $mixed->getId() : $mixed;
 		self::playCard($id);
 	}
 
@@ -170,15 +171,15 @@ class BangCardManager extends APP_GameClass
 	}
 
 	public static function wasPlayed($id) {
-		return self::getUniqueValueFromDB("SELECT card_played FROM card WHERE card_id=$id") == 1;
+		return self::getUniqueValueFromDB("SELECT card_played FROM card WHERE card_id = $id") == 1;
 	}
 
 	public static function markAsPlayed($id) {
-		self::DbQuery("UPDATE card SET card_played=1 WHERE card_id=$id");
+		self::DbQuery("UPDATE card SET card_played = 1 WHERE card_id=$id");
 	}
 
 	public static function resetPlayedColumn() {
-		self::DbQuery("UPDATE card SET card_played=0");
+		self::DbQuery("UPDATE card SET card_played = 0");
 	}
 
 

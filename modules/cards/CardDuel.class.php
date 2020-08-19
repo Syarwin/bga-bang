@@ -1,18 +1,12 @@
 <?php
 
-class CardDuel extends BangCard {
-  public function __construct($id=null)
-  {
-    parent::__construct($id);
+class CardDuel extends BangBrownCard {
+  public function __construct($id = null, $copy = ""){
+    parent::__construct($id, $copy);
     $this->type  = CARD_DUEL;
     $this->name  = clienttranslate('Duel');
     $this->text  = clienttranslate("A target player discards a BANG! then you, etc. First player failing to discard a BANG! loses 1 life point.");
     $this->color = BROWN;
-    $this->effect = [
-      'type' => OTHER,
-			'range' => 0,
-			'impacts' => ANY
-		];
     $this->symbols = [
       [$this->text]
     ];
@@ -20,8 +14,17 @@ class CardDuel extends BangCard {
       BASE_GAME => [ 'QD', 'JS', '8C'],
       DODGE_CITY => [ ],
     ];
+    $this->effect = [
+      'type' => OTHER,
+			'range' => 0,
+			'impacts' => ANY
+		];
   }
 
+
+  /*
+   * 
+   */
   public function play($player, $args) {
     BangCardManager::playCard($this->id);
     bang::$instance->setGameStateValue('cardArg', $args['player']);

@@ -59,7 +59,7 @@ class BangPlayerManager extends APP_GameClass
 	public static function getSherrifId() {
 		return self::getUniqueValueFromDB("SELECT player_id FROM player WHERE player_role=" . SHERIFF);
 	}
-	
+
 	/*
 	 * getPlayer : returns the BangPlayer object for the given player ID
 	 */
@@ -101,9 +101,12 @@ class BangPlayerManager extends APP_GameClass
 	/**
 	 * returns an array of the ids of all living players
 	 */
-	public static function getLivingPlayers($exept = null, $asPlayerObjects = false) {
-		$sql = "SELECT player_id FROM player WHERE player_eliminated=0";
-		if($exept != null) $sql.= " AND player_id != $exept";
+	public static function getLivingPlayers($except = null, $asPlayerObjects = false) {
+		$sql = "SELECT player_id FROM player WHERE player_eliminated = 0";
+		if($except != null){
+			$ids = is_array($except)? $except : [$except];
+			$sql .= " AND player_id NOT IN ('" . implode("','", $ids) . "')";
+		}
 		$sql .= " ORDER BY player_no";
 		$ids = self::getObjectListFromDB($sql, true);
 		return $asPlayerObjects ? self::getPlayers($ids) : $ids;
@@ -119,6 +122,7 @@ class BangPlayerManager extends APP_GameClass
 	  }
 
 
+
 	public static function preparePlayerActivation($playerIds) {
 		self::DbQuery("UPDATE player SET player_activate=0");
 		$ids = implode(",", $playerIds);
@@ -128,6 +132,11 @@ class BangPlayerManager extends APP_GameClass
 	public static function getPlayersForActivation() {
 		return self::getObjectListFromDB("SELECT player_id FROM player WHERE player_activate=1", true);
 	}
+
+	public static function getTarget() {
+		return BangLog::getLastAction("target")["target"];
+	}
+
 
 	/*
 	 * getUiData : get all ui data of all players : id, hp, max_hp no, name, color, character, powers(character effect), hand(count)  [if $full then also role]

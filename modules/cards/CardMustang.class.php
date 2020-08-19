@@ -1,14 +1,11 @@
 <?php
 
-class CardMustang extends BangCard {
-  public function __construct($id=null)
-  {
-    parent::__construct($id);
+class CardMustang extends BangBlueCard {
+  public function __construct($id = null, $copy = ""){
+    parent::__construct($id, $copy);
     $this->type  = CARD_MUSTANG;
     $this->name  = clienttranslate('Mustang');
     $this->text  = clienttranslate("Others view you at distance +1");
-    $this->color = BLUE;
-    $this->effect = ['type' => RANGE_INCREASE];
     $this->symbols = [
       [$this->text]
     ];
@@ -16,5 +13,6 @@ class CardMustang extends BangCard {
       BASE_GAME => [ '8H', '9H'],
       DODGE_CITY => [ ],
     ];
+    $this->effect = ['type' => RANGE_INCREASE];
   }
 }

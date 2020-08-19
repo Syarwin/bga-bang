@@ -137,23 +137,44 @@ class bang extends Table
 
 	function playCard($id, $args) {
 		self::checkAction('play');
+		if(in_array(Utils::getStateName(), ["react", "multiReact"])){
+			$this->react($id);
+			return;
+		}
+
 		// TODO : add check to see if the card was indeed playable
 		// if(!in_array($id, $this->argPlayableCards())) ...
-		BangPlayerManager::getActivePlayer()->playCard($id, $args);
+		$newState = BangPlayerManager::getActivePlayer()->playCard($id, $args);
+		$this->gamestate->nextState($newState ?? "continuePlaying");
 	}
 
 
 /*********************
  **** react state ****
  ********************/
- public function argReact() {
+
+	public function stAwaitReaction() {
+		BangCardManager::resetPlayedColumn();
+		$this->gamestate->changeActivePlayer(BangPlayerManager::getTarget());
+		$this->gamestate->nextState();
+	}
+
+	public function argReact() {
 	 $card = BangCardManager::getCurrentCard();
 	 return [
 		 '_private' => [
 			 'active' => $card->getReactionOptions(BangPlayerManager::getActivePlayer())
 		 ]
 	 ];
- }
+	}
+
+
+	public function stAwaitMultiReaction() {
+		BangCardManager::resetPlayedColumn();
+		$players = BangPlayerManager::getTarget();
+		$this->gamestate->setPlayersMultiactive($players, 'finishedReaction', true); // This transition should never happens as the targets are non-empty
+		$this->gamestate->nextState();
+	}
 
  	public function argMultiReact() {
  		$players = $this->gamestate->getActivePlayerList();
@@ -170,7 +191,17 @@ class bang extends Table
 
 	function react($id) {
  		$character = BangPlayerManager::getPlayer(self::getCurrentPlayerId());
- 		$character->react($id);
+ 		$newState = $character->react($id) ?? "finishedReaction";
+
+		if($newState == "updateOptions"){
+			$args = $character->getDefensiveOptions();
+      BangNotificationManager::updateOptions($character, $args);
+		} else {
+	    if(Utils::getStateName() == 'multiReact')
+	      bang::$instance->gamestate->setPlayerNonMultiactive(self::getCurrentPlayerId(), $newState);
+	    else
+	      bang::$instance->gamestate->nextState($newState);
+		}
  	}
 
 	public function useAbility($args) {
@@ -179,19 +210,6 @@ class bang extends Table
 	}
 
 
-	public function stAwaitReaction() {
-		BangCardManager::resetPlayedColumn();
-		$this->setGameStateValue('JourdonnaisUsedSkill', 0);
-		$this->gamestate->changeActivePlayer( $this->getGameStateValue('target') );
-		$this->gamestate->nextState("awaitReaction");
-	}
-
-	public function stAwaitMultiReaction() {
-		BangCardManager::resetPlayedColumn();
-		$players = BangPlayerManager::getPlayersForActivation();
-		if(!$this->gamestate->setPlayersMultiactive( $players, 'awaitReaction', true ))
-				$this->gamestate->nextState("awaitReaction");
-	}
 
 	public function stEndReaction() {
 		$this->gamestate->changeActivePlayer(BangPlayerManager::getCurrentTurn());

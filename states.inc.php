@@ -114,8 +114,8 @@ $machinestates = [
 			'zombiePass' => ST_END_OF_TURN,
 			'endTurn'		=> ST_END_OF_TURN,
 			'discardExcess' => ST_DISCARD_EXCESS,
-			'awaitReaction' => ST_AWAIT_REACTION,
-			'awaitMultiReaction' => ST_AWAIT_MULTIREACTION,
+			'react' => ST_AWAIT_REACTION,
+			'multiReact' => ST_AWAIT_MULTIREACTION,
 			'continuePlaying' => ST_PLAY_CARD
 		],
 	],
@@ -126,7 +126,7 @@ $machinestates = [
 		'type' => 'game',
 		'action' => 'stAwaitReaction',
 		'updateGameProgression' => true,
-		'transitions' => ['awaitReaction' => ST_REACT, 'finishedReaction' => ST_PLAY_CARD]
+		'transitions' => ['' => ST_REACT]
 	],
 
 	ST_REACT => [
@@ -137,8 +137,7 @@ $machinestates = [
 		'args' => 'argReact',
 		'possibleactions' => ['play', 'pass'],
 		'transitions' => [
-			'awaitReaction' => ST_AWAIT_REACTION,
-			'react' => ST_END_REACT
+			'finishedReaction' => ST_END_REACT
 		]
 	],
 
@@ -148,7 +147,7 @@ $machinestates = [
 		'type' => 'game',
 		'action' => 'stAwaitMultiReaction',
 		'updateGameProgression' => true,
-		'transitions' => ['awaitReaction' => ST_MULTIREACT]
+		'transitions' => ['' => ST_MULTIREACT]
 	],
 
 	ST_MULTIREACT => [
