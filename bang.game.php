@@ -156,28 +156,47 @@ class bang extends Table
 			$this->gamestate->changeActivePlayer($args[0]);
 			$this->gamestate->nextState('select');
 		} else {
+			$selection = BangCardManager::getSelection();
+			$player = BangPlayerManager::getCurrentTurn();
+			if(count($selection['$cards']) > 0) {
+				$player->useAbility($selection['$cards']);
+			}
+			$this->gamestate->changeActivePlayer($player->getId());
 			$this->gamestate->nextState('finish');
 		}
 	}
 
 	public function argSelect() {
+		$args = BangLog::getLastAction("selection");
+		$pid = $args[0];
+		$amount = 0;
+		foreach ($args as $id) {
+			if($id==$pid) $amount++;
+			else break;
+		}
 		$selection = BangCardManager::getSelection();
 		if($selection['id'] == -1) {
-			return ['cards' => $selection['cards']];
+			return [
+				'cards' => $selection['cards'],
+				'amountToPick' => $amount
+			];
 		} else {
 			return [
 				'_private' => [
 					$selection['id'] => $selection['cards']
 				],
-				'amount' => count($selection['cards'])
+				'amount' => count($selection['cards']),
+				'amountToPick' => $amount
 			];
 		}
 	}
 
-	public function select($id) {
-		$args = BangLog::getLastAction("selection");
-		$pid = array_shift($args);
-		BangCardManager::moveCard($id, 'hand', $pid);
+	public function select($ids) {
+		foreach ($ids as $id) {
+			$args = BangLog::getLastAction("selection");
+			$pid = array_shift($args);
+			BangCardManager::moveCard($id, 'hand', $pid);
+		}
 		BangLog::addAction("selection", $args);
 		$this->gamestate->nextState('select');
 	}
