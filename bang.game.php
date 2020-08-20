@@ -132,7 +132,7 @@ class bang extends Table
 	}
 
 
-	function playCard($id, $args) {
+	public function playCard($id, $args) {
 		self::checkAction('play');
 		if(in_array(Utils::getStateName(), ["react", "multiReact"])){
 			$this->react($id);
@@ -143,6 +143,43 @@ class bang extends Table
 		// if(!in_array($id, $this->argPlayableCards())) ...
 		$newState = BangPlayerManager::getActivePlayer()->playCard($id, $args);
 		$this->gamestate->nextState($newState ?? "continuePlaying");
+	}
+
+/************************
+ **** slectCard state ***
+ ***********************/
+
+  public function stPrepareSelection() {
+		$args = BangLog::getLastAction("selection");
+
+		if(count($args)>0) {
+			$this->gamestate->changeActivePlayer($args[0]);
+			$this->gamestate->nextState('select');
+		} else {
+			$this->gamestate->nextState('finish');
+		}
+	}
+
+	public function argSelect() {
+		$selection = BangCardManager::getSelection();
+		if($selection['id'] == -1) {
+			return ['cards' => $selection['cards']];
+		} else {
+			return [
+				'_private' => [
+					$selection['id'] => $selection['cards']
+				],
+				'amount' => count($selection['cards'])
+			];
+		}
+	}
+
+	public function select($id) {
+		$args = BangLog::getLastAction("selection");
+		$pid = array_shift($args);
+		BangCardManager::moveCard($id, 'hand', $pid);
+		BangLog::addAction("selection", $args);
+		$this->gamestate->nextState('select');
 	}
 
 

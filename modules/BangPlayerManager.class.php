@@ -40,8 +40,8 @@ class BangPlayerManager extends APP_GameClass
 			BangCardManager::deal($pId,$bullets);
 		}
 		self::DbQuery($sql . implode($values, ','));
-		BangCardManager::dealCard($sheriff, CARD_BARREL);
-		BangCardManager::dealCard($sheriff, CARD_JAIL, 1);
+		BangCardManager::dealCard($sheriff, CARD_GENERAL_STORE);
+		//BangCardManager::dealCard($sheriff, CARD_JAIL, 1);
 		bang::$instance->reloadPlayersBasicInfos();
 		return $sheriff;
 	}

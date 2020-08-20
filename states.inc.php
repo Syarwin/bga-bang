@@ -101,8 +101,6 @@ $machinestates = [
 	],
 
 
-
-
 	ST_PLAY_CARD => [
 		'name' => 'playCard',
 		'description' => clienttranslate('${actplayer} can play a card'),
@@ -116,6 +114,7 @@ $machinestates = [
 			'discardExcess' => ST_DISCARD_EXCESS,
 			'react' => ST_AWAIT_REACTION,
 			'multiReact' => ST_AWAIT_MULTIREACTION,
+			'selection' => ST_PREPARE_SELECTION,
 			'continuePlaying' => ST_PLAY_CARD
 		],
 	],
@@ -161,6 +160,27 @@ $machinestates = [
 		'possibleactions' => ['play','pass'],
 		'transitions' => [
 			'finishedReaction' => ST_END_REACT
+		]
+	],
+
+	ST_PREPARE_SELECTION => [
+		'name' => 'prepareSelection',
+		'description' => '',
+		'type' => 'game',
+		'action' => 'stPrepareSelection',
+		'updateGameProgression' => true,
+		'transitions' => ['select' => ST_SELECT_CARD, 'finish' => ST_PLAY_CARD]
+	],
+
+	ST_SELECT_CARD => [
+		'name' => 'selectCard',
+		'description' => clienttranslate('${actplayer} must select a card'),
+		'descriptionmyturn' => clienttranslate('${you} must select a card'),
+		'type' => 'activeplayer',
+		'args' => 'argSelect',
+		'possibleactions' => ['select'],
+		'transitions' => [
+			'select' => ST_SELECT_CARD,
 		]
 	],
 
