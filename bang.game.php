@@ -115,8 +115,8 @@ class bang extends Table
 	 */
 	public function stDrawCards() {
 		$player = BangPlayerManager::getActivePlayer();
-		$player->drawCards(2);
-		$this->gamestate->nextState("play");
+		$newstate= $player->drawCards(2) ?? "play";
+		$this->gamestate->nextState($newState);
 	}
 
 
@@ -151,8 +151,9 @@ class bang extends Table
 
   public function stPrepareSelection() {
 		$args = BangLog::getLastAction("selection");
+		$players = $args['players'];
 
-		if(count($args)>0) {
+		if(count($players)>0) {
 			$this->gamestate->changeActivePlayer($args[0]);
 			$this->gamestate->nextState('select');
 		} else {
@@ -168,9 +169,10 @@ class bang extends Table
 
 	public function argSelect() {
 		$args = BangLog::getLastAction("selection");
-		$pid = $args[0];
+		$players = $args['players'];
+		$pid = $players[0];
 		$amount = 0;
-		foreach ($args as $id) {
+		foreach ($players as $id) {
 			if($id==$pid) $amount++;
 			else break;
 		}
@@ -178,7 +180,8 @@ class bang extends Table
 		if($selection['id'] == -1) {
 			return [
 				'cards' => $selection['cards'],
-				'amountToPick' => $amount
+				'amountToPick' => $amount,
+				'src' => $args['src']
 			];
 		} else {
 			return [
@@ -186,19 +189,29 @@ class bang extends Table
 					$selection['id'] => $selection['cards']
 				],
 				'amount' => count($selection['cards']),
-				'amountToPick' => $amount
+				'amountToPick' => $amount,
+				'src' => $args['src']
 			];
 		}
 	}
 
 	public function select($ids) {
-		foreach ($ids as $id) {
-			$args = BangLog::getLastAction("selection");
-			$pid = array_shift($args);
+		$selection = BangCardManager::getSelection();
+		$args = BangLog::getLastAction("selection");
+		if($selection['id'] == -1) { //atm only general store
+			$pid = array_shift($args['players']);
 			BangCardManager::moveCard($id, 'hand', $pid);
+			BangLog::addAction("selection", $args);
+			$this->gamestate->nextState('select');
+		} else {
+			$player = BangPlayerManager::getActivePlayer();
+			$rest = [];
+			foreach ($selection['cards'] as $card)
+				if(!in_array($card['id'], $ids)) $rest[] = $card['id'];
+			$newstate = $player->useAbility(['selected' => $ids, 'rest' => $rest);
+			$this->gamestate->nextState($newState);
 		}
-		BangLog::addAction("selection", $args);
-		$this->gamestate->nextState('select');
+
 	}
 
 

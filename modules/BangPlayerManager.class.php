@@ -170,7 +170,7 @@ class BangPlayerManager extends APP_GameClass
 		BLACK_JACK => 'BlackJack', // todo 2
 		PEDRO_RAMIREZ => 'PedroRamirez', // todo 2
 		SUZY_LAFAYETTE => 'SuzyLafayette', // todo 1
-		KIT_CARLSON => 'KitCarlson', // todo 2
+		KIT_CARLSON => 'KitCarlson', // done
 		VULTURE_SAM => 'VultureSam', // todo 1
 		JESSE_JONES => 'JesseJones', // todo 2
 		CALAMITY_JANET => 'CalamityJanet', // tested

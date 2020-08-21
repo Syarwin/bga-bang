@@ -25,7 +25,7 @@ class CardGeneralStore extends BangBrownCard {
         break;
       }
     }
-    BangLog::addAction("selection", $players);
+    BangLog::addAction("selection", ['players' => $players, 'src' => $this->name]);
     BangCardManager::createSelection(count($players));
     //BangCardManager::createSelection(count($players), $player->getId());
     return "selection";

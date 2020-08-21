@@ -141,6 +141,10 @@ class BangCardManager extends APP_GameClass
 		self::getDeck()->moveCard($id, $location, $arg);
 	}
 
+	public static function putOnDeck($card) {
+		insertCardOnExtremePosition($card, 'deck', true);
+	}
+
 	public static function playCard($id) {
 		self::getDeck()->playCard($id);
 	}
