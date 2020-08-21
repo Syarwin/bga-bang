@@ -66,6 +66,11 @@ class BangCard extends APP_GameClass
 
 	public function isEquipment(){ return false; }
 	public function isAction()	 { return false; }
+	public function getNameAndValue() {
+		$colors = ['H' => clienttranslate('Hearts'), 'C' => clienttranslate('Clubs'), 'D' => clienttranslate('Diamonds'), 'S' => clienttranslate('Spades')];
+		$format = $this->format();
+		return $this->name . ' (' . $colors[$format['color']] . ' ' . $format['value'] . ')';
+	}
 
 
 	public function wasPlayed()	{ return BangCardManager::wasPlayed($this->id);	}

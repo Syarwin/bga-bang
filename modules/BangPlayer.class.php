@@ -88,6 +88,17 @@ class BangPlayer extends APP_GameClass
 
   public function useAbility($args) {}
 
+  /**
+   * called whenever a card from the hand is lost(played, stolen, discarded, etc)
+   * atm just for Suzy
+   */
+  public function onCardsLost() {}
+
+  /**
+   * called whenever a player is eliminated
+   * atm just for Vulture Sam
+   */
+  public function onPlayerEliminated($player) {}
 
 
 /*************************
@@ -108,6 +119,7 @@ class BangPlayer extends APP_GameClass
   public function discardCard($card, $silent = false){
     $card->discard();
     BangNotificationManager::discardedCard($this, $card, $silent);
+    $this->onCardsLost();
   }
 
   /*
@@ -335,7 +347,9 @@ class BangPlayer extends APP_GameClass
 		$card = BangCardManager::getCard($id);
     BangNotificationManager::cardPlayed($this, $card, $args);
     BangLog::addCardPlayed($this, $card, $args);
-    return $card->play($this, $args);
+    $newstate = $card->play($this, $args);
+    $this->onCardsLost();
+    return $newstate;
 	}
 
 
@@ -348,7 +362,9 @@ class BangPlayer extends APP_GameClass
       return $card->pass($this);
     else {
       $reactionCard = BangCardManager::getCard($id);
-      return $card->react($reactionCard, $this);
+      $newstate = $card->react($reactionCard, $this);
+      $this->onCardsLost();
+      return $newstate;
     }
 	}
 
@@ -393,5 +409,9 @@ class BangPlayer extends APP_GameClass
 
   public function eliminate($byPlayer = null){
     $this->eliminated = true;
+    $this->save();
+    foreach(BangPlayerManager::getLivingPlayers() as $player)
+      $player->onPlayerEliminated($this);
+
   }
 }

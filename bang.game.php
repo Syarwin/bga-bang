@@ -115,7 +115,7 @@ class bang extends Table
 	 */
 	public function stDrawCards() {
 		$player = BangPlayerManager::getActivePlayer();
-		$newstate= $player->drawCards(2) ?? "play";
+		$newState = $player->drawCards(2) ?? "play";
 		$this->gamestate->nextState($newState);
 	}
 
@@ -208,7 +208,7 @@ class bang extends Table
 			$rest = [];
 			foreach ($selection['cards'] as $card)
 				if(!in_array($card['id'], $ids)) $rest[] = $card['id'];
-			$newstate = $player->useAbility(['selected' => $ids, 'rest' => $rest);
+			$newstate = $player->useAbility(['selected' => $ids, 'rest' => $rest]);
 			$this->gamestate->nextState($newState);
 		}
 
