@@ -97,7 +97,9 @@ class BangCard extends APP_GameClass
 	 * return: list of options (cards/abilities) that can be used
 	 */
 	public function getReactionOptions($player) {
-		return $player->getDefensiveOptions();
+		$options = $player->getDefensiveOptions();
+		$options['amount'] = 1;
+		return $options;
 	}
 
 	/**
@@ -113,7 +115,6 @@ class BangCard extends APP_GameClass
 				return $card->activate($player);
 			}
 		}
-
 		return null;
 	}
 
@@ -123,7 +124,6 @@ class BangCard extends APP_GameClass
 	public function pass($player) {
 		if($this->effect['type'] == BASIC_ATTACK)
 			$player->looseLife();
-
 		return null;
 	}
 

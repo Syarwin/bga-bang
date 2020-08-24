@@ -9,7 +9,9 @@ class SlabtheKiller extends BangPlayer {
       clienttranslate("Players trying to cancel his BANG! cards need to play 2 Missed! "),
 
     ];
-    $this->bullets = 4;  
+    $this->bullets = 4;
     parent::__construct($row);
   }
+
+  function getAmountToCounterBang() { return 2; }
 }

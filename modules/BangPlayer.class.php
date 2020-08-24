@@ -86,20 +86,6 @@ class BangPlayer extends APP_GameClass
   }
 
 
-  public function useAbility($args) {}
-
-  /**
-   * called whenever a card from the hand is lost(played, stolen, discarded, etc)
-   * atm just for Suzy
-   */
-  public function onCardsLost() {}
-
-  /**
-   * called whenever a player is eliminated
-   * atm just for Vulture Sam
-   */
-  public function onPlayerEliminated($player) {}
-
 
 /*************************
 ********** Utils *********
@@ -402,11 +388,6 @@ class BangPlayer extends APP_GameClass
     return null;
   }
 
-
-
-
-
-
   public function eliminate($byPlayer = null){
     $this->eliminated = true;
     $this->save();
@@ -414,4 +395,31 @@ class BangPlayer extends APP_GameClass
       $player->onPlayerEliminated($this);
 
   }
+
+
+  /***************************************
+  ****************************************
+  ************** templates ***************
+  ****************************************
+  ***************************************/
+
+
+
+  public function useAbility($args) {}
+
+  /**
+   * called whenever a card from the hand is lost(played, stolen, discarded, etc)
+   * atm just for Suzy
+   */
+  public function onCardsLost() {}
+
+  /**
+   * called whenever a player is eliminated
+   * atm just for Vulture Sam
+   */
+  public function onPlayerEliminated($player) {}
+
+
+  public function getAmountToCounterBang() {return 1;}
+
 }
