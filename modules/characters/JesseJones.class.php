@@ -16,10 +16,10 @@ class JesseJones extends BangPlayer {
   public function drawCards($amount) {
     if(Utils::getStateName() == 'drawCards') {
       $options = BangPlayerManager::getLivingPlayers($this->id);
-      Utils::filter(function($id) {
+      Utils::filter($options, function($id) {
         $hand = BangPlayerManager::getPlayer($id)->getCardsInHand();
         return !empty($hand);
-      }, $options);
+      });
       $options[] = 'deck';
       BangLog::addAction("draw", $options);
       return 'draw';
@@ -36,9 +36,9 @@ class JesseJones extends BangPlayer {
       $victim = BangPlayerManager::getPlayer($args['selected']);
       $card= $victim->getRandomCardInHand();
       BangCardManager::moveCard($card, 'hand', $this->id);
-      BangNotificationManager::stoleCard($this, $victim, $card);
+      BangNotificationManager::stoleCard($this, $victim, $card, false);
       $card = BangCardManager::deal($this->id, 1);
-      BangNotificationManager::gainedCard($this, $card);
+      BangNotificationManager::gainedCards($this, $card);
     }
     return "play";
   }

@@ -126,13 +126,13 @@ class bang extends Table
 	public function argDrawCard() {
 		return [
 			'_private' => [
-				'active' => BangLog::getLastAction('draw')
+				'active' => ['options' => BangLog::getLastAction('draw')]
 			]
 		];
 	}
 
 	public function draw($selected) {
-		$newstate = BangPlayerManager::getActivePlayer()->activate(['selected' => $selected]);
+		$newstate = BangPlayerManager::getActivePlayer()->useAbility(['selected' => $selected]);
 		$this->gamestate->nextState($newState ?? "play");
 	}
 

@@ -146,7 +146,16 @@ class BangPlayer extends APP_GameClass
    */
   public function looseLife($byPlayer = null, $amount = 1) {
 		$this->hp -= $amount;
-    if($this->hp < 0) $this->hp = 0;
+    if($this->hp <= 0) {
+      $this->hp = 0;
+      $hand = $this->getCardsInHand();
+      Utils::filter($hand, function($card){return $card->getEffectType() == LIFE_POINT_MODIFIER;});
+      if($this->hp+count($hand)>0) {
+        while ($this->hp < 1) {
+          $this->playCard(array_shift($hand)->getId(), ['player' => null]);
+        }
+      } else $this->hp = 0;
+    }
 		$this->save();
     BangNotificationManager::lostLife($this);
     if($this->hp == 0) {

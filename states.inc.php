@@ -104,7 +104,7 @@ $machinestates = [
 	],
 
 	ST_DRAW_CARD => [
-		'name' => 'playCard',
+		'name' => 'drawCard',
 		'description' => clienttranslate('${actplayer} must choose where to draw the first card from'),
 		'descriptionmyturn' => clienttranslate('${you} must choose where to draw the first card from'),
 		'type' => 'activeplayer',
