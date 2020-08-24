@@ -16,6 +16,10 @@ class JesseJones extends BangPlayer {
   public function drawCards($amount) {
     if(Utils::getStateName() == 'drawCards') {
       $options = BangPlayerManager::getLivingPlayers($this->id);
+      Utils::filter(function($id) {
+        $hand = BangPlayerManager::getPlayer($id)->getCardsInHand();
+        return !empty($hand);
+      })
       $options[] = 'deck';
       BangLog::addAction("draw", $options);
       return 'draw';
