@@ -86,6 +86,7 @@ $machinestates = [
 		'transitions' => [
 			'draw'	=> ST_DRAW_CARDS,
 			'skip' => ST_NEXT_PLAYER,
+			'select' => ST_SELECT_CARD,
 			'endgame' => ST_GAME_END,
 		],
 	],
@@ -196,6 +197,8 @@ $machinestates = [
 		'transitions' => [
 			'select' => ST_SELECT_CARD,
 			'play'	=> ST_PLAY_CARD,
+			'skip' => ST_NEXT_PLAYER,
+			'draw' => ST_DRAW_CARD,
 		]
 	],
 

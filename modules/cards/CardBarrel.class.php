@@ -17,16 +17,18 @@ class CardBarrel extends BangBlueCard {
   }
 
   public function activate($player, $args = []) {
-    $card = $player->draw($args, $this);
-    if(is_null($card)) return; // TODO : can happen ??
-
-    BangCardManager::markAsPlayed($this->id);
-    if ($card->getCopyColor() == 'H') {
-      BangNotificationManager::tell('Barrel blocked the attack');
-      return null;
-    } else {
-      BangNotificationManager::tell('Barrel failed to block the attack');
-      return "updateOptions";
+    $mixed = $player->draw(['pattern' => "/H/"], $this);
+    if($mixed instanceof BangCard) {
+      BangCardManager::markAsPlayed($this->id);
+      if ($mixed->getCopyColor() == 'H') {
+        BangNotificationManager::tell('Barrel blocked the attack');
+        return null;
+      } else {
+        BangNotificationManager::tell('Barrel failed to block the attack');
+        return "updateOptions";
+      }
     }
+    return $mixed; //shouldn't happen, just in case we decide to let player decide after all
+
   }
 }

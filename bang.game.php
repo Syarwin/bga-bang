@@ -214,16 +214,18 @@ class bang extends Table
 	public function select($ids) {
 		$selection = BangCardManager::getSelection();
 		$args = BangLog::getLastAction("selection");
+
+		$rest = [];
+		foreach ($selection['cards'] as $card);
+			if(!in_array($card['id'], $ids)) $rest[] = $card['id'];
 		if($selection['id'] == -1) { //atm only general store
 			$pid = array_shift($args['players']);
-			BangCardManager::moveCard($id, 'hand', $pid);
+			$newstate = isset($args['card']) ? BangCardManager::getCurrentCard()->react($ids[0])
+				:	BangPlayerManager::getActivePlayer()->useAbility(['selected' => $ids, 'rest' => $rest]);
 			BangLog::addAction("selection", $args);
-			$this->gamestate->nextState('select');
+			$this->gamestate->nextState($newstate ?? 'select');
 		} else {
 			$player = BangPlayerManager::getActivePlayer();
-			$rest = [];
-			foreach ($selection['cards'] as $card)
-				if(!in_array($card['id'], $ids)) $rest[] = $card['id'];
 			$newstate = $player->useAbility(['selected' => $ids, 'rest' => $rest]);
 			$this->gamestate->nextState($newState);
 		}

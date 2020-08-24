@@ -19,7 +19,7 @@ class JesseJones extends BangPlayer {
       Utils::filter(function($id) {
         $hand = BangPlayerManager::getPlayer($id)->getCardsInHand();
         return !empty($hand);
-      })
+      }, $options);
       $options[] = 'deck';
       BangLog::addAction("draw", $options);
       return 'draw';
