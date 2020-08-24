@@ -98,6 +98,19 @@ $machinestates = [
 		'transitions' => [
 			'play'	=> ST_PLAY_CARD,
 			'selection' => ST_PREPARE_SELECTION,
+			'draw' => ST_DRAW_CARD
+		],
+	],
+
+	ST_DRAW_CARD => [
+		'name' => 'playCard',
+		'description' => clienttranslate('${actplayer} must choose where to draw the first card from'),
+		'descriptionmyturn' => clienttranslate('${you} must choose where to draw the first card from'),
+		'type' => 'activeplayer',
+		'args' => 'argDrawCard',
+		'possibleactions' => ['draw', 'endTurn'],
+		'transitions' => [
+			'play' => ST_PLAY_CARD
 		],
 	],
 

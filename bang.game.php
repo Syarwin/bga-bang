@@ -119,6 +119,22 @@ class bang extends Table
 		$this->gamestate->nextState($newState);
 	}
 
+	/************************
+	 **** drawCard state ****
+	 ***********************/
+
+	public function argDrawCard() {
+		return [
+			'_private' => [
+				'active' => BangLog::getLastAction('draw')
+			]
+		];
+	}
+
+	public function draw($selected) {
+		$newstate = BangPlayerManager::getActivePlayer()->activate(['selected' => $selected]);
+		$this->gamestate->nextState($newState ?? "play");
+	}
 
 /************************
  **** playCard state ****

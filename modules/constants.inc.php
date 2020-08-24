@@ -17,6 +17,7 @@ define('ST_DISCARD_EXCESS', 12);
 define('ST_DRAW_CARDS', 13);
 define('ST_PREPARE_SELECTION', 14);
 define('ST_SELECT_CARD', 15);
+define('ST_DRAW_CARD', 16);
 define('ST_GAME_END', 99);
 
 

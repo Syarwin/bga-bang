@@ -168,11 +168,11 @@ class BangPlayerManager extends APP_GameClass
 		JOURDONNAIS => 'Jourdonnais', // done
 		PAUL_REGRET => 'PaulRegret', // done
 		BLACK_JACK => 'BlackJack', // done
-		PEDRO_RAMIREZ => 'PedroRamirez', // todo 2
+		PEDRO_RAMIREZ => 'PedroRamirez', // done
 		SUZY_LAFAYETTE => 'SuzyLafayette', // done
 		KIT_CARLSON => 'KitCarlson', // done
 		VULTURE_SAM => 'VultureSam', // done
-		JESSE_JONES => 'JesseJones', // todo 2
+		JESSE_JONES => 'JesseJones', // done
 		CALAMITY_JANET => 'CalamityJanet', // tested
 		SLAB_THE_KILLER => 'SlabtheKiller', // todo 2
 		WILLY_THE_KID => 'WillytheKid', // done
