@@ -1,7 +1,17 @@
 - implement Notification for BangNotificationManager::updateOptions
-- implement Notification for BangNotificationManager::moveCard
+- implement Notification for BangNotificationManager::moveCard (this is only for Dynamite)
 - playable cards are no longer contained directly in the state args but in the index cards.(js is already adjusted to that)
 	In addition there is the index character.
-	if this is not null, it can be either OPTION_NONE(=0) or OPTION_CARDS(=3)
+	if this is not null, it can be either OPTION_NONE(=0) or OPTION_CARDS(=3). in both cases we need an action button for using character ability.
 	in the second case the player will need to select 2 Hand Cards to discard.
 	The action to be called is named useAbility and should be used like discardExcess
+- implement selectCard state. arguments: 
+	- args.amountToPick (always) the number of cards the active player needs to pick
+	- args.amount (only when cards aren't visible to all) the amount of cards to choose from, in case you want to show a face-down selection for the others. if not, tell me.
+	- args.cards (only if visible to all) the cards to choose from, formatted as usual
+	- args._private.cards (only for active player and only if selection is not visible for all) the same
+- finish state drawCard. This state is only for the draw phase of Jesse Jones and Pedro Ramirez. Check the onEnteringStateDrawCard, that i already created to avoid errors. 
+	What's still needed here is to make the deck/discard pile selectable. Atm those work only with action buttons
+- adjust react State: args.amount now contains the amount of hand cards needed to react. Usually 1 except when Slab The Killer played Bang!. Keep in mind, that Barrel can still be played alone(i think)
+- Black Jack has to show the second card he draws. For now i just send a message to all, that tells them both the name and the "copy" (written like 'Hearts J').
+	Do you want to show that card somehow? if so, tell me what notification(s) and arguments you want here.

@@ -202,7 +202,7 @@ class bang extends Table
 		} else {
 			return [
 				'_private' => [
-					$selection['id'] => $selection['cards']
+					$selection['id'] => ['cards' => $selection['cards']]
 				],
 				'amount' => count($selection['cards']),
 				'amountToPick' => $amount,
