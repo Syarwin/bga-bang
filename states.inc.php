@@ -109,7 +109,7 @@ $machinestates = [
 		'descriptionmyturn' => clienttranslate('${you} must choose where to draw the first card from'),
 		'type' => 'activeplayer',
 		'args' => 'argDrawCard',
-		'possibleactions' => ['draw', 'endTurn'],
+		'possibleactions' => ['draw'],
 		'transitions' => [
 			'play' => ST_PLAY_CARD
 		],

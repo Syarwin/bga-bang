@@ -305,7 +305,7 @@ onClickPlayer: function(playerId){
   debug("Click", playerId);
   if(!this._selectablePlayers.includes(playerId))
     return;
-  if(this._action = 'drawCard') {
+  if(this._action == 'drawCard') {
     this.onClickDraw(playerId);
     return;
   }
