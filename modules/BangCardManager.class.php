@@ -132,8 +132,13 @@ class BangCardManager extends APP_GameClass
 
 	public static function getSelection() {
 		$cards = array_values(self::getDeck()->getCardsInLocation('selection'));
-		if(count($cards)==0) return ['player'=>0, 'cards'=>[]]; //should never happen
-		return ['id' => $cards[0]['location_arg'], 'cards'=>self::formatCards(self::toObjects($cards))];
+		if(count($cards) == 0)
+			return ['player' => 0, 'cards' => [] ]; //should never happen
+
+		return [
+			'id' => $cards[0]['location_arg'],
+			'cards' => self::formatCards(self::toObjects($cards))
+		];
 	}
 
 	public static function moveCard($mixed, $location, $arg = 0) {
@@ -165,7 +170,7 @@ class BangCardManager extends APP_GameClass
 		return $card;
 	}
 
-	public static function createSelection($nbr, $player=-1) {
+	public static function createSelection($nbr, $player = PUBLIC_SELECTION) {
 		self::getDeck()->pickCardsForLocation($nbr, 'deck', 'selection', $player);
 	}
 

@@ -526,6 +526,17 @@ div.bang-card {
   }
 }
 
+#popin_selectCard_contents {
+  #dialog-card-container {
+    display:flex;
+  }
+
+  #dialog-button-container {
+    text-align:right;
+  }
+}
+
+
 @keyframes pulsate {
   0% {
     transform:rotate(13deg) scale(1);

@@ -192,13 +192,13 @@ $machinestates = [
 
 	ST_SELECT_CARD => [
 		'name' => 'selectCard',
-		'description' => clienttranslate('${actplayer} must select for the effect of {src}'),
-		'descriptionmyturn' => clienttranslate('${you} must select for the effect of {src}'),
+		'description' => clienttranslate('${actplayer} must select for the effect of ${src}'),
+		'descriptionmyturn' => clienttranslate('${you} must select for the effect of ${src}'),
 		'type' => 'activeplayer',
 		'args' => 'argSelect',
 		'possibleactions' => ['select'],
 		'transitions' => [
-			'select' => ST_SELECT_CARD,
+			'select' => ST_PREPARE_SELECTION,
 			'play'	=> ST_PLAY_CARD,
 			'skip' => ST_NEXT_PLAYER,
 			'draw' => ST_DRAW_CARD,

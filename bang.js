@@ -159,6 +159,10 @@ onLeavingState: function (stateName) {
 onUpdateActionButtons: function (stateName, args) {
 	debug('Update action buttons: ' + stateName, args);
 
+  if (stateName == "selectCard")
+    this.addActionButton('buttonShowCards', _('Show cards'), () => this.dialogSelectCard(), null, false, 'blue');
+
+
 	if (!this.isCurrentPlayerActive()) // Make sure the player is active
 		return;
 
@@ -223,9 +227,39 @@ onClickCard: function(ocard){
   var card = this._selectableCards.find(o => o.id == ocard.id);
   if(!card) return;
 
-  if     (this._action == "selectCard")   this.onClickCardSelectCard(card);
-  else if(this._action == "selectOption") this.onClickCardSelectOption(card);
-  else if(this._action == "discardExcess") this.onClickCardDiscardExcess(card);
+  var methodName = "onClickCard" + this._action.charAt(0).toUpperCase() + this._action.slice(1);
+	if (this[methodName] !== undefined)
+		this[methodName](card);
+  else
+    console.error("Trying to call " + methodName); // Should not happen
+},
+
+/*
+ * Toggle a card : useful for multiple select or whenever we want a confirm button
+ */
+toggleCard: function(card){
+  var domId = "bang-card-" + card.id;
+  // Already selected, unselect it
+  if(this._selectedCards.includes(card.id)){
+    this._selectedCards = this._selectedCards.filter(id => id != card.id);
+    dojo.removeClass(domId, "selected");
+    this._selectableCards.forEach(c => dojo.query("#bang-card-" + c.id).addClass("selectable").removeClass("unselectable") );
+  }
+  // Not yet selected, add to selection
+  else {
+    if(this._selectedCards.length >= this._amount)
+      return false;
+
+    this._selectedCards.push(card.id);
+    dojo.addClass(domId, "selected");
+
+    if(this._selectedCards.length == this._amount){
+      dojo.query(".bang-card.selectable").removeClass("selectable").addClass("unselectable");
+      dojo.query(".bang-card.selected").removeClass("unselectable").addClass("selectable");
+    }
+  }
+
+  return true;
 },
 
 
@@ -404,6 +438,55 @@ onClickDraw: function(arg) {
   this.takeAction('draw', {selected: arg});
 },
 
+
+
+
+
+/********************
+**** Select Card ****
+********************/
+onEnteringStateSelectCard: function(args){
+  debug("Selecting cards", args);
+  this.gamedatas.gamestate.args.cards = args.cards.length > 0? args.cards : (args._private? args._private.cards : this.getNBackCards(args.amount) );
+  debug(this.gamedatas.gamestate.args.cards);
+  this.dialogSelectCard();
+},
+
+
+dialogSelectCard: function(){
+  var args = this.gamedatas.gamestate.args;
+  var dial = new ebg.popindialog();
+  dial.create('selectCard');
+  dial.setTitle(_("Pool of card"));
+  dial.setContent(jstpl_dialog);
+  args.cards.forEach(card => this.addCard(card, 'dialog-card-container') );
+  dial.show();
+
+  if(!this.isCurrentPlayerActive())
+    return;
+
+  this._amount = args.amountToPick;
+  this._selectedCards = [];
+  this.makeCardSelectable(args.cards, "selectDialog");
+},
+
+
+onClickCardSelectDialog: function(card){
+  if(!this.toggleCard(card))
+    return;
+
+  dojo.empty("dialog-button-container");
+  if(this._selectedCards.length == this._amount)
+    this.addActionButton('buttonConfirmSelectCard', _('Confirm selection'), 'onClickConfirmSelection', 'dialog-button-container', false, 'blue');
+},
+
+onClickConfirmSelection: function(){
+  this.takeAction("select", {
+    cards:this._selectedCards.join(";"),
+  });
+},
+
+
 ////////////////////////////////
 ////////////////////////////////
 ///		End of turn / discard	 ///
@@ -425,28 +508,13 @@ onEnteringStateDiscardExcess: function(args){
 },
 
 onClickCardDiscardExcess: function(card){
-  var domId = "bang-card-" + card.id;
-  // Already selected, unselect it
-  if(this._selectedCards.includes(card.id)){
-    this._selectedCards = this._selectedCards.filter(id => id != card.id);
-    dojo.removeClass(domId, "selected");
-    dojo.query("#hand .bang-card").addClass("selectable").removeClass("unselectable");
+  this.toggleCard(card);
 
+  if(this._selectedCards.length < this._amount){
     this.removeActionButtons();
     this.onUpdateActionButtons(this.gamedatas.gamestate.name, this.gamedatas.gamestate.args);
-  }
-  // Not yet selected, add to selection
-  else {
-    if(this._selectedCards.length >= this._amount)
-      return;
-    this._selectedCards.push(card.id);
-    dojo.addClass(domId, "selected");
-
-    if(this._selectedCards.length == this._amount){
-      dojo.query("#hand .bang-card.selectable").removeClass("selectable").addClass("unselectable");
-      dojo.query("#hand .bang-card.selected").removeClass("unselectable").addClass("selectable");
-      this.addActionButton('buttonConfirmDiscardExcess', _('Confirm discard'), 'onClickConfirmDiscardExcess', null, false, 'blue');
-    }
+  } else {
+    this.addActionButton('buttonConfirmDiscardExcess', _('Confirm discard'), 'onClickConfirmDiscardExcess', null, false, 'blue');
   }
 },
 
@@ -531,6 +599,7 @@ getCard: function(ocard, eraseId) {
     id: 0,
     type: 0,
     name: '',
+    text: '',
   };
   card.id = eraseId? -1 : ocard.id;
   card.color = ocard.color;
@@ -546,16 +615,22 @@ getBackCard:function(){
     color:0,
     value:0,
     name:'',
+    text: '',
     type:"back",
     flipped:true,
   };
+},
+
+getNBackCards: function(n){
+  return Array.apply(null, {length : n}).map(o => this.getBackCard());
 },
 
 addCard: function(ocard, container){
   var card = this.getCard(ocard);
 
   var div = dojo.place(this.format_block('jstpl_card', card), container);
-  this.addTooltipHtml(div.id, this.format_block( 'jstpl_cardTooltip',  card));
+  if(div.flipped == "")
+    this.addTooltipHtml(div.id, this.format_block( 'jstpl_cardTooltip',  card));
 
   dojo.connect(div, "onclick", (evt) => { evt.preventDefault(); evt.stopPropagation(); this.onClickCard(ocard) });
 },
@@ -692,7 +767,7 @@ notif_cardPlayed: function(n) {
 */
 notif_cardsGained: function(n) {
   debug("Notif: cards gained", n);
-  var cards = n.args.cards.length > 0? n.args.cards.map(o => this.getCard(o)) : Array.apply(null, {length : n.args.amount}).map(o => this.getBackCard());
+  var cards = n.args.cards.length > 0? n.args.cards.map(o => this.getCard(o)) : this.getNBackCards(n.args.amount);
   cards.forEach((card, i) => {
     let sourceId = (n.args.src == "deck")? "deck" : this.getCardAndDestroy(card, "player-character-" + n.args.victimId);
     let targetId = n.args.target == "hand"? (this.player_id == n.args.playerId ? "hand" : ("player-character-" + n.args.playerId)) : ("player-inplay-" + n.args.playerId);

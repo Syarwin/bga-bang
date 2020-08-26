@@ -17,21 +17,17 @@ class CardGeneralStore extends BangBrownCard {
   }
 
   public function play($player, $args) {
-    $players = BangPlayerManager::getLivingPlayers();
-    // make the array start with this player
-    foreach ($players as $idx => $pid) {
-      if($player->getId()==$pid) {
-        $players = array_merge(array_splice($players,$idx),$players);
-        break;
-      }
-    }
-    BangLog::addAction("selection", ['players' => $players, 'src' => $this->name, 'card'=>1]);
+    $players = BangPlayerManager::getLivingPlayersStartingWith($player);
+    BangLog::addAction("selection", ['players' => $players, 'src' => $this->name, 'card' => 1]);
     BangCardManager::createSelection(count($players));
     //BangCardManager::createSelection(count($players), $player->getId());
     return "selection";
   }
 
-  public function react($card, $pid) {
-			BangCardManager::moveCard($id, 'hand', $pid);			
-  }
+
+  public function react($card, $player) {
+    // TODO : missing notification
+    BangCardManager::moveCard($card, 'hand', $player->getId());
+		return null;
+	}
 }

@@ -869,6 +869,11 @@ div.bang-card {
         content: "♣";
         color: black; }
 
+#popin_selectCard_contents #dialog-card-container {
+  display: flex; }
+#popin_selectCard_contents #dialog-button-container {
+  text-align: right; }
+
 @keyframes pulsate {
   0% {
     transform: rotate(13deg) scale(1);

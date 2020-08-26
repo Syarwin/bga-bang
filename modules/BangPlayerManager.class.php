@@ -112,18 +112,20 @@ class BangPlayerManager extends APP_GameClass
 		return $asPlayerObjects ? self::getPlayers($ids) : $ids;
 	}
 
+	public static function getLivingPlayersStartingWith($player) {
+		return self::getObjectListFromDB("SELECT player_id FROM player WHERE player_eliminated = 0 ORDER BY player_no < {$player->getNo()}, player_no", true);
+	}
+
+
 	public static function getEliminatedPlayers() {
 		$sql = "SELECT player_id id, player_role role FROM player WHERE player_eliminated = 1";
 		return array_values(self::getObjectListFromDB($sql));
 	}
 
 
-  public static function getNextPlayer($id) {
-    $players = self::getLivingPlayers();
-		foreach($players as $idx => $pid) {
-			if($pid == $id)
-				return self::getPlayer($idx==count($players)-1 ? $players[0] : $players[$idx+1]);
-		}
+  public static function getNextPlayer($playerId) {
+    $players = self::getLivingPlayersStartingWith($playerId);
+		return self::getPlayer($players[1]);
   }
 
 	public static function countRoles($roles) {

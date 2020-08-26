@@ -61,8 +61,8 @@ class action_bang extends APP_GameAction
 
 	public function select() {
 		self::setAjaxMode();
-		$id = self::getArg( "id", AT_posint, true );
-		$result = $this->game->select($id);
+		$cards = explode(";",self::getArg("cards", AT_numberlist, false));
+		$result = $this->game->select($cards);
 		self::ajaxResponse( );
 	}
 

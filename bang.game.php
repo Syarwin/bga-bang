@@ -170,69 +170,87 @@ class bang extends Table
 		$args = BangLog::getLastAction("selection");
 		$players = $args['players'];
 
-		if(count($players)>0) {
-			$this->gamestate->changeActivePlayer($args[0]);
-			$this->gamestate->nextState('select');
-		} else {
-			$selection = BangCardManager::getSelection();
-			$player = BangPlayerManager::getCurrentTurn();
-			if(count($selection['$cards']) > 0) {
-				$player->useAbility($selection['$cards']);
-			}
-			$this->gamestate->changeActivePlayer($player->getId());
-			$this->gamestate->nextState('finish');
-		}
+		// No more players left to select card => finish selection state
+		if(empty($players))
+			return $this->stFinishSelection();
+
+		// Set active next player who need to select a card
+		$this->gamestate->changeActivePlayer($players[0]);
+		$this->gamestate->nextState('select');
 	}
+
 
 	public function argSelect() {
 		$args = BangLog::getLastAction("selection");
+
 		$players = $args['players'];
-		$pid = $players[0];
-		$amount = 0;
-		foreach ($players as $id) {
-			if($id==$pid) $amount++;
-			else break;
-		}
+		$amount = array_count_values($players)[$players[0]]; // Amount of cards = number of occurence of player's id
 		$selection = BangCardManager::getSelection();
-		if($selection['id'] == -1) {
-			return [
-				'cards' => $selection['cards'],
-				'amountToPick' => $amount,
-				'src' => $args['src']
-			];
-		} else {
-			return [
-				'_private' => [
-					$selection['id'] => ['cards' => $selection['cards']]
-				],
-				'amount' => count($selection['cards']),
-				'amountToPick' => $amount,
-				'src' => $args['src']
-			];
-		}
+		$data = [
+			'i18n' => ['src'],
+			'cards' => [],
+			'amount' => count($selection['cards']),
+			'amountToPick' => $amount,
+			'src' => $args['src']
+		];
+
+		if($selection['id'] == PUBLIC_SELECTION)
+			$data['cards'] = $selection['cards'];
+		else
+		 	$data['_private'] = [ $selection['id'] => ['cards' => $selection['cards'] ] ];
+
+		return $data;
 	}
 
-	public function select($ids) {
-		$selection = BangCardManager::getSelection();
-		$args = BangLog::getLastAction("selection");
 
-		$rest = [];
-		foreach ($selection['cards'] as $card);
-			if(!in_array($card['id'], $ids)) $rest[] = $card['id'];
-		if($selection['id'] == -1) { //atm only general store
-			$pid = array_shift($args['players']);
-			$newstate = isset($args['card']) ? BangCardManager::getCurrentCard()->react($ids[0])
-				:	BangPlayerManager::getActivePlayer()->useAbility(['selected' => $ids, 'rest' => $rest]);
+	public function select($ids) {
+		$args = BangLog::getLastAction("selection");
+		$selection = BangCardManager::getSelection();
+
+		// Compute the remeaning cards
+		Utils::filter($selection['cards'], function($card) use ($ids){
+			return !in_array($card['id'], $ids);
+		});
+
+		// Compute the remeaning players
+		array_shift($args['players']); // TODO : don't work if multiple card selected and other players left
+
+		BangLog::addAction("selection", $args);
+		$player = BangPlayerManager::getActivePlayer();
+		$newState = isset($args['card'])? $player->react($ids[0])
+							: $player->useAbility(['selected' => $ids, 'rest' => $selection['cards'] ]);
+
+	  $this->gamestate->nextState($newstate ?? 'select');
+/*
+		} else {
+
+			$newstate = $card->react($reactionCard, $this);
+
+		}
+
+		if($selection['id'] == PUBLIC_SELECTION) {
+			$playerId = array_shift($args['players']);
+			$newstate =  ? BangCardManager::getCurrentCard()->react($ids[0])
+				:	BangPlayerManager::getActivePlayer()->useAbility(['selected' => $ids, 'rest' => $selection['cards'] ]);
 			BangLog::addAction("selection", $args);
 			$this->gamestate->nextState($newstate ?? 'select');
 		} else {
-			$player = BangPlayerManager::getActivePlayer();
 			$newstate = $player->useAbility(['selected' => $ids, 'rest' => $rest]);
 			$this->gamestate->nextState($newState);
 		}
-
+	*/
 	}
 
+
+	public function stFinishSelection(){
+		$selection = BangCardManager::getSelection();
+		$player = BangPlayerManager::getCurrentTurn();
+		if(count($selection['cards']) > 0) {
+			$player->useAbility($selection['cards']);
+		}
+		$this->gamestate->changeActivePlayer($player->getId());
+		$this->gamestate->nextState('finish');
+	}
 
 /*********************
  **** react state ****

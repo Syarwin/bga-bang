@@ -84,7 +84,7 @@ class BangBrownCard extends BangCard
 			case DRAW:
 			case DISCARD:
 				// Drawing from deck
-				if($args['type'] == 'deck'){
+				if(is_null($args['type'])) {
 					$player->drawCards($this->effect['amount']);
 					return null;
 				}

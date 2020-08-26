@@ -91,6 +91,11 @@ var jstpl_cardTooltip = `<div class="bang-card-tooltip">
 </div>`;
 
 
+var jstpl_dialog = `<div id="dialog-card-container"></div>
+<div id="dialog-button-container"></div>
+`;
+
+
 //var jstpl_card = '<div class="card bigcard" id="tmpcard" ></div>';
 //var jstpl_card = '<div class="card bigcard" id="tmpcard" style="position:absolute; top:${y}px; left:${x}px; scale:1; background-position: ${pos}"></div>';
 var jstpl_option = '<p style="text-align: center; color: #${color}; font-weight: bold; cursor: pointer;" id="option_${id}">${name}</p>';

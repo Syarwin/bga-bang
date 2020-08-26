@@ -159,6 +159,8 @@ define('ANY',5);
 define('CHECK_BARREL', true);
 define('NO_CHECK_BARREL', false);
 
+define('PUBLIC_SELECTION', -1);
+
 /*
  * Constants for card symbols
  */
