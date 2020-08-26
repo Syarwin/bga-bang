@@ -15,3 +15,6 @@
 - adjust react State: args.amount now contains the amount of hand cards needed to react. Usually 1 except when Slab The Killer played Bang!. Keep in mind, that Barrel can still be played alone(i think)
 - Black Jack has to show the second card he draws. For now i just send a message to all, that tells them both the name and the "copy" (written like 'Hearts J').
 	Do you want to show that card somehow? if so, tell me what notification(s) and arguments you want here.
+- Handle playerEliminated notification. arg.player and args.role are provided.
+- show roles of eliminated players. setup args now contain the array 'eliminated' of the eliminated players with their id and role.
+- implement gameEnd state

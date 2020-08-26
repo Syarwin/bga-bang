@@ -160,10 +160,9 @@ class BangPlayer extends APP_GameClass
     BangNotificationManager::lostLife($this);
     if($this->hp == 0) {
       $byPlayer = $byPlayer ?? BangPlayerManager::getCurrentTurn();
-      $this->eliminate($byPlayer);
-      return true;
+      return $this->eliminate($byPlayer);
     }
-    return false;
+    return null;
 	}
 
 
@@ -369,6 +368,7 @@ class BangPlayer extends APP_GameClass
    */
   public function attack($playerIds, $checkBarrel = true) {
     $reactions = [];
+    $state = null;
     foreach(BangPlayerManager::getPlayers($playerIds) as $player){
       // Player has defensive equipment ? (eg Barrel)
       $canUseEquipment = false;
@@ -382,7 +382,8 @@ class BangPlayer extends APP_GameClass
       if($player->countCardsInHand() > 0 || $canUseEquipment)  {
   			$reactions[] = $player->id; // Give him a chance to (pretend to) react
   		} else {
-  			$player->looseLife($this); // Lost life immediatly
+  			$newstate = $player->looseLife($this); // Lost life immediatly
+        if(!is_null($newstate)) $state = $newstate;
   		}
     }
 
@@ -394,7 +395,7 @@ class BangPlayer extends APP_GameClass
       BangLog::addAction("target", ["target" => $reactions]);
       return "multiReact";
     }
-    return null;
+    return $state;
   }
 
   public function eliminate($byPlayer = null){
@@ -402,7 +403,25 @@ class BangPlayer extends APP_GameClass
     $this->save();
     foreach(BangPlayerManager::getLivingPlayers() as $player)
       $player->onPlayerEliminated($this);
+    BangNotificationManager::playerEliminated($this);
+    if(BangPlayerManager::countRoles([Sheriff]) == 0 || BangPlayerManager::countRoles([OUTLAW, RENEGADE]) == 0) {
+      return "endgame";
+    }
 
+
+    if(!is_null($byPlayer)) {
+      if($this->getRole() == OUTLAW) {
+        $byPlayer->drawCards(3);
+      }
+      if($this->getRole() == DEPUTY && $byPlayer->getRole() == SHERIFF) {
+        BangNotificationManager::tell("The Sheriff eliminated his Deputy and must discard all cards",[]);
+        $hand = $byPlayer->getCardsInHand();
+        $equipment = $byPlayer->getCardsInPlay();
+        foreach (array_merge($hand, $equipment) as $card) BangCardManager::discardCard($card);
+        BangNotificationManager::discardedCards($byPlayer, $equipment, true);
+        BangNotificationManager::discardedCards($byPlayer, $hand, false);
+      }
+    }
   }
 
 

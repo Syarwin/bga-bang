@@ -14,7 +14,8 @@ class BartCassidy extends BangPlayer {
   }
 
   public function looseLife($attacker = null, $amount = 1) {
-		if(parent::looseLife($attacker, $amount)) return true;
-    $this->drawCards($amount);
+		$newstate = parent::looseLife($attacker, $amount);
+    if(!$this->eliminated) $this->drawCards($amount);
+    return $newstate;
   }
 }

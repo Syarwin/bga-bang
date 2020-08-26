@@ -66,6 +66,7 @@ class bang extends Table
 			'discard' => BangCardManager::getLastDiscarded(),
 			'playerTurn' => BangPlayerManager::getCurrentTurn(),
 			'cards' => BangCardManager::getUIData(),
+			'eliminated' => BangPlayerManager::getEliminatedPlayers()
 		];
 		return $result;
 	}
@@ -281,10 +282,12 @@ class bang extends Table
 			$args = $character->getDefensiveOptions();
       BangNotificationManager::updateOptions($character, $args);
 		} else {
-	    if(Utils::getStateName() == 'multiReact')
+	    if(Utils::getStateName() == 'multiReact') {
+				if(BangPlayerManager::countRoles([Sheriff]) == 0 || BangPlayerManager::countRoles([OUTLAW, RENEGADE]) == 0) {
+					$newState = "endgame";
+				}
 	      bang::$instance->gamestate->setPlayerNonMultiactive(self::getCurrentPlayerId(), $newState);
-	    else
-	      bang::$instance->gamestate->nextState($newState);
+	    } else bang::$instance->gamestate->nextState($newState);
 		}
  	}
 
@@ -354,7 +357,29 @@ class bang extends Table
 		return false;
 	}
 
-
+/*****************************************
+ *************** end of Game *************
+ ****************************************/
+	public function argGameEnd() {
+		$players = BangPlayerManager::getPlayers(null, true);
+		$alive = BangPlayerManager::getLivingPlayers();
+		$winningRoles = [];
+		$sheriffEliminated = BangPlayerManager::countRoles([SHERIFF]) == 0;
+		$badGuysEliminated = BangPlayerManager::countRoles([OUTLAW, RENEGADE]) == 0;
+		if($sheriffEliminated && $badGuysEliminated) {
+			// todo can that happen with indians or gatling?
+		} elseif($sheriffEliminated) {
+			if(count($alive) == 1 && $alive[0]->getRole() == RENEGADE) $winningRoles = [RENEGADE];
+			else $winningRoles = [OUTLAW];
+		} else {
+			$winningRoles = [SHERIFF, DEPUTY];
+		}
+		$winners = array_filter(function($row) use ($winningRoles) {return in_array($winningRoles, $row['$role']);});
+		return [
+			'players' => $players,
+			'winners' => $winners
+		];
+	}
 
 	/*
 	 * announceWin: TODO

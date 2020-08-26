@@ -123,7 +123,7 @@ class BangCard extends APP_GameClass
 	 */
 	public function pass($player) {
 		if($this->effect['type'] == BASIC_ATTACK)
-			$player->looseLife();
+			return $player->looseLife();
 		return null;
 	}
 

@@ -52,8 +52,7 @@ class CardDuel extends BangBrownCard {
 
   public function pass($player){
     $pId = $this->getOpponent($player);
-    $player->looseLife($pId);
-    return null;
+    return $player->looseLife($pId);
   }
 
   public function react($card, $player) {

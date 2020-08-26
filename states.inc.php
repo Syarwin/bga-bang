@@ -130,7 +130,8 @@ $machinestates = [
 			'react' => ST_AWAIT_REACTION,
 			'multiReact' => ST_AWAIT_MULTIREACTION,
 			'selection' => ST_PREPARE_SELECTION,
-			'continuePlaying' => ST_PLAY_CARD
+			'continuePlaying' => ST_PLAY_CARD,
+			'endgame' => ST_GAME_END,
 		],
 	],
 
@@ -153,7 +154,8 @@ $machinestates = [
 		'transitions' => [
 			'react' => ST_AWAIT_REACTION,
 			'multiReact' => ST_AWAIT_MULTIREACTION,
-			'finishedReaction' => ST_END_REACT
+			'finishedReaction' => ST_END_REACT,
+			'endgame' => ST_GAME_END,
 		]
 	],
 
@@ -174,7 +176,8 @@ $machinestates = [
 		'args' => 'argMultiReact',
 		'possibleactions' => ['play','pass'],
 		'transitions' => [
-			'finishedReaction' => ST_END_REACT
+			'finishedReaction' => ST_END_REACT,
+			'endgame' => ST_GAME_END,
 		]
 	],
 

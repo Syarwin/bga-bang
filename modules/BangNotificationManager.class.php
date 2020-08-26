@@ -162,4 +162,14 @@ class BangNotificationManager extends APP_GameClass {
     ]);
   }
 
+  public static function playerEliminated($player) {
+    $roles = ['Sheriff', 'Deputy', 'Outlaw', 'Renegade'];
+    bang::$instance->notifyAllPlayers('playerEliminated', '${player_name} has been eliminated, he was a ${role_name}', [
+      'player_name' => $player->getName(),
+      'role_name' => $roles[$player->getRole()],
+      'player' => $player->getId(),
+      'role' => $player->getRole()
+    ]);
+  }
+
 }
