@@ -59,6 +59,20 @@ class action_bang extends APP_GameAction
 		self::ajaxResponse( );
 	}
 
+	public function select() {
+		self::setAjaxMode();
+		$id = self::getArg( "id", AT_posint, true );
+		$result = $this->game->select($id);
+		self::ajaxResponse( );
+	}
+
+	public function draw() {
+		self::setAjaxMode();
+		$id = self::getArg( "selected", AT_alphanum, true );
+		$result = $this->game->draw($id);
+		self::ajaxResponse( );
+	}
+
 	public function endTurn() {
 		self::setAjaxMode();
 		$result = $this->game->endTurn();

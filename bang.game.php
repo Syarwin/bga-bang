@@ -66,6 +66,7 @@ class bang extends Table
 			'discard' => BangCardManager::getLastDiscarded(),
 			'playerTurn' => BangPlayerManager::getCurrentTurn(),
 			'cards' => BangCardManager::getUIData(),
+			'eliminated' => BangPlayerManager::getEliminatedPlayers()
 		];
 		return $result;
 	}
@@ -115,10 +116,26 @@ class bang extends Table
 	 */
 	public function stDrawCards() {
 		$player = BangPlayerManager::getActivePlayer();
-		$player->drawCards(2);
-		$this->gamestate->nextState("play");
+		$newState = $player->drawCards(2) ?? "play";
+		$this->gamestate->nextState($newState);
 	}
 
+	/************************
+	 **** drawCard state ****
+	 ***********************/
+
+	public function argDrawCard() {
+		return [
+			'_private' => [
+				'active' => ['options' => BangLog::getLastAction('draw')]
+			]
+		];
+	}
+
+	public function draw($selected) {
+		$newstate = BangPlayerManager::getActivePlayer()->useAbility(['selected' => $selected]);
+		$this->gamestate->nextState($newState ?? "play");
+	}
 
 /************************
  **** playCard state ****
@@ -132,7 +149,7 @@ class bang extends Table
 	}
 
 
-	function playCard($id, $args) {
+	public function playCard($id, $args) {
 		self::checkAction('play');
 		if(in_array(Utils::getStateName(), ["react", "multiReact"])){
 			$this->react($id);
@@ -143,6 +160,77 @@ class bang extends Table
 		// if(!in_array($id, $this->argPlayableCards())) ...
 		$newState = BangPlayerManager::getActivePlayer()->playCard($id, $args);
 		$this->gamestate->nextState($newState ?? "continuePlaying");
+	}
+
+/************************
+ **** slectCard state ***
+ ***********************/
+
+  public function stPrepareSelection() {
+		$args = BangLog::getLastAction("selection");
+		$players = $args['players'];
+
+		if(count($players)>0) {
+			$this->gamestate->changeActivePlayer($args[0]);
+			$this->gamestate->nextState('select');
+		} else {
+			$selection = BangCardManager::getSelection();
+			$player = BangPlayerManager::getCurrentTurn();
+			if(count($selection['$cards']) > 0) {
+				$player->useAbility($selection['$cards']);
+			}
+			$this->gamestate->changeActivePlayer($player->getId());
+			$this->gamestate->nextState('finish');
+		}
+	}
+
+	public function argSelect() {
+		$args = BangLog::getLastAction("selection");
+		$players = $args['players'];
+		$pid = $players[0];
+		$amount = 0;
+		foreach ($players as $id) {
+			if($id==$pid) $amount++;
+			else break;
+		}
+		$selection = BangCardManager::getSelection();
+		if($selection['id'] == -1) {
+			return [
+				'cards' => $selection['cards'],
+				'amountToPick' => $amount,
+				'src' => $args['src']
+			];
+		} else {
+			return [
+				'_private' => [
+					$selection['id'] => ['cards' => $selection['cards']]
+				],
+				'amount' => count($selection['cards']),
+				'amountToPick' => $amount,
+				'src' => $args['src']
+			];
+		}
+	}
+
+	public function select($ids) {
+		$selection = BangCardManager::getSelection();
+		$args = BangLog::getLastAction("selection");
+
+		$rest = [];
+		foreach ($selection['cards'] as $card);
+			if(!in_array($card['id'], $ids)) $rest[] = $card['id'];
+		if($selection['id'] == -1) { //atm only general store
+			$pid = array_shift($args['players']);
+			$newstate = isset($args['card']) ? BangCardManager::getCurrentCard()->react($ids[0])
+				:	BangPlayerManager::getActivePlayer()->useAbility(['selected' => $ids, 'rest' => $rest]);
+			BangLog::addAction("selection", $args);
+			$this->gamestate->nextState($newstate ?? 'select');
+		} else {
+			$player = BangPlayerManager::getActivePlayer();
+			$newstate = $player->useAbility(['selected' => $ids, 'rest' => $rest]);
+			$this->gamestate->nextState($newState);
+		}
+
 	}
 
 
@@ -194,10 +282,12 @@ class bang extends Table
 			$args = $character->getDefensiveOptions();
       BangNotificationManager::updateOptions($character, $args);
 		} else {
-	    if(Utils::getStateName() == 'multiReact')
+	    if(Utils::getStateName() == 'multiReact') {
+				if(BangPlayerManager::countRoles([Sheriff]) == 0 || BangPlayerManager::countRoles([OUTLAW, RENEGADE]) == 0) {
+					$newState = "endgame";
+				}
 	      bang::$instance->gamestate->setPlayerNonMultiactive(self::getCurrentPlayerId(), $newState);
-	    else
-	      bang::$instance->gamestate->nextState($newState);
+	    } else bang::$instance->gamestate->nextState($newState);
 		}
  	}
 
@@ -267,7 +357,29 @@ class bang extends Table
 		return false;
 	}
 
-
+/*****************************************
+ *************** end of Game *************
+ ****************************************/
+	public function argGameEnd() {
+		$players = BangPlayerManager::getPlayers(null, true);
+		$alive = BangPlayerManager::getLivingPlayers();
+		$winningRoles = [];
+		$sheriffEliminated = BangPlayerManager::countRoles([SHERIFF]) == 0;
+		$badGuysEliminated = BangPlayerManager::countRoles([OUTLAW, RENEGADE]) == 0;
+		if($sheriffEliminated && $badGuysEliminated) {
+			// todo can that happen with indians or gatling?
+		} elseif($sheriffEliminated) {
+			if(count($alive) == 1 && $alive[0]->getRole() == RENEGADE) $winningRoles = [RENEGADE];
+			else $winningRoles = [OUTLAW];
+		} else {
+			$winningRoles = [SHERIFF, DEPUTY];
+		}
+		$winners = array_filter(function($row) use ($winningRoles) {return in_array($winningRoles, $row['$role']);});
+		return [
+			'players' => $players,
+			'winners' => $winners
+		];
+	}
 
 	/*
 	 * announceWin: TODO

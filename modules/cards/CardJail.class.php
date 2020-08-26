@@ -36,7 +36,7 @@ class CardJail extends BangBlueCard {
     ];
     if ($card->getCopyColor() == 'H') {
       BangNotificationManager::tell('${player_name} can make his turn', $data);
-      return null;
+      return 'draw';
     } else {
       BangNotificationManager::tell('${player_name} is skipped', $data);
       return "skip";

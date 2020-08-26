@@ -36,12 +36,12 @@ class BangPlayerManager extends APP_GameClass
 				$bullets++;
 				$sheriff = $pId;
 			}
-			$values[] = "($pId, '$color','$canal','$name','$avatar', $bullets, $bullets, $role, $char_id)";
+			$values[] = "($pId, '$color','$canal','$name','$avatar', $bullets, 1, $role, $char_id)";
 			BangCardManager::deal($pId,$bullets);
 		}
 		self::DbQuery($sql . implode($values, ','));
-		BangCardManager::dealCard($sheriff, CARD_BARREL);
-		BangCardManager::dealCard($sheriff, CARD_JAIL, 1);
+		BangCardManager::dealCard($sheriff, CARD_BEER);
+		//BangCardManager::dealCard($sheriff, CARD_JAIL, 1);
 		bang::$instance->reloadPlayersBasicInfos();
 		return $sheriff;
 	}
@@ -112,15 +112,25 @@ class BangPlayerManager extends APP_GameClass
 		return $asPlayerObjects ? self::getPlayers($ids) : $ids;
 	}
 
+	public static function getEliminatedPlayers() {
+		$sql = "SELECT player_id id, player_role role FROM player WHERE player_eliminated = 1";
+		return array_values(self::getObjectListFromDB($sql));
+	}
 
-	  public static function getNextPlayer($id) {
-	    $players = self::getLivingPlayers();
-			foreach($players as $idx => $pid) {
-				if($pid == $id)
-					return self::getPlayer($idx==count($players)-1 ? $players[0] : $players[$idx+1]);
-			}
-	  }
 
+  public static function getNextPlayer($id) {
+    $players = self::getLivingPlayers();
+		foreach($players as $idx => $pid) {
+			if($pid == $id)
+				return self::getPlayer($idx==count($players)-1 ? $players[0] : $players[$idx+1]);
+		}
+  }
+
+	public static function countRoles($roles) {
+		$sql = "SELECT COUNT(*) FROM player WHERE player_eliminated=0 AND (";
+		$sql .= implode(" OR ", array_map(function($role) {return "player_role=$role";}, $roles)) . ")";
+		return self::getUniqueValueFromDB($sql);
+	}
 
 
 	public static function preparePlayerActivation($playerIds) {
@@ -161,20 +171,20 @@ class BangPlayerManager extends APP_GameClass
 	 * characterClasses : for each character Id, the corresponding class name
 	 */
 	public static $classes = [
-		LUCKY_DUKE => 'LuckyDuke', // todo 2
+		LUCKY_DUKE => 'LuckyDuke', // done
 		EL_GRINGO => 'ElGringo', // tested(with Bang!)
 		SID_KETCHUM => 'SidKetchum', // done
 		BART_CASSIDY => 'BartCassidy', // done
 		JOURDONNAIS => 'Jourdonnais', // done
 		PAUL_REGRET => 'PaulRegret', // done
-		BLACK_JACK => 'BlackJack', // todo 2
-		PEDRO_RAMIREZ => 'PedroRamirez', // todo 2
-		SUZY_LAFAYETTE => 'SuzyLafayette', // todo 1
-		KIT_CARLSON => 'KitCarlson', // todo 2
-		VULTURE_SAM => 'VultureSam', // todo 1
-		JESSE_JONES => 'JesseJones', // todo 2
+		BLACK_JACK => 'BlackJack', // done
+		PEDRO_RAMIREZ => 'PedroRamirez', // done
+		SUZY_LAFAYETTE => 'SuzyLafayette', // done
+		KIT_CARLSON => 'KitCarlson', // done
+		VULTURE_SAM => 'VultureSam', // done
+		JESSE_JONES => 'JesseJones', // done
 		CALAMITY_JANET => 'CalamityJanet', // tested
-		SLAB_THE_KILLER => 'SlabtheKiller', // todo 2
+		SLAB_THE_KILLER => 'SlabtheKiller', // done
 		WILLY_THE_KID => 'WillytheKid', // done
 		ROSE_DOOLAN => 'RoseDoolan', // tested
 

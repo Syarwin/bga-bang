@@ -117,7 +117,7 @@ onEnteringState: function (stateName, args) {
     this.setTurn(args.active_player);
 
 	// Stop here if it's not the current player's turn for some states
-	if (["playCard", "react", "multiReact", "discardExcess"].includes(stateName) && !this.isCurrentPlayerActive()) return;
+	if (["drawCard", "playCard", "react", "multiReact", "discardExcess"].includes(stateName) && !this.isCurrentPlayerActive()) return;
 
 	// Call appropriate method
 	var methodName = "onEnteringState" + stateName.charAt(0).toUpperCase() + stateName.slice(1);
@@ -283,11 +283,13 @@ onSelectOption: function(){
 /*
  * Make some players selectable with either action button or directly on the board
  */
-makePlayersSelectable: function(players){
-  this.removeActionButtons();
-  this.gamedatas.gamestate.descriptionmyturn = _("You must choose a player");
-  this.updatePageTitle();
-  this.addActionButton('buttonCancel', _('Undo'), () => this.onClickCancelCardSelected(this._selectableCards), null, false, 'gray');
+makePlayersSelectable: function(players, append=false){
+  if(!append) {
+    this.removeActionButtons();
+    this.gamedatas.gamestate.descriptionmyturn = _("You must choose a player");
+    this.updatePageTitle();
+    this.addActionButton('buttonCancel', _('Undo'), () => this.onClickCancelCardSelected(this._selectableCards), null, false, 'gray');
+  }
 
   this._selectablePlayers = players;
   this._selectablePlayers.forEach(playerId => {
@@ -303,7 +305,10 @@ onClickPlayer: function(playerId){
   debug("Click", playerId);
   if(!this._selectablePlayers.includes(playerId))
     return;
-
+  if(this._action == 'drawCard') {
+    this.onClickDraw(playerId);
+    return;
+  }
   this._selectedOptionType = "player";
   this._selectedPlayer = playerId;
   this.onSelectOption();
@@ -375,6 +380,29 @@ onClickPass: function(){
 },
 
 
+
+onEnteringStateDrawCard: function(args){
+  this._action = 'drawCard';
+  var players = [];
+  args._private.options.forEach(option => {
+    switch(option) {
+      case 'deck':
+        this.addActionButton('buttonSelectDeck', 'Deck', () => this.onClickDraw('deck'), null, false, 'blue');
+        break;
+      case 'discard':
+        this.addActionButton('buttonSelectDeck', 'Discard', () => this.onClickDraw('discard'), null, false, 'blue');
+        break;
+      default:
+        players.push(option);
+        break;
+    }
+  });
+  if(players.length > 0) this.makePlayersSelectable(players, true);
+},
+
+onClickDraw: function(arg) {
+  this.takeAction('draw', {selected: arg});
+},
 
 ////////////////////////////////
 ////////////////////////////////
@@ -707,7 +735,7 @@ notif_updateOption: function(n){
   debug("Notif: update option", n);
 	this.clearPossible();
 	this.makeCardSelectable(n.args.cards, "selectCard");
-},	
+},
 
 	});
 });

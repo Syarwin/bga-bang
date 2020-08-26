@@ -130,16 +130,14 @@ class BangNotificationManager extends APP_GameClass {
    * drawing a card for cards like barrel, jail, etc.
    */
   public static function drawCard($player, $card, $src) {
-    $colors = ['H' => clienttranslate('Hearts'), 'C' => clienttranslate('Clubs'), 'D' => clienttranslate('Diamonds'), 'S' => clienttranslate('Spades')];
+
     $format = $card->format();
     $src_name = ($src instanceof BangCard) ? $src->getName() : $src->getCharName();
 
-    bang::$instance->notifyAllPlayers('drawCard', '${player_name} draws ${card_name} (${card_color} ${card_value}) for ${src_name}\'s effect.', [
+    bang::$instance->notifyAllPlayers('drawCard', '${player_name} draws ${card_name} for ${src_name}\'s effect.', [
       'i18n' => ['card_name', 'card_color', 'src_name'],
       'player_name' => $player->getName(),
-      'card_name' => $card->getName(),
-      'card_value' => $format['value'],
-      'card_color' => $colors[$format['color']],
+      'card_name' => $card->getNameAndValue(),
       'src_name' => $src_name,
       'src_id' => $src->getId(),
       'card' => $format
@@ -161,6 +159,16 @@ class BangNotificationManager extends APP_GameClass {
       'src' => $player->getId(),
       'cards' => [$card->format()],
       'amount' => 1,
+    ]);
+  }
+
+  public static function playerEliminated($player) {
+    $roles = ['Sheriff', 'Deputy', 'Outlaw', 'Renegade'];
+    bang::$instance->notifyAllPlayers('playerEliminated', '${player_name} has been eliminated, he was a ${role_name}', [
+      'player_name' => $player->getName(),
+      'role_name' => $roles[$player->getRole()],
+      'player' => $player->getId(),
+      'role' => $player->getRole()
     ]);
   }
 

@@ -130,10 +130,19 @@ class BangCardManager extends APP_GameClass
 		return BangPlayerManager::getPlayer($card['location_arg']);
 	}
 
+	public static function getSelection() {
+		$cards = array_values(self::getDeck()->getCardsInLocation('selection'));
+		if(count($cards)==0) return ['player'=>0, 'cards'=>[]]; //should never happen
+		return ['id' => $cards[0]['location_arg'], 'cards'=>self::formatCards(self::toObjects($cards))];
+	}
 
 	public static function moveCard($mixed, $location, $arg = 0) {
 		$id = ($mixed instanceof BangCard)? $mixed->getId() : $mixed;
 		self::getDeck()->moveCard($id, $location, $arg);
+	}
+
+	public static function putOnDeck($card) {
+		insertCardOnExtremePosition($card, 'deck', true);
 	}
 
 	public static function playCard($id) {
@@ -145,7 +154,8 @@ class BangCardManager extends APP_GameClass
 		self::playCard($id);
 	}
 
-	public static function deal($player, $amount){
+	public static function deal($player, $amount, $fromDiscard=false){
+		if($fromDiscard) return self::toObjects(self::getDeck()->pickCards($amount, 'discard', $player));
 		return self::toObjects(self::getDeck()->pickCards($amount, 'deck', $player));
 	}
 
@@ -153,6 +163,10 @@ class BangCardManager extends APP_GameClass
 		$card = self::resToObject(self::getDeck()->getCardOnTop('deck'));
 		self::playCard($card->getId());
 		return $card;
+	}
+
+	public static function createSelection($nbr, $player=-1) {
+		self::getDeck()->pickCardsForLocation($nbr, 'deck', 'selection', $player);
 	}
 
   // only for testing

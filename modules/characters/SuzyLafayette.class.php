@@ -9,7 +9,13 @@ class SuzyLafayette extends BangPlayer {
       clienttranslate("As soon as she has no cards in her hand, she draws a card from the draw pile. "),
 
     ];
-    $this->bullets = 4;  
+    $this->bullets = 4;
     parent::__construct($row);
+  }
+
+  public function onCardsLost() {
+    if(count($this->getCardsInHand()) == 0) {
+      $this->drawCards(1);
+    }
   }
 }

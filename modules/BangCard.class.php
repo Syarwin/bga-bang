@@ -66,6 +66,11 @@ class BangCard extends APP_GameClass
 
 	public function isEquipment(){ return false; }
 	public function isAction()	 { return false; }
+	public function getNameAndValue() {
+		$colors = ['H' => clienttranslate('Hearts'), 'C' => clienttranslate('Clubs'), 'D' => clienttranslate('Diamonds'), 'S' => clienttranslate('Spades')];
+		$format = $this->format();
+		return $this->name . ' (' . $colors[$format['color']] . ' ' . $format['value'] . ')';
+	}
 
 
 	public function wasPlayed()	{ return BangCardManager::wasPlayed($this->id);	}
@@ -92,7 +97,9 @@ class BangCard extends APP_GameClass
 	 * return: list of options (cards/abilities) that can be used
 	 */
 	public function getReactionOptions($player) {
-		return $player->getDefensiveOptions();
+		$options = $player->getDefensiveOptions();
+		$options['amount'] = 1;
+		return $options;
 	}
 
 	/**
@@ -108,7 +115,6 @@ class BangCard extends APP_GameClass
 				return $card->activate($player);
 			}
 		}
-
 		return null;
 	}
 
@@ -117,8 +123,7 @@ class BangCard extends APP_GameClass
 	 */
 	public function pass($player) {
 		if($this->effect['type'] == BASIC_ATTACK)
-			$player->looseLife();
-
+			return $player->looseLife();
 		return null;
 	}
 

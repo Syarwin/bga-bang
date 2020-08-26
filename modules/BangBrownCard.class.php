@@ -99,6 +99,7 @@ class BangBrownCard extends BangCard
 				} else {
 					$victim->discardCard($card);
 				}
+				$victim->onCardsLost();
 				break;
 
 			case LIFE_POINT_MODIFIER:

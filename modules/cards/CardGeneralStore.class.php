@@ -13,7 +13,25 @@ class CardGeneralStore extends BangBrownCard {
       BASE_GAME => [ '9C', 'QS' ],
       DODGE_CITY => [ ],
     ];
-    $this->effect = ['type' => STARTOFTURN];
-// TODO
+    $this->effect = ['type' => OTHER];
+  }
+
+  public function play($player, $args) {
+    $players = BangPlayerManager::getLivingPlayers();
+    // make the array start with this player
+    foreach ($players as $idx => $pid) {
+      if($player->getId()==$pid) {
+        $players = array_merge(array_splice($players,$idx),$players);
+        break;
+      }
+    }
+    BangLog::addAction("selection", ['players' => $players, 'src' => $this->name, 'card'=>1]);
+    BangCardManager::createSelection(count($players));
+    //BangCardManager::createSelection(count($players), $player->getId());
+    return "selection";
+  }
+
+  public function react($card, $pid) {
+			BangCardManager::moveCard($id, 'hand', $pid);			
   }
 }

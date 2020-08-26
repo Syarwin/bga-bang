@@ -15,11 +15,12 @@ class ElGringo extends BangPlayer {
 
 
   public function looseLife($attacker = null, $amount = 1) {
-		parent::looseLife($attacker, $amount);
-		if($attacker instanceof BangPlayer) {
+		$newstate = parent::looseLife($attacker, $amount);
+		if(!$this->eliminated && $attacker instanceof BangPlayer) {
 			$card = $attacker->getRandomCardInHand();
       BangCardManager::moveCard($card->getId(), 'hand', $this->getId());
 			BangNotificationManager::stoleCard($this, $attacker, $card, false);
 		}
+    return $newstate;
 	}
 }

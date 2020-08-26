@@ -86,9 +86,6 @@ class BangPlayer extends APP_GameClass
   }
 
 
-  public function useAbility($args) {}
-
-
 
 /*************************
 ********** Utils *********
@@ -108,6 +105,7 @@ class BangPlayer extends APP_GameClass
   public function discardCard($card, $silent = false){
     $card->discard();
     BangNotificationManager::discardedCard($this, $card, $silent);
+    $this->onCardsLost();
   }
 
   /*
@@ -148,15 +146,23 @@ class BangPlayer extends APP_GameClass
    */
   public function looseLife($byPlayer = null, $amount = 1) {
 		$this->hp -= $amount;
-    if($this->hp < 0) $this->hp = 0;
+    if($this->hp <= 0) {
+      $this->hp = 0;
+      $hand = $this->getCardsInHand();
+      Utils::filter($hand, function($card){return $card->getEffectType() == LIFE_POINT_MODIFIER;});
+      if($this->hp+count($hand)>0) {
+        while ($this->hp < 1) {
+          $this->playCard(array_shift($hand)->getId(), ['player' => null]);
+        }
+      } else $this->hp = 0;
+    }
 		$this->save();
     BangNotificationManager::lostLife($this);
     if($this->hp == 0) {
       $byPlayer = $byPlayer ?? BangPlayerManager::getCurrentTurn();
-      $this->eliminate($byPlayer);
-      return true;
+      return $this->eliminate($byPlayer);
     }
-    return false;
+    return null;
 	}
 
 
@@ -335,7 +341,9 @@ class BangPlayer extends APP_GameClass
 		$card = BangCardManager::getCard($id);
     BangNotificationManager::cardPlayed($this, $card, $args);
     BangLog::addCardPlayed($this, $card, $args);
-    return $card->play($this, $args);
+    $newstate = $card->play($this, $args);
+    $this->onCardsLost();
+    return $newstate;
 	}
 
 
@@ -348,7 +356,9 @@ class BangPlayer extends APP_GameClass
       return $card->pass($this);
     else {
       $reactionCard = BangCardManager::getCard($id);
-      return $card->react($reactionCard, $this);
+      $newstate = $card->react($reactionCard, $this);
+      $this->onCardsLost();
+      return $newstate;
     }
 	}
 
@@ -358,6 +368,7 @@ class BangPlayer extends APP_GameClass
    */
   public function attack($playerIds, $checkBarrel = true) {
     $reactions = [];
+    $state = null;
     foreach(BangPlayerManager::getPlayers($playerIds) as $player){
       // Player has defensive equipment ? (eg Barrel)
       $canUseEquipment = false;
@@ -371,7 +382,8 @@ class BangPlayer extends APP_GameClass
       if($player->countCardsInHand() > 0 || $canUseEquipment)  {
   			$reactions[] = $player->id; // Give him a chance to (pretend to) react
   		} else {
-  			$player->looseLife($this); // Lost life immediatly
+  			$newstate = $player->looseLife($this); // Lost life immediatly
+        if(!is_null($newstate)) $state = $newstate;
   		}
     }
 
@@ -383,15 +395,59 @@ class BangPlayer extends APP_GameClass
       BangLog::addAction("target", ["target" => $reactions]);
       return "multiReact";
     }
-    return null;
+    return $state;
   }
-
-
-
-
-
 
   public function eliminate($byPlayer = null){
     $this->eliminated = true;
+    $this->save();
+    foreach(BangPlayerManager::getLivingPlayers() as $player)
+      $player->onPlayerEliminated($this);
+    BangNotificationManager::playerEliminated($this);
+    if(BangPlayerManager::countRoles([Sheriff]) == 0 || BangPlayerManager::countRoles([OUTLAW, RENEGADE]) == 0) {
+      return "endgame";
+    }
+
+
+    if(!is_null($byPlayer)) {
+      if($this->getRole() == OUTLAW) {
+        $byPlayer->drawCards(3);
+      }
+      if($this->getRole() == DEPUTY && $byPlayer->getRole() == SHERIFF) {
+        BangNotificationManager::tell("The Sheriff eliminated his Deputy and must discard all cards",[]);
+        $hand = $byPlayer->getCardsInHand();
+        $equipment = $byPlayer->getCardsInPlay();
+        foreach (array_merge($hand, $equipment) as $card) BangCardManager::discardCard($card);
+        BangNotificationManager::discardedCards($byPlayer, $equipment, true);
+        BangNotificationManager::discardedCards($byPlayer, $hand, false);
+      }
+    }
   }
+
+
+  /***************************************
+  ****************************************
+  ************** templates ***************
+  ****************************************
+  ***************************************/
+
+
+
+  public function useAbility($args) {}
+
+  /**
+   * called whenever a card from the hand is lost(played, stolen, discarded, etc)
+   * atm just for Suzy
+   */
+  public function onCardsLost() {}
+
+  /**
+   * called whenever a player is eliminated
+   * atm just for Vulture Sam
+   */
+  public function onPlayerEliminated($player) {}
+
+
+  public function getAmountToCounterBang() {return 1;}
+
 }

@@ -20,23 +20,26 @@ class CardDynamite extends BangBlueCard {
    * When activated at the start of turn, draw a card and resolve effect
    */
   public function activate($player, $args=[]) {
-    $card = $player->draw($args, $this);
-    if(is_null($card)) return; // TODO : can really happen ?
+    $mixed = $player->draw($args, $this);
+    if($mixed instanceof BangCard) {
+      $val = $mixed->getCopyValue();
+      if ($mixed->getCopyColor() == 'S' && is_numeric($val) && intval($val) < 10) {
+        BangNotificationManager::tell("Dynamite explodes");
+        BangCardManager::discardCard($this->id);
+        BangNotificationManager::discardedCard($player, $this, true);
 
-    $val = $card->getCopyValue();
-    if ($card->getCopyColor() == 'S' && is_numeric($val) && intval($val) < 10) {
-      BangNotificationManager::tell("Dynamite explodes");
-      BangCardManager::discardCard($this->id);
-      BangNotificationManager::discardedCard($player, $this, true);
-
-      // Loose 3hp: if the player dies, skip its turn
-      return $player->looseLife("dynamite", 3)? "skip" : null;
-    } else {
-      // Move to next player and go on
-      $next = BangPlayerManager::getNextPlayer($player->getId());
-      BangCardManager::moveCard($this->id, 'inPlay', $next);
-      BangNotificationManager::moveCard($this, $player, $next);
-      return null;
+        // Loose 3hp: if the player dies, skip its turn
+        $newstate = $player->looseLife("dynamite", 3);
+        if(is_null($newstate)) return $player->isEliminated() ? "skip" : "draw";
+        return $newstate;
+      } else {
+        // Move to next player and go on
+        $next = BangPlayerManager::getNextPlayer($player->getId());
+        BangCardManager::moveCard($this->id, 'inPlay', $next);
+        BangNotificationManager::moveCard($this, $player, $next);
+        return null;
+      }
     }
+    return $mixed;
   }
 }

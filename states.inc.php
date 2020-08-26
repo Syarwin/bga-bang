@@ -86,6 +86,7 @@ $machinestates = [
 		'transitions' => [
 			'draw'	=> ST_DRAW_CARDS,
 			'skip' => ST_NEXT_PLAYER,
+			'select' => ST_SELECT_CARD,
 			'endgame' => ST_GAME_END,
 		],
 	],
@@ -97,10 +98,22 @@ $machinestates = [
 		'action' => 'stDrawCards',
 		'transitions' => [
 			'play'	=> ST_PLAY_CARD,
+			'selection' => ST_PREPARE_SELECTION,
+			'draw' => ST_DRAW_CARD
 		],
 	],
 
-
+	ST_DRAW_CARD => [
+		'name' => 'drawCard',
+		'description' => clienttranslate('${actplayer} must choose where to draw the first card from'),
+		'descriptionmyturn' => clienttranslate('${you} must choose where to draw the first card from'),
+		'type' => 'activeplayer',
+		'args' => 'argDrawCard',
+		'possibleactions' => ['draw'],
+		'transitions' => [
+			'play' => ST_PLAY_CARD
+		],
+	],
 
 
 	ST_PLAY_CARD => [
@@ -116,7 +129,9 @@ $machinestates = [
 			'discardExcess' => ST_DISCARD_EXCESS,
 			'react' => ST_AWAIT_REACTION,
 			'multiReact' => ST_AWAIT_MULTIREACTION,
-			'continuePlaying' => ST_PLAY_CARD
+			'selection' => ST_PREPARE_SELECTION,
+			'continuePlaying' => ST_PLAY_CARD,
+			'endgame' => ST_GAME_END,
 		],
 	],
 
@@ -139,7 +154,8 @@ $machinestates = [
 		'transitions' => [
 			'react' => ST_AWAIT_REACTION,
 			'multiReact' => ST_AWAIT_MULTIREACTION,
-			'finishedReaction' => ST_END_REACT
+			'finishedReaction' => ST_END_REACT,
+			'endgame' => ST_GAME_END,
 		]
 	],
 
@@ -160,7 +176,32 @@ $machinestates = [
 		'args' => 'argMultiReact',
 		'possibleactions' => ['play','pass'],
 		'transitions' => [
-			'finishedReaction' => ST_END_REACT
+			'finishedReaction' => ST_END_REACT,
+			'endgame' => ST_GAME_END,
+		]
+	],
+
+	ST_PREPARE_SELECTION => [
+		'name' => 'prepareSelection',
+		'description' => '',
+		'type' => 'game',
+		'action' => 'stPrepareSelection',
+		'updateGameProgression' => true,
+		'transitions' => ['select' => ST_SELECT_CARD, 'finish' => ST_PLAY_CARD]
+	],
+
+	ST_SELECT_CARD => [
+		'name' => 'selectCard',
+		'description' => clienttranslate('${actplayer} must select for the effect of {src}'),
+		'descriptionmyturn' => clienttranslate('${you} must select for the effect of {src}'),
+		'type' => 'activeplayer',
+		'args' => 'argSelect',
+		'possibleactions' => ['select'],
+		'transitions' => [
+			'select' => ST_SELECT_CARD,
+			'play'	=> ST_PLAY_CARD,
+			'skip' => ST_NEXT_PLAYER,
+			'draw' => ST_DRAW_CARD,
 		]
 	],
 
