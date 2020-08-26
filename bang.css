@@ -15,7 +15,7 @@
  */
 @font-face {
   font-family: 'Perdido';
-  src: url("img/fonts/PerdidoDemo.woff2") format("woff2"), url("img/fonts/PerdidoDemo.woff") format("woff"), url("img/fonts/PerdidoDemo.ttf") format("truetype");
+  src: url("img/fonts/PerdidoDemo.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
   font-display: swap; }
