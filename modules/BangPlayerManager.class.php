@@ -36,11 +36,11 @@ class BangPlayerManager extends APP_GameClass
 				$bullets++;
 				$sheriff = $pId;
 			}
-			$values[] = "($pId, '$color','$canal','$name','$avatar', $bullets, 1, $role, $char_id)";
+			$values[] = "($pId, '$color','$canal','$name','$avatar', $bullets, $bullets, $role, $char_id)";
 			BangCardManager::deal($pId,$bullets);
 		}
 		self::DbQuery($sql . implode($values, ','));
-		BangCardManager::dealCard($sheriff, CARD_BEER);
+		BangCardManager::dealCard($sheriff, CARD_GENERAL_STORE);
 		//BangCardManager::dealCard($sheriff, CARD_JAIL, 1);
 		bang::$instance->reloadPlayersBasicInfos();
 		return $sheriff;

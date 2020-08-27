@@ -244,7 +244,7 @@ class bang extends Table
 
 	public function stFinishSelection(){
 		$selection = BangCardManager::getSelection();
-		$player = BangPlayerManager::getCurrentTurn();
+		$player = BangPlayerManager::getCurrentTurn(true);
 		if(count($selection['cards']) > 0) {
 			$player->useAbility($selection['cards']);
 		}

@@ -29,9 +29,9 @@ class PedroRamirez extends BangPlayer {
     } else {
       $cards[] = BangCardManager::deal($this->id, 1, true);
       $cards[] = BangCardManager::deal($this->id, 1);
-      BangNotificationManager::tell("${player_name} chooses ${card_name} picks from the discard pile");
+      BangNotificationManager::tell("${player_name} chooses ${card_name} picks from the discard pile", ['player_name' => $this->name, 'card_name' => $cards[0]->getName()]);
     }
-    BangNotificationManager::gainedCrads($this, $cards);
+    BangNotificationManager::gainedCards($this, $cards);
     return "play";
   }
 
