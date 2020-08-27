@@ -14,19 +14,23 @@ class BlackJack extends BangPlayer {
   }
 
   public function drawCards($amount) {
-    if(Utils::getStateName() == 'drawCards') {
-      $cards = BangCardManager::deal($this->id, $amount);
+    // TODO : maybe going to another state at startOfTurn would be safer to detect phase 1 ?
+    // Power only applies at phase 1
+    if(Utils::getStateName() != 'drawCards')
+      return parent::drawCards($amount);
+
+    // Draw one card not visible
+    $cards = BangCardManager::deal($this->id, 1);
+    BangNotificationManager::gainedCards($this, $cards);
+    // Then draw one visible
+    $cards = BangCardManager::deal($this->id, 1);
+    BangNotificationManager::gainedCards($this, $cards, true);
+
+    // If heart or diamond => draw again a private one
+    $card = $cards[0];
+    if(in_array($card->getCopyColor(), ['H', 'D']) {
+      $cards = BangCardManager::deal($this->id, 1);
       BangNotificationManager::gainedCards($this, $cards);
-      $card = $cards[1];
-      BangNotificationManager::tell('Second card was ${card_name}', ['card_name' => $card->getNameAndValue()]);
-      $color = $card->getCopyColor();
-      if($color == 'H' || $color == 'D') {
-        $cards = BangCardManager::deal($this->id, 1);
-        BangNotificationManager::gainedCards($this, $cards);
-      }
-    } else {
-      parent::drawCards($amount);
     }
   }
-
 }

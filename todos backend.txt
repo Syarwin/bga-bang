@@ -1,0 +1,2 @@
+ - LuckyDuke : test with Jail. Is it working with Barrel ? I don't see any card flipped
+ - ElGringo : don't work with duel

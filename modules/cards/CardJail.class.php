@@ -26,9 +26,16 @@ class CardJail extends BangBlueCard {
 		];
  	}
 
+  public function play($player, $args) {
+		BangCardManager::moveCard($this->id, 'inPlay', $args['player']);
+		return null;
+	}
+
+
   public function activate($player, $args = []) {
     $card = $player->draw($args, $this);
-    if(is_null($card)) return; // TODO : can really happen ?
+    if(!$card instanceof BangCard)
+      return $card;
 
     $player->discardCard($this, true);
     $data = [

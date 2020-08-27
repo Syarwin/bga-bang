@@ -13,6 +13,7 @@ class BartCassidy extends BangPlayer {
     parent::__construct($row);
   }
 
+  // TODO : make it work with the dynamite : should lost the three hp THEN draw three cards if not dead
   public function looseLife($attacker = null, $amount = 1) {
 		$newstate = parent::looseLife($attacker, $amount);
     if(!$this->eliminated) $this->drawCards($amount);

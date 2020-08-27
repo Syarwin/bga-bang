@@ -17,6 +17,7 @@ class CardGeneralStore extends BangBrownCard {
   }
 
   public function play($player, $args) {
+    // TODO : add discard
     $players = BangPlayerManager::getLivingPlayersStartingWith($player);
     BangLog::addAction("selection", ['players' => $players, 'src' => $this->name, 'card' => 1]);
     BangCardManager::createSelection(count($players));
@@ -25,7 +26,6 @@ class CardGeneralStore extends BangBrownCard {
 
 
   public function react($card, $player) {
-    // TODO : missing notification
     BangCardManager::moveCard($card, 'hand', $player->getId());
     BangNotificationManager::gainedCards($player, [$card], true);
 		return null;

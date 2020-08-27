@@ -32,6 +32,7 @@ constructor: function () {
   this._selectedPlayer = null;
   this._selectedOptionType = null;
   this._selectedOptionArg = null;
+  this._dial = null;
 },
 
 /*
@@ -448,7 +449,6 @@ onClickDraw: function(arg) {
 onEnteringStateSelectCard: function(args){
   debug("Selecting cards", args);
   this.gamedatas.gamestate.args.cards = args.cards.length > 0? args.cards : (args._private? args._private.cards : this.getNBackCards(args.amount) );
-  debug(this.gamedatas.gamestate.args.cards);
   this.dialogSelectCard();
 },
 
@@ -461,6 +461,7 @@ dialogSelectCard: function(){
   dial.setContent(jstpl_dialog);
   args.cards.forEach(card => this.addCard(card, 'dialog-card-container') );
   dial.show();
+  this._dial = dial;
 
   if(!this.isCurrentPlayerActive())
     return;
@@ -481,6 +482,7 @@ onClickCardSelectDialog: function(card){
 },
 
 onClickConfirmSelection: function(){
+  this._dial.hide();
   this.takeAction("select", {
     cards:this._selectedCards.join(";"),
   });
@@ -766,6 +768,9 @@ notif_cardPlayed: function(n) {
 * notification sent to all players when someone gained a card (from deck or from someone else hand/inplay)
 */
 notif_cardsGained: function(n) {
+  if(this._dial)
+    this._dial.hide();
+
   debug("Notif: cards gained", n);
   var cards = n.args.cards.length > 0? n.args.cards.map(o => this.getCard(o)) : this.getNBackCards(n.args.amount);
   cards.forEach((card, i) => {
