@@ -23,7 +23,7 @@ class CardIndians extends BangBrownCard {
   /* */
 
   public function play($player, $args) {
-    BangCardManager::discardCard($this->id);
+    parent::play($player, $args);
     $ids = BangPlayerManager::getLivingPlayers($player->getId());
     return $player->attack($ids, false);
   }
@@ -35,7 +35,7 @@ class CardIndians extends BangBrownCard {
 
 
   public function pass($player) {
-    $player->looseLife();
+    $player->looseLife(BangPlayerManager::getCurrentTurn(true));
     return null;
   }
 

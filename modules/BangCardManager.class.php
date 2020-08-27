@@ -171,7 +171,7 @@ class BangCardManager extends APP_GameClass
 	}
 
 	public static function createSelection($nbr, $player = PUBLIC_SELECTION) {
-		self::getDeck()->pickCardsForLocation($nbr, 'deck', 'selection', $player);
+		return self::getDeck()->pickCardsForLocation($nbr, 'deck', 'selection', $player);
 	}
 
   // only for testing

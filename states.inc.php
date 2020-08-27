@@ -122,7 +122,8 @@ $machinestates = [
 		'descriptionmyturn' => clienttranslate('${you} can play a card'),
 		'type' => 'activeplayer',
 		'args' => 'argPlayCards',
-		'possibleactions' => ['play', 'endTurn'],
+		'action' => 'stPlayCard',
+		'possibleactions' => ['play', 'useAbility', 'endTurn'],
 		'transitions' => [
 			'zombiePass' => ST_END_OF_TURN,
 			'endTurn'		=> ST_END_OF_TURN,
@@ -201,7 +202,7 @@ $machinestates = [
 			'select' => ST_PREPARE_SELECTION,
 			'play'	=> ST_PLAY_CARD,
 			'skip' => ST_NEXT_PLAYER,
-			'draw' => ST_DRAW_CARD,
+			'draw' => ST_DRAW_CARDS,
 		]
 	],
 

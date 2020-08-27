@@ -148,6 +148,10 @@ class bang extends Table
 		];
 	}
 
+	public function stPlayCard() {
+		$players = BangPlayerManager::getLivingPlayers(null, true);
+		foreach($players as $player) $player->checkHand();
+	}
 
 	public function playCard($id, $args) {
 		self::checkAction('play');
@@ -208,18 +212,20 @@ class bang extends Table
 		$selection = BangCardManager::getSelection();
 
 		// Compute the remeaning cards
-		Utils::filter($selection['cards'], function($card) use ($ids){
-			return !in_array($card['id'], $ids);
-		});
+		$rest = [];
+		foreach($selection['cards'] as $card)
+			if(!in_array($card['id'], $ids))
+				$rest[] = $card['id'];
+
 
 		// Compute the remeaning players
-		array_shift($args['players']); // TODO : don't work if multiple card selected and other players left
+		array_shift($args['players']); // TODO : don't work if multiple card selected and other players left. And where would that be the case???
+
 
 		BangLog::addAction("selection", $args);
 		$player = BangPlayerManager::getActivePlayer();
-		$newState = isset($args['card'])? $player->react($ids[0])
-							: $player->useAbility(['selected' => $ids, 'rest' => $selection['cards'] ]);
-
+		$newstate = isset($args['card'])? $player->react($ids[0])
+							: $player->useAbility(['selected' => $ids, 'rest' => $rest ]);
 	  $this->gamestate->nextState($newstate ?? 'select');
 /*
 		} else {
@@ -301,7 +307,7 @@ class bang extends Table
       BangNotificationManager::updateOptions($character, $args);
 		} else {
 	    if(Utils::getStateName() == 'multiReact') {
-				if(BangPlayerManager::countRoles([Sheriff]) == 0 || BangPlayerManager::countRoles([OUTLAW, RENEGADE]) == 0) {
+				if(BangPlayerManager::countRoles([SHERIFF]) == 0 || BangPlayerManager::countRoles([OUTLAW, RENEGADE]) == 0) {
 					$newState = "endgame";
 				}
 	      bang::$instance->gamestate->setPlayerNonMultiactive(self::getCurrentPlayerId(), $newState);

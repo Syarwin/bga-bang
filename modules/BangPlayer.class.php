@@ -382,7 +382,7 @@ class BangPlayer extends APP_GameClass
       if($player->countCardsInHand() > 0 || $canUseEquipment)  {
   			$reactions[] = $player->id; // Give him a chance to (pretend to) react
   		} else {
-  			$newstate = $player->looseLife($this); // Lost life immediatly
+  			$newstate = $player->looseLife($checkBarrel ? $this : null); // Lost life immediatly
         if(!is_null($newstate)) $state = $newstate;
   		}
     }
@@ -439,7 +439,9 @@ class BangPlayer extends APP_GameClass
    * called whenever a card from the hand is lost(played, stolen, discarded, etc)
    * atm just for Suzy
    */
-  public function onCardsLost() {}
+  public function onCardsLost() {} //todo löschen wenn es mit checkHand funktioniert
+
+  public function checkHand() {}
 
   /**
    * called whenever a player is eliminated

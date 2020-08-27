@@ -13,7 +13,7 @@ class SuzyLafayette extends BangPlayer {
     parent::__construct($row);
   }
 
-  public function onCardsLost() {
+  public function checkHand() {
     if(count($this->getCardsInHand()) == 0) {
       $this->drawCards(1);
     }

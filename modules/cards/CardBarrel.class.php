@@ -17,6 +17,7 @@ class CardBarrel extends BangBlueCard {
   }
 
   public function activate($player, $args = []) {
+    BangNotificationManager::tell('${player_name } uses ${card_name}', ['player_name'=>$player->getName(), 'card_name' => $this->name]);
     $mixed = $player->draw(['pattern' => "/H/"], $this);
     if(!$mixed instanceof BangCard)
       return $mixed; //shouldn't happen, just in case we decide to let player decide after all

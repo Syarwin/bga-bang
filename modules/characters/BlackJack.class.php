@@ -28,7 +28,7 @@ class BlackJack extends BangPlayer {
 
     // If heart or diamond => draw again a private one
     $card = $cards[0];
-    if(in_array($card->getCopyColor(), ['H', 'D']) {
+    if(in_array($card->getCopyColor(), ['H', 'D'])) {
       $cards = BangCardManager::deal($this->id, 1);
       BangNotificationManager::gainedCards($this, $cards);
     }

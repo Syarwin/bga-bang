@@ -20,6 +20,11 @@ class CardJail extends BangBlueCard {
   public function getPlayOptions($player) {
     // Can be played on anyone except the sheriff
 		$playerIds = BangPlayerManager::getLivingPlayers(BangPlayerManager::getSherrifId());
+    Utils::filter($playerIds, function($playerId) {
+      $equipment = BangPlayerManager::getPlayer($playerId)->getCardsInPlay();
+      foreach($equipment as $card) if($card->type == $this->type) return false;
+      return true;
+    });
 		return [
 			'type' => OPTION_PLAYER,
 			'targets' => $playerIds
@@ -33,6 +38,7 @@ class CardJail extends BangBlueCard {
 
 
   public function activate($player, $args = []) {
+    BangLog::addCardPlayed($player, $this,[]);
     $card = $player->draw($args, $this);
     if(!$card instanceof BangCard)
       return $card;

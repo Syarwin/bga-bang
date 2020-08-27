@@ -17,7 +17,7 @@ class CardGeneralStore extends BangBrownCard {
   }
 
   public function play($player, $args) {
-    // TODO : add discard
+    parent::play($player, $args);
     $players = BangPlayerManager::getLivingPlayersStartingWith($player);
     BangLog::addAction("selection", ['players' => $players, 'src' => $this->name, 'card' => 1]);
     BangCardManager::createSelection(count($players));

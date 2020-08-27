@@ -125,7 +125,6 @@ class BangNotificationManager extends APP_GameClass {
     bang::$instance->notifyPlayer($player->getId(), 'updateOptions', '', $args);
   }
 
-  // todo implement and change parameter for notification name
   /**
    * drawing a card for cards like barrel, jail, etc.
    */

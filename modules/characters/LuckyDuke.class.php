@@ -19,18 +19,28 @@ class LuckyDuke extends BangPlayer {
   public function draw($args, $src) {
     if(isset($args['pattern'])) {
       $cards = [BangCardManager::draw(), BangCardManager::draw()];
+      BangNotificationManager::drawCard($this, $cards[0], $src);
+      BangNotificationManager::drawCard($this, $cards[1], $src);
       if(preg_match($args['pattern'],$cards[0]->getCopy()))
         return $cards[0];
       return $cards[1];
     }
-    if(!is_null($this->selectedCard)) return BangCardManager::getCard($this->selectedCard);
-    BangCardManager::createSelection(2);
-    BangLog::addAction("selection", ["players" => [$this->id], 'src' => $this->character_name]);
+    if(!is_null($this->selectedCard)) return $this->selectedCard;
+    $cards = BangCardManager::toObjects(BangCardManager::createSelection(2));
+    BangNotificationManager::drawCard($this, $cards[0], $src);
+    BangNotificationManager::drawCard($this, $cards[1], $src);
+    BangLog::addAction("selection", ["players" => [$this->id], 'src' => $src->getName()]);
     return "select";
   }
 
   public function useAbility($args) {
-    $this->$selectedCard = $args[0];
-    return BangCardManager::getCurrentCard()->play($this, []);
+    $this->selectedCard = BangCardManager::getCard($args['selected'][0]);
+
+    $this->discardCard(BangCardManager::getCard($args['rest'][0]));
+    BangNotificationManager::tell('${player_name} chooses ${card_name}', [
+      'player_name' => $this->name,
+      'card_name' => $this->selectedCard->getNameAndValue()
+    ]);
+    return BangCardManager::getCurrentCard()->activate($this, []);
   }
 }
