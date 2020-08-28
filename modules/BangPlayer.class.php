@@ -269,7 +269,8 @@ class BangPlayer extends APP_GameClass
 
     return [
       'cards' => $cards,
-      'character' => null
+      'character' => null,
+      'amount' => 1
     ];
   }
 

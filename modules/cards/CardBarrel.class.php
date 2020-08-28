@@ -23,12 +23,18 @@ class CardBarrel extends BangBlueCard {
       return $mixed; //shouldn't happen, just in case we decide to let player decide after all
 
     BangCardManager::markAsPlayed($this->id);
+    $args = BangCardManager::getCurrentCard()->getReactionOptions($player);
     if ($mixed->getCopyColor() == 'H') {
-      BangNotificationManager::tell('Barrel blocked the attack');
-      return null;
+      BangNotificationManager::tell('Barrel was successfull');
+      if($args['amount'] == 1)
+            return null;
+      BangNotificationManager::tell('But ${player_name} needs another miss', ['player_name' => $player->getName()]);
+      $args['amount']--;
+      BangLog::addCardPlayed(BangPlayerManager::getCurrentTurn(true), BangCardManager::getCurrentCard(), $args);
+
     } else {
-      BangNotificationManager::tell('Barrel failed to block the attack');
-      return "updateOptions";
+      BangNotificationManager::tell('Barrel failed');
     }
+    return "updateOptions";
   }
 }

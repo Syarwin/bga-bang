@@ -36,8 +36,9 @@ class CardBang extends BangBrownCard {
   }
   public function getReactionOptions($player) {
     $options = parent::getReactionOptions($player);
-    $need = BangPlayerManager::getCurrentTurn(true)->getAmountToCounterBang();
-    $options['amount'] = $need;
+    $args = BangLog::getLastAction('cardPlayed');
+
+    $options['amount'] = isset($args['missedNeeded']) ? $args['missedNeeded'] : 1;
     return $options;
   }
 

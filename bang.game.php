@@ -270,6 +270,8 @@ class bang extends Table
 
 	public function argReact() {
 	 $card = BangCardManager::getCurrentCard();
+
+	 //
 	 return [
 		 '_private' => [
 			 'active' => $card->getReactionOptions(BangPlayerManager::getActivePlayer())
@@ -299,12 +301,12 @@ class bang extends Table
 
 
 	function react($id) {
- 		$character = BangPlayerManager::getPlayer(self::getCurrentPlayerId());
+ 		$player = BangPlayerManager::getPlayer(self::getCurrentPlayerId());
  		$newState = $character->react($id) ?? "finishedReaction";
 
 		if($newState == "updateOptions"){
-			$args = $character->getDefensiveOptions();
-      BangNotificationManager::updateOptions($character, $args);
+			$args = BangCardManager::getCurrentCard()->getReactionOptions($player);
+      BangNotificationManager::updateOptions($player, $args);
 		} else {
 	    if(Utils::getStateName() == 'multiReact') {
 				if(BangPlayerManager::countRoles([SHERIFF]) == 0 || BangPlayerManager::countRoles([OUTLAW, RENEGADE]) == 0) {
