@@ -13,5 +13,9 @@ class SlabtheKiller extends BangPlayer {
     parent::__construct($row);
   }
 
-  function getAmountToCounterBang() { return 2; }
+  public function playCard($id, $args) {
+		$card = BangCardManager::getCard($id);
+    if($card->getType() == CARD_BANG) $args['missedNeeded'] = 2;
+    return parent::playCard($id, $args);
+	}
 }

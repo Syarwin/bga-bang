@@ -24,14 +24,20 @@ class Jourdonnais extends BangPlayer {
   public function useAbility($args) {
     bang::$instance->setGameStateValue('JourdonnaisUsedSkill', 1);
     $card = $player->draw([], $this);
-    BangCardManager::markAsPlayed($this->id);
+    $args = BangCardManager::getCurrentCard()->getReactionOptions($player);
     if ($card->format()['color'] == 'H') {
-      BangNotificationManager::tell('Jourdonnais blocked the attack');
-      bang::$instance->gamestate->nextState( "react" );
+      BangNotificationManager::tell('Jourdonnais effect was successfull');
+      if($args['amount'] == 1) {
+        bang::$instance->gamestate->nextState( "react" );
+        return;
+      }
+      BangNotificationManager::tell('But ${player_name} needs another miss', ['player_name' => $player->getName()]);
+      $args['amount']--;
+      BangLog::addCardPlayed(BangPlayerManager::getCurrentTurn(true), BangCardManager::getCurrentCard(), $args);
     } else {
-      BangNotificationManager::tell('Jourdonnais failed to block the attack');
-      $args = $this->getDefensiveOptions();
-      BangNotificationManager::updateOptions($this, $args);
+      BangNotificationManager::tell('Jourdonnais effect failed');
     }
+    $args = $this->getDefensiveOptions();
+    BangNotificationManager::updateOptions($this, $args);
   }
 }
