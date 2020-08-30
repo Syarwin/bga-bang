@@ -159,11 +159,13 @@ class BangCardManager extends APP_GameClass
 		self::playCard($id);
 	}
 
-	public static function deal($player, $amount, $fromDiscard=false){
-		if($fromDiscard) return self::toObjects(self::getDeck()->pickCards($amount, 'discard', $player));
-		return self::toObjects(self::getDeck()->pickCards($amount, 'deck', $player));
+	public static function deal($player, $amount, $fromLocation = 'deck'){
+		return self::toObjects(self::getDeck()->pickCards($amount, $fromLocation, $player));
 	}
-
+	public static function dealFromDiscard($player, $amount){
+		return self::deal($player, $amount, "discard");
+	}
+	
 	public static function draw() {
 		$card = self::resToObject(self::getDeck()->getCardOnTop('deck'));
 		self::playCard($card->getId());

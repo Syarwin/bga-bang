@@ -96,7 +96,7 @@ class BangPlayer extends APP_GameClass
    */
   public function drawCards($amount){
     $cards = BangCardManager::deal($this->id, $amount);
-    BangNotificationManager::gainedCards($this, $cards);
+    BangNotificationManager::drawCards($this, $cards);
   }
 
   /*

@@ -27,7 +27,7 @@ class CardGeneralStore extends BangBrownCard {
 
   public function react($card, $player) {
     BangCardManager::moveCard($card, 'hand', $player->getId());
-    BangNotificationManager::gainedCards($player, [$card], true);
+    BangNotificationManager::chooseCard($player, $card);
 		return null;
 	}
 }

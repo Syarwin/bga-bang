@@ -1,2 +1,3 @@
  - LuckyDuke : tested with Jail and barrel
  - ElGringo : need to test with duel, gatling and indians
+ - PedroRamirez : shouldn't be able to draw from discard if no cards here 

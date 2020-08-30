@@ -31,14 +31,16 @@ class JesseJones extends BangPlayer {
   public function useAbility($args) {
     if($args['selected'] == 'deck') {
       $cards = BangCardManager::deal($this->id, 2);
-      BangNotificationManager::gainedCards($this, $cards);
+      BangNotificationManager::drawCards($this, $cards);
     } else {
+      // Stole the first card
       $victim = BangPlayerManager::getPlayer($args['selected']);
       $card= $victim->getRandomCardInHand();
       BangCardManager::moveCard($card, 'hand', $this->id);
       BangNotificationManager::stoleCard($this, $victim, $card, false);
+      // Deal the second one
       $card = BangCardManager::deal($this->id, 1);
-      BangNotificationManager::gainedCards($this, $card);
+      BangNotificationManager::drawCards($this, $card);
     }
     return "play";
   }

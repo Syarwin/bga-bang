@@ -144,6 +144,9 @@ div#board {
         width: 106.25px;
         height: 170px;
         position: relative; }
+        div#board #table #table-container #deck.selectable, div#board #table #table-container #discard.selectable {
+          cursor: pointer;
+          animation: borderBlink 0.9s infinite; }
       div#board #table #table-container #deck {
         background-image: url("img/cardback.jpg");
         background-size: cover;

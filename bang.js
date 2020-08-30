@@ -58,6 +58,8 @@ setup: function (gamedatas) {
   dojo.place(this.format_block('jstpl_table', { deck : gamedatas.deck }), 'board');
   if(gamedatas.discard)
     this.addCard(gamedatas.discard, "discard");
+  dojo.connect($("deck"), "onclick", () => this.onClickDeck() );
+  dojo.connect($("discard"), "onclick", () => this.onClickDiscard() );
 
 	// Setting up player boards
   var nPlayers = gamedatas.bplayers.length;
@@ -125,19 +127,6 @@ onEnteringState: function (stateName, args) {
 	if (this[methodName] !== undefined)
 		this[methodName](args.args);
 },
-
-/*
- * onLeavingState:
- * 	this method is called each time we are leaving a game state.
- *
- * params:
- *	- str stateName : name of the state we are leaving
- */
-onLeavingState: function (stateName) {
-	debug('Leaving state: ' + stateName);
-	this.clearPossible();
-},
-
 
 /*
  * onLeavingState:
@@ -234,6 +223,7 @@ onClickCard: function(ocard){
   else
     console.error("Trying to call " + methodName); // Should not happen
 },
+
 
 /*
  * Toggle a card : useful for multiple select or whenever we want a confirm button
@@ -416,27 +406,53 @@ onClickPass: function(){
 
 
 
+
+/**********************************
+*** Draw card / for some powers ***
+**********************************/
 onEnteringStateDrawCard: function(args){
   this._action = 'drawCard';
   var players = [];
   args._private.options.forEach(option => {
     switch(option) {
-      case 'deck':
-        this.addActionButton('buttonSelectDeck', 'Deck', () => this.onClickDraw('deck'), null, false, 'blue');
-        break;
-      case 'discard':
-        this.addActionButton('buttonSelectDeck', 'Discard', () => this.onClickDraw('discard'), null, false, 'blue');
-        break;
-      default:
-        players.push(option);
-        break;
+      case 'deck': this.makeDeckSelectable(); break;
+      case 'discard': this.makeDiscardSelectable(); break;
+      default: players.push(option); break;
     }
   });
   if(players.length > 0) this.makePlayersSelectable(players, true);
 },
 
+makeDeckSelectable:function(){
+  this.addActionButton('buttonSelectDeck', _('Deck'), () => this.onClickDeck(), null, false, 'blue');
+  this._isSelectableDeck = true;
+  dojo.addClass("deck", "selectable");
+},
+
+onClickDeck: function(){
+  if(!this.isCurrentPlayerActive() || !this._isSelectableDeck) return;
+
+  if(this._action == "drawCard")
+    this.onClickDraw('deck');
+},
+
+makeDiscardSelectable:function(){
+  this.addActionButton('buttonSelectDeck', _('Discard'), () => this.onClickDiscard(), null, false, 'blue');
+  this._isSelectableDiscard = true;
+  dojo.addClass("discard", "selectable");
+},
+
+onClickDiscard: function(){
+  if(!this.isCurrentPlayerActive() || !this._isSelectableDiscard) return;
+
+  if(this._action == "drawCard")
+    this.onClickDraw('discard');
+},
+
+
+
 onClickDraw: function(arg) {
-  this.takeAction('draw', {selected: arg});
+  this.takeAction('draw', { selected: arg });
 },
 
 
@@ -482,7 +498,8 @@ onClickCardSelectDialog: function(card){
 },
 
 onClickConfirmSelection: function(){
-  this._dial.hide();
+  if(this._dial)
+    this._dial.hide();
   this.takeAction("select", {
     cards:this._selectedCards.join(";"),
   });
@@ -543,8 +560,12 @@ clearPossible: function () {
   this._selectedPlayer = null;
   this._selectedOptionType = null;
   this._selectedOptionArg = null;
+  this._isSelectableDeck = false;
+  this._isSelectableDiscard = false;
   dojo.query(".bang-card").removeClass("unselectable selectable selected");
   dojo.query(".bang-player").removeClass("selectable");
+  dojo.removeClass("deck", "selectable");
+  dojo.removeClass("discard", "selectable");
 
 	this.removeActionButtons();
 	this.onUpdateActionButtons(this.gamedatas.gamestate.name, this.gamedatas.gamestate.args);

@@ -46,22 +46,61 @@ class BangNotificationManager extends APP_GameClass {
     ]);
   }
 
-
-  public static function gainedCards($player, $cards, $public = false) {
+  public static function drawCards($player, $cards, $public = false, $src = 'deck') {
     $amount = count($cards);
-    $msg  = $amount == 1 ? clienttranslate('${player_name} draws a card') : clienttranslate('${player_name} draws ${amount} cards');
+    $srcName = $src == 'deck'? clienttranslate("the deck") : clienttranslate("the discard pile");
     $formattedCards = array_map(function($card){ return $card->format(); }, $cards);
+
     foreach(BangPlayerManager::getPlayers() as $bplayer){
-      bang::$instance->notifyPlayer($bplayer->getId(), "cardsGained", $msg, [
+      $isVisible = ($public || $player->getId() == $bplayer->getId());
+      $data = [
+        'i18n' => ['src_name'],
+        'src_name' => $srcName,
         'player_name' => $player->getName(),
         'playerId' => $player->getId(),
         'amount' => $amount,
-        'cards' => ($public || $player->getId() == $bplayer->getId())? $formattedCards : [],
-        'src' => 'deck',
+        'cards' => $isVisible? $formattedCards : [],
+        'src' => $src,
         'target' => 'hand',
-      ]);
+      ];
+
+      if($amount == 1){
+        if($isVisible){
+          $msg = $src == 'deck'? clienttranslate('${player_name} draws a card (${card_name}) from ${src_name}')
+                : clienttranslate('${player_name} chooses ${card_name} from ${src_name}');
+          $data['card_name'] = $cards[0]->getName();
+          $data['i18n'][] = 'card_name';
+        }
+        else
+          $msg = clienttranslate('${player_name} draws a card from ${src_name}');
+      }
+      else
+        $msg = clienttranslate('${player_name} draws ${amount} cards from ${src_name}');
+
+      bang::$instance->notifyPlayer($bplayer->getId(), "cardsGained", $msg, $data);
     }
   }
+
+  public static function drawCardFromDiscard($player, $cards) {
+    self::drawCards($player, $cards, true, 'discard');
+  }
+
+  // For general store
+  public static function chooseCard($player, $card) {
+    $msg = clienttranslate('${player_name} chooses ${card_name}');
+    $formattedCards = [ $card->format() ];
+    bang::$instance->notifyAllPlayers("cardsGained", $msg, [
+      'i18n' => ['card_name'],
+      'player_name' => $player->getName(),
+      'card_name' => $card->getName(),
+      'playerId' => $player->getId(),
+      'amount' => 1,
+      'cards' => $formattedCards,
+      'src' => 'deck',
+      'target' => 'hand',
+    ]);
+  }
+
 
 
   public static function discardedCard($player, $card, $silent = false) {
