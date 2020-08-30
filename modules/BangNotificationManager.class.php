@@ -20,7 +20,7 @@ class BangNotificationManager extends APP_GameClass {
     bang::$instance->notifyAllPlayers("updateHand", '', [
       'player_name' => $player->getName(),
       'playerId' => $player->getId(),
-      'amount' => 1,
+      'amount' => -1,
     ]);
   }
 

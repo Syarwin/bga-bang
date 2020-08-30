@@ -1,12 +1,9 @@
-- finish state drawCard. This state is only for the draw phase of Jesse Jones and Pedro Ramirez. Check the onEnteringStateDrawCard, that i already created to avoid errors.
-	What's still needed here is to make the deck/discard pile selectable. Atm those work only with action buttons
 - playable cards are no longer contained directly in the state args but in the index cards.(js is already adjusted to that)
 	In addition there is the index character.
 	if this is not null, it can be either OPTION_NONE(=0) or OPTION_CARDS(=3). in both cases we need an action button for using character ability.
 	in the second case the player will need to select 2 Hand Cards to discard.
 	The action to be called is named useAbility and should be used like discardExcess
 - adjust react State: args.amount now contains the amount of hand cards needed to react. Usually 1 except when Slab The Killer played Bang!. Keep in mind, that Barrel can still be played alone(i think)
-- bug: when a card is played, the handcount of that player increases instead of decreasing
 - bug: when lucky duke is in jail and it's his turn, the selection appears but the cards are disabled.
 - in the react state: display equipment that is not playable like the handcards that are not playable, so the possiblity to click on barrel becomes more obvious
 - Handle playerEliminated notification. arg.player and args.role are provided.
