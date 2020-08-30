@@ -302,7 +302,7 @@ class bang extends Table
 
 	function react($id) {
  		$player = BangPlayerManager::getPlayer(self::getCurrentPlayerId());
- 		$newState = $character->react($id) ?? "finishedReaction";
+ 		$newState = $player->react($id) ?? "finishedReaction";
 
 		if($newState == "updateOptions"){
 			$args = BangCardManager::getCurrentCard()->getReactionOptions($player);

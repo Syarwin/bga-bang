@@ -20,9 +20,9 @@ class SidKetchum extends BangPlayer {
   }
 
   public function useAbility($args) {
-    BangNotificationManager::tell('{player_name} uses his ability.', ['player_name' => $this->name]);
+    BangNotificationManager::tell('${player_name} uses his ability', ['player_name' => $this->name]);
     foreach ($args as $card) BangCardManager::playCard($card);
-    BangNotificationManager::discardedCards($this, $cards, array_map(['BangCardManager','getCard'], $args));
-
+    BangNotificationManager::discardedCards($this, array_map(['BangCardManager','getCard'], $args));
+    $this->gainLife();
   }
 }
