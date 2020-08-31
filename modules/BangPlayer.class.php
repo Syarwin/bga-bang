@@ -279,16 +279,18 @@ class BangPlayer extends APP_GameClass
    * return defensive options
    */
   public function getDefensiveOptions() {
+    $args = BangLog::getLastAction('cardPlayed');
+    $amount = isset($args['missedNeeded']) ? $args['missedNeeded'] : 1;
     // Defensive cards in hand
     $hand = $this->getCardsInHand();
     Utils::filter($hand, function($card){ return $card->getColor() == BROWN && $card->getEffectType() == DEFENSIVE; });
-    $res = array_map(function($card){ return ['id' => $card->getId(), 'options' => ['type' => OPTION_NONE] ]; }, $hand);
+    $res = array_map(function($card) use ($amount) { return ['id' => $card->getId(), 'amount' => $amount, 'options' => ['type' => OPTION_NONE] ]; }, $hand);
 
     // Defensive cards in play
     $card = array_reduce($this->getCardsInPlay(), function($barrel, $card){
       return ($card->getType() == CARD_BARREL && !$card->wasPlayed()) ? $card : $barrel;
     }, null);
-    if(!is_null($card)) $res[] = ['id' => $card->getId(), 'options' => ['type' => OPTION_NONE]];
+    if(!is_null($card)) $res[] = ['id' => $card->getId(), 'amount' => 1,  'options' => ['type' => OPTION_NONE]];
 
     return ['cards' => array_values($res), 'character' => null];
   }

@@ -15,7 +15,7 @@ class SidKetchum extends BangPlayer {
 
   public function getHandOptions() {
     $res = parent::getHandOptions();
-    $res['character'] = OPTION_CARDS;
+    $res['character'] = SID_KETCHUM;
     return $res;
   }
 

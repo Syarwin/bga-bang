@@ -270,11 +270,13 @@ class bang extends Table
 
 	public function argReact() {
 	 $card = BangCardManager::getCurrentCard();
-
+	 $options =  $card->getReactionOptions(BangPlayerManager::getActivePlayer());
+	 foreach($options['cards'] as $option)
+	 	if(!isset($option['amount'])) $optin['amount'] = 1;
 	 //
 	 return [
 		 '_private' => [
-			 'active' => $card->getReactionOptions(BangPlayerManager::getActivePlayer())
+			 'active' => $options
 		 ]
 	 ];
 	}

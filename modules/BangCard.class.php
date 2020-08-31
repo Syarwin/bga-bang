@@ -98,7 +98,6 @@ class BangCard extends APP_GameClass
 	 */
 	public function getReactionOptions($player) {
 		$options = $player->getDefensiveOptions();
-		$options['amount'] = 1;
 		return $options;
 	}
 
