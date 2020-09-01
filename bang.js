@@ -775,7 +775,7 @@ setupNotifications: function () {
     ['drawCard', 1000],
     ['updateHP', 200],
     ['updateHand', 200],
-		['updateOption', 200],
+		['updateOptions', 200],
 	];
 
 	notifs.forEach(notif => {
@@ -895,8 +895,8 @@ notif_drawCard: function(n){
 
 
 
-notif_updateOption: function(n){
-  debug("Notif: update option", n);
+notif_updateOptions: function(n){
+  debug("Notif: update options", n);
 	this.clearPossible();
 	this.makeCardSelectable(n.args.cards, "selectCard");
 },

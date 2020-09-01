@@ -34,6 +34,7 @@ class LuckyDuke extends BangPlayer {
   }
 
   public function useAbility($args) {
+    
     $this->selectedCard = BangCardManager::getCard($args['selected'][0]);
 
     $this->discardCard(BangCardManager::getCard($args['rest'][0]));

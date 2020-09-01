@@ -15,7 +15,8 @@ class SidKetchum extends BangPlayer {
 
   public function getHandOptions() {
     $res = parent::getHandOptions();
-    $res['character'] = SID_KETCHUM;
+    if(count($this->getCardsinHand())>1)
+        $res['character'] = SID_KETCHUM;
     return $res;
   }
 

@@ -20,6 +20,7 @@ class CardDynamite extends BangBlueCard {
    * When activated at the start of turn, draw a card and resolve effect
    */
   public function activate($player, $args=[]) {
+    BangLog::addCardPlayed($player, $this,[]);
     $mixed = $player->draw($args, $this);
     if($mixed instanceof BangCard) {
       $val = $mixed->getCopyValue();
@@ -34,10 +35,10 @@ class CardDynamite extends BangBlueCard {
         return $newstate;
       } else {
         // Move to next player and go on
-        $next = BangPlayerManager::getNextPlayer($player->getId());
-        BangCardManager::moveCard($this->id, 'inPlay', $next);
+        $next = BangPlayerManager::getNextPlayer($player);
+        BangCardManager::moveCard($this->id, 'inPlay', $next->getId());
         BangNotificationManager::moveCard($this, $player, $next);
-        return null;
+        return "draw";
       }
     }
     return $mixed;

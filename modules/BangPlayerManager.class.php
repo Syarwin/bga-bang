@@ -41,6 +41,8 @@ class BangPlayerManager extends APP_GameClass
 		}
 		self::DbQuery($sql . implode($values, ','));
 		BangCardManager::dealCard($sheriff, CARD_GENERAL_STORE);
+		BangCardManager::dealCard($sheriff, CARD_DUEL);
+		BangCardManager::dealCard($sheriff, CARD_DYNAMITE);
 		//BangCardManager::dealCard($sheriff, CARD_JAIL, 1);
 		bang::$instance->reloadPlayersBasicInfos();
 		return $sheriff;
@@ -123,8 +125,8 @@ class BangPlayerManager extends APP_GameClass
 	}
 
 
-  public static function getNextPlayer($playerId) {
-    $players = self::getLivingPlayersStartingWith($playerId);
+  public static function getNextPlayer($player) {
+    $players = self::getLivingPlayersStartingWith($player);
 		return self::getPlayer($players[1]);
   }
 
@@ -161,7 +163,7 @@ class BangPlayerManager extends APP_GameClass
 
 	public static function getCharactersByExpansion($expansions) {
 		$characters = [
-			BASE_GAME => [0,SID_KETCHUM,PEDRO_RAMIREZ,SLAB_THE_KILLER], //range(0,15)
+			BASE_GAME => [0,1,2,3], //range(0,15)
 			// add new expansions
 		];
 		return array_reduce($expansions, function($res, $exp) use ($characters){
