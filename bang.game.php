@@ -246,16 +246,15 @@ class bang extends Table
 
 	public function stAwaitReaction() {
 		BangCardManager::resetPlayedColumn();
-		$this->gamestate->changeActivePlayer(BangPlayerManager::getTarget());
+		$pId =  array_keys(BangLog::getLastAction("react"))[0];
+		$this->gamestate->changeActivePlayer($pId);
 		$this->gamestate->nextState();
 	}
 
 	public function argReact() {
 	 $card = BangCardManager::getCurrentCard();
-	 $options =  $card->getReactionOptions(BangPlayerManager::getActivePlayer());
-	 foreach($options['cards'] as $option)
-	 	if(!isset($option['amount'])) $optin['amount'] = 1;
-	 //
+	 $options = array_values(BangLog::getLastAction("react"))[0];
+
 	 return [
 		 '_private' => [
 			 'active' => $options
@@ -266,18 +265,14 @@ class bang extends Table
 
 	public function stAwaitMultiReaction() {
 		BangCardManager::resetPlayedColumn();
-		$players = BangPlayerManager::getTarget();
+		//$players = BangPlayerManager::getTarget();
+		$players = array_keys(BangLog::getLastAction("react"));
 		$this->gamestate->setPlayersMultiactive($players, 'finishedReaction', true); // This transition should never happens as the targets are non-empty
 		$this->gamestate->nextState();
 	}
 
  	public function argMultiReact() {
- 		$players = $this->gamestate->getActivePlayerList();
-		$card = BangCardManager::getCurrentCard();
-		$arg = [];
-		foreach ($players as $id) {
-			$args[$id] = $card->getReactionOptions(BangPlayerManager::getPlayer($id));
-		}
+		$args = BangLog::getLastAction("react");
  		return [
  			'_private' => $args
  		];
@@ -422,7 +417,7 @@ class bang extends Table
 	 */
 	public function zombieTurn($state, $activePlayer) {
 		if (array_key_exists('zombiePass', $state['transitions'])) {
-			$this->playerManager->eliminate($activePlayer);
+			$this->playerManager->eliminate();
 			$this->gamestate->nextState('zombiePass');
 		} else {
 			throw new BgaVisibleSystemException('Zombie player ' . $activePlayer . ' stuck in unexpected state ' . $state['name']);

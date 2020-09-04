@@ -25,7 +25,7 @@ class CardIndians extends BangBrownCard {
   public function play($player, $args) {
     parent::play($player, $args);
     $ids = BangPlayerManager::getLivingPlayers($player->getId());
-    return $player->attack($ids, false);
+    return $player->attack($ids, NO_CHECK_BARREL);
   }
 
 
@@ -35,7 +35,7 @@ class CardIndians extends BangBrownCard {
 
 
   public function pass($player) {
-    $player->looseLife(BangPlayerManager::getCurrentTurn(true));
+    $player->looseLife();
     return null;
   }
 

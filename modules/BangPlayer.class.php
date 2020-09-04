@@ -144,25 +144,29 @@ class BangPlayer extends APP_GameClass
    * reduces the life points of a player by 1.
    * return: whether the player was eliminated
    */
-  public function looseLife($byPlayer = null, $amount = 1) {
+  public function looseLife($amount = 1) {
 		$this->hp -= $amount;
     if($this->hp <= 0) {
       $hand = $this->getCardsInHand();
-      Utils::filter($hand, function($card){return $card->getEffectType() == LIFE_POINT_MODIFIER;});
-      if($this->hp+count($hand)>0) {
-        while ($this->hp < 1) {
-          $this->playCard(array_shift($hand)->getId(), ['player' => null]);
+      if(count($hand)>0) {
+        Utils::filter($hand, function($card){return $card->getType() == CARD_BEER;});
+        $cards = [];
+        foreach($hand as $card) {
+          $format = $card->format();
+          $format['amount'] = 1- $this->hp;
+          $cards[] = $format;
         }
-        if($this->hp < 0)
-          $this->hp = 0;
-      } else $this->hp = 0;
+        BangLog::addAction('react', ['cards' => $cards, 'src' => 'hp', 'character' => null]);
+        $this->hp = 0;
+        $this->save();
+        return "react";
+      } else {
+        $this->hp = 0;
+        return $this->eliminate();
+      }
     }
-		$this->save();
+    $this->save();
     BangNotificationManager::lostLife($this);
-    if($this->hp == 0) {
-      $byPlayer = $byPlayer ?? BangPlayerManager::getCurrentTurn();
-      return $this->eliminate($byPlayer);
-    }
     return null;
 	}
 
@@ -355,7 +359,26 @@ class BangPlayer extends APP_GameClass
    * react: whenever a player react by passing or playing a card
    */
 	public function react($id) {
-		$card = BangCardManager::getCurrentCard();
+    $action = BangLog::getLastActions(["selection", "react"])[0];
+    $args = json_decode($action['action_arg']);
+    $src = $action['action'] == "react" ? $args[$this->id]['src'] : BangCardManager::getCurrentCard();
+    if($src == 'hp') {
+      if($id == PASS) {
+        $curr =  BangPlayerManager::getCurrentTurn();
+        $byPlayer = $this->id == $curr ? null : $curr;
+        $this->eliminate();
+      } else {
+        $ids = explode(";", $id);
+        foreach($ids as $i) {
+          $card = BangCardManager::getCard($i);
+          BangCardManager::discardCard($card);
+          BangNotificationManager::cardPlayed($this, $card, []);
+          BangLog::addCardPlayed($this, $card, $args);
+        }
+      }
+      return null;
+    }
+		$card = ($src instanceof BangCard) ? $src : BangCardManager::getCard($src);
     if($id == PASS)
       return $card->pass($this);
     else {
@@ -370,39 +393,46 @@ class BangPlayer extends APP_GameClass
   /**
    * attack : performs an attack on all given players
    */
-  public function attack($playerIds, $checkBarrel = true) {
+  public function attack($playerIds, $checkMissed = true) {
     $reactions = [];
     $state = null;
     foreach(BangPlayerManager::getPlayers($playerIds) as $player){
       // Player has defensive equipment ? (eg Barrel)
-      $canUseEquipment = false;
-      if($checkBarrel) {
-        $canUseEquipment = array_reduce($player->getCardsInPlay(), function($hasDefense, $card){
-          return $hasDefense || ($card->getEffectType() == DEFENSIVE);
-        }, false);
+      $reaction = [];
+      if($checkMissed) {
+        $reaction = $player->getDefensiveOptions();
+      } else {
+        $reaction = $player->getBangCards();
       }
 
-      // Otherwise, player has at least one card in hand ?
-      if($player->countCardsInHand() > 0 || $canUseEquipment)  {
-  			$reactions[] = $player->id; // Give him a chance to (pretend to) react
+      $handcount = $player->countCardsInHand();
+
+      if(count($reaction['cards']) > 0 || $handcount > 0 || $reaction['character'] != null) {
+        $reaction['src'] = BangLog::getCurrentCard();
+        $reactions[$player->id] = $reaction; // Give him a chance to (pretend to) react
   		} else {
-  			$newstate = $player->looseLife($checkBarrel ? $this : null); // Lost life immediatly
+        $curr = BangPlayerManager::getCurrentTurn();
+        $byPlayer = $this->id==$curr ? $this : null;
+  			$newstate = $player->looseLife(); // Lost life immediatly
         if(!is_null($newstate)) $state = $newstate;
   		}
     }
 
     // Go to corresponding state
     if(count($reactions) == 1) {
-      BangLog::addAction("target", ["target" => $reactions[0]]);
+      BangLog::addAction("react", $reactions);
+
       return "react";
     } elseif(count($reactions) > 1) {
-      BangLog::addAction("target", ["target" => $reactions]);
+      BangLog::addAction("react", $reactions);
       return "multiReact";
     }
     return $state;
   }
 
-  public function eliminate($byPlayer = null){
+  public function eliminate(){
+    $byPlayer = BangPlayerManager::getCurrentTurn(true);
+    if($byPlayer->id == $this->id) $byPlayer = null;
     $this->eliminated = true;
     $this->save();
     foreach(BangPlayerManager::getLivingPlayers(null, true) as $player)
@@ -455,5 +485,7 @@ class BangPlayer extends APP_GameClass
 
 
   public function getAmountToCounterBang() {return 1;}
+
+
 
 }

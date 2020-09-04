@@ -52,11 +52,7 @@ class CardDuel extends BangBrownCard {
 
   public function pass($player){
     parent::pass($player);
-    $current = BangPlayerManager::getCurrentTurn();
-    $pId = $this->getOpponent($player);
-    // if the opponent isn't the one who played the card, it doesn't count as his hit
-    $enemy = $current == $pId ? BangPlayerManager::getPlayer($pId) : null;
-    return $player->looseLife($enemy);
+    return $player->looseLife();
   }
 
   public function react($card, $player) {

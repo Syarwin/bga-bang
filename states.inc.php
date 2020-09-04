@@ -87,6 +87,7 @@ $machinestates = [
 			'draw'	=> ST_DRAW_CARDS,
 			'skip' => ST_NEXT_PLAYER,
 			'select' => ST_SELECT_CARD,
+			'react' => ST_AWAIT_REACTION,
 			'endgame' => ST_GAME_END,
 		],
 	],
