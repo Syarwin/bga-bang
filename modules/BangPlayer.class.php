@@ -360,7 +360,7 @@ class BangPlayer extends APP_GameClass
    */
 	public function react($id) {
     $action = BangLog::getLastActions(["selection", "react"])[0];
-    $args = json_decode($action['action_arg']);
+    $args = json_decode($action['action_arg'], true);
     $src = $action['action'] == "react" ? $args[$this->id]['src'] : BangCardManager::getCurrentCard();
     if($src == 'hp') {
       if($id == PASS) {
