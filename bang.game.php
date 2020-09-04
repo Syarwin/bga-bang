@@ -227,24 +227,6 @@ class bang extends Table
 		$newstate = isset($args['card'])? $player->react($ids[0])
 							: $player->useAbility(['selected' => $ids, 'rest' => $rest ]);
 	  $this->gamestate->nextState($newstate ?? 'select');
-/*
-		} else {
-
-			$newstate = $card->react($reactionCard, $this);
-
-		}
-
-		if($selection['id'] == PUBLIC_SELECTION) {
-			$playerId = array_shift($args['players']);
-			$newstate =  ? BangCardManager::getCurrentCard()->react($ids[0])
-				:	BangPlayerManager::getActivePlayer()->useAbility(['selected' => $ids, 'rest' => $selection['cards'] ]);
-			BangLog::addAction("selection", $args);
-			$this->gamestate->nextState($newstate ?? 'select');
-		} else {
-			$newstate = $player->useAbility(['selected' => $ids, 'rest' => $rest]);
-			$this->gamestate->nextState($newState);
-		}
-	*/
 	}
 
 

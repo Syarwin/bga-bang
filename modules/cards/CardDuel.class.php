@@ -51,7 +51,7 @@ class CardDuel extends BangBrownCard {
   }
 
   public function pass($player){
-    parent::play($player, $args);
+    parent::pass($player);
     $current = BangPlayerManager::getCurrentTurn();
     $pId = $this->getOpponent($player);
     // if the opponent isn't the one who played the card, it doesn't count as his hit

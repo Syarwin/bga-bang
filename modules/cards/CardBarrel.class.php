@@ -21,15 +21,15 @@ class CardBarrel extends BangBlueCard {
     $mixed = $player->draw(['pattern' => "/H/"], $this);
     if(!$mixed instanceof BangCard)
       return $mixed; //shouldn't happen, just in case we decide to let player decide after all
-
     BangCardManager::markAsPlayed($this->id);
-    $args = BangCardManager::getCurrentCard()->getReactionOptions($player);
+    $args = BangLog::getLastAction('cardPlayed');
+    if(!isset($args['missedNeeded'])) $args['missedNeeded'] = 1;
     if ($mixed->getCopyColor() == 'H') {
       BangNotificationManager::tell('Barrel was successfull');
-      if($args['amount'] == 1)
+      if($args['missedNeeded'] == 1)
             return null;
       BangNotificationManager::tell('But ${player_name} needs another miss', ['player_name' => $player->getName()]);
-      $args['amount']--;
+      $args['missedNeeded']--;
       BangLog::addCardPlayed(BangPlayerManager::getCurrentTurn(true), BangCardManager::getCurrentCard(), $args);
 
     } else {
