@@ -10,3 +10,4 @@
 - show roles of eliminated players. setup args now contain the array 'eliminated' of the eliminated players with their id and role.
 - implement gameEnd state
 - bug: dynamite diappears after moving(until reload)
+- equipping 4 cards looks weird

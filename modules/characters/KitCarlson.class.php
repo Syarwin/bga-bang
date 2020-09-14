@@ -28,7 +28,8 @@ class KitCarlson extends BangPlayer {
     foreach ($args['selected'] as $card)
       BangCardManager::moveCard($card, 'hand', $this->id);
     BangCardManager::putOnDeck($args['rest'][0]);
-    BangNotificationManager::drawCards($this, BangCardManager::toObjects($args['selected']));
+    BangNotificationManager::drawCards($this, BangCardManager::getCards($args['selected']));
+
     // todo notification
     return "play";
   }

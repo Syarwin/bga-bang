@@ -66,9 +66,9 @@ class BangNotificationManager extends APP_GameClass {
 
       if($amount == 1){
         if($isVisible){
-          $msg = $src == 'deck'? clienttranslate('${player_name} draws a card (${card_name}) from ${src_name}')
+          $msg = $src == 'deck'? clienttranslate('${player_name} draws ${card_name} from ${src_name}')
                 : clienttranslate('${player_name} chooses ${card_name} from ${src_name}');
-          $data['card_name'] = $cards[0]->getName();
+          $data['card_name'] = $cards[0]->getNameAndValue();
           $data['i18n'][] = 'card_name';
         }
         else

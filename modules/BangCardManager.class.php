@@ -38,11 +38,12 @@ class BangCardManager extends APP_GameClass
 		return array_values(array_map(['BangCardManager', 'formatCard'], $cards));
 	}
 
-	public static function toObjects($array) {
+	public static function getCards($array) {
 		$cards = [];
-		foreach($array as $row) $cards[] = self::resToObject($row);
+		foreach($array as $id) $cards[] = self::getCard($id);
 		return $cards;
 	}
+
 
 	/*
 	*
@@ -59,6 +60,11 @@ class BangCardManager extends APP_GameClass
 		return self::getCard(BangLog::getCurrentCard());
 	}
 
+	public static function toObjects($array) {
+		$cards = [];
+		foreach($array as $row) $cards[] = self::resToObject($row);
+		return $cards;
+	}
 
 	private static function resToObject($row) {
 		$card_id = $row['type'];
@@ -147,7 +153,7 @@ class BangCardManager extends APP_GameClass
 	}
 
 	public static function putOnDeck($card) {
-		insertCardOnExtremePosition($card, 'deck', true);
+		self::getDeck()->insertCardOnExtremePosition($card, 'deck', true);
 	}
 
 	public static function playCard($id) {
@@ -165,7 +171,7 @@ class BangCardManager extends APP_GameClass
 	public static function dealFromDiscard($player, $amount){
 		return self::deal($player, $amount, "discard");
 	}
-	
+
 	public static function draw() {
 		$card = self::resToObject(self::getDeck()->getCardOnTop('deck'));
 		self::playCard($card->getId());
