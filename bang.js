@@ -681,16 +681,20 @@ getCardAndDestroy: function(card, val){
  */
 getCard: function(ocard, eraseId) {
   // Gets a card object ready to use in UI templates
-  var card = this._cards[ocard.type] || {
-    id: 0,
-    type: 0,
+  var card = {
+    id: eraseId? -1 : ocard.id,
+    type: ocard.type,
     name: '',
     text: '',
+  	color: ocard.color,
+ 		value: ocard.value,
+		flipped: (typeof ocard.flipped == "undefined" || !ocard.flipped)? "" : "flipped",
   };
-  card.id = eraseId? -1 : ocard.id;
-  card.color = ocard.color;
-  card.value = ocard.value;
-  card.flipped = (typeof ocard.flipped == "undefined" || !ocard.flipped)? "" : "flipped";
+
+	if(this._cards[ocard.type]){
+		card.name = this._cards[ocard.type].name;
+		card.text = this._cards[ocard.type].text;
+	}
 
   return card;
 },
@@ -717,8 +721,8 @@ addCard: function(ocard, container){
   var div = dojo.place(this.format_block('jstpl_card', card), container);
   if(div.flipped == "")
     this.addTooltipHtml(div.id, this.format_block( 'jstpl_cardTooltip',  card));
-
-  dojo.connect(div, "onclick", (evt) => { evt.preventDefault(); evt.stopPropagation(); this.onClickCard(ocard) });
+console.log(ocard, card);
+  dojo.connect(div, "onclick", (evt) => { evt.preventDefault(); evt.stopPropagation(); this.onClickCard(card) });
 },
 
 
