@@ -149,6 +149,7 @@ class bang extends Table
 	}
 
 	public function stPlayCard() {
+		$this->setGameStateValue('JourdonnaisUsedSkill', 0);
 		$players = BangPlayerManager::getLivingPlayers(null, true);
 		$newstate = null;
 		foreach($players as $player) {
@@ -255,6 +256,8 @@ class bang extends Table
 	public function stAwaitReaction() {
 		BangCardManager::resetPlayedColumn();
 		$pId =  array_keys(BangLog::getLastAction("react"))[0];
+		$player = BangPlayerManager::getPlayer($pId);
+
 		$this->gamestate->changeActivePlayer($pId);
 		$this->gamestate->nextState();
 	}
@@ -281,7 +284,7 @@ class bang extends Table
 
  	public function argMultiReact() {
 		$args = BangLog::getLastAction("react");
-		
+
  		return [
  			'_private' => $args
  		];
