@@ -23,15 +23,15 @@ class Jourdonnais extends BangPlayer {
 
   public function useAbility($args) {
     bang::$instance->setGameStateValue('JourdonnaisUsedSkill', 1);
-    $card = $player->draw([], $this);
-    $args = BangCardManager::getCurrentCard()->getReactionOptions($player);
+    $card = $this->draw([], $this);
+    $args = BangCardManager::getCurrentCard()->getReactionOptions($this);
     if ($card->format()['color'] == 'H') {
       BangNotificationManager::tell('Jourdonnais effect was successfull');
       if($args['amount'] == 1) {
         bang::$instance->gamestate->nextState( "react" );
         return;
       }
-      BangNotificationManager::tell('But ${player_name} needs another miss', ['player_name' => $player->getName()]);
+      BangNotificationManager::tell('But ${player_name} needs another miss', ['player_name' => $this->getName()]);
       $args['amount']--;
       BangLog::addCardPlayed(BangPlayerManager::getCurrentTurn(true), BangCardManager::getCurrentCard(), $args);
     } else {

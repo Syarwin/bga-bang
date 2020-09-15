@@ -281,6 +281,7 @@ class bang extends Table
 
  	public function argMultiReact() {
 		$args = BangLog::getLastAction("react");
+		
  		return [
  			'_private' => $args
  		];

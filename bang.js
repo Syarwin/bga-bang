@@ -398,6 +398,7 @@ onClickCardSelectOption: function(card){
  */
 onEnteringStateReact: function(args){
   this.makeCardSelectable(args._private.cards, "selectCard");
+  if(args._private.character != null) this.makeCharacterAbilityUsable(args._private.character);
 },
 
 /*
@@ -405,6 +406,7 @@ onEnteringStateReact: function(args){
  */
 onEnteringStateMultiReact: function(args){
   this.makeCardSelectable(args._private.cards, "selectCard");
+  if(args._private.character != null) this.makeCharacterAbilityUsable(args._private.character);
 },
 
 
@@ -526,14 +528,15 @@ makeCharacterAbilityUsable:function(option){
 },
 
 onClickUseAbility: function(){
-  let OPTIONS_NONE = 0, OPTION_CARDS = 3;
-
-  if(this._useAbilityOption == OPTIONS_NONE) {
+  //let OPTIONS_NONE = 0, OPTION_CARDS = 3;
+  let SID_KETCHUM = 2, JOURDONNAIS = 4;
+  this._selectedCards = [];
+  if(this._useAbilityOption == JOURDONNAIS) {
     this.onClickConfirmUseAbility();
-  } else if(this._useAbilityOption == OPTION_CARDS) {
+  } else if(this._useAbilityOption == SID_KETCHUM) {
     // Sid Ketchum power
     var cards = dojo.query("#hand .bang-card").map( card => { return {id : dojo.attr(card, 'data-id') }; })
-    this._selectedCards = [];
+
     this._amount = 2;
     this.makeCardSelectable(cards, "useAbility");
 
@@ -891,10 +894,10 @@ notif_drawCard: function(n){
   debug("Notif: card drawn", n);
   var card = n.args.card;
   card.flipped = true;
-  dojo.addClass("bang-card-" + n.args.src_id, "selected");
+  //dojo.addClass("bang-card-" + n.args.src_id, "selected");
   this.addCard(card, "discard");
   setTimeout(() => dojo.removeClass("bang-card-" + card.id, "flipped"), 100);
-  setTimeout(() => dojo.removeClass("bang-card-" + n.args.src_id, "selected"), 1000);
+  //setTimeout(() => dojo.removeClass("bang-card-" + n.args.src_id, "selected"), 1000);
 },
 
 
