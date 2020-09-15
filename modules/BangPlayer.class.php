@@ -146,29 +146,35 @@ class BangPlayer extends APP_GameClass
    */
   public function looseLife($amount = 1) {
 		$this->hp -= $amount;
+    $this->save();
     if($this->hp <= 0) {
-      $hand = $this->getCardsInHand();
-      if(count($hand)>0) {
-        Utils::filter($hand, function($card){return $card->getType() == CARD_BEER;});
-        $cards = [];
-        foreach($hand as $card) {
-          $format = $card->format();
-          $format['amount'] = 1- $this->hp;
-          $cards[] = $format;
-        }
-        BangLog::addAction('react', ['cards' => $cards, 'src' => 'hp', 'character' => null]);
-        $this->hp = 0;
-        $this->save();
-        return "react";
-      } else {
-        $this->hp = 0;
-        return $this->eliminate();
-      }
+      if(Utils::getStateName() == 'multiReact') return null;
+      return $this->lostLastLife();
     }
     $this->save();
     BangNotificationManager::lostLife($this);
     return null;
 	}
+
+  public function lostLastLife() {
+    $hand = $this->getCardsInHand();
+    if(count($hand)>0) {
+      Utils::filter($hand, function($card){return $card->getType() == CARD_BEER;});
+      $cards = [];
+      foreach($hand as $card) {
+        $format = $card->format();
+        $format['amount'] = 1- $this->hp;
+        $cards[] = $format;
+      }
+      BangLog::addAction('react', ['cards' => $cards, 'src' => 'hp', 'character' => null]);
+      $this->hp = 0;
+      $this->save();
+      return "react";
+    } else {
+      $this->hp = 0;
+      return $this->eliminate();
+    }
+  }
 
 
 /************************************

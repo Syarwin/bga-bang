@@ -150,7 +150,15 @@ class bang extends Table
 
 	public function stPlayCard() {
 		$players = BangPlayerManager::getLivingPlayers(null, true);
-		foreach($players as $player) $player->checkHand();
+		$newstate = null;
+		foreach($players as $player) {
+			if($player->getHp() < 1) {
+				$newstate = $player->lostLastLife();
+				if($newstate == "react") bang::$instance->gamestate->nextState($newState);
+			}
+			$player->checkHand();
+		}
+		if($newstate != null) bang::$instance->gamestate->nextState($newState);
 	}
 
 	public function playCard($id, $args) {
