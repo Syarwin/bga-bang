@@ -246,37 +246,24 @@ class bang extends Table
 
 	public function stAwaitReaction() {
 		BangCardManager::resetPlayedColumn();
-		$pId =  array_keys(BangLog::getLastAction("react"))[0];
+		$pId = BangLog::getReactPlayers();
 		$this->gamestate->changeActivePlayer($pId);
 		$this->gamestate->nextState();
 	}
 
 	public function argReact() {
-	 $card = BangCardManager::getCurrentCard();
-	 $options = array_values(BangLog::getLastAction("react"))[0];
-
 	 return [
-		 '_private' => [
-			 'active' => $options
-		 ]
+		 '_private' => BangLog::getReactArgs()
 	 ];
 	}
 
 
 	public function stAwaitMultiReaction() {
 		BangCardManager::resetPlayedColumn();
-		//$players = BangPlayerManager::getTarget();
-		$players = array_keys(BangLog::getLastAction("react"));
+		$players = BangLog::getReactPlayers();
 		$this->gamestate->setPlayersMultiactive($players, 'finishedReaction', true); // This transition should never happens as the targets are non-empty
 		$this->gamestate->nextState();
 	}
-
- 	public function argMultiReact() {
-		$args = BangLog::getLastAction("react");
- 		return [
- 			'_private' => $args
- 		];
- 	}
 
 
 	function react($id) {

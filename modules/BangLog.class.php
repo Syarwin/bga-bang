@@ -169,4 +169,18 @@ class BangLog extends APP_GameClass
     $action = self::getObjectFromDb("SELECT * FROM log WHERE `action` = 'cardPlayed' AND `turn` = (SELECT turn FROM log WHERE `action` = 'startTurn' ORDER BY log_id DESC LIMIT 1) ORDER BY log_id DESC LIMIT 1");
     return is_null($action)? null : $action["card_id"];
   }
+
+
+  public static function getReactPlayers()
+  {
+    $players = array_keys(self::getLastAction("react"));
+    return count($players > 1)? $players : $players[0];
+  }
+
+  public static function getReactArgs()
+  {
+    $args = self::getLastAction("react");
+    return count($args > 1)? $args : ['active' => array_values($args)[0] ];
+  }
+
 }
