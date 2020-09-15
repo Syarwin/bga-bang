@@ -42,6 +42,7 @@ class CalamityJanet extends BangPlayer {
   public function playCard($id, $args) {
     $card = BangCardManager::getCard($id);
     if($card->getType() == CARD_MISSED) {
+      $args['asBang'] = true;
       BangNotificationManager::cardPlayed($this, $card, $args);
       BangLog::addCardPlayed($this, $card, $args);
       $card = new CardBang($id, "");

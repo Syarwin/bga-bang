@@ -150,7 +150,15 @@ class bang extends Table
 
 	public function stPlayCard() {
 		$players = BangPlayerManager::getLivingPlayers(null, true);
-		foreach($players as $player) $player->checkHand();
+		$newstate = null;
+		foreach($players as $player) {
+			if($player->getHp() < 1) {
+				$newstate = $player->lostLastLife();
+				if($newstate == "react") bang::$instance->gamestate->nextState($newState);
+			}
+			$player->checkHand();
+		}
+		if($newstate != null) bang::$instance->gamestate->nextState($newState);
 	}
 
 	public function playCard($id, $args) {
@@ -264,7 +272,6 @@ class bang extends Table
 		$this->gamestate->setPlayersMultiactive($players, 'finishedReaction', true); // This transition should never happens as the targets are non-empty
 		$this->gamestate->nextState();
 	}
-
 
 	function react($id) {
  		$player = BangPlayerManager::getPlayer(self::getCurrentPlayerId());

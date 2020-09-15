@@ -16,9 +16,22 @@ class CardMissed extends BangBrownCard {
     $this->effect = ['type' => DEFENSIVE];
   }
 
-  // can only happen when played as BANG by Calamity Janet
+  // react and pass can only happen when played as BANG by Calamity Janet
   public function react($card, $player) {
     $bang = new CardBang();
-    $bang->react($card, $player);
+    return $bang->react($card, $player);
+  }
+
+  public function pass($player) {
+    $bang = new CardBang();
+    return $bang->pass($player);
+  }
+
+  public function getArgsMessage($args) {
+    $msg = parent::getArgsMessage($args);
+    if(isset($args['asBang'])) {
+      return ' as Bang!' . $msg;
+    }
+    return $msg;
   }
 }
