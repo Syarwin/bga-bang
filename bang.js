@@ -414,7 +414,7 @@ onEnteringStateMultiReact: function(args){
 onClickCardSelectReact: function(card){
   // React with single card
   if(card.amount == 1 && this._amount == null){
-    this._selectedCards = [card];
+    this._selectedCards = [card.id];
     this.onClickConfirmReact();
   }
   // React with several cards
@@ -903,7 +903,7 @@ notif_cardsGained: function(n) {
     let sourceId = (n.args.src == "deck")? "deck" : this.getCardAndDestroy(card, "player-character-" + n.args.victimId);
     let targetId = n.args.target == "hand"? (this.player_id == n.args.playerId ? "hand" : ("player-character-" + n.args.playerId)) : ("player-inplay-" + n.args.playerId);
     this.slideTemporary("jstpl_card", card, "board", sourceId, targetId, 800, 120*i).then(() => {
-      if(n.args.target == "hand") this.addCard(card, 'hand-cards');
+      if(targetId == "hand") this.addCard(card, 'hand-cards');
       if(n.args.target == "inPlay") this.addCard(card, targetId);
     });
   });
