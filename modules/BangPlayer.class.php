@@ -392,13 +392,13 @@ class BangPlayer extends APP_GameClass
       if(is_null($ids)) // PASS
         return $card->pass($this);
       else {
-        // TODO
+        $newstate = null;
         foreach($ids as $id) {
           $reactionCard = BangCardManager::getCard($id);
           $newstate = $card->react($reactionCard, $this);
           $this->onCardsLost();
-          return $newstate;
         }
+        return $newstate;
       }
     }
 	}
