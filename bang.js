@@ -29,6 +29,7 @@ constructor: function () {
   this._selectableCards = [];
   this._selectablePlayers = [];
   this._selectedCard = null;
+  this._selectedCards = [];
   this._selectedPlayer = null;
   this._selectedOptionType = null;
   this._selectedOptionArg = null;
@@ -166,8 +167,12 @@ onUpdateActionButtons: function (stateName, args) {
   if (stateName == "discardExcess")
 		this.addActionButton('buttonCancelEnd', _('Cancel'), 'onClickCancelEndTurn', null, false, 'gray');
 
-  if (stateName == "react" || stateName == "multiReact")
+  if (stateName == "react" || stateName == "multiReact"){
     this.addActionButton('buttonSkip', _('Pass'), () => this.onClickPass(), null, false, 'blue');
+
+    if(args._private.character != null && this._selectedCard == null && this._selectedCards.length == 0)
+      this.makeCharacterAbilityUsable(args._private.character);
+  }
 },
 
 
@@ -397,17 +402,47 @@ onClickCardSelectOption: function(card){
  * React state : active player can play cards from his hand in reaction
  */
 onEnteringStateReact: function(args){
-  this.makeCardSelectable(args._private.cards, "selectCard");
-  if(args._private.character != null) this.makeCharacterAbilityUsable(args._private.character);
+  this._amount = null;
+  this._selectedCards = [];
+  this.makeCardSelectable(args._private.cards, "selectReact");
+},
+onEnteringStateMultiReact: function(args){
+  this.onEnteringStateReact(args);
 },
 
-/*
- * Multi React state : active player can play cards from his hand in reaction
- */
-onEnteringStateMultiReact: function(args){
-  this.makeCardSelectable(args._private.cards, "selectCard");
-  if(args._private.character != null) this.makeCharacterAbilityUsable(args._private.character);
+
+onClickCardSelectReact: function(card){
+  // React with single card
+  if(card.amount == 1 && this._amount == null){
+    this._selectedCards = [card];
+    this.onClickConfirmReact();
+  }
+  // React with several cards
+  else {
+    if(this._amount == null)
+      this._amount = card.amount;
+
+    // Toggle the card
+    if(!this.toggleCard(card)) return;
+
+    if(this._selectedCards.length < this._amount){
+      if(this._selectedCards.length == 0)
+        this._amount = null;
+      this.removeActionButtons();
+      this.onUpdateActionButtons(this.gamedatas.gamestate.name, this.gamedatas.gamestate.args);
+    } else {
+      this.addActionButton('buttonConfirmReact', _('Confirm react'), 'onClickConfirmReact', null, false, 'blue');
+    }
+  }
 },
+
+
+onClickConfirmReact: function(){
+  this.takeAction("react", {
+    cards:this._selectedCards.join(";"),
+  });
+},
+
 
 
 onClickPass: function(){
@@ -586,7 +621,7 @@ onEnteringStateDiscardExcess: function(args){
 },
 
 onClickCardDiscardExcess: function(card){
-  this.toggleCard(card);
+  if(!this.toggleCard(card)) return;
 
   if(this._selectedCards.length < this._amount){
     this.removeActionButtons();
@@ -868,8 +903,8 @@ notif_cardsGained: function(n) {
     let sourceId = (n.args.src == "deck")? "deck" : this.getCardAndDestroy(card, "player-character-" + n.args.victimId);
     let targetId = n.args.target == "hand"? (this.player_id == n.args.playerId ? "hand" : ("player-character-" + n.args.playerId)) : ("player-inplay-" + n.args.playerId);
     this.slideTemporary("jstpl_card", card, "board", sourceId, targetId, 800, 120*i).then(() => {
-      if(targetId != "hand") return;
-      this.addCard(card, 'hand-cards');
+      if(n.args.target == "hand") this.addCard(card, 'hand-cards');
+      if(n.args.target == "inPlay") this.addCard(card, targetId);
     });
   });
 

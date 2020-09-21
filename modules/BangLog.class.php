@@ -174,13 +174,13 @@ class BangLog extends APP_GameClass
   public static function getReactPlayers()
   {
     $players = array_keys(self::getLastAction("react"));
-    return count($players > 1)? $players : $players[0];
+    return count($players) > 1? $players : $players[0];
   }
 
   public static function getReactArgs()
   {
     $args = self::getLastAction("react");
-    return count($args > 1)? $args : ['active' => array_values($args)[0] ];
+    return count($args) > 1? $args : ['active' => array_values($args)[0] ];
   }
 
 }

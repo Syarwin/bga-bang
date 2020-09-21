@@ -1,8 +1,6 @@
-- adjust react State to cards having attribute 'amount'
 - Handle playerEliminated notification. arg.player and args.role are provided.
 - show roles of eliminated players. setup args now contain the array 'eliminated' of the eliminated players with their id and role.
 - implement gameEnd state
 - equipping 4 cards looks weird
 - bug: when i have to discard at the end of my turn and select the right amount of number, then every time i click on a unselected card, an additional 'Confirm discard'-button appears.
 - bug: when lucky duke is in jail and it's his turn, the selection appears but the cards are disabled.
-- bug: dynamite diappears after moving(until reload)

@@ -274,10 +274,10 @@ class bang extends Table
 		$this->gamestate->nextState();
 	}
 
-	
-	function react($id) {
+
+	function react($ids) {
  		$player = BangPlayerManager::getPlayer(self::getCurrentPlayerId());
- 		$newState = $player->react($id) ?? "finishedReaction";
+ 		$newState = $player->react($ids) ?? "finishedReaction";
 
 		if($newState == "updateOptions"){
 			$args = BangCardManager::getCurrentCard()->getReactionOptions($player);

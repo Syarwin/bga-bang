@@ -364,18 +364,19 @@ class BangPlayer extends APP_GameClass
   /**
    * react: whenever a player react by passing or playing a card
    */
-	public function react($id) {
+	public function react($ids) {
     $action = BangLog::getLastActions(["selection", "react"])[0];
     $args = json_decode($action['action_arg'], true);
     $src = $action['action'] == "react" ? $args[$this->id]['src'] : BangCardManager::getCurrentCard();
+
+    // Beer reaction when dying
     if($src == 'hp') {
-      if($id == PASS) {
+      if(is_null($ids)) { // PASS
         $curr =  BangPlayerManager::getCurrentTurn();
         $byPlayer = $this->id == $curr ? null : $curr;
         $this->eliminate();
       } else {
-        $ids = explode(";", $id);
-        foreach($ids as $i) {
+       foreach($ids as $i) {
           $card = BangCardManager::getCard($i);
           BangCardManager::discardCard($card);
           BangNotificationManager::cardPlayed($this, $card, []);
@@ -384,14 +385,21 @@ class BangPlayer extends APP_GameClass
       }
       return null;
     }
-		$card = ($src instanceof BangCard) ? $src : BangCardManager::getCard($src);
-    if($id == PASS)
-      return $card->pass($this);
+
+    // "Normal" react
     else {
-      $reactionCard = BangCardManager::getCard($id);
-      $newstate = $card->react($reactionCard, $this);
-      $this->onCardsLost();
-      return $newstate;
+  		$card = ($src instanceof BangCard) ? $src : BangCardManager::getCard($src);
+      if(is_null($ids)) // PASS
+        return $card->pass($this);
+      else {
+        // TODO
+        foreach($ids as $id) {
+          $reactionCard = BangCardManager::getCard($id);
+          $newstate = $card->react($reactionCard, $this);
+          $this->onCardsLost();
+          return $newstate;
+        }
+      }
     }
 	}
 

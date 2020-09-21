@@ -54,10 +54,19 @@ class action_bang extends APP_GameAction
 
 	public function react() {
 		self::setAjaxMode();
-		$id = self::getArg( "id", AT_posint, true );
-		$result = $this->game->react($id);
+		$cards = explode(";",self::getArg("cards", AT_numberlist, false));
+//		$id = self::getArg( "id", AT_posint, true );
+		$result = $this->game->react($cards);
 		self::ajaxResponse( );
 	}
+
+	public function pass() {
+		self::setAjaxMode();
+		$result = $this->game->react(null);
+		self::ajaxResponse( );
+	}
+
+
 
 	public function select() {
 		self::setAjaxMode();
@@ -90,13 +99,6 @@ class action_bang extends APP_GameAction
 		self::setAjaxMode();
 		$cards = explode(";",self::getArg("cards", AT_numberlist, false));
 		$result = $this->game->discardExcess($cards);
-		self::ajaxResponse( );
-	}
-
-
-	public function pass() {
-		self::setAjaxMode();
-		$result = $this->game->react(PASS);
 		self::ajaxResponse( );
 	}
 
