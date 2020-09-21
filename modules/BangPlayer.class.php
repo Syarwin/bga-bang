@@ -147,12 +147,12 @@ class BangPlayer extends APP_GameClass
   public function looseLife($amount = 1) {
 		$this->hp -= $amount;
     $this->save();
+    BangNotificationManager::lostLife($this, $amount);
     if($this->hp <= 0) {
       if(Utils::getStateName() == 'multiReact') return null;
       return $this->lostLastLife();
     }
     $this->save();
-    BangNotificationManager::lostLife($this);
     return null;
 	}
 
@@ -166,7 +166,7 @@ class BangPlayer extends APP_GameClass
         $format['amount'] = 1- $this->hp;
         $cards[] = $format;
       }
-      BangLog::addAction('react', ['cards' => $cards, 'src' => 'hp', 'character' => null]);
+      BangLog::addAction('react', [$this->id => ['cards' => $cards, 'src' => 'hp', 'character' => null]]);
       $this->hp = 0;
       $this->save();
       return "react";
@@ -444,7 +444,7 @@ class BangPlayer extends APP_GameClass
     foreach(BangPlayerManager::getLivingPlayers(null, true) as $player)
       $player->onPlayerEliminated($this);
     BangNotificationManager::playerEliminated($this);
-    if(BangPlayerManager::countRoles([Sheriff]) == 0 || BangPlayerManager::countRoles([OUTLAW, RENEGADE]) == 0) {
+    if(BangPlayerManager::countRoles([SHERIFF]) == 0 || BangPlayerManager::countRoles([OUTLAW, RENEGADE]) == 0) {
       return "endgame";
     }
 

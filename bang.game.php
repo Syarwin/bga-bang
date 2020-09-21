@@ -149,6 +149,7 @@ class bang extends Table
 	}
 
 	public function stPlayCard() {
+		$this->setGameStateValue('JourdonnaisUsedSkill', 0);
 		$players = BangPlayerManager::getLivingPlayers(null, true);
 		$newstate = null;
 		foreach($players as $player) {
@@ -273,6 +274,7 @@ class bang extends Table
 		$this->gamestate->nextState();
 	}
 
+	
 	function react($id) {
  		$player = BangPlayerManager::getPlayer(self::getCurrentPlayerId());
  		$newState = $player->react($id) ?? "finishedReaction";

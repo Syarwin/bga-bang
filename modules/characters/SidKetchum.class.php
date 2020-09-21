@@ -25,5 +25,6 @@ class SidKetchum extends BangPlayer {
     foreach ($args as $card) BangCardManager::playCard($card);
     BangNotificationManager::discardedCards($this, array_map(['BangCardManager','getCard'], $args));
     $this->gainLife();
+    bang::$instance->gamestate->nextState( "continuePlaying" );    
   }
 }
