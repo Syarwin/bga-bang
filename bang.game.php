@@ -358,6 +358,20 @@ class bang extends Table
 		return false;
 	}
 
+
+	public function stEliminate() {
+		$living = BangPlayerManager::getLivingPlayersStartingWith(BangPlayerManager::getCurrentTurn(true));
+		$toEliminate = BangPlayerManager::getPlayersForElimination();
+		foreach($living as $id) {
+			if(!in_array($id, $toEliminate)) {
+				if(id != self::getActivePlayerId()) $this->gamestate->changeActivePlayer($id);
+				break;
+			}
+		}
+		$nextState = array_reduce($toEliminate, function($state, $id){ return BangPlayerManager::getPlayer($id)->eliminate() ?? $state}, null);
+		$this->gamestate->nextState($nextState);
+	}
+
 /*****************************************
  *************** end of Game *************
  ****************************************/

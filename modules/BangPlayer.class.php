@@ -172,7 +172,7 @@ class BangPlayer extends APP_GameClass
       return "react";
     } else {
       $this->hp = 0;
-      return $this->eliminate();
+      return 'eliminate';
     }
   }
 
@@ -374,7 +374,7 @@ class BangPlayer extends APP_GameClass
       if(is_null($ids)) { // PASS
         $curr =  BangPlayerManager::getCurrentTurn();
         $byPlayer = $this->id == $curr ? null : $curr;
-        $this->eliminate();
+        return 'eliminate';
       } else {
        foreach($ids as $i) {
           $card = BangCardManager::getCard($i);

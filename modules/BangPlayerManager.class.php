@@ -118,6 +118,10 @@ class BangPlayerManager extends APP_GameClass
 		return self::getObjectListFromDB("SELECT player_id FROM player WHERE player_eliminated = 0 ORDER BY player_no < {$player->getNo()}, player_no", true);
 	}
 
+	public static function getPlayersForElimination() {
+		return self::getObjectListFromDB("SELECT player_id FROM player WHERE player_eliminated = 0 AND player_score <= 0", true);
+	}
+
 
 	public static function getEliminatedPlayers() {
 		$sql = "SELECT player_id id, player_role role FROM player WHERE player_eliminated = 1";

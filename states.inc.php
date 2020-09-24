@@ -86,6 +86,7 @@ $machinestates = [
 		'transitions' => [
 			'draw'	=> ST_DRAW_CARDS,
 			'skip' => ST_NEXT_PLAYER,
+			'eliminate' => ST_ELIMINATE,
 			'select' => ST_SELECT_CARD,
 			'react' => ST_AWAIT_REACTION,
 			'endgame' => ST_GAME_END,
@@ -133,6 +134,7 @@ $machinestates = [
 			'multiReact' => ST_AWAIT_MULTIREACTION,
 			'selection' => ST_PREPARE_SELECTION,
 			'continuePlaying' => ST_PLAY_CARD,
+			'eliminate' => ST_ELIMINATE,
 			'endgame' => ST_GAME_END,
 		],
 	],
@@ -157,6 +159,7 @@ $machinestates = [
 			'react' => ST_AWAIT_REACTION,
 			'multiReact' => ST_AWAIT_MULTIREACTION,
 			'finishedReaction' => ST_END_REACT,
+			'eliminate' => ST_ELIMINATE,
 			'endgame' => ST_GAME_END,
 		]
 	],
@@ -179,6 +182,7 @@ $machinestates = [
 		'possibleactions' => ['play','pass'],
 		'transitions' => [
 			'finishedReaction' => ST_END_REACT,
+			'eliminate' => ST_ELIMINATE,
 			'endgame' => ST_GAME_END,
 		]
 	],
@@ -213,7 +217,10 @@ $machinestates = [
 		'type' => 'game',
 		'action' => 'stEndReaction',
 		'updateGameProgression' => true,
-		'transitions' => ['finishedReaction' => ST_PLAY_CARD]
+		'transitions' => [
+			'finishedReaction' => ST_PLAY_CARD,
+			'eliminate' => ST_ELIMINATE
+		]
 	],
 
 
@@ -228,6 +235,18 @@ $machinestates = [
 			'zombiePass' => ST_END_OF_TURN,
 			'endTurn'		=> ST_END_OF_TURN,
 			'cancel' 		=> ST_PLAY_CARD,
+		],
+	],
+
+	ST_ELIMINATE => [
+		'name' => 'eliminate',
+		'description' => '',
+		'type' => 'game',
+		'action' => 'stEliminate',
+		'transitions' => [
+			'play' => ST_PLAY_CARD,
+			'next' => ST_START_OF_TURN,
+			'endgame' => ST_GAME_END,
 		],
 	],
 
