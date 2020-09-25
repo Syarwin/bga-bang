@@ -31,8 +31,7 @@ class CardDynamite extends BangBlueCard {
 
         // Loose 3hp: if the player dies, skip its turn
         $newstate = $player->looseLife(3);
-        if(is_null($newstate)) return $player->isEliminated() ? "skip" : "draw";
-        return $newstate;
+        return is_null($newstate) ? "draw" : $newstate;
       } else {
         // Move to next player and go on
         $next = BangPlayerManager::getNextPlayer($player);

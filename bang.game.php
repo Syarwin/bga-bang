@@ -153,10 +153,6 @@ class bang extends Table
 		$players = BangPlayerManager::getLivingPlayers(null, true);
 		$newstate = null;
 		foreach($players as $player) {
-			if($player->getHp() < 1) {
-				$newstate = $player->lostLastLife();
-				if($newstate == "react") bang::$instance->gamestate->nextState($newState);
-			}
 			$player->checkHand();
 		}
 		if($newstate != null) bang::$instance->gamestate->nextState($newState);
@@ -233,7 +229,7 @@ class bang extends Table
 
 		BangLog::addAction("selection", $args);
 		$player = BangPlayerManager::getActivePlayer();
-		$newstate = isset($args['card'])? $player->react($ids[0])
+		$newstate = isset($args['card'])? $player->react($ids)
 							: $player->useAbility(['selected' => $ids, 'rest' => $rest ]);
 	  $this->gamestate->nextState($newstate ?? 'select');
 	}
@@ -256,8 +252,13 @@ class bang extends Table
 	public function stAwaitReaction() {
 		BangCardManager::resetPlayedColumn();
 		$pId = BangLog::getReactPlayers();
-		$this->gamestate->changeActivePlayer($pId);
-		$this->gamestate->nextState();
+		if(is_array($pId)) {
+			$this->gamestate->setPlayersMultiactive($pId, 'finishedReaction', true); // This transition should never happens as the targets are non-empty
+			$this->gamestate->nextState('multi');
+		} else {
+			$this->gamestate->changeActivePlayer($pId);
+			$this->gamestate->nextState('single');
+		}
 	}
 
 	public function argReact() {
@@ -300,8 +301,30 @@ class bang extends Table
 
 
 	public function stEndReaction() {
+		$args = BangLog::getLastAction('react');
+
+		$toEliminate = BangPlayerManager::getPlayersForElimination();
+		if(array_values($args)[0]['src'] == 'hp') {
+			$living = BangPlayerManager::getLivingPlayersStartingWith(BangPlayerManager::getCurrentTurn(true));
+			foreach($living as $id) {
+				if(!in_array($id, $toEliminate)) {
+					if($id != self::getActivePlayerId()) $this->gamestate->changeActivePlayer($id);
+					break;
+				}
+			}
+			$nextState = array_reduce($toEliminate, function($state, $id){ return BangPlayerManager::getPlayer($id)->eliminate() ?? $state;}, null);
+			if(is_null($nextState)) {
+				if(BangPlayerManager::getCurrentTurn(true)->isEliminated())
+					$nextState = 'next';
+				else
+					$nextState = BangLog::getLastAction('lastState')[0] == 'startOfTurn' ? 'draw' : 'finishedReaction';
+			}
+			$this->gamestate->nextState($nextState);
+			return;
+		}
 		$this->gamestate->changeActivePlayer(BangPlayerManager::getCurrentTurn());
-		bang::$instance->gamestate->nextState("finishedReaction");
+		if(count($toEliminate)>0) $this->gamestate->nextState('eliminate');
+		else $this->gamestate->nextState("finishedReaction");
 	}
 
 
@@ -360,16 +383,27 @@ class bang extends Table
 
 
 	public function stEliminate() {
-		$living = BangPlayerManager::getLivingPlayersStartingWith(BangPlayerManager::getCurrentTurn(true));
-		$toEliminate = BangPlayerManager::getPlayersForElimination();
-		foreach($living as $id) {
-			if(!in_array($id, $toEliminate)) {
-				if(id != self::getActivePlayerId()) $this->gamestate->changeActivePlayer($id);
-				break;
+		$toEliminate = BangPlayerManager::getPlayersForElimination(true);
+		$argsReact = [];
+		foreach($toEliminate as $player) {
+			$hand = $player->getCardsInHand();
+			$needed = 1- $player->getHp();
+			if(count($hand)>=$needed) {
+				Utils::filter($hand, function($card){return $card->getType() == CARD_BEER;});
+				$cards = [];
+				foreach($hand as $card) {
+					$format = $card->format();
+					$format['amount'] = $needed;
+					$cards[] = $format;
+				}
+				$argsReact[$player->getId()] = ['cards' => $cards, 'src' => 'hp', 'character' => null];
 			}
+			$player->setHp(0);
+			$player->save();
 		}
-		$nextState = array_reduce($toEliminate, function($state, $id){ return BangPlayerManager::getPlayer($id)->eliminate() ?? $state}, null);
-		$this->gamestate->nextState($nextState);
+		BangLog::addAction('react', $argsReact);
+		$this->gamestate->nextState(count($argsReact) > 0 ? "react" : "eliminate");
+
 	}
 
 /*****************************************
@@ -427,8 +461,15 @@ class bang extends Table
 	 */
 	public function zombieTurn($state, $activePlayer) {
 		if (array_key_exists('zombiePass', $state['transitions'])) {
-			$this->playerManager->eliminate();
+			$player = BangPlayerManager::getActivePlayer();
+			// reducing hp to 0 and simulate a passed reaction
+			$player->setHp(0);
+			$player->save();
+			BangLog::addAction('react', [$activePlayer => ['src'=>'hp']]);
 			$this->gamestate->nextState('zombiePass');
+		} elseif ($state['name'] == 'multiReact') {
+			$player->setHp(-999); // making sure, he can't react
+			$player->save();
 		} else {
 			throw new BgaVisibleSystemException('Zombie player ' . $activePlayer . ' stuck in unexpected state ' . $state['name']);
 		}

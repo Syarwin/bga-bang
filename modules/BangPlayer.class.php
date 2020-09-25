@@ -55,7 +55,7 @@ class BangPlayer extends APP_GameClass
   public function getCardsInHand($formatted = false){ return BangCardManager::getHand($this->id, $formatted); }
   public function getCardsInPlay(){ return BangCardManager::getCardsInPlay($this->id); }
   public function countCardsInHand() { return BangCardManager::countCards("hand", $this->id);}
-
+  public function setHp($hp) {$this->hp = $hp;}
 
   public function getUiData($currentPlayerId = null) {
     $current = $this->id == $currentPlayerId;
@@ -150,31 +150,13 @@ class BangPlayer extends APP_GameClass
     BangNotificationManager::lostLife($this, $amount);
     if($this->hp <= 0) {
       if(Utils::getStateName() == 'multiReact') return null;
-      return $this->lostLastLife();
+      BangLog::addAction('lastState', [Utils::getStateName()]);
+      return 'eliminate';
     }
     $this->save();
     return null;
 	}
 
-  public function lostLastLife() {
-    $hand = $this->getCardsInHand();
-    if(count($hand)>0) {
-      Utils::filter($hand, function($card){return $card->getType() == CARD_BEER;});
-      $cards = [];
-      foreach($hand as $card) {
-        $format = $card->format();
-        $format['amount'] = 1- $this->hp;
-        $cards[] = $format;
-      }
-      BangLog::addAction('react', [$this->id => ['cards' => $cards, 'src' => 'hp', 'character' => null]]);
-      $this->hp = 0;
-      $this->save();
-      return "react";
-    } else {
-      $this->hp = 0;
-      return 'eliminate';
-    }
-  }
 
 
 /************************************
@@ -223,7 +205,7 @@ class BangPlayer extends APP_GameClass
   * getPlayerInRange : Returns the players ids in range of weapon
   */
   public function getPlayersInRange($range) {
-		$targets = BangPlayerManager::getPlayers();
+		$targets = BangPlayerManager::getLivingPlayers(null, true);
 
     Utils::filter($targets, function($player) use ($range){
       return ($player->getDistanceTo($this) <= $range); // TODO : use isInRange => weird bug...
@@ -365,6 +347,7 @@ class BangPlayer extends APP_GameClass
    * react: whenever a player react by passing or playing a card
    */
 	public function react($ids) {
+
     $action = BangLog::getLastActions(["selection", "react"])[0];
     $args = json_decode($action['action_arg'], true);
     $src = $action['action'] == "react" ? $args[$this->id]['src'] : BangCardManager::getCurrentCard();
@@ -372,9 +355,7 @@ class BangPlayer extends APP_GameClass
     // Beer reaction when dying
     if($src == 'hp') {
       if(is_null($ids)) { // PASS
-        $curr =  BangPlayerManager::getCurrentTurn();
-        $byPlayer = $this->id == $curr ? null : $curr;
-        return 'eliminate';
+        // nothing to do, i think
       } else {
        foreach($ids as $i) {
           $card = BangCardManager::getCard($i);
@@ -433,13 +414,10 @@ class BangPlayer extends APP_GameClass
     }
 
     // Go to corresponding state
-    if(count($reactions) == 1) {
+    if(count($reactions) > 0) {
       BangLog::addAction("react", $reactions);
 
       return "react";
-    } elseif(count($reactions) > 1) {
-      BangLog::addAction("react", $reactions);
-      return "multiReact";
     }
     return $state;
   }
