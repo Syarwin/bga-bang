@@ -62,17 +62,26 @@ setup: function (gamedatas) {
   dojo.connect($("deck"), "onclick", () => this.onClickDeck() );
   dojo.connect($("discard"), "onclick", () => this.onClickDiscard() );
 
-	// Setting up player boards
-  var nPlayers = gamedatas.bplayers.length;
-  dojo.attr("board", "data-players", nPlayers); // Usefull to setup the layout
-
   // Usefull to reorder player board around the current player
   var currentPlayerNo = gamedatas.bplayers.reduce((carry, player) => (player.id == this.player_id)? player.no : carry, 0);
+  var nPlayers = gamedatas.bplayers.length;
+  var playersAlive = 0;
+  var playersEliminated = 0;
   gamedatas.bplayers.forEach( player => {
+    if(player.eliminated){
+      dojo.addClass("overall_player_board_" + player.id, "eliminated");
+      var role = this.getRole(player.role);
+      dojo.place(this.format_block('jstpl_player_board_role', player), "player_board_" + player.id);
+      this.addTooltip("player-role-" + player.id, role["role-name"]);
+      playersEliminated++;
+      return;
+    }
+
+    playersAlive++;
     let isCurrent = player.id == this.player_id;
 
     if(player.role == null) player.role = 'hidden';
-    player.no = (player.no + nPlayers - currentPlayerNo) % nPlayers;
+    player.no = (player.no + nPlayers - currentPlayerNo) % nPlayers - playersEliminated;
     player.handCount = isCurrent? player.hand.length : player.hand;
     player.powers = '<p>' + player.powers.join('</p><p>') + '</p>';
 
@@ -90,6 +99,10 @@ setup: function (gamedatas) {
     }
   });
 
+  // Setting up player boards
+  dojo.attr("board", "data-players", playersAlive);
+
+  // Make the current player stand out
   this.setTurn(gamedatas.playerTurn);
 
 	// Setup game notifications
@@ -818,6 +831,7 @@ setupNotifications: function () {
     ['updateHP', 200],
     ['updateHand', 200],
 		['updateOptions', 200],
+    ['playerEliminated', 1000],
 	];
 
 	notifs.forEach(notif => {
@@ -858,6 +872,13 @@ notif_updateHand: function(n) {
 },
 
 
+/*
+* notification sent to all players when someone is eliminated
+*/
+notif_playerEliminated: function(n){
+  debug("Notif: player eliminated", n);
+  dojo.addClass('bang-player-' + n.args.playerId, "eliminated");
+},
 
 /*
  * notification sent to all players when someone plays a card

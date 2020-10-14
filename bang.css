@@ -25,6 +25,43 @@
   font-weight: normal;
   font-style: italic;
   font-display: swap; }
+.player-board .player-role {
+  width: 40px;
+  height: 38px;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0;
+  right: 37px; }
+  .player-board .player-role[data-role="0"] {
+    background-image: url("img/sheriff.svg"); }
+  .player-board .player-role[data-role="1"] {
+    background-image: url("img/deputy.svg"); }
+  .player-board .player-role[data-role="2"] {
+    background-image: url("img/outlaw.svg"); }
+  .player-board .player-role[data-role="3"] {
+    background-image: url("img/renegade.svg"); }
+
+.player-board.eliminated {
+  background-color: #BBB !important; }
+  .player-board.eliminated .player_board_inner .player_table_status {
+    display: none !important; }
+  .player-board.eliminated .player_board_inner::before {
+    content: "";
+    display: block;
+    width: 35px;
+    height: 35px;
+    background-image: url("img/dead.svg");
+    position: absolute;
+    z-index: 3;
+    background-color: white;
+    border-radius: 50%;
+    background-size: 88%;
+    background-position: center center;
+    background-repeat: no-repeat;
+    top: 4px;
+    left: 1px; }
+
 div#board {
   width: 100%;
   min-height: 800px;
@@ -85,6 +122,21 @@ div#board {
     grid-column-end: span 2;
     max-height: 190px;
     min-height: 190px; }
+  div#board[data-players="3"] #table {
+    grid-column-start: 3;
+    grid-row-start: 4; }
+  div#board[data-players="3"] .bang-player[data-no="0"] {
+    grid-column-start: 3;
+    grid-row-start: 2;
+    justify-content: center; }
+  div#board[data-players="3"] .bang-player[data-no="1"] {
+    grid-column-start: 5;
+    grid-row-start: 4;
+    justify-content: flex-start; }
+  div#board[data-players="3"] .bang-player[data-no="2"] {
+    grid-column-start: 1;
+    grid-row-start: 4;
+    justify-content: flex-end; }
   div#board[data-players="4"] #table {
     grid-column-start: 3;
     grid-row-start: 4; }
@@ -249,6 +301,13 @@ div#board {
     border: 1px dashed black; }
   100% {
     border: 1px dashed white; } }
+  div#board .bang-player.eliminated .bang-player-container {
+    width: 113.266509434px; }
+    div#board .bang-player.eliminated .bang-player-container .player-character-background {
+      background-image: url("img/tombstone.svg");
+      background-size: 80%;
+      background-position: center center;
+      background-repeat: no-repeat; }
   div#board .bang-player .bang-player-container {
     width: 96%;
     height: 180px;
@@ -256,7 +315,8 @@ div#board {
     border-radius: 5px;
     border: 1px solid rgba(50, 50, 50, 0.8);
     box-shadow: 1px 1px 5px rgba(50, 50, 50, 0.8);
-    display: flex; }
+    display: flex;
+    transition: width 1s; }
     div#board .bang-player .bang-player-container .player-inplay {
       flex-grow: 1;
       display: flex;

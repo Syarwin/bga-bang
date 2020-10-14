@@ -31,7 +31,7 @@ class BangPlayerManager extends APP_GameClass
 			$role = $roles[$i];
 			$char_id = $characters[$i++];
 			$char  = new self::$classes[$char_id]();
-			$bullets = $char->getBullets();
+			$bullets = 1; //$char->getBullets(); TODO remove
 			if($role == SHERIFF) {
 				$bullets++;
 				$sheriff = $pId;
@@ -71,7 +71,7 @@ class BangPlayerManager extends APP_GameClass
 	}
 
 	/*
-	 * getPlayers : Returns array of SantoriniPlayer objects for all/specified player IDs
+	 * getPlayers : Returns array of BangPlayer objects for all/specified player IDs
 	 * if $asArrayCollection is set to true it return the result as a map $id=>array
 	 */
 	public static function getPlayers($playerIds = null, $asArrayCollection = false) {

@@ -45,6 +45,12 @@ $cardW: $cardH / 200 * 125;
 
 
 $layoutBig:(
+  3:(
+    "table":("col" : 3, "row" : 4, "align" : center),
+    0:("col" : 3, "row" : 2, "align": center),
+    1:("col" : 5, "row" : 4, "align": left),
+    2:("col" : 1, "row" : 4, "align": right),
+  ),
   4:(
     "table":("col" : 3, "row" : 4, "align" : center),
     0:("col" : 3, "row" : 2, "align": center),
@@ -61,6 +67,48 @@ $layoutBig:(
     4:("col" : 1, "row" : 4, "align": right),
   )
 );
+
+.player-board {
+  .player-role {
+    width:40px;
+    height:40px;
+    background-size:contain;
+    background-repeat:no-repeat;
+    position:absolute;
+    top:0;
+    right:45px;
+
+    &[data-role="0"] { background-image:url("img/sheriff.svg"); }
+    &[data-role="1"] { background-image:url("img/deputy.svg"); }
+    &[data-role="2"] { background-image:url("img/outlaw.svg"); }
+    &[data-role="3"] { background-image:url("img/renegade.svg"); }
+  }
+}
+.player-board.eliminated {
+  background-color: #BBB !important;
+
+  .player_board_inner {
+    .player_table_status { display:none !important; }
+
+    &::before {
+      content: "";
+      display: block;
+      width: 35px;
+      height: 35px;
+      background-image: url("img/dead.svg");
+      position: absolute;
+      z-index: 3;
+      background-color: white;
+      border-radius: 50%;
+      background-size: 88%;
+      background-position: center center;
+      background-repeat: no-repeat;
+      top: 4px;
+      left: 1px;
+    }
+  }
+}
+
 
 div#board {
 	width:100%;
@@ -287,6 +335,20 @@ div#board {
       }
     }
 
+    &.eliminated {
+      .bang-player-container {
+        width:$cardW / 106 * 113;
+
+        .player-character-background {
+          background-image:url("img/tombstone.svg");
+          background-size: 80%;
+          background-position: center center;
+          background-repeat: no-repeat;
+        }
+      }
+    }
+
+
     .bang-player-container {
       width:96%;
       height:$cardH + 10px;
@@ -295,6 +357,7 @@ div#board {
       border:1px solid $darkgray;
       box-shadow: 1px 1px 5px $darkgray;
       display:flex;
+      transition:width 1s;
 
       .player-inplay {
         flex-grow:1;

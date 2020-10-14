@@ -66,7 +66,6 @@ class bang extends Table
 			'discard' => BangCardManager::getLastDiscarded(),
 			'playerTurn' => BangPlayerManager::getCurrentTurn(),
 			'cards' => BangCardManager::getUIData(),
-			'eliminated' => BangPlayerManager::getEliminatedPlayers()
 		];
 		return $result;
 	}

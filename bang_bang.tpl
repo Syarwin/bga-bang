@@ -22,6 +22,8 @@ var jstpl_table = `<div id="table">
 </div>
 `;
 
+var jstpl_player_board_role = `<div class='player-role' id="player-role-\${id}" data-role='\${role}'></div>`;
+
 var jstpl_player = `<div class='bang-player' id='bang-player-\${id}' data-role="\${role}" data-no="\${no}" data-max-bullets="\${bullets}" data-bullets="\${hp}" data-hand="\${handCount}">
 	<div class='bang-player-container'>
 		<div class='player-inplay' id="player-inplay-\${id}">
