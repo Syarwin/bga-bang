@@ -207,7 +207,10 @@ class BangNotificationManager extends APP_GameClass {
       'player_name' => $player->getName(),
       'role_name' => $roles[$player->getRole()],
       'playerId' => $player->getId(),
-      'role' => $player->getRole()
+    ]);
+
+    bang::$instance->notifyAllPlayers('updatePlayers', '', [
+      'players' => BangPlayerManager::getUiData(0),
     ]);
   }
 

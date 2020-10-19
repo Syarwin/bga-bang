@@ -63,25 +63,10 @@ setup: function (gamedatas) {
   dojo.connect($("discard"), "onclick", () => this.onClickDiscard() );
 
   // Usefull to reorder player board around the current player
-  var currentPlayerNo = gamedatas.bplayers.reduce((carry, player) => (player.id == this.player_id)? player.no : carry, 0);
-  var nPlayers = gamedatas.bplayers.length;
-  var playersAlive = 0;
-  var playersEliminated = 0;
   gamedatas.bplayers.forEach( player => {
-    if(player.eliminated){
-      dojo.addClass("overall_player_board_" + player.id, "eliminated");
-      var role = this.getRole(player.role);
-      dojo.place(this.format_block('jstpl_player_board_role', player), "player_board_" + player.id);
-      this.addTooltip("player-role-" + player.id, role["role-name"]);
-      playersEliminated++;
-      return;
-    }
-
-    playersAlive++;
     let isCurrent = player.id == this.player_id;
 
     if(player.role == null) player.role = 'hidden';
-    player.no = (player.no + nPlayers - currentPlayerNo) % nPlayers - playersEliminated;
     player.handCount = isCurrent? player.hand.length : player.hand;
     player.powers = '<p>' + player.powers.join('</p><p>') + '</p>';
 
@@ -89,7 +74,6 @@ setup: function (gamedatas) {
     this.addTooltipHtml("player-character-" + player.id, this.format_block( 'jstpl_characterTooltip',  player));
     player.inPlay.forEach(card => this.addCard(card, 'player-inplay-' + player.id));
     dojo.connect($("player-character-" + player.id), "onclick", (evt) => { evt.preventDefault(); evt.stopPropagation(); this.onClickPlayer(player.id) });
-
 
     if(isCurrent){
       let role = this.getRole(player.role);
@@ -100,7 +84,7 @@ setup: function (gamedatas) {
   });
 
   // Setting up player boards
-  dojo.attr("board", "data-players", playersAlive);
+  this.updatePlayers(gamedatas.bplayers);
 
   // Make the current player stand out
   this.setTurn(gamedatas.playerTurn);
@@ -114,6 +98,40 @@ setTurn: function(playerId){
   dojo.query("#bang-player-" + playerId + " .bang-player-container").style("border", "2px solid #" + this.gamedatas.players[playerId].color);
 },
 
+
+updatePlayers: function(players){
+  var nPlayers = players.length;
+  var playersAlive = players.reduce((carry,player) => carry + (player.eliminated? 0 : 1), 0);
+  var playersEliminated = nPlayers - playersAlive;
+  var newNo = 0;
+  players.forEach( player => {
+    if(!player.eliminated)
+      player.no = newNo++;
+  });
+  var currentPlayerNo = players.reduce((carry, player) => (player.id == this.player_id)? player.no : carry, 0);
+
+  players.forEach( player => {
+    if(player.eliminated){
+      dojo.addClass("overall_player_board_" + player.id, "eliminated");
+      if(!$("player-role-" + player.id)){
+        var role = this.getRole(player.role);
+        dojo.place(this.format_block('jstpl_player_board_role', player), "player_board_" + player.id);
+        this.addTooltip("player-role-" + player.id, role["role-name"]);
+      }
+
+      if($("bang-player-" + player.id))
+        dojo.destroy("bang-player-" + player.id);
+
+      if(player.id == this.player_id && $("hand"))
+        dojo.destroy("hand");
+    } else {
+      player.no = (player.no + playersAlive - currentPlayerNo) % playersAlive;
+      dojo.attr("bang-player-" + player.id, "data-no", player.no);
+    }
+  });
+
+  dojo.attr("board", "data-players", playersAlive);
+},
 
 /*
  * onEnteringState:
@@ -832,6 +850,7 @@ setupNotifications: function () {
     ['updateHand', 200],
 		['updateOptions', 200],
     ['playerEliminated', 1000],
+    ['updatePlayers', 100],
 	];
 
 	notifs.forEach(notif => {
@@ -879,6 +898,12 @@ notif_playerEliminated: function(n){
   debug("Notif: player eliminated", n);
   dojo.addClass('bang-player-' + n.args.playerId, "eliminated");
 },
+
+notif_updatePlayers: function(n){
+  debug("Notif: update players", n);
+  this.updatePlayers(n.args.players);
+},
+
 
 /*
  * notification sent to all players when someone plays a card

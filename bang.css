@@ -27,12 +27,12 @@
   font-display: swap; }
 .player-board .player-role {
   width: 40px;
-  height: 38px;
-  background-size: 100%;
+  height: 40px;
+  background-size: contain;
   background-repeat: no-repeat;
   position: absolute;
   top: 0;
-  right: 37px; }
+  right: 45px; }
   .player-board .player-role[data-role="0"] {
     background-image: url("img/sheriff.svg"); }
   .player-board .player-role[data-role="1"] {
@@ -68,6 +68,9 @@ div#board {
   position: relative;
   display: grid;
   grid-template-columns: repeat(6, 1fr); }
+  @media (max-width: 1300px) {
+    div#board {
+      grid-template-columns: repeat(4, 1fr); } }
   div#board div#hand {
     background-color: rgba(255, 255, 255, 0.5);
     border-radius: 5px;
@@ -76,6 +79,9 @@ div#board {
     height: 185px;
     display: flex;
     flex-flow: row; }
+    @media (max-width: 1300px) {
+      div#board div#hand {
+        grid-column: 1 / span 4; } }
     div#board div#hand div#role-container {
       flex-grow: 0;
       width: 121.25px;
@@ -179,6 +185,64 @@ div#board {
     grid-column-start: 1;
     grid-row-start: 4;
     justify-content: flex-end; }
+  @media (max-width: 1300px) {
+    div#board[data-players="3"] #table {
+      grid-column-start: 3;
+      grid-row-start: 4; }
+    div#board[data-players="3"] .bang-player[data-no="0"] {
+      grid-column-start: 3;
+      grid-row-start: 2;
+      justify-content: center; }
+    div#board[data-players="3"] .bang-player[data-no="1"] {
+      grid-column-start: 5;
+      grid-row-start: 4;
+      justify-content: flex-start; }
+    div#board[data-players="3"] .bang-player[data-no="2"] {
+      grid-column-start: 1;
+      grid-row-start: 4;
+      justify-content: flex-end; }
+    div#board[data-players="4"] #table {
+      grid-column-start: 3;
+      grid-row-start: 4; }
+    div#board[data-players="4"] .bang-player[data-no="0"] {
+      grid-column-start: 3;
+      grid-row-start: 2;
+      justify-content: center; }
+    div#board[data-players="4"] .bang-player[data-no="1"] {
+      grid-column-start: 5;
+      grid-row-start: 4;
+      justify-content: flex-start; }
+    div#board[data-players="4"] .bang-player[data-no="2"] {
+      grid-column-start: 3;
+      grid-row-start: 6;
+      justify-content: center; }
+    div#board[data-players="4"] .bang-player[data-no="3"] {
+      grid-column-start: 1;
+      grid-row-start: 4;
+      justify-content: flex-end; }
+    div#board[data-players="5"] #table {
+      grid-column-start: 2;
+      grid-row-start: 4; }
+    div#board[data-players="5"] .bang-player[data-no="0"] {
+      grid-column-start: 2;
+      grid-row-start: 2;
+      justify-content: center; }
+    div#board[data-players="5"] .bang-player[data-no="1"] {
+      grid-column-start: 3;
+      grid-row-start: 6;
+      justify-content: flex-end; }
+    div#board[data-players="5"] .bang-player[data-no="2"] {
+      grid-column-start: 3;
+      grid-row-start: 8;
+      justify-content: center; }
+    div#board[data-players="5"] .bang-player[data-no="3"] {
+      grid-column-start: 1;
+      grid-row-start: 8;
+      justify-content: center; }
+    div#board[data-players="5"] .bang-player[data-no="4"] {
+      grid-column-start: 1;
+      grid-row-start: 6;
+      justify-content: flex-start; } }
   div#board #table {
     justify-content: center; }
     div#board #table #table-container {

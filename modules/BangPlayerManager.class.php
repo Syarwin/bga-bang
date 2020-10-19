@@ -168,7 +168,7 @@ class BangPlayerManager extends APP_GameClass
 
 	public static function getCharactersByExpansion($expansions) {
 		$characters = [
-			BASE_GAME => [SID_KETCHUM, JOURDONNAIS, SLAB_THE_KILLER, WILLY_THE_KID], //range(0,15)
+			BASE_GAME => [SID_KETCHUM, JOURDONNAIS, SLAB_THE_KILLER, WILLY_THE_KID, EL_GRINGO], //range(0,15)
 			// add new expansions
 		];
 		return array_reduce($expansions, function($res, $exp) use ($characters){

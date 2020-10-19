@@ -68,6 +68,32 @@ $layoutBig:(
   )
 );
 
+
+$layoutSmall:(
+  3:(
+    "table":("col" : 3, "row" : 4, "align" : center),
+    0:("col" : 3, "row" : 2, "align": center),
+    1:("col" : 5, "row" : 4, "align": left),
+    2:("col" : 1, "row" : 4, "align": right),
+  ),
+  4:(
+    "table":("col" : 3, "row" : 4, "align" : center),
+    0:("col" : 3, "row" : 2, "align": center),
+    1:("col" : 5, "row" : 4, "align": left),
+    2:("col" : 3, "row" : 6, "align": center),
+    3:("col" : 1, "row" : 4, "align": right),
+  ),
+  5:(
+    "table":("col" : 2, "row" : 4, "align" : center),
+    0:("col" : 2, "row" : 2, "align": center),
+    1:("col" : 3, "row" : 6, "align": right),
+    2:("col" : 3, "row" : 8, "align": center),
+    3:("col" : 1, "row" : 8, "align": center),
+    4:("col" : 1, "row" : 6, "align": left),
+  )
+);
+
+
 .player-board {
   .player-role {
     width:40px;
@@ -116,6 +142,9 @@ div#board {
 	position:relative;
 	display:grid;
 	grid-template-columns: repeat(6, 1fr);
+  @media (max-width: 1300px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
 
   div#hand {
   	background-color:$transparentWhite;
@@ -125,6 +154,9 @@ div#board {
   	height:$cardH + 15px;
   	display:flex;
   	flex-flow:row;
+    @media (max-width: 1300px) {
+      grid-column:1 / span 4;
+    }
 
     div#role-container {
       flex-grow:0;
@@ -201,6 +233,32 @@ div#board {
             @if map-get($place, 'align') == left   { justify-content: flex-start; }
             @if map-get($place, 'align') == center { justify-content: center; }
             @if map-get($place, 'align') == right  { justify-content: flex-end; }
+          }
+        }
+      }
+    }
+  }
+
+
+  @media (max-width: 1300px) {
+    @each $nPlayers, $layout in $layoutSmall {
+      &[data-players="#{$nPlayers}"] #table {
+        $place : map-get($layout, "table");
+        grid-column-start: map-get($place, 'col');
+        grid-row-start: map-get($place, 'row');
+      }
+
+      &[data-players="#{$nPlayers}"] .bang-player {
+        @each $i, $place in $layout {
+          @if $i != "table" {
+            &[data-no="#{$i}"] {
+              grid-column-start: map-get($place, 'col');
+              grid-row-start: map-get($place, 'row');
+
+              @if map-get($place, 'align') == left   { justify-content: flex-start; }
+              @if map-get($place, 'align') == center { justify-content: center; }
+              @if map-get($place, 'align') == right  { justify-content: flex-end; }
+            }
           }
         }
       }
