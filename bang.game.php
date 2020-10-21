@@ -261,9 +261,7 @@ class bang extends Table
 	}
 
 	public function argReact() {
-	 return [
-		 '_private' => BangLog::getReactArgs()
-	 ];
+	 return BangLog::getLastAction("react");
 	}
 
 
@@ -303,7 +301,7 @@ class bang extends Table
 		$args = BangLog::getLastAction('react');
 
 		$toEliminate = BangPlayerManager::getPlayersForElimination();
-		if(array_values($args)[0]['src'] == 'hp') {
+		if(array_values($args['_private'])[0]['src'] == 'hp') {
 			$living = BangPlayerManager::getLivingPlayersStartingWith(BangPlayerManager::getCurrentTurn(true));
 			foreach($living as $id) {
 				if(!in_array($id, $toEliminate)) {
@@ -384,6 +382,7 @@ class bang extends Table
 	public function stEliminate() {
 		$toEliminate = BangPlayerManager::getPlayersForElimination(true);
 		$argsReact = [];
+
 		foreach($toEliminate as $player) {
 			$hand = $player->getCardsInHand();
 			$needed = 1- $player->getHp();
@@ -400,7 +399,13 @@ class bang extends Table
 			$player->setHp(0);
 			$player->save();
 		}
-		BangLog::addAction('react', $argsReact);
+		$args = [
+			'msgActive' => '${you} lost your last life point. You may play a beer to survive.',
+			'msgInactive' => 'players may play beer to survive',
+			'_private' => $argsReact
+		];
+
+		BangLog::addAction('react', $args);
 		$this->gamestate->nextState(count($argsReact) > 0 ? "react" : "eliminate");
 
 	}

@@ -436,9 +436,15 @@ onEnteringStateReact: function(args){
   this._amount = null;
   this._selectedCards = [];
   this.makeCardSelectable(args._private.cards, "selectReact");
+  var msg = this.isCurrentPlayerActive() ? args.msgActive : args.msgInactive;
+  this.gamedatas.gamestate.descriptionmyturn = msg;
+  this.updatePageTitle();
 },
 onEnteringStateMultiReact: function(args){
   this.onEnteringStateReact(args);
+  var msg = this.isCurrentPlayerActive() ? args.msgActive : args.msgInactive;
+  this.gamedatas.gamestate.descriptionmyturn = msg;
+  this.updatePageTitle();
 },
 
 
@@ -896,7 +902,7 @@ notif_updateHand: function(n) {
 */
 notif_playerEliminated: function(n){
   debug("Notif: player eliminated", n);
-  dojo.addClass('bang-player-' + n.args.playerId, "eliminated");
+  dojo.addClass('bang-player-' + n.args.who_quits, "eliminated");
 },
 
 notif_updatePlayers: function(n){

@@ -351,7 +351,7 @@ class BangPlayer extends APP_GameClass
 
     $action = BangLog::getLastActions(["selection", "react"])[0];
     $args = json_decode($action['action_arg'], true);
-    $src = $action['action'] == "react" ? $args[$this->id]['src'] : BangCardManager::getCurrentCard();
+    $src = $action['action'] == "react" ? $args['_private'][$this->id]['src'] : BangCardManager::getCurrentCard();
 
     // Beer reaction when dying
     if($src == 'hp') {
@@ -414,9 +414,19 @@ class BangPlayer extends APP_GameClass
   		}
     }
 
+
+
     // Go to corresponding state
     if(count($reactions) > 0) {
-      BangLog::addAction("react", $reactions);
+      $card = BangCardManager::getCard(BangLog::getCurrentCard());
+      $inactive = count($reactions) > 1 ? 'players' : '${actplayer}';
+      $args = [
+        'msgActive' => clienttranslate('${you} may react to ${src}'),
+        'msgInactive' => clienttranslate($inactive . ' may react to ${src}'),
+        'src' => $card->getName(),
+        '_private' => $reactions
+      ];
+      BangLog::addAction("react", $args);
 
       return "react";
     }
@@ -424,18 +434,33 @@ class BangPlayer extends APP_GameClass
   }
 
   public function eliminate(){
+    // get player who eliminated this player
     $byPlayer = BangPlayerManager::getCurrentTurn(true);
     if($byPlayer->id == $this->id) $byPlayer = null;
-    $this->eliminated = true;
-    $this->save();
+
+    // let characters react
     foreach(BangPlayerManager::getLivingPlayers(null, true) as $player)
       $player->onPlayerEliminated($this);
-    BangNotificationManager::playerEliminated($this);
+
+    //discard cards
+    $hand = $this->getCardsInHand();
+    $equipment = $this->getCardsInPlay();
+    foreach (array_merge($hand, $equipment) as $card) BangCardManager::discardCard($card);
+    BangNotificationManager::discardedCards($this, $equipment, true);
+    BangNotificationManager::discardedCards($this, $hand, false);
+    //check if game should end
     if(BangPlayerManager::countRoles([SHERIFF]) == 0 || BangPlayerManager::countRoles([OUTLAW, RENEGADE]) == 0) {
       return "endgame";
     }
 
 
+    // eliminate player
+    $this->eliminated = true;
+    $this->save();
+    bang::$instance->eliminatePlayer($this->id);
+    BangNotificationManager::playerEliminated($this);
+
+    //handle rewards/penalties
     if(!is_null($byPlayer)) {
       if($this->getRole() == OUTLAW) {
         $byPlayer->drawCards(3);

@@ -202,14 +202,10 @@ class BangNotificationManager extends APP_GameClass {
 
   public static function playerEliminated($player) {
     $roles = [clienttranslate('Sheriff'), clienttranslate('Deputy'), clienttranslate('Outlaw'), clienttranslate('Renegade')];
-    bang::$instance->notifyAllPlayers('playerEliminated', '${player_name} has been eliminated, he was a ${role_name}', [
-      'i18n' => ['role_name'],
+    
+    bang::$instance->notifyAllPlayers('updatePlayers', '${player_name} was a ${role_name}', [
       'player_name' => $player->getName(),
       'role_name' => $roles[$player->getRole()],
-      'playerId' => $player->getId(),
-    ]);
-
-    bang::$instance->notifyAllPlayers('updatePlayers', '', [
       'players' => BangPlayerManager::getUiData(0),
     ]);
   }
