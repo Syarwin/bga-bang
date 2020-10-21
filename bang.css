@@ -68,9 +68,6 @@ div#board {
   position: relative;
   display: grid;
   grid-template-columns: repeat(6, 1fr); }
-  @media (max-width: 1300px) {
-    div#board {
-      grid-template-columns: repeat(4, 1fr); } }
   div#board div#hand {
     background-color: rgba(255, 255, 255, 0.5);
     border-radius: 5px;
@@ -78,7 +75,8 @@ div#board {
     grid-column: 1 / span 6;
     height: 185px;
     display: flex;
-    flex-flow: row; }
+    flex-flow: row;
+    width: 100%; }
     @media (max-width: 1300px) {
       div#board div#hand {
         grid-column: 1 / span 4; } }
@@ -119,7 +117,8 @@ div#board {
       display: flex;
       flex-flow: row;
       align-items: center;
-      justify-content: center; }
+      justify-content: center;
+      overflow: auto; }
   div#board .bang-player, div#board #table {
     display: flex;
     flex-flow: row;
@@ -221,18 +220,18 @@ div#board {
       grid-row-start: 4;
       justify-content: flex-end; }
     div#board[data-players="5"] #table {
-      grid-column-start: 2;
-      grid-row-start: 4; }
+      grid-column-start: 1;
+      grid-row-start: 2; }
     div#board[data-players="5"] .bang-player[data-no="0"] {
-      grid-column-start: 2;
-      grid-row-start: 2;
-      justify-content: center; }
-    div#board[data-players="5"] .bang-player[data-no="1"] {
       grid-column-start: 3;
+      grid-row-start: 2;
+      justify-content: flex-start; }
+    div#board[data-players="5"] .bang-player[data-no="1"] {
+      grid-column-start: 4;
       grid-row-start: 6;
       justify-content: flex-end; }
     div#board[data-players="5"] .bang-player[data-no="2"] {
-      grid-column-start: 3;
+      grid-column-start: 4;
       grid-row-start: 8;
       justify-content: center; }
     div#board[data-players="5"] .bang-player[data-no="3"] {
@@ -425,6 +424,24 @@ div#board {
       background-size: cover; }
   div#board .bang-player[data-role="0"] .bang-player-container .player-info .player-star {
     display: block; }
+  div#board .bang-player[data-max-bullets="1"] .bang-player-container .player-info .player-bullets .bullet:nth-child(2) {
+    display: none; }
+  div#board .bang-player[data-max-bullets="1"] .bang-player-container .player-info .player-bullets .bullet:nth-child(3) {
+    display: none; }
+  div#board .bang-player[data-max-bullets="1"] .bang-player-container .player-info .player-bullets .bullet:nth-child(4) {
+    display: none; }
+  div#board .bang-player[data-max-bullets="1"] .bang-player-container .player-info .player-bullets .bullet:nth-child(5) {
+    display: none; }
+  div#board .bang-player[data-max-bullets="1"] .bang-player-container .player-info .player-bullets .bullet:nth-child(6) {
+    display: none; }
+  div#board .bang-player[data-max-bullets="2"] .bang-player-container .player-info .player-bullets .bullet:nth-child(3) {
+    display: none; }
+  div#board .bang-player[data-max-bullets="2"] .bang-player-container .player-info .player-bullets .bullet:nth-child(4) {
+    display: none; }
+  div#board .bang-player[data-max-bullets="2"] .bang-player-container .player-info .player-bullets .bullet:nth-child(5) {
+    display: none; }
+  div#board .bang-player[data-max-bullets="2"] .bang-player-container .player-info .player-bullets .bullet:nth-child(6) {
+    display: none; }
   div#board .bang-player[data-max-bullets="3"] .bang-player-container .player-info .player-bullets .bullet:nth-child(4) {
     display: none; }
   div#board .bang-player[data-max-bullets="3"] .bang-player-container .player-info .player-bullets .bullet:nth-child(5) {
@@ -441,21 +458,27 @@ div#board {
     display: none; }
   div#board .bang-player[data-max-bullets="6"] .bang-player-container .player-info .player-bullets .bullet:nth-child(6) {
     display: none; }
-  div#board .bang-player[data-bullets="0"] .bang-player-container .player-info .player-bullets .bullet:nth-child(1) {
-    background-position: 0 0; }
   div#board .bang-player[data-bullets="0"] .bang-player-container .player-info .player-bullets .bullet:nth-child(0) {
     background-position: 0 0; }
+  div#board .bang-player[data-bullets="1"] .bang-player-container .player-info .player-bullets .bullet:nth-child(0) {
+    background-position: 0 0; }
   div#board .bang-player[data-bullets="1"] .bang-player-container .player-info .player-bullets .bullet:nth-child(1) {
+    background-position: 0 0; }
+  div#board .bang-player[data-bullets="2"] .bang-player-container .player-info .player-bullets .bullet:nth-child(0) {
     background-position: 0 0; }
   div#board .bang-player[data-bullets="2"] .bang-player-container .player-info .player-bullets .bullet:nth-child(1) {
     background-position: 0 0; }
   div#board .bang-player[data-bullets="2"] .bang-player-container .player-info .player-bullets .bullet:nth-child(2) {
+    background-position: 0 0; }
+  div#board .bang-player[data-bullets="3"] .bang-player-container .player-info .player-bullets .bullet:nth-child(0) {
     background-position: 0 0; }
   div#board .bang-player[data-bullets="3"] .bang-player-container .player-info .player-bullets .bullet:nth-child(1) {
     background-position: 0 0; }
   div#board .bang-player[data-bullets="3"] .bang-player-container .player-info .player-bullets .bullet:nth-child(2) {
     background-position: 0 0; }
   div#board .bang-player[data-bullets="3"] .bang-player-container .player-info .player-bullets .bullet:nth-child(3) {
+    background-position: 0 0; }
+  div#board .bang-player[data-bullets="4"] .bang-player-container .player-info .player-bullets .bullet:nth-child(0) {
     background-position: 0 0; }
   div#board .bang-player[data-bullets="4"] .bang-player-container .player-info .player-bullets .bullet:nth-child(1) {
     background-position: 0 0; }
@@ -464,6 +487,8 @@ div#board {
   div#board .bang-player[data-bullets="4"] .bang-player-container .player-info .player-bullets .bullet:nth-child(3) {
     background-position: 0 0; }
   div#board .bang-player[data-bullets="4"] .bang-player-container .player-info .player-bullets .bullet:nth-child(4) {
+    background-position: 0 0; }
+  div#board .bang-player[data-bullets="5"] .bang-player-container .player-info .player-bullets .bullet:nth-child(0) {
     background-position: 0 0; }
   div#board .bang-player[data-bullets="5"] .bang-player-container .player-info .player-bullets .bullet:nth-child(1) {
     background-position: 0 0; }
@@ -474,6 +499,8 @@ div#board {
   div#board .bang-player[data-bullets="5"] .bang-player-container .player-info .player-bullets .bullet:nth-child(4) {
     background-position: 0 0; }
   div#board .bang-player[data-bullets="5"] .bang-player-container .player-info .player-bullets .bullet:nth-child(5) {
+    background-position: 0 0; }
+  div#board .bang-player[data-bullets="6"] .bang-player-container .player-info .player-bullets .bullet:nth-child(0) {
     background-position: 0 0; }
   div#board .bang-player[data-bullets="6"] .bang-player-container .player-info .player-bullets .bullet:nth-child(1) {
     background-position: 0 0; }

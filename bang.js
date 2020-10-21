@@ -116,7 +116,7 @@ updatePlayers: function(players){
       if(!$("player-role-" + player.id)){
         var role = this.getRole(player.role);
         dojo.place(this.format_block('jstpl_player_board_role', player), "player_board_" + player.id);
-        this.addTooltip("player-role-" + player.id, role["role-name"]);
+        this.addTooltip("player-role-" + player.id, role["role-name"], '');
       }
 
       if($("bang-player-" + player.id))
@@ -189,7 +189,7 @@ onUpdateActionButtons: function (stateName, args) {
 		return;
 
 	if (stateName == "playCard"){
-    if(args._private.character != null && this._selectedCard == null)
+    if(args._private && args._private.character != null && this._selectedCard == null)
       this.makeCharacterAbilityUsable(args._private.character);
 
 		this.addActionButton('buttonEndTurn', _('End of turn'), 'onClickEndOfTurn', null, false, 'blue');
@@ -201,7 +201,7 @@ onUpdateActionButtons: function (stateName, args) {
   if (stateName == "react" || stateName == "multiReact"){
     this.addActionButton('buttonSkip', _('Pass'), () => this.onClickPass(), null, false, 'blue');
 
-    if(args._private.character != null && this._selectedCard == null && this._selectedCards.length == 0)
+    if(args._private && args._private.character != null && this._selectedCard == null && this._selectedCards.length == 0)
       this.makeCharacterAbilityUsable(args._private.character);
   }
 },
@@ -796,7 +796,6 @@ addCard: function(ocard, container){
   var div = dojo.place(this.format_block('jstpl_card', card), container);
   if(div.flipped == "")
     this.addTooltipHtml(div.id, this.format_block( 'jstpl_cardTooltip',  card));
-console.log(ocard, card);
   dojo.connect(div, "onclick", (evt) => { evt.preventDefault(); evt.stopPropagation(); this.onClickCard(card) });
 },
 

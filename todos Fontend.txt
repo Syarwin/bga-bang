@@ -1,5 +1,3 @@
-- Handle playerEliminated notification. arg.player and args.role are provided.
-- show roles of eliminated players. setup args now contain the array 'eliminated' of the eliminated players with their id and role.
 - implement gameEnd state
 - equipping 4 cards looks weird
 - bug: when lucky duke is in jail and it's his turn, the selection appears but the cards are disabled.

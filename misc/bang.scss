@@ -84,10 +84,10 @@ $layoutSmall:(
     3:("col" : 1, "row" : 4, "align": right),
   ),
   5:(
-    "table":("col" : 2, "row" : 4, "align" : center),
-    0:("col" : 2, "row" : 2, "align": center),
-    1:("col" : 3, "row" : 6, "align": right),
-    2:("col" : 3, "row" : 8, "align": center),
+    "table":("col" : 1, "row" : 2, "align" : center),
+    0:("col" : 3, "row" : 2, "align": left),
+    1:("col" : 4, "row" : 6, "align": right),
+    2:("col" : 4, "row" : 8, "align": center),
     3:("col" : 1, "row" : 8, "align": center),
     4:("col" : 1, "row" : 6, "align": left),
   )
@@ -142,9 +142,6 @@ div#board {
 	position:relative;
 	display:grid;
 	grid-template-columns: repeat(6, 1fr);
-  @media (max-width: 1300px) {
-    grid-template-columns: repeat(4, 1fr);
-  }
 
   div#hand {
   	background-color:$transparentWhite;
@@ -154,6 +151,7 @@ div#board {
   	height:$cardH + 15px;
   	display:flex;
   	flex-flow:row;
+    width:100%;
     @media (max-width: 1300px) {
       grid-column:1 / span 4;
     }
@@ -202,6 +200,7 @@ div#board {
     	flex-flow:row;
       align-items: center;
       justify-content: center;
+      overflow-x:auto;
     }
   }
 
@@ -479,14 +478,14 @@ div#board {
     }
     &[data-role="0"] .bang-player-container .player-info .player-star { display:block; }
 
-    @for $maxBullets from 3 through 6 {
+    @for $maxBullets from 1 through 6 {
       @for $n from $maxBullets + 1 through 6 {
         &[data-max-bullets="#{$maxBullets}"] .bang-player-container .player-info .player-bullets .bullet:nth-child(#{$n}) { display:none; }
       }
     }
 
     @for $bullets from 0 through 6 {
-      @for $n from 1 through $bullets {
+      @for $n from 0 through $bullets {
         &[data-bullets="#{$bullets}"] .bang-player-container .player-info .player-bullets .bullet:nth-child(#{$n}) { background-position:0 0; }
       }
     }
