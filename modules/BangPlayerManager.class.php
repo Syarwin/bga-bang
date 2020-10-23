@@ -31,7 +31,7 @@ class BangPlayerManager extends APP_GameClass
 			$role = $roles[$i];
 			$char_id = $characters[$i++];
 			$char  = new self::$classes[$char_id]();
-			$bullets = 1; //$char->getBullets(); TODO remove
+			$bullets = $char->getBullets();
 			if($role == SHERIFF) {
 				$bullets++;
 				$sheriff = $pId;
@@ -40,9 +40,7 @@ class BangPlayerManager extends APP_GameClass
 			BangCardManager::deal($pId,$bullets);
 		}
 		self::DbQuery($sql . implode($values, ','));
-		BangCardManager::dealCard($sheriff, CARD_GENERAL_STORE);
-		BangCardManager::dealCard($sheriff, CARD_DUEL);
-		BangCardManager::dealCard($sheriff, CARD_DYNAMITE);
+		//BangCardManager::dealCard($sheriff, CARD_DYNAMITE);
 		//BangCardManager::dealCard($sheriff, CARD_JAIL, 1);
 		bang::$instance->reloadPlayersBasicInfos();
 		return $sheriff;

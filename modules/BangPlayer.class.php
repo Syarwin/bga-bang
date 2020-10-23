@@ -257,14 +257,14 @@ class BangPlayer extends APP_GameClass
     $cards = array_map(function($card){
       return [
         'id' => $card->getId(),
-        'options' => ['type' => OPTION_NONE],
+        'options' => ['type' => OPTION_NONE],        
+        'amount' => 1
       ];
     }, $hand);
 
     return [
       'cards' => $cards,
       'character' => null,
-      'amount' => 1
     ];
   }
 
@@ -448,6 +448,7 @@ class BangPlayer extends APP_GameClass
     foreach (array_merge($hand, $equipment) as $card) BangCardManager::discardCard($card);
     BangNotificationManager::discardedCards($this, $equipment, true);
     BangNotificationManager::discardedCards($this, $hand, false);
+
     //check if game should end
     if(BangPlayerManager::countRoles([SHERIFF]) == 0 || BangPlayerManager::countRoles([OUTLAW, RENEGADE]) == 0) {
       return "endgame";
