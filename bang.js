@@ -436,14 +436,14 @@ onEnteringStateReact: function(args){
   this._amount = null;
   this._selectedCards = [];
   this.makeCardSelectable(args._private.cards, "selectReact");
-  var msg = this.isCurrentPlayerActive() ? args.msgActive : args.msgInactive;
-  this.gamedatas.gamestate.descriptionmyturn = msg;
+  this.gamedatas.gamestate.descriptionmyturn = args.msgActive;
+  this.gamedatas.gamestate.description = args.msgInactive;
   this.updatePageTitle();
 },
 onEnteringStateMultiReact: function(args){
   this.onEnteringStateReact(args);
-  var msg = this.isCurrentPlayerActive() ? args.msgActive : args.msgInactive;
-  this.gamedatas.gamestate.descriptionmyturn = msg;
+  this.gamedatas.gamestate.descriptionmyturn = args.msgActive;
+  this.gamedatas.gamestate.description = args.msgInactive;
   this.updatePageTitle();
 },
 
