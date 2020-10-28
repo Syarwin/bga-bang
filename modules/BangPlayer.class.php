@@ -257,7 +257,7 @@ class BangPlayer extends APP_GameClass
     $cards = array_map(function($card){
       return [
         'id' => $card->getId(),
-        'options' => ['type' => OPTION_NONE],        
+        'options' => ['type' => OPTION_NONE],
         'amount' => 1
       ];
     }, $hand);
@@ -375,6 +375,9 @@ class BangPlayer extends APP_GameClass
         return $card->pass($this);
       else {
         $newstate = null;
+        if(!is_array($ids))
+          $ids = [$ids];
+
         foreach($ids as $id) {
           $reactionCard = BangCardManager::getCard($id);
           $newstate = $card->react($reactionCard, $this);

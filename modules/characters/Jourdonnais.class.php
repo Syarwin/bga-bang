@@ -13,34 +13,50 @@ class Jourdonnais extends BangPlayer {
     parent::__construct($row);
   }
 
+  // TODO replace with log ?
+  protected function canUseAbility(){
+    return bang::$instance->getGameStateValue('JourdonnaisUsedSkill') == 0;
+  }
+
+  protected function logUseAbility(){
+    bang::$instance->setGameStateValue('JourdonnaisUsedSkill', 1);
+  }
+
+
   public function getDefensiveOptions() {
     $res = parent::getDefensiveOptions();
     $card = BangCardManager::getCurrentCard();
-    if($card->getType() == CARD_BANG && bang::$instance->getGameStateValue('JourdonnaisUsedSkill')==0)
+    if($card->getType() == CARD_BANG && $this->canUseAbility())
         $res['character'] = JOURDONNAIS;
     return $res;
   }
 
   public function useAbility($args) {
-
     $args = BangLog::getLastAction('cardPlayed');
-    $amount = isset($args['missedNeeded']) ? $args['missedNeeded'] : 1;
-    bang::$instance->setGameStateValue('JourdonnaisUsedSkill', 1);
+    $amount = $args['missedNeeded'] ?? 1;
+    $this->logUseAbility();
+
+    // Draw one card
     $card = $this->draw([], $this);
-    $args = BangCardManager::getCurrentCard()->getReactionOptions($this);
-    if ($card->format()['color'] == 'H') {
-      BangNotificationManager::tell('Jourdonnais effect was successfull');
+    if ($card->getCopyColor() == 'H') {
+      // Success
+      BangNotificationManager::tell(clienttranslate("Jourdonnais effect was successfull"));
+
       if($amount == 1) {
-        bang::$instance->gamestate->nextState( "react" );
+        bang::$instance->gamestate->nextState("finishedReaction");
         return;
+      } else {
+        BangNotificationManager::tell(clienttranslate('But ${player_name} needs another miss'), ['player_name' => $this->getName()]); // TODO : are you sure this is the right name ?
+        $amount--;
+        $args = BangCardManager::getCurrentCard()->getReactionOptions($this);
+        $args['missedNeeded'] = $amount;
+        BangLog::addCardPlayed(BangPlayerManager::getCurrentTurn(true), BangCardManager::getCurrentCard(), $args);
       }
-      BangNotificationManager::tell('But ${player_name} needs another miss', ['player_name' => $this->getName()]);
-      $amount--;
-      $args['missedNeeded'] = $amount;
-      BangLog::addCardPlayed(BangPlayerManager::getCurrentTurn(true), BangCardManager::getCurrentCard(), $args);
     } else {
-      BangNotificationManager::tell('Jourdonnais effect failed');
+      // Failure
+      BangNotificationManager::tell(clienttranslate("Jourdonnais effect failed"));
     }
+
     $args = $this->getDefensiveOptions();
     BangNotificationManager::updateOptions($this, $args);
   }

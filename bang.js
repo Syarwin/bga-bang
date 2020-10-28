@@ -990,6 +990,7 @@ notif_drawCard: function(n){
 
 notif_updateOptions: function(n){
   debug("Notif: update options", n);
+  this.gamedatas.gamestate.args['_private'] = n.args;
 	this.clearPossible();
 	this.makeCardSelectable(n.args.cards, "selectCard");
 },
