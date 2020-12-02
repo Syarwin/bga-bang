@@ -17,20 +17,53 @@
 	*/
 
 
+$swdNamespaceAutoload = function ($class)
+{
+  $classParts = explode('\\', $class);
+  if ($classParts[0] == 'Bang') {
+    array_shift($classParts);
+    $file = dirname(__FILE__) . "/modules/php/" . implode(DIRECTORY_SEPARATOR, $classParts) . ".php";
+    if (file_exists($file)) {
+      require_once($file);
+    } else {
+      var_dump("Impossible to load welcometo class : $class");
+    }
+  }
+};
+spl_autoload_register($swdNamespaceAutoload, true, true);
+
 require_once( APP_GAMEMODULE_PATH.'module/table/table.game.php' );
+
+use Bang\Characters\Players;
+use Bang\Cards\Cards;
+use Bang\Game\Log;
+use Bang\Game\Utils;
+use Bang\Game\Notifications;
+use Bang\Game\Stats;
 
 
 class bang extends Table
 {
+  use Bang\States\TurnTrait;
+  use Bang\States\DrawCardsTrait;
+  use Bang\States\PlayCardTrait;
+  use Bang\States\ReactTrait;
+  use Bang\States\SelectCardTrait;
+  use Bang\States\EndOfGameTrait;
+
 	public static $instance = null;
 	public function __construct() {
 		parent::__construct();
 		self::$instance = $this;
+
 		self::initGameStateLabels([
-//      'optionSetup'  => OPTION_SETUP,
 			'JourdonnaisUsedSkill' => 17
 		]);
 	}
+  public static function get()
+  {
+    return self::$instance;
+  }
 
 	protected function getGameName() {
 		return "bang";
@@ -47,10 +80,10 @@ class bang extends Table
 	protected function setupNewGame($bplayers, $options = []) {
 		// Initialize board and cards
 		$expansions = [BASE_GAME];
-		BangCardManager::setupNewGame($expansions);
+		Cards::setupNewGame($expansions);
 
 		// Initialize players
-		$sheriff = BangPlayerManager::setupNewGame($bplayers, $expansions, $this);
+		$sheriff = Players::setupNewGame($bplayers, $expansions, $this);
 		$this->gamestate->changeActivePlayer($sheriff);
 	}
 
@@ -61,11 +94,11 @@ class bang extends Table
 	 */
 	protected function getAllDatas() {
 		$result = [
-			'bplayers' => BangPlayerManager::getUiData(self::getCurrentPlayerId()),
-			'deck' => BangCardManager::getDeckCount(),
-			'discard' => BangCardManager::getLastDiscarded(),
-			'playerTurn' => BangPlayerManager::getCurrentTurn(),
-			'cards' => BangCardManager::getUIData(),
+			'bplayers' => Players::getUiData(self::getCurrentPlayerId()),
+			'deck' => Cards::getDeckCount(),
+			'discard' => Cards::getLastDiscarded(),
+			'playerTurn' => Players::getCurrentTurn(),
+			'cards' => Cards::getUIData(),
 		];
 		return $result;
 	}
@@ -83,304 +116,8 @@ class bang extends Table
 
 
 
-
-
-	//////////////////////////////////////////////////////
-	////////////   Next player / Start turn   ////////////
-	//////////////////////////////////////////////////////
-
-	/*
-	 * stNextPlayer: go to next player
-	 */
-	public function stNextPlayer() {
-		$pId = $this->activeNextPlayer();
-		self::giveExtraTime($pId);
-		$this->gamestate->nextState('start');
-	}
-
-
-	/*
-	 * stStartOfTurn: called at the beggining of each player turn
-	 */
-	public function stStartOfTurn() {
-		BangLog::startTurn();
-		$player = BangPlayerManager::getActivePlayer();
-		$newState = $player->startOfTurn();
-		$this->gamestate->nextState($newState);
-	}
-
-
-	/*
-	 * stDrawCards: called after the beggining of each player turn, if the turn was not skipped or if no character's abilities apply
-	 */
-	public function stDrawCards() {
-		$player = BangPlayerManager::getActivePlayer();
-		$newState = $player->drawCards(2) ?? "play";
-		$this->gamestate->nextState($newState);
-	}
-
-	/************************
-	 **** drawCard state ****
-	 ***********************/
-
-	public function argDrawCard() {
-		return [
-			'_private' => [
-				'active' => ['options' => BangLog::getLastAction('draw')]
-			]
-		];
-	}
-
-	public function draw($selected) {
-		$newstate = BangPlayerManager::getActivePlayer()->useAbility(['selected' => $selected]);
-		$this->gamestate->nextState($newState ?? "play");
-	}
-
-/************************
- **** playCard state ****
- ***********************/
-	public function argPlayCards() {
-		return [
-			'_private' => [
-				'active' => BangPlayerManager::getActivePlayer()->getHandOptions()
-			]
-		];
-	}
-
-	public function stPlayCard() {
-		$this->setGameStateValue('JourdonnaisUsedSkill', 0);
-		$players = BangPlayerManager::getLivingPlayers(null, true);
-		$newstate = null;
-		foreach($players as $player) {
-			$player->checkHand();
-		}
-		if($newstate != null) bang::$instance->gamestate->nextState($newState);
-	}
-
-	public function playCard($id, $args) {
-		self::checkAction('play');
-		if(in_array(Utils::getStateName(), ["react", "multiReact"])){
-			$this->react($id);
-			return;
-		}
-
-		// TODO : add check to see if the card was indeed playable
-		// if(!in_array($id, $this->argPlayableCards())) ...
-		$newState = BangPlayerManager::getActivePlayer()->playCard($id, $args);
-		$this->gamestate->nextState($newState ?? "continuePlaying");
-	}
-
-/************************
- **** slectCard state ***
- ***********************/
-
-  public function stPrepareSelection() {
-		$args = BangLog::getLastAction("selection");
-		$players = $args['players'];
-
-		// No more players left to select card => finish selection state
-		if(empty($players))
-			return $this->stFinishSelection();
-
-		// Set active next player who need to select a card
-		$this->gamestate->changeActivePlayer($players[0]);
-		$this->gamestate->nextState('select');
-	}
-
-
-	public function argSelect() {
-		$args = BangLog::getLastAction("selection");
-
-		$players = $args['players'];
-		$amount = array_count_values($players)[$players[0]]; // Amount of cards = number of occurence of player's id
-		$selection = BangCardManager::getSelection();
-		$data = [
-			'i18n' => ['src'],
-			'cards' => [],
-			'amount' => count($selection['cards']),
-			'amountToPick' => $amount,
-			'src' => $args['src']
-		];
-
-		if($selection['id'] == PUBLIC_SELECTION)
-			$data['cards'] = $selection['cards'];
-		else
-		 	$data['_private'] = [ $selection['id'] => ['cards' => $selection['cards'] ] ];
-
-		return $data;
-	}
-
-
-	public function select($ids) {
-		$args = BangLog::getLastAction("selection");
-		$selection = BangCardManager::getSelection();
-
-		// Compute the remeaning cards
-		$rest = [];
-		foreach($selection['cards'] as $card)
-			if(!in_array($card['id'], $ids))
-				$rest[] = $card['id'];
-
-
-		// Compute the remeaning players
-		array_shift($args['players']); // TODO : don't work if multiple card selected and other players left. And where would that be the case???
-
-
-		BangLog::addAction("selection", $args);
-		$player = BangPlayerManager::getActivePlayer();
-		$newstate = isset($args['card'])? $player->react($ids)
-							: $player->useAbility(['selected' => $ids, 'rest' => $rest ]);
-	  $this->gamestate->nextState($newstate ?? 'select');
-	}
-
-
-	public function stFinishSelection(){
-		$selection = BangCardManager::getSelection();
-		$player = BangPlayerManager::getCurrentTurn(true);
-		if(count($selection['cards']) > 0) {
-			$player->useAbility($selection['cards']);
-		}
-		$this->gamestate->changeActivePlayer($player->getId());
-		$this->gamestate->nextState('finish');
-	}
-
-/*********************
- **** react state ****
- ********************/
-
-	public function stAwaitReaction() {
-		BangCardManager::resetPlayedColumn();
-		$pId = BangLog::getReactPlayers();
-		if(is_array($pId)) {
-			$this->gamestate->setPlayersMultiactive($pId, 'finishedReaction', true); // This transition should never happens as the targets are non-empty
-			$this->gamestate->nextState('multi');
-		} else {
-			$this->gamestate->changeActivePlayer($pId);
-			$this->gamestate->nextState('single');
-		}
-	}
-
-	public function argReact() {
-	 return BangLog::getLastAction("react");
-	}
-
-
-	public function stAwaitMultiReaction() {
-		BangCardManager::resetPlayedColumn();
-		$players = BangLog::getReactPlayers();
-		$this->gamestate->setPlayersMultiactive($players, 'finishedReaction', true); // This transition should never happens as the targets are non-empty
-		$this->gamestate->nextState();
-	}
-
-
-	function react($ids) {
- 		$player = BangPlayerManager::getPlayer(self::getCurrentPlayerId());
- 		$newState = $player->react($ids) ?? "finishedReaction";
-
-		if($newState == "updateOptions"){
-			$args = BangCardManager::getCurrentCard()->getReactionOptions($player);
-      BangNotificationManager::updateOptions($player, $args);
-		} else {
-	    if(Utils::getStateName() == 'multiReact') {
-				if(BangPlayerManager::countRoles([SHERIFF]) == 0 || BangPlayerManager::countRoles([OUTLAW, RENEGADE]) == 0) {
-					$newState = "endgame";
-				}
-	      bang::$instance->gamestate->setPlayerNonMultiactive(self::getCurrentPlayerId(), $newState);
-	    } else bang::$instance->gamestate->nextState($newState);
-		}
- 	}
-
-	public function useAbility($args) {
-		$id = self::getCurrentPlayerId();
-		BangPlayerManager::getPlayer($id)->useAbility($args);
-	}
-
-
-
-	public function stEndReaction() {
-		$args = BangLog::getLastAction('react');
-
-		$toEliminate = BangPlayerManager::getPlayersForElimination();
-		if(array_values($args['_private'])[0]['src'] == 'hp') {
-			$living = BangPlayerManager::getLivingPlayersStartingWith(BangPlayerManager::getCurrentTurn(true));
-			foreach($living as $id) {
-				if(!in_array($id, $toEliminate)) {
-					if($id != self::getActivePlayerId()) $this->gamestate->changeActivePlayer($id);
-					break;
-				}
-			}
-			$nextState = array_reduce($toEliminate, function($state, $id){ return BangPlayerManager::getPlayer($id)->eliminate() ?? $state;}, null);
-			if(is_null($nextState)) {
-				if(BangPlayerManager::getCurrentTurn(true)->isEliminated())
-					$nextState = 'next';
-				else
-					$nextState = BangLog::getLastAction('lastState')[0] == 'startOfTurn' ? 'draw' : 'finishedReaction';
-			}
-			$this->gamestate->nextState($nextState);
-			return;
-		}
-		$this->gamestate->changeActivePlayer(BangPlayerManager::getCurrentTurn());
-		if(count($toEliminate)>0) $this->gamestate->nextState('eliminate');
-		else $this->gamestate->nextState("finishedReaction");
-	}
-
-
-
-/*****************************************
- **** endOfTurn / discardExcess state ****
- ****************************************/
-	public function endTurn() {
-		$player = BangPlayerManager::getPlayer(self::getCurrentPlayerId());
-		$newState = ($player->countCardsInHand() > $player->getHp())? "discardExcess" : "endTurn";
-		$this->gamestate->nextState($newState);
- 	}
-
-
-	public function argDiscardExcess(){
-		$player = BangPlayerManager::getPlayer(self::getActivePlayerId());
-		return [
-			'amount' => $player->countCardsInHand() - $player->getHp(),
-			'_private' => [
-				'active' => $player->getCardsInHand(true),
-			]
-		];
-	}
-
-	public function cancelEndTurn(){
-		$this->gamestate->nextState("cancel");
-	}
-
-
-	public function discardExcess($cardIds){
-		$cards = array_map(function($id){
-			BangCardManager::discardCard($id);
-			return BangCardManager::getCard($id);
-		}, $cardIds);
-		$player = BangPlayerManager::getPlayer(self::getActivePlayerId());
-		BangNotificationManager::discardedCards($player, $cards);
-		$this->gamestate->nextState("endTurn");
-	}
-
-	/*
-	 * stEndOfTurn: called at the end of each player turn
-	 */
-	public function stEndOfTurn() {
-		//$this->playerManager->getPlayer()->endOfTurn();
-		$this->stCheckEndOfGame();
-		$this->gamestate->nextState('next');
-	}
-
-
-	/*
-	 * stCheckEndOfGame: check if the game is finished
-	 */
-	public function stCheckEndOfGame() {
-		return false;
-	}
-
-
 	public function stEliminate() {
-		$toEliminate = BangPlayerManager::getPlayersForElimination(true);
+		$toEliminate = Players::getPlayersForElimination(true);
 		$argsReact = [];
 
 		foreach($toEliminate as $player) {
@@ -405,54 +142,9 @@ class bang extends Table
 			'_private' => $argsReact
 		];
 
-		BangLog::addAction('react', $args);
+		Log::addAction('react', $args);
 		$this->gamestate->nextState(count($argsReact) > 0 ? "react" : "eliminate");
-
 	}
-
-/*****************************************
- *************** end of Game *************
- ****************************************/
-	public function argGameEnd() {
-		$players = BangPlayerManager::getPlayers(null, true);
-		$alive = BangPlayerManager::getLivingPlayers();
-		$winningRoles = [];
-		$sheriffEliminated = BangPlayerManager::countRoles([SHERIFF]) == 0;
-		$badGuysEliminated = BangPlayerManager::countRoles([OUTLAW, RENEGADE]) == 0;
-		if($sheriffEliminated && $badGuysEliminated) {
-			// todo can that happen with indians or gatling?
-		} elseif($sheriffEliminated) {
-			if(count($alive) == 1 && $alive[0]->getRole() == RENEGADE) $winningRoles = [RENEGADE];
-			else $winningRoles = [OUTLAW];
-		} else {
-			$winningRoles = [SHERIFF, DEPUTY];
-		}
-		$winners = array_filter(function($row) use ($winningRoles) {return in_array($winningRoles, $row['$role']);});
-		return [
-			'players' => $players,
-			'winners' => $winners
-		];
-	}
-
-	/*
-	 * announceWin: TODO
-	 *
-	public function announceWin($playerId, $win = true) {
-		$bplayers = $win ? $this->playerManager->getTeammates($playerId) : $this->playerManager->getOpponents($playerId);
-		if (count($bplayers) == 2) {
-			self::notifyAllPlayers('message', clienttranslate('${player_name} and ${player_name2} win!'), [
-				'player_name' => $bplayers[0]->getName(),
-				'player_name2' => $bplayers[1]->getName(),
-			]);
-		} else {
-			self::notifyAllPlayers('message', clienttranslate('${player_name} wins!'), [
-				'player_name' => $bplayers[0]->getName(),
-			]);
-		}
-		self::DbQuery("UPDATE player SET player_score = 1 WHERE player_team = {$bplayers[0]->getTeam()}");
-		$this->gamestate->nextState('endgame');
-	}
-*/
 
 
 	////////////////////////////////////
@@ -465,11 +157,11 @@ class bang extends Table
 	 */
 	public function zombieTurn($state, $activePlayer) {
 		if (array_key_exists('zombiePass', $state['transitions'])) {
-			$player = BangPlayerManager::getActivePlayer();
+			$player = Players::getActivePlayer();
 			// reducing hp to 0 and simulate a passed reaction
 			$player->setHp(0);
 			$player->save();
-			BangLog::addAction('react', [$activePlayer => ['src'=>'hp']]);
+			Log::addAction('react', [$activePlayer => ['src'=>'hp']]);
 			$this->gamestate->nextState('zombiePass');
 		} elseif ($state['name'] == 'multiReact') {
 			$player->setHp(-999); // making sure, he can't react
