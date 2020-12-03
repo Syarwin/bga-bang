@@ -43,9 +43,6 @@ trait ReactTrait
       Notifications::updateOptions($player, $args);
 		} else {
 	    if(Utils::getStateName() == 'multiReact') {
-				if(Players::countRoles([SHERIFF]) == 0 || Players::countRoles([OUTLAW, RENEGADE]) == 0) {
-					$newState = "endgame";
-				}
 	      $this->gamestate->setPlayerNonMultiactive(self::getCurrentPlayerId(), $newState);
 	    } else {
         $this->gamestate->nextState($newState);

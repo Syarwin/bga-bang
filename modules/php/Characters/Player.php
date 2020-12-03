@@ -33,7 +33,7 @@ class Player extends \APP_GameClass
       $this->name = $row['player_name'];
       $this->color = $row['player_color'];
       $this->eliminated = $row['player_eliminated'] == 1;
-      $this->hp = (int)$row['player_score'];
+      $this->hp = (int)$row['player_hp'];
       $this->zombie = $row['player_zombie'] == 1;
       $this->role = $row['player_role'];
       $this->bullets = (int)$row['player_bullets'];
@@ -87,7 +87,7 @@ class Player extends \APP_GameClass
    */
   public function save() {
     $eliminated = ($this->eliminated) ? 1 : 0;
-    $sql = "UPDATE player SET player_eliminated=$eliminated, player_score= " . $this->hp . " WHERE player_id=" . $this->id;
+    $sql = "UPDATE player SET player_eliminated=$eliminated, player_hp= " . $this->hp . " WHERE player_id=" . $this->id;
     self::DbQuery($sql);
   }
 
@@ -457,17 +457,31 @@ class Player extends \APP_GameClass
     Notifications::discardedCards($this, $equipment, true);
     Notifications::discardedCards($this, $hand, false);
 
+    // eliminate player
+    $this->eliminated = true;
+    $this->save();
+    //bang::$instance->eliminatePlayer($this->id);
+    Notifications::playerEliminated($this);
+
     //check if game should end
-    if(Players::countRoles([SHERIFF]) == 0 || Players::countRoles([OUTLAW, RENEGADE]) == 0) {
+    if(Players::countRoles([SHERIFF]) == 0){
+      $living = Players::getLivingPlayers(null, true);
+      if(count($living) == 0) {
+        Players::setWinners([SHERIFF, DEPUTY, OUTLAW, RENEGADE]);
+      } elseif(count($living) > 1 || $living[0]->role == OUTLAW) {
+        Players::setWinners([OUTLAW]);
+      } else {
+        Players::setWinners([RENEGADE]);
+      }
+      return "endgame";
+    }
+
+    if((Players::countRoles([OUTLAW, RENEGADE]) == 0)) {
+      Players::setWinners([SHERIFF, DEPUTY]);
       return "endgame";
     }
 
 
-    // eliminate player
-    $this->eliminated = true;
-    $this->save();
-    bang::$instance->eliminatePlayer($this->id);
-    Notifications::playerEliminated($this);
 
     //handle rewards/penalties
     if(!is_null($byPlayer)) {

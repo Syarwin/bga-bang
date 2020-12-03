@@ -13,19 +13,7 @@ trait EndOfGameTrait
 
  	public function argGameEnd() {
  		$players = Players::getPlayers(null, true);
- 		$alive = Players::getLivingPlayers();
- 		$winningRoles = [];
- 		$sheriffEliminated = Players::countRoles([SHERIFF]) == 0;
- 		$badGuysEliminated = Players::countRoles([OUTLAW, RENEGADE]) == 0;
- 		if($sheriffEliminated && $badGuysEliminated) {
- 			// todo can that happen with indians or gatling?
- 		} elseif($sheriffEliminated) {
- 			if(count($alive) == 1 && $alive[0]->getRole() == RENEGADE) $winningRoles = [RENEGADE];
- 			else $winningRoles = [OUTLAW];
- 		} else {
- 			$winningRoles = [SHERIFF, DEPUTY];
- 		}
- 		$winners = array_filter(function($row) use ($winningRoles) {return in_array($winningRoles, $row['$role']);});
+ 		$winners = array_filter($players, function($row) {return $row['score']==1;});
  		return [
  			'players' => $players,
  			'winners' => $winners

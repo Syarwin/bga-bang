@@ -14,7 +14,7 @@ class Players extends \APP_GameClass
 	public static function setupNewGame($bplayers, $expansions)	{
 		self::DbQuery('DELETE FROM player');
 		$gameInfos = bang::get()->getGameinfos();
-		$sql = 'INSERT INTO player (player_id, player_color, player_canal, player_name, player_avatar, player_bullets, player_score, player_role, player_character) VALUES ';
+		$sql = 'INSERT INTO player (player_id, player_color, player_canal, player_name, player_avatar, player_bullets, player_hp, player_role, player_character) VALUES ';
 
 		$roles = array_slice(array(0,2,2,3,1,2,1),0,count($bplayers));
 		shuffle($roles);
@@ -76,7 +76,7 @@ class Players extends \APP_GameClass
 	 * if $asArrayCollection is set to true it return the result as a map $id=>array
 	 */
 	public static function getPlayers($playerIds = null, $asArrayCollection = false) {
-		$columns = ["id", "no", "name", "color", "eliminated", "score", "zombie", "role", "character", "bullets"];
+		$columns = ["id", "no", "name", "color", "eliminated", "hp", "zombie", "role", "character", "bullets", "score"];
 		$sqlcolumns = [];
 		foreach($columns as $col) $sqlcolumns[] = "player_$col";
 		$sql = "SELECT " . implode(", ", $sqlcolumns) . " FROM player" ;
@@ -121,7 +121,7 @@ class Players extends \APP_GameClass
 	}
 
 	public static function getPlayersForElimination($asObjects=false) {
-		$ids = self::getObjectListFromDB("SELECT player_id FROM player WHERE player_eliminated = 0 AND player_score <= 0", true);
+		$ids = self::getObjectListFromDB("SELECT player_id FROM player WHERE player_eliminated = 0 AND player_hp <= 0", true);
 		return $asObjects ? self::getPlayers($ids) : $ids;
 	}
 
@@ -137,9 +137,9 @@ class Players extends \APP_GameClass
 		return self::getPlayer($players[1]);
   }
 
-	public static function countRoles($roles) {
-		$sql = "SELECT COUNT(*) FROM player WHERE player_eliminated=0 AND (";
-		$sql .= implode(" OR ", array_map(function($role) {return "player_role=$role";}, $roles)) . ")";
+	public static function countRoles($rolesArr) {
+		$roles = "(" . implode($rolesArr, ",")  . ")";
+		$sql = "SELECT COUNT(*) FROM player WHERE player_eliminated=0 AND player_role in $roles";
 		return self::getUniqueValueFromDB($sql);
 	}
 
@@ -176,6 +176,12 @@ class Players extends \APP_GameClass
 		return array_reduce($expansions, function($res, $exp) use ($characters){
 			return array_merge($res, $characters[$exp]);
 		}, []);
+	}
+
+	public static function setWinners($winningRoles) {
+		$roles = "(" . implode($winningRoles, ",")  . ")";
+		self::DbQuery("UPDATE player SET player_score = 1 WHERE player_role in $roles");
+		self::DbQuery("UPDATE player SET player_score = 0 WHERE player_role not in $roles");
 	}
 
 	/*

@@ -24,6 +24,7 @@ ALTER TABLE `player` ADD `player_role` INT(1) UNSIGNED NOT NULL;
 ALTER TABLE `player` ADD `player_character` INT(1) UNSIGNED NOT NULL;
 ALTER TABLE `player` ADD `player_bullets` INT(1) UNSIGNED NOT NULL;
 ALTER TABLE `player` ADD `player_activate` TINYINT UNSIGNED NOT NULL;
+ALTER TABLE `player` ADD `player_hp` TINYINT UNSIGNED NOT NULL;
 
 
 
