@@ -20,11 +20,11 @@ class VultureSam extends Player {
     // TODO send a single notification?
     foreach($player->getCardsInHand() as $card) {
       Cards::moveCard($card, 'hand', $this->id);
-      Notifications::stoleCard($this, $player, false);
+      Notifications::stoleCard($this, $player, $card, false);
     }
     foreach($player->getCardsInPlay() as $card) {
       Cards::moveCard($card, 'hand', $this->id);
-      Notifications::stoleCard($this, $player, true);
+      Notifications::stoleCard($this, $player, $card, true);
     }
   }
 }

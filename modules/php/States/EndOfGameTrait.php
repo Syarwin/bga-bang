@@ -13,7 +13,7 @@ trait EndOfGameTrait
 
  	public function argGameEnd() {
  		$players = Players::getPlayers(null, true);
- 		$winners = array_filter($players, function($row) {return $row['score']==1;});
+ 		$winners = array_filter($players, function($row) {return $row['player_score']==1;});
  		return [
  			'players' => $players,
  			'winners' => $winners

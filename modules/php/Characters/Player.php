@@ -447,7 +447,7 @@ class Player extends \APP_GameClass
     if($byPlayer->id == $this->id) $byPlayer = null;
 
     // let characters react
-    foreach(Players::getLivingPlayers(null, true) as $player)
+    foreach(Players::getLivingPlayers($this->id, true) as $player)
       $player->onPlayerEliminated($this);
 
     //discard cards
