@@ -4,6 +4,7 @@ use Bang\Game\Notifications;
 use Bang\Game\Log;
 use Bang\Game\Utils;
 use Bang\Characters\Players;
+use Bang\Cards\Card;
 
 class CardJail extends BlueCard {
   public function __construct($id = null, $copy = ""){
@@ -45,7 +46,7 @@ class CardJail extends BlueCard {
   public function activate($player, $args = []) {
     Log::addCardPlayed($player, $this,[]);
     $card = $player->draw($args, $this);
-    if(!$card instanceof Bang\Cards\Card)
+    if(!$card instanceof Card)
       return $card;
 
     $player->discardCard($this, true);

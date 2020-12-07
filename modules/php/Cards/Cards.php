@@ -1,6 +1,9 @@
 <?php
 
 namespace Bang\Cards;
+use Bang\Game\Log;
+use Bang\Characters\Players;
+
 
 /*
  * Cards: all utility functions concerning cards are here

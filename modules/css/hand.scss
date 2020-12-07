@@ -1,0 +1,62 @@
+div#board {
+  div#hand {
+  	background-color:$transparentWhite;
+  	border-radius: 5px;
+  	grid-row:1;
+  	grid-column:1 / span 6;
+  	height:$cardH + 15px;
+  	display:flex;
+  	flex-flow:row;
+    width:100%;
+    @media (max-width: 1300px) {
+      grid-column:1 / span 4;
+    }
+
+    div#role-container {
+      flex-grow:0;
+      width:$cardW + 15px;
+      display:flex;
+      align-items: center;
+      justify-content: center;
+      background-color:white;
+
+      div#role-card {
+        height:$cardH;
+        width:$cardW - 1px;
+        background-image:url("img/roles.png");
+        background-size:cover;
+
+        div#role-name {
+          width:100%;
+          font-family: "Perdido";
+          font-size:23px;
+          text-align: center;
+          margin-top:9px;
+        }
+
+        div#role-text {
+          font-family:'Palatino Linotype';
+          font-style:italic;
+          font-size:9px;
+          margin-top:98px;
+          text-align:center;
+        }
+      }
+
+      @for $i from 0 through 3 {
+        &[data-role="#{$i}"] div#role-card { background-position:$i*100%/3 center; }
+      }
+    }
+
+
+
+    div#hand-cards {
+      flex-grow:1;
+      display:flex;
+    	flex-flow:row;
+      align-items: center;
+      justify-content: center;
+      overflow-x:auto;
+    }
+  }
+}

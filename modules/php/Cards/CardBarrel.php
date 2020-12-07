@@ -1,5 +1,6 @@
 <?php
 namespace Bang\Cards;
+use Bang\Cards\Card;
 use Bang\Game\Notifications;
 use Bang\Game\Log;
 use Bang\Characters\Players;
@@ -20,26 +21,33 @@ class CardBarrel extends BlueCard {
     $this->effect = ['type' => DEFENSIVE ];
   }
 
-  // TODO : strings not translated
   public function activate($player, $args = []) {
-    Notifications::tell('${player_name } uses ${card_name}', ['player_name'=>$player->getName(), 'card_name' => $this->name]);
+    Notifications::useCard($player, $this);
+
     $mixed = $player->draw(['pattern' => "/H/"], $this);
-    if(!$mixed instanceof Bang\Cards\Card)
+    if(!$mixed instanceof Card)
       return $mixed; //shouldn't happen, just in case we decide to let player decide after all
+
+
     Cards::markAsPlayed($this->id);
     $args = Log::getLastAction('cardPlayed');
-    if(!isset($args['missedNeeded'])) $args['missedNeeded'] = 1;
+    $args['missedNeeded'] = $args['missedNeeded'] ?? 1;
+
+    // Draw an heart => success
     if ($mixed->getCopyColor() == 'H') {
-      Notifications::tell('Barrel was successfull');
+      Notifications::tell(clienttranslate('Barrel was successfull'));
       if($args['missedNeeded'] == 1)
-            return null;
-      Notifications::tell('But ${player_name} needs another miss', ['player_name' => $player->getName()]);
+        return null;
+
+      // Against Slab the Killer, need to miss => update args
+      Notifications::tell(clienttranslate('But ${player_name} needs another miss'), ['player_name' => $player->getName()]);
       $args['missedNeeded']--;
       Log::addCardPlayed(Players::getCurrentTurn(true), Cards::getCurrentCard(), $args);
 
     } else {
-      Notifications::tell('Barrel failed');
+      Notifications::tell(clienttranslate('Barrel failed'));
     }
+
     return "updateOptions";
   }
 }

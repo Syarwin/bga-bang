@@ -1,6 +1,7 @@
 <?php
 namespace Bang\Characters;
 use Bang\Cards\Cards;
+use Bang\Cards\Card;
 use Bang\Game\Utils;
 use Bang\Game\Notifications;
 use Bang\Game\Log;
@@ -375,7 +376,7 @@ class Player extends \APP_GameClass
 
     // "Normal" react
     else {
-  		$card = ($src instanceof Bang\Cards\Card) ? $src : Cards::getCard($src);
+  		$card = ($src instanceof Card) ? $src : Cards::getCard($src);
       if(is_null($ids)) // PASS
         return $card->pass($this);
       else {

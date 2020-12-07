@@ -19,8 +19,28 @@
 //@ sourceURL=bang.js
 var isDebug = true;
 var debug = isDebug ? console.info.bind(window.console) : function () { };
-define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], function (dojo, declare) {
-	return declare("bgagame.bang", ebg.core.gamegui, {
+define([
+    "dojo", "dojo/_base/declare",
+    "ebg/core/gamegui",
+    "ebg/counter",
+    g_gamethemeurl + "modules/js/Game/game.js",
+    g_gamethemeurl + "modules/js/Game/modal.js",
+
+    g_gamethemeurl + "modules/js/States/PlayCardTrait.js",
+
+    g_gamethemeurl + "modules/js/CardTrait.js",
+    g_gamethemeurl + "modules/js/CardSelectorTrait.js",
+    g_gamethemeurl + "modules/js/PlayerSelectorTrait.js",
+    g_gamethemeurl + "modules/js/PlayerCardSelectorTrait.js",
+], function (dojo, declare) {
+  return declare("bgagame.bang", [
+    customgame.game,
+    bang.playCardTrait,
+    bang.cardTrait,
+    bang.cardSelectorTrait,
+    bang.playerSelectorTrait,
+    bang.playerCardSelectorTrait,
+  ], {
 
 /*
  * Constructor
@@ -34,6 +54,18 @@ constructor: function () {
   this._selectedOptionType = null;
   this._selectedOptionArg = null;
   this._dial = null;
+
+  this._notifications.push(
+    ['debug',500],
+    ['cardLost', 1000],
+    ['cardsGained', 1200],
+    ['drawCard', 1000],
+    ['updateHP', 200],
+    ['updateHand', 200],
+    ['updateOptions', 200],
+    ['playerEliminated', 1000],
+    ['updatePlayers', 100]
+  );
 },
 
 /*
@@ -44,7 +76,7 @@ constructor: function () {
  * Params :
  *	- mixed gamedatas : contains all datas retrieved by the getAllDatas PHP method.
  */
-setup: function (gamedatas) {
+setup(gamedatas) {
 	debug('SETUP', gamedatas);
 
   // Formatting cards
@@ -89,8 +121,7 @@ setup: function (gamedatas) {
   // Make the current player stand out
   this.setTurn(gamedatas.playerTurn);
 
-	// Setup game notifications
-	this.setupNotifications();
+  this.inherited(arguments);
 },
 
 setTurn: function(playerId){
@@ -160,17 +191,6 @@ onEnteringState: function (stateName, args) {
 		this[methodName](args.args);
 },
 
-/*
- * onLeavingState:
- * 	this method is called each time we are leaving a game state.
- *
- * params:
- *	- str stateName : name of the state we are leaving
- */
-onLeavingState: function (stateName) {
-	debug('Leaving state: ' + stateName);
-	this.clearPossible();
-},
 
 
 /*
@@ -213,214 +233,6 @@ onUpdateActionButtons: function (stateName, args) {
 /////////		Actions		//////////
 ////////////////////////////////
 ////////////////////////////////
-/*
- * Main state of game : active player can play cards from his hand
- */
-onEnteringStatePlayCard: function(args){
-  // TODO : do it on server's side
-  var cards = args._private.cards.filter(card => card.options != null);
-  this.makeCardSelectable(cards, "selectCard");
-},
-
-
-/*
- * Given a list of cards, make them selectable
- */
-makeCardSelectable: function(cards, action){
-  this._action = action;
-  if(this._action == "selectCard" || this._action == "discardExcess"){
-    dojo.query("#hand .bang-card").addClass("unselectable");
-    dojo.query("#bang-player-" + this.player_id + " .bang-card").addClass("unselectable");
-  } else {
-    if(action != "selectDialog")
-      dojo.query(".bang-card").addClass("unselectable");
-  }
-
-  this._selectableCards = cards;
-  this._selectableCards.forEach(card => {
-    dojo.removeClass("bang-card-" + card.id, "unselectable");
-    dojo.addClass("bang-card-" + card.id, "selectable");
-  });
-
-  if(this._action == "selectCard"){
-    this.gamedatas.gamestate.descriptionmyturn = _("You can play a card");
-    this.updatePageTitle();
-  }
-},
-
-
-/*
- * Triggered whenever a player click on a card
- */
-onClickCard: function(ocard){
-  if(!this.isCurrentPlayerActive()) return;
-  // Is the card in the discard ?
-  if($("bang-card-" + ocard.id).parentNode.id == "discard")
-    return this.onClickDiscard();
-
-  // Is the card selectable ?
-  var card = this._selectableCards.find(o => o.id == ocard.id);
-  if(!card) return;
-
-  var methodName = "onClickCard" + this._action.charAt(0).toUpperCase() + this._action.slice(1);
-	if (this[methodName] !== undefined)
-		this[methodName](card);
-  else
-    console.error("Trying to call " + methodName); // Should not happen
-},
-
-
-/*
- * Toggle a card : useful for multiple select or whenever we want a confirm button
- */
-toggleCard: function(card){
-  var domId = "bang-card-" + card.id;
-  // Already selected, unselect it
-  if(this._selectedCards.includes(card.id)){
-    this._selectedCards = this._selectedCards.filter(id => id != card.id);
-    dojo.removeClass(domId, "selected");
-    this._selectableCards.forEach(c => dojo.query("#bang-card-" + c.id).addClass("selectable").removeClass("unselectable") );
-  }
-  // Not yet selected, add to selection
-  else {
-    if(this._selectedCards.length >= this._amount)
-      return false;
-
-    this._selectedCards.push(card.id);
-    dojo.addClass(domId, "selected");
-
-    if(this._selectedCards.length == this._amount){
-      dojo.query(".bang-card.selectable").removeClass("selectable").addClass("unselectable");
-      dojo.query(".bang-card.selected").removeClass("unselectable").addClass("selectable");
-    }
-  }
-
-  return true;
-},
-
-
-/*
- * Triggered whenever a player clicked on a selectable card to play
- */
-onClickCardSelectCard: function(card){
-  dojo.query("#hand .bang-card").removeClass("selectable").addClass("unselectable");
-  dojo.removeClass("bang-card-" + card.id, "unselectable");
-  dojo.addClass("bang-card-" + card.id, "selected");
-  this._selectedCard = card;
-
-  // What kind of target ?
-  let OPTIONS_NONE = 0, OPTION_CARD = 1, OPTION_PLAYER = 2;
-  if(card.options.type == OPTIONS_NONE) {
-    this.onSelectOption();
-  } else if(card.options.type == OPTION_PLAYER) {
-    this.makePlayersSelectable(card.options.targets);
-  } else if(card.options.type == OPTION_CARD){
-    this.makePlayersCardsSelectable(card.options.targets);
-  }
-},
-
-/*
- * Triggerd when clicked on the undo button
- */
-onClickCancelCardSelected: function(cards){
-  this.clearPossible();
-  this.makeCardSelectable(cards, "selectCard");
-},
-
-
-/*
- * Whenever the card and the option are selected, send that to the server
- */
-onSelectOption: function(){
-  if(!this.checkAction('play')) return;
-
-  var data = {
-    id:this._selectedCard.id,
-    player:this._selectedPlayer,
-    optionType:this._selectedOptionType,
-    optionArg:this._selectedOptionArg,
-  };
-
-  this.takeAction("playCard", data);
-},
-
-
-
-/********************
-*** OPTION_PLAYER ***
-********************/
-
-/*
- * Make some players selectable with either action button or directly on the board
- */
-makePlayersSelectable: function(players, append=false){
-  if(!append) {
-    this.removeActionButtons();
-    this.gamedatas.gamestate.descriptionmyturn = _("You must choose a player");
-    this.updatePageTitle();
-    this.addActionButton('buttonCancel', _('Undo'), () => this.onClickCancelCardSelected(this._selectableCards), null, false, 'gray');
-  }
-
-  this._selectablePlayers = players;
-  this._selectablePlayers.forEach(playerId => {
-    this.addActionButton('buttonSelectPlayer' + playerId, this.gamedatas.players[playerId].name, () => this.onClickPlayer(playerId), null, false, 'blue');
-    dojo.addClass("bang-player-" + playerId, "selectable");
-  });
-},
-
-/*
- * Triggered when a player click on a player's board or action button
- */
-onClickPlayer: function(playerId){
-  debug("Click", playerId);
-  if(!this._selectablePlayers.includes(playerId))
-    return;
-  if(this._action == 'drawCard') {
-    this.onClickDraw(playerId);
-    return;
-  }
-  this._selectedOptionType = "player";
-  this._selectedPlayer = playerId;
-  this.onSelectOption();
-},
-
-
-
-
-/******************
-*** OPTION_CARD ***
-******************/
-/*
- * Make some players' cards selectable with sometimes the deck
- */
-makePlayersCardsSelectable: function(players){
-  this.removeActionButtons();
-  this.gamedatas.gamestate.descriptionmyturn = _("You must choose a card in play or a player's hand");
-  this.updatePageTitle();
-  var oldSelectableCards = this._selectableCards;
-  this.addActionButton('buttonCancel', _('Undo'), () => this.onClickCancelCardSelected(oldSelectableCards), null, false, 'gray');
-
-  var cards = [];
-  this._selectablePlayers = players;
-  players.forEach(playerId => {
-    dojo.addClass("bang-player-" + playerId, "selectable");
-    dojo.query("#bang-player-" + playerId + " .bang-card").forEach(div => {
-      cards.push({
-        id:dojo.attr(div, "data-id"),
-        playerId:playerId,
-      })
-    });
-  });
-  this.makeCardSelectable(cards, "selectOption");
-},
-
-
-onClickCardSelectOption: function(card){
-  this._selectedPlayer = card.playerId;
-  this._selectedOptionType = "inplay";
-  this._selectedOptionArg = card.id;
-  this.onSelectOption();
-},
 
 
 
@@ -502,7 +314,8 @@ onEnteringStateSelectCard: function(args){
 },
 
 
-dialogSelectCard: function(){
+
+dialogSelectCard(){
   var args = this.gamedatas.gamestate.args;
   var dial = new ebg.popindialog();
   dial.create('selectCard');
@@ -516,7 +329,6 @@ dialogSelectCard: function(){
     return;
 
   this._amount = args.amountToPick;
-  this._selectedCards = [];
   this.makeCardSelectable(args.cards, "selectDialog");
 },
 
@@ -538,6 +350,55 @@ onClickConfirmSelection: function(){
   });
 },
 
+
+
+
+
+
+/******************
+*** Use ability ***
+******************/
+makeCharacterAbilityUsable:function(option){
+  this._useAbilityOption = option;
+  this.addActionButton('buttonUseAbility', _('Use ability'), () => this.onClickUseAbility(), null, false, 'blue');
+},
+
+onClickUseAbility: function(){
+  //let OPTIONS_NONE = 0, OPTION_CARDS = 3;
+  let SID_KETCHUM = 2, JOURDONNAIS = 4;
+  this._selectedCards = [];
+  if(this._useAbilityOption == JOURDONNAIS) {
+    this.onClickConfirmUseAbility();
+  } else if(this._useAbilityOption == SID_KETCHUM) {
+    // Sid Ketchum power
+    var cards = dojo.query("#hand .bang-card").map( card => { return {id : dojo.attr(card, 'data-id') }; })
+
+    this._amount = 2;
+    this.makeCardSelectable(cards, "useAbility");
+
+    $("pagemaintitletext").innerHTML = _("You must select two cards");
+    this.removeActionButtons();
+    this.addActionButton('buttonCancelUseAbility', _('Cancel'), () => this.restartState() , null, false, 'gray');
+  }
+},
+
+
+onClickCardUseAbility: function(card){
+  this.toggleCard(card);
+
+  if(this._selectedCards.length < this._amount){
+    if($("buttonConfirmUseAbility"))
+      dojo.destroy("buttonConfirmUseAbility");
+  } else {
+    this.addActionButton('buttonConfirmUseAbility', _('Confirm'), 'onClickConfirmUseAbility', null, false, 'blue');
+  }
+},
+
+onClickConfirmUseAbility: function(){
+  this.takeAction("useAbility", {
+    cards:this._selectedCards.join(";"),
+  });
+},
 
 
 
@@ -589,52 +450,6 @@ onClickDraw: function(arg) {
   this.takeAction('draw', { selected: arg });
 },
 
-
-
-/******************
-*** Use ability ***
-******************/
-makeCharacterAbilityUsable:function(option){
-  this._useAbilityOption = option;
-  this.addActionButton('buttonUseAbility', _('Use ability'), () => this.onClickUseAbility(), null, false, 'blue');
-},
-
-onClickUseAbility: function(){
-  //let OPTIONS_NONE = 0, OPTION_CARDS = 3;
-  let SID_KETCHUM = 2, JOURDONNAIS = 4;
-  this._selectedCards = [];
-  if(this._useAbilityOption == JOURDONNAIS) {
-    this.onClickConfirmUseAbility();
-  } else if(this._useAbilityOption == SID_KETCHUM) {
-    // Sid Ketchum power
-    var cards = dojo.query("#hand .bang-card").map( card => { return {id : dojo.attr(card, 'data-id') }; })
-
-    this._amount = 2;
-    this.makeCardSelectable(cards, "useAbility");
-
-    $("pagemaintitletext").innerHTML = _("You must select two cards");
-    this.removeActionButtons();
-    this.addActionButton('buttonCancelUseAbility', _('Cancel'), () => this.restartState() , null, false, 'gray');
-  }
-},
-
-
-onClickCardUseAbility: function(card){
-  this.toggleCard(card);
-
-  if(this._selectedCards.length < this._amount){
-    if($("buttonConfirmUseAbility"))
-      dojo.destroy("buttonConfirmUseAbility");
-  } else {
-    this.addActionButton('buttonConfirmUseAbility', _('Confirm'), 'onClickConfirmUseAbility', null, false, 'blue');
-  }
-},
-
-onClickConfirmUseAbility: function(){
-  this.takeAction("useAbility", {
-    cards:this._selectedCards.join(";"),
-  });
-},
 
 
 ////////////////////////////////
@@ -709,28 +524,6 @@ restartState: function(){
 },
 
 
-/*
- * takeAction: default AJAX call with locked interface
- */
-takeAction: function (action, data, callback) {
-	data = data || {};
-	data.lock = true;
-	callback = callback || function (res) { };
-	this.ajaxcall("/bang/bang/" + action + ".html", data, this, callback);
-},
-
-
-/*
- * slideTemporary: a wrapper of slideTemporaryObject using Promise
- */
-slideTemporary: function (template, data, container, sourceId, targetId, duration, delay) {
-	return new Promise((resolve, reject) => {
-		var animation = this.slideTemporaryObject(this.format_block(template, data), container, sourceId, targetId, duration, delay);
-		setTimeout(function(){
-			resolve();
-		}, duration + delay)
-	});
-},
 
 slideTemporaryToDiscard: function(card, sourceId, duration){
   var ocard = this.getCard(card, true);
@@ -739,65 +532,6 @@ slideTemporaryToDiscard: function(card, sourceId, duration){
 },
 
 
-getCardAndDestroy: function(card, val){
-  var id = "bang-card-" + card.id;
-  if($(id)){
-    dojo.attr(id, "data-type", "empty");
-    setTimeout(() => dojo.destroy(id), 700);
-    return id;
-  }
-  else {
-    return val;
-  }
-},
-
-/*
- * getCard: factory function that create a card
- */
-getCard: function(ocard, eraseId) {
-  // Gets a card object ready to use in UI templates
-  var card = {
-    id: eraseId? -1 : ocard.id,
-    type: ocard.type,
-    name: '',
-    text: '',
-  	color: ocard.color,
- 		value: ocard.value,
-		flipped: (typeof ocard.flipped == "undefined" || !ocard.flipped)? "" : "flipped",
-  };
-
-	if(this._cards[ocard.type]){
-		card.name = this._cards[ocard.type].name;
-		card.text = this._cards[ocard.type].text;
-	}
-
-  return card;
-},
-
-getBackCard:function(){
-  return {
-    id:-1,
-    color:0,
-    value:0,
-    name:'',
-    text: '',
-    type:"back",
-    flipped:true,
-  };
-},
-
-getNBackCards: function(n){
-  return Array.apply(null, {length : n}).map(o => this.getBackCard());
-},
-
-addCard: function(ocard, container){
-  var card = this.getCard(ocard);
-
-  var div = dojo.place(this.format_block('jstpl_card', card), container);
-  if(div.flipped == "")
-    this.addTooltipHtml(div.id, this.format_block( 'jstpl_cardTooltip',  card));
-  dojo.connect(div, "onclick", (evt) => { evt.preventDefault(); evt.stopPropagation(); this.onClickCard(card) });
-},
 
 
 /*
@@ -838,32 +572,6 @@ incHandCount: function(playerId, amount){
 ///////////////////////////////////////////////////
 //////	 Reaction to cometD notifications	 ///////
 ///////////////////////////////////////////////////
-
-/*
- * setupNotifications:
- *	In this method, you associate each of your game notifications with your local method to handle it.
- *	Note: game notification names correspond to "notifyAllPlayers" and "notifyPlayer" in the santorini.game.php file.
- */
-setupNotifications: function () {
-	var notifs = [
-		['debug',500],
-		['cardPlayed', 1500],
-    ['cardLost', 1000],
-    ['cardsGained', 1200],
-    ['drawCard', 1000],
-    ['updateHP', 200],
-    ['updateHand', 200],
-		['updateOptions', 200],
-    ['playerEliminated', 1000],
-    ['updatePlayers', 100],
-	];
-
-	notifs.forEach(notif => {
-		dojo.subscribe(notif[0], this, "notif_" + notif[0]);
-		this.notifqueue.setSynchronous(notif[0], notif[1]);
-	});
-},
-
 
 /** just for troubleshooting */
 notif_debug:function(notif) {
@@ -910,81 +618,6 @@ notif_updatePlayers: function(n){
 },
 
 
-/*
- * notification sent to all players when someone plays a card
- */
-notif_cardPlayed: function(n) {
-  debug("Notif: card played", n);
-  var playerId = n.args.playerId,
-      target = n.args.target,
-      targetPlayer = n.args.targetPlayer;
-  if(!targetPlayer && target == "inPlay")
-    targetPlayer = playerId;
-
-  var card = this.getCard(n.args.card, true);
-  var sourceId = this.getCardAndDestroy(n.args.card, "player-character-" + playerId);
-  if(targetPlayer){
-    var duration = target == "inPlay"? 1500: 800;
-    var targetId = (target == "inPlay"? "player-inplay-" : "player-character-") + targetPlayer
-    this.slideTemporary('jstpl_card', card, "board", sourceId, targetId, duration, 0)
-    .then(() => {
-      // Add the card in front of player
-      if(target == "inPlay")
-        this.addCard(n.args.card, targetId)
-      // Put the card in the discard pile
-      else
-        this.slideTemporaryToDiscard(n.args.card, targetId, 800);
-    });
-  }
-  // Directly to discard
-  else
-    this.slideTemporaryToDiscard(n.args.card, sourceId, 1500);
-},
-
-/*
-* notification sent to all players when someone gained a card (from deck or from someone else hand/inplay)
-*/
-notif_cardsGained: function(n) {
-  if(this._dial != null)
-    this._dial.destroy();
-
-  debug("Notif: cards gained", n);
-  var cards = n.args.cards.length > 0? n.args.cards.map(o => this.getCard(o)) : this.getNBackCards(n.args.amount);
-  cards.forEach((card, i) => {
-    let sourceId = (n.args.src == "deck")? "deck" : this.getCardAndDestroy(card, "player-character-" + n.args.victimId);
-    let targetId = n.args.target == "hand"? (this.player_id == n.args.playerId ? "hand" : ("player-character-" + n.args.playerId)) : ("player-inplay-" + n.args.playerId);
-    this.slideTemporary("jstpl_card", card, "board", sourceId, targetId, 800, 120*i).then(() => {
-      if(targetId == "hand") this.addCard(card, 'hand-cards');
-      if(n.args.target == "inPlay") this.addCard(card, targetId);
-    });
-  });
-
-  this.incHandCount(n.args.playerId, n.args.amount);
-  if(n.args.src == "deck")
-    $("deck").innerHTML = parseInt($("deck").innerHTML) - n.args.amount;
-  else if(n.args.src != "discard")
-    this.incHandCount(n.args.victimId, -n.args.amount);
-},
-
-/*
-* notification sent to all players when someone discard a card
-*/
-notif_cardLost: function(n) {
-  debug("Notif: card lost", n);
-  var sourceId = this.getCardAndDestroy(n.args.card, "player-character-" + n.args.playerId);
-  this.slideTemporaryToDiscard(n.args.card, sourceId);
-},
-
-
-notif_drawCard: function(n){
-  debug("Notif: card drawn", n);
-  var card = n.args.card;
-  card.flipped = true;
-  //dojo.addClass("bang-card-" + n.args.src_id, "selected");
-  this.addCard(card, "discard");
-  setTimeout(() => dojo.removeClass("bang-card-" + card.id, "flipped"), 100);
-  //setTimeout(() => dojo.removeClass("bang-card-" + n.args.src_id, "selected"), 1000);
-},
 
 
 

@@ -2,6 +2,7 @@
 namespace Bang\Game;
 use bang;
 use Bang\Characters\Players;
+use Bang\Cards\Card;
 
 /*
  * Notifications
@@ -16,16 +17,25 @@ class Notifications {
   }
 
   public static function cardPlayed($player, $card, $args = []) {
-    self::notifyAll('cardPlayed', clienttranslate('${player_name} plays ${card_name}${card_msg}'), [
-      'i18n' => ['card_name', 'card_msg'],
+    $msg = clienttranslate('${player_name} plays ${card_name}');
+    $data = [
+      'i18n' => ['card_name'],
       'player_name' => $player->getName(),
       'card_name' => $card->getName(),
-      'card_msg' => $card->getArgsMessage($args),
       'card' => $card->format(),
       'playerId' => $player->getId(),
       'targetPlayer' => isset($args['player']) ? $args['player'] : null,
       'target' => $card->isEquipment() ? 'inPlay' : 'discard'
-    ]);
+    ];
+
+
+    $cardArgMsg = $card->getArgsMessage($args);
+    if(!is_null($cardArgMsg) && isset($cardArgMsg['name'])){
+      $msg = clienttranslate('${player_name} plays ${card_name} and chooses ${player_target} as target');
+      $data['player_target'] = $cardArgMsg['name'];
+    }
+
+    self::notifyAll('cardPlayed', $msg, $data);
 
     self::notifyAll("updateHand", '', [
       'player_name' => $player->getName(),
@@ -179,10 +189,9 @@ class Notifications {
    */
   public static function drawCard($player, $card, $src) {
     $format = $card->format();
-    $src_name = ($src instanceof Bang\Cards\Card) ? $src->getName() : $src->getCharName();
+    $src_name = ($src instanceof Card) ? $src->getName() : $src->getCharName();
 
-    // TODO : not translated
-    self::notifyAll('drawCard', '${player_name} draws ${card_name} for ${src_name}\'s effect.', [
+    self::notifyAll('drawCard', clienttranslate('${player_name} draws ${card_name} for ${src_name}\'s effect.'), [
       'i18n' => ['card_name', 'card_color', 'src_name'],
       'player_name' => $player->getName(),
       'card_name' => $card->getNameAndValue(),
@@ -192,13 +201,21 @@ class Notifications {
     ]);
   }
 
+
+  public static function useCard($player, $card){
+    self::notifyAll('message', clienttranslate('${player_name} uses ${card_name}'), [
+      'i18n' => ['card_name'],
+      'player_name'=>$player->getName(),
+      'card_name' => $card->getName(),
+    ]);
+  }
+
   /**
    * When a card moves from one player(inplay) to another player(inplay).
    * Probably needed only for dynamite
    */
   public static function moveCard($card, $player, $target) {
-    // TODO : not translated
-    self::notifyAll('cardsGained', '${card_name} moves to ${player_name}', [
+    self::notifyAll('cardsGained', clienttranslate('${card_name} moves to ${player_name}'), [
       'i18n' => ['card_name'],
       'card_name' => $card->getName(),
       'player_name' => $target->getName(),
@@ -214,8 +231,8 @@ class Notifications {
   public static function playerEliminated($player) {
     $roles = [clienttranslate('Sheriff'), clienttranslate('Deputy'), clienttranslate('Outlaw'), clienttranslate('Renegade')];
 
-    // TODO : not translated
-    self::notifyAll('updatePlayers', '${player_name} was a ${role_name}', [
+    self::notifyAll('updatePlayers', clienttranslate('${player_name} was a ${role_name}'), [
+      'i18n' => ['role_name'],
       'player_name' => $player->getName(),
       'role_name' => $roles[$player->getRole()],
       'players' => Players::getUiData(0),

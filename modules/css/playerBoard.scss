@@ -1,0 +1,42 @@
+.player-board {
+  .player-role {
+    width:40px;
+    height:40px;
+    background-size:contain;
+    background-repeat:no-repeat;
+    position:absolute;
+    top:0;
+    right:45px;
+
+    &[data-role="0"] { background-image:url("img/sheriff.svg"); }
+    &[data-role="1"] { background-image:url("img/deputy.svg"); }
+    &[data-role="2"] { background-image:url("img/outlaw.svg"); }
+    &[data-role="3"] { background-image:url("img/renegade.svg"); }
+  }
+
+
+  &.eliminated {
+    background-color: #BBB !important;
+
+    .player_board_inner {
+      .player_table_status { display:none !important; }
+
+      &::before {
+        content: "";
+        display: block;
+        width: 35px;
+        height: 35px;
+        background-image: url("img/dead.svg");
+        position: absolute;
+        z-index: 3;
+        background-color: white;
+        border-radius: 50%;
+        background-size: 88%;
+        background-position: center center;
+        background-repeat: no-repeat;
+        top: 4px;
+        left: 1px;
+      }
+    }
+  }
+}

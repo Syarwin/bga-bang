@@ -1,0 +1,67 @@
+div#board {
+	width:100%;
+	min-height:800px;
+	position:relative;
+	display:grid;
+	grid-template-columns: repeat(6, 1fr);
+
+  .bang-player, #table {
+    display:flex;
+    flex-flow:row;
+    align-items: center;
+    grid-row-end:span 2;
+    grid-column-end:span 2;
+    max-height:$cardH + 20px;
+    min-height:$cardH + 20px;
+  }
+
+  // TODO : add media query
+  @each $nPlayers, $layout in $layoutBig {
+    &[data-players="#{$nPlayers}"] #table {
+      $place : map-get($layout, "table");
+      grid-column-start: map-get($place, 'col');
+      grid-row-start: map-get($place, 'row');
+    }
+
+    &[data-players="#{$nPlayers}"] .bang-player {
+      @each $i, $place in $layout {
+        @if $i != "table" {
+          &[data-no="#{$i}"] {
+            grid-column-start: map-get($place, 'col');
+            grid-row-start: map-get($place, 'row');
+
+            @if map-get($place, 'align') == left   { justify-content: flex-start; }
+            @if map-get($place, 'align') == center { justify-content: center; }
+            @if map-get($place, 'align') == right  { justify-content: flex-end; }
+          }
+        }
+      }
+    }
+  }
+
+
+  @media (max-width: 1300px) {
+    @each $nPlayers, $layout in $layoutSmall {
+      &[data-players="#{$nPlayers}"] #table {
+        $place : map-get($layout, "table");
+        grid-column-start: map-get($place, 'col');
+        grid-row-start: map-get($place, 'row');
+      }
+
+      &[data-players="#{$nPlayers}"] .bang-player {
+        @each $i, $place in $layout {
+          @if $i != "table" {
+            &[data-no="#{$i}"] {
+              grid-column-start: map-get($place, 'col');
+              grid-row-start: map-get($place, 'row');
+
+              @if map-get($place, 'align') == left   { justify-content: flex-start; }
+              @if map-get($place, 'align') == center { justify-content: center; }
+              @if map-get($place, 'align') == right  { justify-content: flex-end; }
+            }
+          }
+        }
+      }
+    }
+  }
+}

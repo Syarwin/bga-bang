@@ -140,12 +140,12 @@ class Card extends \APP_GameClass
 	 * can be overwritten to add an additional Message to the played card notification.
 	 * this message should start with a space
 	 */
-	 // TODO : not translatable
 	public function getArgsMessage($args) {
 		if(isset($args['player']) && !is_null($args['player']) ) {
-			$name = Players::getPlayer($args['player'])->getName();
-			return " and chooses $name as target";
+      return [
+        'name' => Players::getPlayer($args['player'])->getName(),
+      ];
 		}
-		return "";
+		return null;
 	}
 }

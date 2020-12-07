@@ -1,0 +1,61 @@
+$transparentWhite:rgba(255,255,255,0.5);
+$darkgray: rgba(50,50,50, 0.8);
+
+$numberOfSymbols:15;
+$numberOfCharacters:15;
+$numberOfCards:21;
+$guns: 0,1,2,3,4;
+$actions: 5,6,7,8,9,10,11,12,13,14,15,16;
+$equipments: 17,18,19,20,21;
+$cardH: 170px;
+$cardW: $cardH / 200 * 125;
+
+
+$layoutBig:(
+  3:(
+    "table":("col" : 3, "row" : 4, "align" : center),
+    0:("col" : 3, "row" : 2, "align": center),
+    1:("col" : 5, "row" : 4, "align": left),
+    2:("col" : 1, "row" : 4, "align": right),
+  ),
+  4:(
+    "table":("col" : 3, "row" : 4, "align" : center),
+    0:("col" : 3, "row" : 2, "align": center),
+    1:("col" : 5, "row" : 4, "align": left),
+    2:("col" : 3, "row" : 6, "align": center),
+    3:("col" : 1, "row" : 4, "align": right),
+  ),
+  5:(
+    "table":("col" : 3, "row" : 4, "align" : center),
+    0:("col" : 3, "row" : 2, "align": center),
+    1:("col" : 5, "row" : 4, "align": left),
+    2:("col" : 4, "row" : 6, "align": center),
+    3:("col" : 2, "row" : 6, "align": center),
+    4:("col" : 1, "row" : 4, "align": right),
+  )
+);
+
+
+$layoutSmall:(
+  3:(
+    "table":("col" : 3, "row" : 4, "align" : center),
+    0:("col" : 3, "row" : 2, "align": center),
+    1:("col" : 5, "row" : 4, "align": left),
+    2:("col" : 1, "row" : 4, "align": right),
+  ),
+  4:(
+    "table":("col" : 3, "row" : 4, "align" : center),
+    0:("col" : 3, "row" : 2, "align": center),
+    1:("col" : 5, "row" : 4, "align": left),
+    2:("col" : 3, "row" : 6, "align": center),
+    3:("col" : 1, "row" : 4, "align": right),
+  ),
+  5:(
+    "table":("col" : 1, "row" : 2, "align" : center),
+    0:("col" : 3, "row" : 2, "align": left),
+    1:("col" : 4, "row" : 6, "align": right),
+    2:("col" : 4, "row" : 8, "align": center),
+    3:("col" : 1, "row" : 8, "align": center),
+    4:("col" : 1, "row" : 6, "align": left),
+  )
+);

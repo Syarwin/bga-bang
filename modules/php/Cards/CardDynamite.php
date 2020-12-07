@@ -1,7 +1,9 @@
 <?php
 namespace Bang\Cards;
 use Bang\Game\Notifications;
+use Bang\Game\Log;
 use Bang\Characters\Players;
+use Bang\Cards\Card;
 
 class CardDynamite extends BlueCard {
   public function __construct($id = null, $copy = ""){
@@ -22,28 +24,32 @@ class CardDynamite extends BlueCard {
   /*
    * When activated at the start of turn, draw a card and resolve effect
    */
-   // TODO : strings not translatable
-  public function activate($player, $args=[]) {
-    Log::addCardPlayed($player, $this,[]);
+  public function activate($player, $args = []) {
+    Log::addCardPlayed($player, $this, []);
     $mixed = $player->draw($args, $this);
-    if($mixed instanceof Bang\Cards\Card) {
+
+    if($mixed instanceof Card) {
+      // Beween 2 & 10 of spades ? => kaboom
       $val = $mixed->getCopyValue();
       if ($mixed->getCopyColor() == 'S' && is_numeric($val) && intval($val) < 10) {
-        Notifications::tell("Dynamite explodes");
+        Notifications::tell(clienttranslate("Dynamite explodes"));
         Cards::discardCard($this->id);
         Notifications::discardedCard($player, $this, true);
 
         // Loose 3hp: if the player dies, skip its turn
         $newstate = $player->looseLife(3);
-        return is_null($newstate) ? "draw" : $newstate;
-      } else {
-        // Move to next player and go on
+        return $newstate;
+      }
+      // Move to next player and go on
+      else {
+        // TODO : move to next player WITHOUT a dynamite...
         $next = Players::getNextPlayer($player);
         Cards::moveCard($this->id, 'inPlay', $next->getId());
         Notifications::moveCard($this, $player, $next);
-        return "draw";
+        return null;
       }
     }
+
     return $mixed;
   }
 }

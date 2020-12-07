@@ -1,0 +1,50 @@
+div#board {
+  #table {
+    justify-content:center;
+
+    #table-container {
+      width:2*$cardW + 30px;
+      height:$cardH + 15px;
+      background-color:$transparentWhite;
+      border-radius:5px;
+      border:1px solid $darkgray;
+      box-shadow: 1px 1px 5px $darkgray;
+      display:flex;
+      flex-flow:row;
+      align-items: center;
+      justify-content: space-around;
+
+      #deck, #discard {
+        width:$cardW;
+        height:$cardH;
+        position:relative;
+
+        &.selectable {
+          cursor:pointer;
+          animation:borderBlink 0.9s infinite;
+        }
+      }
+
+      #deck {
+        background-image:url("img/cardback.jpg");
+        background-size:cover;
+        background-position: center center;
+        border-radius:7px;
+        font-size:30px;
+        text-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white;
+        display:flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #discard div.bang-card {
+        margin:0px;
+        opacity:1 !important;
+        position:absolute;
+        top:0;
+        left:0;
+        transform-origin: -7% 50%;
+      }
+    }
+  }
+}

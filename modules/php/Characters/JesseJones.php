@@ -33,6 +33,7 @@ class JesseJones extends Player {
     }
   }
 
+
   public function useAbility($args) {
     if($args['selected'] == 'deck') {
       $cards = Cards::deal($this->id, 2);

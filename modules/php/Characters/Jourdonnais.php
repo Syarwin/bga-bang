@@ -48,17 +48,20 @@ class Jourdonnais extends Player {
       Notifications::tell(clienttranslate("Jourdonnais effect was successfull"));
 
       if($amount == 1) {
-        bang::$instance->gamestate->nextState("finishedReaction");
+        bang::get()->gamestate->nextState("finishedReaction");
         return;
-      } else {
-        Notifications::tell(clienttranslate('But ${player_name} needs another miss'), ['player_name' => $this->getName()]); // TODO : are you sure this is the right name ?
+      }
+      // Might happen againt Slab the Killer
+      else {
+        Notifications::tell(clienttranslate('But ${player_name} needs another miss'), ['player_name' => $this->getName()]);
         $amount--;
         $args = Cards::getCurrentCard()->getReactionOptions($this);
         $args['missedNeeded'] = $amount;
         Log::addCardPlayed(Players::getCurrentTurn(true), Cards::getCurrentCard(), $args);
       }
-    } else {
-      // Failure
+    }
+    // Failure
+    else {
       Notifications::tell(clienttranslate("Jourdonnais effect failed"));
     }
 
