@@ -428,11 +428,12 @@ class Player extends \APP_GameClass
     // Go to corresponding state
     if(count($reactions) > 0) {
       $card = Cards::getCard(Log::getCurrentCard());
-      $inactive = count($reactions) > 1 ? 'players' : '${actplayer}';
+      $inactive = count($reactions) > 1 ? clienttranslate('Players may react to ${src}') : clienttranslate('${actplayer} may react to ${src}');
       $args = [
         'msgActive' => clienttranslate('${you} may react to ${src}'),
-        'msgInactive' => clienttranslate($inactive . ' may react to ${src}'),
+        'msgInactive' => $inactive,
         'src' => $card->getName(),
+        'attack' => true,
         '_private' => $reactions
       ];
       Log::addAction("react", $args);

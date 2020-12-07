@@ -1,5 +1,6 @@
 <?php
 namespace Bang\Cards;
+use Bang\Game\Utils;
 use Bang\Characters\Players;
 use Bang\Game\Notifications;
 
@@ -34,6 +35,11 @@ class BrownCard extends Card
 				$player_ids = [];
 				break;
 		}
+
+    // Cannot bang myself
+    if($this->effect['type'] == BASIC_ATTACK){
+      Utils::filter($player_ids, function($id) use ($player){ return $id != $player->getId();  });
+    }
 
 		return array_values($player_ids);
 	}

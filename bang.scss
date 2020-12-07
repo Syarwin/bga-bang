@@ -32,16 +32,6 @@
 }
 
 
-#popin_selectCard_contents {
-  #dialog-card-container {
-    display:flex;
-  }
-
-  #dialog-button-container {
-    text-align:right;
-  }
-}
-
 
 @keyframes pulsate {
   0% {
@@ -61,3 +51,4 @@
 @import 'modules/css/player';
 @import 'modules/css/card';
 @import 'modules/css/playerBoard';
+@import 'modules/css/modal';

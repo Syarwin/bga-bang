@@ -31,8 +31,8 @@ class Notifications {
 
     $cardArgMsg = $card->getArgsMessage($args);
     if(!is_null($cardArgMsg) && isset($cardArgMsg['name'])){
-      $msg = clienttranslate('${player_name} plays ${card_name} and chooses ${player_target} as target');
-      $data['player_target'] = $cardArgMsg['name'];
+      $msg = clienttranslate('${player_name} plays ${card_name} and chooses ${player_name2} as target');
+      $data['player_name2'] = $cardArgMsg['name'];
     }
 
     self::notifyAll('cardPlayed', $msg, $data);

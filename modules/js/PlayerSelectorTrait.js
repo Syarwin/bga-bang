@@ -13,9 +13,9 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
      */
     makePlayersSelectable(players, append = false){
       if(!append) {
-        this.removeActionButtons();
         this.gamedatas.gamestate.descriptionmyturn = _("You must choose a player");
         this.updatePageTitle();
+        this.removeActionButtons();
         this.addActionButton('buttonCancel', _('Undo'), () => this.onClickCancelCardSelected(this._selectableCards), null, false, 'gray');
       }
 

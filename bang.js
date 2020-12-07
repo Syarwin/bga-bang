@@ -219,7 +219,10 @@ onUpdateActionButtons: function (stateName, args) {
 		this.addActionButton('buttonCancelEnd', _('Cancel'), 'onClickCancelEndTurn', null, false, 'gray');
 
   if (stateName == "react" || stateName == "multiReact"){
-    this.addActionButton('buttonSkip', _('Pass'), () => this.onClickPass(), null, false, 'blue');
+    if(args.attack)
+      this.addActionButton('buttonSkip', _('Pass and loose life point'), () => this.onClickPass(), null, false, 'red');
+    else
+      this.addActionButton('buttonSkip', _('Pass'), () => this.onClickPass(), null, false, 'blue');
 
     if(args._private && args._private.character != null && this._selectedCard == null && this._selectedCards.length == 0)
       this.makeCharacterAbilityUsable(args._private.character);
@@ -307,7 +310,7 @@ onClickPass: function(){
 /********************
 **** Select Card ****
 ********************/
-onEnteringStateSelectCard: function(args){
+onEnteringStateSelectCard(args){
   debug("Selecting cards", args);
   this.gamedatas.gamestate.args.cards = args.cards.length > 0? args.cards : (args._private? args._private.cards : this.getNBackCards(args.amount) );
   this.dialogSelectCard();
@@ -317,14 +320,18 @@ onEnteringStateSelectCard: function(args){
 
 dialogSelectCard(){
   var args = this.gamedatas.gamestate.args;
-  var dial = new ebg.popindialog();
-  dial.create('selectCard');
-  dial.setTitle(_("Pool of card"));
-  dial.setContent(jstpl_dialog);
+  this._dial = new customgame.modal("selectCard", {
+     autoShow:true,
+     title:_("Pool of cards"),
+     class:"bang_popin",
+     closeIcon:'fa-times',
+     openAnimation:true,
+     openAnimationTarget:"buttonShowCards",
+     contentsTpl:jstpl_dialog,
+   });
   args.cards.forEach(card => this.addCard(card, 'dialog-card-container') );
-  dial.show();
-  this._dial = dial;
-
+  $('dialog-title-container').innerHTML = $('pagemaintitletext').innerHTML;
+  
   if(!this.isCurrentPlayerActive())
     return;
 

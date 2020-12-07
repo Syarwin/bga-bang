@@ -94,6 +94,7 @@ var jstpl_cardTooltip = `<div class="bang-card-tooltip">
 
 
 var jstpl_dialog = `<div id="dialog-card-container"></div>
+<div id="dialog-title-container"></div>
 <div id="dialog-button-container"></div>
 `;
 

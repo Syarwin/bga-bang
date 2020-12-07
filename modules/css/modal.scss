@@ -1,0 +1,61 @@
+.bang_popin {
+  width:auto;
+  position:relative;
+  background-image:url("img/modal.jpg");
+  background-size:contain;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 3px solid #88481a;
+  box-shadow: 1px 1px 5px #444;
+
+  h2 {
+    color:#444;
+    font-size:30px;
+    padding:3px 90px;
+    text-align: center;
+    font-family: "Perdido";
+  }
+
+  .bang_popin_closeicon {
+    background-color: #88481a;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    position:absolute;
+    top: -19px;
+    right: -19px;
+    font-size: 90%;
+    color: white !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      text-decoration: none;
+      color:#CCC !important;
+      transform:scale(1.1);
+    }
+
+    i {
+      margin-top:-2px;
+    }
+  }
+
+  #dialog-card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #dialog-title-container {
+    background-color: rgba(255,255,255,0.8);
+    padding: 5px 9px;
+    border-radius: 5px;
+    margin:10px 2px 2px;
+    text-align: center;
+  }
+
+  #dialog-button-container {
+    text-align: center;
+  }
+}
