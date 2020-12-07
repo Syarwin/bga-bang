@@ -3,14 +3,14 @@ div#board {
 	min-height:800px;
 	position:relative;
 	display:grid;
-	grid-template-columns: repeat(6, 1fr);
+	grid-template-columns: repeat(12, 1fr);
 
   .bang-player, #table {
     display:flex;
     flex-flow:row;
     align-items: center;
     grid-row-end:span 2;
-    grid-column-end:span 2;
+    grid-column-end:span 4;
     max-height:$cardH + 20px;
     min-height:$cardH + 20px;
   }
@@ -41,6 +41,10 @@ div#board {
 
 
   @media (max-width: 1300px) {
+    .bang-player {
+      grid-column-end:span 6;
+    }
+
     @each $nPlayers, $layout in $layoutSmall {
       &[data-players="#{$nPlayers}"] #table {
         $place : map-get($layout, "table");

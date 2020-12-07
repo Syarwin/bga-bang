@@ -3,14 +3,11 @@ div#board {
   	background-color:$transparentWhite;
   	border-radius: 5px;
   	grid-row:1;
-  	grid-column:1 / span 6;
+  	grid-column:1 / span 12;
   	height:$cardH + 15px;
   	display:flex;
   	flex-flow:row;
     width:100%;
-    @media (max-width: 1300px) {
-      grid-column:1 / span 4;
-    }
 
     div#role-container {
       flex-grow:0;
