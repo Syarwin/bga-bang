@@ -4,9 +4,16 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
       this._notifications.push(
         ['cardPlayed', 2000],
         ['cardsGained', 1200],
-        ['cardLost', 1000],
+        ['cardLost', 1200],
         ['drawCard', 1000]
       );
+    },
+
+
+    slideTemporaryToDiscard(card, sourceId, duration){
+      var ocard = this.getCard(card, true);
+      this.slideTemporary('jstpl_card', ocard, "board", sourceId, "discard", duration || 1000, 0)
+      .then(() => this.addCard(card, "discard"));
     },
 
 

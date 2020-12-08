@@ -414,7 +414,7 @@ class Player extends \APP_GameClass
 
       if(count($reaction['cards']) > 0 || $handcount > 0 || $reaction['character'] != null) {
         $reaction['src'] = Log::getCurrentCard();
-        $reactions[$player->id] = $reaction; // Give him a chance to (pretend to) react
+        $reactions[$player->getId()] = $reaction; // Give him a chance to (pretend to) react
   		} else {
         $curr = Players::getCurrentTurn();
         $byPlayer = $this->id==$curr ? $this : null;
@@ -428,11 +428,16 @@ class Player extends \APP_GameClass
     // Go to corresponding state
     if(count($reactions) > 0) {
       $card = Cards::getCard(Log::getCurrentCard());
+
+      $src = $card->getName();
+      if($this->character == CALAMITY_JANET && $card->getType() == CARD_MISSED)
+        $src = clienttranslate("Missed used as a BANG! by Calamity Janet");
+
       $inactive = count($reactions) > 1 ? clienttranslate('Players may react to ${src}') : clienttranslate('${actplayer} may react to ${src}');
       $args = [
         'msgActive' => clienttranslate('${you} may react to ${src}'),
         'msgInactive' => $inactive,
-        'src' => $card->getName(),
+        'src' => $src,
         'attack' => true,
         '_private' => $reactions
       ];

@@ -35,6 +35,7 @@ define([
     g_gamethemeurl + "modules/js/CardSelectorTrait.js",
     g_gamethemeurl + "modules/js/PlayerSelectorTrait.js",
     g_gamethemeurl + "modules/js/PlayerCardSelectorTrait.js",
+    g_gamethemeurl + "modules/js/PlayerTrait.js",
 ], function (dojo, declare) {
   return declare("bgagame.bang", [
     customgame.game,
@@ -42,6 +43,7 @@ define([
     bang.reactTrait,
     bang.selectCardTrait,
     bang.discardEndOfTurnTrait,
+    bang.playerTrait,
     bang.cardTrait,
     bang.cardSelectorTrait,
     bang.playerSelectorTrait,
@@ -62,13 +64,10 @@ constructor: function () {
   this._dial = null;
 
   this._notifications.push(
-    ['debug',500],
-    ['updateHP', 200],
-    ['updateHand', 200],
-    ['updateOptions', 200],
-    ['playerEliminated', 1000],
-    ['updatePlayers', 100]
+    ['updateOptions', 200]
   );
+  // States that need the player to be active to be entered
+  this._activeStates = ["drawCard", "playCard", "react", "multiReact", "discardExcess"];
 },
 
 /*
@@ -97,6 +96,7 @@ setup(gamedatas) {
   dojo.connect($("deck"), "onclick", () => this.onClickDeck() );
   dojo.connect($("discard"), "onclick", () => this.onClickDiscard() );
 
+
   // Usefull to reorder player board around the current player
   gamedatas.bplayers.forEach( player => {
     let isCurrent = player.id == this.player_id;
@@ -122,77 +122,11 @@ setup(gamedatas) {
   this.updatePlayers(gamedatas.bplayers);
 
   // Make the current player stand out
-  this.setTurn(gamedatas.playerTurn);
+  this.updateCurrentTurnPlayer(gamedatas.playerTurn);
 
   this.inherited(arguments);
 },
 
-setTurn: function(playerId){
-  dojo.query("div.bang-player-container").style("border", "1px solid rgba(50,50,50,0.8)");
-  dojo.query("#bang-player-" + playerId + " .bang-player-container").style("border", "2px solid #" + this.gamedatas.players[playerId].color);
-},
-
-
-updatePlayers: function(players){
-  var nPlayers = players.length;
-  var playersAlive = players.reduce((carry,player) => carry + (player.eliminated? 0 : 1), 0);
-  var playersEliminated = nPlayers - playersAlive;
-  var newNo = 0;
-  players.forEach( player => {
-    if(!player.eliminated)
-      player.no = newNo++;
-  });
-  var currentPlayerNo = players.reduce((carry, player) => (player.id == this.player_id)? player.no : carry, 0);
-
-  players.forEach( player => {
-    if(player.eliminated){
-      dojo.addClass("overall_player_board_" + player.id, "eliminated");
-      if(!$("player-role-" + player.id)){
-        var role = this.getRole(player.role);
-        dojo.place(this.format_block('jstpl_player_board_role', player), "player_board_" + player.id);
-        this.addTooltip("player-role-" + player.id, role["role-name"], '');
-      }
-
-      if($("bang-player-" + player.id))
-        dojo.destroy("bang-player-" + player.id);
-
-      if(player.id == this.player_id && $("hand"))
-        dojo.destroy("hand");
-    } else {
-      player.no = (player.no + playersAlive - currentPlayerNo) % playersAlive;
-      dojo.attr("bang-player-" + player.id, "data-no", player.no);
-    }
-  });
-
-  dojo.attr("board", "data-players", playersAlive);
-},
-
-/*
- * onEnteringState:
- * 	this method is called each time we are entering into a new game state.
- * params:
- *	- str stateName : name of the state we are entering
- *	- mixed args : additional information
- */
-onEnteringState: function (stateName, args) {
-	debug('Entering state: ' + stateName, args);
-
-  dojo.query(".bang-player").addClass("inactive");
-  var activePlayers = (args.type == "activeplayer")? [args.active_player] : [];
-  if(args.type == "multipleactiveplayer")
-    activePlayers = args.multiactive;
-  activePlayers.forEach(playerId => dojo.removeClass("bang-player-" + playerId, "inactive") );
-  if(stateName == "playCard")
-    this.setTurn(args.active_player);
-
-	// Stop here if it's not the current player's turn for some states
-	if (["drawCard", "playCard", "react", "multiReact", "discardExcess"].includes(stateName) && !this.isCurrentPlayerActive()) return;
-
-	// Call appropriate method
-	var methodName = "onEnteringState" + stateName.charAt(0).toUpperCase() + stateName.slice(1);
-	if (this[methodName] !== undefined)
-		this[methodName](args.args);
-},
 
 
 
@@ -201,11 +135,13 @@ onEnteringState: function (stateName, args) {
  * 	called by BGA framework before onEnteringState
  *	in this method you can manage "action buttons" that are displayed in the action status bar (ie: the HTML links in the status bar).
  */
-onUpdateActionButtons: function (stateName, args) {
+onUpdateActionButtons(stateName, args) {
 	debug('Update action buttons: ' + stateName, args);
+  this.updatePlayersStatus(); // Called when a player go inactive
 
-  if (stateName == "selectCard")
+  if (stateName == "selectCard" && (args.cards.length > 0 || args._private)){
     this.addActionButton('buttonShowCards', _('Show cards'), () => this.dialogSelectCard(), null, false, 'blue');
+  }
 
 
 	if (!this.isCurrentPlayerActive()) // Make sure the player is active
@@ -245,12 +181,12 @@ onUpdateActionButtons: function (stateName, args) {
 /******************
 *** Use ability ***
 ******************/
-makeCharacterAbilityUsable:function(option){
+makeCharacterAbilityUsable(option){
   this._useAbilityOption = option;
   this.addActionButton('buttonUseAbility', _('Use ability'), () => this.onClickUseAbility(), null, false, 'blue');
 },
 
-onClickUseAbility: function(){
+onClickUseAbility(){
   //let OPTIONS_NONE = 0, OPTION_CARDS = 3;
   let SID_KETCHUM = 2, JOURDONNAIS = 4;
   this._selectedCards = [];
@@ -376,50 +312,7 @@ restartState: function(){
 
 
 
-slideTemporaryToDiscard: function(card, sourceId, duration){
-  var ocard = this.getCard(card, true);
-  this.slideTemporary('jstpl_card', ocard, "board", sourceId, "discard", duration || 1000, 0)
-  .then(() => this.addCard(card, "discard"));
-},
 
-
-
-
-/*
- * getRole: factory function that return a role
- */
-getRole: function(roleId){
-  const roles = {
-    0: {
-      "role":0,
-      "role-name": _("Sheriff"),
-      "role-text": _("Kill all the Outlaws and the Renegade!")
-    },
-    1:{
-      "role":1,
-      "role-name":_("Vice"),
-      "role-text":_("Protect the Sheriff! Kill all the Outlaws and the Renegade!"),
-    },
-    2:{
-      "role":2,
-      "role-name":_("Outlaw"),
-      "role-text":_("Kill the Sheriff!"),
-    },
-    3:{
-      "role":3,
-      "role-name":_("Renegade"),
-      "role-text":_("Be the last one in play!"),
-    },
-  };
-  return roles[roleId];
-},
-
-
-incHandCount: function(playerId, amount){
-  var currentHandCount = parseInt(dojo.attr("bang-player-" + playerId, "data-hand")),
-      newHandCount = currentHandCount + parseInt(amount);
-  dojo.attr("bang-player-" + playerId, "data-hand", newHandCount);
-},
 ///////////////////////////////////////////////////
 //////	 Reaction to cometD notifications	 ///////
 ///////////////////////////////////////////////////
@@ -430,43 +323,7 @@ notif_debug:function(notif) {
 },
 
 
-/*
-* notification sent to all players when a player looses or gains hp
-*/
-notif_updateHP: function(n) {
-  debug("Notif: hp changed", n);
-  var currentHp = dojo.attr("bang-player-" + n.args.playerId, "data-bullets");
-  dojo.query("#bang-player-" + n.args.playerId + " .bullet").forEach( (bullet, id) => {
-    if( (currentHp <= id && id < n.args.hp) || (n.args.hp <= id && id < currentHp) ){
-      dojo.removeClass(bullet, "pulse");
-      bullet.offsetWidth;
-      dojo.addClass(bullet, "pulse");
-    }
-  });
-  dojo.attr("bang-player-" + n.args.playerId, "data-bullets", n.args.hp);
-},
 
-/*
-* notification sent to all players when the hand count of a player changed
-*/
-notif_updateHand: function(n) {
-  debug("Notif: update handcount of player", n);
-  this.incHandCount(n.args.playerId, n.args.amount);
-},
-
-
-/*
-* notification sent to all players when someone is eliminated
-*/
-notif_playerEliminated: function(n){
-  debug("Notif: player eliminated", n);
-  dojo.addClass('bang-player-' + n.args.who_quits, "eliminated");
-},
-
-notif_updatePlayers: function(n){
-  debug("Notif: update players", n);
-  this.updatePlayers(n.args.players);
-},
 
 
 

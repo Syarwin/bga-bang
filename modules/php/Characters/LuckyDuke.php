@@ -39,7 +39,7 @@ class LuckyDuke extends Player {
   }
 
   public function useAbility($args) {
-
+    var_dump($args);
     $this->selectedCard = Cards::getCard($args['selected'][0]);
 
     $this->discardCard(Cards::getCard($args['rest'][0]));

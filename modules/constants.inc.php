@@ -102,22 +102,23 @@ define('RENEGADE',3);
 /*
  * Characters
  */
-define('LUCKY_DUKE', 0);
-define('EL_GRINGO', 1);
-define('SID_KETCHUM', 2);
-define('BART_CASSIDY', 3);
-define('JOURDONNAIS', 4);
-define('PAUL_REGRET', 5);
-define('BLACK_JACK', 6);
-define('PEDRO_RAMIREZ', 7);
-define('SUZY_LAFAYETTE', 8);
-define('KIT_CARLSON', 9);
+define('PAUL_REGRET', 0);
+define('SLAB_THE_KILLER', 1);
+define('EL_GRINGO', 2);
+define('ROSE_DOOLAN', 3);
+define('KIT_CARLSON', 4);
+define('CALAMITY_JANET', 5);
+define('PEDRO_RAMIREZ', 6);
+define('SUZY_LAFAYETTE', 7);
+define('BLACK_JACK', 8);
+define('SID_KETCHUM', 9);
 define('VULTURE_SAM', 10);
-define('JESSE_JONES', 11);
-define('CALAMITY_JANET', 12);
-define('SLAB_THE_KILLER', 13);
+define('BART_CASSIDY', 11);
+define('JESSE_JONES', 12);
+define('JOURDONNAIS', 13);
 define('WILLY_THE_KID', 14);
-define('ROSE_DOOLAN', 15);
+define('LUCKY_DUKE', 15);
+
 
 define('MOLLY_STARK', 16);
 define('APACHE_KID', 17);

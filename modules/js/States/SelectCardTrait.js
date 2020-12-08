@@ -14,6 +14,16 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
       else
         display = false;
 
+      this.gamedatas.gamestate.args.cards = cards;
+
+      // Update message when only 1 card to picl
+      if(args.amountToPick == 1){
+        this.gamedatas.gamestate.descriptionmyturn = args.descriptionsinglemyturn;
+        this.gamedatas.gamestate.description = args.descriptionsingle;
+        this.updatePageTitle();
+      }
+
+
 //      this.gamedatas.gamestate.args.cards = args.cards.length > 0? args.cards : (args._private? args._private.cards : this.getNBackCards(args.amount) );
       if(display)
         this.dialogSelectCard();

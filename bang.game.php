@@ -26,7 +26,7 @@ $swdNamespaceAutoload = function ($class)
     if (file_exists($file)) {
       require_once($file);
     } else {
-      var_dump("Impossible to load welcometo class : $class");
+      var_dump("Impossible to load bang class : $class");
     }
   }
 };

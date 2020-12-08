@@ -126,7 +126,7 @@ $machinestates = [
 
 	ST_MULTIREACT => [
 		'name' => 'multiReact',
-		'description' => clienttranslate('waiting for reactions'),
+		'description' => clienttranslate('Waiting for others\' reactions'),
 		'descriptionmyturn' => clienttranslate('${you} must react'),
 		'type' => 'multipleactiveplayer',
 		'args' => 'argReact',
@@ -148,15 +148,17 @@ $machinestates = [
 
 	ST_SELECT_CARD => [
 		'name' => 'selectCard',
-		'description' => clienttranslate('${actplayer} must select for the effect of ${src}'),
-		'descriptionmyturn' => clienttranslate('${you} must select for the effect of ${src}'),
+		'description' => clienttranslate('${actplayer} must select ${amountToPick} cards for the effect of ${src}'),
+		'descriptionmyturn' => clienttranslate('${you} must select ${amountToPick} cards for the effect of ${src}'),
+    'descriptionsingle' => clienttranslate('${actplayer} must select one card for the effect of ${src}'),
+		'descriptionsinglemyturn' => clienttranslate('${you} must select one card for the effect of ${src}'),
 		'type' => 'activeplayer',
 		'args' => 'argSelect',
 		'possibleactions' => ['select'],
 		'transitions' => [
 			'zombiePass' => ST_END_REACT,
 			'select' => ST_PREPARE_SELECTION,
-			//'play'	=> ST_PLAY_CARD, i think we don't need this anymore
+			'play'	=> ST_PLAY_CARD, // Needed for KitCarlson
 			'skip' => ST_NEXT_PLAYER,
 			'draw' => ST_DRAW_CARDS,
 		]

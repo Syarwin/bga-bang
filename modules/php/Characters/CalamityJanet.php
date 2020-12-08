@@ -11,7 +11,7 @@ class CalamityJanet extends Player {
     $this->character    = CALAMITY_JANET;
     $this->character_name = clienttranslate('Calamity Janet');
     $this->text  = [
-      clienttranslate("He can play BANG! cards as Missed! cards and vice versa. "),
+      clienttranslate("She can play BANG! cards as Missed! cards and vice versa."),
 
     ];
     $this->bullets = 4;
@@ -23,13 +23,15 @@ class CalamityJanet extends Player {
     $hand = Cards::getHand($this->id);
     foreach($hand as $card) {
       if($card->getType() == CARD_MISSED)
-        $res['cards'][] = ['id' => $card->getID(), 'options' => ['type' => OPTION_NONE]];
+        $res['cards'][] = ['id' => $card->getId(), 'options' => ['type' => OPTION_NONE]];
     }
     return $res;
   }
 
   public function getDefensiveOptions() {
-    return array_merge_recursive(parent::getDefensiveOptions(), parent::getBangCards());
+    $data = array_merge_recursive(parent::getDefensiveOptions(), parent::getBangCards());
+    $data['character'] = null;
+    return $data;
   }
 
   public function getHandOptions() {

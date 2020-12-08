@@ -27,12 +27,4 @@ class CardMissed extends BrownCard {
     $bang = new CardBang();
     return $bang->pass($player);
   }
-
-  public function getArgsMessage($args) {
-    $msg = parent::getArgsMessage($args);
-    if(isset($args['asBang'])) {
-      return ' as Bang!' . $msg;
-    }
-    return $msg;
-  }
 }

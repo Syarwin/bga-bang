@@ -4,6 +4,7 @@ use Bang\Game\Notifications;
 use Bang\Game\Log;
 use Bang\Game\Utils;
 use Bang\Cards\Cards;
+use bang;
 
 class Jourdonnais extends Player {
   public function __construct($row = null)

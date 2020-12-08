@@ -32,6 +32,9 @@ class Notifications {
     $cardArgMsg = $card->getArgsMessage($args);
     if(!is_null($cardArgMsg) && isset($cardArgMsg['name'])){
       $msg = clienttranslate('${player_name} plays ${card_name} and chooses ${player_name2} as target');
+      if(isset($args['asBang']))
+        $msg = clienttranslate('${player_name} plays ${card_name} as BANG! and chooses ${player_name2} as target');
+
       $data['player_name2'] = $cardArgMsg['name'];
     }
 

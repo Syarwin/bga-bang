@@ -35,7 +35,7 @@ class KitCarlson extends Player {
     Cards::putOnDeck($args['rest'][0]);
     Notifications::drawCards($this, Cards::getCards($args['selected']));
 
-    // todo notification
+    // TODO notification
     return "play";
   }
 
