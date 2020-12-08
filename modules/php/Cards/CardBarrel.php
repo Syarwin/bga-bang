@@ -21,6 +21,8 @@ class CardBarrel extends BlueCard {
     $this->effect = ['type' => DEFENSIVE ];
   }
 
+
+//  wasPlayed
   public function activate($player, $args = []) {
     Notifications::useCard($player, $this);
 
@@ -42,12 +44,11 @@ class CardBarrel extends BlueCard {
       // Against Slab the Killer, need to miss => update args
       Notifications::tell(clienttranslate('But ${player_name} needs another miss'), ['player_name' => $player->getName()]);
       $args['missedNeeded']--;
-      Log::addCardPlayed(Players::getCurrentTurn(true), Cards::getCurrentCard(), $args);
-
     } else {
       Notifications::tell(clienttranslate('Barrel failed'));
     }
 
+    Log::addCardPlayed(Players::getCurrentTurn(true), Cards::getCurrentCard(), $args);
     return "updateOptions";
   }
 }

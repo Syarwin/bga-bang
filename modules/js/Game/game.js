@@ -119,6 +119,7 @@ define(["dojo", "dojo/_base/declare","ebg/core/gamegui",], (dojo, declare) => {
       * setupNotifications
       */
      setupNotifications() {
+       console.log(this._notifications);
        this._notifications.forEach(notif => {
          var functionName = "notif_" + notif[0];
 
@@ -257,7 +258,7 @@ define(["dojo", "dojo/_base/declare","ebg/core/gamegui",], (dojo, declare) => {
     slideTemporary(template, data, container, sourceId, targetId, duration, delay) {
     	return new Promise((resolve, reject) => {
     		var animation = this.slideTemporaryObject(this.format_block(template, data), container, sourceId, targetId, duration, delay);
-    		setTimeout(function(){
+    		setTimeout(() => {
     			resolve();
     		}, duration + delay)
     	});

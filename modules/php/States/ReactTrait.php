@@ -39,8 +39,14 @@ trait ReactTrait
  		$newState = $player->react($ids) ?? "finishedReaction";
 
 		if($newState == "updateOptions"){
+      // TODO : the computation is not correct, it should handle more complex case
 			$args = Cards::getCurrentCard()->getReactionOptions($player);
       Notifications::updateOptions($player, $args);
+
+      $argReact = $this->argReact();
+      $argReact["_private"][$player->getId()] = $args;
+      $argReact["_private"][$player->getId()]['src'] =  Log::getCurrentCard();
+      Log::addAction("react", $argReact);
 		} else {
 	    if(Utils::getStateName() == 'multiReact') {
 	      $this->gamestate->setPlayerNonMultiactive(self::getCurrentPlayerId(), $newState);

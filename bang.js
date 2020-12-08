@@ -63,9 +63,6 @@ constructor: function () {
   this._selectedOptionArg = null;
   this._dial = null;
 
-  this._notifications.push(
-    ['updateOptions', 200]
-  );
   // States that need the player to be active to be entered
   this._activeStates = ["drawCard", "playCard", "react", "multiReact", "discardExcess"];
 },
@@ -187,8 +184,9 @@ makeCharacterAbilityUsable(option){
 },
 
 onClickUseAbility(){
+  debug("test");
   //let OPTIONS_NONE = 0, OPTION_CARDS = 3;
-  let SID_KETCHUM = 2, JOURDONNAIS = 4;
+  let SID_KETCHUM = 9, JOURDONNAIS = 13;
   this._selectedCards = [];
   if(this._useAbilityOption == JOURDONNAIS) {
     this.onClickConfirmUseAbility();
@@ -290,6 +288,7 @@ clearPossible: function () {
   this._selectableCards = [];
   this._selectablePlayers = [];
   this._selectedCard = null;
+  this._selectedCards = [];
   this._selectedPlayer = null;
   this._selectedOptionType = null;
   this._selectedOptionArg = null;
@@ -322,19 +321,6 @@ notif_debug:function(notif) {
 	debug(notif);
 },
 
-
-
-
-
-
-
-
-notif_updateOptions: function(n){
-  debug("Notif: update options", n);
-  this.gamedatas.gamestate.args['_private'] = n.args;
-	this.clearPossible();
-	this.makeCardSelectable(n.args.cards, "selectCard");
-},
 
 	});
 });

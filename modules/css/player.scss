@@ -125,6 +125,9 @@ div#board {
         flex-grow:1;
         display:flex;
         flex-flow:row;
+        overflow-x: auto;
+        overflow-y: hidden;
+        height: 107%;
       }
 
       .player-info {

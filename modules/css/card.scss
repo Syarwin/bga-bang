@@ -16,6 +16,7 @@ div.bang-card {
 	position:relative;
 	width:$cardW;
 	height:$cardH;
+  flex-shrink: 0;
 	margin:5px;
   transition: transform .5s ease-in-out;
   transform-origin: 50% 50%;

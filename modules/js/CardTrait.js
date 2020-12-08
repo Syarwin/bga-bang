@@ -2,10 +2,11 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
   return declare("bang.cardTrait", null, {
     constructor(){
       this._notifications.push(
-        ['cardPlayed', 2000],
+        ['cardPlayed', 1600],
         ['cardsGained', 1200],
         ['cardLost', 1200],
-        ['drawCard', 1000]
+        ['drawCard', 1000],
+        ['updateOptions', 200]
       );
     },
 
@@ -96,7 +97,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
       var playerId = n.args.playerId,
           target = n.args.target,
           targetPlayer = n.args.targetPlayer;
-      var animationDuration = 1500;
+      var animationDuration = 1600;
 
       if(!targetPlayer && target == "inPlay"){
         targetPlayer = playerId;
@@ -106,7 +107,6 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
         // Slide to player then to discard
         animationDuration = 1600;
       }
-      this.notifqueue.setSynchronousDuration(animationDuration);
 
 
       var card = this.getCard(n.args.card, true);
@@ -182,6 +182,18 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
       this.addCard(card, "discard");
       setTimeout(() => dojo.removeClass("bang-card-" + card.id, "flipped"), 100);
       //setTimeout(() => dojo.removeClass("bang-card-" + n.args.src_id, "selected"), 1000);
+    },
+
+
+    /*
+     * Update playing/reacting option after playing a card
+     */
+    notif_updateOptions(n){
+      debug("Notif: update options", n);
+      this.gamedatas.gamestate.args['_private'] = n.args;
+    	this.clearPossible();
+      var action = this.gamedatas.gamestate.name == "playCard"? "playCard" : "selectReact";
+    	this.makeCardSelectable(n.args.cards, action);
     },
 
 

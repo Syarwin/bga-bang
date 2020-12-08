@@ -13,6 +13,7 @@ div#board {
     grid-column-end:span 4;
     max-height:$cardH + 20px;
     min-height:$cardH + 20px;
+    max-width: 100%;
   }
 
   // TODO : add media query

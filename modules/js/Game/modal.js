@@ -217,7 +217,9 @@ define(["dojo", "dojo/_base/declare", "dojo/fx", "dojox/fx/ext-dojo/complex"], f
         let anim = dojo.fx.combine(animations);
         dojo.connect(anim, "onEnd", () => resolve() );
         anim.play();
-        dojo.style("popin_" + this.id + "_container", "display", "block");
+        setTimeout(() => {
+          dojo.style("popin_" + this.id + "_container", "display", "block");
+        }, 10);
       });
     },
 

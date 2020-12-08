@@ -215,7 +215,7 @@ class Player extends \APP_GameClass
 		$targets = Players::getLivingPlayers(null, true);
 
     Utils::filter($targets, function($player) use ($range){
-      return ($player->getDistanceTo($this) <= $range); // TODO : use isInRange => weird bug...
+      return $this->isInRange($player, $range); //($player->getDistanceTo($this) <= $range); // TODO : use isInRange => weird bug...
     });
 
     return array_map(function($target){ return $target->getId(); }, $targets);
@@ -354,7 +354,6 @@ class Player extends \APP_GameClass
    * react: whenever a player react by passing or playing a card
    */
 	public function react($ids) {
-
     $action = Log::getLastActions(["selection", "react"])[0];
     $args = json_decode($action['action_arg'], true);
     $src = $action['action'] == "react" ? $args['_private'][$this->id]['src'] : Cards::getCurrentCard();

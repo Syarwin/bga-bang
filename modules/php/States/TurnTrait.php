@@ -13,6 +13,12 @@ trait TurnTrait
    */
   public function stNextPlayer() {
     $pId = $this->activeNextPlayer();
+
+    if (Players::getPlayer($pId)->isEliminated()) {
+      $this->stNextPlayer();
+      return;
+    }
+
     self::giveExtraTime($pId);
     $this->gamestate->nextState('start');
   }

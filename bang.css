@@ -45,7 +45,8 @@ div#board {
     grid-row-end: span 2;
     grid-column-end: span 4;
     max-height: 190px;
-    min-height: 190px; }
+    min-height: 190px;
+    max-width: 100%; }
   div#board[data-players="3"] #table {
     grid-column-start: 5;
     grid-row-start: 4; }
@@ -485,7 +486,10 @@ div#board .bang-player .bang-player-container {
   div#board .bang-player .bang-player-container .player-inplay {
     flex-grow: 1;
     display: flex;
-    flex-flow: row; }
+    flex-flow: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    height: 107%; }
   div#board .bang-player .bang-player-container .player-info .player-name {
     text-align: center; }
   div#board .bang-player .bang-player-container .player-info .player-cards {
@@ -952,6 +956,7 @@ div.bang-card {
   position: relative;
   width: 106.25px;
   height: 170px;
+  flex-shrink: 0;
   margin: 5px;
   transition: transform .5s ease-in-out;
   transform-origin: 50% 50%;

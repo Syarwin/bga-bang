@@ -18,8 +18,8 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
 
       // Update message when only 1 card to picl
       if(args.amountToPick == 1){
-        this.gamedatas.gamestate.descriptionmyturn = args.descriptionsinglemyturn;
-        this.gamedatas.gamestate.description = args.descriptionsingle;
+        this.gamedatas.gamestate.descriptionmyturn = this.gamedatas.gamestate.descriptionsinglemyturn;
+        this.gamedatas.gamestate.description = this.gamedatas.gamestate.descriptionsingle;
         this.updatePageTitle();
       }
 
@@ -53,7 +53,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
     },
 
 
-    onClickCardSelectDialog: function(card){
+    onClickCardSelectDialog(card){
       if(!this.toggleCard(card))
         return;
 
