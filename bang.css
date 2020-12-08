@@ -375,7 +375,7 @@ div#board div.bang-character-tooltip div.bang-character-tooltip-sizing {
   align-items: center; }
   div#board div.bang-character-tooltip div.bang-character-tooltip-sizing div.player-info {
     transform: scale(2); }
-div#board .player-info {
+div#board .bang-player .player-info {
   position: relative;
   width: 113.266509434px;
   height: 180px;
@@ -384,7 +384,7 @@ div#board .player-info {
   border-left: 1px solid rgba(50, 50, 50, 0.8);
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px; }
-  div#board .player-info .player-character-name {
+  div#board .bang-player .player-info .player-character-name {
     font-family: "Perdido";
     width: 100%;
     max-height: 22px;
@@ -393,44 +393,58 @@ div#board .player-info {
     font-size: 15px;
     transform: scale(0.8, 1.3);
     transform-origin: top center; }
-  div#board .player-info .player-character-background {
+  div#board .bang-player .player-info .player-character-background {
     width: 90.2122641509px;
     height: 89.25px;
     margin: 5px auto;
     background-image: url("img/card_characters.jpg");
-    background-size: cover; }
-  div#board .player-info[data-character="0"] .player-character-background {
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center; }
+    div#board .bang-player .player-info .player-character-background .player-character-hourglass {
+      width: 50%;
+      height: 50%;
+      background-image: url("https://en.1.studio.boardgamearena.com:8083/data/themereleases/201204-0905/img/layout/active_player.gif");
+      background-size: 75%;
+      background-color: rgba(255, 255, 255, 0.7);
+      background-position: center center;
+      border-radius: 10px;
+      background-repeat: no-repeat; }
+  div#board .bang-player .player-info[data-character="0"] .player-character-background {
     background-position: 0% center; }
-  div#board .player-info[data-character="1"] .player-character-background {
+  div#board .bang-player .player-info[data-character="1"] .player-character-background {
     background-position: 6.6666666667% center; }
-  div#board .player-info[data-character="2"] .player-character-background {
+  div#board .bang-player .player-info[data-character="2"] .player-character-background {
     background-position: 13.3333333333% center; }
-  div#board .player-info[data-character="3"] .player-character-background {
+  div#board .bang-player .player-info[data-character="3"] .player-character-background {
     background-position: 20% center; }
-  div#board .player-info[data-character="4"] .player-character-background {
+  div#board .bang-player .player-info[data-character="4"] .player-character-background {
     background-position: 26.6666666667% center; }
-  div#board .player-info[data-character="5"] .player-character-background {
+  div#board .bang-player .player-info[data-character="5"] .player-character-background {
     background-position: 33.3333333333% center; }
-  div#board .player-info[data-character="6"] .player-character-background {
+  div#board .bang-player .player-info[data-character="6"] .player-character-background {
     background-position: 40% center; }
-  div#board .player-info[data-character="7"] .player-character-background {
+  div#board .bang-player .player-info[data-character="7"] .player-character-background {
     background-position: 46.6666666667% center; }
-  div#board .player-info[data-character="8"] .player-character-background {
+  div#board .bang-player .player-info[data-character="8"] .player-character-background {
     background-position: 53.3333333333% center; }
-  div#board .player-info[data-character="9"] .player-character-background {
+  div#board .bang-player .player-info[data-character="9"] .player-character-background {
     background-position: 60% center; }
-  div#board .player-info[data-character="10"] .player-character-background {
+  div#board .bang-player .player-info[data-character="10"] .player-character-background {
     background-position: 66.6666666667% center; }
-  div#board .player-info[data-character="11"] .player-character-background {
+  div#board .bang-player .player-info[data-character="11"] .player-character-background {
     background-position: 73.3333333333% center; }
-  div#board .player-info[data-character="12"] .player-character-background {
+  div#board .bang-player .player-info[data-character="12"] .player-character-background {
     background-position: 80% center; }
-  div#board .player-info[data-character="13"] .player-character-background {
+  div#board .bang-player .player-info[data-character="13"] .player-character-background {
     background-position: 86.6666666667% center; }
-  div#board .player-info[data-character="14"] .player-character-background {
+  div#board .bang-player .player-info[data-character="14"] .player-character-background {
     background-position: 93.3333333333% center; }
-  div#board .player-info[data-character="15"] .player-character-background {
+  div#board .bang-player .player-info[data-character="15"] .player-character-background {
     background-position: 100% center; }
+div#board .bang-player.inactive .player-character-background .player-character-hourglass {
+  display: none; }
 div#board .bang-player.inactive {
   opacity: 0.6; }
 div#board .bang-player.selectable {

@@ -27,6 +27,9 @@ define([
     g_gamethemeurl + "modules/js/Game/modal.js",
 
     g_gamethemeurl + "modules/js/States/PlayCardTrait.js",
+    g_gamethemeurl + "modules/js/States/ReactTrait.js",
+    g_gamethemeurl + "modules/js/States/SelectCardTrait.js",
+    g_gamethemeurl + "modules/js/States/DiscardEndOfTurnTrait.js",
 
     g_gamethemeurl + "modules/js/CardTrait.js",
     g_gamethemeurl + "modules/js/CardSelectorTrait.js",
@@ -36,6 +39,9 @@ define([
   return declare("bgagame.bang", [
     customgame.game,
     bang.playCardTrait,
+    bang.reactTrait,
+    bang.selectCardTrait,
+    bang.discardEndOfTurnTrait,
     bang.cardTrait,
     bang.cardSelectorTrait,
     bang.playerSelectorTrait,
@@ -57,9 +63,6 @@ constructor: function () {
 
   this._notifications.push(
     ['debug',500],
-    ['cardLost', 1000],
-    ['cardsGained', 1200],
-    ['drawCard', 1000],
     ['updateHP', 200],
     ['updateHand', 200],
     ['updateOptions', 200],
@@ -239,129 +242,6 @@ onUpdateActionButtons: function (stateName, args) {
 
 
 
-
-/************
-*** REACT ***
-************/
-
-/*
- * React state : active player can play cards from his hand in reaction
- */
-onEnteringStateReact: function(args){
-  this._amount = null;
-  this._selectedCards = [];
-  this.makeCardSelectable(args._private.cards, "selectReact");
-  this.gamedatas.gamestate.descriptionmyturn = args.msgActive;
-  this.gamedatas.gamestate.description = args.msgInactive;
-  this.updatePageTitle();
-},
-onEnteringStateMultiReact: function(args){
-  this.onEnteringStateReact(args);
-  this.gamedatas.gamestate.descriptionmyturn = args.msgActive;
-  this.gamedatas.gamestate.description = args.msgInactive;
-  this.updatePageTitle();
-},
-
-
-onClickCardSelectReact: function(card){
-  // React with single card
-  if(card.amount == 1 && this._amount == null){
-    this._selectedCards = [card.id];
-    this.onClickConfirmReact();
-  }
-  // React with several cards
-  else {
-    if(this._amount == null)
-      this._amount = card.amount;
-
-    // Toggle the card
-    if(!this.toggleCard(card)) return;
-
-    if(this._selectedCards.length < this._amount){
-      if(this._selectedCards.length == 0)
-        this._amount = null;
-      this.removeActionButtons();
-      this.onUpdateActionButtons(this.gamedatas.gamestate.name, this.gamedatas.gamestate.args);
-    } else {
-      this.addActionButton('buttonConfirmReact', _('Confirm react'), 'onClickConfirmReact', null, false, 'blue');
-    }
-  }
-},
-
-
-onClickConfirmReact: function(){
-  this.takeAction("react", {
-    cards:this._selectedCards.join(";"),
-  });
-},
-
-
-
-onClickPass: function(){
-  this.checkAction('pass');
-  this.takeAction("pass");
-},
-
-
-
-
-
-
-/********************
-**** Select Card ****
-********************/
-onEnteringStateSelectCard(args){
-  debug("Selecting cards", args);
-  this.gamedatas.gamestate.args.cards = args.cards.length > 0? args.cards : (args._private? args._private.cards : this.getNBackCards(args.amount) );
-  this.dialogSelectCard();
-},
-
-
-
-dialogSelectCard(){
-  var args = this.gamedatas.gamestate.args;
-  this._dial = new customgame.modal("selectCard", {
-     autoShow:true,
-     title:_("Pool of cards"),
-     class:"bang_popin",
-     closeIcon:'fa-times',
-     openAnimation:true,
-     openAnimationTarget:"buttonShowCards",
-     contentsTpl:jstpl_dialog,
-   });
-  args.cards.forEach(card => this.addCard(card, 'dialog-card-container') );
-  $('dialog-title-container').innerHTML = $('pagemaintitletext').innerHTML;
-  
-  if(!this.isCurrentPlayerActive())
-    return;
-
-  this._amount = args.amountToPick;
-  this.makeCardSelectable(args.cards, "selectDialog");
-},
-
-
-onClickCardSelectDialog: function(card){
-  if(!this.toggleCard(card))
-    return;
-
-  dojo.empty("dialog-button-container");
-  if(this._selectedCards.length == this._amount)
-    this.addActionButton('buttonConfirmSelectCard', _('Confirm selection'), 'onClickConfirmSelection', 'dialog-button-container', false, 'blue');
-},
-
-onClickConfirmSelection: function(){
-  if(this._dial != null)
-    this._dial.destroy();
-  this.takeAction("select", {
-    cards:this._selectedCards.join(";"),
-  });
-},
-
-
-
-
-
-
 /******************
 *** Use ability ***
 ******************/
@@ -459,42 +339,6 @@ onClickDraw: function(arg) {
 
 
 
-////////////////////////////////
-////////////////////////////////
-///		End of turn / discard	 ///
-////////////////////////////////
-////////////////////////////////
-onClickEndOfTurn: function(){
-  this.takeAction("endTurn");
-},
-
-onClickCancelEndTurn: function(){
-  this.takeAction("cancelEndTurn");
-},
-
-onEnteringStateDiscardExcess: function(args){
-  debug("Discard excess", args);
-  this._amount = args.amount;
-  this._selectedCards = [];
-  this.makeCardSelectable(args._private, "discardExcess");
-},
-
-onClickCardDiscardExcess: function(card){
-  if(!this.toggleCard(card)) return;
-
-  if(this._selectedCards.length < this._amount){
-    this.removeActionButtons();
-    this.onUpdateActionButtons(this.gamedatas.gamestate.name, this.gamedatas.gamestate.args);
-  } else {
-    this.addActionButton('buttonConfirmDiscardExcess', _('Confirm discard'), 'onClickConfirmDiscardExcess', null, false, 'blue');
-  }
-},
-
-onClickConfirmDiscardExcess: function(){
-  this.takeAction("discardExcess", {
-    cards:this._selectedCards.join(";"),
-  });
-},
 
 
 ////////////////////////////////

@@ -1,7 +1,12 @@
 define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
   return declare("bang.cardTrait", null, {
     constructor(){
-      this._notifications.push(['cardPlayed', 1500]);
+      this._notifications.push(
+        ['cardPlayed', 2000],
+        ['cardsGained', 1200],
+        ['cardLost', 1000],
+        ['drawCard', 1000]
+      );
     },
 
 
@@ -124,7 +129,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
     /*
     * notification sent to all players when someone gained a card (from deck or from someone else hand/inplay)
     */
-    notif_cardsGained: function(n) {
+    notif_cardsGained(n) {
       if(this._dial != null)
         this._dial.destroy();
 
@@ -133,12 +138,14 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
       cards.forEach((card, i) => {
         let sourceId = (n.args.src == "deck")? "deck" : this.getCardAndDestroy(card, "player-character-" + n.args.victimId);
         let targetId = n.args.target == "hand"? (this.player_id == n.args.playerId ? "hand" : ("player-character-" + n.args.playerId)) : ("player-inplay-" + n.args.playerId);
+
         this.slideTemporary("jstpl_card", card, "board", sourceId, targetId, 800, 120*i).then(() => {
           if(targetId == "hand") this.addCard(card, 'hand-cards');
           if(n.args.target == "inPlay") this.addCard(card, targetId);
         });
       });
 
+      // Update hand counters
       this.incHandCount(n.args.playerId, n.args.amount);
       if(n.args.src == "deck")
         $("deck").innerHTML = parseInt($("deck").innerHTML) - n.args.amount;
@@ -149,14 +156,18 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
     /*
     * notification sent to all players when someone discard a card
     */
-    notif_cardLost: function(n) {
+    notif_cardLost(n) {
       debug("Notif: card lost", n);
       var sourceId = this.getCardAndDestroy(n.args.card, "player-character-" + n.args.playerId);
       this.slideTemporaryToDiscard(n.args.card, sourceId);
     },
 
 
-    notif_drawCard: function(n){
+
+    /*
+    * Flip card
+    */
+    notif_drawCard(n){
       debug("Notif: card drawn", n);
       var card = n.args.card;
       card.flipped = true;
