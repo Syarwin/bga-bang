@@ -23,6 +23,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
         }
       });
       dojo.attr("bang-player-" + n.args.playerId, "data-bullets", n.args.hp);
+      dojo.attr("bang-player-board-" + n.args.playerId, "data-bullets", n.args.hp);
     },
 
 
@@ -154,6 +155,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
       var currentHandCount = parseInt(dojo.attr("bang-player-" + playerId, "data-hand")),
           newHandCount = currentHandCount + parseInt(amount);
       dojo.attr("bang-player-" + playerId, "data-hand", newHandCount);
+      dojo.attr("bang-player-board-" + playerId, "data-hand", newHandCount);
     },
   });
 });

@@ -18,15 +18,11 @@ class KitCarlson extends Player {
     parent::__construct($row);
   }
 
-  public function drawCards($amount) {
-    if(Utils::getStateName() == 'drawCards') {
-      $id = $this->id;
-      Cards::createSelection(3, $id);
-      Log::addAction("selection", ['players' => [$id, $id], 'src' => $this->character_name]);
-      return 'selection';
-    } else {
-      return parent::drawCards($amount);
-    }
+  public function statePhaseOne() {
+    $id = $this->id;
+    Cards::createSelection(3, $id);
+    Log::addAction("selection", ['players' => [$id, $id], 'src' => $this->character_name]);
+    return 'selection';
   }
 
   public function useAbility($args) {

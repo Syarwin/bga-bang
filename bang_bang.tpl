@@ -22,6 +22,22 @@ var jstpl_table = `<div id="table">
 </div>
 `;
 
+var jstpl_player_board_data = `<div class='bang-player-board' id="bang-player-board-\${id}" data-max-bullets="\${bullets}" data-bullets="\${hp}" data-hand="\${handCount}">
+  <ul class='player-bullets'>
+    <li class='bullet'></li>
+    <li class='bullet'></li>
+    <li class='bullet'></li>
+    <li class='bullet'></li>
+    <li class='bullet'></li>
+    <li class='bullet'></li>
+  </ul>
+  <div class='player-cards'>
+    <span class="player-hand-card"></span>
+    <span class='player-handcount'></span>/<span class="player-maxhand"></span>
+  </div>
+
+</div>`;
+
 var jstpl_player_board_role = `<div class='player-role' id="player-role-\${id}" data-role='\${role}'></div>`;
 
 var jstpl_player = `<div class='bang-player' id='bang-player-\${id}' data-role="\${role}" data-no="\${no}" data-max-bullets="\${bullets}" data-bullets="\${hp}" data-hand="\${handCount}">
@@ -63,7 +79,7 @@ var jstpl_characterTooltip = `<div class="bang-character-tooltip">
 </div>`;
 
 
-var jstpl_card = `<div class="bang-card \${flipped}" id="bang-card-\${id}" data-id="\${id}" data-type="\${type}">
+var jstpl_card = `<div class="bang-card \${flipped}" id="bang-card-\${uid}" data-id="\${id}" data-type="\${type}">
 	<div class="card-back"></div>
 	<div class="card-front">
 		<div class="card-name">\${name}</div>

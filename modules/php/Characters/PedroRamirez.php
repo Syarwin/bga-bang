@@ -18,13 +18,9 @@ class PedroRamirez extends Player {
     parent::__construct($row);
   }
 
-  public function drawCards($amount) {
-    if(Utils::getStateName() == 'drawCards') {
-      Log::addAction("draw", ['deck', 'discard']);
-      return 'draw';
-    } else {
-      return parent::drawCards($amount);
-    }
+  public function statePhaseOne() {
+    Log::addAction("draw", ['deck', 'discard']);
+    return 'activeDraw';
   }
 
   public function useAbility($args) {

@@ -21,7 +21,9 @@ class LuckyDuke extends Player {
     $this->selectedCard = null;
   }
 
-  public function draw($args, $src) {
+  public function flip($args, $src) {
+    if(!is_null($this->selectedCard)) return $this->selectedCard;
+
     if(isset($args['pattern'])) {
       $cards = [Cards::draw(), Cards::draw()];
       Notifications::drawCard($this, $cards[0], $src);
@@ -30,7 +32,6 @@ class LuckyDuke extends Player {
         return $cards[0];
       return $cards[1];
     }
-    if(!is_null($this->selectedCard)) return $this->selectedCard;
     $cards = Cards::toObjects(Cards::createSelection(2));
     Notifications::drawCard($this, $cards[0], $src);
     Notifications::drawCard($this, $cards[1], $src);
@@ -39,11 +40,11 @@ class LuckyDuke extends Player {
   }
 
   public function useAbility($args) {
-    var_dump($args);
     $this->selectedCard = Cards::getCard($args['selected'][0]);
 
     $this->discardCard(Cards::getCard($args['rest'][0]));
-    Notifications::tell('${player_name} chooses ${card_name}', [
+    Notifications::tell(clienttranslate('${player_name} chooses ${card_name}'), [
+      'i18n' => ['card_name'],
       'player_name' => $this->name,
       'card_name' => $this->selectedCard->getNameAndValue()
     ]);

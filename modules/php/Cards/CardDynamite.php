@@ -22,11 +22,11 @@ class CardDynamite extends BlueCard {
   }
 
   /*
-   * When activated at the start of turn, draw a card and resolve effect
+   * When activated at the start of turn, flip a card and resolve effect
    */
   public function activate($player, $args = []) {
     Log::addCardPlayed($player, $this, []);
-    $mixed = $player->draw($args, $this);
+    $mixed = $player->flip($args, $this);
 
     if($mixed instanceof Card) {
       // Beween 2 & 10 of spades ? => kaboom
@@ -46,7 +46,7 @@ class CardDynamite extends BlueCard {
         $next = Players::getNextPlayer($player);
         Cards::moveCard($this->id, 'inPlay', $next->getId());
         Notifications::moveCard($this, $player, $next);
-        return null;
+        return 'draw'; // Required to work with Lucky Duke
       }
     }
 

@@ -5,7 +5,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
         ['cardPlayed', 1600],
         ['cardsGained', 1200],
         ['cardLost', 1200],
-        ['drawCard', 1000],
+        ['flipCard', 1000],
         ['updateOptions', 200]
       );
     },
@@ -13,6 +13,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
 
     slideTemporaryToDiscard(card, sourceId, duration){
       var ocard = this.getCard(card, true);
+      ocard.uid = ocard.id + "discard";
       this.slideTemporary('jstpl_card', ocard, "board", sourceId, "discard", duration || 1000, 0)
       .then(() => this.addCard(card, "discard"));
     },
@@ -79,8 +80,9 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
     /*
      * Create and add a new card to a container
      */
-    addCard(ocard, container){
+    addCard(ocard, container, suffix = ''){
       var card = this.getCard(ocard);
+      card.uid = card.id + suffix;
 
       var div = dojo.place(this.format_block('jstpl_card', card), container);
       if(card.flipped == "")
@@ -110,6 +112,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
 
 
       var card = this.getCard(n.args.card, true);
+      card.uid = card.id + "slide";
       var sourceId = this.getCardAndDestroy(n.args.card, "player-character-" + playerId);
       if(targetPlayer){
         var duration = target == "inPlay"? animationDuration: (animationDuration/2);
@@ -143,6 +146,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
       debug("Notif: cards gained", n);
       var cards = n.args.cards.length > 0? n.args.cards.map(o => this.getCard(o)) : this.getNBackCards(n.args.amount);
       cards.forEach((card, i) => {
+        card.uid = card.id + "slide";
         let sourceId = (n.args.src == "deck")? "deck" : this.getCardAndDestroy(card, "player-character-" + n.args.victimId);
         let targetId = n.args.target == "hand"? (this.player_id == n.args.playerId ? "hand" : ("player-character-" + n.args.playerId)) : ("player-inplay-" + n.args.playerId);
 
@@ -174,8 +178,8 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
     /*
     * Flip card
     */
-    notif_drawCard(n){
-      debug("Notif: card drawn", n);
+    notif_flipCard(n){
+      debug("Notif: card flipped", n);
       var card = n.args.card;
       card.flipped = true;
       //dojo.addClass("bang-card-" + n.args.src_id, "selected");

@@ -446,14 +446,15 @@ div#board .bang-player .player-info {
     background-position: 100% center; }
 div#board .bang-player.inactive .player-character-background .player-character-hourglass {
   display: none; }
-div#board .bang-player.inactive {
+
+.bang-player.inactive {
   opacity: 0.6; }
-div#board .bang-player.selectable {
+.bang-player.selectable {
   opacity: 1; }
-  div#board .bang-player.selectable .player-info {
+  .bang-player.selectable .player-info {
     cursor: pointer;
     animation: borderBlink 0.9s infinite; }
-    div#board .bang-player.selectable .player-info:hover {
+    .bang-player.selectable .player-info:hover {
       animation: none;
       border: 1px solid red; }
 @keyframes borderBlink {
@@ -467,14 +468,14 @@ div#board .bang-player.selectable {
     border: 1px dashed black; }
   100% {
     border: 1px dashed white; } }
-div#board .bang-player.eliminated .bang-player-container {
+.bang-player.eliminated .bang-player-container {
   width: 113.266509434px; }
-  div#board .bang-player.eliminated .bang-player-container .player-character-background {
+  .bang-player.eliminated .bang-player-container .player-character-background {
     background-image: url("img/tombstone.svg");
     background-size: 80%;
     background-position: center center;
     background-repeat: no-repeat; }
-div#board .bang-player .bang-player-container {
+.bang-player .bang-player-container {
   width: 96%;
   height: 180px;
   background-color: rgba(255, 255, 255, 0.5);
@@ -483,43 +484,21 @@ div#board .bang-player .bang-player-container {
   box-shadow: 1px 1px 5px rgba(50, 50, 50, 0.8);
   display: flex;
   transition: width 1s; }
-  div#board .bang-player .bang-player-container .player-inplay {
+  .bang-player .bang-player-container .player-inplay {
     flex-grow: 1;
     display: flex;
     flex-flow: row;
     overflow-x: auto;
     overflow-y: hidden;
     height: 107%; }
-  div#board .bang-player .bang-player-container .player-info .player-name {
+  .bang-player .bang-player-container .player-info .player-name {
     text-align: center; }
-  div#board .bang-player .bang-player-container .player-info .player-cards {
-    text-align: center; }
-    div#board .bang-player .bang-player-container .player-info .player-cards .player-hand-card {
-      display: inline-block;
-      width: 22px;
-      height: 22px;
-      background-image: url("img/cards.svg");
-      background-size: contain;
-      background-repeat: no-repeat;
-      vertical-align: bottom; }
-  div#board .bang-player .bang-player-container .player-info .player-bullets {
+  .bang-player .bang-player-container .player-info .player-bullets {
     position: absolute;
     width: 30px;
     right: -8px;
     top: 40px; }
-    div#board .bang-player .bang-player-container .player-info .player-bullets .bullet {
-      width: 35px;
-      height: 13px;
-      background-image: url("img/bullet.png");
-      background-size: cover;
-      margin: 1px 0px;
-      transform: rotate(13deg);
-      background-position: 0% 100%; }
-      div#board .bang-player .bang-player-container .player-info .player-bullets .bullet.pulse {
-        animation-duration: 1.8s;
-        animation-name: pulsate;
-        animation-iteration-count: 3; }
-  div#board .bang-player .bang-player-container .player-info .player-star {
+  .bang-player .bang-player-container .player-info .player-star {
     display: none;
     position: absolute;
     top: -17px;
@@ -528,419 +507,442 @@ div#board .bang-player .bang-player-container {
     height: 34px;
     background-image: url("img/sheriff.svg");
     background-size: cover; }
-div#board .bang-player[data-role="0"] .bang-player-container .player-info .player-star {
+.bang-player[data-role="0"] .bang-player-container .player-info .player-star {
   display: block; }
-div#board .bang-player[data-max-bullets="1"] .bang-player-container .player-info .player-bullets .bullet:nth-child(2) {
+
+.bang-player .player-cards, .bang-player-board .player-cards {
+  text-align: center; }
+  .bang-player .player-cards .player-hand-card, .bang-player-board .player-cards .player-hand-card {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    background-image: url("img/cards.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    vertical-align: bottom; }
+.bang-player .bullet, .bang-player-board .bullet {
+  width: 35px;
+  height: 13px;
+  background-image: url("img/bullet.png");
+  background-size: cover;
+  margin: 1px 0px;
+  transform: rotate(13deg);
+  background-position: 0% 100%; }
+  .bang-player .bullet.pulse, .bang-player-board .bullet.pulse {
+    animation-duration: 1.8s;
+    animation-name: pulsate;
+    animation-iteration-count: 3; }
+.bang-player[data-max-bullets="1"] .player-bullets .bullet:nth-child(2), .bang-player-board[data-max-bullets="1"] .player-bullets .bullet:nth-child(2) {
   display: none; }
-div#board .bang-player[data-max-bullets="1"] .bang-player-container .player-info .player-bullets .bullet:nth-child(3) {
+.bang-player[data-max-bullets="1"] .player-bullets .bullet:nth-child(3), .bang-player-board[data-max-bullets="1"] .player-bullets .bullet:nth-child(3) {
   display: none; }
-div#board .bang-player[data-max-bullets="1"] .bang-player-container .player-info .player-bullets .bullet:nth-child(4) {
+.bang-player[data-max-bullets="1"] .player-bullets .bullet:nth-child(4), .bang-player-board[data-max-bullets="1"] .player-bullets .bullet:nth-child(4) {
   display: none; }
-div#board .bang-player[data-max-bullets="1"] .bang-player-container .player-info .player-bullets .bullet:nth-child(5) {
+.bang-player[data-max-bullets="1"] .player-bullets .bullet:nth-child(5), .bang-player-board[data-max-bullets="1"] .player-bullets .bullet:nth-child(5) {
   display: none; }
-div#board .bang-player[data-max-bullets="1"] .bang-player-container .player-info .player-bullets .bullet:nth-child(6) {
+.bang-player[data-max-bullets="1"] .player-bullets .bullet:nth-child(6), .bang-player-board[data-max-bullets="1"] .player-bullets .bullet:nth-child(6) {
   display: none; }
-div#board .bang-player[data-max-bullets="2"] .bang-player-container .player-info .player-bullets .bullet:nth-child(3) {
+.bang-player[data-max-bullets="2"] .player-bullets .bullet:nth-child(3), .bang-player-board[data-max-bullets="2"] .player-bullets .bullet:nth-child(3) {
   display: none; }
-div#board .bang-player[data-max-bullets="2"] .bang-player-container .player-info .player-bullets .bullet:nth-child(4) {
+.bang-player[data-max-bullets="2"] .player-bullets .bullet:nth-child(4), .bang-player-board[data-max-bullets="2"] .player-bullets .bullet:nth-child(4) {
   display: none; }
-div#board .bang-player[data-max-bullets="2"] .bang-player-container .player-info .player-bullets .bullet:nth-child(5) {
+.bang-player[data-max-bullets="2"] .player-bullets .bullet:nth-child(5), .bang-player-board[data-max-bullets="2"] .player-bullets .bullet:nth-child(5) {
   display: none; }
-div#board .bang-player[data-max-bullets="2"] .bang-player-container .player-info .player-bullets .bullet:nth-child(6) {
+.bang-player[data-max-bullets="2"] .player-bullets .bullet:nth-child(6), .bang-player-board[data-max-bullets="2"] .player-bullets .bullet:nth-child(6) {
   display: none; }
-div#board .bang-player[data-max-bullets="3"] .bang-player-container .player-info .player-bullets .bullet:nth-child(4) {
+.bang-player[data-max-bullets="3"] .player-bullets .bullet:nth-child(4), .bang-player-board[data-max-bullets="3"] .player-bullets .bullet:nth-child(4) {
   display: none; }
-div#board .bang-player[data-max-bullets="3"] .bang-player-container .player-info .player-bullets .bullet:nth-child(5) {
+.bang-player[data-max-bullets="3"] .player-bullets .bullet:nth-child(5), .bang-player-board[data-max-bullets="3"] .player-bullets .bullet:nth-child(5) {
   display: none; }
-div#board .bang-player[data-max-bullets="3"] .bang-player-container .player-info .player-bullets .bullet:nth-child(6) {
+.bang-player[data-max-bullets="3"] .player-bullets .bullet:nth-child(6), .bang-player-board[data-max-bullets="3"] .player-bullets .bullet:nth-child(6) {
   display: none; }
-div#board .bang-player[data-max-bullets="4"] .bang-player-container .player-info .player-bullets .bullet:nth-child(5) {
+.bang-player[data-max-bullets="4"] .player-bullets .bullet:nth-child(5), .bang-player-board[data-max-bullets="4"] .player-bullets .bullet:nth-child(5) {
   display: none; }
-div#board .bang-player[data-max-bullets="4"] .bang-player-container .player-info .player-bullets .bullet:nth-child(6) {
+.bang-player[data-max-bullets="4"] .player-bullets .bullet:nth-child(6), .bang-player-board[data-max-bullets="4"] .player-bullets .bullet:nth-child(6) {
   display: none; }
-div#board .bang-player[data-max-bullets="5"] .bang-player-container .player-info .player-bullets .bullet:nth-child(6) {
+.bang-player[data-max-bullets="5"] .player-bullets .bullet:nth-child(6), .bang-player-board[data-max-bullets="5"] .player-bullets .bullet:nth-child(6) {
   display: none; }
-div#board .bang-player[data-max-bullets="6"] .bang-player-container .player-info .player-bullets .bullet:nth-child(7) {
+.bang-player[data-max-bullets="6"] .player-bullets .bullet:nth-child(7), .bang-player-board[data-max-bullets="6"] .player-bullets .bullet:nth-child(7) {
   display: none; }
-div#board .bang-player[data-max-bullets="6"] .bang-player-container .player-info .player-bullets .bullet:nth-child(6) {
+.bang-player[data-max-bullets="6"] .player-bullets .bullet:nth-child(6), .bang-player-board[data-max-bullets="6"] .player-bullets .bullet:nth-child(6) {
   display: none; }
-div#board .bang-player[data-bullets="0"] .bang-player-container .player-info .player-bullets .bullet:nth-child(0) {
+.bang-player[data-bullets="0"] .bullet:nth-child(0), .bang-player-board[data-bullets="0"] .bullet:nth-child(0) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="1"] .bang-player-container .player-info .player-bullets .bullet:nth-child(0) {
+.bang-player[data-bullets="1"] .bullet:nth-child(0), .bang-player-board[data-bullets="1"] .bullet:nth-child(0) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="1"] .bang-player-container .player-info .player-bullets .bullet:nth-child(1) {
+.bang-player[data-bullets="1"] .bullet:nth-child(1), .bang-player-board[data-bullets="1"] .bullet:nth-child(1) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="2"] .bang-player-container .player-info .player-bullets .bullet:nth-child(0) {
+.bang-player[data-bullets="2"] .bullet:nth-child(0), .bang-player-board[data-bullets="2"] .bullet:nth-child(0) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="2"] .bang-player-container .player-info .player-bullets .bullet:nth-child(1) {
+.bang-player[data-bullets="2"] .bullet:nth-child(1), .bang-player-board[data-bullets="2"] .bullet:nth-child(1) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="2"] .bang-player-container .player-info .player-bullets .bullet:nth-child(2) {
+.bang-player[data-bullets="2"] .bullet:nth-child(2), .bang-player-board[data-bullets="2"] .bullet:nth-child(2) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="3"] .bang-player-container .player-info .player-bullets .bullet:nth-child(0) {
+.bang-player[data-bullets="3"] .bullet:nth-child(0), .bang-player-board[data-bullets="3"] .bullet:nth-child(0) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="3"] .bang-player-container .player-info .player-bullets .bullet:nth-child(1) {
+.bang-player[data-bullets="3"] .bullet:nth-child(1), .bang-player-board[data-bullets="3"] .bullet:nth-child(1) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="3"] .bang-player-container .player-info .player-bullets .bullet:nth-child(2) {
+.bang-player[data-bullets="3"] .bullet:nth-child(2), .bang-player-board[data-bullets="3"] .bullet:nth-child(2) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="3"] .bang-player-container .player-info .player-bullets .bullet:nth-child(3) {
+.bang-player[data-bullets="3"] .bullet:nth-child(3), .bang-player-board[data-bullets="3"] .bullet:nth-child(3) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="4"] .bang-player-container .player-info .player-bullets .bullet:nth-child(0) {
+.bang-player[data-bullets="4"] .bullet:nth-child(0), .bang-player-board[data-bullets="4"] .bullet:nth-child(0) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="4"] .bang-player-container .player-info .player-bullets .bullet:nth-child(1) {
+.bang-player[data-bullets="4"] .bullet:nth-child(1), .bang-player-board[data-bullets="4"] .bullet:nth-child(1) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="4"] .bang-player-container .player-info .player-bullets .bullet:nth-child(2) {
+.bang-player[data-bullets="4"] .bullet:nth-child(2), .bang-player-board[data-bullets="4"] .bullet:nth-child(2) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="4"] .bang-player-container .player-info .player-bullets .bullet:nth-child(3) {
+.bang-player[data-bullets="4"] .bullet:nth-child(3), .bang-player-board[data-bullets="4"] .bullet:nth-child(3) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="4"] .bang-player-container .player-info .player-bullets .bullet:nth-child(4) {
+.bang-player[data-bullets="4"] .bullet:nth-child(4), .bang-player-board[data-bullets="4"] .bullet:nth-child(4) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="5"] .bang-player-container .player-info .player-bullets .bullet:nth-child(0) {
+.bang-player[data-bullets="5"] .bullet:nth-child(0), .bang-player-board[data-bullets="5"] .bullet:nth-child(0) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="5"] .bang-player-container .player-info .player-bullets .bullet:nth-child(1) {
+.bang-player[data-bullets="5"] .bullet:nth-child(1), .bang-player-board[data-bullets="5"] .bullet:nth-child(1) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="5"] .bang-player-container .player-info .player-bullets .bullet:nth-child(2) {
+.bang-player[data-bullets="5"] .bullet:nth-child(2), .bang-player-board[data-bullets="5"] .bullet:nth-child(2) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="5"] .bang-player-container .player-info .player-bullets .bullet:nth-child(3) {
+.bang-player[data-bullets="5"] .bullet:nth-child(3), .bang-player-board[data-bullets="5"] .bullet:nth-child(3) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="5"] .bang-player-container .player-info .player-bullets .bullet:nth-child(4) {
+.bang-player[data-bullets="5"] .bullet:nth-child(4), .bang-player-board[data-bullets="5"] .bullet:nth-child(4) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="5"] .bang-player-container .player-info .player-bullets .bullet:nth-child(5) {
+.bang-player[data-bullets="5"] .bullet:nth-child(5), .bang-player-board[data-bullets="5"] .bullet:nth-child(5) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="6"] .bang-player-container .player-info .player-bullets .bullet:nth-child(0) {
+.bang-player[data-bullets="6"] .bullet:nth-child(0), .bang-player-board[data-bullets="6"] .bullet:nth-child(0) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="6"] .bang-player-container .player-info .player-bullets .bullet:nth-child(1) {
+.bang-player[data-bullets="6"] .bullet:nth-child(1), .bang-player-board[data-bullets="6"] .bullet:nth-child(1) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="6"] .bang-player-container .player-info .player-bullets .bullet:nth-child(2) {
+.bang-player[data-bullets="6"] .bullet:nth-child(2), .bang-player-board[data-bullets="6"] .bullet:nth-child(2) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="6"] .bang-player-container .player-info .player-bullets .bullet:nth-child(3) {
+.bang-player[data-bullets="6"] .bullet:nth-child(3), .bang-player-board[data-bullets="6"] .bullet:nth-child(3) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="6"] .bang-player-container .player-info .player-bullets .bullet:nth-child(4) {
+.bang-player[data-bullets="6"] .bullet:nth-child(4), .bang-player-board[data-bullets="6"] .bullet:nth-child(4) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="6"] .bang-player-container .player-info .player-bullets .bullet:nth-child(5) {
+.bang-player[data-bullets="6"] .bullet:nth-child(5), .bang-player-board[data-bullets="6"] .bullet:nth-child(5) {
   background-position: 0 0; }
-div#board .bang-player[data-bullets="6"] .bang-player-container .player-info .player-bullets .bullet:nth-child(6) {
+.bang-player[data-bullets="6"] .bullet:nth-child(6), .bang-player-board[data-bullets="6"] .bullet:nth-child(6) {
   background-position: 0 0; }
-div#board .bang-player[data-hand="0"] .player-cards .player-handcount::before {
+.bang-player[data-hand="0"] .player-cards .player-handcount::before, .bang-player-board[data-hand="0"] .player-cards .player-handcount::before {
   content: "0"; }
-div#board .bang-player[data-hand="1"] .player-cards .player-handcount::before {
+.bang-player[data-hand="1"] .player-cards .player-handcount::before, .bang-player-board[data-hand="1"] .player-cards .player-handcount::before {
   content: "1"; }
-div#board .bang-player[data-hand="2"] .player-cards .player-handcount::before {
+.bang-player[data-hand="2"] .player-cards .player-handcount::before, .bang-player-board[data-hand="2"] .player-cards .player-handcount::before {
   content: "2"; }
-div#board .bang-player[data-hand="3"] .player-cards .player-handcount::before {
+.bang-player[data-hand="3"] .player-cards .player-handcount::before, .bang-player-board[data-hand="3"] .player-cards .player-handcount::before {
   content: "3"; }
-div#board .bang-player[data-hand="4"] .player-cards .player-handcount::before {
+.bang-player[data-hand="4"] .player-cards .player-handcount::before, .bang-player-board[data-hand="4"] .player-cards .player-handcount::before {
   content: "4"; }
-div#board .bang-player[data-hand="5"] .player-cards .player-handcount::before {
+.bang-player[data-hand="5"] .player-cards .player-handcount::before, .bang-player-board[data-hand="5"] .player-cards .player-handcount::before {
   content: "5"; }
-div#board .bang-player[data-hand="6"] .player-cards .player-handcount::before {
+.bang-player[data-hand="6"] .player-cards .player-handcount::before, .bang-player-board[data-hand="6"] .player-cards .player-handcount::before {
   content: "6"; }
-div#board .bang-player[data-hand="7"] .player-cards .player-handcount::before {
+.bang-player[data-hand="7"] .player-cards .player-handcount::before, .bang-player-board[data-hand="7"] .player-cards .player-handcount::before {
   content: "7"; }
-div#board .bang-player[data-hand="8"] .player-cards .player-handcount::before {
+.bang-player[data-hand="8"] .player-cards .player-handcount::before, .bang-player-board[data-hand="8"] .player-cards .player-handcount::before {
   content: "8"; }
-div#board .bang-player[data-hand="9"] .player-cards .player-handcount::before {
+.bang-player[data-hand="9"] .player-cards .player-handcount::before, .bang-player-board[data-hand="9"] .player-cards .player-handcount::before {
   content: "9"; }
-div#board .bang-player[data-hand="10"] .player-cards .player-handcount::before {
+.bang-player[data-hand="10"] .player-cards .player-handcount::before, .bang-player-board[data-hand="10"] .player-cards .player-handcount::before {
   content: "10"; }
-div#board .bang-player[data-hand="11"] .player-cards .player-handcount::before {
+.bang-player[data-hand="11"] .player-cards .player-handcount::before, .bang-player-board[data-hand="11"] .player-cards .player-handcount::before {
   content: "11"; }
-div#board .bang-player[data-hand="12"] .player-cards .player-handcount::before {
+.bang-player[data-hand="12"] .player-cards .player-handcount::before, .bang-player-board[data-hand="12"] .player-cards .player-handcount::before {
   content: "12"; }
-div#board .bang-player[data-hand="13"] .player-cards .player-handcount::before {
+.bang-player[data-hand="13"] .player-cards .player-handcount::before, .bang-player-board[data-hand="13"] .player-cards .player-handcount::before {
   content: "13"; }
-div#board .bang-player[data-hand="14"] .player-cards .player-handcount::before {
+.bang-player[data-hand="14"] .player-cards .player-handcount::before, .bang-player-board[data-hand="14"] .player-cards .player-handcount::before {
   content: "14"; }
-div#board .bang-player[data-hand="15"] .player-cards .player-handcount::before {
+.bang-player[data-hand="15"] .player-cards .player-handcount::before, .bang-player-board[data-hand="15"] .player-cards .player-handcount::before {
   content: "15"; }
-div#board .bang-player[data-hand="16"] .player-cards .player-handcount::before {
+.bang-player[data-hand="16"] .player-cards .player-handcount::before, .bang-player-board[data-hand="16"] .player-cards .player-handcount::before {
   content: "16"; }
-div#board .bang-player[data-hand="17"] .player-cards .player-handcount::before {
+.bang-player[data-hand="17"] .player-cards .player-handcount::before, .bang-player-board[data-hand="17"] .player-cards .player-handcount::before {
   content: "17"; }
-div#board .bang-player[data-hand="18"] .player-cards .player-handcount::before {
+.bang-player[data-hand="18"] .player-cards .player-handcount::before, .bang-player-board[data-hand="18"] .player-cards .player-handcount::before {
   content: "18"; }
-div#board .bang-player[data-hand="19"] .player-cards .player-handcount::before {
+.bang-player[data-hand="19"] .player-cards .player-handcount::before, .bang-player-board[data-hand="19"] .player-cards .player-handcount::before {
   content: "19"; }
-div#board .bang-player[data-hand="20"] .player-cards .player-handcount::before {
+.bang-player[data-hand="20"] .player-cards .player-handcount::before, .bang-player-board[data-hand="20"] .player-cards .player-handcount::before {
   content: "20"; }
-div#board .bang-player[data-bullets="0"] .player-cards .player-maxhand::before {
+.bang-player[data-bullets="0"] .player-cards .player-maxhand::before, .bang-player-board[data-bullets="0"] .player-cards .player-maxhand::before {
   content: "0"; }
-div#board .bang-player[data-bullets="1"] .player-cards .player-maxhand::before {
+.bang-player[data-bullets="1"] .player-cards .player-maxhand::before, .bang-player-board[data-bullets="1"] .player-cards .player-maxhand::before {
   content: "1"; }
-div#board .bang-player[data-bullets="2"] .player-cards .player-maxhand::before {
+.bang-player[data-bullets="2"] .player-cards .player-maxhand::before, .bang-player-board[data-bullets="2"] .player-cards .player-maxhand::before {
   content: "2"; }
-div#board .bang-player[data-bullets="3"] .player-cards .player-maxhand::before {
+.bang-player[data-bullets="3"] .player-cards .player-maxhand::before, .bang-player-board[data-bullets="3"] .player-cards .player-maxhand::before {
   content: "3"; }
-div#board .bang-player[data-bullets="4"] .player-cards .player-maxhand::before {
+.bang-player[data-bullets="4"] .player-cards .player-maxhand::before, .bang-player-board[data-bullets="4"] .player-cards .player-maxhand::before {
   content: "4"; }
-div#board .bang-player[data-bullets="5"] .player-cards .player-maxhand::before {
+.bang-player[data-bullets="5"] .player-cards .player-maxhand::before, .bang-player-board[data-bullets="5"] .player-cards .player-maxhand::before {
   content: "5"; }
-div#board .bang-player[data-bullets="6"] .player-cards .player-maxhand::before {
+.bang-player[data-bullets="6"] .player-cards .player-maxhand::before, .bang-player-board[data-bullets="6"] .player-cards .player-maxhand::before {
   content: "6"; }
-div#board .bang-player[data-bullets="7"] .player-cards .player-maxhand::before {
+.bang-player[data-bullets="7"] .player-cards .player-maxhand::before, .bang-player-board[data-bullets="7"] .player-cards .player-maxhand::before {
   content: "7"; }
-div#board .bang-player[data-bullets="0"][data-hand="1"] .player-cards {
+.bang-player[data-bullets="0"][data-hand="1"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="1"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="0"][data-hand="2"] .player-cards {
+.bang-player[data-bullets="0"][data-hand="2"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="2"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="0"][data-hand="3"] .player-cards {
+.bang-player[data-bullets="0"][data-hand="3"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="3"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="0"][data-hand="4"] .player-cards {
+.bang-player[data-bullets="0"][data-hand="4"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="4"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="0"][data-hand="5"] .player-cards {
+.bang-player[data-bullets="0"][data-hand="5"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="5"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="0"][data-hand="6"] .player-cards {
+.bang-player[data-bullets="0"][data-hand="6"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="6"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="0"][data-hand="7"] .player-cards {
+.bang-player[data-bullets="0"][data-hand="7"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="7"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="0"][data-hand="8"] .player-cards {
+.bang-player[data-bullets="0"][data-hand="8"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="8"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="0"][data-hand="9"] .player-cards {
+.bang-player[data-bullets="0"][data-hand="9"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="9"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="0"][data-hand="10"] .player-cards {
+.bang-player[data-bullets="0"][data-hand="10"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="10"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="0"][data-hand="11"] .player-cards {
+.bang-player[data-bullets="0"][data-hand="11"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="11"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="0"][data-hand="12"] .player-cards {
+.bang-player[data-bullets="0"][data-hand="12"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="12"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="0"][data-hand="13"] .player-cards {
+.bang-player[data-bullets="0"][data-hand="13"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="13"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="0"][data-hand="14"] .player-cards {
+.bang-player[data-bullets="0"][data-hand="14"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="14"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="0"][data-hand="15"] .player-cards {
+.bang-player[data-bullets="0"][data-hand="15"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="15"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="0"][data-hand="16"] .player-cards {
+.bang-player[data-bullets="0"][data-hand="16"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="16"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="0"][data-hand="17"] .player-cards {
+.bang-player[data-bullets="0"][data-hand="17"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="17"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="0"][data-hand="18"] .player-cards {
+.bang-player[data-bullets="0"][data-hand="18"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="18"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="0"][data-hand="19"] .player-cards {
+.bang-player[data-bullets="0"][data-hand="19"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="19"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="0"][data-hand="20"] .player-cards {
+.bang-player[data-bullets="0"][data-hand="20"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="20"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="1"][data-hand="2"] .player-cards {
+.bang-player[data-bullets="1"][data-hand="2"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="2"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="1"][data-hand="3"] .player-cards {
+.bang-player[data-bullets="1"][data-hand="3"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="3"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="1"][data-hand="4"] .player-cards {
+.bang-player[data-bullets="1"][data-hand="4"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="4"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="1"][data-hand="5"] .player-cards {
+.bang-player[data-bullets="1"][data-hand="5"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="5"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="1"][data-hand="6"] .player-cards {
+.bang-player[data-bullets="1"][data-hand="6"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="6"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="1"][data-hand="7"] .player-cards {
+.bang-player[data-bullets="1"][data-hand="7"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="7"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="1"][data-hand="8"] .player-cards {
+.bang-player[data-bullets="1"][data-hand="8"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="8"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="1"][data-hand="9"] .player-cards {
+.bang-player[data-bullets="1"][data-hand="9"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="9"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="1"][data-hand="10"] .player-cards {
+.bang-player[data-bullets="1"][data-hand="10"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="10"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="1"][data-hand="11"] .player-cards {
+.bang-player[data-bullets="1"][data-hand="11"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="11"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="1"][data-hand="12"] .player-cards {
+.bang-player[data-bullets="1"][data-hand="12"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="12"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="1"][data-hand="13"] .player-cards {
+.bang-player[data-bullets="1"][data-hand="13"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="13"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="1"][data-hand="14"] .player-cards {
+.bang-player[data-bullets="1"][data-hand="14"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="14"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="1"][data-hand="15"] .player-cards {
+.bang-player[data-bullets="1"][data-hand="15"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="15"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="1"][data-hand="16"] .player-cards {
+.bang-player[data-bullets="1"][data-hand="16"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="16"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="1"][data-hand="17"] .player-cards {
+.bang-player[data-bullets="1"][data-hand="17"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="17"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="1"][data-hand="18"] .player-cards {
+.bang-player[data-bullets="1"][data-hand="18"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="18"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="1"][data-hand="19"] .player-cards {
+.bang-player[data-bullets="1"][data-hand="19"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="19"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="1"][data-hand="20"] .player-cards {
+.bang-player[data-bullets="1"][data-hand="20"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="20"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="2"][data-hand="3"] .player-cards {
+.bang-player[data-bullets="2"][data-hand="3"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="3"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="2"][data-hand="4"] .player-cards {
+.bang-player[data-bullets="2"][data-hand="4"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="4"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="2"][data-hand="5"] .player-cards {
+.bang-player[data-bullets="2"][data-hand="5"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="5"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="2"][data-hand="6"] .player-cards {
+.bang-player[data-bullets="2"][data-hand="6"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="6"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="2"][data-hand="7"] .player-cards {
+.bang-player[data-bullets="2"][data-hand="7"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="7"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="2"][data-hand="8"] .player-cards {
+.bang-player[data-bullets="2"][data-hand="8"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="8"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="2"][data-hand="9"] .player-cards {
+.bang-player[data-bullets="2"][data-hand="9"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="9"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="2"][data-hand="10"] .player-cards {
+.bang-player[data-bullets="2"][data-hand="10"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="10"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="2"][data-hand="11"] .player-cards {
+.bang-player[data-bullets="2"][data-hand="11"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="11"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="2"][data-hand="12"] .player-cards {
+.bang-player[data-bullets="2"][data-hand="12"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="12"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="2"][data-hand="13"] .player-cards {
+.bang-player[data-bullets="2"][data-hand="13"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="13"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="2"][data-hand="14"] .player-cards {
+.bang-player[data-bullets="2"][data-hand="14"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="14"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="2"][data-hand="15"] .player-cards {
+.bang-player[data-bullets="2"][data-hand="15"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="15"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="2"][data-hand="16"] .player-cards {
+.bang-player[data-bullets="2"][data-hand="16"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="16"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="2"][data-hand="17"] .player-cards {
+.bang-player[data-bullets="2"][data-hand="17"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="17"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="2"][data-hand="18"] .player-cards {
+.bang-player[data-bullets="2"][data-hand="18"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="18"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="2"][data-hand="19"] .player-cards {
+.bang-player[data-bullets="2"][data-hand="19"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="19"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="2"][data-hand="20"] .player-cards {
+.bang-player[data-bullets="2"][data-hand="20"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="20"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="3"][data-hand="4"] .player-cards {
+.bang-player[data-bullets="3"][data-hand="4"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="4"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="3"][data-hand="5"] .player-cards {
+.bang-player[data-bullets="3"][data-hand="5"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="5"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="3"][data-hand="6"] .player-cards {
+.bang-player[data-bullets="3"][data-hand="6"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="6"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="3"][data-hand="7"] .player-cards {
+.bang-player[data-bullets="3"][data-hand="7"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="7"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="3"][data-hand="8"] .player-cards {
+.bang-player[data-bullets="3"][data-hand="8"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="8"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="3"][data-hand="9"] .player-cards {
+.bang-player[data-bullets="3"][data-hand="9"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="9"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="3"][data-hand="10"] .player-cards {
+.bang-player[data-bullets="3"][data-hand="10"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="10"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="3"][data-hand="11"] .player-cards {
+.bang-player[data-bullets="3"][data-hand="11"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="11"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="3"][data-hand="12"] .player-cards {
+.bang-player[data-bullets="3"][data-hand="12"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="12"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="3"][data-hand="13"] .player-cards {
+.bang-player[data-bullets="3"][data-hand="13"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="13"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="3"][data-hand="14"] .player-cards {
+.bang-player[data-bullets="3"][data-hand="14"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="14"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="3"][data-hand="15"] .player-cards {
+.bang-player[data-bullets="3"][data-hand="15"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="15"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="3"][data-hand="16"] .player-cards {
+.bang-player[data-bullets="3"][data-hand="16"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="16"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="3"][data-hand="17"] .player-cards {
+.bang-player[data-bullets="3"][data-hand="17"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="17"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="3"][data-hand="18"] .player-cards {
+.bang-player[data-bullets="3"][data-hand="18"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="18"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="3"][data-hand="19"] .player-cards {
+.bang-player[data-bullets="3"][data-hand="19"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="19"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="3"][data-hand="20"] .player-cards {
+.bang-player[data-bullets="3"][data-hand="20"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="20"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="4"][data-hand="5"] .player-cards {
+.bang-player[data-bullets="4"][data-hand="5"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="5"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="4"][data-hand="6"] .player-cards {
+.bang-player[data-bullets="4"][data-hand="6"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="6"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="4"][data-hand="7"] .player-cards {
+.bang-player[data-bullets="4"][data-hand="7"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="7"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="4"][data-hand="8"] .player-cards {
+.bang-player[data-bullets="4"][data-hand="8"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="8"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="4"][data-hand="9"] .player-cards {
+.bang-player[data-bullets="4"][data-hand="9"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="9"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="4"][data-hand="10"] .player-cards {
+.bang-player[data-bullets="4"][data-hand="10"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="10"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="4"][data-hand="11"] .player-cards {
+.bang-player[data-bullets="4"][data-hand="11"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="11"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="4"][data-hand="12"] .player-cards {
+.bang-player[data-bullets="4"][data-hand="12"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="12"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="4"][data-hand="13"] .player-cards {
+.bang-player[data-bullets="4"][data-hand="13"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="13"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="4"][data-hand="14"] .player-cards {
+.bang-player[data-bullets="4"][data-hand="14"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="14"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="4"][data-hand="15"] .player-cards {
+.bang-player[data-bullets="4"][data-hand="15"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="15"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="4"][data-hand="16"] .player-cards {
+.bang-player[data-bullets="4"][data-hand="16"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="16"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="4"][data-hand="17"] .player-cards {
+.bang-player[data-bullets="4"][data-hand="17"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="17"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="4"][data-hand="18"] .player-cards {
+.bang-player[data-bullets="4"][data-hand="18"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="18"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="4"][data-hand="19"] .player-cards {
+.bang-player[data-bullets="4"][data-hand="19"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="19"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="4"][data-hand="20"] .player-cards {
+.bang-player[data-bullets="4"][data-hand="20"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="20"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="5"][data-hand="6"] .player-cards {
+.bang-player[data-bullets="5"][data-hand="6"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="6"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="5"][data-hand="7"] .player-cards {
+.bang-player[data-bullets="5"][data-hand="7"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="7"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="5"][data-hand="8"] .player-cards {
+.bang-player[data-bullets="5"][data-hand="8"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="8"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="5"][data-hand="9"] .player-cards {
+.bang-player[data-bullets="5"][data-hand="9"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="9"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="5"][data-hand="10"] .player-cards {
+.bang-player[data-bullets="5"][data-hand="10"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="10"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="5"][data-hand="11"] .player-cards {
+.bang-player[data-bullets="5"][data-hand="11"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="11"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="5"][data-hand="12"] .player-cards {
+.bang-player[data-bullets="5"][data-hand="12"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="12"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="5"][data-hand="13"] .player-cards {
+.bang-player[data-bullets="5"][data-hand="13"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="13"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="5"][data-hand="14"] .player-cards {
+.bang-player[data-bullets="5"][data-hand="14"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="14"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="5"][data-hand="15"] .player-cards {
+.bang-player[data-bullets="5"][data-hand="15"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="15"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="5"][data-hand="16"] .player-cards {
+.bang-player[data-bullets="5"][data-hand="16"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="16"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="5"][data-hand="17"] .player-cards {
+.bang-player[data-bullets="5"][data-hand="17"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="17"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="5"][data-hand="18"] .player-cards {
+.bang-player[data-bullets="5"][data-hand="18"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="18"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="5"][data-hand="19"] .player-cards {
+.bang-player[data-bullets="5"][data-hand="19"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="19"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="5"][data-hand="20"] .player-cards {
+.bang-player[data-bullets="5"][data-hand="20"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="20"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="6"][data-hand="7"] .player-cards {
+.bang-player[data-bullets="6"][data-hand="7"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="7"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="6"][data-hand="8"] .player-cards {
+.bang-player[data-bullets="6"][data-hand="8"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="8"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="6"][data-hand="9"] .player-cards {
+.bang-player[data-bullets="6"][data-hand="9"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="9"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="6"][data-hand="10"] .player-cards {
+.bang-player[data-bullets="6"][data-hand="10"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="10"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="6"][data-hand="11"] .player-cards {
+.bang-player[data-bullets="6"][data-hand="11"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="11"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="6"][data-hand="12"] .player-cards {
+.bang-player[data-bullets="6"][data-hand="12"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="12"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="6"][data-hand="13"] .player-cards {
+.bang-player[data-bullets="6"][data-hand="13"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="13"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="6"][data-hand="14"] .player-cards {
+.bang-player[data-bullets="6"][data-hand="14"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="14"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="6"][data-hand="15"] .player-cards {
+.bang-player[data-bullets="6"][data-hand="15"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="15"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="6"][data-hand="16"] .player-cards {
+.bang-player[data-bullets="6"][data-hand="16"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="16"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="6"][data-hand="17"] .player-cards {
+.bang-player[data-bullets="6"][data-hand="17"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="17"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="6"][data-hand="18"] .player-cards {
+.bang-player[data-bullets="6"][data-hand="18"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="18"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="6"][data-hand="19"] .player-cards {
+.bang-player[data-bullets="6"][data-hand="19"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="19"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="6"][data-hand="20"] .player-cards {
+.bang-player[data-bullets="6"][data-hand="20"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="20"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="7"][data-hand="8"] .player-cards {
+.bang-player[data-bullets="7"][data-hand="8"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="8"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="7"][data-hand="9"] .player-cards {
+.bang-player[data-bullets="7"][data-hand="9"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="9"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="7"][data-hand="10"] .player-cards {
+.bang-player[data-bullets="7"][data-hand="10"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="10"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="7"][data-hand="11"] .player-cards {
+.bang-player[data-bullets="7"][data-hand="11"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="11"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="7"][data-hand="12"] .player-cards {
+.bang-player[data-bullets="7"][data-hand="12"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="12"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="7"][data-hand="13"] .player-cards {
+.bang-player[data-bullets="7"][data-hand="13"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="13"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="7"][data-hand="14"] .player-cards {
+.bang-player[data-bullets="7"][data-hand="14"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="14"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="7"][data-hand="15"] .player-cards {
+.bang-player[data-bullets="7"][data-hand="15"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="15"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="7"][data-hand="16"] .player-cards {
+.bang-player[data-bullets="7"][data-hand="16"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="16"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="7"][data-hand="17"] .player-cards {
+.bang-player[data-bullets="7"][data-hand="17"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="17"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="7"][data-hand="18"] .player-cards {
+.bang-player[data-bullets="7"][data-hand="18"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="18"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="7"][data-hand="19"] .player-cards {
+.bang-player[data-bullets="7"][data-hand="19"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="19"] .player-cards {
   color: red; }
-div#board .bang-player[data-bullets="7"][data-hand="20"] .player-cards {
+.bang-player[data-bullets="7"][data-hand="20"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="20"] .player-cards {
   color: red; }
 
 div.bang-card-tooltip div.bang-card-tooltip-sizing {
@@ -1167,6 +1169,21 @@ div.bang-card {
     background-repeat: no-repeat;
     top: 4px;
     left: 1px; }
+
+.bang-player-board {
+  display: flex;
+  align-items: center;
+  padding: 0px 10px; }
+  .bang-player-board ul.player-bullets {
+    display: flex;
+    height: 35px; }
+    .bang-player-board ul.player-bullets li.bullet {
+      transform: scale(0.8) rotate(-90deg);
+      margin-top: 9px;
+      margin-right: -11px;
+      margin-left: -11px; }
+  .bang-player-board .player-cards {
+    margin-left: 15px; }
 
 .bang_popin {
   width: auto;

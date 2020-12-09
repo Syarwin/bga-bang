@@ -107,6 +107,8 @@ setup(gamedatas) {
     player.inPlay.forEach(card => this.addCard(card, 'player-inplay-' + player.id));
     dojo.connect($("player-character-" + player.id), "onclick", (evt) => { evt.preventDefault(); evt.stopPropagation(); this.onClickPlayer(player.id) });
 
+    dojo.place(this.format_block('jstpl_player_board_data', player), "overall_player_board_" + player.id);
+
     if(isCurrent){
       let role = this.getRole(player.role);
       dojo.place(this.format_block('jstpl_hand', role), 'board');

@@ -11,7 +11,12 @@ trait DrawCardsTrait
 	 */
 	public function stDrawCards() {
 		$player = Players::getActivePlayer();
-		$newState = $player->drawCards(2) ?? "play";
+		$newState = $player->statePhaseOne();
+    if(is_null($newState)){
+      $newState = "play";
+      $player->drawCards(2);
+    }
+
 		$this->gamestate->nextState($newState);
 	}
 

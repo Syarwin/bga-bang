@@ -170,7 +170,7 @@ class Players extends \APP_GameClass
 
 	public static function getCharactersByExpansion($expansions) {
 		$characters = [
-			BASE_GAME => range(0,15)
+			BASE_GAME => [JESSE_JONES, PEDRO_RAMIREZ, LUCKY_DUKE, KIT_CARLSON, JOURDONNAIS], //range(0,15)
 			// add new expansions
 		];
 		return array_reduce($expansions, function($res, $exp) use ($characters){

@@ -190,11 +190,11 @@ class Notifications {
   /**
    * drawing a card for cards like barrel, jail, etc.
    */
-  public static function drawCard($player, $card, $src) {
+  public static function flipCard($player, $card, $src) {
     $format = $card->format();
     $src_name = ($src instanceof Card) ? $src->getName() : $src->getCharName();
 
-    self::notifyAll('drawCard', clienttranslate('${player_name} draws ${card_name} for ${src_name}\'s effect.'), [
+    self::notifyAll('flipCard', clienttranslate('${player_name} draws ${card_name} for ${src_name}\'s effect.'), [
       'i18n' => ['card_name', 'card_color', 'src_name'],
       'player_name' => $player->getName(),
       'card_name' => $card->getNameAndValue(),

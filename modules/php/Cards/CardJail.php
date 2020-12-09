@@ -45,7 +45,7 @@ class CardJail extends BlueCard {
 
   public function activate($player, $args = []) {
     Log::addCardPlayed($player, $this,[]);
-    $card = $player->draw($args, $this);
+    $card = $player->flip($args, $this);
     if(!$card instanceof Card)
       return $card;
 

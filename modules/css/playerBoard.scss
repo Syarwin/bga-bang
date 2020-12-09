@@ -40,3 +40,26 @@
     }
   }
 }
+
+
+.bang-player-board {
+  display:flex;
+  align-items: center;
+  padding:0px 10px;
+
+  ul.player-bullets {
+    display:flex;
+    height:35px;
+
+    li.bullet {
+      transform: scale(0.8) rotate(-90deg);
+      margin-top: 9px;
+      margin-right:-11px;
+      margin-left:-11px;
+    }
+  }
+
+  .player-cards {
+    margin-left:15px;
+  }
+}

@@ -18,19 +18,15 @@ class JesseJones extends Player {
     parent::__construct($row);
   }
 
-  public function drawCards($amount) {
-    if(Utils::getStateName() == 'drawCards') {
-      $options = Players::getLivingPlayers($this->id);
-      Utils::filter($options, function($id) {
-        $hand = Players::getPlayer($id)->getCardsInHand();
-        return !empty($hand);
-      });
-      $options[] = 'deck';
-      Log::addAction("draw", $options);
-      return 'draw';
-    } else {
-      return parent::drawCards($amount);
-    }
+  public function statePhaseOne() {
+    $options = Players::getLivingPlayers($this->id);
+    Utils::filter($options, function($id) {
+      $hand = Players::getPlayer($id)->getCardsInHand();
+      return !empty($hand);
+    });
+    $options[] = 'deck';
+    Log::addAction("draw", $options);
+    return 'activeDraw';
   }
 
 

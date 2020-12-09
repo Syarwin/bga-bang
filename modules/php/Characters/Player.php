@@ -128,9 +128,9 @@ class Player extends \APP_GameClass
   /*
    * Draw! (careful, not the same as drawCard), notify and return the card
    */
-  public function draw($args, $src) {
+  public function flip($args, $src) {
     $card = Cards::draw();
-    Notifications::drawCard($this, $card, $src);
+    Notifications::flipCard($this, $card, $src);
     return $card;
   }
 
@@ -512,7 +512,7 @@ class Player extends \APP_GameClass
   ****************************************
   ***************************************/
 
-
+  public function statePhaseOne(){ return null; }
 
   public function useAbility($args) {}
 

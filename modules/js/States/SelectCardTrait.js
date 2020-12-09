@@ -42,14 +42,14 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
          openAnimationTarget:"buttonShowCards",
          contentsTpl:jstpl_dialog,
        });
-      args.cards.forEach(card => this.addCard(card, 'dialog-card-container') );
+      args.cards.forEach(card => this.addCard(card, 'dialog-card-container', 'dialog') );
       $('dialog-title-container').innerHTML = $('pagemaintitletext').innerHTML;
 
       if(!this.isCurrentPlayerActive())
         return;
 
       this._amount = args.amountToPick;
-      this.makeCardSelectable(args.cards, "selectDialog");
+      this.makeCardSelectable(args.cards, "selectDialog", "dialog");
     },
 
 

@@ -7,7 +7,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
     /*
      * Given a list of cards, make them selectable
      */
-    makeCardSelectable(cards, action){
+    makeCardSelectable(cards, action, suffix = ''){
       this._action = action;
 
       // Add unselectable class
@@ -21,8 +21,9 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
 
       this._selectableCards = cards;
       this._selectableCards.forEach(card => {
-        dojo.removeClass("bang-card-" + card.id, "unselectable");
-        dojo.addClass("bang-card-" + card.id, "selectable");
+        card.uid = card.id + suffix;
+        dojo.removeClass("bang-card-" + card.uid, "unselectable");
+        dojo.addClass("bang-card-" + card.uid, "selectable");
       });
 
       if(this._action == "playCard"){
@@ -38,7 +39,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
     onClickCard(ocard){
       if(!this.isCurrentPlayerActive()) return;
       // Is the card in the discard ?
-      if($("bang-card-" + ocard.id).parentNode.id == "discard")
+      if($("bang-card-" + ocard.uid).parentNode.id == "discard")
         return this.onClickDiscard();
 
       // Is the card selectable ?
@@ -57,12 +58,12 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
      * Toggle a card : useful for multiple select or whenever we want a confirm button
      */
     toggleCard(card){
-      var domId = "bang-card-" + card.id;
+      var domId = "bang-card-" + card.uid;
       // Already selected, unselect it
       if(this._selectedCards.includes(card.id)){
         this._selectedCards = this._selectedCards.filter(id => id != card.id);
         dojo.removeClass(domId, "selected");
-        this._selectableCards.forEach(c => dojo.query("#bang-card-" + c.id).addClass("selectable").removeClass("unselectable") );
+        this._selectableCards.forEach(c => dojo.query("#bang-card-" + c.uid).addClass("selectable").removeClass("unselectable") );
       }
       // Not yet selected, add to selection
       else {

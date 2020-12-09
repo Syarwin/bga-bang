@@ -63,6 +63,7 @@ trait SelectCardTrait
 		$player = Players::getActivePlayer();
 		$newstate = isset($args['card'])? $player->react($ids)
 							: $player->useAbility(['selected' => $ids, 'rest' => $rest ]);
+
 	  $this->gamestate->nextState($newstate ?? 'select');
 	}
 

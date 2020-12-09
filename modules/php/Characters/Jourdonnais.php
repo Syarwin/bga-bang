@@ -43,7 +43,7 @@ class Jourdonnais extends Player {
     $this->logUseAbility();
 
     // Draw one card
-    $card = $this->draw([], $this);
+    $card = $this->flip([], $this);
     if ($card->getCopyColor() == 'H') {
       // Success
       Notifications::tell(clienttranslate("Jourdonnais effect was successfull"));
