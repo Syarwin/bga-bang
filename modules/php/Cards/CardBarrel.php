@@ -26,7 +26,7 @@ class CardBarrel extends BlueCard {
   public function activate($player, $args = []) {
     Notifications::useCard($player, $this);
 
-    $mixed = $player->draw(['pattern' => "/H/"], $this);
+    $mixed = $player->flip(['pattern' => "/H/"], $this);
     if(!$mixed instanceof Card)
       return $mixed; //shouldn't happen, just in case we decide to let player decide after all
 

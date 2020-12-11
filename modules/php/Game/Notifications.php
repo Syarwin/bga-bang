@@ -2,6 +2,7 @@
 namespace Bang\Game;
 use bang;
 use Bang\Characters\Players;
+use Bang\Cards\Cards;
 use Bang\Cards\Card;
 
 /*
@@ -69,6 +70,7 @@ class Notifications {
     ]);
   }
 
+
   public static function drawCards($player, $cards, $public = false, $src = 'deck') {
     $amount = count($cards);
     $srcName = $src == 'deck'? clienttranslate("the deck") : clienttranslate("the discard pile");
@@ -85,6 +87,7 @@ class Notifications {
         'cards' => $isVisible? $formattedCards : [],
         'src' => $src,
         'target' => 'hand',
+        'deckCount' => Cards::getDeckCount(),
       ];
 
       if($amount == 1){
@@ -200,7 +203,8 @@ class Notifications {
       'card_name' => $card->getNameAndValue(),
       'src_name' => $src_name,
       'src_id' => $src->getId(),
-      'card' => $format
+      'card' => $format,
+      'deckCount' => Cards::getDeckCount(),
     ]);
   }
 
@@ -234,11 +238,23 @@ class Notifications {
   public static function playerEliminated($player) {
     $roles = [clienttranslate('Sheriff'), clienttranslate('Deputy'), clienttranslate('Outlaw'), clienttranslate('Renegade')];
 
-    self::notifyAll('updatePlayers', clienttranslate('${player_name} was a ${role_name}'), [
+    self::notifyAll('playerEliminated', clienttranslate('${player_name} is eliminated.'), [
+      'player_name' => $player->getName(),
+      'who_quits' => $player->getId(),
+    ]);
+
+    self::notifyAll('updatePlayers', clienttranslate('${player_name} was a ${role_name}.'), [
       'i18n' => ['role_name'],
       'player_name' => $player->getName(),
       'role_name' => $roles[$player->getRole()],
       'players' => Players::getUiData(0),
+    ]);
+  }
+
+
+  public static function reshuffle(){
+    self::notifyAll('reshuffle', clienttranslate("Reshuffling the deck."), [
+      'deckCount' => Cards::getDeckCount(),
     ]);
   }
 }

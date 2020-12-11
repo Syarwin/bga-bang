@@ -3,6 +3,7 @@ namespace Bang\Characters;
 use Bang\Game\Notifications;
 use Bang\Game\Log;
 use Bang\Cards\Cards;
+use bang;
 
 class SidKetchum extends Player {
   public function __construct($row = null)
@@ -25,10 +26,10 @@ class SidKetchum extends Player {
   }
 
   public function useAbility($args) {
-    Notifications::tell('${player_name} uses his ability', ['player_name' => $this->name]);
+    Notifications::tell(clienttranslate('${player_name} uses the ability of Sid Ketchum by discarding 2 cards to regain 1 life point'), ['player_name' => $this->name]);
     foreach ($args as $card) Cards::playCard($card);
-    Notifications::discardedCards($this, array_map(['Cards','getCard'], $args));
+    Notifications::discardedCards($this, array_map(['Bang\Cards\Cards','getCard'], $args));
     $this->gainLife();
-    bang::$instance->gamestate->nextState( "continuePlaying" );
+    bang::get()->gamestate->nextState("continuePlaying");
   }
 }

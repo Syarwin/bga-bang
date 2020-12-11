@@ -1,5 +1,7 @@
 <?php
 namespace Bang\Cards;
+use Bang\Characters\Players;
+use Bang\Game\Notifications;
 
 class CardBeer extends BrownCard {
   public function __construct($id = null, $copy = ""){
@@ -19,5 +21,14 @@ class CardBeer extends BrownCard {
 			'amount' => 1,
 			'impacts' => NONE
 		];
+  }
+
+  public function play($player, $args){
+    if(count(Players::getLivingPlayers()) <= 2){
+      Cards::discardCard($this);
+      Notifications::tell(clienttranslate("Beer has no effect when only 2 players are alive."));
+    } else {
+      parent::play($player,$args);
+    }
   }
 }

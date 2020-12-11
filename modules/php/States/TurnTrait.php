@@ -75,7 +75,6 @@ trait TurnTrait
   	 */
   	public function stEndOfTurn() {
   		//$this->playerManager->getPlayer()->endOfTurn();
-  		$this->stCheckEndOfGame();
   		$this->gamestate->nextState('next');
   	}
 

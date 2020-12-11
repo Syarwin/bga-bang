@@ -2,6 +2,7 @@
 
 namespace Bang\Cards;
 use Bang\Game\Log;
+use Bang\Game\Notifications;
 use Bang\Characters\Players;
 
 
@@ -174,13 +175,25 @@ class Cards extends \APP_GameClass
 		return self::deal($player, $amount, "discard");
 	}
 
+
+  public static function reshuffle(){
+    self::getDeck()->moveAllCardsInLocation('discard', 'deck');
+    self::getDeck()->shuffle('deck');
+    Notifications::reshuffle();
+  }
+
+
 	public static function draw() {
+    if(self::getDeckCount() == 0){
+      self::reshuffle();
+    }
 		$card = self::resToObject(self::getDeck()->getCardOnTop('deck'));
 		self::playCard($card->getId());
 		return $card;
 	}
 
 	public static function createSelection($nbr, $player = PUBLIC_SELECTION) {
+    self::getDeck()->moveAllCardsInLocation('selection', 'discard');
 		return self::getDeck()->pickCardsForLocation($nbr, 'deck', 'selection', $player);
 	}
 
@@ -194,8 +207,7 @@ class Cards extends \APP_GameClass
 			if($no > $count) $no -= $count;
 			$player = self::getUniqueValueFromDB("SELECT player_id FROM player WHERE player_no=$no");
 		}
-		$sql = "SELECT card_id FROM card WHERE card_type=$type";
-		$cards = self::getObjectListFromDB("SELECT card_id FROM card WHERE card_type=$type", true);
+		$cards = self::getObjectListFromDB("SELECT card_id FROM card WHERE card_type=$type AND card_location='deck'", true);
 		self::getDeck()->moveCard($cards[0], 'hand', $player);
 	}
 

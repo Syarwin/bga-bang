@@ -16,6 +16,7 @@ div#board {
   .bang-player {
     .player-info {
       position:relative;
+      min-width:$cardW / 106 * 113;
       width:$cardW / 106 * 113;
       height:$cardH + 10px;
       background-image:url("img/card_borders.png");
@@ -48,7 +49,7 @@ div#board {
         .player-character-hourglass {
           width: 50%;
           height: 50%;
-          background-image: url("https://en.1.studio.boardgamearena.com:8083/data/themereleases/201204-0905/img/layout/active_player.gif");
+          background-image: url("img/hourglass.gif");
           background-size: 75%;
           background-color: rgba(255,255,255,0.7);
           background-position: center center;
@@ -121,12 +122,15 @@ div#board {
     transition:width 1s;
 
     .player-inplay {
+      width: calc(100% - #{$cardW / 106 * 113 + 2});
       flex-grow:1;
       display:flex;
       flex-flow:row;
       overflow-x: auto;
       overflow-y: hidden;
       height: 107%;
+      position:relative;
+      z-index:2;
     }
 
     .player-info {

@@ -175,7 +175,7 @@ $machinestates = [
 			'eliminate' => ST_ELIMINATE,
 			'draw'	=> ST_DRAW_CARDS,
 			'next' => ST_START_OF_TURN,
-			'endgame' => ST_GAME_END,
+			'endgame' => ST_PRE_GAME_END,
 		]
 	],
 
@@ -215,6 +215,17 @@ $machinestates = [
 		],
 	],
 
+
+
+	ST_PRE_GAME_END => [
+		'name' => 'preGameEnd',
+		'description' => '',
+		'type' => 'game',
+		'action' => 'stPreGameEnd',
+    'transitions' => ['' => ST_GAME_END ]
+	],
+
+
 	/*
 	 * BGA framework final state. Do not modify.
 	 */
@@ -225,5 +236,4 @@ $machinestates = [
 		'action' => 'stGameEnd',
 		'args' => 'argGameEnd'
 	]
-
 ];

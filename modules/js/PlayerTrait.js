@@ -39,7 +39,8 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
     // TODO
     notif_updatePlayers(n){
       debug("Notif: update players", n);
-      this.updatePlayers(n.args.players);
+      this.gamedatas.bplayers = n.args.players;
+      this.updatePlayers();
     },
 
 
@@ -47,7 +48,8 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
     /*
      * Called to setup player board, called at setup and when someone is eliminated
      */
-    updatePlayers(players){
+    updatePlayers(){
+      var players = this.gamedatas.bplayers;
       var nPlayers = players.length;
       var playersAlive = players.reduce((carry,player) => carry + (player.eliminated? 0 : 1), 0);
       var playersEliminated = nPlayers - playersAlive;
@@ -56,16 +58,12 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
         if(!player.eliminated)
           player.no = newNo++;
       });
-      var currentPlayerNo = players.reduce((carry, player) => (player.id == this.player_id)? player.no : carry, 0);
+      var currentPlayerNo = players.reduce((carry, player) => (player.id == this.player_id && !player.eliminated)? player.no : carry, 0);
 
       players.forEach( player => {
+        this.displayRoleIfPublic(player);
         if(player.eliminated){
           dojo.addClass("overall_player_board_" + player.id, "eliminated");
-          if(!$("player-role-" + player.id)){
-            var role = this.getRole(player.role);
-            dojo.place(this.format_block('jstpl_player_board_role', player), "player_board_" + player.id);
-            this.addTooltip("player-role-" + player.id, role["role-name"], '');
-          }
 
           if($("bang-player-" + player.id))
             dojo.destroy("bang-player-" + player.id);
@@ -81,6 +79,14 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
       dojo.attr("board", "data-players", playersAlive);
     },
 
+
+    displayRoleIfPublic(player){
+      var role = this.getRole(player.role);
+      if(role != null && !$("player-role-" + player.id)){
+        dojo.place(this.format_block('jstpl_player_board_role', player), "player_board_" + player.id);
+        this.addTooltip("player-role-" + player.id, role["role-name"], '');
+      }
+    },
 
     /*
      * Highlight with border whose turn it is (might be different to who is active)
@@ -133,7 +139,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
           "role-text":_("Be the last one in play!"),
         },
       };
-      return roles[roleId];
+      return roleId == "hidden"? null : roles[roleId];
     },
 
 
@@ -156,6 +162,35 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
           newHandCount = currentHandCount + parseInt(amount);
       dojo.attr("bang-player-" + playerId, "data-hand", newHandCount);
       dojo.attr("bang-player-board-" + playerId, "data-hand", newHandCount);
+    },
+
+
+    displayPlayersHelp(){
+      new customgame.modal("playersHelp", {
+       autoShow:true,
+       title:_("Players informations"),
+       class:"bang_popin",
+       closeIcon:'fa-times',
+       openAnimation:true,
+       openAnimationTarget:"help-icon",
+       contentsTpl:jstpl_helpDialog,
+     });
+
+     [0,2,2,3,1,2,1].forEach((roleId, i) => {
+       if(i >= this.gamedatas.bplayers.length)
+         return;
+
+        if($('dialog-role-count-' + roleId)){
+          $('dialog-role-count-' + roleId).innerHTML = parseInt($('dialog-role-count-' + roleId).innerHTML) + 1;
+        } else {
+          dojo.place(this.format_block('jstpl_helpDialogRole', this.getRole(roleId)), "dialog-roles");
+        }
+     });
+
+     this.gamedatas.bplayers.forEach( player => {
+       dojo.place(this.format_block('jstpl_helpDialogCharacter', player), "dialog-players");
+     });
+
     },
   });
 });

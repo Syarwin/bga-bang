@@ -19,7 +19,19 @@ define('ST_PREPARE_SELECTION', 14);
 define('ST_SELECT_CARD', 15);
 define('ST_ACTIVE_DRAW_CARD', 17);
 define('ST_ELIMINATE', 16);
+define('ST_PRE_GAME_END', 98);
 define('ST_GAME_END', 99);
+
+/*
+ * Game options
+ */
+define('OPTION_CHAR_1', 101);
+define('OPTION_CHAR_2', 102);
+define('OPTION_CHAR_3', 103);
+define('OPTION_CHAR_4', 104);
+define('OPTION_CHAR_5', 105);
+define('OPTION_CHAR_6', 106);
+define('OPTION_CHAR_7', 107);
 
 
 /*

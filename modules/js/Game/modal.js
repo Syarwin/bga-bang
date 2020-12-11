@@ -218,7 +218,8 @@ define(["dojo", "dojo/_base/declare", "dojo/fx", "dojox/fx/ext-dojo/complex"], f
         dojo.connect(anim, "onEnd", () => resolve() );
         anim.play();
         setTimeout(() => {
-          dojo.style("popin_" + this.id + "_container", "display", "block");
+          if($("popin_" + this.id + "_container"))
+            dojo.style("popin_" + this.id + "_container", "display", "block");
         }, 10);
       });
     },

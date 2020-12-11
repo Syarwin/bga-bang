@@ -11,7 +11,7 @@ use Bang\Game\Log;
 class Players extends \APP_GameClass
 {
 
-	public static function setupNewGame($bplayers, $expansions)	{
+	public static function setupNewGame($bplayers, $expansions, $options)	{
 		self::DbQuery('DELETE FROM player');
 		$gameInfos = bang::get()->getGameinfos();
 		$sql = 'INSERT INTO player (player_id, player_color, player_canal, player_name, player_avatar, player_bullets, player_hp, player_role, player_character) VALUES ';
@@ -20,7 +20,9 @@ class Players extends \APP_GameClass
 		shuffle($roles);
 
 		$characters = self::getCharactersByExpansion($expansions);
-		shuffle($characters);
+    $forcedCharacters = [$options[OPTION_CHAR_1], $options[OPTION_CHAR_2], $options[OPTION_CHAR_3], $options[OPTION_CHAR_4], $options[OPTION_CHAR_5], $options[OPTION_CHAR_6], $options[OPTION_CHAR_7] ];
+    $characters = array_diff($characters, $forcedCharacters);
+    shuffle($characters);
 
 		$values = [];
 		$i = 0;
@@ -31,7 +33,7 @@ class Players extends \APP_GameClass
 			$avatar = addslashes($player['player_avatar']);
 			$name = addslashes($player['player_name']);
 			$role = $roles[$i];
-			$char_id = $characters[$i++];
+			$char_id = $forcedCharacters[$i] == 100? array_pop($characters) : $forcedCharacters[$i];
       $className = "Bang\Characters\\".self::$classes[$char_id];
 			$char  = new $className();
 			$bullets = $char->getBullets();
@@ -41,14 +43,30 @@ class Players extends \APP_GameClass
 			}
 			$values[] = "($pId, '$color','$canal','$name','$avatar', $bullets, $bullets, $role, $char_id)";
 			Cards::deal($pId,$bullets);
+      $i++;
 		}
 		self::DbQuery($sql . implode($values, ','));
-		//Cards::dealCard($sheriff, CARD_DYNAMITE);
-		//Cards::dealCard($sheriff, CARD_JAIL, 1);
-		bang::$instance->reloadPlayersBasicInfos();
+
+/*
+    Cards::dealCard($sheriff, CARD_MUSTANG);
+    Cards::dealCard($sheriff, CARD_SCOPE);
+    Cards::dealCard($sheriff, CARD_BARREL);
+    Cards::dealCard($sheriff, CARD_REMINGTON);
+    Cards::dealCard($sheriff, CARD_DYNAMITE);
+//    Cards::dealCard($sheriff, CARD_GATLING);
+/*
+    Cards::dealCard($sheriff, CARD_BEER,2);
+    Cards::dealCard($sheriff, CARD_BEER,2);
+  	//Cards::dealCard($sheriff, CARD_JAIL, 1);
+    */
+		bang::get()->reloadPlayersBasicInfos();
 		return $sheriff;
 	}
 
+
+  public static function isEndOfGame(){
+    return self::countRoles([SHERIFF]) == 0 || self::countRoles([OUTLAW, RENEGADE]) == 0;
+  }
 
 	public static function getCurrentTurn($asObject = false){
 		$playerId = Log::getPlayerTurn();
@@ -170,7 +188,7 @@ class Players extends \APP_GameClass
 
 	public static function getCharactersByExpansion($expansions) {
 		$characters = [
-			BASE_GAME => [JESSE_JONES, PEDRO_RAMIREZ, LUCKY_DUKE, KIT_CARLSON, JOURDONNAIS], //range(0,15)
+			BASE_GAME => range(0,15),
 			// add new expansions
 		];
 		return array_reduce($expansions, function($res, $exp) use ($characters){

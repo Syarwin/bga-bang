@@ -114,11 +114,19 @@ setup(gamedatas) {
       dojo.place(this.format_block('jstpl_hand', role), 'board');
       player.hand.forEach(card => this.addCard(card, 'hand-cards') );
       this.addTooltip("role-card", role["role-text"], '');
+
+      dojo.place(jstpl_helpIcon, 'bang-player-board-' + player.id);
     }
   });
 
+  if(this.isSpectator){
+    dojo.place(jstpl_helpIcon, document.querySelector(".player-board.spectator-mode"));
+    dojo.query(".player-board.spectator-mode .roundedbox_main").style("display", "none");
+  }
+  dojo.connect($("help-icon"), "click", () => this.displayPlayersHelp() );
+
   // Setting up player boards
-  this.updatePlayers(gamedatas.bplayers);
+  this.updatePlayers();
 
   // Make the current player stand out
   this.updateCurrentTurnPlayer(gamedatas.playerTurn);
@@ -127,7 +135,12 @@ setup(gamedatas) {
 },
 
 
-
+onLoadingComplete(){
+  debug("Loading complete");
+  if(this.gamedatas.turn == 1){
+    this.displayPlayersHelp();
+  }
+},
 
 /*
  * onUpdateActionButtons:

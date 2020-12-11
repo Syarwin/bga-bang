@@ -32,7 +32,7 @@ class Jourdonnais extends Player {
   public function getDefensiveOptions() {
     $res = parent::getDefensiveOptions();
     $card = Cards::getCurrentCard();
-    if($card->getType() == CARD_BANG && $this->canUseAbility())
+    if($this->canUseAbility()) // Jourdonnais can use his ability on any attack as a Barrel, so I've removed $card->getType() == CARD_BANG && 
         $res['character'] = JOURDONNAIS;
     return $res;
   }

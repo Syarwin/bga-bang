@@ -65,9 +65,13 @@ trait ReactTrait
 
 	public function stEndReaction() {
 		$args = Log::getLastAction('react');
+    $src = array_values($args['_private'])[0]['src'];
 
 		$toEliminate = Players::getPlayersForElimination();
-		if(array_values($args['_private'])[0]['src'] == 'hp') {
+
+    // What else could that be ??
+		if($src == 'hp') {
+      // Find the next living player after current player that is not going to be eliminated
 			$living = Players::getLivingPlayersStartingWith(Players::getCurrentTurn(true));
 			foreach($living as $id) {
 				if(!in_array($id, $toEliminate)) {
@@ -75,6 +79,7 @@ trait ReactTrait
 					break;
 				}
 			}
+
 			$nextState = array_reduce($toEliminate, function($state, $id){ return Players::getPlayer($id)->eliminate() ?? $state;}, null);
 			if(is_null($nextState)) {
 				if(Players::getCurrentTurn(true)->isEliminated())
@@ -85,6 +90,7 @@ trait ReactTrait
 			$this->gamestate->nextState($nextState);
 			return;
 		}
+
 		$this->gamestate->changeActivePlayer(Players::getCurrentTurn());
 		if(count($toEliminate)>0) $this->gamestate->nextState('eliminate');
 		else $this->gamestate->nextState("finishedReaction");

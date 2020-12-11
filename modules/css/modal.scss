@@ -59,3 +59,115 @@
     text-align: center;
   }
 }
+
+
+#popin_playersHelp {
+  #dialog-roles {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+
+    .dialog-role {
+      width:150px;
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      background:rgba(255,255,255,0.9);
+      border-radius: 7px;
+      border:1px solid rgba(0,0,0,0.4);
+      box-shadow: 2px 2px 5px #111;
+
+
+      .dialog-role-count {
+        margin:5px 0px;
+        font-family: "Perdido";
+        font-size: 18px;
+        span {
+          font-size:20px;
+        }
+      }
+
+      .dialog-role-img {
+        height:170px;
+        width:105px;
+        background-image:url("img/roles.png");
+        background-size:cover;
+      }
+
+      .dialog-role-desc {
+        padding: 5px 10px;
+        font-family: 'Palatino Linotype';
+        text-align: center;
+        font-size: 15px;
+      }
+
+      @for $i from 0 through 3 {
+        &[data-role="#{$i}"] .dialog-role-img { background-position:$i*100%/3 center; }
+      }
+    }
+  }
+
+
+
+  #dialog-players {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+
+    .dialog-character {
+      width:160px;
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      background:rgba(255,255,255,0.9);
+      border-radius: 7px;
+      border:1px solid rgba(0,0,0,0.4);
+      margin:0 7px;
+      box-shadow: 2px 2px 5px #111;
+
+      .dialog-player-name {
+        font-weight: bold;
+        padding:5px 0px;
+        margin-bottom:2px;
+        width:100%;
+        text-align: center;
+        background:white;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+        border-bottom:1px solid rgba(0,0,0,0.4);
+      }
+
+      .dialog-character-name {
+        font-family: "Perdido";
+        margin:7px auto;
+      }
+
+      .dialog-character-background-container {
+        width: 100px;
+        height: 100px;
+        background:white;
+        border-radius:5px;
+        border:1px solid grey;
+
+        .dialog-character-background {
+          width: 90px;
+          height: 90px;
+          margin:5px;
+          background-image:url("img/card_characters.jpg");
+          background-size:cover;
+        }
+      }
+
+      .dialog-character-desc {
+        padding: 5px 10px;
+        font-family: 'Palatino Linotype';
+        text-align: center;
+        font-size: 12px;
+      }
+
+      @for $i from 0 through $numberOfCharacters {
+        &[data-character="#{$i}"] .dialog-character-background { background-position:$i * 100% / $numberOfCharacters center; }
+      }
+    }
+  }
+}

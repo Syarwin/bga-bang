@@ -63,3 +63,19 @@
     margin-left:15px;
   }
 }
+
+#help-icon {
+  height:35px;
+  width:35px;
+  margin-left: auto;
+  cursor:pointer;
+
+  &:hover {
+    color:grey;
+  }
+
+  svg {
+    width:100%;
+    height: 100%;
+  }
+}

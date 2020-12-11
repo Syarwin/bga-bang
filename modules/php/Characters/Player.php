@@ -77,7 +77,7 @@ class Player extends \APP_GameClass
       'hp'          => $this->hp,
       'bullets'     => $this->bullets,
       'hand' => ($current) ? array_values(Cards::getHand($this->id, true)) : Cards::countCards('hand', $this->id),
-      'role' => ($current || $this->role==SHERIFF || $this->eliminated) ? $this->role : null,
+      'role' => ($current || $this->role==SHERIFF || $this->eliminated || Players::isEndOfGame()) ? $this->role : null,
       'inPlay' => array_values(Cards::getCardsInPlay($this->id, true)),
     ];
   }
@@ -88,8 +88,7 @@ class Player extends \APP_GameClass
    */
   public function save() {
     $eliminated = ($this->eliminated) ? 1 : 0;
-    $sql = "UPDATE player SET player_eliminated=$eliminated, player_hp= " . $this->hp . " WHERE player_id=" . $this->id;
-    self::DbQuery($sql);
+    self::DbQuery("UPDATE player SET `player_eliminated` = $eliminated, `player_hp` = {$this->hp} WHERE `player_id` = {$this->id}");
   }
 
 
@@ -365,7 +364,8 @@ class Player extends \APP_GameClass
       } else {
        foreach($ids as $i) {
           $card = Cards::getCard($i);
-          Cards::discardCard($card);
+          $card->play($this, ['player' => null]);
+//          Cards::discardCard($card);
           Notifications::cardPlayed($this, $card, []);
           Log::addCardPlayed($this, $card, $args);
         }
@@ -470,23 +470,8 @@ class Player extends \APP_GameClass
     Notifications::playerEliminated($this);
 
     //check if game should end
-    if(Players::countRoles([SHERIFF]) == 0){
-      $living = Players::getLivingPlayers(null, true);
-      if(count($living) == 0) {
-        Players::setWinners([SHERIFF, DEPUTY, OUTLAW, RENEGADE]);
-      } elseif(count($living) > 1 || $living[0]->role == OUTLAW) {
-        Players::setWinners([OUTLAW]);
-      } else {
-        Players::setWinners([RENEGADE]);
-      }
-      return "endgame";
-    }
-
-    if((Players::countRoles([OUTLAW, RENEGADE]) == 0)) {
-      Players::setWinners([SHERIFF, DEPUTY]);
-      return "endgame";
-    }
-
+    if(Players::isEndOfGame())
+      return 'endgame';
 
 
     //handle rewards/penalties

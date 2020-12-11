@@ -12,6 +12,11 @@ $cardW: $cardH / 200 * 125;
 
 
 $layoutBig:(
+  2:(
+    "table":("col" : 5, "row" : 4, "align" : center),
+    0:("col" : 5, "row" : 2, "align": center),
+    1:("col" : 5, "row" : 6, "align": center),
+  ),
   3:(
     "table":("col" : 5, "row" : 4, "align" : center),
     0:("col" : 5, "row" : 2, "align": center),
@@ -56,6 +61,11 @@ $layoutBig:(
 
 
 $layoutSmall:(
+  2:(
+    "table":("col" : 8, "row" : 2, "align" : center),
+    0:("col" : 2, "row" : 2, "align": left),
+    1:("col" : 4, "row" : 4, "align": center),
+  ),
   3:(
     "table":("col" : 8, "row" : 2, "align" : right),
     0:("col" : 2, "row" : 2, "align": left),

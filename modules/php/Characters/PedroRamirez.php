@@ -19,7 +19,10 @@ class PedroRamirez extends Player {
   }
 
   public function statePhaseOne() {
-    Log::addAction("draw", ['deck', 'discard']);
+    $locations = ['deck'];
+    if(!is_null(Cards::getLastDiscarded()))
+      array_push($locations, 'discard');
+    Log::addAction("draw", $locations);
     return 'activeDraw';
   }
 

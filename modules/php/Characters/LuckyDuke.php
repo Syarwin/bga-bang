@@ -26,15 +26,15 @@ class LuckyDuke extends Player {
 
     if(isset($args['pattern'])) {
       $cards = [Cards::draw(), Cards::draw()];
-      Notifications::drawCard($this, $cards[0], $src);
-      Notifications::drawCard($this, $cards[1], $src);
+      Notifications::flipCard($this, $cards[0], $src);
+      Notifications::flipCard($this, $cards[1], $src);
       if(preg_match($args['pattern'],$cards[0]->getCopy()))
         return $cards[0];
       return $cards[1];
     }
     $cards = Cards::toObjects(Cards::createSelection(2));
-    Notifications::drawCard($this, $cards[0], $src);
-    Notifications::drawCard($this, $cards[1], $src);
+    Notifications::flipCard($this, $cards[0], $src);
+    Notifications::flipCard($this, $cards[1], $src);
     Log::addAction("selection", ["players" => [$this->id], 'src' => $src->getName()]);
     return "select";
   }

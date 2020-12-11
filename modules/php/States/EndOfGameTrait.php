@@ -1,42 +1,35 @@
 <?php
 namespace Bang\States;
 use Bang\Characters\Players;
+use Bang\Game\Notifications;
 
 trait EndOfGameTrait
 {
   /*
-   * stCheckEndOfGame: check if the game is finished
+   * stPreGameEnd : attribute score to players according to end of game trigger
    */
-  public function stCheckEndOfGame() {
-    return false;
+  public function stPreGameEnd(){
+    if(Players::countRoles([SHERIFF]) == 0){
+      $living = Players::getLivingPlayers(null, true);
+
+      // That not's really possible, is it ?
+      if(count($living) == 0) {
+        Players::setWinners([SHERIFF, DEPUTY, OUTLAW, RENEGADE]);
+      }
+      else if(count($living) == 1 && $living[0]->getRole() == RENEGADE){
+        Players::setWinners([RENEGADE]); // TODO : if two renegades (with expansion), only the one left win
+        Notifications::tell(clienttranslate("The renegade is the only one left and thus wins this game."));
+      } else {
+        Players::setWinners([OUTLAW]);
+        Notifications::tell(clienttranslate("The sheriff has been killed and thus the outlaws win this game."));
+      }
+    }
+
+    if((Players::countRoles([OUTLAW, RENEGADE]) == 0)) {
+      Players::setWinners([SHERIFF, DEPUTY]);
+      Notifications::tell(clienttranslate("All the renegades and outlaws have been killed and thus Sheriff and Deputies win this game."));
+    }
+
+    $this->gamestate->nextState('');
   }
-
- 	public function argGameEnd() {
- 		$players = Players::getPlayers(null, true);
- 		$winners = array_filter($players, function($row) {return $row['player_score']==1;});
- 		return [
- 			'players' => $players,
- 			'winners' => $winners
- 		];
- 	}
-
- 	/*
- 	 * announceWin: TODO
- 	 *
- 	public function announceWin($playerId, $win = true) {
- 		$bplayers = $win ? $this->playerManager->getTeammates($playerId) : $this->playerManager->getOpponents($playerId);
- 		if (count($bplayers) == 2) {
- 			self::notifyAllPlayers('message', clienttranslate('${player_name} and ${player_name2} win!'), [
- 				'player_name' => $bplayers[0]->getName(),
- 				'player_name2' => $bplayers[1]->getName(),
- 			]);
- 		} else {
- 			self::notifyAllPlayers('message', clienttranslate('${player_name} wins!'), [
- 				'player_name' => $bplayers[0]->getName(),
- 			]);
- 		}
- 		self::DbQuery("UPDATE player SET player_score = 1 WHERE player_team = {$bplayers[0]->getTeam()}");
- 		$this->gamestate->nextState('endgame');
- 	}
- */
 }

@@ -6,6 +6,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
         ['cardsGained', 1200],
         ['cardLost', 1200],
         ['flipCard', 1000],
+        ['reshuffle', 1000],
         ['updateOptions', 200]
       );
     },
@@ -159,7 +160,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
       // Update hand counters
       this.incHandCount(n.args.playerId, n.args.amount);
       if(n.args.src == "deck")
-        $("deck").innerHTML = parseInt($("deck").innerHTML) - n.args.amount;
+        this.updateDeckCount(n);
       else if(n.args.src != "discard")
         this.incHandCount(n.args.victimId, -n.args.amount);
     },
@@ -182,10 +183,9 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
       debug("Notif: card flipped", n);
       var card = n.args.card;
       card.flipped = true;
-      //dojo.addClass("bang-card-" + n.args.src_id, "selected");
       this.addCard(card, "discard");
       setTimeout(() => dojo.removeClass("bang-card-" + card.id, "flipped"), 100);
-      //setTimeout(() => dojo.removeClass("bang-card-" + n.args.src_id, "selected"), 1000);
+      this.updateDeckCount(n);
     },
 
 
@@ -201,5 +201,17 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
     },
 
 
+    notif_reshuffle(n){
+      debug("Notif: reshuffle", n);
+      dojo.query("#discard .bang-card").forEach((card,i) => setTimeout(() => {
+        dojo.addClass(card, "flipped");
+        setTimeout(() => dojo.destroy(card), 500);
+      }, i*10) );
+      this.updateDeckCount(n);
+    },
+
+    updateDeckCount(n){
+      $("deck").innerHTML = n.args.deckCount;
+    }
   });
 });

@@ -57,7 +57,8 @@ class bang extends Table
 		self::$instance = $this;
 
 		self::initGameStateLabels([
-			'JourdonnaisUsedSkill' => 17
+			'JourdonnaisUsedSkill' => 17,
+      'optionChar1' => OPTION_CHAR_1,
 		]);
 	}
   public static function get()
@@ -83,7 +84,7 @@ class bang extends Table
 		Cards::setupNewGame($expansions);
 
 		// Initialize players
-		$sheriff = Players::setupNewGame($bplayers, $expansions, $this);
+		$sheriff = Players::setupNewGame($bplayers, $expansions, $options);
 		$this->gamestate->changeActivePlayer($sheriff);
 	}
 
@@ -99,6 +100,7 @@ class bang extends Table
 			'discard' => Cards::getLastDiscarded(),
 			'playerTurn' => Players::getCurrentTurn(),
 			'cards' => Cards::getUIData(),
+      'turn' => Log::getCurrentTurn(),
 		];
 		return $result;
 	}
@@ -136,9 +138,12 @@ class bang extends Table
 			$player->setHp(0);
 			$player->save();
 		}
+    $msgInactive = count($toEliminate) == 1? sprintf( clienttranslate("%s may play a beer to survive."), $toEliminate[0]->getName())
+      : clienttranslate('Players may play a beer to survive.');
+
 		$args = [
-			'msgActive' => '${you} lost your last life point. You may play a beer to survive.',
-			'msgInactive' => 'players may play beer to survive',
+			'msgActive' => clienttranslate('${you} lost your last life point. You may play a beer to survive.'),
+			'msgInactive' => $msgInactive,
 			'_private' => $argsReact
 		];
 

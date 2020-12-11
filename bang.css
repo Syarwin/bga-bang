@@ -47,6 +47,17 @@ div#board {
     max-height: 190px;
     min-height: 190px;
     max-width: 100%; }
+  div#board[data-players="2"] #table {
+    grid-column-start: 5;
+    grid-row-start: 4; }
+  div#board[data-players="2"] .bang-player[data-no="0"] {
+    grid-column-start: 5;
+    grid-row-start: 2;
+    justify-content: center; }
+  div#board[data-players="2"] .bang-player[data-no="1"] {
+    grid-column-start: 5;
+    grid-row-start: 6;
+    justify-content: center; }
   div#board[data-players="3"] #table {
     grid-column-start: 5;
     grid-row-start: 4; }
@@ -165,6 +176,17 @@ div#board {
   @media (max-width: 1300px) {
     div#board .bang-player {
       grid-column-end: span 6; }
+    div#board[data-players="2"] #table {
+      grid-column-start: 8;
+      grid-row-start: 2; }
+    div#board[data-players="2"] .bang-player[data-no="0"] {
+      grid-column-start: 2;
+      grid-row-start: 2;
+      justify-content: flex-start; }
+    div#board[data-players="2"] .bang-player[data-no="1"] {
+      grid-column-start: 4;
+      grid-row-start: 4;
+      justify-content: center; }
     div#board[data-players="3"] #table {
       grid-column-start: 8;
       grid-row-start: 2; }
@@ -378,6 +400,7 @@ div#board div.bang-character-tooltip div.bang-character-tooltip-sizing {
     transform: scale(2); }
 div#board .bang-player .player-info {
   position: relative;
+  min-width: 113.266509434px;
   width: 113.266509434px;
   height: 180px;
   background-image: url("img/card_borders.png");
@@ -406,7 +429,7 @@ div#board .bang-player .player-info {
     div#board .bang-player .player-info .player-character-background .player-character-hourglass {
       width: 50%;
       height: 50%;
-      background-image: url("https://en.1.studio.boardgamearena.com:8083/data/themereleases/201204-0905/img/layout/active_player.gif");
+      background-image: url("img/hourglass.gif");
       background-size: 75%;
       background-color: rgba(255, 255, 255, 0.7);
       background-position: center center;
@@ -485,12 +508,15 @@ div#board .bang-player.inactive .player-character-background .player-character-h
   display: flex;
   transition: width 1s; }
   .bang-player .bang-player-container .player-inplay {
+    width: calc(100% - 115.266509434px);
     flex-grow: 1;
     display: flex;
     flex-flow: row;
     overflow-x: auto;
     overflow-y: hidden;
-    height: 107%; }
+    height: 107%;
+    position: relative;
+    z-index: 2; }
   .bang-player .bang-player-container .player-info .player-name {
     text-align: center; }
   .bang-player .bang-player-container .player-info .player-bullets {
@@ -1185,6 +1211,17 @@ div.bang-card {
   .bang-player-board .player-cards {
     margin-left: 15px; }
 
+#help-icon {
+  height: 35px;
+  width: 35px;
+  margin-left: auto;
+  cursor: pointer; }
+  #help-icon:hover {
+    color: grey; }
+  #help-icon svg {
+    width: 100%;
+    height: 100%; }
+
 .bang_popin {
   width: auto;
   position: relative;
@@ -1231,5 +1268,119 @@ div.bang-card {
     text-align: center; }
   .bang_popin #dialog-button-container {
     text-align: center; }
+
+#popin_playersHelp #dialog-roles {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px; }
+  #popin_playersHelp #dialog-roles .dialog-role {
+    width: 150px;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 7px;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    box-shadow: 2px 2px 5px #111; }
+    #popin_playersHelp #dialog-roles .dialog-role .dialog-role-count {
+      margin: 5px 0px;
+      font-family: "Perdido";
+      font-size: 18px; }
+      #popin_playersHelp #dialog-roles .dialog-role .dialog-role-count span {
+        font-size: 20px; }
+    #popin_playersHelp #dialog-roles .dialog-role .dialog-role-img {
+      height: 170px;
+      width: 105px;
+      background-image: url("img/roles.png");
+      background-size: cover; }
+    #popin_playersHelp #dialog-roles .dialog-role .dialog-role-desc {
+      padding: 5px 10px;
+      font-family: 'Palatino Linotype';
+      text-align: center;
+      font-size: 15px; }
+    #popin_playersHelp #dialog-roles .dialog-role[data-role="0"] .dialog-role-img {
+      background-position: 0% center; }
+    #popin_playersHelp #dialog-roles .dialog-role[data-role="1"] .dialog-role-img {
+      background-position: 33.3333333333% center; }
+    #popin_playersHelp #dialog-roles .dialog-role[data-role="2"] .dialog-role-img {
+      background-position: 66.6666666667% center; }
+    #popin_playersHelp #dialog-roles .dialog-role[data-role="3"] .dialog-role-img {
+      background-position: 100% center; }
+#popin_playersHelp #dialog-players {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px; }
+  #popin_playersHelp #dialog-players .dialog-character {
+    width: 160px;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 7px;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    margin: 0 7px;
+    box-shadow: 2px 2px 5px #111; }
+    #popin_playersHelp #dialog-players .dialog-character .dialog-player-name {
+      font-weight: bold;
+      padding: 5px 0px;
+      margin-bottom: 2px;
+      width: 100%;
+      text-align: center;
+      background: white;
+      border-top-left-radius: 7px;
+      border-top-right-radius: 7px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.4); }
+    #popin_playersHelp #dialog-players .dialog-character .dialog-character-name {
+      font-family: "Perdido";
+      margin: 7px auto; }
+    #popin_playersHelp #dialog-players .dialog-character .dialog-character-background-container {
+      width: 100px;
+      height: 100px;
+      background: white;
+      border-radius: 5px;
+      border: 1px solid grey; }
+      #popin_playersHelp #dialog-players .dialog-character .dialog-character-background-container .dialog-character-background {
+        width: 90px;
+        height: 90px;
+        margin: 5px;
+        background-image: url("img/card_characters.jpg");
+        background-size: cover; }
+    #popin_playersHelp #dialog-players .dialog-character .dialog-character-desc {
+      padding: 5px 10px;
+      font-family: 'Palatino Linotype';
+      text-align: center;
+      font-size: 12px; }
+    #popin_playersHelp #dialog-players .dialog-character[data-character="0"] .dialog-character-background {
+      background-position: 0% center; }
+    #popin_playersHelp #dialog-players .dialog-character[data-character="1"] .dialog-character-background {
+      background-position: 6.6666666667% center; }
+    #popin_playersHelp #dialog-players .dialog-character[data-character="2"] .dialog-character-background {
+      background-position: 13.3333333333% center; }
+    #popin_playersHelp #dialog-players .dialog-character[data-character="3"] .dialog-character-background {
+      background-position: 20% center; }
+    #popin_playersHelp #dialog-players .dialog-character[data-character="4"] .dialog-character-background {
+      background-position: 26.6666666667% center; }
+    #popin_playersHelp #dialog-players .dialog-character[data-character="5"] .dialog-character-background {
+      background-position: 33.3333333333% center; }
+    #popin_playersHelp #dialog-players .dialog-character[data-character="6"] .dialog-character-background {
+      background-position: 40% center; }
+    #popin_playersHelp #dialog-players .dialog-character[data-character="7"] .dialog-character-background {
+      background-position: 46.6666666667% center; }
+    #popin_playersHelp #dialog-players .dialog-character[data-character="8"] .dialog-character-background {
+      background-position: 53.3333333333% center; }
+    #popin_playersHelp #dialog-players .dialog-character[data-character="9"] .dialog-character-background {
+      background-position: 60% center; }
+    #popin_playersHelp #dialog-players .dialog-character[data-character="10"] .dialog-character-background {
+      background-position: 66.6666666667% center; }
+    #popin_playersHelp #dialog-players .dialog-character[data-character="11"] .dialog-character-background {
+      background-position: 73.3333333333% center; }
+    #popin_playersHelp #dialog-players .dialog-character[data-character="12"] .dialog-character-background {
+      background-position: 80% center; }
+    #popin_playersHelp #dialog-players .dialog-character[data-character="13"] .dialog-character-background {
+      background-position: 86.6666666667% center; }
+    #popin_playersHelp #dialog-players .dialog-character[data-character="14"] .dialog-character-background {
+      background-position: 93.3333333333% center; }
+    #popin_playersHelp #dialog-players .dialog-character[data-character="15"] .dialog-character-background {
+      background-position: 100% center; }
 
 /*# sourceMappingURL=bang.css.map */
