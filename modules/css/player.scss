@@ -149,11 +149,12 @@ div#board {
         display:none;
         position:absolute;
         top: -17px;
-        right: -12px;
-        width: 30px;
+        right: -18px;
+        width: 34px;
         height: 34px;
-        background-image:url("img/sheriff.svg");
+        background-image:url("img/role-icons.png");
         background-size:cover;
+        background-position: 66.66% 0%;
       }
     }
   }

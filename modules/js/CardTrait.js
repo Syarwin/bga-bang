@@ -84,6 +84,8 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
     addCard(ocard, container, suffix = ''){
       var card = this.getCard(ocard);
       card.uid = card.id + suffix;
+      if($("bang-card-" + card.uid))
+        dojo.destroy("bang-card-" + card.uid);
 
       var div = dojo.place(this.format_block('jstpl_card', card), container);
       if(card.flipped == "")

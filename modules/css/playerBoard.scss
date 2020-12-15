@@ -7,11 +7,13 @@
     position:absolute;
     top:0;
     right:45px;
+    background-image:url("img/role-icons.png");
+    background-size:cover;
 
-    &[data-role="0"] { background-image:url("img/sheriff.svg"); }
-    &[data-role="1"] { background-image:url("img/deputy.svg"); }
-    &[data-role="2"] { background-image:url("img/outlaw.svg"); }
-    &[data-role="3"] { background-image:url("img/renegade.svg"); }
+    &[data-role="0"] { background-position: 66.66% 0%; }
+    &[data-role="1"] { background-position: 100% 0%; }
+    &[data-role="2"] { background-position: 33.33% 0%; }
+    &[data-role="3"] { background-position: 0% 0%; }
   }
 
 

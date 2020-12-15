@@ -124,6 +124,7 @@ class Notifications {
       'cards' => $formattedCards,
       'src' => 'deck',
       'target' => 'hand',
+      'deckCount' => Cards::getDeckCount(),
     ]);
   }
 
@@ -167,6 +168,7 @@ class Notifications {
         'cards' => $show? [$card->format()] : [],
         'src' => $victim->getId(),
         'target' => 'hand',
+        'deckCount' => Cards::getDeckCount(),
       ];
       if($show){
         $data['i18n'] = ['card_name'];
