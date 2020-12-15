@@ -29,9 +29,15 @@ class CalamityJanet extends Player {
   }
 
   public function getDefensiveOptions() {
-    $data = array_merge_recursive(parent::getDefensiveOptions(), parent::getBangCards());
-    $data['character'] = null;
-    return $data;
+    $missed = parent::getDefensiveOptions();
+    $args = Log::getLastAction('cardPlayed');
+    $amount = isset($args['missedNeeded']) ? $args['missedNeeded'] : 1;
+    $bangs = parent::getBangCards();
+    foreach($bangs['cards'] as $card) {
+      $card['amount'] = $amount;
+      $missed['cards'][] = $card;
+    }
+    return $missed;
   }
 
   public function getHandOptions() {
