@@ -87,7 +87,7 @@ trait ReactTrait
 				else
 					$nextState = Log::getLastAction('lastState')[0] == 'startOfTurn' ? 'draw' : 'finishedReaction';
 			}
-			if($newState == "finishedReaction") {
+			if($nextState == "finishedReaction") {
 				Players::handleRemainingEffects();
 			}
 			$this->gamestate->nextState($nextState);
