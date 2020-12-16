@@ -7,7 +7,7 @@ class SuzyLafayette extends Player {
     $this->character    = SUZY_LAFAYETTE;
     $this->character_name = clienttranslate('Suzy Lafayette');
     $this->text  = [
-      clienttranslate("As soon as he has no cards in her hand, he draws a card from the draw pile. "),
+      clienttranslate("As soon as she has no cards in her hand, she draws a card from the draw pile."),
 
     ];
     $this->bullets = 4;
