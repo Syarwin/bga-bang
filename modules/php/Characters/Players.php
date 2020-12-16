@@ -202,6 +202,15 @@ class Players extends \APP_GameClass
 		self::DbQuery("UPDATE player SET player_score = 0 WHERE player_role not in $roles");
 	}
 
+	public static function handleRemainingEffects() {
+		$actions = Log::getActionsAfter("registerAbility", "handledAbilities");
+		foreach($actions as $ability) {
+			$player = self::getPlayer($ability['id']);
+			if(!$player->isEliminated()) $player->useAbility($ability['args']);
+		}
+		Log::addAction("handledAbilities");
+	}
+
 	/*
 	 * characterClasses : for each character Id, the corresponding class name
 	 */

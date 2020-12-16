@@ -16,8 +16,14 @@ class BartCassidy extends Player {
 
   // TODO : make it work with the dynamite : should lost the three hp THEN draw three cards if not dead
   public function looseLife($amount = 1) {
-		$newstate = parent::looseLife($amount);
-    if(!$this->eliminated) $this->drawCards($amount);
+    $this->registerAbility(['amount'=>$amount]);
+    $newstate = parent::looseLife($amount);
+    //if(!$this->eliminated) $this->drawCards($amount);
+
     return $newstate;
+  }
+
+  public function useAbility($args) {
+    $this->drawCards($args['amount']);
   }
 }

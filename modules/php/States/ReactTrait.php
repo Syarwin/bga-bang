@@ -87,12 +87,18 @@ trait ReactTrait
 				else
 					$nextState = Log::getLastAction('lastState')[0] == 'startOfTurn' ? 'draw' : 'finishedReaction';
 			}
+			if($newState == "finishedReaction") {
+				Players::handleRemainingEffects();
+			}
 			$this->gamestate->nextState($nextState);
 			return;
 		}
 
 		$this->gamestate->changeActivePlayer(Players::getCurrentTurn());
 		if(count($toEliminate)>0) $this->gamestate->nextState('eliminate');
-		else $this->gamestate->nextState("finishedReaction");
+		else {
+			Players::handleRemainingEffects();
+			$this->gamestate->nextState("finishedReaction");
+		}
 	}
 }

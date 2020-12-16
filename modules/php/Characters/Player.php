@@ -491,6 +491,10 @@ class Player extends \APP_GameClass
   }
 
 
+  public function registerAbility($args = []) {
+    Log::addAction("registerAbility", ["id" => $this->id, "args" => $args]);
+  }
+
   /***************************************
   ****************************************
   ************** templates ***************

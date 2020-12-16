@@ -19,13 +19,16 @@ class ElGringo extends Player {
 
   public function looseLife($amount = 1) {
 		$newstate = parent::looseLife($amount);
-    $attacker = Players::getCurrentTurn(true);
-
-		if(!$this->eliminated && $attacker->id != $this->id) {
-			$card = $attacker->getRandomCardInHand();
-      Cards::moveCard($card->getId(), 'hand', $this->getId());
-			Notifications::stoleCard($this, $attacker, $card, false);
+		if($attacker->id != $this->id) {
+      $this->registerAbility();
 		}
     return $newstate;
 	}
+
+  public function useAbility($args) {
+    $attacker = Players::getCurrentTurn(true);
+    $card = $attacker->getRandomCardInHand();
+    Cards::moveCard($card->getId(), 'hand', $this->getId());
+    Notifications::stoleCard($this, $attacker, $card, false);
+  }
 }

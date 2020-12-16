@@ -85,6 +85,12 @@ class Log extends \APP_GameClass
     return count($actions) > 0 ? json_decode($actions[0]['action_arg'], true) : null;
   }
 
+  public static function getActionsAfter($action, $lastAction) {
+    $sql = "SELECT action_arg FROM log WHERE action='$action' AND log_id > (SELECT IFNULL(MAX(log_id), 0) FROM log WHERE action='$lastAction')";
+    $res = self::getObjectListFromDB($sql);
+    return array_values(array_map(function($row) { return json_decode($row['action_arg'], true);}, $res));
+  }
+
 
   public static function getPlayerTurn()
   {

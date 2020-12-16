@@ -32,7 +32,10 @@ trait PlayCardTrait
 
 		// TODO : add check to see if the card was indeed playable
 		// if(!in_array($id, $this->argPlayableCards())) ...
-		$newState = Players::getActivePlayer()->playCard($id, $args);
-		$this->gamestate->nextState($newState ?? "continuePlaying");
+		$newState = Players::getActivePlayer()->playCard($id, $args) ?? "continuePlaying";
+		if($newState == "continuePlaying") {
+			Players::handleRemainingEffects();
+		}
+		$this->gamestate->nextState($newState);
 	}
 }
