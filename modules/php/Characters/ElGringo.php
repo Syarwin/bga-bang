@@ -19,6 +19,7 @@ class ElGringo extends Player {
 
   public function looseLife($amount = 1) {
 		$newstate = parent::looseLife($amount);
+    $attacker = Players::getCurrentTurn(true);
 		if($attacker->id != $this->id) {
       $this->registerAbility();
 		}
