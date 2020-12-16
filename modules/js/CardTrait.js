@@ -6,7 +6,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
         ['cardsGained', 1200],
         ['cardLost', 1200],
         ['flipCard', 1000],
-        ['reshuffle', 1000],
+        ['reshuffle', 1500],
         ['updateOptions', 200]
       );
     },
@@ -16,7 +16,10 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
       var ocard = this.getCard(card, true);
       ocard.uid = ocard.id + "discard";
       this.slideTemporary('jstpl_card', ocard, "board", sourceId, "discard", duration || 1000, 0)
-      .then(() => this.addCard(card, "discard"));
+      .then(() => {
+        var div = this.addCard(card, "discard");
+        dojo.style(div, "zIndex", dojo.query("#discard .bang-card").length);
+      });
     },
 
 
@@ -91,6 +94,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
       if(card.flipped == "")
         this.addTooltipHtml(div.id, this.format_block( 'jstpl_cardTooltip',  card));
       dojo.connect(div, "onclick", (evt) => { evt.preventDefault(); evt.stopPropagation(); this.onClickCard(card) });
+      return div;
     },
 
 
@@ -160,7 +164,9 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
       });
 
       // Update hand counters
-      this.incHandCount(n.args.playerId, n.args.amount);
+      if(n.args.target == "hand")
+        this.incHandCount(n.args.playerId, n.args.amount);
+
       if(n.args.src == "deck")
         this.updateDeckCount(n);
       else if(n.args.src != "discard")
@@ -185,7 +191,8 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
       debug("Notif: card flipped", n);
       var card = n.args.card;
       card.flipped = true;
-      this.addCard(card, "discard");
+      var div = this.addCard(card, "discard");
+      dojo.style(div, "zIndex", dojo.query("#discard .bang-card").length);
       setTimeout(() => dojo.removeClass("bang-card-" + card.id, "flipped"), 100);
       this.updateDeckCount(n);
     },

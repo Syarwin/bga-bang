@@ -7,7 +7,7 @@ class CardIndians extends BrownCard {
     parent::__construct($id, $copy);
     $this->type  = CARD_INDIANS;
     $this->name  = clienttranslate('Indians!');
-    $this->text  = clienttranslate("All other players discard a BANG! or lose 1 life point.");
+    $this->text  = clienttranslate("All other players discard a BANG! or loose 1 life point.");
     $this->symbols = [
       [$this->text]
     ];

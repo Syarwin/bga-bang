@@ -10,7 +10,7 @@ class CardDynamite extends BlueCard {
     parent::__construct($id, $copy);
     $this->type  = CARD_DYNAMITE;
     $this->name  = clienttranslate('Dynamite');
-    $this->text  = clienttranslate("At the start of your turn reveal top card from the deck. If it's Spades 2-9, you lose 3 life points. Else pass the Dynamite to the player on your left.");
+    $this->text  = clienttranslate("At the start of your turn reveal top card from the deck. If it's Spades 2-9, you loose 3 life points. Else pass the Dynamite to the player on your left.");
     $this->symbols = [
       [SYMBOL_DYNAMITE, clienttranslate("Lose 3 life points. Else pass the Dynamite on your left.")]
     ];

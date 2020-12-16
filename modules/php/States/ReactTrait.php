@@ -63,7 +63,8 @@ trait ReactTrait
 
 	public function stEndReaction() {
 		$args = Log::getLastAction('react');
-    $src = array_values($args['_private'])[0]['src'];
+    // Handle direct elimination with no cards in hand
+    $src = is_null($args)? 'hp' : array_values($args['_private'])[0]['src'];
 
 		$toEliminate = Players::getPlayersForElimination();
 

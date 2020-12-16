@@ -7,7 +7,7 @@ class BartCassidy extends Player {
     $this->character    = BART_CASSIDY;
     $this->character_name = clienttranslate('Bart Cassidy');
     $this->text  = [
-      clienttranslate("Each time he loses a life point, he immediately draws a card from the deck. "),
+      clienttranslate("Each time he looses a life point, he immediately draws a card from the deck. "),
 
     ];
     $this->bullets = 4;

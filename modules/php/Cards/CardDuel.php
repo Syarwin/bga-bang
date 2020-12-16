@@ -8,7 +8,7 @@ class CardDuel extends BrownCard {
     parent::__construct($id, $copy);
     $this->type  = CARD_DUEL;
     $this->name  = clienttranslate('Duel');
-    $this->text  = clienttranslate("A target player discards a BANG! then you, etc. First player failing to discard a BANG! loses 1 life point.");
+    $this->text  = clienttranslate("A target player discards a BANG! then you, etc. First player failing to discard a BANG! looses 1 life point.");
     $this->color = BROWN;
     $this->symbols = [
       [$this->text]

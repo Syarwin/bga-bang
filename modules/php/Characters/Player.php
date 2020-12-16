@@ -159,7 +159,6 @@ class Player extends \APP_GameClass
       Log::addAction('lastState', [Utils::getStateName()]);
       return 'eliminate';
     }
-    $this->save();
     return null;
 	}
 
@@ -416,13 +415,11 @@ class Player extends \APP_GameClass
         $reactions[$player->getId()] = $reaction; // Give him a chance to (pretend to) react
   		} else {
         $curr = Players::getCurrentTurn();
-        $byPlayer = $this->id==$curr ? $this : null;
+        $byPlayer = $this->id == $curr ? $this : null;
   			$newstate = $player->looseLife(); // Lost life immediatly
-        if(!is_null($newstate)) $state = $newstate;
+        $state = $newstate ?? $state;
   		}
     }
-
-
 
     // Go to corresponding state
     if(count($reactions) > 0) {
@@ -444,10 +441,12 @@ class Player extends \APP_GameClass
 
       return "react";
     }
+
     return $state;
   }
 
   public function eliminate(){
+
     // get player who eliminated this player
     $byPlayer = Players::getCurrentTurn(true);
     if($byPlayer->id == $this->id) $byPlayer = null;

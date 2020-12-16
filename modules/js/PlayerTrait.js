@@ -174,6 +174,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
        openAnimation:true,
        openAnimationTarget:"help-icon",
        contentsTpl:jstpl_helpDialog,
+       verticalAlign:'flex-start',
      });
 
      [0,2,2,3,1,2,1].forEach((roleId, i) => {
@@ -190,7 +191,6 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
      this.gamedatas.bplayers.forEach( player => {
        dojo.place(this.format_block('jstpl_helpDialogCharacter', player), "dialog-players");
      });
-
     },
   });
 });

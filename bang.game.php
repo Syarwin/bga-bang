@@ -138,17 +138,24 @@ class bang extends Table
 			$player->setHp(0);
 			$player->save();
 		}
-    $msgInactive = count($toEliminate) == 1? sprintf( clienttranslate("%s may play a beer to survive."), $toEliminate[0]->getName())
-      : clienttranslate('Players may play a beer to survive.');
 
-		$args = [
-			'msgActive' => clienttranslate('${you} lost your last life point. You may play a beer to survive.'),
-			'msgInactive' => $msgInactive,
-			'_private' => $argsReact
-		];
+    $newState = 'eliminate';
+    if(count($argsReact) > 0){
+      $msgInactive = count($toEliminate) == 1? sprintf( clienttranslate("%s may play a beer to survive."), $toEliminate[0]->getName())
+        : clienttranslate('Players may play a beer to survive.');
 
-		Log::addAction('react', $args);
-		$this->gamestate->nextState(count($argsReact) > 0 ? "react" : "eliminate");
+  		$args = [
+  			'msgActive' => clienttranslate('${you} lost your last life point. You may play a beer to survive.'),
+  			'msgInactive' => $msgInactive,
+  			'_private' => $argsReact
+  		];
+
+      Log::addAction('react', $args);
+      $newState = 'react';
+    }
+
+
+		$this->gamestate->nextState($newState);
 	}
 
 
