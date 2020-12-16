@@ -10,7 +10,6 @@ use Bang\Game\Stats;
 trait ReactTrait
 {
 	public function stAwaitReaction() {
-		Cards::resetPlayedColumn();
 		$pId = Log::getReactPlayers();
 		if(is_array($pId)) {
 			$this->gamestate->setPlayersMultiactive($pId, 'finishedReaction', true); // This transition should never happens as the targets are non-empty
@@ -27,7 +26,6 @@ trait ReactTrait
 
 
 	public function stAwaitMultiReaction() {
-		Cards::resetPlayedColumn();
 		$players = Log::getReactPlayers();
 		$this->gamestate->setPlayersMultiactive($players, 'finishedReaction', true); // This transition should never happens as the targets are non-empty
 		$this->gamestate->nextState();
@@ -89,6 +87,7 @@ trait ReactTrait
 			}
 			if($nextState == "finishedReaction") {
 				Players::handleRemainingEffects();
+				Cards::resetPlayedColumn();
 			}
 			$this->gamestate->nextState($nextState);
 			return;
@@ -98,6 +97,7 @@ trait ReactTrait
 		if(count($toEliminate)>0) $this->gamestate->nextState('eliminate');
 		else {
 			Players::handleRemainingEffects();
+			Cards::resetPlayedColumn();
 			$this->gamestate->nextState("finishedReaction");
 		}
 	}
