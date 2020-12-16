@@ -169,8 +169,12 @@ class Cards extends \APP_GameClass
 	}
 
 	public static function deal($player, $amount, $fromLocation = 'deck'){
+		if(self::getDeckCount() < $amount){
+      self::reshuffle();
+    }
 		return self::toObjects(self::getDeck()->pickCards($amount, $fromLocation, $player));
 	}
+
 	public static function dealFromDiscard($player, $amount){
 		return self::deal($player, $amount, "discard");
 	}
