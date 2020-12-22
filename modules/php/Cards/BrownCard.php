@@ -20,7 +20,7 @@ class BrownCard extends Card
 		$player_ids = [];
 		switch($this->effect['impacts']) {
 			case ALL_OTHER:
-				$player_ids = Players::getLivingPlayers($player->id);
+				$player_ids = Players::getLivingPlayersStartingWith($player->getId(),$player->getId());
 				break;
 			case INRANGE:
 				$player_ids = $player->getPlayersInRange($player->getRange());

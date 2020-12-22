@@ -10,7 +10,8 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
     onEnteringStateReact(args){
       this._amount = null;
       this._selectedCards = [];
-      this.makeCardSelectable(args._private.cards, "selectReact");
+      if(args._private != undefined)
+        this.makeCardSelectable(args._private.cards, "selectReact");
       this.gamedatas.gamestate.descriptionmyturn = args.msgActive;
       this.gamedatas.gamestate.description = args.msgInactive;
       this.updatePageTitle();

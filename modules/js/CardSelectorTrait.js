@@ -37,7 +37,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
      * Triggered whenever a player click on a card
      */
     onClickCard(ocard){
-      if(!this.isCurrentPlayerActive()) return;
+      //if(!this.isCurrentPlayerActive()) return;
       // Is the card in the discard ?
       if($("bang-card-" + ocard.uid).parentNode.id == "discard")
         return this.onClickDiscard();

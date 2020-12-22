@@ -134,8 +134,13 @@ class Players extends \APP_GameClass
 		return $asPlayerObjects ? self::getPlayers($ids) : $ids;
 	}
 
-	public static function getLivingPlayersStartingWith($player) {
-		return self::getObjectListFromDB("SELECT player_id FROM player WHERE player_eliminated = 0 ORDER BY player_no < {$player->getNo()}, player_no", true);
+	public static function getLivingPlayersStartingWith($player, $except = null) {
+		$and = "";
+		if($except != null){
+			$ids = is_array($except)? $except : [$except];
+			$and = " AND player_id NOT IN ('" . implode("','", $ids) . "')";
+		}
+		return self::getObjectListFromDB("SELECT player_id FROM player WHERE player_eliminated = 0$and ORDER BY player_no < {$player->getNo()}, player_no", true);
 	}
 
 	public static function getPlayersForElimination($asObjects=false) {

@@ -89,7 +89,8 @@ define(["dojo", "dojo/_base/declare","ebg/core/gamegui",], (dojo, declare) => {
      onEnteringState(stateName, args) {
        debug('Entering state: ' + stateName, args);
 
-       if (this._activeStates.includes(stateName) && !this.isCurrentPlayerActive()) return;
+       if (this._activeStates.includes(stateName) && !this.isCurrentPlayerActive() &&
+          stateName != 'react') return;
 
        // Call appropriate method
        var methodName = "onEnteringState" + stateName.charAt(0).toUpperCase() + stateName.slice(1);

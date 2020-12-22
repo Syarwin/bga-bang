@@ -399,15 +399,11 @@ class Player extends \APP_GameClass
   public function attack($playerIds, $checkMissed = true) {
     $reactions = [];
     $state = null;
+
     foreach(Players::getPlayers($playerIds) as $player){
       // Player has defensive equipment ? (eg Barrel)
-      $reaction = [];
-      if($checkMissed) {
-        $reaction = $player->getDefensiveOptions();
-      } else {
-        $reaction = $player->getBangCards();
-      }
-
+      $reaction =  $checkMissed ? $player->getDefensiveOptions() : $player->getBangCards();
+      $reaction['selection'] = [];
       $handcount = $player->countCardsInHand();
 
       if(count($reaction['cards']) > 0 || $handcount > 0 || $reaction['character'] != null) {
@@ -420,7 +416,6 @@ class Player extends \APP_GameClass
         $state = $newstate ?? $state;
   		}
     }
-
     // Go to corresponding state
     if(count($reactions) > 0) {
       $card = Cards::getCard(Log::getCurrentCard());
@@ -432,9 +427,11 @@ class Player extends \APP_GameClass
       $inactive = count($reactions) > 1 ? clienttranslate('Players may react to ${src}') : clienttranslate('${actplayer} may react to ${src}');
       $args = [
         'msgActive' => clienttranslate('${you} may react to ${src}'),
+        'msgWaiting' => clienttranslate('${actplayer} has to react to ${src}. You may already select your reaction'),
         'msgInactive' => $inactive,
         'src' => $src,
         'attack' => true,
+        'order' => array_filter($playerIds,function($id) use ($reactions) {return isset($reactions[$id]);}),
         '_private' => $reactions
       ];
       Log::addAction("react", $args);

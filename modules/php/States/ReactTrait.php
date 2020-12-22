@@ -10,49 +10,69 @@ use Bang\Game\Stats;
 trait ReactTrait
 {
 	public function stAwaitReaction() {
-		$pId = Log::getReactPlayers();
-		if(is_array($pId)) {
-			$this->gamestate->setPlayersMultiactive($pId, 'finishedReaction', true); // This transition should never happens as the targets are non-empty
-			$this->gamestate->nextState('multi');
+		$args = Log::getLastAction("react");
+
+		//Utils::die();
+		if(count($args['order'])>1) {
+			foreach ($args['order'] as $pId) {
+
+				if(count($args['_private'][$pId]['selection']) > 0) continue;
+				$this->gamestate->changeActivePlayer($pId);
+				break;
+			}
 		} else {
 			$this->gamestate->changeActivePlayer($pId);
-			$this->gamestate->nextState('single');
 		}
+		$this->gamestate->nextState('single');
 	}
 
 	public function argReact() {
 	 return Log::getLastAction("react");
 	}
 
-
-	public function stAwaitMultiReaction() {
-		$players = Log::getReactPlayers();
-		$this->gamestate->setPlayersMultiactive($players, 'finishedReaction', true); // This transition should never happens as the targets are non-empty
-		$this->gamestate->nextState();
-	}
-
-
 	function react($ids) {
- 		$player = Players::getPlayer(self::getCurrentPlayerId());
- 		$newState = $player->react($ids) ?? "finishedReaction";
+		$pId = self::getCurrentPlayerId();
+ 		$player = Players::getPlayer($pId);
+		$argReact = $this->argReact();
+		$argReact["_private"][$player->getId()]['selection'] = $ids;
+		if($pId == self::getActivePlayerId()) {
+	 		$newState = $player->react($ids);
+			if($newState == "updateOptions") {
+	      // TODO : the computation is not correct, it should handle more complex case
+				$args = Cards::getCurrentCard()->getReactionOptions($player);
+	      Notifications::updateOptions($player, $args);
 
-		if($newState == "updateOptions"){
-      // TODO : the computation is not correct, it should handle more complex case
-			$args = Cards::getCurrentCard()->getReactionOptions($player);
-      Notifications::updateOptions($player, $args);
-
-      $argReact = $this->argReact();
-      $argReact["_private"][$player->getId()] = $args;
-      $argReact["_private"][$player->getId()]['src'] =  Log::getCurrentCard();
-      Log::addAction("react", $argReact);
+	      $argReact["_private"][$player->getId()] = $args;
+	      $argReact["_private"][$player->getId()]['src'] =  Log::getCurrentCard();
+	      Log::addAction("react", $argReact);
+			} else {
+				while(true) {
+					$next = array_reduce($argReact['order'],
+						function($carry, $id) use ($pId){
+							if($carry==null) return $id == $pId ? $id : null;
+							if($carry == $pId) return $id;
+							return $carry;
+						});
+					if($next == $pId) break;
+					$selection = $argReact['_private'][$next]['selection'];
+					if(count($selection)>0) {
+						$pId = $next;
+						$player = Players::getPlayer($pId);
+						$player->react($selection);
+					} else {
+						$newState = 'react';
+						break;
+					}
+				}
+				Log::addAction("react", $argReact);
+        $this->gamestate->nextState($newState ?? "finishedReaction");
+			}
 		} else {
-	    if(Utils::getStateName() == 'multiReact') {
-	      $this->gamestate->setPlayerNonMultiactive(self::getCurrentPlayerId(), $newState);
-	    } else {
-        $this->gamestate->nextState($newState);
-      }
+			Log::addAction("react", $argReact);
 		}
+
  	}
+
 
 	public function useAbility($args) {
 		$id = self::getCurrentPlayerId();
