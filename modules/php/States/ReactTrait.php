@@ -39,12 +39,8 @@ trait ReactTrait
 	 		$newState = $player->react($ids);
 			if($newState == "updateOptions") {
 	      // TODO : the computation is not correct, it should handle more complex case
-				$args = Cards::getCurrentCard()->getReactionOptions($player);
-	      Notifications::updateOptions($player, $args);
-
-	      $argReact["_private"][$player->getId()] = $args;
-	      $argReact["_private"][$player->getId()]['src'] =  Log::getCurrentCard();
-	      Log::addAction("react", $argReact);
+				// example?
+				$this->updateOptions($player, $argReact);
 			} else {
 				while(true) {
 					$next = array_reduce($argReact['order'],
@@ -58,7 +54,11 @@ trait ReactTrait
 					if(count($selection)>0) {
 						$pId = $next;
 						$player = Players::getPlayer($pId);
-						$player->react($selection);
+						$newState = $player->react($selection);
+						if($newState == "updateOptions") {
+							$this->updateOptions($player, $argReact);
+							return;
+						}
 					} else {
 						$newState = 'react';
 						break;
@@ -73,6 +73,14 @@ trait ReactTrait
 
  	}
 
+	public function updateOptions($player, $argReact) {
+		$args = Cards::getCurrentCard()->getReactionOptions($player);
+		Notifications::updateOptions($player, $args);
+
+		$argReact["_private"][$player->getId()] = $args;
+		$argReact["_private"][$player->getId()]['src'] =  Log::getCurrentCard();
+		Log::addAction("react", $argReact);
+	}
 
 	public function useAbility($args) {
 		$id = self::getCurrentPlayerId();
