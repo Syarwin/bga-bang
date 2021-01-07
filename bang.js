@@ -17,7 +17,7 @@
 
 //# sourceURL=bang.js
 //@ sourceURL=bang.js
-var isDebug = true;
+var isDebug = window.location.host == 'studio.boardgamearena.com' || window.location.hash.indexOf('debug') > -1;
 var debug = isDebug ? console.info.bind(window.console) : function () { };
 define([
     "dojo", "dojo/_base/declare",

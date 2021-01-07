@@ -33,7 +33,7 @@ var jstpl_player_board_data = `<div class='bang-player-board' id="bang-player-bo
   </ul>
   <div class='player-cards'>
     <span class="player-hand-card"></span>
-    <span class='player-handcount'></span>/<span class="player-maxhand"></span>
+    <span class='player-handcount'></span>
   </div>
 </div>`;
 
@@ -88,7 +88,7 @@ var jstpl_player = `<div class='bang-player' id='bang-player-\${id}' data-role="
 			<div class='player-name' style="color:#\${color}">\${name}</div>
 			<div class='player-cards'>
 				<span class="player-hand-card"></span>
-				<span class='player-handcount'></span>/<span class="player-maxhand"></span>
+				<span class='player-handcount'></span>
 			</div>
 
 			<ul class='player-bullets' id='player-bullets-\${id}' >
