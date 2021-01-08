@@ -47,6 +47,7 @@ class Players extends \APP_GameClass
 		}
 		self::DbQuery($sql . implode($values, ','));
 
+/*
     Cards::dealCard($sheriff, CARD_INDIANS);
     Cards::dealCard($sheriff, CARD_GATLING);
     Cards::dealCard($sheriff, CARD_REMINGTON);
