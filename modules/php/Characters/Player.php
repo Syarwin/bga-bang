@@ -169,6 +169,14 @@ class Player extends \APP_GameClass
 ************************************/
 
   /*
+   * Return the set of all other living players
+   */
+  public function getOrderedOtherPlayers()
+  {
+    return Players::getLivingPlayersStartingWith($this, [$this->id]);
+  }
+
+  /*
    * Return a random card from the hand (useful for drawing in hand for instance)
    */
   public function getRandomCardInHand(){

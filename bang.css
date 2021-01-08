@@ -661,47 +661,47 @@ div.bang-character-tooltip div.bang-character-tooltip-sizing {
 .bang-player[data-bullets="6"] .bullet:nth-child(6), .bang-player-board[data-bullets="6"] .bullet:nth-child(6) {
   background-position: 0 0; }
 .bang-player[data-hand="0"] .player-cards .player-handcount::before, .bang-player-board[data-hand="0"] .player-cards .player-handcount::before {
-  content: "0"; }
+  content: "x 0"; }
 .bang-player[data-hand="1"] .player-cards .player-handcount::before, .bang-player-board[data-hand="1"] .player-cards .player-handcount::before {
-  content: "1"; }
+  content: "x 1"; }
 .bang-player[data-hand="2"] .player-cards .player-handcount::before, .bang-player-board[data-hand="2"] .player-cards .player-handcount::before {
-  content: "2"; }
+  content: "x 2"; }
 .bang-player[data-hand="3"] .player-cards .player-handcount::before, .bang-player-board[data-hand="3"] .player-cards .player-handcount::before {
-  content: "3"; }
+  content: "x 3"; }
 .bang-player[data-hand="4"] .player-cards .player-handcount::before, .bang-player-board[data-hand="4"] .player-cards .player-handcount::before {
-  content: "4"; }
+  content: "x 4"; }
 .bang-player[data-hand="5"] .player-cards .player-handcount::before, .bang-player-board[data-hand="5"] .player-cards .player-handcount::before {
-  content: "5"; }
+  content: "x 5"; }
 .bang-player[data-hand="6"] .player-cards .player-handcount::before, .bang-player-board[data-hand="6"] .player-cards .player-handcount::before {
-  content: "6"; }
+  content: "x 6"; }
 .bang-player[data-hand="7"] .player-cards .player-handcount::before, .bang-player-board[data-hand="7"] .player-cards .player-handcount::before {
-  content: "7"; }
+  content: "x 7"; }
 .bang-player[data-hand="8"] .player-cards .player-handcount::before, .bang-player-board[data-hand="8"] .player-cards .player-handcount::before {
-  content: "8"; }
+  content: "x 8"; }
 .bang-player[data-hand="9"] .player-cards .player-handcount::before, .bang-player-board[data-hand="9"] .player-cards .player-handcount::before {
-  content: "9"; }
+  content: "x 9"; }
 .bang-player[data-hand="10"] .player-cards .player-handcount::before, .bang-player-board[data-hand="10"] .player-cards .player-handcount::before {
-  content: "10"; }
+  content: "x 10"; }
 .bang-player[data-hand="11"] .player-cards .player-handcount::before, .bang-player-board[data-hand="11"] .player-cards .player-handcount::before {
-  content: "11"; }
+  content: "x 11"; }
 .bang-player[data-hand="12"] .player-cards .player-handcount::before, .bang-player-board[data-hand="12"] .player-cards .player-handcount::before {
-  content: "12"; }
+  content: "x 12"; }
 .bang-player[data-hand="13"] .player-cards .player-handcount::before, .bang-player-board[data-hand="13"] .player-cards .player-handcount::before {
-  content: "13"; }
+  content: "x 13"; }
 .bang-player[data-hand="14"] .player-cards .player-handcount::before, .bang-player-board[data-hand="14"] .player-cards .player-handcount::before {
-  content: "14"; }
+  content: "x 14"; }
 .bang-player[data-hand="15"] .player-cards .player-handcount::before, .bang-player-board[data-hand="15"] .player-cards .player-handcount::before {
-  content: "15"; }
+  content: "x 15"; }
 .bang-player[data-hand="16"] .player-cards .player-handcount::before, .bang-player-board[data-hand="16"] .player-cards .player-handcount::before {
-  content: "16"; }
+  content: "x 16"; }
 .bang-player[data-hand="17"] .player-cards .player-handcount::before, .bang-player-board[data-hand="17"] .player-cards .player-handcount::before {
-  content: "17"; }
+  content: "x 17"; }
 .bang-player[data-hand="18"] .player-cards .player-handcount::before, .bang-player-board[data-hand="18"] .player-cards .player-handcount::before {
-  content: "18"; }
+  content: "x 18"; }
 .bang-player[data-hand="19"] .player-cards .player-handcount::before, .bang-player-board[data-hand="19"] .player-cards .player-handcount::before {
-  content: "19"; }
+  content: "x 19"; }
 .bang-player[data-hand="20"] .player-cards .player-handcount::before, .bang-player-board[data-hand="20"] .player-cards .player-handcount::before {
-  content: "20"; }
+  content: "x 20"; }
 .bang-player[data-bullets="0"] .player-cards .player-maxhand::before, .bang-player-board[data-bullets="0"] .player-cards .player-maxhand::before {
   content: "0"; }
 .bang-player[data-bullets="1"] .player-cards .player-maxhand::before, .bang-player-board[data-bullets="1"] .player-cards .player-maxhand::before {
@@ -1018,14 +1018,15 @@ div.bang-card {
     div.bang-card.selectable:hover .card-front {
       transform: scale(1.05);
       transform-origin: center center; }
-  div.bang-card.selected .card-front {
-    transform: scale(1.05);
-    transform-origin: center center;
+  div.bang-card.preselected .card-front, div.bang-card.selected .card-front {
     border: 2px solid red;
     margin-left: -2px;
     margin-top: -2px;
     border-radius: 10px;
     background-color: red; }
+  div.bang-card.selected .card-front {
+    transform: scale(1.05);
+    transform-origin: center center; }
   div.bang-card .card-back, div.bang-card .card-front {
     position: absolute;
     top: 0;

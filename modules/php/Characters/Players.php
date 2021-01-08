@@ -47,12 +47,11 @@ class Players extends \APP_GameClass
 		}
 		self::DbQuery($sql . implode($values, ','));
 
-/*
-    Cards::dealCard($sheriff, CARD_MUSTANG);
-    Cards::dealCard($sheriff, CARD_SCOPE);
-    Cards::dealCard($sheriff, CARD_BARREL);
+    Cards::dealCard($sheriff, CARD_INDIANS);
+    Cards::dealCard($sheriff, CARD_GATLING);
     Cards::dealCard($sheriff, CARD_REMINGTON);
     Cards::dealCard($sheriff, CARD_DYNAMITE);
+    Cards::dealCard($sheriff, CARD_BARREL, 2);
 //    Cards::dealCard($sheriff, CARD_GATLING);
 /*
     Cards::dealCard($sheriff, CARD_BEER,2);
@@ -142,6 +141,7 @@ class Players extends \APP_GameClass
 		}
 		return self::getObjectListFromDB("SELECT player_id FROM player WHERE player_eliminated = 0$and ORDER BY player_no < {$player->getNo()}, player_no", true);
 	}
+
 
 	public static function getPlayersForElimination($asObjects=false) {
 		$ids = self::getObjectListFromDB("SELECT player_id FROM player WHERE player_eliminated = 0 AND player_hp <= 0", true);

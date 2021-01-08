@@ -105,7 +105,7 @@ class Log extends \APP_GameClass
     return is_null($action)? null : $action["card_id"];
   }
 
-
+/*
   public static function getReactPlayers()
   {
     $args = self::getLastAction("react");
@@ -113,4 +113,5 @@ class Log extends \APP_GameClass
     $players = array_keys($args['_private']);
     return count($players) > 1? $players : $players[0];
   }
+*/
 }

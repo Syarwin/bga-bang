@@ -26,7 +26,7 @@ class CardIndians extends BrownCard {
 
   public function play($player, $args) {
     parent::play($player, $args);
-    $ids = Players::getLivingPlayersStartingWith($player,$player->getId());
+    $ids = $player->getOrderedOtherPlayers();
     return $player->attack($ids, NO_CHECK_BARREL);
   }
 

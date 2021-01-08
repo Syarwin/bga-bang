@@ -66,6 +66,11 @@ class action_bang extends APP_GameAction
 		self::ajaxResponse( );
 	}
 
+  public function cancelPreselection() {
+    self::setAjaxMode();
+    $result = $this->game->cancelPreSelection();
+    self::ajaxResponse( );
+  }
 
 
 	public function select() {

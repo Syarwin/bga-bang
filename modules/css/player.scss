@@ -215,7 +215,7 @@ div.bang-character-tooltip {
   }
 
   @for $i from 0 through 20 {
-    &[data-hand="#{$i}"] .player-cards .player-handcount::before { content:"#{$i}"; }
+    &[data-hand="#{$i}"] .player-cards .player-handcount::before { content:"x #{$i}"; }
   }
   @for $i from 0 through 7 {
     &[data-bullets="#{$i}"] .player-cards .player-maxhand::before { content:"#{$i}"; }

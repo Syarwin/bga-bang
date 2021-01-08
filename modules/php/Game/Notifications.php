@@ -259,4 +259,11 @@ class Notifications {
       'deckCount' => Cards::getDeckCount(),
     ]);
   }
+
+
+  public static function preSelectCards($player, $ids){
+    self::notify($player->getId(), 'preselection', '', [
+      'cards' => $ids,
+    ]);
+  }
 }

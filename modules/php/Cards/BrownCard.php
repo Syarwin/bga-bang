@@ -86,7 +86,7 @@ class BrownCard extends Card
 
 		switch ($this->effect['type']) {
 			case BASIC_ATTACK:
-				$ids = ($this->effect['impacts'] == ALL_OTHER) ? Players::getLivingPlayers($player->getId()) : [$args['player']];
+				$ids = ($this->effect['impacts'] == ALL_OTHER) ? $player->getOrderedOtherPlayers() : [$args['player']];
 				return $player->attack($ids);
 				break;
 

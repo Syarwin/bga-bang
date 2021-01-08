@@ -49,16 +49,20 @@ div.bang-card {
       transform-origin: center center;
     }
   }
-  &.selected .card-front {
-    transform:scale(1.05);
-    transform-origin: center center;
-    border: 2px solid red;
-    margin-left:-2px;
-    margin-top:-2px;
-    border-radius: 10px;
-    background-color: red;
+  &.preselected, &.selected {
+    .card-front {
+      border: 2px solid red;
+      margin-left:-2px;
+      margin-top:-2px;
+      border-radius: 10px;
+      background-color: red;
+    }
   }
 
+  &.selected .card-front{
+    transform:scale(1.05);
+    transform-origin: center center;
+  }
 
   .card-back, .card-front {
     position:absolute;

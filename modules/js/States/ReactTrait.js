@@ -1,7 +1,9 @@
 define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
   return declare("bang.reactTrait", null, {
     constructor(){
-//      this._notifications.push(      );
+      this._notifications.push(
+        ['preselection', 10]
+      );
     },
 
     /*
@@ -10,14 +12,41 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
     onEnteringStateReact(args){
       this._amount = null;
       this._selectedCards = [];
-      if(args._private != undefined)
+      if(args._private != undefined){
         this.makeCardSelectable(args._private.cards, "selectReact");
+
+        // Button for barrel
+        args._private.cards.forEach(card => {
+          if($('bang-card-' + card.id).parentNode.id != "hand-cards"){
+            this.addPrimaryActionButton('buttonUseBarrel', _('Use barrel'), () => this.onClickCardSelectReact(card) );
+          }
+        });
+
+        if(args._private.selection)
+          this.preSelectCards(args._private.selection);
+      }
       this.gamedatas.gamestate.descriptionmyturn = args.msgActive;
       this.gamedatas.gamestate.description = args.msgInactive;
       this.updatePageTitle();
     },
     onEnteringStateMultiReact(args){
       this.onEnteringStateReact(args);
+    },
+
+    preSelectCards(cards){
+      dojo.query('.bang-card.preselected').removeClass('preselected');
+      cards.forEach(cardId => dojo.addClass('bang-card-' + cardId, 'preselected'));
+      if(cards.length > 0){
+        this.addSecondaryActionButton('buttonCancelPreselection', _('Cancel pre-selection'), () => this.takeAction("cancelPreSelection") );
+      }
+      else if($('buttonCancelPreselection')){
+        dojo.destroy('buttonCancelPreselection');
+      }
+    },
+
+    notif_preselection(n){
+      debug("Changing pre-selected cards", n);
+      this.preSelectCards(n.args.cards);
     },
 
 
