@@ -1,6 +1,6 @@
 <?php
 
-class ApacheKid extends Player {
+class ApacheKid  extends \BANG\Models\Player{
   public function __construct($row = null)
   {
     $this->character    = APACHE_KID;

@@ -1,6 +1,6 @@
 <?php
 
-class TequilaJoe extends Player {
+class TequilaJoe  extends \BANG\Models\Player{
   public function __construct($row = null)
   {
     $this->character    = TEQUILA_JOE;

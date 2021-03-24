@@ -1,26 +1,28 @@
 <?php
-namespace Bang\States;
-use Bang\Characters\Players;
-use Bang\Game\Utils;
+namespace BANG\States;
+use BANG\Managers\Players;
+use BANG\Helpers\Utils;
 
 trait PlayCardTrait
 {
 	public function argPlayCards() {
 		return [
 			'_private' => [
-				'active' => Players::getActivePlayer()->getHandOptions()
+// TODO				'active' => Players::getActive()->getHandOptions()
 			]
 		];
 	}
 
 	public function stPlayCard() {
-		$this->setGameStateValue('JourdonnaisUsedSkill', 0);
+    /*
+		// TODO $this->setGameStateValue('JourdonnaisUsedSkill', 0);
 		$players = Players::getLivingPlayers(null, true);
 		$newstate = null;
 		foreach($players as $player) {
 			$player->checkHand();
 		}
 		if($newstate != null) $this->gamestate->nextState($newState);
+    */
 	}
 
 	public function playCard($id, $args) {

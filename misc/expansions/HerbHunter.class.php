@@ -1,6 +1,6 @@
 <?php
 
-class HerbHunter extends Player {
+class HerbHunter  extends \BANG\Models\Player{
   public function __construct($row = null)
   {
     $this->character    = HERB_HUNTER;

@@ -77,6 +77,7 @@ constructor: function () {
  */
 setup(gamedatas) {
 	debug('SETUP', gamedatas);
+  /*
 
   // Formatting cards
   this._cards = [];
@@ -131,15 +132,18 @@ setup(gamedatas) {
   // Make the current player stand out
   this.updateCurrentTurnPlayer(gamedatas.playerTurn);
 
+  */
   this.inherited(arguments);
 },
 
 
 onLoadingComplete(){
   debug("Loading complete");
+  /*
   if(this.gamedatas.turn == 1){
     this.displayPlayersHelp();
   }
+  */
 },
 
 /*
@@ -149,6 +153,7 @@ onLoadingComplete(){
  */
 onUpdateActionButtons(stateName, args) {
 	debug('Update action buttons: ' + stateName, args);
+  /*
   this.updatePlayersStatus(); // Called when a player go inactive
 
   if (stateName == "selectCard" && (args.cards.length > 0 || args._private)){
@@ -178,6 +183,7 @@ onUpdateActionButtons(stateName, args) {
     if(args._private && args._private.character != null && this._selectedCard == null && this._selectedCards.length == 0)
       this.makeCharacterAbilityUsable(args._private.character);
   }
+  */
 },
 
 
@@ -315,6 +321,7 @@ clearPossible: function () {
   dojo.removeClass("discard", "selectable");
 
 	this.removeActionButtons();
+  dojo.empty('customActions');
 	this.onUpdateActionButtons(this.gamedatas.gamestate.name, this.gamedatas.gamestate.args);
 },
 

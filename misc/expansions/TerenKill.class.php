@@ -1,6 +1,6 @@
 <?php
 
-class TerenKill extends Player {
+class TerenKill  extends \BANG\Models\Player{
   public function __construct($row = null)
   {
     $this->character    = TEREN_KILL;

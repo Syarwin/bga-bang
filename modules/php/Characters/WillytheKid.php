@@ -1,7 +1,7 @@
 <?php
-namespace Bang\Characters;
+namespace BANG\Characters;
 
-class WillytheKid extends Player {
+class WillytheKid  extends \BANG\Models\Player{
   public function __construct($row = null)
   {
     $this->character    = WILLY_THE_KID;

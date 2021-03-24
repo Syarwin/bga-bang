@@ -1,8 +1,8 @@
 <?php
-namespace Bang\States;
-use Bang\Characters\Players;
-use Bang\Cards\Cards;
-use Bang\Game\Log;
+namespace BANG\States;
+use BANG\Managers\Players;
+use BANG\Managers\Cards;
+use BANG\Core\Log;
 
 // Happens when drawing a General Store
 trait SelectCardTrait

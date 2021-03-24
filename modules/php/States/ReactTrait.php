@@ -1,11 +1,11 @@
 <?php
-namespace Bang\States;
-use Bang\Characters\Players;
-use Bang\Cards\Cards;
-use Bang\Game\Log;
-use Bang\Game\Utils;
-use Bang\Game\Notifications;
-use Bang\Game\Stats;
+namespace BANG\States;
+use BANG\Managers\Players;
+use BANG\Managers\Cards;
+use BANG\Core\Log;
+use BANG\Helpers\Utils;
+use BANG\Core\Notifications;
+use BANG\Core\Stats;
 
 trait ReactTrait
 {
@@ -34,7 +34,7 @@ trait ReactTrait
     // Otherwise, reaction is over, proceed to next player if any
     else {
       array_shift($argReact['order']);
-      // TODO : to add this line, the src must be stored somewhere than inside private : unset($argReact['_private'][$pId]);
+      unset($argReact['_private'][$pId]);
       Log::addAction("react", $argReact);
 
       // No more players need to react ? => we are over
@@ -89,7 +89,6 @@ trait ReactTrait
 		Notifications::updateOptions($player, $args);
 
 		$argReact["_private"][$player->getId()] = $args;
-		$argReact["_private"][$player->getId()]['src'] = Log::getCurrentCard();
 		Log::addAction("react", $argReact);
 	}
 
@@ -102,13 +101,10 @@ trait ReactTrait
 
 	public function stEndReaction() {
 		$args = Log::getLastAction('react');
-    // Handle direct elimination with no cards in hand
-    $src = is_null($args)? 'hp' : array_values($args['_private'])[0]['src'];
-
 		$toEliminate = Players::getPlayersForElimination();
 
-    // What else could that be ??
-		if($src == 'hp') {
+    // Handle direct elimination with no cards in hand
+		if(is_null($args)) {
       // Find the next living player after current player that is not going to be eliminated
 			$living = Players::getLivingPlayersStartingWith(Players::getCurrentTurn(true));
 			foreach($living as $id) {

@@ -1,6 +1,6 @@
 <?php
 
-class PorterRockwell extends Player {
+class PorterRockwell  extends \BANG\Models\Player{
   public function __construct($row = null)
   {
     $this->character    = PORTER_ROCKWELL;

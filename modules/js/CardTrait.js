@@ -20,6 +20,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
         var div = this.addCard(card, "discard");
         dojo.style(div, "zIndex", dojo.query("#discard .bang-card").length);
       });
+      dojo.style('bang-card-' + ocard.uid, "zIndex", dojo.query("#discard .bang-card").length);
     },
 
 
@@ -161,6 +162,11 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
           if(targetId == "hand") this.addCard(card, 'hand-cards');
           if(n.args.target == "inPlay") this.addCard(card, targetId);
         });
+
+        if(n.args.src == "deck"){
+          // Make sure it will pass in front on discard
+          dojo.style('bang-card-' + card.uid, "zIndex", dojo.query("#discard .bang-card").length);
+        }
       });
 
       // Update hand counters

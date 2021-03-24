@@ -1,7 +1,7 @@
 <?php
-namespace Bang\States;
-use Bang\Characters\Players;
-use Bang\Game\Notifications;
+namespace BANG\States;
+use BANG\Managers\Players;
+use BANG\Core\Notifications;
 
 trait EndOfGameTrait
 {

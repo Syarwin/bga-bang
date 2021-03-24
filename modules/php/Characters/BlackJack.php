@@ -1,10 +1,10 @@
 <?php
-namespace Bang\Characters;
-use Bang\Game\Notifications;
-use Bang\Game\Utils;
-use Bang\Cards\Cards;
+namespace BANG\Characters;
+use BANG\Core\Notifications;
+use BANG\Helpers\Utils;
+use BANG\Managers\Cards;
 
-class BlackJack extends Player {
+class BlackJack  extends \BANG\Models\Player{
   public function __construct($row = null)
   {
     $this->character    = BLACK_JACK;

@@ -1,11 +1,11 @@
 <?php
-namespace Bang\Characters;
-use Bang\Game\Notifications;
-use Bang\Game\Log;
-use Bang\Cards\Cards;
+namespace BANG\Characters;
+use BANG\Core\Notifications;
+use BANG\Core\Log;
+use BANG\Managers\Cards;
 use bang;
 
-class SidKetchum extends Player {
+class SidKetchum  extends \BANG\Models\Player{
   public function __construct($row = null)
   {
     $this->character    = SID_KETCHUM;
@@ -28,7 +28,7 @@ class SidKetchum extends Player {
   public function useAbility($args) {
     Notifications::tell(clienttranslate('${player_name} uses the ability of Sid Ketchum by discarding 2 cards to regain 1 life point'), ['player_name' => $this->name]);
     foreach ($args as $card) Cards::playCard($card);
-    Notifications::discardedCards($this, array_map(['Bang\Cards\Cards','getCard'], $args));
+    Notifications::discardedCards($this, array_map(['BANG\Cards\Cards','getCard'], $args));
     $this->gainLife();
     bang::get()->gamestate->nextState("continuePlaying");
   }

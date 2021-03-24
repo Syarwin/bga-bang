@@ -1,9 +1,9 @@
 <?php
-namespace Bang\States;
-use Bang\Characters\Players;
-use Bang\Cards\Cards;
-use Bang\Game\Log;
-use Bang\Game\Notifications;
+namespace BANG\States;
+use BANG\Managers\Players;
+use BANG\Managers\Cards;
+use BANG\Core\Log;
+use BANG\Core\Notifications;
 
 
 trait TurnTrait
@@ -27,9 +27,10 @@ trait TurnTrait
   /*
    * stStartOfTurn: called at the beggining of each player turn
    */
-  public function stStartOfTurn() {
+  public function stStartOfTurn()
+  {
     Log::startTurn();
-    $player = Players::getActivePlayer();
+    $player = Players::getActive();
     $newState = $player->startOfTurn();
     $this->gamestate->nextState($newState);
   }
@@ -74,8 +75,8 @@ trait TurnTrait
   	 * stEndOfTurn: called at the end of each player turn
   	 */
   	public function stEndOfTurn() {
-  		//$this->playerManager->getPlayer()->endOfTurn();
   		$this->gamestate->nextState('next');
   	}
+
 
 }

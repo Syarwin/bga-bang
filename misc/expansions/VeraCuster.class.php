@@ -1,6 +1,6 @@
 <?php
 
-class VeraCuster extends Player {
+class VeraCuster  extends \BANG\Models\Player{
   public function __construct($row = null)
   {
     $this->character    = VERA_CUSTER;

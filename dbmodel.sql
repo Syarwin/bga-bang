@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS `log` (
   PRIMARY KEY (`log_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
+
 -- see constants.inc.php --
 ALTER TABLE `player` ADD `player_role` INT(1) UNSIGNED NOT NULL;
 ALTER TABLE `player` ADD `player_character` INT(1) UNSIGNED NOT NULL;
@@ -27,13 +28,21 @@ ALTER TABLE `player` ADD `player_activate` TINYINT UNSIGNED NOT NULL;
 ALTER TABLE `player` ADD `player_hp` TINYINT NOT NULL;
 
 
-
 CREATE TABLE IF NOT EXISTS `card` (
   `card_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `card_type` int(11) NOT NULL,
-  `card_type_arg` varchar(16) NOT NULL,
-  `card_location` varchar(16) NOT NULL,
-  `card_location_arg` int(11) NOT NULL,
-  `card_played` tinyint DEFAULT 0,
+  `card_location` varchar(32) NOT NULL,
+  `card_state` int(10),
+  `type` int(10),
+  `played` tinyint DEFAULT 0,
+  `value` varchar(2) NOT NULL,
+  `color` varchar(2) NOT NULL,
   PRIMARY KEY (`card_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+CREATE TABLE IF NOT EXISTS `global_variables` (
+  `name` varchar(255) NOT NULL,
+  `value` json,
+  PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

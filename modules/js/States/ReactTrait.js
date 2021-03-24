@@ -29,9 +29,6 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
       this.gamedatas.gamestate.description = args.msgInactive;
       this.updatePageTitle();
     },
-    onEnteringStateMultiReact(args){
-      this.onEnteringStateReact(args);
-    },
 
     preSelectCards(cards){
       dojo.query('.bang-card.preselected').removeClass('preselected');

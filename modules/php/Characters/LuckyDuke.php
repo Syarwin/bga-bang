@@ -1,11 +1,11 @@
 <?php
-namespace Bang\Characters;
-use Bang\Game\Notifications;
-use Bang\Game\Log;
-use Bang\Game\Utils;
-use Bang\Cards\Cards;
+namespace BANG\Characters;
+use BANG\Core\Notifications;
+use BANG\Core\Log;
+use BANG\Helpers\Utils;
+use BANG\Managers\Cards;
 
-class LuckyDuke extends Player {
+class LuckyDuke  extends \BANG\Models\Player{
   private $selectedCard = null;
   public function __construct($row = null)
   {

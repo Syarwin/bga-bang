@@ -1,9 +1,9 @@
 <?php
-namespace Bang\Characters;
-use Bang\Game\Notifications;
-use Bang\Cards\Cards;
+namespace BANG\Characters;
+use BANG\Core\Notifications;
+use BANG\Managers\Cards;
 
-class ElGringo extends Player {
+class ElGringo  extends \BANG\Models\Player{
   public function __construct($row = null)
   {
     $this->character    = EL_GRINGO;

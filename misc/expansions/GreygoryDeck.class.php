@@ -1,6 +1,6 @@
 <?php
 
-class GreygoryDeck extends Player {
+class GreygoryDeck  extends \BANG\Models\Player{
   public function __construct($row = null)
   {
     $this->character    = GREYGORY_DECK;

@@ -1,6 +1,6 @@
 <?php
 
-class BillNoface extends Player {
+class BillNoface  extends \BANG\Models\Player{
   public function __construct($row = null)
   {
     $this->character    = BILL_NOFACE;

@@ -1,11 +1,11 @@
 <?php
-namespace Bang\Characters;
-use Bang\Game\Notifications;
-use Bang\Game\Log;
-use Bang\Cards\Cards;
-use Bang\Cards\CardBang;
+namespace BANG\Characters;
+use BANG\Core\Notifications;
+use BANG\Core\Log;
+use BANG\Managers\Cards;
+use BANG\Cards\Bang;
 
-class CalamityJanet extends Player {
+class CalamityJanet  extends \BANG\Models\Player{
   public function __construct($row = null)
   {
     $this->character    = CALAMITY_JANET;
@@ -43,7 +43,7 @@ class CalamityJanet extends Player {
   public function getHandOptions() {
     $res = parent::getHandOptions();
     $hand = Cards::getHand($this->id);
-    $bang = new CardBang();
+    $bang = new Bang();
     $options = $bang->getPlayOptions($this);
     foreach($hand as $card) {
       if($card->getType() == CARD_MISSED)
@@ -58,7 +58,7 @@ class CalamityJanet extends Player {
       $args['asBang'] = true;
       Notifications::cardPlayed($this, $card, $args);
       Log::addCardPlayed($this, $card, $args);
-      $card = new CardBang($id, "");
+      $card = new Bang($id, "");
       $newstate = $card->play($this, $args);
       return $newstate;
     }

@@ -19,18 +19,10 @@ $machinestates = [
 	],
 
 
-	ST_NEXT_PLAYER => [
-		'name' => 'nextPlayer',
-		'description' => '',
-		'type' => 'game',
-		'action' => 'stNextPlayer',
-		'transitions' => [
-			'start' => ST_START_OF_TURN
-		],
-		'updateGameProgression' => true,
-	],
-
-	ST_START_OF_TURN => [
+  /*
+   * Start of a turn : trigger cards such as Dynamite or Jail before moving on to appropriate state
+   */
+  ST_START_OF_TURN => [
 		'name' => 'startOfTurn',
 		'description' => '',
 		'type' => 'game',
@@ -42,6 +34,11 @@ $machinestates = [
 			'select' => ST_PREPARE_SELECTION
 		],
 	],
+
+
+
+
+
 
 	ST_DRAW_CARDS => [
 		'name' => 'drawCards',
@@ -96,7 +93,6 @@ $machinestates = [
 		'updateGameProgression' => true,
 		'transitions' => [
 			'single' => ST_REACT,
-			'multi' => ST_MULTIREACT
 		]
 	],
 
@@ -110,28 +106,6 @@ $machinestates = [
 		'transitions' => [
 			'zombiePass' => ST_END_REACT,
 			'react' => ST_AWAIT_REACTION,
-			'finishedReaction' => ST_END_REACT,
-			'eliminate' => ST_ELIMINATE,
-		]
-	],
-
-	/*ST_AWAIT_MULTIREACTION => [
-		'name' => 'awaitMultiReaction',
-		'description' => '',
-		'type' => 'game',
-		'action' => 'stAwaitMultiReaction',
-		'updateGameProgression' => true,
-		'transitions' => ['' => ST_MULTIREACT]
-	],*/
-
-	ST_MULTIREACT => [
-		'name' => 'multiReact',
-		'description' => clienttranslate('Waiting for others\' reactions'),
-		'descriptionmyturn' => clienttranslate('${you} must react'),
-		'type' => 'multipleactiveplayer',
-		'args' => 'argReact',
-		'possibleactions' => ['play','pass'],
-		'transitions' => [
 			'finishedReaction' => ST_END_REACT,
 			'eliminate' => ST_ELIMINATE,
 		]
@@ -205,6 +179,7 @@ $machinestates = [
 		],
 	],
 
+
 	ST_END_OF_TURN => [
 		'name' => 'endOfTurn',
 		'description' => '',
@@ -216,7 +191,22 @@ $machinestates = [
 	],
 
 
+  ST_NEXT_PLAYER => [
+		'name' => 'nextPlayer',
+		'description' => '',
+		'type' => 'game',
+		'action' => 'stNextPlayer',
+		'transitions' => [
+			'start' => ST_START_OF_TURN
+		],
+		'updateGameProgression' => true,
+	],
 
+
+
+  /*
+   * Compute winners and losers
+   */
 	ST_PRE_GAME_END => [
 		'name' => 'preGameEnd',
 		'description' => '',

@@ -1,8 +1,8 @@
 <?php
-namespace Bang\Characters;
-use Bang\Cards\Cards;
+namespace BANG\Characters;
+use BANG\Managers\Cards;
 
-class SlabtheKiller extends Player {
+class SlabtheKiller  extends \BANG\Models\Player{
   public function __construct($row = null)
   {
     $this->character    = SLAB_THE_KILLER;

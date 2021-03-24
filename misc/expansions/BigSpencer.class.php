@@ -1,6 +1,6 @@
 <?php
 
-class BigSpencer extends Player {
+class BigSpencer  extends \BANG\Models\Player{
   public function __construct($row = null)
   {
     $this->character    = BIG_SPENCER;

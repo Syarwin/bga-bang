@@ -1,7 +1,7 @@
 <?php
-namespace Bang\States;
-use Bang\Characters\Players;
-use Bang\Game\Log;
+namespace BANG\States;
+use BANG\Managers\Players;
+use BANG\Core\Log;
 
 
 trait DrawCardsTrait
@@ -10,8 +10,8 @@ trait DrawCardsTrait
 	 * stDrawCards: called after the beggining of each player turn, if the turn was not skipped or if no character's abilities apply
 	 */
 	public function stDrawCards() {
-		$player = Players::getActivePlayer();
-		$newState = $player->statePhaseOne();
+		$player = Players::getActive();
+		$newState = null; // TODO : $player->statePhaseOne();
     if(is_null($newState)){
       $newState = "play";
       $player->drawCards(2);
