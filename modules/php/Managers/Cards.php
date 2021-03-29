@@ -136,4 +136,15 @@ class Cards extends \BANG\Helpers\Pieces
   {
     return self::getInLocation(['inPlay', $pId ?? '%']);
   }
+
+  public static function play($id)
+  {
+    self::insertOnTop($id, "discard");
+  }
+
+  public static function discard($mixed)
+  {
+    $id = is_int($mixed)? $mixed : $mixed->getId();
+    self::play($id);
+  }
 }

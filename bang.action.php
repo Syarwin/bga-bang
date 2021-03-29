@@ -21,98 +21,102 @@
  *
  */
 
-
 class action_bang extends APP_GameAction
 {
-	// Constructor: please do not modify
-	public function __default()
-	{
-		if( self::isArg( 'notifwindow') ) {
-			$this->view = "common_notifwindow";
-			$this->viewArgs['table'] = self::getArg( "table", AT_posint, true );
-		}
-		else {
-			$this->view = "bang_bang";
-			self::trace( "Complete reinitialization of board game" );
-		}
-	}
-
-	public function playCard() {
-		self::setAjaxMode();
-		$id = self::getArg( "id", AT_posint, true );
-		$player = self::getArg( "player", AT_posint, false);
-		$optionType = self::getArg( "optionType", AT_alphanum, false);
-		$optionArg = self::getArg( "optionArg", AT_posint, false);
-		$args = [
-			'type'   => $optionType,
-			'player' => $player,
-			'arg' 	 => $optionArg,
-		];
-		$result = $this->game->playCard($id, $args);
-		self::ajaxResponse( );
-	}
-
-	public function react() {
-		self::setAjaxMode();
-		$cards = explode(";",self::getArg("cards", AT_numberlist, false));
-//		$id = self::getArg( "id", AT_posint, true );
-		$result = $this->game->react($cards);
-		self::ajaxResponse( );
-	}
-
-	public function pass() {
-		self::setAjaxMode();
-		$result = $this->game->react(null);
-		self::ajaxResponse( );
-	}
-
-  public function cancelPreselection() {
-    self::setAjaxMode();
-    $result = $this->game->cancelPreSelection();
-    self::ajaxResponse( );
+  // Constructor: please do not modify
+  public function __default()
+  {
+    if (self::isArg('notifwindow')) {
+      $this->view = 'common_notifwindow';
+      $this->viewArgs['table'] = self::getArg('table', AT_posint, true);
+    } else {
+      $this->view = 'bang_bang';
+      self::trace('Complete reinitialization of board game');
+    }
   }
 
+  public function playCard()
+  {
+    self::setAjaxMode();
+    $id = self::getArg('id', AT_posint, true);
+    $player = self::getArg('player', AT_posint, false);
+    $optionType = self::getArg('optionType', AT_alphanum, false);
+    $optionArg = self::getArg('optionArg', AT_posint, false);
+    $args = [
+      'type' => $optionType,
+      'player' => $player,
+      'arg' => $optionArg,
+    ];
+    $result = $this->game->actPlayCard($id, $args);
+    self::ajaxResponse();
+  }
 
-	public function select() {
-		self::setAjaxMode();
-		$cards = explode(";",self::getArg("cards", AT_numberlist, false));
-		$result = $this->game->select($cards);
-		self::ajaxResponse( );
-	}
+  public function react()
+  {
+    self::setAjaxMode();
+    $cards = explode(';', self::getArg('cards', AT_numberlist, false));
+    //		$id = self::getArg( "id", AT_posint, true );
+    $result = $this->game->react($cards);
+    self::ajaxResponse();
+  }
 
-	public function draw() {
-		self::setAjaxMode();
-		$id = self::getArg( "selected", AT_alphanum, true );
-		$result = $this->game->draw($id);
-		self::ajaxResponse( );
-	}
+  public function pass()
+  {
+    self::setAjaxMode();
+    $result = $this->game->react(null);
+    self::ajaxResponse();
+  }
 
-	public function endTurn() {
-		self::setAjaxMode();
-		$result = $this->game->endTurn();
-		self::ajaxResponse( );
-	}
+  public function cancelPreselection()
+  {
+    self::setAjaxMode();
+    $result = $this->game->cancelPreSelection();
+    self::ajaxResponse();
+  }
 
-	public function cancelEndTurn() {
-		self::setAjaxMode();
-		$result = $this->game->cancelEndTurn();
-		self::ajaxResponse( );
-	}
+  public function select()
+  {
+    self::setAjaxMode();
+    $cards = explode(';', self::getArg('cards', AT_numberlist, false));
+    $result = $this->game->select($cards);
+    self::ajaxResponse();
+  }
 
+  public function draw()
+  {
+    self::setAjaxMode();
+    $id = self::getArg('selected', AT_alphanum, true);
+    $result = $this->game->draw($id);
+    self::ajaxResponse();
+  }
 
-	public function discardExcess() {
-		self::setAjaxMode();
-		$cards = explode(";",self::getArg("cards", AT_numberlist, false));
-		$result = $this->game->discardExcess($cards);
-		self::ajaxResponse( );
-	}
+  public function endTurn()
+  {
+    self::setAjaxMode();
+    $result = $this->game->endTurn();
+    self::ajaxResponse();
+  }
 
-	public function useAbility() {
-		self::setAjaxMode();
-		$cards = explode(";",self::getArg("cards", AT_numberlist, false));
-		$result = $this->game->useAbility($cards);
-		self::ajaxResponse( );
-	}
+  public function cancelEndTurn()
+  {
+    self::setAjaxMode();
+    $result = $this->game->cancelEndTurn();
+    self::ajaxResponse();
+  }
 
+  public function discardExcess()
+  {
+    self::setAjaxMode();
+    $cards = explode(';', self::getArg('cards', AT_numberlist, false));
+    $result = $this->game->discardExcess($cards);
+    self::ajaxResponse();
+  }
 
+  public function useAbility()
+  {
+    self::setAjaxMode();
+    $cards = explode(';', self::getArg('cards', AT_numberlist, false));
+    $result = $this->game->useAbility($cards);
+    self::ajaxResponse();
+  }
 }

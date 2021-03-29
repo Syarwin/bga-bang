@@ -1,28 +1,4 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	public static function formatCard($card){
-		return $card->format();
-	}
-
-	public static function formatCards($cards){
-		return array_values(array_map(['BANG\Cards\Cards', 'formatCard'], $cards));
-	}
-
-
 	public static function getCurrentCard(){
 		return self::getCard(Log::getCurrentCard());
 	}
@@ -69,15 +45,6 @@
 
 	public static function putOnDeck($card) {
 		self::getDeck()->insertCardOnExtremePosition($card, 'deck', true);
-	}
-
-	public static function playCard($id) {
-		self::getDeck()->playCard($id);
-	}
-
-	public static function discardCard($mixed) {
-		$id = ($mixed instanceof Card)? $mixed->getId() : $mixed;
-		self::playCard($id);
 	}
 
 

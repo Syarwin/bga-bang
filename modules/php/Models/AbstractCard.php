@@ -150,7 +150,7 @@ class AbstractCard implements \JsonSerializable
 	public function getArgsMessage($args) {
 		if(isset($args['player']) && !is_null($args['player']) ) {
       return [
-        'name' => Players::getPlayer($args['player'])->getName(),
+        'name' => Players::get($args['player'])->getName(),
       ];
 		}
 		return null;

@@ -23,7 +23,7 @@ class Notifications {
       'i18n' => ['card_name'],
       'player_name' => $player->getName(),
       'card_name' => $card->getName(),
-      'card' => $card->format(),
+      'card' => $card,
       'playerId' => $player->getId(),
       'targetPlayer' => isset($args['player']) ? $args['player'] : null,
       'target' => $card->isEquipment() ? 'inPlay' : 'discard'

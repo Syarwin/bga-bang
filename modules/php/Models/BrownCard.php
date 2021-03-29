@@ -1,6 +1,7 @@
 <?php
 namespace BANG\Models;
 use BANG\Managers\Players;
+use BANG\Managers\Cards;
 use BANG\Core\Notifications;
 use BANG\Helpers\Utils;
 
@@ -91,12 +92,13 @@ class BrownCard extends AbstractCard
    */
   public function play($player, $args)
   {
-    Cards::discardCard($this);
+    // Played card always go to the discard
+    Cards::discard($this);
 
     switch ($this->effect['type']) {
       case BASIC_ATTACK:
         $ids = $this->effect['impacts'] == ALL_OTHER ? $player->getOrderedOtherPlayers() : [$args['player']];
-        return $player->attack($ids);
+        return $player->attack($this, $ids);
         break;
 
       case DRAW:

@@ -47,7 +47,6 @@ trait TurnTrait
 
   public function stResolveStack()
   {
-    Stack::resolve();
   }
 
 

@@ -53,7 +53,7 @@ class CalamityJanet  extends \BANG\Models\Player{
   }
 
   public function playCard($id, $args) {
-    $card = Cards::getCard($id);
+    $card = Cards::get($id);
     if($card->getType() == CARD_MISSED) {
       $args['asBang'] = true;
       Notifications::cardPlayed($this, $card, $args);

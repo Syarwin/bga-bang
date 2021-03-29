@@ -16,6 +16,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
         if(player.role == null) player.role = 'hidden';
         player.handCount = isCurrent? player.hand.length : player.hand;
         player.powers = '<p>' + player.powers.join('</p><p>') + '</p>';
+        player.newNo = player.no;
 
         dojo.place(this.format_block('jstpl_player', player), 'board');
         this.addTooltipHtml("player-character-" + player.id, this.format_block( 'jstpl_characterTooltip',  player));
@@ -82,11 +83,11 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
       var playersAlive = players.reduce((carry,player) => carry + (player.eliminated? 0 : 1), 0);
       var playersEliminated = nPlayers - playersAlive;
       var newNo = 0;
-      players.forEach( player => {
+      players.sort((a,b) => a.no - b.no).forEach( player => {
         if(!player.eliminated)
-          player.no = newNo++;
+          player.newNo = newNo++;
       });
-      var currentPlayerNo = players.reduce((carry, player) => (player.id == this.player_id && !player.eliminated)? player.no : carry, 0);
+      var currentPlayerNo = players.reduce((carry, player) => (player.id == this.player_id && !player.eliminated)? player.newNo : carry, 0);
 
       players.forEach( player => {
         this.displayRoleIfPublic(player);
@@ -99,8 +100,8 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
           if(player.id == this.player_id && $("hand"))
             dojo.destroy("hand");
         } else {
-          player.no = (player.no + playersAlive - currentPlayerNo) % playersAlive;
-          dojo.attr("bang-player-" + player.id, "data-no", player.no);
+          player.newNo = (player.newNo + playersAlive - currentPlayerNo) % playersAlive;
+          dojo.attr("bang-player-" + player.id, "data-no", player.newNo);
         }
       });
 
@@ -219,6 +220,84 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
      this.gamedatas.bplayers.forEach( player => {
        dojo.place(this.format_block('jstpl_helpDialogCharacter', player), "dialog-players");
      });
+    },
+
+
+
+    /********************
+    *** OPTION_PLAYER ***
+    ********************/
+
+    /*
+     * Make some players selectable with either action button or directly on the board
+     */
+    makePlayersSelectable(players, append = false){
+      if(!append) {
+        this.gamedatas.gamestate.descriptionmyturn = _("You must choose a player");
+        this.updatePageTitle();
+        this.removeActionButtons();
+        this.addActionButton('buttonCancel', _('Undo'), () => this.onClickCancelCardSelected(this._selectableCards), null, false, 'gray');
+      }
+
+      this._selectablePlayers = players;
+      this._selectablePlayers.forEach(playerId => {
+        this.addActionButton('buttonSelectPlayer' + playerId, this.gamedatas.players[playerId].name, () => this.onClickPlayer(playerId) );
+        dojo.addClass("bang-player-" + playerId, "selectable");
+      });
+    },
+
+
+    /*
+     * Triggered when a player click on a player's board or action button
+     */
+    onClickPlayer(playerId){
+      if(!this._selectablePlayers.includes(playerId))
+        return;
+
+      if(this._action == 'drawCard') {
+        this.onClickDraw(playerId);
+      } else {
+        this._selectedOptionType = "player";
+        this._selectedPlayer = playerId;
+        this.onSelectOption();
+      }
+    },
+
+
+
+    /******************
+    *** OPTION_CARD ***
+    ******************/
+    /*
+     * Make some players' cards selectable with sometimes the deck
+     */
+    makePlayersCardsSelectable(players){
+      this.removeActionButtons();
+      this.gamedatas.gamestate.descriptionmyturn = _("You must choose a card in play or a player's hand");
+      this.updatePageTitle();
+      var oldSelectableCards = this._selectableCards;
+      this.addActionButton('buttonCancel', _('Undo'), () => this.onClickCancelCardSelected(oldSelectableCards), null, false, 'gray');
+
+      var cards = [];
+      this._selectablePlayers = players;
+      players.forEach(playerId => {
+        dojo.addClass("bang-player-" + playerId, "selectable");
+        dojo.query("#bang-player-" + playerId + " .bang-card").forEach(div => {
+          cards.push({
+            id:dojo.attr(div, "data-id"),
+            playerId:playerId,
+          })
+        });
+      });
+      this.makeCardSelectable(cards, "selectOption");
+    },
+
+
+    onClickCardSelectOption(card){
+      this._selectedPlayer = card.playerId;
+      this._selectedOptionType = "inplay";
+      this._selectedOptionArg = card.id;
+      this.onSelectOption();
     },
   });
 });

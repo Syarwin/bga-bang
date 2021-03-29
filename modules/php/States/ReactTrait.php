@@ -16,7 +16,7 @@ trait ReactTrait
 	}
 
 	public function argReact() {
-	 return Log::getLastAction("react");
+	 return []; //Log::getLastAction("react");
 	}
 
 

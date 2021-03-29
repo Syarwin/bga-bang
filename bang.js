@@ -32,9 +32,6 @@ define([
     g_gamethemeurl + "modules/js/States/DiscardEndOfTurnTrait.js",
 
     g_gamethemeurl + "modules/js/CardTrait.js",
-    g_gamethemeurl + "modules/js/CardSelectorTrait.js",
-    g_gamethemeurl + "modules/js/PlayerSelectorTrait.js",
-    g_gamethemeurl + "modules/js/PlayerCardSelectorTrait.js",
     g_gamethemeurl + "modules/js/PlayerTrait.js",
 ], function (dojo, declare) {
   return declare("bgagame.bang", [
@@ -45,9 +42,6 @@ define([
     bang.discardEndOfTurnTrait,
     bang.playerTrait,
     bang.cardTrait,
-    bang.cardSelectorTrait,
-    bang.playerSelectorTrait,
-    bang.playerCardSelectorTrait,
   ], {
 
 /*

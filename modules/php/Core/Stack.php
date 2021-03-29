@@ -54,7 +54,7 @@ class Stack
     // Jump to resolveStack state to ensure we can change active pId
     if ($atom['pId'] != null && $pId != $atom['pId']) {
       self::getGame()->gamestate->jumpToState(ST_RESOLVE_STACK);
-      self::getGame()->changeActivePlayer($atom['pId']);
+      self::getGame()->gamestate->changeActivePlayer($atom['pId']);
     }
 
     self::getGame()->gamestate->jumpToState($atom['state']);
@@ -64,6 +64,14 @@ class Stack
   {
     self::shift();
     self::resolve();
+  }
+
+  public function insertOnTop($atom)
+  {
+    $stack = Globals::getStack();
+    array_unshift($stack, $atom);
+    Globals::setStack($stack);
+    return $atom;
   }
 
   /*

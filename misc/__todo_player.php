@@ -1,15 +1,3 @@
-/**
- * playCard: play a card given by id with args to specify the chosen option
- */
-public function playCard($id, $args)
-{
-  $card = Cards::getCard($id);
-  Notifications::cardPlayed($this, $card, $args);
-  Log::addCardPlayed($this, $card, $args);
-  $newstate = $card->play($this, $args);
-  $this->onCardsLost();
-  return $newstate;
-}
 
 /**
  * react: whenever a player react by passing or playing a card
@@ -59,14 +47,9 @@ public function react($ids)
   }
 }
 
-/**
- * attack : performs an attack on all given players
- */
+
 public function attack($playerIds, $checkMissed = true)
 {
-  $reactions = [];
-  $state = null;
-
   foreach (Players::getPlayers($playerIds) as $player) {
     // Player has defensive equipment ? (eg Barrel)
     $reaction = $checkMissed ? $player->getDefensiveOptions() : $player->getBangCards();
@@ -117,6 +100,7 @@ public function attack($playerIds, $checkMissed = true)
 
   return $state;
 }
+
 
 public function eliminate()
 {

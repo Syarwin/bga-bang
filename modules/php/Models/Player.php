@@ -5,6 +5,7 @@ use BANG\Managers\Players;
 use BANG\Helpers\Utils;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
+use BANG\Core\Stack;
 
 /*
  * Player: all utility functions concerning a player
@@ -127,9 +128,9 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     $current = $this->id == $currentPlayerId;
     return [
-      'id' => $this->id,
-      'eliminated' => $this->eliminated,
-      'no' => $this->no,
+      'id' => (int) $this->id,
+      'eliminated' => (int) $this->eliminated,
+      'no' => (int) $this->no,
       'name' => $this->getName(),
       'color' => $this->color,
       'characterId' => $this->character,
@@ -395,6 +396,7 @@ class Player extends \BANG\Helpers\DB_Manager
     }
     return true;
   }
+
   /***************************************
    ****************************************
    **************** Actions ***************
@@ -448,5 +450,45 @@ class Player extends \BANG\Helpers\DB_Manager
       'cards' => $options->toArray(),
       'character' => null,
     ];
+  }
+
+  /**
+   * playCard: play a card given by id with args to specify the chosen option
+   */
+  public function playCard($cardId, $args)
+  {
+    $card = Cards::get($cardId);
+    Notifications::cardPlayed($this, $card, $args);
+    Log::addCardPlayed($this, $card, $args);
+    $card->play($this, $args);
+    // TODO $this->onCardsLost();
+  }
+
+  /**
+   * attack : performs an attack on all given players
+   */
+  public function attack($card, $playerIds)
+  {
+    $src = $card->getName();
+    if ($this->character == CALAMITY_JANET && $card->getType() == CARD_MISSED) {
+      $src = clienttranslate('Missed used as a BANG! by Calamity Janet');
+    }
+
+    $atom = [
+      'state' => ST_REACT,
+      'type' => 'attack',
+      'msgActive' => clienttranslate('${you} may react to ${src_name}'),
+      'msgWaiting' => clienttranslate('${actplayer} has to react to ${src_name}. You may already select your reaction'),
+      'msgInactive' => clienttranslate('${actplayer} may react to ${src_name}'),
+      'src_name' => $src,
+      'src' => $card->jsonSerialize(),
+      'attacker' => $this->id,
+      'selection' => [],
+    ];
+
+    foreach(array_reverse($playerIds) as $pId){
+      $atom['pId'] = $pId;
+      Stack::insertOnTop($atom);
+    }
   }
 }
