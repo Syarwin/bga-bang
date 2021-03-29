@@ -9,6 +9,34 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
       );
     },
 
+    setupPlayerBoards(){
+      this.forEachPlayer(player => {
+        let isCurrent = player.id == this.player_id;
+
+        if(player.role == null) player.role = 'hidden';
+        player.handCount = isCurrent? player.hand.length : player.hand;
+        player.powers = '<p>' + player.powers.join('</p><p>') + '</p>';
+
+        dojo.place(this.format_block('jstpl_player', player), 'board');
+        this.addTooltipHtml("player-character-" + player.id, this.format_block( 'jstpl_characterTooltip',  player));
+        player.inPlay.forEach(card => this.addCard(card, 'player-inplay-' + player.id));
+        dojo.connect($("player-character-" + player.id), "onclick", (evt) => { evt.preventDefault(); evt.stopPropagation(); this.onClickPlayer(player.id) });
+
+        dojo.place(this.format_block('jstpl_player_board_data', player), "overall_player_board_" + player.id);
+
+        if(isCurrent){
+          let role = this.getRole(player.role);
+          dojo.place(this.format_block('jstpl_hand', role), 'board');
+          player.hand.forEach(card => this.addCard(card, 'hand-cards') );
+          this.addTooltip("role-card", role["role-text"], '');
+
+          dojo.place(jstpl_helpIcon, 'bang-player-board-' + player.id);
+        }
+      });
+
+      this.updatePlayers();
+    },
+
     /*
     * notification sent to all players when a player looses or gains hp
     */
@@ -39,7 +67,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
     // TODO
     notif_updatePlayers(n){
       debug("Notif: update players", n);
-      this.gamedatas.bplayers = n.args.players;
+      this.gamedatas.players = n.args.players;
       this.updatePlayers();
     },
 
@@ -49,7 +77,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
      * Called to setup player board, called at setup and when someone is eliminated
      */
     updatePlayers(){
-      var players = this.gamedatas.bplayers;
+      var players = Object.values(this.gamedatas.players);
       var nPlayers = players.length;
       var playersAlive = players.reduce((carry,player) => carry + (player.eliminated? 0 : 1), 0);
       var playersEliminated = nPlayers - playersAlive;
@@ -178,7 +206,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
      });
 
      [0,2,2,3,1,2,1].forEach((roleId, i) => {
-       if(i >= this.gamedatas.bplayers.length)
+       if(i >= Object.keys(this.gamedatas.players).length)
          return;
 
         if($('dialog-role-count-' + roleId)){

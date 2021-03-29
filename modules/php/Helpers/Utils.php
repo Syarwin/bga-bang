@@ -6,7 +6,11 @@ abstract class Utils
 {
   public static function filter(&$data, $filter)
   {
-    $data = array_values(array_filter($data, $filter));
+    if(\is_array($data)){
+      $data = array_values(array_filter($data, $filter));
+    } else {
+      $data = $data->filter($filter);
+    }
   }
 
   public static function die($args=null){

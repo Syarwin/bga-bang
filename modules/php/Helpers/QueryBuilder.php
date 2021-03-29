@@ -384,11 +384,7 @@ class Collection extends \ArrayObject {
   }
 
   public function map($func){
-    return array_map($func, $this->toArray());
-  }
-
-  public function assocMap($func){
-    return array_map($func, $this->toAssoc());
+    return new Collection(array_map($func, $this->toAssoc()));
   }
 
   public function merge($arr){
@@ -400,7 +396,7 @@ class Collection extends \ArrayObject {
   }
 
   public function filter($func){
-    return array_values(array_filter($this->toArray(), $func));
+    return new Collection(array_filter($this->toAssoc(), $func));
   }
 
 

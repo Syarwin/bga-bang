@@ -29,10 +29,10 @@ class Duel extends \BANG\Models\BrownCard{
    *
    */
   public function getPlayOptions($player) {
- 		$player_ids = Players::getLivingPlayers($player->getId());
+ 		$livings = Players::getLivingPlayers($player->getId());
  		return [
  			'type' => OPTION_PLAYER,
- 			'targets' => array_values($player_ids)
+ 			'targets' => $livings->getIds()
  		];
   }
 

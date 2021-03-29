@@ -265,5 +265,10 @@ define(["dojo", "dojo/_base/declare","ebg/core/gamegui",], (dojo, declare) => {
     	});
     },
 
+
+
+    forEachPlayer(callback){
+      Object.values(this.gamedatas.players).forEach(callback);
+    },
   });
 });

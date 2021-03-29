@@ -139,11 +139,10 @@ class Players extends \BANG\Helpers\DB_Manager
 
   public function getUiData($pId)
   {
-    return self::getAll()->assocMap(function ($player) use ($pId) {
+    return self::getAll()->map(function ($player) use ($pId) {
       return $player->getUiData($pId);
     });
   }
-
 
   /*******************************
    ******* CHARACTERS ASSOC ******
@@ -194,7 +193,6 @@ class Players extends \BANG\Helpers\DB_Manager
     return $char->getBullets();
   }
 
-
   /****************************
    ******* BASIC GETTERS *******
    ****************************/
@@ -227,45 +225,52 @@ class Players extends \BANG\Helpers\DB_Manager
 		$playerId = Log::getPlayerTurn();
 		return $asObject? self::getPlayer($playerId) : $playerId;
 	}
+  */
 
-
-	public static function getSherrifId() {
-		return self::getUniqueValueFromDB("SELECT player_id FROM player WHERE player_role=" . SHERIFF);
-	}
-*/
+  public static function getSherrifId()
+  {
+    return self::getUniqueValueFromDB('SELECT player_id FROM player WHERE player_role = ' . SHERIFF);
+  }
 
   /*
-	 * returns an array with positions of all living players . the values won't always be the same as player_no, but a complete sequence [0,#numberOflivingplayers)
-	 *
-	public static function getPlayerPositions() {
-		return array_flip(self::getObjectListFromDB("SELECT player_id from player WHERE player_eliminated=0 ORDER BY player_no", true));
-	}*/
+   * returns an array with positions of all living players . the values won't always be the same as player_no, but a complete sequence [0,#numberOflivingplayers)
+   */
+  public static function getPlayerPositions()
+  {
+    return array_flip(
+      self::getObjectListFromDB('SELECT player_id from player WHERE player_eliminated=0 ORDER BY player_no', true)
+    );
+  }
 
   /**
    * returns an array of the ids of all living players
    */
+  public static function getLivingPlayers($except = null)
+  {
+    $query = self::DB()
+      ->where('player_eliminated', 0)
+      ->orderBy('player_no');
+    if ($except != null) {
+      $ids = is_array($except) ? $except : [$except];
+      $query = $query->whereNotIn('player_id', $ids);
+    }
+    return $query->get();
+  }
+
+  public static function getLivingPlayersStartingWith($player, $except = null)
+  {
+    $and = '';
+    if ($except != null) {
+      $ids = is_array($except) ? $except : [$except];
+      $and = " AND player_id NOT IN ('" . implode("','", $ids) . "')";
+    }
+    return self::getObjectListFromDB(
+      "SELECT player_id FROM player WHERE player_eliminated = 0$and ORDER BY player_no < {$player->getNo()}, player_no",
+      true
+    );
+  }
+
   /*
-	public static function getLivingPlayers($except = null, $asPlayerObjects = false) {
-		$sql = "SELECT player_id FROM player WHERE player_eliminated = 0";
-		if($except != null){
-			$ids = is_array($except)? $except : [$except];
-			$sql .= " AND player_id NOT IN ('" . implode("','", $ids) . "')";
-		}
-		$sql .= " ORDER BY player_no";
-		$ids = self::getObjectListFromDB($sql, true);
-		return $asPlayerObjects ? self::getPlayers($ids) : $ids;
-	}
-
-	public static function getLivingPlayersStartingWith($player, $except = null) {
-		$and = "";
-		if($except != null){
-			$ids = is_array($except)? $except : [$except];
-			$and = " AND player_id NOT IN ('" . implode("','", $ids) . "')";
-		}
-		return self::getObjectListFromDB("SELECT player_id FROM player WHERE player_eliminated = 0$and ORDER BY player_no < {$player->getNo()}, player_no", true);
-	}
-
-
 	public static function getPlayersForElimination($asObjects=false) {
 		$ids = self::getObjectListFromDB("SELECT player_id FROM player WHERE player_eliminated = 0 AND player_hp <= 0", true);
 		return $asObjects ? self::getPlayers($ids) : $ids;

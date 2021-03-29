@@ -34,10 +34,11 @@ require_once APP_GAMEMODULE_PATH . 'module/table/table.game.php';
 
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
-use BANG\Core\Log;
 use BANG\Helpers\Utils;
 use BANG\Core\Notifications;
 use BANG\Core\Stats;
+use BANG\Core\Globals;
+use BANG\Core\Log;
 
 
 class bang extends Table
@@ -93,13 +94,10 @@ class bang extends Table
   {
     $pId = self::getCurrentPlayerId();
     $result = [
-      'bplayers' => Players::getUiData($pId),
-      /*
+      'players' => Players::getUiData($pId),
 			'deck' => Cards::getDeckCount(),
 			'discard' => Cards::getLastDiscarded(),
-			'playerTurn' => Players::getCurrentTurn(),
-      'turn' => Log::getCurrentTurn(),
-      */
+			'playerTurn' => Globals::getPIdTurn(),
       'cards' => Cards::getUIData(),
     ];
     return $result;

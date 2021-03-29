@@ -1,18 +1,80 @@
 <?php
 namespace BANG\Core;
+use bang;
 
 /*
  * Stack: a class that handle resolution stack
  */
-class Stack extends \APP_GameClass
+class Stack
 {
-  public static function setup(){
-    $arg = json_encode([]);
-    self::DbQuery("INSERT INTO stack (`arg`) VALUES ('$arg')");
+  public static function getGame()
+  {
+    return bang::get();
   }
 
-  public static function get(){
-    $arg = self::getUniqueValueFromDB("SELECT arg FROM stack LIMIT 1");
-    return json_decode($arg);
+  public static function setup($flow)
+  {
+    $stack = [];
+    foreach ($flow as $atom) {
+      if (is_int($atom)) {
+        $stack[] = [
+          'state' => $atom,
+          'pId' => Globals::getPIdTurn(),
+        ];
+      }
+    }
+    Globals::setStack($stack);
   }
+
+
+  public function top()
+  {
+    $stack = Globals::getStack();
+    return reset($stack);
+  }
+
+  public function shift()
+  {
+    $stack = Globals::getStack();
+    $elem = array_shift($stack);
+    Globals::setStack($stack);
+    return $elem;
+  }
+
+  public function resolve()
+  {
+    $atom = self::top();
+    if ($atom == false) {
+      throw new \feException('Stack engine is empty !');
+    }
+
+    Globals::setStackCtx($atom);
+
+    $pId = self::getGame()->getActivePlayerId();
+    // Jump to resolveStack state to ensure we can change active pId
+    if ($atom['pId'] != null && $pId != $atom['pId']) {
+      self::getGame()->gamestate->jumpToState(ST_RESOLVE_STACK);
+      self::getGame()->changeActivePlayer($atom['pId']);
+    }
+
+    self::getGame()->gamestate->jumpToState($atom['state']);
+  }
+
+  public function nextState()
+  {
+    self::shift();
+    self::resolve();
+  }
+
+  /*
+  public function nextState($transition, $newState){
+    if($newState != null){
+      self::push($transition);
+    } else {
+      $newState = $transition;
+    }
+    // Classic transition
+    self::getGame()->gamestate->nextState($newState);
+  }
+*/
 }

@@ -2,6 +2,7 @@
 namespace BANG\States;
 use BANG\Managers\Players;
 use BANG\Core\Log;
+use BANG\Core\Stack;
 
 
 trait DrawCardsTrait
@@ -11,13 +12,8 @@ trait DrawCardsTrait
 	 */
 	public function stDrawCards() {
 		$player = Players::getActive();
-		$newState = null; // TODO : $player->statePhaseOne();
-    if(is_null($newState)){
-      $newState = "play";
-      $player->drawCards(2);
-    }
-
-		$this->gamestate->nextState($newState);
+    $player->drawCards(2);
+    Stack::nextState();
 	}
 
 

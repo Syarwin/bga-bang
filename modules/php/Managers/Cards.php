@@ -110,4 +110,30 @@ class Cards extends \BANG\Helpers\Pieces
   {
     return self::pickForLocation($amount, $fromLocation, ['hand', $pId]);
   }
+
+  public static function getHand($pId)
+  {
+    return self::getInLocation(['hand', $pId]);
+  }
+
+  public static function countHand($pId)
+  {
+    return self::countInLocation(['hand', $pId]);
+  }
+
+  public static function getDeckCount()
+  {
+    return self::countInLocation('deck');
+  }
+
+  public static function getLastDiscarded()
+  {
+    $card = self::getTopOf('discard');
+    return $card;
+  }
+
+  public static function getInPlay($pId = null)
+  {
+    return self::getInLocation(['inPlay', $pId ?? '%']);
+  }
 }

@@ -6,6 +6,8 @@
 define('ST_GAME_SETUP', 1);
 define('ST_NEXT_PLAYER', 3);
 define('ST_START_OF_TURN', 4);
+define('ST_RESOLVE_STACK', 90);
+
 define('ST_PLAY_CARD', 5);
 define('ST_AWAIT_REACTION',6);
 define('ST_AWAIT_MULTIREACTION',7);

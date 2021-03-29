@@ -8,8 +8,10 @@ class Globals extends \BANG\Helpers\DB_Manager
 {
   protected static $initialized = false;
   protected static $variables = [
-    'test' => 'int',
-    'mytest' => 'obj',
+    'stack' => 'obj', // DO NOT MODIFY, USED BY STACK ENGINE
+    'stackCtx' => 'obj', // DO NOT MODIFY, USED BY STACK ENGINE
+    
+    'pIdTurn' => 'int', // Player's id whose turn is
   ];
 
 

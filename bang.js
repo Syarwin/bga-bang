@@ -77,8 +77,6 @@ constructor: function () {
  */
 setup(gamedatas) {
 	debug('SETUP', gamedatas);
-  /*
-
   // Formatting cards
   this._cards = [];
   Object.values(gamedatas.cards).forEach(card => {
@@ -94,45 +92,18 @@ setup(gamedatas) {
   dojo.connect($("deck"), "onclick", () => this.onClickDeck() );
   dojo.connect($("discard"), "onclick", () => this.onClickDiscard() );
 
-
-  // Usefull to reorder player board around the current player
-  gamedatas.bplayers.forEach( player => {
-    let isCurrent = player.id == this.player_id;
-
-    if(player.role == null) player.role = 'hidden';
-    player.handCount = isCurrent? player.hand.length : player.hand;
-    player.powers = '<p>' + player.powers.join('</p><p>') + '</p>';
-
-    dojo.place(this.format_block('jstpl_player', player), 'board');
-    this.addTooltipHtml("player-character-" + player.id, this.format_block( 'jstpl_characterTooltip',  player));
-    player.inPlay.forEach(card => this.addCard(card, 'player-inplay-' + player.id));
-    dojo.connect($("player-character-" + player.id), "onclick", (evt) => { evt.preventDefault(); evt.stopPropagation(); this.onClickPlayer(player.id) });
-
-    dojo.place(this.format_block('jstpl_player_board_data', player), "overall_player_board_" + player.id);
-
-    if(isCurrent){
-      let role = this.getRole(player.role);
-      dojo.place(this.format_block('jstpl_hand', role), 'board');
-      player.hand.forEach(card => this.addCard(card, 'hand-cards') );
-      this.addTooltip("role-card", role["role-text"], '');
-
-      dojo.place(jstpl_helpIcon, 'bang-player-board-' + player.id);
-    }
-  });
-
   if(this.isSpectator){
     dojo.place(jstpl_helpIcon, document.querySelector(".player-board.spectator-mode"));
     dojo.query(".player-board.spectator-mode .roundedbox_main").style("display", "none");
   }
   dojo.connect($("help-icon"), "click", () => this.displayPlayersHelp() );
 
-  // Setting up player boards
-  this.updatePlayers();
+  // Setting up player boards order
+  this.setupPlayerBoards();
 
   // Make the current player stand out
   this.updateCurrentTurnPlayer(gamedatas.playerTurn);
 
-  */
   this.inherited(arguments);
 },
 

@@ -6,7 +6,7 @@ use BANG\Core\Notifications;
 /*
  * AbstractCard: base class to handle actions cards
  */
-class AbstractCard
+class AbstractCard implements \JsonSerializable
 {
 	public function __construct($row = null)
 	{
@@ -44,14 +44,14 @@ class AbstractCard
 	}
 
 	/*
-	 * format: used in frontend to manipulate cards
+	 * jsonSerialize: used in frontend to manipulate cards
 	 */
-	public function format() {
+	public function jsonSerialize() {
 		return [
 			'id' => $this->id,
 			'type' => $this->type,
-			'color' => $this->getCopyColor(),
-			'value' => $this->getCopyValue(),
+			'color' => $this->color,
+			'value' => $this->value,
 		];
 	}
 
@@ -69,12 +69,13 @@ class AbstractCard
 	public function getCopy()		{ return $this->copy; }
 
 	public function getColor()	{ return null; } // Will be overwrite by Blue/Brown class
-	public function getCopyValue() { return substr($this->copy, 0, -1); }
-	public function getCopyColor() { return substr($this->copy, -1); }
+	public function getCopyValue() { return $this->value; }
+	public function getCopyColor() { return $this->color; }
 	public function getEffectType(){ return $this->effect['type']; }
 
 	public function isEquipment(){ return false; }
 	public function isAction()	 { return false; }
+  public function isWeapon()	 { return $this->effect['type'] == WEAPON; }
 	public function getNameAndValue() {
 		$colors = ['H' => clienttranslate('Hearts'), 'C' => clienttranslate('Clubs'), 'D' => clienttranslate('Diamonds'), 'S' => clienttranslate('Spades')];
 		$format = $this->format();

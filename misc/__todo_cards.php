@@ -29,47 +29,8 @@
 
 
 
-	/**
-	 * countCard : Returns the number of cards in a location
-	 */
-	public static function countCards($location, $player = null) {
-		if($player==null)
-			return self::getDeck()->countCardsInLocation($location);
-		else
-			return self::getDeck()->countCardsInLocation($location, $player);
-	}
 
-	/**
-	 * getDeckCount : Returns the number of cards in the
-	 */
-  public static function getDeckCount(){
-		return self::countCards("deck");
-	}
 
-	/**
-	  * getHand : Returns the cards of a players hand
-	  */
-	public static function getHand($playerId, $formatted = false) {
-		$cards = self::toObjects(self::getDeck()->getCardsInLocation('hand', $playerId));
-		return $formatted? self::formatCards($cards) : $cards;
-	}
-
-	/**
-	 * getCardsInPlay : returns all Cards in play
-	 */
-	public static function getCardsInPlay($playerId = null, $formatted = false) {
-		$cards = is_null($playerId)? self::getDeck()->getCardsInLocation('inPlay') : self::getDeck()->getCardsInLocation('inPlay', $playerId);
-		$cards = self::toObjects($cards);
-		return $formatted? self::formatCards($cards) : $cards;
-	}
-
-	/**
-	 * getCardsInPlay : returns all Cards in play
-	 */
-	public static function getLastDiscarded() {
-		$card = self::getDeck()->getCardOnTop('discard');
-		return is_null($card) ? null : self::resToObject($card)->format();
-	}
 
 	/**
 	 * getEquipment : returns all equipment Cards the players has in play as array: id => cards
