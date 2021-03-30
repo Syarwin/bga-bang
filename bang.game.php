@@ -202,4 +202,20 @@ class bang extends Table
   public function upgradeTableDb($from_version)
   {
   }
+
+  /////////////////////////////////////////////////////////////
+  // Exposing protected methods, please use at your own risk //
+  /////////////////////////////////////////////////////////////
+
+  // Exposing protected method getCurrentPlayerId
+  public static function getCurrentPId()
+  {
+    return self::getCurrentPlayerId();
+  }
+
+  // Exposing protected method translation
+  public static function translate($text)
+  {
+    return self::_($text);
+  }
 }

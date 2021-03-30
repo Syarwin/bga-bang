@@ -175,7 +175,7 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     $card->discard();
     Notifications::discardedCard($this, $card, $silent);
-    $this->onCardsLost();
+    // TODO $this->onCardsLost();
   }
 
   /*
@@ -226,13 +226,9 @@ class Player extends \BANG\Helpers\DB_Manager
     $this->save();
     Notifications::lostLife($this, $amount);
     if ($this->hp <= 0) {
-      if (Utils::getStateName() == 'multiReact') {
-        return null;
-      }
-      Log::addAction('lastState', [Utils::getStateName()]);
-      return 'eliminate';
+      // TODO : add something in the stack after current atomic resolution
+//      Log::addAction('lastState', [Utils::getStateName()]);
     }
-    return null;
   }
 
   /************************************
@@ -361,29 +357,38 @@ class Player extends \BANG\Helpers\DB_Manager
   public function getDefensiveOptions()
   {
     $args = Log::getLastAction('cardPlayed');
-    $amount = isset($args['missedNeeded']) ? $args['missedNeeded'] : 1;
+    $amount = 1; // TODO isset($args['missedNeeded']) ? $args['missedNeeded'] : 1;
+
     // Defensive cards in hand
-    $hand = $this->getCardsInHand();
-    Utils::filter($hand, function ($card) {
-      return $card->getColor() == BROWN && $card->getEffectType() == DEFENSIVE;
-    });
-    $res = array_map(function ($card) use ($amount) {
-      return ['id' => $card->getId(), 'amount' => $amount, 'options' => ['type' => OPTION_NONE]];
-    }, $hand);
+    $res = $this->getHand()
+      ->filter(function ($card) {
+        return $card->getColor() == BROWN && $card->getEffectType() == DEFENSIVE;
+      })
+      ->map(function ($card) use ($amount) {
+        return [
+          'id' => $card->getId(),
+          'amount' => $amount,
+          'options' => ['type' => OPTION_NONE],
+        ];
+      })
+      ->toArray();
 
     // Defensive cards in play
-    $card = array_reduce(
-      $this->getCardsInPlay(),
-      function ($barrel, $card) {
-        return $card->getType() == CARD_BARREL && !$card->wasPlayed() ? $card : $barrel;
-      },
-      null
-    );
+    $card = $this->getCardsInPlay()->reduce(function ($barrel, $card) {
+      return $card->getType() == CARD_BARREL && !$card->wasPlayed() ? $card : $barrel;
+    }, null);
     if (!is_null($card)) {
-      $res[] = ['id' => $card->getId(), 'amount' => 1, 'options' => ['type' => OPTION_NONE]];
+      $res[] = [
+        'id' => $card->getId(),
+        'amount' => 1,
+        'options' => ['type' => OPTION_NONE],
+      ];
     }
 
-    return ['cards' => array_values($res), 'character' => null];
+    return [
+      'cards' => array_values($res),
+      'character' => null,
+    ];
   }
 
   public function hasCardCopyInPlay($targetCard)
@@ -455,9 +460,8 @@ class Player extends \BANG\Helpers\DB_Manager
   /**
    * playCard: play a card given by id with args to specify the chosen option
    */
-  public function playCard($cardId, $args)
+  public function playCard($card, $args)
   {
-    $card = Cards::get($cardId);
     Notifications::cardPlayed($this, $card, $args);
     Log::addCardPlayed($this, $card, $args);
     $card->play($this, $args);
@@ -486,9 +490,31 @@ class Player extends \BANG\Helpers\DB_Manager
       'selection' => [],
     ];
 
-    foreach(array_reverse($playerIds) as $pId){
+    foreach (array_reverse($playerIds) as $pId) {
       $atom['pId'] = $pId;
       Stack::insertOnTop($atom);
+    }
+  }
+
+  /**
+   * react: whenever a player react by passing or playing a card
+   */
+  public function react($ids, $ctx)
+  {
+    $card = Cards::get($ctx['src']['id']);
+    if (is_null($ids)) {
+      // PASS
+      return $card->pass($this);
+    } else {
+      if (!is_array($ids)) {
+        $ids = [$ids];
+      }
+
+      foreach ($ids as $id) {
+        $reactionCard = Cards::get($id);
+        $card->react($reactionCard, $this);
+        // TODO $this->onCardsLost();
+      }
     }
   }
 }

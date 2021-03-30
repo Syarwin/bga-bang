@@ -139,12 +139,17 @@ class Cards extends \BANG\Helpers\Pieces
 
   public static function play($id)
   {
-    self::insertOnTop($id, "discard");
+    self::insertOnTop($id, 'discard');
   }
 
   public static function discard($mixed)
   {
-    $id = is_int($mixed)? $mixed : $mixed->getId();
+    $id = is_int($mixed) ? $mixed : $mixed->getId();
     self::play($id);
+  }
+
+  public static function equip($cardId, $pId)
+  {
+    self::move($cardId, ['inPlay', $pId]);
   }
 }

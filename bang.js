@@ -86,14 +86,14 @@ setup(gamedatas) {
   dojo.connect($("deck"), "onclick", () => this.onClickDeck() );
   dojo.connect($("discard"), "onclick", () => this.onClickDiscard() );
 
+  // Setting up player boards order
+  this.setupPlayerBoards();
+
   if(this.isSpectator){
     dojo.place(jstpl_helpIcon, document.querySelector(".player-board.spectator-mode"));
     dojo.query(".player-board.spectator-mode .roundedbox_main").style("display", "none");
   }
   dojo.connect($("help-icon"), "click", () => this.displayPlayersHelp() );
-
-  // Setting up player boards order
-  this.setupPlayerBoards();
 
   // Make the current player stand out
   this.updateCurrentTurnPlayer(gamedatas.playerTurn);
@@ -118,7 +118,6 @@ onLoadingComplete(){
  */
 onUpdateActionButtons(stateName, args) {
 	debug('Update action buttons: ' + stateName, args);
-  /*
   this.updatePlayersStatus(); // Called when a player go inactive
 
   if (stateName == "selectCard" && (args.cards.length > 0 || args._private)){
@@ -148,7 +147,6 @@ onUpdateActionButtons(stateName, args) {
     if(args._private && args._private.character != null && this._selectedCard == null && this._selectedCards.length == 0)
       this.makeCharacterAbilityUsable(args._private.character);
   }
-  */
 },
 
 

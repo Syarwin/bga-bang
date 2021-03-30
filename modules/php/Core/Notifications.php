@@ -136,7 +136,7 @@ class Notifications {
   public static function discardedCard($player, $card, $silent = false) {
     self::notifyAll("cardLost", '', [
       'playerId' => $player->getId(),
-      'card' => $card->format(),
+      'card' => $card->jsonSerialize(),
     ]);
     if($silent)
       return;

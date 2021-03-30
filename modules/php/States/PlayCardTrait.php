@@ -1,6 +1,7 @@
 <?php
 namespace BANG\States;
 use BANG\Managers\Players;
+use BANG\Managers\Cards;
 use BANG\Helpers\Utils;
 use BANG\Core\Stack;
 
@@ -36,12 +37,16 @@ trait PlayCardTrait
       return;
     }
 
-    $cardIds = array_map(function($card){ return $card['id'];}, $this->argPlayCards()['_private']['active']['cards']);
-    if(!in_array($cardId, $cardIds))
-      throw new BgaVisibleSystemException("You cannot play this card!");
+    $cardIds = array_map(function ($card) {
+      return $card['id'];
+    }, $this->argPlayCards()['_private']['active']['cards']);
+    if (!in_array($cardId, $cardIds)) {
+      throw new BgaVisibleSystemException('You cannot play this card!');
+    }
 
+    $card = Cards::get($cardId);
     $player = Players::getActive();
-    $player->playCard($cardId, $args);
+    $player->playCard($card, $args);
 
     // TODO : not sure what this function was doing before
     //  Players::handleRemainingEffects();

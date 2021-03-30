@@ -30,7 +30,7 @@ trait TurnTrait
    */
   public function stStartOfTurn()
   {
-    // Log::startTurn(); TODO : useful ??
+    Log::startTurn();
     $player = Players::getActive();
     Globals::setPIdTurn($player->getId());
     Stack::setup([
@@ -55,7 +55,7 @@ trait TurnTrait
    ****************************************/
   public function endTurn()
   {
-    $player = Players::getPlayer(self::getCurrentPlayerId());
+    $player = Players::getCurrent();
     $newState = $player->countCardsInHand() > $player->getHp() ? 'discardExcess' : 'endTurn';
     $this->gamestate->nextState($newState);
   }
