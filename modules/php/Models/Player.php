@@ -248,7 +248,7 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function getRandomCardInHand()
   {
-    $cards = self::getCardsInHand();
+    $cards = self::getHand()->toArray();
     if (empty($cards)) {
       throw new \BgaVisibleSystemException('Cannot draw a card in an empty hand');
     }

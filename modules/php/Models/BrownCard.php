@@ -110,11 +110,11 @@ class BrownCard extends AbstractCard
         }
 
         // Drawing/discarding from someone's hand/inplay
-        $victim = Players::getPlayer($args['player']);
-        $card = $args['type'] == 'player' ? $victim->getRandomCardInHand() : Cards::getCard($args['arg']);
+        $victim = Players::get($args['player']);
+        $card = $args['type'] == 'player' ? $victim->getRandomCardInHand() : Cards::get($args['arg']);
 
         if ($this->effect['type'] == DRAW) {
-          Cards::moveCard($card, 'hand', $player->getId());
+          Cards::stole($card, $player);
           Notifications::stoleCard($player, $victim, $card, $args['type'] == 'inplay');
         } else {
           $victim->discardCard($card);

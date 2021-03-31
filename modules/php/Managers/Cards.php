@@ -152,4 +152,10 @@ class Cards extends \BANG\Helpers\Pieces
   {
     self::move($cardId, ['inPlay', $pId]);
   }
+
+  public static function stole($mixed, $player)
+  {
+    $cId = is_int($mixed) ? $mixed : $mixed->getId();
+    Cards::move($cId, ['hand', $player->getId()]);
+  }
 }

@@ -75,7 +75,6 @@ class Log extends \APP_GameClass
     $player = is_null($pId)? "" : "AND `player_id` = '$pId'";
     $offset = $offset ?? 0;
     $actionsNames = "'" . implode("','", $actions) . "'";
-var_dump("SELECT * FROM log WHERE `action` IN ($actionsNames) $player AND `turn` = (SELECT turn FROM log WHERE `action` = 'startTurn' ORDER BY log_id DESC LIMIT 1) - $offset ORDER BY log_id DESC");
     return self::getObjectListFromDb("SELECT * FROM log WHERE `action` IN ($actionsNames) $player AND `turn` = (SELECT turn FROM log WHERE `action` = 'startTurn' ORDER BY log_id DESC LIMIT 1) - $offset ORDER BY log_id DESC");
   }
 

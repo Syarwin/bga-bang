@@ -2,8 +2,8 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
   return declare("bang.cardTrait", null, {
     constructor(){
       this._notifications.push(
-        ['cardPlayed', 1600],
-        ['cardsGained', 1200],
+        ['cardPlayed', null],
+        ['cardsGained', 1200, (n) => { debug(n); return (n.args.ignore && n.arsg.ignore.map(id => parseInt(id)).includes(this.player_id))} ],
         ['cardLost', 1200],
         ['flipCard', 1000],
         ['reshuffle', 1500],
@@ -118,6 +118,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
         animationDuration = 1600;
       }
 
+      this.notifqueue.setSynchronousDuration(animationDuration);
 
       var card = this.getCard(n.args.card, true);
       card.uid = card.id + "slide";

@@ -52,8 +52,7 @@ class CalamityJanet  extends \BANG\Models\Player{
     return $res;
   }
 
-  public function playCard($id, $args) {
-    $card = Cards::get($id);
+  public function playCard($card, $args) {
     if($card->getType() == CARD_MISSED) {
       $args['asBang'] = true;
       Notifications::cardPlayed($this, $card, $args);
@@ -62,7 +61,7 @@ class CalamityJanet  extends \BANG\Models\Player{
       $newstate = $card->play($this, $args);
       return $newstate;
     }
-    return parent::playCard($id, $args);
+    return parent::playCard($card, $args);
   }
 
 }
