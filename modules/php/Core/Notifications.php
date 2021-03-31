@@ -12,6 +12,10 @@ class Notifications
 {
   protected static function notifyAll($name, $msg, $data)
   {
+    if(isset($data['ignore'])){
+      $data['preserve'] = [3 => 'ignore'];
+      $data['ignore'] = array_map(function($player){ return $player->getId();}, $data['ignore']);
+    }
     bang::get()->notifyAllPlayers($name, $msg, $data);
   }
 
@@ -100,12 +104,12 @@ class Notifications
     if ($amount == 1) {
       $msg =
         $src == 'deck'
-          ? clienttranslate('You draw ${card_name} from ${src_name}')
-          : clienttranslate('You chooses ${card_name} from ${src_name}');
+          ? clienttranslate('${You} draw ${card_name} from ${src_name}')
+          : clienttranslate('${You} choose ${card_name} from ${src_name}');
       $data['card_name'] = $cards->first()->getNameAndValue();
       $data['i18n'][] = 'card_name';
     } else {
-      $msg = clienttranslate('You draws ${amount} cards from ${src_name}');
+      $msg = clienttranslate('${You} draw ${amount} cards from ${src_name}');
     }
     self::notify($player, 'cardsGained', $msg, $data);
 
@@ -116,17 +120,14 @@ class Notifications
       $msg =
         $amount == 1
           ? clienttranslate('${player_name} draws a card from ${src_name}')
-          : clienttranslate('${player_name} draws ${amount} cards from ${src_name}');
+          : clienttranslate('${player_name} draws ${amount} cards from azeaze ${src_name}');
     } else {
       $msg =
         $src == 'deck'
           ? clienttranslate('${player_name} draws ${card_name} from ${src_name}')
           : clienttranslate('${player_name} chooses ${card_name} from ${src_name}');
     }
-    $data['ignore'] = [$player->getId()];
-    $data['preserve'] = ['ignore'];
-    $data['preserveArgsInHistory'] = ['ignore'];
-    $data['_preserve'] = ['ignore'];
+    $data['ignore'] = [$player];
     self::notifyAll('cardsGained', $msg, $data);
   }
 
@@ -196,12 +197,11 @@ class Notifications
     ];
 
     // Notify receiver and victim
-    self::notify($receiver, 'cardsGained', clienttranslate('You stole ${card_name} from ${victim_name}'), $data);
+    self::notify($receiver, 'cardsGained', clienttranslate('${You} stole ${card_name} from ${victim_name}'), $data);
     self::notify($victim, 'cardsGained', clienttranslate('{player_name} stole you ${card_name}'), $data);
 
     // Notify everyone else
-    $data['ignore'] = [$receiver->getId(), $victim->getId()];
-    $data['preserve'] = ['ignore'];
+    $data['ignore'] = [$receiver, $victim];
     if ($equipped) {
       self::notifyAll('cardGained', clienttranslate('${player_name} stole ${card_name} from ${victim_name}'), $data);
     } else {

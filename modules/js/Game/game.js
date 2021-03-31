@@ -255,5 +255,51 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
     forEachPlayer(callback) {
       Object.values(this.gamedatas.players).forEach(callback);
     },
+
+
+    /*
+     * Return a span with a colored 'You'
+     */
+    coloredYou() {
+        var color = this.gamedatas.players[this.player_id].color;
+        var color_bg = "";
+        if (this.gamedatas.players[this.player_id] && this.gamedatas.players[this.player_id].color_back) {
+            color_bg = "background-color:#" + this.gamedatas.players[this.player_id].color_back + ";";
+        }
+        var you = "<span style=\"font-weight:bold;color:#" + color + ";" + color_bg + "\">" + __("lang_mainsite", "You") + "</span>";
+        return you;
+    },
+
+    coloredPlayerName(name) {
+      const player = Object.values(this.gamedatas.players).find(player => player.name == name);
+      if(player == undefined)
+        return '<!--PNS--><span class="playername">' + name + "</span><!--PNE-->";
+
+      const color = player.color;
+      const color_bg = player.color_back? ("background-color:#" + this.gamedatas.players[this.player_id].color_back + ";") : "";
+      return '<!--PNS--><span class="playername" style="color:#' + color + ";" + color_bg + '">' + name + "</span><!--PNE-->";
+    },
+
+
+    /*
+     * Overwrite to allow to more player coloration than player_name and player_name2
+     */
+     format_string_recursive (log, args) {
+       try {
+         if (log && args) {
+           let player_keys = Object.keys(args).filter(key => key.substr(0, 11) == "player_name");
+           player_keys.forEach(key => {
+             args[key] = this.coloredPlayerName(args[key]);
+           });
+
+           args.You = this.coloredYou();
+         }
+       } catch (e) {
+         console.error(log,args,"Exception thrown", e.stack);
+       }
+
+       return this.inherited(arguments);
+     },
+
   });
 });

@@ -3,7 +3,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
     constructor(){
       this._notifications.push(
         ['cardPlayed', null],
-        ['cardsGained', 1200, (n) => { debug(n); return (n.args.ignore && n.arsg.ignore.map(id => parseInt(id)).includes(this.player_id))} ],
+        ['cardsGained', 1200, (n) => { debug(n); return (n.args.ignore && n.args.ignore.includes(this.player_id))} ],
         ['cardLost', 1200],
         ['flipCard', 1000],
         ['reshuffle', 1500],

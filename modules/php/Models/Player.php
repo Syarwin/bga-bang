@@ -34,7 +34,7 @@ class Player extends \BANG\Helpers\DB_Manager
   public function __construct($row)
   {
     if ($row != null) {
-      $this->id = $row['player_id'];
+      $this->id = (int) $row['player_id'];
       $this->no = (int) $row['player_no'];
       $this->name = $row['player_name'];
       $this->color = $row['player_color'];
