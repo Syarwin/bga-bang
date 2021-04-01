@@ -126,25 +126,31 @@ div.bang-card {
       .card-copy-color {
         margin-left:-2px;
       }
-      .card-copy-color::before {
-        font-size:$cardH / 8;
-      }
-      .card-copy-color[data-color="D"]::before {
-        content:"♦";
-        color:red;
-      }
-      .card-copy-color[data-color="H"]::before {
-        content:"♥";
-        color:red;
-      }
-      .card-copy-color[data-color="S"]::before {
-        content:"♠";
-        color:black;
-      }
-      .card-copy-color[data-color="C"]::before {
-        content:"♣";
-        color:black;
-      }
     }
   }
+}
+
+.card-copy-color::before {
+  font-size:$cardH / 8;
+}
+#logs_wrap .card-copy-color::before {
+  font-size:17px;
+  margin-left:1px;
+}
+
+.card-copy-color[data-color="D"]::before {
+  content:"♦";
+  color:red;
+}
+.card-copy-color[data-color="H"]::before {
+  content:"♥";
+  color:red;
+}
+.card-copy-color[data-color="S"]::before {
+  content:"♠";
+  color:black;
+}
+.card-copy-color[data-color="C"]::before {
+  content:"♣";
+  color:black;
 }

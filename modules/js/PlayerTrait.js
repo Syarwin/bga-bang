@@ -175,7 +175,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
      */
     notif_updateHand(n) {
       debug('Notif: update handcount of player', n);
-      this.incHandCount(n.args.playerId, n.args.amount);
+      this.incHandCount(n.args.player_id, n.args.amount);
     },
 
     /*

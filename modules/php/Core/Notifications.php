@@ -12,76 +12,80 @@ class Notifications
 {
   protected static function notifyAll($name, $msg, $data)
   {
-    if(isset($data['ignore'])){
-      $data['preserve'] = [3 => 'ignore'];
-      $data['ignore'] = array_map(function($player){ return $player->getId();}, $data['ignore']);
-    }
+    self::updateArgs($data);
     bang::get()->notifyAllPlayers($name, $msg, $data);
   }
 
   protected static function notify($pId, $name, $msg, $data)
   {
+    self::updateArgs($data);
     $pId = is_int($pId) ? $pId : $pId->getId();
     bang::get()->notifyPlayer($pId, $name, $msg, $data);
   }
 
+  /**
+   * cardPlayed: called once a card is played
+   */
   public static function cardPlayed($player, $card, $args = [])
   {
     $msg = clienttranslate('${player_name} plays ${card_name}');
     $data = [
-      'i18n' => ['card_name'],
-      'player_name' => $player->getName(),
-      'card_name' => $card->getName(),
+      'msgYou' => clienttranslate('${You} play ${card_name}'),
+      'player' => $player,
       'card' => $card,
-      'playerId' => $player->getId(),
-      'targetPlayer' => isset($args['player']) ? $args['player'] : null,
       'target' => $card->isEquipment() ? 'inPlay' : 'discard',
     ];
 
-    $cardArgMsg = $card->getArgsMessage($args);
-    if (!is_null($cardArgMsg) && isset($cardArgMsg['name'])) {
+    if (isset($args['player'])) {
       $msg = clienttranslate('${player_name} plays ${card_name} and chooses ${player_name2} as target');
+      $data['msgYou'] = clienttranslate('${You} play ${card_name} and chooses ${player_name2} as target');
       if (isset($args['asBang'])) {
         $msg = clienttranslate('${player_name} plays ${card_name} as BANG! and chooses ${player_name2} as target');
+        $data['msgYou'] = clienttranslate('${You} play ${card_name} as BANG! and chooses ${player_name2} as target');
       }
 
-      $data['player_name2'] = $cardArgMsg['name'];
+      $data['player2'] = Players::get($args['player']);
     }
 
     self::notifyAll('cardPlayed', $msg, $data);
 
     self::notifyAll('updateHand', '', [
-      'player_name' => $player->getName(),
-      'playerId' => $player->getId(),
+      'player' => $player,
       'amount' => -1,
     ]);
   }
 
   public static function lostLife($player, $amount = 1)
   {
-    $msg =
-      $amount == 1
-        ? clienttranslate('${player_name} looses a life point')
-        : clienttranslate('${player_name} looses ${amount} life points');
+    $msg = clienttranslate('${player_name} looses ${amount} life points');
+    $sgYou = clienttranslate('${You} loose ${amount} life points');
+    if ($amount == 1) {
+      $msg = clienttranslate('${player_name} looses a life point');
+      $msgYou = clienttranslate('${You} loose a life point');
+    }
+
     self::notifyAll('updateHP', $msg, [
-      'player_name' => $player->getName(),
-      'playerId' => $player->getId(),
+      'player' => $player,
       'hp' => $player->getHp(),
       'amount' => -$amount,
+      'msgYou' => $msgYou,
     ]);
   }
 
   public static function gainedLife($player, $amount)
   {
-    $msg =
-      $amount == 1
-        ? clienttranslate('${player_name} gains a life point')
-        : clienttranslate('${player_name} gains ${amount} life points');
+    $msg = clienttranslate('${player_name} gains ${amount} life points');
+    $sgYou = clienttranslate('${You} gain ${amount} life points');
+    if ($amount == 1) {
+      $msg = clienttranslate('${player_name} gains a life point');
+      $msgYou = clienttranslate('${You} gain a life point');
+    }
+
     self::notifyAll('updateHP', $msg, [
-      'player_name' => $player->getName(),
-      'amount' => $amount,
-      'playerId' => $player->getId(),
+      'player' => $player,
       'hp' => $player->getHp(),
+      'amount' => $amount,
+      'msgYou' => $msgYou,
     ]);
   }
 
@@ -91,8 +95,7 @@ class Notifications
     $data = [
       'i18n' => ['src_name'],
       'src_name' => $src == 'deck' ? clienttranslate('the deck') : clienttranslate('the discard pile'),
-      'player_name' => $player->getName(),
-      'playerId' => $player->getId(),
+      'player' => $player,
       'amount' => $amount,
       'cards' => $cards->ui(),
       'src' => $src,
@@ -106,8 +109,7 @@ class Notifications
         $src == 'deck'
           ? clienttranslate('${You} draw ${card_name} from ${src_name}')
           : clienttranslate('${You} choose ${card_name} from ${src_name}');
-      $data['card_name'] = $cards->first()->getNameAndValue();
-      $data['i18n'][] = 'card_name';
+      $data['card'] = $cards->first();
     } else {
       $msg = clienttranslate('${You} draw ${amount} cards from ${src_name}');
     }
@@ -116,11 +118,12 @@ class Notifications
     // Notify everyone else
     if (!$public) {
       unset($data['card_name']);
-      $data['cards'] = [];
+      unset($data['card']);
+      unset($data['cards']);
       $msg =
         $amount == 1
           ? clienttranslate('${player_name} draws a card from ${src_name}')
-          : clienttranslate('${player_name} draws ${amount} cards from azeaze ${src_name}');
+          : clienttranslate('${player_name} draws ${amount} cards from ${src_name}');
     } else {
       $msg =
         $src == 'deck'
@@ -140,14 +143,11 @@ class Notifications
   public static function chooseCard($player, $card)
   {
     $msg = clienttranslate('${player_name} chooses ${card_name}');
-    $formattedCards = [$card->format()];
     self::notifyAll('cardsGained', $msg, [
-      'i18n' => ['card_name'],
-      'player_name' => $player->getName(),
-      'card_name' => $card->getName(),
-      'playerId' => $player->getId(),
+      'msgYou' => clienttranslate('${You} choose ${card_name}'),
+      'player' => $player,
+      'card' => $card,
       'amount' => 1,
-      'cards' => $formattedCards,
       'src' => 'deck',
       'target' => 'hand',
       'deckCount' => Cards::getDeckCount(),
@@ -157,18 +157,17 @@ class Notifications
   public static function discardedCard($player, $card, $silent = false)
   {
     self::notifyAll('cardLost', '', [
-      'playerId' => $player->getId(),
-      'card' => $card->jsonSerialize(),
+      'player' => $player,
+      'card' => $card,
     ]);
     if ($silent) {
       return;
     }
 
-    self::notifyAll('updateHand', clienttranslate('${player_name} discard ${card_name}'), [
-      'i18n' => ['card_name'],
-      'player_name' => $player->getName(),
-      'card_name' => $card->getName(),
-      'playerId' => $player->getId(),
+    self::notifyAll('updateHand', clienttranslate('${player_name} discards ${card_name}'), [
+      'msgYou' => clienttranslate('${You} discard ${card_name}'),
+      'player' => $player,
+      'card' => $card,
       'amount' => -1,
     ]);
   }
@@ -183,31 +182,27 @@ class Notifications
   public static function stoleCard($receiver, $victim, $card, $equipped)
   {
     $data = [
-      'i18n' => ['card_name'],
-      'player_name' => $receiver->getName(),
-      'victim_name' => $victim->getName(),
-      'card_name' => $card->getName(),
-      'playerId' => $receiver->getId(),
-      'victimId' => $victim->getId(),
+      'player' => $player,
+      'player2' => $victim,
+      'card' => $card,
       'amount' => 1,
-      'cards' => [$card],
       'src' => $victim->getId(),
       'target' => 'hand',
       'deckCount' => Cards::getDeckCount(),
     ];
 
     // Notify receiver and victim
-    self::notify($receiver, 'cardsGained', clienttranslate('${You} stole ${card_name} from ${victim_name}'), $data);
-    self::notify($victim, 'cardsGained', clienttranslate('{player_name} stole you ${card_name}'), $data);
+    self::notify($receiver, 'cardsGained', clienttranslate('${You} stole ${card_name} from ${player_name2}'), $data);
+    self::notify($victim, 'cardsGained', clienttranslate('${player_name} stole you ${card_name}'), $data);
 
     // Notify everyone else
     $data['ignore'] = [$receiver, $victim];
     if ($equipped) {
-      self::notifyAll('cardGained', clienttranslate('${player_name} stole ${card_name} from ${victim_name}'), $data);
+      self::notifyAll('cardsGained', clienttranslate('${player_name} stole ${card_name} from ${player_name2}'), $data);
     } else {
-      $data['card_name'] = '';
-      $data['cards'] = [];
-      self::notifyAll('cardGained', clienttranslate('${player_name} stole a card from ${victim_name}'), $data);
+      unset($data['card_name']);
+      unset($data['card']);
+      self::notifyAll('cardsGained', clienttranslate('${player_name} stole a card from ${player_name2}'), $data);
     }
   }
 
@@ -231,16 +226,14 @@ class Notifications
    */
   public static function flipCard($player, $card, $src)
   {
-    $format = $card->format();
     $src_name = $src instanceof Card ? $src->getName() : $src->getCharName();
 
     self::notifyAll('flipCard', clienttranslate('${player_name} draws ${card_name} for ${src_name}\'s effect.'), [
-      'i18n' => ['card_name', 'card_color', 'src_name'],
-      'player_name' => $player->getName(),
-      'card_name' => $card->getNameAndValue(),
+      'i18n' => ['src_name'],
+      'player' => $player,
+      'card' => $card,
       'src_name' => $src_name,
       'src_id' => $src->getId(),
-      'card' => $format,
       'deckCount' => Cards::getDeckCount(),
     ]);
   }
@@ -248,9 +241,8 @@ class Notifications
   public static function useCard($player, $card)
   {
     self::notifyAll('message', clienttranslate('${player_name} uses ${card_name}'), [
-      'i18n' => ['card_name'],
-      'player_name' => $player->getName(),
-      'card_name' => $card->getName(),
+      'player' => $player,
+      'card' => $card,
     ]);
   }
 
@@ -261,14 +253,11 @@ class Notifications
   public static function moveCard($card, $player, $target)
   {
     self::notifyAll('cardsGained', clienttranslate('${card_name} moves to ${player_name}'), [
-      'i18n' => ['card_name'],
-      'card_name' => $card->getName(),
-      'player_name' => $target->getName(),
-      'playerId' => $target->getId(),
-      'victimId' => $player->getId(),
+      'card' => $card,
+      'player' => $target,
+      'player2' => $player,
       'target' => 'inPlay',
       'src' => $player->getId(),
-      'cards' => [$card->format()],
       'amount' => 1,
     ]);
   }
@@ -283,13 +272,12 @@ class Notifications
     ];
 
     self::notifyAll('playerEliminated', clienttranslate('${player_name} is eliminated.'), [
-      'player_name' => $player->getName(),
-      'who_quits' => $player->getId(),
+      'player' => $player,
     ]);
 
     self::notifyAll('updatePlayers', clienttranslate('${player_name} was a ${role_name}.'), [
       'i18n' => ['role_name'],
-      'player_name' => $player->getName(),
+      'player' => $player,
       'role_name' => $roles[$player->getRole()],
       'players' => Players::getUiData(0),
     ]);
@@ -307,5 +295,33 @@ class Notifications
     self::notify($player->getId(), 'preselection', '', [
       'cards' => $ids,
     ]);
+  }
+
+  public static function updateArgs(&$data)
+  {
+    if (isset($data['player'])) {
+      $data['player_id'] = $data['player']->getId();
+      $data['player_name'] = $data['player']->getName();
+      unset($data['player']);
+    }
+
+    if (isset($data['player2'])) {
+      $data['player_id2'] = $data['player2']->getId();
+      $data['player_name2'] = $data['player2']->getName();
+      unset($data['player2']);
+    }
+
+    if (isset($data['card'])) {
+      $data['card_name'] = $data['card']->getName();
+      $data['i18n'][] = 'card_name';
+      $data['preserve'][2] = $data['card'];
+    }
+
+    if (isset($data['ignore'])) {
+      $data['preserve'][3] = 'ignore';
+      $data['ignore'] = array_map(function ($player) {
+        return $player->getId();
+      }, $data['ignore']);
+    }
   }
 }

@@ -287,12 +287,19 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
      format_string_recursive (log, args) {
        try {
          if (log && args) {
+           if(args.msgYou && args.player_id == this.player_id)
+            log = args.msgYou;
+
            let player_keys = Object.keys(args).filter(key => key.substr(0, 11) == "player_name");
            player_keys.forEach(key => {
              args[key] = this.coloredPlayerName(args[key]);
            });
 
            args.You = this.coloredYou();
+
+           if(args.card_name && args.card){
+             args.card_name = args.card_name + ' (' + args.card.value + '<span class="card-copy-color" data-color="' + args.card.color + '"></span>)';
+           }
          }
        } catch (e) {
          console.error(log,args,"Exception thrown", e.stack);

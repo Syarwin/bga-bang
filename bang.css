@@ -1158,20 +1158,29 @@ div.bang-card {
       text-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white; }
       div.bang-card .card-front .card-copy .card-copy-color {
         margin-left: -2px; }
-      div.bang-card .card-front .card-copy .card-copy-color::before {
-        font-size: 21.25px; }
-      div.bang-card .card-front .card-copy .card-copy-color[data-color="D"]::before {
-        content: "♦";
-        color: red; }
-      div.bang-card .card-front .card-copy .card-copy-color[data-color="H"]::before {
-        content: "♥";
-        color: red; }
-      div.bang-card .card-front .card-copy .card-copy-color[data-color="S"]::before {
-        content: "♠";
-        color: black; }
-      div.bang-card .card-front .card-copy .card-copy-color[data-color="C"]::before {
-        content: "♣";
-        color: black; }
+
+.card-copy-color::before {
+  font-size: 21.25px; }
+
+#logs_wrap .card-copy-color::before {
+  font-size: 17px;
+  margin-left: 1px; }
+
+.card-copy-color[data-color="D"]::before {
+  content: "♦";
+  color: red; }
+
+.card-copy-color[data-color="H"]::before {
+  content: "♥";
+  color: red; }
+
+.card-copy-color[data-color="S"]::before {
+  content: "♠";
+  color: black; }
+
+.card-copy-color[data-color="C"]::before {
+  content: "♣";
+  color: black; }
 
 .player-board .player-role {
   width: 40px;

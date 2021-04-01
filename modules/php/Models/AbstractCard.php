@@ -131,8 +131,7 @@ class AbstractCard implements \JsonSerializable
       'D' => clienttranslate('Diamonds'),
       'S' => clienttranslate('Spades'),
     ];
-    $format = $this->format();
-    return $this->name . ' (' . $colors[$format['color']] . ' ' . $format['value'] . ')';
+    return $this->name . ' (' . $colors[$this->color] . ' ' . $this->value . ')';
   }
 
   public function wasPlayed()
@@ -203,20 +202,6 @@ class AbstractCard implements \JsonSerializable
    */
   public function activate($player, $args = [])
   {
-    return null;
-  }
-
-  /**
-   * can be overwritten to add an additional Message to the played card notification.
-   * this message should start with a space
-   */
-  public function getArgsMessage($args)
-  {
-    if (isset($args['player']) && !is_null($args['player'])) {
-      return [
-        'name' => Players::get($args['player'])->getName(),
-      ];
-    }
     return null;
   }
 }
