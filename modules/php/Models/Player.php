@@ -333,7 +333,7 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function getBangCards()
   {
-    $cards = $this->getCardsInHand()
+    $cards = $this->getHand()
       ->filter(function ($card) {
         return $card->getType() == CARD_BANG;
       })
@@ -343,7 +343,7 @@ class Player extends \BANG\Helpers\DB_Manager
           'options' => ['type' => OPTION_NONE],
           'amount' => 1,
         ];
-      });
+      })->toArray();
 
     return [
       'cards' => $cards,

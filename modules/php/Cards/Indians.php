@@ -27,7 +27,7 @@ class Indians extends \BANG\Models\BrownCard{
   public function play($player, $args) {
     parent::play($player, $args);
     $ids = $player->getOrderedOtherPlayers();
-    return $player->attack($ids, NO_CHECK_BARREL);
+    return $player->attack($this, $ids);
   }
 
 
