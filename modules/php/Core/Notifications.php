@@ -97,7 +97,7 @@ class Notifications
       'src_name' => $src == 'deck' ? clienttranslate('the deck') : clienttranslate('the discard pile'),
       'player' => $player,
       'amount' => $amount,
-      'cards' => $cards->ui(),
+      'cards' => $cards->ui()->toArray(),
       'src' => $src,
       'target' => 'hand',
       'deckCount' => Cards::getDeckCount(),
@@ -182,7 +182,7 @@ class Notifications
   public static function stoleCard($receiver, $victim, $card, $equipped)
   {
     $data = [
-      'player' => $player,
+      'player' => $receiver,
       'player2' => $victim,
       'card' => $card,
       'amount' => 1,
@@ -322,6 +322,10 @@ class Notifications
       $data['ignore'] = array_map(function ($player) {
         return $player->getId();
       }, $data['ignore']);
+    }
+
+    if (isset($data['msgYou'])) {
+      $data['preserve'][4] = 'msgYou';
     }
   }
 }

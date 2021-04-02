@@ -19,7 +19,7 @@ class SidKetchum extends \BANG\Models\Player
   public function getHandOptions()
   {
     $res = parent::getHandOptions();
-    if ($this->countCardsinHand() > 1) {
+    if ($this->countHand() > 1) {
       $res['character'] = SID_KETCHUM;
     }
     return $res;

@@ -53,7 +53,7 @@ else {
 }
 */
 
-  function react($ids)
+  function actReact($ids)
   {
     $player = Players::getCurrent();
 
@@ -75,7 +75,7 @@ TODO : preselection stuff
     }
   }
 
-  public function cancelPreSelection()
+  public function actCancelPreSelection()
   {
     $pId = self::getCurrentPlayerId();
     $player = Players::getPlayer($pId);

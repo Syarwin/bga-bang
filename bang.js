@@ -200,7 +200,7 @@ onClickCardUseAbility: function(card){
 },
 
 onClickConfirmUseAbility: function(){
-  this.takeAction("useAbility", {
+  this.takeAction("actUseAbility", {
     cards:this._selectedCards.join(";"),
   });
 },
@@ -252,7 +252,7 @@ onClickDiscard: function(){
 
 
 onClickDraw: function(arg) {
-  this.takeAction('draw', { selected: arg });
+  this.takeAction('actDraw', { selected: arg });
 },
 
 

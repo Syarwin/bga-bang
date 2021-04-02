@@ -74,6 +74,15 @@ class Stack
     return $atom;
   }
 
+  public function insertAfter($atom, $pos = 1)
+  {
+    $stack = Globals::getStack();
+    array_splice($stack, $pos, 0, [$atom]);
+    Globals::setStack($stack);
+    return $atom;
+  }
+
+
   /*
   public function nextState($transition, $newState){
     if($newState != null){

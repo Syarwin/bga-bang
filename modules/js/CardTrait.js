@@ -11,7 +11,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
             return n.args.ignore && n.args.ignore.includes(this.player_id);
           },
         ],
-        ['cardLost', 1200],
+        ['cardLost', null],
         ['flipCard', 1000],
         ['reshuffle', 1500],
         ['updateOptions', 200],
@@ -110,11 +110,11 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       var playerId = n.args.player_id,
         target = n.args.target,
         targetPlayer = n.args.player_id2 || null;
-      var animationDuration = 1600;
+      var animationDuration = 1000;
 
       if (!targetPlayer && target == 'inPlay') {
         targetPlayer = playerId;
-        animationDuration = 1000;
+        animationDuration = 700;
       }
       if (targetPlayer && target != 'inPlay') {
         // Slide to player then to discard
@@ -152,7 +152,10 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       if (n.args.card) n.args.cards = [n.args.card];
 
       var cards =
-        n.args.cards.length > 0 ? n.args.cards.map((o) => this.getCard(o)) : this.getNBackCards(n.args.amount);
+        n.args.cards && n.args.cards.length > 0
+          ? n.args.cards.map((o) => this.getCard(o))
+          : this.getNBackCards(n.args.amount);
+
       cards.forEach((card, i) => {
         card.uid = card.id + 'slide';
         let sourceId =
@@ -189,6 +192,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       debug('Notif: card lost', n);
       var sourceId = this.getCardAndDestroy(n.args.card, 'player-character-' + n.args.player_id);
       this.slideTemporaryToDiscard(n.args.card, sourceId);
+      this.notifqueue.setSynchronousDuration(n.args.player_id == this.player_id? 800 : 1200);
     },
 
     /*

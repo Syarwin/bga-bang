@@ -33,58 +33,59 @@ trait TurnTrait
     Log::startTurn();
     $player = Players::getActive();
     Globals::setPIdTurn($player->getId());
-    Stack::setup([
-      ST_DRAW_CARDS,
-      ST_PLAY_CARD,
-      ST_DISCARD_EXCESS,
-      ST_END_OF_TURN,
-    ]);
+    Stack::setup([ST_DRAW_CARDS, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN]);
 
     //TODO    $newState = $player->startOfTurn();
     Stack::resolve();
   }
 
-
   public function stResolveStack()
   {
   }
 
-
   /*****************************************
    **** endOfTurn / discardExcess state ****
    ****************************************/
-  public function endTurn()
+  public function actEndTurn()
   {
-    $player = Players::getCurrent();
-    $newState = $player->countCardsInHand() > $player->getHp() ? 'discardExcess' : 'endTurn';
-    $this->gamestate->nextState($newState);
+    Stack::nextState();
+  }
+
+  public function stDiscardExcess()
+  {
+    $player = Players::getActive();
+    if ($player->countHand() <= $player->getHp()) {
+      Stack::nextState();
+    }
   }
 
   public function argDiscardExcess()
   {
-    $player = Players::getPlayer(self::getActivePlayerId());
+    $player = Players::getActive();
     return [
-      'amount' => $player->countCardsInHand() - $player->getHp(),
+      'amount' => $player->countHand() - $player->getHp(),
       '_private' => [
-        'active' => $player->getCardsInHand(true),
+        'active' => $player->getHand()->toArray(),
       ],
     ];
   }
 
   public function cancelEndTurn()
   {
-    $this->gamestate->nextState('cancel');
+    Stack::insertOnTop([
+      'state' => ST_PLAY_CARD,
+      'pId' => Players::getActiveId(),
+    ]);
+    Stack::resolve();
   }
 
-  public function discardExcess($cardIds)
+  public function actDiscardExcess($cardIds)
   {
-    $cards = array_map(function ($id) {
-      Cards::discardCard($id);
-      return Cards::getCard($id);
-    }, $cardIds);
-    $player = Players::getPlayer(self::getActivePlayerId());
+    $cards = Cards::get($cardIds);
+    Cards::discardMany($cardIds);
+    $player = Players::getActive();
     Notifications::discardedCards($player, $cards);
-    $this->gamestate->nextState('endTurn');
+    Stack::nextState();
   }
 
   /*

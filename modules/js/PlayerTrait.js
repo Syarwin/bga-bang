@@ -47,16 +47,16 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
      */
     notif_updateHP(n) {
       debug('Notif: hp changed', n);
-      var currentHp = dojo.attr('bang-player-' + n.args.playerId, 'data-bullets');
-      dojo.query('#bang-player-' + n.args.playerId + ' .bullet').forEach((bullet, id) => {
+      var currentHp = dojo.attr('bang-player-' + n.args.player_id, 'data-bullets');
+      dojo.query('#bang-player-' + n.args.player_id + ' .bullet').forEach((bullet, id) => {
         if ((currentHp <= id && id < n.args.hp) || (n.args.hp <= id && id < currentHp)) {
           dojo.removeClass(bullet, 'pulse');
           bullet.offsetWidth;
           dojo.addClass(bullet, 'pulse');
         }
       });
-      dojo.attr('bang-player-' + n.args.playerId, 'data-bullets', n.args.hp);
-      dojo.attr('bang-player-board-' + n.args.playerId, 'data-bullets', n.args.hp);
+      dojo.attr('bang-player-' + n.args.player_id, 'data-bullets', n.args.hp);
+      dojo.attr('bang-player-board-' + n.args.player_id, 'data-bullets', n.args.hp);
     },
 
     /*

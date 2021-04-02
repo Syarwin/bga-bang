@@ -65,7 +65,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
     onClickConfirmSelection: function(){
       if(this._dial != null)
         this._dial.destroy();
-      this.takeAction("select", {
+      this.takeAction("actSelect", {
         cards:this._selectedCards.join(";"),
       });
     },

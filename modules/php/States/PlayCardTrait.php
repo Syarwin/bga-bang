@@ -31,7 +31,7 @@ trait PlayCardTrait
 
   public function actPlayCard($cardId, $args)
   {
-    self::checkAction('play');
+    self::checkAction('actPlayCard');
     if (in_array(Utils::getStateName(), ['react', 'multiReact'])) {
       $this->react($cardId);
       return;

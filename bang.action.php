@@ -35,7 +35,7 @@ class action_bang extends APP_GameAction
     }
   }
 
-  public function playCard()
+  public function actPlayCard()
   {
     self::setAjaxMode();
     $id = self::getArg('id', AT_posint, true);
@@ -51,30 +51,30 @@ class action_bang extends APP_GameAction
     self::ajaxResponse();
   }
 
-  public function react()
+  public function actReact()
   {
     self::setAjaxMode();
     $cards = explode(';', self::getArg('cards', AT_numberlist, false));
     //		$id = self::getArg( "id", AT_posint, true );
-    $result = $this->game->react($cards);
+    $result = $this->game->actReact($cards);
     self::ajaxResponse();
   }
 
-  public function pass()
+  public function actPass()
   {
     self::setAjaxMode();
-    $result = $this->game->react(null);
+    $result = $this->game->actReact(null);
     self::ajaxResponse();
   }
 
-  public function cancelPreselection()
+  public function actCancelPreselection()
   {
     self::setAjaxMode();
-    $result = $this->game->cancelPreSelection();
+    $result = $this->game->actCancelPreSelection();
     self::ajaxResponse();
   }
 
-  public function select()
+  public function actSelect()
   {
     self::setAjaxMode();
     $cards = explode(';', self::getArg('cards', AT_numberlist, false));
@@ -82,7 +82,7 @@ class action_bang extends APP_GameAction
     self::ajaxResponse();
   }
 
-  public function draw()
+  public function actDraw()
   {
     self::setAjaxMode();
     $id = self::getArg('selected', AT_alphanum, true);
@@ -90,32 +90,32 @@ class action_bang extends APP_GameAction
     self::ajaxResponse();
   }
 
-  public function endTurn()
+  public function actEndTurn()
   {
     self::setAjaxMode();
-    $result = $this->game->endTurn();
+    $result = $this->game->actEndTurn();
     self::ajaxResponse();
   }
 
-  public function cancelEndTurn()
+  public function actCancelEndTurn()
   {
     self::setAjaxMode();
     $result = $this->game->cancelEndTurn();
     self::ajaxResponse();
   }
 
-  public function discardExcess()
+  public function actDiscardExcess()
   {
     self::setAjaxMode();
-    $cards = explode(';', self::getArg('cards', AT_numberlist, false));
-    $result = $this->game->discardExcess($cards);
+    $cards = array_map('intval', explode(';', self::getArg('cards', AT_numberlist, false)));
+    $result = $this->game->actDiscardExcess($cards);
     self::ajaxResponse();
   }
 
-  public function useAbility()
+  public function actUseAbility()
   {
     self::setAjaxMode();
-    $cards = explode(';', self::getArg('cards', AT_numberlist, false));
+    $cards = array_map('intval', explode(';', self::getArg('cards', AT_numberlist, false)));
     $result = $this->game->useAbility($cards);
     self::ajaxResponse();
   }

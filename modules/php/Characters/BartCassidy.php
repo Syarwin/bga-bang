@@ -16,11 +16,13 @@ class BartCassidy  extends \BANG\Models\Player{
 
   // TODO : make it work with the dynamite : should lost the three hp THEN draw three cards if not dead
   public function looseLife($amount = 1) {
-    $this->registerAbility(['amount'=>$amount]);
-    $newstate = parent::looseLife($amount);
+    // TODO
+    //$this->registerAbility(['amount'=>$amount]);
+    //$newstate = parent::looseLife($amount);
     //if(!$this->eliminated) $this->drawCards($amount);
 
-    return $newstate;
+    // return $newstate;
+    parent::looseLife($amount);
   }
 
   public function useAbility($args) {

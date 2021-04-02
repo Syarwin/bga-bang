@@ -148,6 +148,13 @@ class Cards extends \BANG\Helpers\Pieces
     self::play($id);
   }
 
+  public static function discardMany($arr)
+  {
+    foreach ($arr as $card) {
+      self::discard($card);
+    }
+  }
+
   public static function equip($cardId, $pId)
   {
     self::move($cardId, ['inPlay', $pId]);

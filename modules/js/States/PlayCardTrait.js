@@ -48,16 +48,14 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
      * Whenever the card and the option are selected, send that to the server
      */
     onSelectOption(){
-      if(!this.checkAction('play')) return;
-
       var data = {
         id:this._selectedCard.id,
         player:this._selectedPlayer,
         optionType:this._selectedOptionType,
         optionArg:this._selectedOptionArg,
       };
-
-      this.takeAction("playCard", data);
+      debug("Coucou");
+      this.takeAction("actPlayCard", data);
     },
   });
 });

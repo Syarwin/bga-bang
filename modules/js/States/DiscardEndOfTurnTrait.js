@@ -5,11 +5,11 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
     },
 
     onClickEndOfTurn(){
-      this.takeAction("endTurn");
+      this.takeAction("actEndTurn");
     },
 
     onClickCancelEndTurn(){
-      this.takeAction("cancelEndTurn");
+      this.takeAction("actCancelEndTurn");
     },
 
     onEnteringStateDiscardExcess(args){
@@ -31,7 +31,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
     },
 
     onClickConfirmDiscardExcess(){
-      this.takeAction("discardExcess", {
+      this.takeAction("actDiscardExcess", {
         cards:this._selectedCards.join(";"),
       });
     },

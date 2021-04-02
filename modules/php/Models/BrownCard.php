@@ -93,7 +93,7 @@ class BrownCard extends AbstractCard
   public function play($player, $args)
   {
     // Played card always go to the discard
-    Cards::discard($this);
+    $this->discard();
 
     switch ($this->effect['type']) {
       case BASIC_ATTACK:
@@ -135,7 +135,5 @@ class BrownCard extends AbstractCard
         }
         break;
     }
-
-    return null;
   }
 }

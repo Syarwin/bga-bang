@@ -34,7 +34,7 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
       dojo.query('.bang-card.preselected').removeClass('preselected');
       cards.forEach(cardId => dojo.addClass('bang-card-' + cardId, 'preselected'));
       if(cards.length > 0){
-        this.addSecondaryActionButton('buttonCancelPreselection', _('Cancel pre-selection'), () => this.takeAction("cancelPreSelection") );
+        this.addSecondaryActionButton('buttonCancelPreselection', _('Cancel pre-selection'), () => this.takeAction("actCancelPreSelection") );
       }
       else if($('buttonCancelPreselection')){
         dojo.destroy('buttonCancelPreselection');
@@ -74,15 +74,14 @@ define(["dojo", "dojo/_base/declare"], (dojo, declare) => {
 
 
     onClickConfirmReact(){
-      this.takeAction("react", {
+      this.takeAction("actReact", {
         cards:this._selectedCards.join(";"),
       });
     },
 
 
     onClickPass(){
-      this.checkAction('pass');
-      this.takeAction("pass");
+      this.takeAction('actPass');
     },
   });
 });
