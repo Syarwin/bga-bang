@@ -227,7 +227,7 @@ class Player extends \BANG\Helpers\DB_Manager
     Notifications::lostLife($this, $amount);
     if ($this->hp <= 0) {
       // TODO : add something in the stack after current atomic resolution
-//      Log::addAction('lastState', [Utils::getStateName()]);
+      //      Log::addAction('lastState', [Utils::getStateName()]);
     }
   }
 
@@ -343,7 +343,8 @@ class Player extends \BANG\Helpers\DB_Manager
           'options' => ['type' => OPTION_NONE],
           'amount' => 1,
         ];
-      })->toArray();
+      })
+      ->toArray();
 
     return [
       'cards' => $cards,

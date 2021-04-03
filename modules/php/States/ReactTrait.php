@@ -28,7 +28,7 @@ trait ReactTrait
     Stack::nextState();
   }
 
-/*
+  /*
 TODO : handle with stack engine
 // Otherwise, reaction is over, proceed to next player if any
 else {
@@ -60,7 +60,7 @@ else {
     if ($player->getId() == self::getActivePlayerId()) {
       self::reactAux($player, $ids);
     } else {
-/*
+      /*
 TODO : preselection stuff
       // Re-made the same pre-choice => unselect it
       if ($argReact['_private'][$player->getId()]['selection'] == $ids) {

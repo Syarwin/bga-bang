@@ -180,9 +180,9 @@ class AbstractCard implements \JsonSerializable
         Notifications::cardPlayed($player, $card);
         Cards::play($card->id);
       } else {
-// TODO : what the heck is this supposed to do ? A non-brown card with basic attack effect ???
+        // TODO : what the heck is this supposed to do ? A non-brown card with basic attack effect ???
         // TODO : notification to highlight the card
-//        return $card->activate($player);
+        //        return $card->activate($player);
       }
     }
   }

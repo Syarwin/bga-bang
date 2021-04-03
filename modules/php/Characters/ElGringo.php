@@ -23,7 +23,7 @@ class ElGringo extends \BANG\Models\Player
   {
     parent::looseLife($amount);
 
-/*
+    /*
 TODO
     $attacker = Players::getCurrentTurn(true);
     if ($attacker->id != $this->id) {

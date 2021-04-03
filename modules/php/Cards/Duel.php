@@ -40,7 +40,7 @@ class Duel extends \BANG\Models\BrownCard
 
   public function play($player, $args)
   {
-    parent::play($player,$args);
+    parent::play($player, $args);
     $atom = [
       'state' => ST_REACT,
       'type' => 'duel',
@@ -71,7 +71,7 @@ class Duel extends \BANG\Models\BrownCard
 
     // Get top of the stack, change pId and insertAfter
     $atom = Stack::top();
-    $atom['pId'] = $atom['pId'] == $atom['attacker']? $atom['opponent'] : $atom['attacker'];
+    $atom['pId'] = $atom['pId'] == $atom['attacker'] ? $atom['opponent'] : $atom['attacker'];
     Stack::insertAfter($atom);
   }
 }
