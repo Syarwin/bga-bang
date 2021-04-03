@@ -5,18 +5,20 @@ use BANG\Core\Log;
 use BANG\Managers\Players;
 use BANG\Cards\Card;
 
-class Dynamite extends \BANG\Models\BlueCard{
-  public function __construct($id = null, $copy = ""){
+class Dynamite extends \BANG\Models\BlueCard
+{
+  public function __construct($id = null, $copy = '')
+  {
     parent::__construct($id, $copy);
-    $this->type  = CARD_DYNAMITE;
-    $this->name  = clienttranslate('Dynamite');
-    $this->text  = clienttranslate("At the start of your turn reveal top card from the deck. If it's Spades 2-9, you loose 3 life points. Else pass the Dynamite to the player on your left.");
-    $this->symbols = [
-      [SYMBOL_DYNAMITE, clienttranslate("Lose 3 life points. Else pass the Dynamite on your left.")]
-    ];
+    $this->type = CARD_DYNAMITE;
+    $this->name = clienttranslate('Dynamite');
+    $this->text = clienttranslate(
+      "At the start of your turn reveal top card from the deck. If it's Spades 2-9, you loose 3 life points. Else pass the Dynamite to the player on your left."
+    );
+    $this->symbols = [[SYMBOL_DYNAMITE, clienttranslate('Lose 3 life points. Else pass the Dynamite on your left.')]];
     $this->copies = [
-      BASE_GAME => [ '2H' ],
-      DODGE_CITY => [ ],
+      BASE_GAME => ['2H'],
+      DODGE_CITY => [],
     ];
     $this->effect = ['type' => STARTOFTURN];
   }
@@ -29,11 +31,11 @@ class Dynamite extends \BANG\Models\BlueCard{
     Log::addCardPlayed($player, $this, []);
     $mixed = $player->flip($args, $this);
 
-    if($mixed instanceof Card) {
+    if ($mixed instanceof Card) {
       // Beween 2 & 10 of spades ? => kaboom
       $val = $mixed->getCopyValue();
       if ($mixed->getCopyColor() == 'S' && is_numeric($val) && intval($val) < 10) {
-        Notifications::tell(clienttranslate("Dynamite explodes"));
+        Notifications::tell(clienttranslate('Dynamite explodes'));
         Cards::discardCard($this->id);
         Notifications::discardedCard($player, $this, true);
 
@@ -49,8 +51,7 @@ class Dynamite extends \BANG\Models\BlueCard{
         Notifications::moveCard($this, $player, $next);
         return 'draw'; // Required to work with Lucky Duke
       }
-    }
-    else {
+    } else {
       // If that's not a card, that means that the character has flip ability
       return $mixed;
     }

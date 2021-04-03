@@ -26,7 +26,6 @@ class Stack
     Globals::setStack($stack);
   }
 
-
   public function top()
   {
     $stack = Globals::getStack();
@@ -81,7 +80,6 @@ class Stack
     Globals::setStack($stack);
     return $atom;
   }
-
 
   /*
   public function nextState($transition, $newState){
