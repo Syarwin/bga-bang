@@ -192,7 +192,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       debug('Notif: card lost', n);
       var sourceId = this.getCardAndDestroy(n.args.card, 'player-character-' + n.args.player_id);
       this.slideTemporaryToDiscard(n.args.card, sourceId);
-      this.notifqueue.setSynchronousDuration(n.args.player_id == this.player_id? 800 : 1200);
+      this.notifqueue.setSynchronousDuration(n.args.player_id == this.player_id ? 800 : 1200);
     },
 
     /*
