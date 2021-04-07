@@ -24,15 +24,16 @@
  *
  */
 
-require_once( APP_BASE_PATH."view/common/game.view.php" );
+require_once APP_BASE_PATH . 'view/common/game.view.php';
 
 class view_bang_bang extends game_view
 {
-  function getGameName() {
-    return "bang";
+  function getGameName()
+  {
+    return 'bang';
   }
 
-  function build_page($viewArgs) {
-
+  function build_page($viewArgs)
+  {
   }
 }
