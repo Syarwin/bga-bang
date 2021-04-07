@@ -1,10 +1,11 @@
 <?php
 namespace BANG\States;
+use BANG\Core\Globals;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
 use BANG\Core\Log;
 
-// Happens when drawing a General Store
+// Happens when playing a General Store
 trait SelectCardTrait
 {
   public function stPrepareSelection()
@@ -24,7 +25,7 @@ trait SelectCardTrait
 
   public function argSelect()
   {
-    $args = Log::getLastAction('selection');
+    $args = Globals::getStackCtx();
 
     $players = $args['players'];
     $amount = array_count_values($players)[$players[0]]; // Amount of cards = number of occurence of player's id
@@ -32,15 +33,16 @@ trait SelectCardTrait
     $data = [
       'i18n' => ['src'],
       'cards' => [],
-      'amount' => count($selection['cards']),
+      'amount' => count($selection),
       'amountToPick' => $amount,
-      'src' => $args['src'],
+      'src' => $args['src_name'],
     ];
 
-    if ($selection['id'] == PUBLIC_SELECTION) {
-      $data['cards'] = $selection['cards'];
-    } else {
+    if ($args['isPrivate']) {
+      // TODO: $selection['id'] should be replaced with something else
       $data['_private'] = [$selection['id'] => ['cards' => $selection['cards']]];
+    } else {
+      $data['cards'] = $selection;
     }
 
     return $data;
@@ -49,26 +51,19 @@ trait SelectCardTrait
   public function select($ids)
   {
     $args = Log::getLastAction('selection');
-    $selection = Cards::getSelection();
+    $cards = Cards::getSelection();
 
-    // Compute the remeaning cards
-    $rest = [];
-    foreach ($selection['cards'] as $card) {
-      if (!in_array($card['id'], $ids)) {
-        $rest[] = $card['id'];
-      }
-    }
+    // Compute the remaining cards
+    $rest = array_filter($cards, function($card) use ($ids) {
+      return !in_array($card->getId(), $ids);
+    });
+    // TODO: $rest was used later in $player->useAbility(['selected' => $ids, 'rest' => $rest]); We might want to restore it later
 
-    // Compute the remeaning players
-    array_shift($args['players']); // TODO : don't work if multiple card selected and other players left. And where would that be the case???
+    // Compute the remaining players
+    $playerId = array_shift($args['players']); // TODO : don't work if multiple card selected and other players left. And where would that be the case???
 
     Log::addAction('selection', $args);
-    $player = Players::getActivePlayer();
-    $newstate = isset($args['card'])
-      ? $player->react($ids)
-      : $player->useAbility(['selected' => $ids, 'rest' => $rest]);
-
-    $this->gamestate->nextState($newstate ?? 'select');
+    self::reactAux(Players::get($playerId), $ids);
   }
 
   public function stFinishSelection()

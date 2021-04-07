@@ -53,7 +53,6 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         optionType: this._selectedOptionType,
         optionArg: this._selectedOptionArg,
       };
-      debug('Coucou');
       this.takeAction('actPlayCard', data);
     },
   });

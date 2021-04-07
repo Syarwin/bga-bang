@@ -3,6 +3,7 @@ namespace BANG\Cards;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
 use BANG\Managers\Players;
+use BANG\Managers\Cards;
 
 class GeneralStore extends \BANG\Models\BrownCard
 {
@@ -25,13 +26,14 @@ class GeneralStore extends \BANG\Models\BrownCard
     parent::play($player, $args);
     $players = Players::getLivingPlayersStartingWith($player);
     Log::addAction('selection', ['players' => $players, 'src' => $this->name, 'card' => 1]);
-    Cards::createSelection(count($players));
+    $cards = Cards::createSelection(count($players));
+    $player->prepareSelection($this, $cards, $players);
     return 'selection';
   }
 
   public function react($card, $player)
   {
-    Cards::moveCard($card, 'hand', $player->getId());
+    Cards::move($card->getId(), 'hand', $player->getId());
     Notifications::chooseCard($player, $card);
     return null;
   }

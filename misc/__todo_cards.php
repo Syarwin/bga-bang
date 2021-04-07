@@ -27,17 +27,6 @@
 		return Players::getPlayer($card['location_arg']);
 	}
 
-	public static function getSelection() {
-		$cards = array_values(self::getDeck()->getCardsInLocation('selection'));
-		if(count($cards) == 0)
-			return ['player' => 0, 'cards' => [] ]; //should never happen
-
-		return [
-			'id' => $cards[0]['location_arg'],
-			'cards' => self::formatCards(self::toObjects($cards))
-		];
-	}
-
 	public static function moveCard($mixed, $location, $arg = 0) {
 		$id = ($mixed instanceof Card)? $mixed->getId() : $mixed;
 		self::getDeck()->moveCard($id, $location, $arg);
@@ -67,11 +56,6 @@
 		$card = self::resToObject(self::getDeck()->getCardOnTop('deck'));
 		self::playCard($card->getId());
 		return $card;
-	}
-
-	public static function createSelection($nbr, $player = PUBLIC_SELECTION) {
-    self::getDeck()->moveAllCardsInLocation('selection', 'discard');
-		return self::getDeck()->pickCardsForLocation($nbr, 'deck', 'selection', $player);
 	}
 
   // only for testing

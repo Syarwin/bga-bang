@@ -518,4 +518,27 @@ class Player extends \BANG\Helpers\DB_Manager
       }
     }
   }
+
+  public function prepareSelection($card, $selectionCards, $playerIds)
+  {
+    $src = $card->getName();
+    $atom = [
+      'state' => ST_SELECT_CARD,
+//      'type' => 'selection_draw' // TODO: Do we actually need 'type'?
+      'msgActive' => clienttranslate('${you} should choose a card to draw because of ${src_name}'),
+//      'msgWaiting' => clienttranslate('${actplayer} has to react to ${src_name}. You may already select your reaction'),
+      'msgInactive' => clienttranslate('${actplayer} should choose a card to draw because of ${src_name}'),
+      'src_name' => $src,
+      'players' => $playerIds,
+      'isPrivate' => false,
+      'src' => $card->jsonSerialize(),
+      'whoPlayed' => $this->id,
+      'selection' => [$selectionCards],
+    ];
+
+    foreach (array_reverse($playerIds) as $pId) {
+      $atom['pId'] = $pId;
+      Stack::insertOnTop($atom);
+    }
+  }
 }
