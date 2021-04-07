@@ -48,8 +48,8 @@
 */
 $stats_type = [
   // Statistics global to table
-  "table" => [],
+  'table' => [],
 
   // Statistics existing for each player
-  "player" => []
+  'player' => [],
 ];

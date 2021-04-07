@@ -40,7 +40,6 @@ use BANG\Core\Stats;
 use BANG\Core\Globals;
 use BANG\Core\Log;
 
-
 class bang extends Table
 {
   use BANG\States\TurnTrait;
@@ -95,9 +94,9 @@ class bang extends Table
     $pId = self::getCurrentPlayerId();
     $result = [
       'players' => Players::getUiData($pId),
-			'deck' => Cards::getDeckCount(),
-			'discard' => Cards::getLastDiscarded(),
-			'playerTurn' => Globals::getPIdTurn(),
+      'deck' => Cards::getDeckCount(),
+      'discard' => Cards::getLastDiscarded(),
+      'playerTurn' => Globals::getPIdTurn(),
       'cards' => Cards::getUIData(),
     ];
     return $result;
