@@ -54,7 +54,7 @@ trait SelectCardTrait
     $cards = Cards::getSelection();
 
     // Compute the remaining cards
-    $rest = array_filter($cards, function($card) use ($ids) {
+    $rest = array_filter($cards, function ($card) use ($ids) {
       return !in_array($card->getId(), $ids);
     });
     // TODO: $rest was used later in $player->useAbility(['selected' => $ids, 'rest' => $rest]); We might want to restore it later

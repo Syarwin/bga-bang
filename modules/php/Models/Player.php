@@ -524,9 +524,9 @@ class Player extends \BANG\Helpers\DB_Manager
     $src = $card->getName();
     $atom = [
       'state' => ST_SELECT_CARD,
-//      'type' => 'selection_draw' // TODO: Do we actually need 'type'?
+      //      'type' => 'selection_draw' // TODO: Do we actually need 'type'?
       'msgActive' => clienttranslate('${you} should choose a card to draw because of ${src_name}'),
-//      'msgWaiting' => clienttranslate('${actplayer} has to react to ${src_name}. You may already select your reaction'),
+      //      'msgWaiting' => clienttranslate('${actplayer} has to react to ${src_name}. You may already select your reaction'),
       'msgInactive' => clienttranslate('${actplayer} should choose a card to draw because of ${src_name}'),
       'src_name' => $src,
       'players' => $playerIds,
