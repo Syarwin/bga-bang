@@ -18,294 +18,300 @@
 //# sourceURL=bang.js
 //@ sourceURL=bang.js
 var isDebug = window.location.host == 'studio.boardgamearena.com' || window.location.hash.indexOf('debug') > -1;
-var debug = isDebug ? console.info.bind(window.console) : function () { };
+var debug = isDebug ? console.info.bind(window.console) : function () {};
 define([
-    "dojo", "dojo/_base/declare",
-    "ebg/core/gamegui",
-    "ebg/counter",
-    g_gamethemeurl + "modules/js/Game/game.js",
-    g_gamethemeurl + "modules/js/Game/modal.js",
+  'dojo',
+  'dojo/_base/declare',
+  'ebg/core/gamegui',
+  'ebg/counter',
+  g_gamethemeurl + 'modules/js/Game/game.js',
+  g_gamethemeurl + 'modules/js/Game/modal.js',
 
-    g_gamethemeurl + "modules/js/States/PlayCardTrait.js",
-    g_gamethemeurl + "modules/js/States/ReactTrait.js",
-    g_gamethemeurl + "modules/js/States/SelectCardTrait.js",
-    g_gamethemeurl + "modules/js/States/DiscardEndOfTurnTrait.js",
+  g_gamethemeurl + 'modules/js/States/PlayCardTrait.js',
+  g_gamethemeurl + 'modules/js/States/ReactTrait.js',
+  g_gamethemeurl + 'modules/js/States/SelectCardTrait.js',
+  g_gamethemeurl + 'modules/js/States/DiscardEndOfTurnTrait.js',
 
-    g_gamethemeurl + "modules/js/CardTrait.js",
-    g_gamethemeurl + "modules/js/PlayerTrait.js",
+  g_gamethemeurl + 'modules/js/CardTrait.js',
+  g_gamethemeurl + 'modules/js/PlayerTrait.js',
 ], function (dojo, declare) {
-  return declare("bgagame.bang", [
-    customgame.game,
-    bang.playCardTrait,
-    bang.reactTrait,
-    bang.selectCardTrait,
-    bang.discardEndOfTurnTrait,
-    bang.playerTrait,
-    bang.cardTrait,
-  ], {
+  return declare(
+    'bgagame.bang',
+    [
+      customgame.game,
+      bang.playCardTrait,
+      bang.reactTrait,
+      bang.selectCardTrait,
+      bang.discardEndOfTurnTrait,
+      bang.playerTrait,
+      bang.cardTrait,
+    ],
+    {
+      /*
+       * Constructor
+       */
+      constructor: function () {
+        this._selectableCards = [];
+        this._selectablePlayers = [];
+        this._selectedCard = null;
+        this._selectedCards = [];
+        this._selectedPlayer = null;
+        this._selectedOptionType = null;
+        this._selectedOptionArg = null;
+        this._dial = null;
 
-/*
- * Constructor
- */
-constructor: function () {
-  this._selectableCards = [];
-  this._selectablePlayers = [];
-  this._selectedCard = null;
-  this._selectedCards = [];
-  this._selectedPlayer = null;
-  this._selectedOptionType = null;
-  this._selectedOptionArg = null;
-  this._dial = null;
+        // States that need the player to be active to be entered
+        this._activeStates = ['drawCard', 'playCard', 'react', 'multiReact', 'discardExcess'];
+      },
 
-  // States that need the player to be active to be entered
-  this._activeStates = ["drawCard", "playCard", "react", "multiReact", "discardExcess"];
-},
+      /*
+       * Setup:
+       *	This method set up the game user interface according to current game situation specified in parameters
+       *	The method is called each time the game interface is displayed to a player, ie: when the game starts and when a player refreshes the game page (F5)
+       *
+       * Params :
+       *	- mixed gamedatas : contains all datas retrieved by the getAllDatas PHP method.
+       */
+      setup(gamedatas) {
+        debug('SETUP', gamedatas);
+        // Formatting cards
+        this._cards = [];
+        Object.values(gamedatas.cards).forEach((card) => {
+          card.name = card.name.toUpperCase();
+          this._cards[card.type] = card;
+        });
 
-/*
- * Setup:
- *	This method set up the game user interface according to current game situation specified in parameters
- *	The method is called each time the game interface is displayed to a player, ie: when the game starts and when a player refreshes the game page (F5)
- *
- * Params :
- *	- mixed gamedatas : contains all datas retrieved by the getAllDatas PHP method.
- */
-setup(gamedatas) {
-	debug('SETUP', gamedatas);
-  // Formatting cards
-  this._cards = [];
-  Object.values(gamedatas.cards).forEach(card => {
-    card.name = card.name.toUpperCase();
-    this._cards[card.type] = card;
-  });
+        // Adding deck/discard
+        dojo.place(this.format_block('jstpl_table', { deck: gamedatas.deck }), 'board');
+        if (gamedatas.discard) this.addCard(gamedatas.discard, 'discard');
+        dojo.connect($('deck'), 'onclick', () => this.onClickDeck());
+        dojo.connect($('discard'), 'onclick', () => this.onClickDiscard());
 
+        // Setting up player boards order
+        this.setupPlayerBoards();
 
-  // Adding deck/discard
-  dojo.place(this.format_block('jstpl_table', { deck : gamedatas.deck }), 'board');
-  if(gamedatas.discard)
-    this.addCard(gamedatas.discard, "discard");
-  dojo.connect($("deck"), "onclick", () => this.onClickDeck() );
-  dojo.connect($("discard"), "onclick", () => this.onClickDiscard() );
+        if (this.isSpectator) {
+          dojo.place(jstpl_helpIcon, document.querySelector('.player-board.spectator-mode'));
+          dojo.query('.player-board.spectator-mode .roundedbox_main').style('display', 'none');
+        }
+        dojo.connect($('help-icon'), 'click', () => this.displayPlayersHelp());
 
-  // Setting up player boards order
-  this.setupPlayerBoards();
+        // Make the current player stand out
+        this.updateCurrentTurnPlayer(gamedatas.playerTurn);
 
-  if(this.isSpectator){
-    dojo.place(jstpl_helpIcon, document.querySelector(".player-board.spectator-mode"));
-    dojo.query(".player-board.spectator-mode .roundedbox_main").style("display", "none");
-  }
-  dojo.connect($("help-icon"), "click", () => this.displayPlayersHelp() );
+        this.inherited(arguments);
+      },
 
-  // Make the current player stand out
-  this.updateCurrentTurnPlayer(gamedatas.playerTurn);
-
-  this.inherited(arguments);
-},
-
-
-onLoadingComplete(){
-  debug("Loading complete");
-  /*
+      onLoadingComplete() {
+        debug('Loading complete');
+        /*
   if(this.gamedatas.turn == 1){
     this.displayPlayersHelp();
   }
   */
-},
+      },
 
-/*
- * onUpdateActionButtons:
- * 	called by BGA framework before onEnteringState
- *	in this method you can manage "action buttons" that are displayed in the action status bar (ie: the HTML links in the status bar).
- */
-onUpdateActionButtons(stateName, args) {
-	debug('Update action buttons: ' + stateName, args);
-  this.updatePlayersStatus(); // Called when a player go inactive
+      /*
+       * onUpdateActionButtons:
+       * 	called by BGA framework before onEnteringState
+       *	in this method you can manage "action buttons" that are displayed in the action status bar (ie: the HTML links in the status bar).
+       */
+      onUpdateActionButtons(stateName, args) {
+        debug('Update action buttons: ' + stateName, args);
+        this.updatePlayersStatus(); // Called when a player go inactive
 
-  if (stateName == "selectCard" && (args.cards.length > 0 || args._private)){
-    this.addActionButton('buttonShowCards', _('Show cards'), () => this.dialogSelectCard(), null, false, 'blue');
-  }
+        if (stateName == 'selectCard' && (args.cards.length > 0 || args._private)) {
+          this.addActionButton('buttonShowCards', _('Show cards'), () => this.dialogSelectCard(), null, false, 'blue');
+        }
 
+        if (!this.isCurrentPlayerActive())
+          // Make sure the player is active
+          return;
 
-	if (!this.isCurrentPlayerActive()) // Make sure the player is active
-		return;
+        if (stateName == 'playCard') {
+          if (args._private && args._private.character != null && this._selectedCard == null)
+            this.makeCharacterAbilityUsable(args._private.character);
 
-	if (stateName == "playCard"){
-    if(args._private && args._private.character != null && this._selectedCard == null)
-      this.makeCharacterAbilityUsable(args._private.character);
+          this.addActionButton('buttonEndTurn', _('End of turn'), 'onClickEndOfTurn', null, false, 'blue');
+        }
 
-		this.addActionButton('buttonEndTurn', _('End of turn'), 'onClickEndOfTurn', null, false, 'blue');
-  }
+        if (stateName == 'discardExcess')
+          this.addActionButton('buttonCancelEnd', _('Cancel'), 'onClickCancelEndTurn', null, false, 'gray');
 
-  if (stateName == "discardExcess")
-		this.addActionButton('buttonCancelEnd', _('Cancel'), 'onClickCancelEndTurn', null, false, 'gray');
+        if (stateName == 'react' || stateName == 'multiReact') {
+          if (args.attack)
+            this.addActionButton(
+              'buttonSkip',
+              _('Pass and loose life point'),
+              () => this.onClickPass(),
+              null,
+              false,
+              'red',
+            );
+          else this.addActionButton('buttonSkip', _('Pass'), () => this.onClickPass(), null, false, 'blue');
 
-  if (stateName == "react" || stateName == "multiReact"){
-    if(args.attack)
-      this.addActionButton('buttonSkip', _('Pass and loose life point'), () => this.onClickPass(), null, false, 'red');
-    else
-      this.addActionButton('buttonSkip', _('Pass'), () => this.onClickPass(), null, false, 'blue');
+          if (
+            args._private &&
+            args._private.character != null &&
+            this._selectedCard == null &&
+            this._selectedCards.length == 0
+          )
+            this.makeCharacterAbilityUsable(args._private.character);
+        }
+      },
 
-    if(args._private && args._private.character != null && this._selectedCard == null && this._selectedCards.length == 0)
-      this.makeCharacterAbilityUsable(args._private.character);
-  }
-},
+      ////////////////////////////////
+      ////////////////////////////////
+      /////////		Actions		//////////
+      ////////////////////////////////
+      ////////////////////////////////
 
+      /******************
+       *** Use ability ***
+       ******************/
+      makeCharacterAbilityUsable(option) {
+        this._useAbilityOption = option;
+        this.addActionButton('buttonUseAbility', _('Use ability'), () => this.onClickUseAbility(), null, false, 'blue');
+      },
 
+      onClickUseAbility() {
+        debug('test');
+        //let OPTIONS_NONE = 0, OPTION_CARDS = 3;
+        let SID_KETCHUM = 9,
+          JOURDONNAIS = 13;
+        this._selectedCards = [];
+        if (this._useAbilityOption == JOURDONNAIS) {
+          this.onClickConfirmUseAbility();
+        } else if (this._useAbilityOption == SID_KETCHUM) {
+          // Sid Ketchum power
+          var cards = dojo.query('#hand .bang-card').map((card) => {
+            return { id: dojo.attr(card, 'data-id') };
+          });
 
-////////////////////////////////
-////////////////////////////////
-/////////		Actions		//////////
-////////////////////////////////
-////////////////////////////////
+          this._amount = 2;
+          this.makeCardSelectable(cards, 'useAbility');
 
+          $('pagemaintitletext').innerHTML = _('You must select two cards');
+          this.removeActionButtons();
+          this.addActionButton('buttonCancelUseAbility', _('Cancel'), () => this.restartState(), null, false, 'gray');
+        }
+      },
 
+      onClickCardUseAbility: function (card) {
+        this.toggleCard(card);
 
-/******************
-*** Use ability ***
-******************/
-makeCharacterAbilityUsable(option){
-  this._useAbilityOption = option;
-  this.addActionButton('buttonUseAbility', _('Use ability'), () => this.onClickUseAbility(), null, false, 'blue');
-},
+        if (this._selectedCards.length < this._amount) {
+          if ($('buttonConfirmUseAbility')) dojo.destroy('buttonConfirmUseAbility');
+        } else {
+          this.addActionButton(
+            'buttonConfirmUseAbility',
+            _('Confirm'),
+            'onClickConfirmUseAbility',
+            null,
+            false,
+            'blue',
+          );
+        }
+      },
 
-onClickUseAbility(){
-  debug("test");
-  //let OPTIONS_NONE = 0, OPTION_CARDS = 3;
-  let SID_KETCHUM = 9, JOURDONNAIS = 13;
-  this._selectedCards = [];
-  if(this._useAbilityOption == JOURDONNAIS) {
-    this.onClickConfirmUseAbility();
-  } else if(this._useAbilityOption == SID_KETCHUM) {
-    // Sid Ketchum power
-    var cards = dojo.query("#hand .bang-card").map( card => { return {id : dojo.attr(card, 'data-id') }; })
+      onClickConfirmUseAbility: function () {
+        this.takeAction('actUseAbility', {
+          cards: this._selectedCards.join(';'),
+        });
+      },
 
-    this._amount = 2;
-    this.makeCardSelectable(cards, "useAbility");
+      /**********************************
+       *** Draw card / for some powers ***
+       **********************************/
+      onEnteringStateDrawCard: function (args) {
+        this._action = 'drawCard';
+        var players = [];
+        args._private.options.forEach((option) => {
+          switch (option) {
+            case 'deck':
+              this.makeDeckSelectable();
+              break;
+            case 'discard':
+              this.makeDiscardSelectable();
+              break;
+            default:
+              players.push(option);
+              break;
+          }
+        });
+        if (players.length > 0) this.makePlayersSelectable(players, true);
+      },
 
-    $("pagemaintitletext").innerHTML = _("You must select two cards");
-    this.removeActionButtons();
-    this.addActionButton('buttonCancelUseAbility', _('Cancel'), () => this.restartState() , null, false, 'gray');
-  }
-},
+      makeDeckSelectable: function () {
+        this.addActionButton('buttonSelectDeck', _('Deck'), () => this.onClickDeck(), null, false, 'blue');
+        this._isSelectableDeck = true;
+        dojo.addClass('deck', 'selectable');
+      },
 
+      onClickDeck: function () {
+        if (!this.isCurrentPlayerActive() || !this._isSelectableDeck) return;
 
-onClickCardUseAbility: function(card){
-  this.toggleCard(card);
+        if (this._action == 'drawCard') this.onClickDraw('deck');
+      },
 
-  if(this._selectedCards.length < this._amount){
-    if($("buttonConfirmUseAbility"))
-      dojo.destroy("buttonConfirmUseAbility");
-  } else {
-    this.addActionButton('buttonConfirmUseAbility', _('Confirm'), 'onClickConfirmUseAbility', null, false, 'blue');
-  }
-},
+      makeDiscardSelectable: function () {
+        this.addActionButton('buttonSelectDiscard', _('Discard'), () => this.onClickDiscard(), null, false, 'blue');
+        this._isSelectableDiscard = true;
+        dojo.addClass('discard', 'selectable');
+      },
 
-onClickConfirmUseAbility: function(){
-  this.takeAction("actUseAbility", {
-    cards:this._selectedCards.join(";"),
-  });
-},
+      onClickDiscard: function () {
+        if (!this.isCurrentPlayerActive() || !this._isSelectableDiscard) return;
 
+        if (this._action == 'drawCard') this.onClickDraw('discard');
+      },
 
+      onClickDraw: function (arg) {
+        this.takeAction('actDraw', { selected: arg });
+      },
 
-/**********************************
-*** Draw card / for some powers ***
-**********************************/
-onEnteringStateDrawCard: function(args){
-  this._action = 'drawCard';
-  var players = [];
-  args._private.options.forEach(option => {
-    switch(option) {
-      case 'deck': this.makeDeckSelectable(); break;
-      case 'discard': this.makeDiscardSelectable(); break;
-      default: players.push(option); break;
-    }
-  });
-  if(players.length > 0) this.makePlayersSelectable(players, true);
-},
+      ////////////////////////////////
+      ////////////////////////////////
+      /////////		Utils		////////////
+      ////////////////////////////////
+      ////////////////////////////////
+      /*
+       * clearPossible:	clear every clickable space
+       */
+      clearPossible: function () {
+        debug('Clearing everything');
+        this._selectableCards = [];
+        this._selectablePlayers = [];
+        this._selectedCard = null;
+        this._selectedCards = [];
+        this._selectedPlayer = null;
+        this._selectedOptionType = null;
+        this._selectedOptionArg = null;
+        this._isSelectableDeck = false;
+        this._isSelectableDiscard = false;
+        dojo.query('.bang-card').removeClass('unselectable selectable selected');
+        dojo.query('.bang-player').removeClass('selectable');
+        dojo.removeClass('deck', 'selectable');
+        dojo.removeClass('discard', 'selectable');
 
-makeDeckSelectable:function(){
-  this.addActionButton('buttonSelectDeck', _('Deck'), () => this.onClickDeck(), null, false, 'blue');
-  this._isSelectableDeck = true;
-  dojo.addClass("deck", "selectable");
-},
+        this.removeActionButtons();
+        dojo.empty('customActions');
+        this.onUpdateActionButtons(this.gamedatas.gamestate.name, this.gamedatas.gamestate.args);
+      },
 
-onClickDeck: function(){
-  if(!this.isCurrentPlayerActive() || !this._isSelectableDeck) return;
+      restartState: function () {
+        this.clearPossible();
+        this.onEnteringState(this.gamedatas.gamestate.name, this.gamedatas.gamestate);
+      },
 
-  if(this._action == "drawCard")
-    this.onClickDraw('deck');
-},
+      ///////////////////////////////////////////////////
+      //////	 Reaction to cometD notifications	 ///////
+      ///////////////////////////////////////////////////
 
-makeDiscardSelectable:function(){
-  this.addActionButton('buttonSelectDiscard', _('Discard'), () => this.onClickDiscard(), null, false, 'blue');
-  this._isSelectableDiscard = true;
-  dojo.addClass("discard", "selectable");
-},
-
-onClickDiscard: function(){
-  if(!this.isCurrentPlayerActive() || !this._isSelectableDiscard) return;
-
-  if(this._action == "drawCard")
-    this.onClickDraw('discard');
-},
-
-
-
-onClickDraw: function(arg) {
-  this.takeAction('actDraw', { selected: arg });
-},
-
-
-
-
-
-////////////////////////////////
-////////////////////////////////
-/////////		Utils		////////////
-////////////////////////////////
-////////////////////////////////
-/*
- * clearPossible:	clear every clickable space
- */
-clearPossible: function () {
-  debug("Clearing everything");
-  this._selectableCards = [];
-  this._selectablePlayers = [];
-  this._selectedCard = null;
-  this._selectedCards = [];
-  this._selectedPlayer = null;
-  this._selectedOptionType = null;
-  this._selectedOptionArg = null;
-  this._isSelectableDeck = false;
-  this._isSelectableDiscard = false;
-  dojo.query(".bang-card").removeClass("unselectable selectable selected");
-  dojo.query(".bang-player").removeClass("selectable");
-  dojo.removeClass("deck", "selectable");
-  dojo.removeClass("discard", "selectable");
-
-	this.removeActionButtons();
-  dojo.empty('customActions');
-	this.onUpdateActionButtons(this.gamedatas.gamestate.name, this.gamedatas.gamestate.args);
-},
-
-
-restartState: function(){
-  this.clearPossible();
-  this.onEnteringState(this.gamedatas.gamestate.name, this.gamedatas.gamestate);
-},
-
-
-
-
-///////////////////////////////////////////////////
-//////	 Reaction to cometD notifications	 ///////
-///////////////////////////////////////////////////
-
-/** just for troubleshooting */
-notif_debug:function(notif) {
-	debug(notif);
-},
-
-
-	});
+      /** just for troubleshooting */
+      notif_debug: function (notif) {
+        debug(notif);
+      },
+    },
+  );
 });

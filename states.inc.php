@@ -118,7 +118,7 @@ $machinestates = [
     'updateGameProgression' => true,
     'transitions' => [
       'select' => ST_SELECT_CARD,
-      'finish' => ST_PLAY_CARD
+      'finish' => ST_PLAY_CARD,
     ],
   ],
 

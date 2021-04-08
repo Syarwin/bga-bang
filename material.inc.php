@@ -19,4 +19,4 @@
  *
  */
 
-require_once("modules/constants.inc.php");
+require_once 'modules/constants.inc.php';
