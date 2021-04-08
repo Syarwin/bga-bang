@@ -44,7 +44,6 @@ class Jail extends \BANG\Models\BlueCard
   public function play($player, $args)
   {
     Cards::moveCard($this->id, 'inPlay', $args['player']);
-    return null;
   }
 
   public function activate($player, $args = [])
@@ -61,10 +60,8 @@ class Jail extends \BANG\Models\BlueCard
     ];
     if ($card->getCopyColor() == 'H') {
       Notifications::tell('${player_name} can make his turn', $data);
-      return 'draw';
     } else {
       Notifications::tell('${player_name} is skipped', $data);
-      return 'skip';
     }
   }
 }

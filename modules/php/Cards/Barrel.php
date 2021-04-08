@@ -52,6 +52,5 @@ class Barrel extends \BANG\Models\BlueCard
     }
 
     Log::addCardPlayed(Players::getCurrentTurn(true), Cards::getCurrentCard(), $args);
-    return 'updateOptions';
   }
 }

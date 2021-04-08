@@ -40,8 +40,7 @@ class Dynamite extends \BANG\Models\BlueCard
         Notifications::discardedCard($player, $this, true);
 
         // Loose 3hp: if the player dies, skip its turn
-        $newstate = $player->looseLife(3);
-        return $newstate;
+        $player->looseLife(3);
       }
       // Move to next player and go on
       else {
@@ -49,7 +48,6 @@ class Dynamite extends \BANG\Models\BlueCard
         $next = Players::getNextPlayer($player);
         Cards::moveCard($this->id, 'inPlay', $next->getId());
         Notifications::moveCard($this, $player, $next);
-        return 'draw'; // Required to work with Lucky Duke
       }
     } else {
       // If that's not a card, that means that the character has flip ability

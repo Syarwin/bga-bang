@@ -25,7 +25,6 @@ class KitCarlson extends \BANG\Models\Player
     $id = $this->id;
     Cards::createSelection(3, $id);
     Log::addAction('selection', ['players' => [$id, $id], 'src' => $this->character_name]);
-    return 'selection';
   }
 
   public function useAbility($args)
@@ -37,6 +36,5 @@ class KitCarlson extends \BANG\Models\Player
     Notifications::drawCards($this, Cards::getCards($args['selected']));
 
     // TODO notification
-    return 'play';
   }
 }
