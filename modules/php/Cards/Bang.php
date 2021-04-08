@@ -31,7 +31,6 @@ class Bang extends \BANG\Models\BrownCard
     if ($player->hasUnlimitedBangs() || !$player->hasPlayedBang()) {
       return parent::getPlayOptions($player);
     }
-    return null;
   }
 
   public function play($player, $args)

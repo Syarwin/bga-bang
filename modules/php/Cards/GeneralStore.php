@@ -26,15 +26,13 @@ class GeneralStore extends \BANG\Models\BrownCard
     parent::play($player, $args);
     $players = Players::getLivingPlayersStartingWith($player);
     Log::addAction('selection', ['players' => $players, 'src' => $this->name, 'card' => 1]);
-    $cards = Cards::createSelection(count($players));
-    $player->prepareSelection($this, $cards, $players);
-    return 'selection';
+    Cards::createSelection(count($players));
+    $player->prepareSelection($this, $players, false, 1);
   }
 
   public function react($card, $player)
   {
     Cards::move($card->getId(), 'hand', $player->getId());
     Notifications::chooseCard($player, $card);
-    return null;
   }
 }

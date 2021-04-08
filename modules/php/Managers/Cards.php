@@ -174,11 +174,6 @@ class Cards extends \BANG\Helpers\Pieces
 
   public static function getSelection()
   {
-    $cards = self::getInLocation('selection')->toArray();
-    if (count($cards) == 0) {
-      return ['player' => 0, 'cards' => []];
-    } //should never happen
-
-    return $cards;
+    return self::getInLocation('selection');
   }
 }

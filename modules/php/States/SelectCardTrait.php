@@ -27,14 +27,12 @@ trait SelectCardTrait
   {
     $args = Globals::getStackCtx();
 
-    $players = $args['players'];
-    $amount = array_count_values($players)[$players[0]]; // Amount of cards = number of occurence of player's id
-    $selection = Cards::getSelection();
+    $selection = Cards::getSelection()->toArray();
     $data = [
       'i18n' => ['src'],
       'cards' => [],
       'amount' => count($selection),
-      'amountToPick' => $amount,
+      'amountToPick' => $args['amount'],
       'src' => $args['src_name'],
     ];
 
@@ -50,19 +48,14 @@ trait SelectCardTrait
 
   public function select($ids)
   {
-    $args = Log::getLastAction('selection');
-    $cards = Cards::getSelection();
-
     // Compute the remaining cards
-    $rest = array_filter($cards, function ($card) use ($ids) {
+    $rest = Cards::getSelection()->filter(function ($card) use ($ids) {
       return !in_array($card->getId(), $ids);
     });
     // TODO: $rest was used later in $player->useAbility(['selected' => $ids, 'rest' => $rest]); We might want to restore it later
 
-    // Compute the remaining players
-    $playerId = array_shift($args['players']); // TODO : don't work if multiple card selected and other players left. And where would that be the case???
-
-    Log::addAction('selection', $args);
+    Log::addAction('selection');
+    $playerId = Globals::getStackCtx()['pId'];
     self::reactAux(Players::get($playerId), $ids);
   }
 
