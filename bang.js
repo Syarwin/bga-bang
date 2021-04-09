@@ -142,7 +142,7 @@ define([
           if (args.attack)
             this.addActionButton(
               'buttonSkip',
-              _('Pass and loose life point'),
+              _('Pass and lose life point'),
               () => this.onClickPass(),
               null,
               false,

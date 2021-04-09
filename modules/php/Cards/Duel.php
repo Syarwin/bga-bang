@@ -62,7 +62,7 @@ class Duel extends \BANG\Models\BrownCard
 
   public function pass($player)
   {
-    $player->looseLife();
+    $player->loseLife();
   }
 
   public function react($card, $player)

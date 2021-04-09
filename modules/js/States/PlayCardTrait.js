@@ -36,7 +36,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     },
 
     /*
-     * Triggerd when clicked on the undo button
+     * Triggered when clicked on the undo button
      */
     onClickCancelCardSelected(cards) {
       this.clearPossible();

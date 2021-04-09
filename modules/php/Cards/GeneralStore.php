@@ -32,7 +32,7 @@ class GeneralStore extends \BANG\Models\BrownCard
 
   public function react($card, $player)
   {
-    Cards::move($card->getId(), 'hand', $player->getId());
+    Cards::move($card->getId(), 'hand_' . $player->getId());
     Notifications::chooseCard($player, $card);
   }
 }

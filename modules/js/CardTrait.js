@@ -51,7 +51,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         text: '',
         color: ocard.color,
         value: ocard.value,
-        flipped: typeof ocard.flipped == 'undefined' || !ocard.flipped ? '' : 'flipped',
+        flipped: ocard.flipped === undefined || !ocard.flipped ? '' : 'flipped',
       };
 
       if (this._cards[ocard.type]) {
@@ -93,7 +93,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       if ($('bang-card-' + card.uid)) dojo.destroy('bang-card-' + card.uid);
 
       var div = dojo.place(this.format_block('jstpl_card', card), container);
-      if (card.flipped == '') this.addTooltipHtml(div.id, this.format_block('jstpl_cardTooltip', card));
+      if (card.flipped === '') this.addTooltipHtml(div.id, this.format_block('jstpl_cardTooltip', card));
       dojo.connect(div, 'onclick', (evt) => {
         evt.preventDefault();
         evt.stopPropagation();

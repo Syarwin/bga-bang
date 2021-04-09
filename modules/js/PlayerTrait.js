@@ -43,7 +43,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     },
 
     /*
-     * notification sent to all players when a player looses or gains hp
+     * notification sent to all players when a player loses or gains hp
      */
     notif_updateHP(n) {
       debug('Notif: hp changed', n);

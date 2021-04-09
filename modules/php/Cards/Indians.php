@@ -9,7 +9,7 @@ class Indians extends \BANG\Models\BrownCard
     parent::__construct($id, $copy);
     $this->type = CARD_INDIANS;
     $this->name = clienttranslate('Indians!');
-    $this->text = clienttranslate('All other players discard a BANG! or loose 1 life point.');
+    $this->text = clienttranslate('All other players discard a BANG! or lose 1 life point.');
     $this->symbols = [[$this->text]];
     $this->copies = [
       BASE_GAME => ['KD', 'AD'],
@@ -38,7 +38,7 @@ class Indians extends \BANG\Models\BrownCard
 
   public function pass($player)
   {
-    $player->looseLife();
+    $player->loseLife();
   }
 
   public function react($card, $player)

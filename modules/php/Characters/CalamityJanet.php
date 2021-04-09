@@ -61,7 +61,7 @@ class CalamityJanet extends \BANG\Models\Player
       $args['asBang'] = true;
       Notifications::cardPlayed($this, $card, $args);
       Log::addCardPlayed($this, $card, $args);
-      $card = new Bang($id, '');
+      $card = new Bang(['id' => $card->getId()]);
       $newstate = $card->play($this, $args);
       return $newstate;
     }

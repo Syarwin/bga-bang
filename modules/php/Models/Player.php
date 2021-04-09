@@ -220,7 +220,7 @@ class Player extends \BANG\Helpers\DB_Manager
    * reduces the life points of a player by 1.
    * return: whether the player was eliminated
    */
-  public function looseLife($amount = 1)
+  public function loseLife($amount = 1)
   {
     $this->hp -= $amount;
     $this->save();

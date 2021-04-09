@@ -9,12 +9,14 @@ use BANG\Core\Notifications;
  */
 class AbstractCard implements \JsonSerializable
 {
-  public function __construct($row = null)
+  public function __construct($params = null)
   {
-    if ($row != null) {
-      $this->id = $row['id'];
-      $this->value = $row['value'];
-      $this->color = $row['color'];
+    if ($params != null) {
+      $this->id = $params['id'];
+      if (array_key_exists('value', $params) && array_key_exists('color', $params)) {
+        $this->value = $params['value'];
+        $this->color = $params['color'];
+      }
     }
   }
 
@@ -65,30 +67,37 @@ class AbstractCard implements \JsonSerializable
   {
     return $this->id;
   }
+
   public function getType()
   {
     return $this->type;
   }
+
   public function getName()
   {
     return $this->name;
   }
+
   public function getText()
   {
     return $this->text;
   }
+
   public function getEffect()
   {
     return $this->effect;
   }
+
   public function getSymbols()
   {
     return $this->symbols;
   }
+
   public function getCopies()
   {
     return $this->copies;
   }
+
   public function getCopy()
   {
     return $this->copy;
@@ -98,14 +107,17 @@ class AbstractCard implements \JsonSerializable
   {
     return null; // Will be overwrite by Blue/Brown class
   }
+
   public function getCopyValue()
   {
     return $this->value;
   }
+
   public function getCopyColor()
   {
     return $this->color;
   }
+
   public function getEffectType()
   {
     return $this->effect['type'];
@@ -115,10 +127,12 @@ class AbstractCard implements \JsonSerializable
   {
     return false;
   }
+
   public function isAction()
   {
     return false;
   }
+
   public function isWeapon()
   {
     return $this->effect['type'] == WEAPON;
@@ -193,7 +207,7 @@ class AbstractCard implements \JsonSerializable
   public function pass($player)
   {
     if ($this->effect['type'] == BASIC_ATTACK) {
-      $player->looseLife();
+      $player->loseLife();
     }
   }
 

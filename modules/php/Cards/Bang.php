@@ -4,9 +4,9 @@ use BANG\Core\Log;
 
 class Bang extends \BANG\Models\BrownCard
 {
-  public function __construct($id = null, $copy = '')
+  public function __construct($params = null)
   {
-    parent::__construct($id, $copy);
+    parent::__construct($params);
     $this->type = CARD_BANG;
     $this->name = clienttranslate('BANG!');
     $this->text = clienttranslate('A Bang to a player in range. Can usually only be played once per turn');

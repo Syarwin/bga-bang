@@ -12,16 +12,16 @@ class ElGringo extends \BANG\Models\Player
     $this->character_name = clienttranslate('El Gringo');
     $this->text = [
       clienttranslate(
-        'Each time he looses a life point due to a card played by another player, he draws a random card from the hands of that player '
+        'Each time he loses a life point due to a card played by another player, he draws a random card from the hands of that player '
       ),
     ];
     $this->bullets = 3;
     parent::__construct($row);
   }
 
-  public function looseLife($amount = 1)
+  public function loseLife($amount = 1)
   {
-    parent::looseLife($amount);
+    parent::loseLife($amount);
 
     /*
 TODO
