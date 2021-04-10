@@ -97,7 +97,7 @@ class Notifications
       'src_name' => $src == 'deck' ? clienttranslate('the deck') : clienttranslate('the discard pile'),
       'player' => $player,
       'amount' => $amount,
-      'cards' => $cards->ui()->toArray(),
+      'cards' => $cards->toArray(),
       'src' => $src,
       'target' => 'hand',
       'deckCount' => Cards::getDeckCount(),
