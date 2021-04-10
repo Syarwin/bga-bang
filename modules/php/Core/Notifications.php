@@ -38,10 +38,10 @@ class Notifications
 
     if (isset($args['player'])) {
       $msg = clienttranslate('${player_name} plays ${card_name} and chooses ${player_name2} as target');
-      $data['msgYou'] = clienttranslate('${You} play ${card_name} and chooses ${player_name2} as target');
+      $data['msgYou'] = clienttranslate('${You} play ${card_name} and choose ${player_name2} as target');
       if (isset($args['asBang'])) {
         $msg = clienttranslate('${player_name} plays ${card_name} as BANG! and chooses ${player_name2} as target');
-        $data['msgYou'] = clienttranslate('${You} play ${card_name} as BANG! and chooses ${player_name2} as target');
+        $data['msgYou'] = clienttranslate('${You} play ${card_name} as BANG! and choose ${player_name2} as target');
       }
 
       $data['player2'] = Players::get($args['player']);
@@ -57,11 +57,11 @@ class Notifications
 
   public static function lostLife($player, $amount = 1)
   {
-    $msg = clienttranslate('${player_name} looses ${amount} life points');
-    $sgYou = clienttranslate('${You} loose ${amount} life points');
+    $msg = clienttranslate('${player_name} loses ${amount} life points');
+    $sgYou = clienttranslate('${You} lose ${amount} life points');
     if ($amount == 1) {
-      $msg = clienttranslate('${player_name} looses a life point');
-      $msgYou = clienttranslate('${You} loose a life point');
+      $msg = clienttranslate('${player_name} loses a life point');
+      $msgYou = clienttranslate('${You} lose a life point');
     }
 
     self::notifyAll('updateHP', $msg, [

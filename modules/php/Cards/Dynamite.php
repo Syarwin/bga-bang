@@ -13,7 +13,7 @@ class Dynamite extends \BANG\Models\BlueCard
     $this->type = CARD_DYNAMITE;
     $this->name = clienttranslate('Dynamite');
     $this->text = clienttranslate(
-      "At the start of your turn reveal top card from the deck. If it's Spades 2-9, you loose 3 life points. Else pass the Dynamite to the player on your left."
+      "At the start of your turn reveal top card from the deck. If it's Spades 2-9, you lose 3 life points. Else pass the Dynamite to the player on your left."
     );
     $this->symbols = [[SYMBOL_DYNAMITE, clienttranslate('Lose 3 life points. Else pass the Dynamite on your left.')]];
     $this->copies = [
@@ -39,8 +39,8 @@ class Dynamite extends \BANG\Models\BlueCard
         Cards::discardCard($this->id);
         Notifications::discardedCard($player, $this, true);
 
-        // Loose 3hp: if the player dies, skip its turn
-        $player->looseLife(3);
+        // Lose 3hp: if the player dies, skip its turn
+        $player->loseLife(3);
       }
       // Move to next player and go on
       else {

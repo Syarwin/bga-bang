@@ -62,7 +62,7 @@ public function attack($playerIds, $checkMissed = true)
     } else {
       $curr = Players::getCurrentTurn();
       $byPlayer = $this->id == $curr ? $this : null;
-      $newstate = $player->looseLife(); // Lost life immediatly
+      $newstate = $player->loseLife(); // Lost life immediatly
       $state = $newstate ?? $state;
     }
   }
