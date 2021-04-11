@@ -31,11 +31,14 @@ class Jourdonnais extends \BANG\Models\Player
   public function getDefensiveOptions()
   {
     $res = parent::getDefensiveOptions();
+    /*
+    TODO
     $card = Cards::getCurrentCard();
     if ($this->canUseAbility()) {
       // Jourdonnais can use his ability on any attack as a Barrel, so I've removed $card->getType() == CARD_BANG &&
       $res['character'] = JOURDONNAIS;
     }
+    */
     return $res;
   }
 

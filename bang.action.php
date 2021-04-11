@@ -100,7 +100,7 @@ class action_bang extends APP_GameAction
   public function actCancelEndTurn()
   {
     self::setAjaxMode();
-    $result = $this->game->cancelEndTurn();
+    $result = $this->game->actCancelEndTurn();
     self::ajaxResponse();
   }
 

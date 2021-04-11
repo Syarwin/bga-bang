@@ -61,6 +61,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
     /*
      * notification sent to all players when someone is eliminated
+     * WARNING : standard BGA notification when a player is elimnated from the table
      */
     notif_playerEliminated(n) {
       debug('Notif: player eliminated', n);

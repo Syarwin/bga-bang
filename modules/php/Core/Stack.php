@@ -51,7 +51,7 @@ class Stack
 
     $pId = self::getGame()->getActivePlayerId();
     // Jump to resolveStack state to ensure we can change active pId
-    if ($atom['pId'] != null && $pId != $atom['pId']) {
+    if (isset($atom['pId']) && $atom['pId'] != null && $pId != $atom['pId']) {
       self::getGame()->gamestate->jumpToState(ST_RESOLVE_STACK);
       self::getGame()->gamestate->changeActivePlayer($atom['pId']);
     }
@@ -81,15 +81,26 @@ class Stack
     return $atom;
   }
 
-  /*
-  public function nextState($transition, $newState){
-    if($newState != null){
-      self::push($transition);
-    } else {
-      $newState = $transition;
+  public function insertAfterCardResolution($atom)
+  {
+    // Compute pos
+    $top = Globals::getStackCtx();
+    if(!isset($top['src']) || !isset($top['src']['id']))
+      throw new \feException("No card resolution in progress");
+
+    $cId = $top['src']['id'];
+    $stack = Globals::getStack();
+    for($i = 1; $i < count($stack); $i++){
+      if(!isset($stack[$i]['src']) || $stack[$i]['src']['id'] != $cId)
+        break;
     }
-    // Classic transition
-    self::getGame()->gamestate->nextState($newState);
+    self::insertAfter($atom, $i);
   }
-*/
+
+
+  public function isItLastElimination()
+  {
+    $stack = Globals::getStack();
+    return count($stack) == 1 || $stack[1]['state'] != ST_ELIMINATE;
+  }
 }

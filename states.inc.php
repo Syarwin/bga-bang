@@ -45,11 +45,6 @@ $machinestates = [
     'description' => '',
     'type' => 'game',
     'action' => 'stDrawCards',
-    'transitions' => [
-      'play' => ST_PLAY_CARD,
-      'selection' => ST_PREPARE_SELECTION,
-      'activeDraw' => ST_ACTIVE_DRAW_CARD,
-    ],
   ],
 
   ST_ACTIVE_DRAW_CARD => [
@@ -59,10 +54,6 @@ $machinestates = [
     'type' => 'activeplayer',
     'args' => 'argDrawCard',
     'possibleactions' => ['actDraw'],
-    'transitions' => [
-      'zombiePass' => ST_END_REACT,
-      'play' => ST_PLAY_CARD,
-    ],
   ],
 
   ST_PLAY_CARD => [
@@ -73,26 +64,6 @@ $machinestates = [
     'args' => 'argPlayCards',
     'action' => 'stPlayCard',
     'possibleactions' => ['actPlayCard', 'actUseAbility', 'actEndTurn'],
-    'transitions' => [
-      'zombiePass' => ST_END_REACT,
-      'endTurn' => ST_END_OF_TURN,
-      'discardExcess' => ST_DISCARD_EXCESS,
-      'react' => ST_AWAIT_REACTION,
-      'selection' => ST_PREPARE_SELECTION,
-      'continuePlaying' => ST_PLAY_CARD,
-      'eliminate' => ST_ELIMINATE,
-    ],
-  ],
-
-  ST_AWAIT_REACTION => [
-    'name' => 'awaitReaction',
-    'description' => '',
-    'type' => 'game',
-    'action' => 'stAwaitReaction',
-    'updateGameProgression' => true,
-    'transitions' => [
-      'single' => ST_REACT,
-    ],
   ],
 
   ST_REACT => [
@@ -102,24 +73,6 @@ $machinestates = [
     'type' => 'activeplayer',
     'args' => 'argReact',
     'possibleactions' => ['actReact', 'actPass'],
-    'transitions' => [
-      'zombiePass' => ST_END_REACT,
-      'react' => ST_AWAIT_REACTION,
-      'finishedReaction' => ST_END_REACT,
-      'eliminate' => ST_ELIMINATE,
-    ],
-  ],
-
-  ST_PREPARE_SELECTION => [
-    'name' => 'prepareSelection',
-    'description' => '',
-    'type' => 'game',
-    'action' => 'stPrepareSelection',
-    'updateGameProgression' => true,
-    'transitions' => [
-      'select' => ST_SELECT_CARD,
-      'finish' => ST_PLAY_CARD,
-    ],
   ],
 
   ST_SELECT_CARD => [
@@ -131,28 +84,15 @@ $machinestates = [
     'type' => 'activeplayer',
     'args' => 'argSelect',
     'possibleactions' => ['actSelect'],
-    'transitions' => [
-      'zombiePass' => ST_END_REACT,
-      'select' => ST_PREPARE_SELECTION,
-      'play' => ST_PLAY_CARD, // Needed for KitCarlson
-      'skip' => ST_NEXT_PLAYER,
-      'draw' => ST_DRAW_CARDS,
-    ],
   ],
 
-  ST_END_REACT => [
-    'name' => 'endReaction',
-    'description' => '',
-    'type' => 'game',
-    'action' => 'stEndReaction',
-    'updateGameProgression' => true,
-    'transitions' => [
-      'finishedReaction' => ST_PLAY_CARD,
-      'eliminate' => ST_ELIMINATE,
-      'draw' => ST_DRAW_CARDS,
-      'next' => ST_START_OF_TURN,
-      'endgame' => ST_PRE_GAME_END,
-    ],
+  ST_REACT_BEER => [
+    'name' => 'reactBeer',
+    'description' => clienttranslate('${actplayer} may play ${n} beer to survive'),
+    'descriptionmyturn' => clienttranslate('${you} may play ${n} beer to survive'),
+    'type' => 'activeplayer',
+    'args' => 'argReactBeer',
+    'possibleactions' => ['actReact', 'actPass'],
   ],
 
   ST_DISCARD_EXCESS => [
@@ -162,12 +102,7 @@ $machinestates = [
     'type' => 'activeplayer',
     'action' => 'stDiscardExcess',
     'args' => 'argDiscardExcess',
-    'possibleactions' => ['actCancel', 'actDiscardExcess'],
-    'transitions' => [
-      'zombiePass' => ST_END_REACT,
-      'endTurn' => ST_END_OF_TURN,
-      'cancel' => ST_PLAY_CARD,
-    ],
+    'possibleactions' => ['actCancelEndTurn', 'actDiscardExcess'],
   ],
 
   ST_ELIMINATE => [
@@ -175,10 +110,6 @@ $machinestates = [
     'description' => '',
     'type' => 'game',
     'action' => 'stEliminate',
-    'transitions' => [
-      'react' => ST_AWAIT_REACTION,
-      'eliminate' => ST_END_REACT,
-    ],
   ],
 
   ST_END_OF_TURN => [

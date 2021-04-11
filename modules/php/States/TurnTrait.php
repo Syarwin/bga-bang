@@ -70,7 +70,7 @@ trait TurnTrait
     ];
   }
 
-  public function cancelEndTurn()
+  public function actCancelEndTurn()
   {
     Stack::insertOnTop([
       'state' => ST_PLAY_CARD,

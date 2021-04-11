@@ -271,9 +271,12 @@ class Notifications
       clienttranslate('Renegade'),
     ];
 
-    self::notifyAll('playerEliminated', clienttranslate('${player_name} is eliminated.'), [
+    /*
+    THIS IS HANDLED BY BGA FRAMEWORK THAT SENDS A NOTIFICATION WHEN A PLAYER GET ELIMINATED FROM THE GAME
+    self::notifyAll('playerEliminated', clienttranslate('${player_name} is eliminated'), [
       'player' => $player,
     ]);
+    */
 
     self::notifyAll('updatePlayers', clienttranslate('${player_name} was a ${role_name}.'), [
       'i18n' => ['role_name'],

@@ -127,7 +127,7 @@ class BrownCard extends AbstractCard
         if ($this->effect['impacts'] == ALL) {
           $targets = Players::getLivingPlayers(null, true);
         } else {
-          $targets[] = is_null($args['player']) ? $player : Players::getPlayer($args['player']);
+          $targets[] = (!isset($args['player']) || is_null($args['player'])) ? $player : Players::getPlayer($args['player']);
         }
 
         foreach ($targets as $target) {

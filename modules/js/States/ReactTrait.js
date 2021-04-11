@@ -76,5 +76,33 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     onClickPass() {
       this.takeAction('actPass');
     },
+
+    /*
+     * React state : active player can play cards from his hand in reaction
+     */
+    onEnteringStateReactBeer(args) {
+      this._amount = args.n;
+      this._selectedCards = [];
+      if (args._private != undefined) {
+        this.makeCardSelectable(args._private.cards, 'selectReactBeer');
+        this.addDangerActionButton('buttonConfirmPass', _('Pass and die'), () => this.onClickPass() );
+      }
+    },
+
+    onClickCardSelectReactBeer(card) {
+      // Toggle the card
+      if (!this.toggleCard(card)) return;
+
+      this.clearActionButtons();
+      if (this._selectedCards.length < this._amount) {
+        if (this._selectedCards.length == 0){
+          this.addDangerActionButton('buttonConfirmPass', _('Pass and die'), () => this.onClickPass() );
+        } else {
+          this.addDangerActionButton('buttonConfirmReact', _('Play and die'), () => this.onClickConfirmReact() );
+        }
+      } else {
+        this.addPrimaryActionButton('buttonConfirmReact', _('Confirm'), () => this.onClickConfirmReact() );
+      }
+    },
   });
 });

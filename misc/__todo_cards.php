@@ -58,19 +58,6 @@
 		return $card;
 	}
 
-  // only for testing
-	public static function dealCard($player, $type, $playerOffset = 0) {
-		//$cards = self::getDeck()->getCardsOfType($type);
-		if($playerOffset>0) {
-			$no = self::getUniqueValueFromDB("SELECT player_no FROM player WHERE player_id=$player");
-			$count = self::getUniqueValueFromDB("SELECT COUNT(*) FROM player");
-			$no += $playerOffset;
-			if($no > $count) $no -= $count;
-			$player = self::getUniqueValueFromDB("SELECT player_id FROM player WHERE player_no=$no");
-		}
-		$cards = self::getObjectListFromDB("SELECT card_id FROM card WHERE card_type=$type AND card_location='deck'", true);
-		self::getDeck()->moveCard($cards[0], 'hand', $player);
-	}
 
 	public static function wasPlayed($id) {
 		return self::getUniqueValueFromDB("SELECT card_played FROM card WHERE card_id = $id") == 1;

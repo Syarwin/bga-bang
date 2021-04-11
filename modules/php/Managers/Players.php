@@ -71,7 +71,8 @@ class Players extends \BANG\Helpers\DB_Manager
         $bullets++;
         $sheriff = $pId;
       }
-      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, $bullets, $role, $cId];
+      //$values[] = [$pId, $color, $canal, $name, $avatar, $bullets, $bullets, $role, $cId];
+      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, 1, $role, $cId];
       Cards::deal($pId, $bullets);
       $i++;
     }
@@ -80,12 +81,12 @@ class Players extends \BANG\Helpers\DB_Manager
     self::getGame()->reloadPlayersBasicInfos();
 
     // TODO : remove
-    if (false) {
+    if (true) {
+      Cards::dealCard($sheriff, CARD_GATLING);
+      /*
       Cards::dealCard($sheriff, CARD_BARREL);
       Cards::dealCard($sheriff, CARD_INDIANS, 1);
-      /*
        Cards::dealCard($sheriff, CARD_INDIANS);
-       Cards::dealCard($sheriff, CARD_GATLING);
        Cards::dealCard($sheriff, CARD_REMINGTON);
        Cards::dealCard($sheriff, CARD_DYNAMITE);
      	//Cards::dealCard($sheriff, CARD_JAIL, 1);
@@ -270,6 +271,13 @@ class Players extends \BANG\Helpers\DB_Manager
     );
   }
 
+  public static function setWinners($winningRoles)
+  {
+    $roles = '(' . implode($winningRoles, ',') . ')';
+    self::DbQuery("UPDATE player SET player_score = 1 WHERE player_role in $roles");
+    self::DbQuery("UPDATE player SET player_score = 0 WHERE player_role not in $roles");
+  }
+
   /*
 	public static function getPlayersForElimination($asObjects=false) {
 		$ids = self::getObjectListFromDB("SELECT player_id FROM player WHERE player_eliminated = 0 AND player_hp <= 0", true);
@@ -305,12 +313,6 @@ class Players extends \BANG\Helpers\DB_Manager
 	}
 
 
-
-	public static function setWinners($winningRoles) {
-		$roles = "(" . implode($winningRoles, ",")  . ")";
-		self::DbQuery("UPDATE player SET player_score = 1 WHERE player_role in $roles");
-		self::DbQuery("UPDATE player SET player_score = 0 WHERE player_role not in $roles");
-	}
 
 	public static function handleRemainingEffects() {
 		$actions = Log::getActionsAfter("registerAbility", "handledAbilities");

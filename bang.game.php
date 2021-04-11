@@ -39,6 +39,7 @@ use BANG\Core\Notifications;
 use BANG\Core\Stats;
 use BANG\Core\Globals;
 use BANG\Core\Log;
+use BANG\Core\Stack;
 
 class bang extends Table
 {
@@ -47,6 +48,7 @@ class bang extends Table
   use BANG\States\PlayCardTrait;
   use BANG\States\ReactTrait;
   use BANG\States\SelectCardTrait;
+  use BANG\States\EndOfLifeTrait;
   use BANG\States\EndOfGameTrait;
 
   public static $instance = null;
@@ -114,50 +116,6 @@ class bang extends Table
     return 0.3;
   }
 
-  public function stEliminate()
-  {
-    $toEliminate = Players::getPlayersForElimination(true);
-    $argsReact = [];
-
-    foreach ($toEliminate as $player) {
-      $hand = $player->getCardsInHand();
-      $needed = 1 - $player->getHp();
-      if (count($hand) >= $needed) {
-        Utils::filter($hand, function ($card) {
-          return $card->getType() == CARD_BEER;
-        });
-        $cards = [];
-        foreach ($hand as $card) {
-          $format = $card->format();
-          $format['amount'] = $needed;
-          $cards[] = $format;
-        }
-        $argsReact[$player->getId()] = ['cards' => $cards, 'src' => 'hp', 'character' => null];
-      }
-      $player->setHp(0);
-      $player->save();
-    }
-
-    $newState = 'eliminate';
-    if (count($argsReact) > 0) {
-      $msgInactive =
-        count($toEliminate) == 1
-          ? sprintf(clienttranslate('%s may play a beer to survive.'), $toEliminate[0]->getName())
-          : clienttranslate('Players may play a beer to survive.');
-
-      $args = [
-        'msgActive' => clienttranslate('${you} lost your last life point. You may play a beer to survive.'),
-        'msgInactive' => $msgInactive,
-        '_private' => $argsReact,
-      ];
-
-      Log::addAction('react', $args);
-      $newState = 'react';
-    }
-
-    $this->gamestate->nextState($newState);
-  }
-
   ////////////////////////////////////
   ////////////   Zombie   ////////////
   ////////////////////////////////////
@@ -168,21 +126,14 @@ class bang extends Table
    */
   public function zombieTurn($state, $activePlayer)
   {
-    if (array_key_exists('zombiePass', $state['transitions'])) {
-      $player = Players::getActivePlayer();
-      // reducing hp to 0 and simulate a passed reaction
-      $player->setHp(0);
-      $player->save();
-      Log::addAction('react', [$activePlayer => ['src' => 'hp']]);
-      $this->gamestate->nextState('zombiePass');
-    } elseif ($state['name'] == 'multiReact') {
-      $player->setHp(-999); // making sure, he can't react
-      $player->save();
-    } else {
-      throw new BgaVisibleSystemException(
-        'Zombie player ' . $activePlayer . ' stuck in unexpected state ' . $state['name']
-      );
+    $player = Players::get($activePlayer);
+    if (!$player->isEliminated()) {
+      $this->stEliminate();
     }
+    Stack::nextState();
+    //      throw new BgaVisibleSystemException(
+    //        'Zombie player ' . $activePlayer . ' stuck in unexpected state ' . $state['name']
+    //      );
   }
 
   /////////////////////////////////////

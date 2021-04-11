@@ -6,6 +6,8 @@ use BANG\Helpers\Utils;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
 use BANG\Core\Stack;
+use BANG\Core\Globals;
+use bang;
 
 /*
  * Player: all utility functions concerning a player
@@ -205,6 +207,7 @@ class Player extends \BANG\Helpers\DB_Manager
   public function gainLife($amount = 1)
   {
     if ($this->hp == $this->bullets) {
+      // TODO : add notification ?
       return;
     }
 
@@ -226,8 +229,15 @@ class Player extends \BANG\Helpers\DB_Manager
     $this->save();
     Notifications::lostLife($this, $amount);
     if ($this->hp <= 0) {
-      // TODO : add something in the stack after current atomic resolution
-      //      Log::addAction('lastState', [Utils::getStateName()]);
+      $ctx = Globals::getStackCtx();
+      $atom = [
+        'state' => ST_REACT_BEER,
+        'type' => 'beer',
+        'src' => $ctx['src'],
+        'attacker' => $ctx['attacker'],
+        'pId' => $this->id,
+      ];
+      Stack::insertAfterCardResolution($atom);
     }
   }
 
@@ -352,6 +362,19 @@ class Player extends \BANG\Helpers\DB_Manager
     ];
   }
 
+
+  /*
+   * return the list of beer cards for saving his life
+   */
+  public function getBeerCards()
+  {
+    return $this->getHand()
+      ->filter(function ($card) {
+        return $card->getType() == CARD_BEER;
+      })
+      ->toArray();
+  }
+
   /*
    * return defensive options
    */
@@ -464,7 +487,7 @@ class Player extends \BANG\Helpers\DB_Manager
   public function playCard($card, $args)
   {
     Notifications::cardPlayed($this, $card, $args);
-    Log::addCardPlayed($this, $card, $args);
+    //Log::addCardPlayed($this, $card, $args);
     $card->play($this, $args);
     // TODO $this->onCardsLost();
   }
@@ -519,6 +542,9 @@ class Player extends \BANG\Helpers\DB_Manager
     }
   }
 
+  /**
+   *
+   */
   public function prepareSelection($card, $playerIds, $isPrivate, $amount)
   {
     $src = $card->getName();
@@ -538,5 +564,62 @@ class Player extends \BANG\Helpers\DB_Manager
       $atom['pId'] = $pId;
       Stack::insertOnTop($atom);
     }
+  }
+
+  /**
+   * Eliminate a player
+   */
+  public function eliminate()
+  {
+    $ctx = Globals::getStackCtx();
+
+    // get player who eliminated this player
+    $byPlayer = Players::get($ctx['attacker']);
+    if ($byPlayer->id == $this->id) {
+      $byPlayer = null;
+    }
+
+    /*
+    TODO : VULTURE I guess ?
+    // let characters react
+    foreach (Players::getLivingPlayers($this->id, true) as $player) {
+      $player->onPlayerEliminated($this);
+    }
+    */
+
+    // Discard cards
+    $this->discardAllCards();
+    // Eliminate player
+    $this->eliminated = true;
+    $this->save();
+    bang::get()->eliminatePlayer($this->id);
+    Notifications::playerEliminated($this);
+
+
+    //handle rewards/penalties
+    if ($byPlayer != null) {
+      if ($this->getRole() == OUTLAW) {
+        $byPlayer->drawCards(3);
+      }
+      if ($this->getRole() == DEPUTY && $byPlayer->getRole() == SHERIFF) {
+        Notifications::tell('The Sheriff eliminated his Deputy and must discard all cards', []);
+        $byPlayer->discardAllCards();
+      }
+    }
+  }
+
+
+  /**
+   * Happens when dead or Sheriff killed one of its deputy
+   */
+  public function discardAllCards()
+  {
+    $hand = $this->getHand();
+    $equipment = $this->getCardsInPlay();
+    $hand->merge($equipment)->map(function($card) {
+      Cards::discard($card);
+    });
+    Notifications::discardedCards($this, $equipment, true);
+    Notifications::discardedCards($this, $hand, false);
   }
 }

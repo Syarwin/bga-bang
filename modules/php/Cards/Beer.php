@@ -26,7 +26,7 @@ class Beer extends \BANG\Models\BrownCard
   public function play($player, $args)
   {
     if (count(Players::getLivingPlayers()) <= 2) {
-      Cards::discardCard($this);
+      Cards::discard($this);
       Notifications::tell(clienttranslate('Beer has no effect when only 2 players are alive.'));
     } else {
       parent::play($player, $args);

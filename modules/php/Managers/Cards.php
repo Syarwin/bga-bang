@@ -176,4 +176,21 @@ class Cards extends \BANG\Helpers\Pieces
   {
     return self::getInLocation('selection');
   }
+
+  // only for testing
+  public static function dealCard($player, $type, $playerOffset = 0)
+  {
+    //$cards = self::getDeck()->getCardsOfType($type);
+    if ($playerOffset > 0) {
+      $no = self::getUniqueValueFromDB("SELECT player_no FROM player WHERE player_id=$player");
+      $count = self::getUniqueValueFromDB('SELECT COUNT(*) FROM player');
+      $no += $playerOffset;
+      if ($no > $count) {
+        $no -= $count;
+      }
+      $player = self::getUniqueValueFromDB("SELECT player_id FROM player WHERE player_no=$no");
+    }
+    $cards = self::getObjectListFromDB("SELECT card_id FROM card WHERE type=$type AND card_location='deck'", true);
+    self::move($cards[0], ['hand', $player]);
+  }
 }

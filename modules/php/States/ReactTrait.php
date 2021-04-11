@@ -58,7 +58,11 @@ else {
     $player = Players::getCurrent();
 
     if ($player->getId() == self::getActivePlayerId()) {
-      self::reactAux($player, $ids);
+      if ($this->gamestate->state_id() == ST_REACT_BEER) {
+        $this->actReactBeer($ids);
+      } else {
+        $this->reactAux($player, $ids);
+      }
     } else {
       /*
 TODO : preselection stuff

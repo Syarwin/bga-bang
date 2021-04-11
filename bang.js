@@ -138,7 +138,7 @@ define([
         if (stateName == 'discardExcess')
           this.addActionButton('buttonCancelEnd', _('Cancel'), 'onClickCancelEndTurn', null, false, 'gray');
 
-        if (stateName == 'react' || stateName == 'multiReact') {
+        if (stateName == 'react') {
           if (args.attack)
             this.addActionButton(
               'buttonSkip',
