@@ -33,7 +33,7 @@ class Notifications
       'msgYou' => clienttranslate('${You} play ${card_name}'),
       'player' => $player,
       'card' => $card,
-      'target' => $card->isEquipment() ? 'inPlay' : 'discard',
+      'target' => $card->isEquipment() ? LOCATION_INPLAY : LOCATION_DISCARD,
     ];
 
     if (isset($args['player'])) {
@@ -89,24 +89,24 @@ class Notifications
     ]);
   }
 
-  public static function drawCards($player, $cards, $public = false, $src = 'deck')
+  public static function drawCards($player, $cards, $public = false, $src = LOCATION_DECK)
   {
     $amount = $cards->count();
     $data = [
       'i18n' => ['src_name'],
-      'src_name' => $src == 'deck' ? clienttranslate('the deck') : clienttranslate('the discard pile'),
+      'src_name' => $src == LOCATION_DECK ? clienttranslate('the deck') : clienttranslate('the discard pile'),
       'player' => $player,
       'amount' => $amount,
       'cards' => $cards->toArray(),
       'src' => $src,
-      'target' => 'hand',
+      'target' => LOCATION_HAND,
       'deckCount' => Cards::getDeckCount(),
     ];
 
     // Notify player
     if ($amount == 1) {
       $msg =
-        $src == 'deck'
+        $src == LOCATION_DECK
           ? clienttranslate('${You} draw ${card_name} from ${src_name}')
           : clienttranslate('${You} choose ${card_name} from ${src_name}');
       $data['card'] = $cards->first();
@@ -126,7 +126,7 @@ class Notifications
           : clienttranslate('${player_name} draws ${amount} cards from ${src_name}');
     } else {
       $msg =
-        $src == 'deck'
+        $src == LOCATION_DECK
           ? clienttranslate('${player_name} draws ${card_name} from ${src_name}')
           : clienttranslate('${player_name} chooses ${card_name} from ${src_name}');
     }
@@ -136,7 +136,7 @@ class Notifications
 
   public static function drawCardFromDiscard($player, $cards)
   {
-    self::drawCards($player, $cards, true, 'discard');
+    self::drawCards($player, $cards, true, LOCATION_DISCARD);
   }
 
   // For general store
@@ -148,8 +148,8 @@ class Notifications
       'player' => $player,
       'card' => $card,
       'amount' => 1,
-      'src' => 'deck',
-      'target' => 'hand',
+      'src' => LOCATION_DECK,
+      'target' => LOCATION_HAND,
       'deckCount' => Cards::getDeckCount(),
     ]);
   }
@@ -187,7 +187,7 @@ class Notifications
       'card' => $card,
       'amount' => 1,
       'src' => $victim->getId(),
-      'target' => 'hand',
+      'target' => LOCATION_HAND,
       'deckCount' => Cards::getDeckCount(),
     ];
 
@@ -256,7 +256,7 @@ class Notifications
       'card' => $card,
       'player' => $target,
       'player2' => $player,
-      'target' => 'inPlay',
+      'target' => LOCATION_INPLAY,
       'src' => $player->getId(),
       'amount' => 1,
     ]);

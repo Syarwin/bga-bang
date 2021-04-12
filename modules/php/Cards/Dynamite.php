@@ -46,7 +46,7 @@ class Dynamite extends \BANG\Models\BlueCard
       else {
         // TODO : move to next player WITHOUT a dynamite...
         $next = Players::getNextPlayer($player);
-        Cards::moveCard($this->id, 'inPlay', $next->getId());
+        Cards::moveCard($this->id, LOCATION_INPLAY . '_' . $next->getId());
         Notifications::moveCard($this, $player, $next);
       }
     } else {

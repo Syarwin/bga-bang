@@ -115,7 +115,7 @@ class BrownCard extends AbstractCard
 
         if ($this->effect['type'] == DRAW) {
           Cards::stole($card, $player);
-          Notifications::stoleCard($player, $victim, $card, $args['type'] == 'inplay');
+          Notifications::stoleCard($player, $victim, $card, $args['type'] == LOCATION_INPLAY);
         } else {
           $victim->discardCard($card);
         }

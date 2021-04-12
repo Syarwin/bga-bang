@@ -23,14 +23,14 @@ class KitCarlson extends \BANG\Models\Player
   public function statePhaseOne()
   {
     $id = $this->id;
-    Cards::createSelection(3, $id);
+    Cards::createLocation(3, $id);
     Log::addAction('selection', ['players' => [$id, $id], 'src' => $this->character_name]);
   }
 
   public function useAbility($args)
   {
     foreach ($args['selected'] as $card) {
-      Cards::moveCard($card, 'hand', $this->id);
+      Cards::moveCard($card, LOCATION_HAND, $this->id);
     }
     Cards::putOnDeck($args['rest'][0]);
     Notifications::drawCards($this, Cards::getCards($args['selected']));

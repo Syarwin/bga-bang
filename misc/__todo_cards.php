@@ -16,7 +16,7 @@
 		$bplayers = Players::getPlayers();
 		foreach($bplayers as $player) {
 			$id = $player->getId();
-			$cards[$id] = self::toObjects(self::getDeck()->getCardsInLocation('inPlay', $id));
+			$cards[$id] = self::toObjects(self::getDeck()->getCardsInLocation(LOCATION_INPLAY, $id));
 		}
 		return $cards;
 	}

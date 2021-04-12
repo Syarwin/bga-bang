@@ -22,12 +22,11 @@ class PedroRamirez extends \BANG\Models\Player
 
   public function statePhaseOne()
   {
-    $locations = ['deck'];
+    $locations = [LOCATION_DECK];
     if (!is_null(Cards::getLastDiscarded())) {
-      array_push($locations, 'discard');
+      array_push($locations, LOCATION_DISCARD);
     }
     Log::addAction('draw', $locations);
-    return 'activeDraw';
   }
 
   public function useAbility($args)
