@@ -85,7 +85,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       this._selectedCards = [];
       if (args._private != undefined) {
         this.makeCardSelectable(args._private.cards, 'selectReactBeer');
-        this.addDangerActionButton('buttonConfirmPass', _('Pass and die'), () => this.onClickPass() );
+        this.addDangerActionButton('buttonConfirmPass', _('Pass and die'), () => this.onClickPass());
       }
     },
 
@@ -95,13 +95,13 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
       this.clearActionButtons();
       if (this._selectedCards.length < this._amount) {
-        if (this._selectedCards.length == 0){
-          this.addDangerActionButton('buttonConfirmPass', _('Pass and die'), () => this.onClickPass() );
+        if (this._selectedCards.length == 0) {
+          this.addDangerActionButton('buttonConfirmPass', _('Pass and die'), () => this.onClickPass());
         } else {
-          this.addDangerActionButton('buttonConfirmReact', _('Play and die'), () => this.onClickConfirmReact() );
+          this.addDangerActionButton('buttonConfirmReact', _('Play and die'), () => this.onClickConfirmReact());
         }
       } else {
-        this.addPrimaryActionButton('buttonConfirmReact', _('Confirm'), () => this.onClickConfirmReact() );
+        this.addPrimaryActionButton('buttonConfirmReact', _('Confirm'), () => this.onClickConfirmReact());
       }
     },
   });

@@ -200,10 +200,10 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
       if (!$(id)) this.addActionButton(id, text, callback, 'customActions', false, 'red');
     },
 
-    clearActionButtons(){
-      dojo.empty("customActions");
+    clearActionButtons() {
+      dojo.empty('customActions');
     },
-    
+
     /*
      * Preference polyfill
      */

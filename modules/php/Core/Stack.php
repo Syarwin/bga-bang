@@ -85,18 +85,19 @@ class Stack
   {
     // Compute pos
     $top = Globals::getStackCtx();
-    if(!isset($top['src']) || !isset($top['src']['id']))
-      throw new \feException("No card resolution in progress");
+    if (!isset($top['src']) || !isset($top['src']['id'])) {
+      throw new \feException('No card resolution in progress');
+    }
 
     $cId = $top['src']['id'];
     $stack = Globals::getStack();
-    for($i = 1; $i < count($stack); $i++){
-      if(!isset($stack[$i]['src']) || $stack[$i]['src']['id'] != $cId)
+    for ($i = 1; $i < count($stack); $i++) {
+      if (!isset($stack[$i]['src']) || $stack[$i]['src']['id'] != $cId) {
         break;
+      }
     }
     self::insertAfter($atom, $i);
   }
-
 
   public function isItLastElimination()
   {

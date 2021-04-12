@@ -362,7 +362,6 @@ class Player extends \BANG\Helpers\DB_Manager
     ];
   }
 
-
   /*
    * return the list of beer cards for saving his life
    */
@@ -595,7 +594,6 @@ class Player extends \BANG\Helpers\DB_Manager
     bang::get()->eliminatePlayer($this->id);
     Notifications::playerEliminated($this);
 
-
     //handle rewards/penalties
     if ($byPlayer != null) {
       if ($this->getRole() == OUTLAW) {
@@ -608,7 +606,6 @@ class Player extends \BANG\Helpers\DB_Manager
     }
   }
 
-
   /**
    * Happens when dead or Sheriff killed one of its deputy
    */
@@ -616,7 +613,7 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     $hand = $this->getHand();
     $equipment = $this->getCardsInPlay();
-    $hand->merge($equipment)->map(function($card) {
+    $hand->merge($equipment)->map(function ($card) {
       Cards::discard($card);
     });
     Notifications::discardedCards($this, $equipment, true);

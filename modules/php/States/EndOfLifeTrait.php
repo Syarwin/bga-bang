@@ -34,19 +34,18 @@ trait EndOfLifeTrait
     ];
   }
 
-
   public function actReactBeer($ids)
   {
     // Play the beer cards picked by player
     $player = Players::getActive();
-    if($ids != null){
-      foreach(Cards::getMany($ids) as $card){
+    if ($ids != null) {
+      foreach (Cards::getMany($ids) as $card) {
         $player->playCard($card, []);
       }
     }
 
     // If it's not enough, add a ELIMINATE node
-    if($player->getHp() <= 0){
+    if ($player->getHp() <= 0) {
       $ctx = Globals::getStackCtx();
       $atom = [
         'state' => ST_ELIMINATE,
@@ -62,7 +61,6 @@ trait EndOfLifeTrait
     Stack::nextState();
   }
 
-
   /**
    * Eliminate a player
    */
@@ -71,7 +69,6 @@ trait EndOfLifeTrait
     $ctx = Globals::getStackCtx();
     $player = Players::get($ctx['pId']);
     $player->eliminate();
-
 
     // Check if game should end
     if (Stack::isItLastElimination() && Players::isEndOfGame()) {
