@@ -335,8 +335,11 @@ class Pieces extends DB_Manager
   /*
    * Move one (or many) pieces to given location
    */
-  public static function move($ids, $location, $state = 0)
+  public static function move($ids, $location, $player = null, $state = 0)
   {
+    if ($player != null) {
+      $location = $location . '_' . $player;
+    }
     if (!is_array($ids)) {
       $ids = [$ids];
     }
@@ -455,7 +458,7 @@ class Pieces extends DB_Manager
       ->where($p . 'location', $location)
       ->where($p . 'state', '>=', $state)
       ->run();
-    self::move($id, $location, $state);
+    self::move($id, $location, null, $state);
   }
 
   public static function insertOnTop($id, $location)

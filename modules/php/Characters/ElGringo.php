@@ -37,7 +37,7 @@ TODO
   {
     $attacker = Players::getCurrentTurn(true);
     $card = $attacker->getRandomCardInHand();
-    Cards::moveCard($card->getId(), 'hand', $this->getId());
+    Cards::move($card->getId(), LOCATION_HAND, $this->getId());
     Notifications::stoleCard($this, $attacker, $card, false);
   }
 }

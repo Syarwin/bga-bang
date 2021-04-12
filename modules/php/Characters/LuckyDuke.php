@@ -39,7 +39,7 @@ class LuckyDuke extends \BANG\Models\Player
       }
       return $cards[1];
     }
-    $cards = Cards::toObjects(Cards::createSelection(2));
+    $cards = Cards::toObjects(Cards::createLocation(2));
     Notifications::flipCard($this, $cards[0], $src);
     Notifications::flipCard($this, $cards[1], $src);
     Log::addAction('selection', ['players' => [$this->id], 'src' => $src->getName()]);

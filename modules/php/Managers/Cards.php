@@ -1,8 +1,5 @@
 <?php
 namespace BANG\Managers;
-use BANG\Core\Log;
-use BANG\Core\Notifications;
-use BANG\Managers\Players;
 use BANG\Helpers\Utils;
 
 /*
@@ -38,8 +35,8 @@ class Cards extends \BANG\Helpers\Pieces
       }
     }
 
-    self::create($cards, 'deck');
-    self::shuffle('deck');
+    self::create($cards, LOCATION_DECK);
+    self::shuffle(LOCATION_DECK);
   }
 
   /***************************
@@ -106,40 +103,40 @@ class Cards extends \BANG\Helpers\Pieces
   /*****************************
    ******* BASIC METHOD ********
    ****************************/
-  public static function deal($pId, $amount, $fromLocation = 'deck')
+  public static function deal($pId, $amount, $fromLocation = LOCATION_DECK)
   {
-    return self::pickForLocation($amount, $fromLocation, ['hand', $pId]);
+    return self::pickForLocation($amount, $fromLocation, [LOCATION_HAND, $pId]);
   }
 
   public static function getHand($pId)
   {
-    return self::getInLocation(['hand', $pId]);
+    return self::getInLocation([LOCATION_HAND, $pId]);
   }
 
   public static function countHand($pId)
   {
-    return self::countInLocation(['hand', $pId]);
+    return self::countInLocation([LOCATION_HAND, $pId]);
   }
 
   public static function getDeckCount()
   {
-    return self::countInLocation('deck');
+    return self::countInLocation(LOCATION_DECK);
   }
 
   public static function getLastDiscarded()
   {
-    $card = self::getTopOf('discard');
+    $card = self::getTopOf(LOCATION_DISCARD);
     return $card;
   }
 
   public static function getInPlay($pId = null)
   {
-    return self::getInLocation(['inPlay', $pId ?? '%']);
+    return self::getInLocation([LOCATION_INPLAY, $pId ?? '%']);
   }
 
   public static function play($id)
   {
-    self::insertOnTop($id, 'discard');
+    self::insertOnTop($id, LOCATION_DISCARD);
   }
 
   public static function discard($mixed)
@@ -157,24 +154,24 @@ class Cards extends \BANG\Helpers\Pieces
 
   public static function equip($cardId, $pId)
   {
-    self::move($cardId, ['inPlay', $pId]);
+    self::move($cardId, LOCATION_INPLAY, $pId);
   }
 
   public static function stole($mixed, $player)
   {
     $cId = is_int($mixed) ? $mixed : $mixed->getId();
-    Cards::move($cId, ['hand', $player->getId()]);
+    Cards::move($cId, [LOCATION_HAND, $player->getId()]);
   }
 
-  public static function createSelection($nbr, $player = PUBLIC_SELECTION)
+  public static function createLocation($nbr)
   {
-    self::moveAllInLocation('selection', 'discard');
-    return self::pickForLocation($nbr, 'deck', 'selection');
+    self::moveAllInLocation(LOCATION_SELECTION, LOCATION_DISCARD);
+    return self::pickForLocation($nbr, LOCATION_DECK, LOCATION_SELECTION);
   }
 
   public static function getSelection()
   {
-    return self::getInLocation('selection');
+    return self::getInLocation(LOCATION_SELECTION);
   }
 
   // only for testing
@@ -191,6 +188,6 @@ class Cards extends \BANG\Helpers\Pieces
       $player = self::getUniqueValueFromDB("SELECT player_id FROM player WHERE player_no=$no");
     }
     $cards = self::getObjectListFromDB("SELECT card_id FROM card WHERE type=$type AND card_location='deck'", true);
-    self::move($cards[0], ['hand', $player]);
+    self::move($cards[0], [LOCATION_HAND, $player]);
   }
 }
