@@ -23,7 +23,7 @@ class KitCarlson extends \BANG\Models\Player
   public function statePhaseOne()
   {
     $id = $this->id;
-    Cards::createLocation(3, $id);
+    Cards::createLocation(LOCATION_SELECTION, 3);
     Log::addAction('selection', ['players' => [$id, $id], 'src' => $this->character_name]);
   }
 

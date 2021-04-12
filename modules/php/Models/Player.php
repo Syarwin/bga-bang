@@ -196,9 +196,15 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function flip($args, $src)
   {
-    $card = Cards::draw();
-    Notifications::flipCard($this, $card, $src);
-    return $card;
+    $cards = Cards::createLocation(LOCATION_FLIPPED, 1);
+    $flipped = $cards->first();
+    Notifications::flipCard($this, $flipped, $src);
+    $atom = [
+      'state' => ST_RESOLVE_FLIPPED,
+      'pId' => $this->id,
+      'src' => $src,
+    ];
+    Stack::insertOnTop($atom);
   }
 
   /**
@@ -418,11 +424,11 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     $equipment = $this->getCardsInPlay();
     foreach ($equipment as $card) {
-      if ($card->type == $targetCard->type) {
-        return false;
+      if ($card->getType() == $targetCard->getType()) {
+        return true;
       }
     }
-    return true;
+    return false;
   }
 
   /***************************************
@@ -432,30 +438,20 @@ class Player extends \BANG\Helpers\DB_Manager
    ***************************************/
 
   /**
-   * startOfTurn: is called at the beggining of each turn (before the drawing phase)
+   * startOfTurn: is called at the beginning of each turn (before the drawing phase)
    *   return: the new state it should continue with
    */
   public function startOfTurn()
   {
-    return 'draw'; // TODO
-
     $equipment = $this->getCardsInPlay();
     // Sort cards to make sure dynamite gets handled before jail
     Utils::sort($equipment, function ($a, $b) {
       return $a->getType() > $b->getType();
     });
 
-    return array_reduce(
-      $equipment,
-      function ($state, $card) {
-        if ($state == 'skip' || $card->getEffectType() != STARTOFTURN) {
-          return $state;
-        }
-        $newState = $card->activate($this);
-        return $newState ?: $state;
-      },
-      'draw'
-    );
+    foreach ($equipment->toArray() as $card) {
+      $card->activate($this);
+    }
   }
 
   /**

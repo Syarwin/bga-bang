@@ -47,6 +47,17 @@ $machinestates = [
     'action' => 'stDrawCards',
   ],
 
+  ST_RESOLVE_FLIPPED => [
+    'name' => 'resolveFlipped',
+    'description' => '',
+    'type' => 'game',
+    'action' => 'stResolveFlipped',
+    'transitions' => [
+      'draw'	=> ST_DRAW_CARDS,
+      'skip' => ST_NEXT_PLAYER,
+    ],
+  ],
+
   ST_ACTIVE_DRAW_CARD => [
     'name' => 'drawCard',
     'description' => clienttranslate('${actplayer} must choose where to draw the first card from'),

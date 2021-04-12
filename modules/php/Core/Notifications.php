@@ -3,7 +3,7 @@ namespace BANG\Core;
 use bang;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
-use BANG\Cards\Card;
+use BANG\Models\AbstractCard;
 
 /*
  * Notifications
@@ -226,7 +226,7 @@ class Notifications
    */
   public static function flipCard($player, $card, $src)
   {
-    $src_name = $src instanceof Card ? $src->getName() : $src->getCharName();
+    $src_name = $src instanceof AbstractCard ? $src->getName() : $src->getCharName();
 
     self::notifyAll('flipCard', clienttranslate('${player_name} draws ${card_name} for ${src_name}\'s effect.'), [
       'i18n' => ['src_name'],

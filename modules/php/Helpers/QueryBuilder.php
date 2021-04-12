@@ -412,4 +412,9 @@ class Collection extends \ArrayObject
       return $elem->getUiData();
     });
   }
+
+  public function contains($value)
+  {
+    return in_array($value, $this->toArray());
+  }
 }
