@@ -14,13 +14,13 @@ trait ResolveFlippedTrait
     $atom = Stack::top();
     $player = Players::get($atom['pId']);
 
-    $src = $atom['src'];
-    $cards = Cards::getInLocation(LOCATION_FLIPPED);
-    if ($cards->count() == 1) {
-      $src->resolveFlipped($cards->first(), $player);
+    $srcCard = Cards::get($atom['srcCardId']);
+    $flippedCards = Cards::getInLocation(LOCATION_FLIPPED);
+    if ($flippedCards->count() == 1) {
+      $srcCard->resolveFlipped($flippedCards->first(), $player);
     } else {
       // Shouldn't ever happen. There should be just 1 card flipped
-      throw new \BgaVisibleSystemException("There's $cards->count() card in LOCATION_FLIPPED");
+      throw new \BgaVisibleSystemException("There's $flippedCards->count() card in LOCATION_FLIPPED");
     }
   }
 }

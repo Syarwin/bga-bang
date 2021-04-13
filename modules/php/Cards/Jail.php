@@ -51,7 +51,8 @@ class Jail extends \BANG\Models\BlueCard
     $player->flip($args, $this);
   }
 
-  public function resolveFlipped($card, $player) {
+  public function resolveFlipped($card, $player)
+  {
     $args = ['player' => $player];
     $player->discardCard($card, true); // Discard a flipped card
     $player->discardCard($this, true); // Discard Jail itself

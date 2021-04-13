@@ -37,8 +37,7 @@ trait SelectCardTrait
     ];
 
     if ($args['isPrivate']) {
-      // TODO: $selection['id'] should be replaced with something else
-      $data['_private'] = [$selection['id'] => ['cards' => $selection['cards']]];
+      $data['_private'] = [$args['pId'] => ['cards' => $selection]];
     } else {
       $data['cards'] = $selection;
     }
@@ -55,7 +54,12 @@ trait SelectCardTrait
     // TODO: $rest was used later in $player->useAbility(['selected' => $ids, 'rest' => $rest]); We might want to restore it later
 
     Log::addAction('selection');
-    $playerId = Globals::getStackCtx()['pId'];
+    $stackCtx = Globals::getStackCtx();
+    $playerId = $stackCtx['pId'];
+    if ($stackCtx['toResolveFlipped']) {
+      Cards::move($ids, LOCATION_FLIPPED);
+      Cards::moveAllInLocation(LOCATION_SELECTION, DISCARD);
+    }
     self::reactAux(Players::get($playerId), $ids);
   }
 

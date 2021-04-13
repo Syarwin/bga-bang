@@ -2,6 +2,7 @@
 namespace BANG\Characters;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
+use BANG\Core\Stack;
 use BANG\Helpers\Utils;
 use BANG\Managers\Cards;
 
@@ -24,28 +25,22 @@ class LuckyDuke extends \BANG\Models\Player
     $this->selectedCard = null;
   }
 
-  // TODO: Fix
-  //  public function flip($args, $src)
-  //  {
-  //    if (!is_null($this->selectedCard)) {
-  //      return $this->selectedCard;
-  //    }
-  //
-  //    if (isset($args['pattern'])) {
-  //      $cards = [Cards::draw(), Cards::draw()];
-  //      Notifications::flipCard($this, $cards[0], $src);
-  //      Notifications::flipCard($this, $cards[1], $src);
-  //      if (preg_match($args['pattern'], $cards[0]->getCopy())) {
-  //        return $cards[0];
-  //      }
-  //      return $cards[1];
-  //    }
-  //    $cards = Cards::toObjects(Cards::drawForLocation(LOCATION_SELECTION, 2));
-  //    Notifications::flipCard($this, $cards[0], $src);
-  //    Notifications::flipCard($this, $cards[1], $src);
-  //    Log::addAction('selection', ['players' => [$this->id], 'src' => $src->getName()]);
-  //    return 'select';
-  //  }
+  public function flip($args, $src)
+  {
+    $cards = Cards::drawForLocation(LOCATION_SELECTION, 2);
+    foreach ($cards as $card) {
+      Notifications::flipCard($this, $card, $src);
+    }
+
+    Log::addAction('selection', ['players' => [$this->id], 'src' => $src->getName()]);
+    $atom = [
+      'state' => ST_RESOLVE_FLIPPED,
+      'pId' => $this->id,
+      'srcCardId' => $src->getId(),
+    ];
+    Stack::insertOnTop($atom);
+    $this->prepareSelection($src, [$this->getId()], true, 1, true);
+  }
 
   public function useAbility($args)
   {
