@@ -202,7 +202,7 @@ class Player extends \BANG\Helpers\DB_Manager
     $atom = [
       'state' => ST_RESOLVE_FLIPPED,
       'pId' => $this->id,
-      'src' => $src,
+      'srcCardId' => $src->getId(),
     ];
     Stack::insertOnTop($atom);
   }
@@ -540,19 +540,16 @@ class Player extends \BANG\Helpers\DB_Manager
   /**
    *
    */
-  public function prepareSelection($card, $playerIds, $isPrivate, $amount)
+  public function prepareSelection($card, $playerIds, $isPrivate, $amount, $toResolveFlipped = false)
   {
     $src = $card->getName();
     $atom = [
       'state' => ST_SELECT_CARD,
-      'msgActive' => clienttranslate('${you} should choose a card to draw because of ${src_name}'),
-      //      'msgWaiting' => clienttranslate('${actplayer} has to react to ${src_name}. You may already select your reaction'),
-      'msgInactive' => clienttranslate('${actplayer} should choose a card to draw because of ${src_name}'),
       'src_name' => $src,
       'amount' => $amount,
       'isPrivate' => $isPrivate,
+      'toResolveFlipped' => $toResolveFlipped,
       'src' => $card->jsonSerialize(),
-      'whoPlayed' => $this->id,
     ];
 
     foreach (array_reverse($playerIds) as $pId) {
