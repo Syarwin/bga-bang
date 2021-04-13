@@ -25,22 +25,22 @@ class LuckyDuke extends \BANG\Models\Player
     $this->selectedCard = null;
   }
 
-    public function flip($args, $src)
-    {
-      $cards = Cards::drawForLocation(LOCATION_SELECTION, 2);
-      foreach ($cards as $card) {
-        Notifications::flipCard($this, $card, $src);
-      }
-
-      Log::addAction('selection', ['players' => [$this->id], 'src' => $src->getName()]);
-      $atom = [
-        'state' => ST_RESOLVE_FLIPPED,
-        'pId' => $this->id,
-        'srcCardId' => $src->getId(),
-      ];
-      Stack::insertOnTop($atom);
-      $this->prepareSelection($src, [$this->getId()], true, 1, true);
+  public function flip($args, $src)
+  {
+    $cards = Cards::drawForLocation(LOCATION_SELECTION, 2);
+    foreach ($cards as $card) {
+      Notifications::flipCard($this, $card, $src);
     }
+
+    Log::addAction('selection', ['players' => [$this->id], 'src' => $src->getName()]);
+    $atom = [
+      'state' => ST_RESOLVE_FLIPPED,
+      'pId' => $this->id,
+      'srcCardId' => $src->getId(),
+    ];
+    Stack::insertOnTop($atom);
+    $this->prepareSelection($src, [$this->getId()], true, 1, true);
+  }
 
   public function useAbility($args)
   {
