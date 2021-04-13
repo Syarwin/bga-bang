@@ -13,7 +13,6 @@ class Duel extends \BANG\Models\BrownCard
     $this->text = clienttranslate(
       'A target player discards a BANG! then you, etc. First player failing to discard a BANG! loses 1 life point.'
     );
-    $this->color = BROWN;
     $this->symbols = [[$this->text]];
     $this->copies = [
       BASE_GAME => ['QD', 'JS', '8C'],
