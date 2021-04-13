@@ -24,27 +24,28 @@ class LuckyDuke extends \BANG\Models\Player
     $this->selectedCard = null;
   }
 
-  public function flip($args, $src)
-  {
-    if (!is_null($this->selectedCard)) {
-      return $this->selectedCard;
-    }
-
-    if (isset($args['pattern'])) {
-      $cards = [Cards::draw(), Cards::draw()];
-      Notifications::flipCard($this, $cards[0], $src);
-      Notifications::flipCard($this, $cards[1], $src);
-      if (preg_match($args['pattern'], $cards[0]->getCopy())) {
-        return $cards[0];
-      }
-      return $cards[1];
-    }
-    $cards = Cards::toObjects(Cards::createLocation(2));
-    Notifications::flipCard($this, $cards[0], $src);
-    Notifications::flipCard($this, $cards[1], $src);
-    Log::addAction('selection', ['players' => [$this->id], 'src' => $src->getName()]);
-    return 'select';
-  }
+  // TODO: Fix
+  //  public function flip($args, $src)
+  //  {
+  //    if (!is_null($this->selectedCard)) {
+  //      return $this->selectedCard;
+  //    }
+  //
+  //    if (isset($args['pattern'])) {
+  //      $cards = [Cards::draw(), Cards::draw()];
+  //      Notifications::flipCard($this, $cards[0], $src);
+  //      Notifications::flipCard($this, $cards[1], $src);
+  //      if (preg_match($args['pattern'], $cards[0]->getCopy())) {
+  //        return $cards[0];
+  //      }
+  //      return $cards[1];
+  //    }
+  //    $cards = Cards::toObjects(Cards::drawForLocation(LOCATION_SELECTION, 2));
+  //    Notifications::flipCard($this, $cards[0], $src);
+  //    Notifications::flipCard($this, $cards[1], $src);
+  //    Log::addAction('selection', ['players' => [$this->id], 'src' => $src->getName()]);
+  //    return 'select';
+  //  }
 
   public function useAbility($args)
   {

@@ -104,4 +104,11 @@ class Stack
     $stack = Globals::getStack();
     return count($stack) == 1 || $stack[1]['state'] != ST_ELIMINATE;
   }
+
+  public function clearAllLeaveLast()
+  {
+    $stack = Globals::getStack();
+    Globals::setStack([end($stack)]);
+    Stack::resolve();
+  }
 }

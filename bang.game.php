@@ -48,6 +48,7 @@ class bang extends Table
   use BANG\States\PlayCardTrait;
   use BANG\States\ReactTrait;
   use BANG\States\SelectCardTrait;
+  use BANG\States\ResolveFlippedTrait;
   use BANG\States\EndOfLifeTrait;
   use BANG\States\EndOfGameTrait;
 

@@ -35,7 +35,7 @@ trait TurnTrait
     Globals::setPIdTurn($player->getId());
     Stack::setup([ST_DRAW_CARDS, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN]);
 
-    //TODO    $newState = $player->startOfTurn();
+    $player->startOfTurn();
     Stack::resolve();
   }
 

@@ -2,19 +2,19 @@
 namespace BANG\Cards;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
-use BANG\Helpers\Utils;
+use BANG\Core\Stack;
 use BANG\Managers\Players;
-use BANG\Cards\Card;
+use BANG\Managers\Cards;
 
 class Jail extends \BANG\Models\BlueCard
 {
   public function __construct($id = null, $copy = '')
   {
-    parent::__construct($id, $copy);
+    parent::__construct($id);
     $this->type = CARD_JAIL;
     $this->name = clienttranslate('Jail');
     $this->text = clienttranslate(
-      "Equip any player with this. At the start of that players turn reveal top card from the deck. If it''s not heart that player is skipped. Either way, the jail is discarded."
+      "Equip any player with this. At the start of that players turn reveal top card from the deck. If it's not heart that player is skipped. Either way, the jail is discarded."
     );
     $this->symbols = [
       [
@@ -26,7 +26,6 @@ class Jail extends \BANG\Models\BlueCard
       BASE_GAME => ['JS', '4H', '10S'],
       DODGE_CITY => [],
     ];
-    $this->effect = ['type' => STARTOFTURN];
   }
 
   public function getPlayOptions($player)
@@ -43,25 +42,26 @@ class Jail extends \BANG\Models\BlueCard
 
   public function play($player, $args)
   {
-    Cards::moveCard($this->id, 'inPlay', $args['player']);
+    Cards::equip($this->id, $args['player']);
   }
 
   public function activate($player, $args = [])
   {
     Log::addCardPlayed($player, $this, []);
-    $card = $player->flip($args, $this);
-    if (!$card instanceof Card) {
-      return $card;
-    }
+    $player->flip($args, $this);
+  }
 
-    $player->discardCard($this, true);
-    $data = [
-      'player_name' => $player->getName(),
-    ];
+  public function resolveFlipped($card, $player) {
+    $args = ['player' => $player];
+    $player->discardCard($card, true); // Discard a flipped card
+    $player->discardCard($this, true); // Discard Jail itself
+
     if ($card->getCopyColor() == 'H') {
-      Notifications::tell('${player_name} can make his turn', $data);
+      Notifications::tell('${player_name} can make his turn', $args);
+      Stack::nextState();
     } else {
-      Notifications::tell('${player_name} is skipped', $data);
+      Notifications::tell('${player_name} is skipped', $args);
+      Stack::clearAllLeaveLast();
     }
   }
 }

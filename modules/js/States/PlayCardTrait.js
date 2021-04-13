@@ -49,7 +49,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     onSelectOption() {
       var data = {
         id: this._selectedCard.id,
-        player: this._selectedPlayer,
+        player: this._selectedPlayer, // TODO: Rename to "targetPlayer" not to be confused with player who played this
         optionType: this._selectedOptionType,
         optionArg: this._selectedOptionArg,
       };
