@@ -2,6 +2,7 @@
 namespace BANG\Cards;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
+use BANG\Core\Stack;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
 
@@ -41,12 +42,26 @@ class Jail extends \BANG\Models\BlueCard
 
   public function play($player, $args)
   {
-    Cards::move($this->id, LOCATION_INPLAY, $args['player']);
+    Cards::equip($this->id, $args['player']);
   }
 
   public function activate($player, $args = [])
   {
     Log::addCardPlayed($player, $this, []);
     $player->flip($args, $this);
+  }
+
+  public function resolveFlipped($card, $player) {
+    $args = ['player' => $player];
+    $player->discardCard($card, true); // Discard a flipped card
+    $player->discardCard($this, true); // Discard Jail itself
+
+    if ($card->getCopyColor() == 'H') {
+      Notifications::tell('${player_name} can make his turn', $args);
+      Stack::nextState();
+    } else {
+      Notifications::tell('${player_name} is skipped', $args);
+      Stack::clearAllLeaveLast();
+    }
   }
 }

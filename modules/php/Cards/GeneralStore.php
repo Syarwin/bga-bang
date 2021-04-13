@@ -26,7 +26,7 @@ class GeneralStore extends \BANG\Models\BrownCard
     parent::play($player, $args);
     $players = Players::getLivingPlayersStartingWith($player);
     Log::addAction('selection', ['players' => $players, 'src' => $this->name, 'card' => 1]);
-    Cards::createLocation(LOCATION_SELECTION, count($players));
+    Cards::drawForLocation(LOCATION_SELECTION, count($players));
     $player->prepareSelection($this, $players, false, 1);
   }
 

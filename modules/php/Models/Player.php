@@ -196,7 +196,7 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function flip($args, $src)
   {
-    $cards = Cards::createLocation(LOCATION_FLIPPED, 1);
+    $cards = Cards::drawForLocation(LOCATION_FLIPPED, 1);
     $flipped = $cards->first();
     Notifications::flipCard($this, $flipped, $src);
     $atom = [
