@@ -2,7 +2,9 @@
 namespace BANG\Characters;
 use BANG\Core\Notifications;
 use BANG\Core\Globals;
+use BANG\Core\Stack;
 use BANG\Managers\Cards;
+use BANG\Managers\Players;
 
 class ElGringo extends \BANG\Models\Player
 {
@@ -12,7 +14,7 @@ class ElGringo extends \BANG\Models\Player
     $this->character_name = clienttranslate('El Gringo');
     $this->text = [
       clienttranslate(
-        'Each time he loses a life point due to a card played by another player, he draws a random card from the hands of that player '
+        'Each time he loses a life point due to a card played by another player, he draws a random card from the hands of that player.'
       ),
     ];
     $this->bullets = 3;
@@ -23,21 +25,26 @@ class ElGringo extends \BANG\Models\Player
   {
     parent::loseLife($amount);
 
-    /*
-TODO
-    $attacker = Players::getCurrentTurn(true);
-    if ($attacker->id != $this->id) {
-      $this->registerAbility();
+    $attacker = Players::getCurrentTurn();
+    if ($attacker->getId() != $this->id) {
+      Stack::insertAfterCardResolution([
+        'pId' => $this->id,
+        'state' => ST_TRIGGER_ABILITY,
+        'amount' => $amount,
+      ]);
     }
-    return $newstate;
-*/
   }
 
-  public function useAbility($args)
+  public function useAbility($ctx)
   {
-    $attacker = Players::getCurrentTurn(true);
-    $card = $attacker->getRandomCardInHand();
-    Cards::move($card->getId(), LOCATION_HAND, $this->getId());
-    Notifications::stoleCard($this, $attacker, $card, false);
+    $attacker = Players::getCurrentTurn();
+    for($i = 0; $i < $ctx['amount']; $i++){
+      $card = $attacker->getRandomCardInHand();
+      if($card === null){
+        return; // No more cards in hand of attacker
+      }
+      Cards::move($card->getId(), LOCATION_HAND, $this->getId());
+      Notifications::stoleCard($this, $attacker, $card, false);
+    }
   }
 }

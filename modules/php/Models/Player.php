@@ -191,7 +191,6 @@ class Player extends \BANG\Helpers\DB_Manager
     }
   }
 
-
   /*
    * Ask a card, notify and return the card
    */
@@ -276,11 +275,15 @@ class Player extends \BANG\Helpers\DB_Manager
   /*
    * Return a random card from the hand (useful for drawing in hand for instance)
    */
-  public function getRandomCardInHand()
+  public function getRandomCardInHand($raiseException = true)
   {
     $cards = self::getHand()->toArray();
     if (empty($cards)) {
-      throw new \BgaVisibleSystemException('Cannot draw a card in an empty hand');
+      if ($raiseException) {
+        throw new \BgaVisibleSystemException('Cannot draw a card in an empty hand');
+      } else {
+        return null;
+      }
     }
     shuffle($cards);
     return $cards[0];
@@ -450,6 +453,16 @@ class Player extends \BANG\Helpers\DB_Manager
    **************** Actions ***************
    ****************************************
    ***************************************/
+
+   /*
+    * Draw cards at phase one of turn
+    *  -> will be overwriten by character abilities that happens at phase 1
+    */
+   public function drawCardsPhaseOne()
+   {
+     $this->drawCards(2);
+   }
+
 
   /**
    * startOfTurn: is called at the beginning of each turn (before the drawing phase)

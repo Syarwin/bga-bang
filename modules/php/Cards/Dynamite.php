@@ -1,7 +1,6 @@
 <?php
 namespace BANG\Cards;
 use BANG\Core\Notifications;
-use BANG\Core\Log;
 use BANG\Core\Stack;
 use BANG\Managers\Cards;
 use BANG\Managers\Players;

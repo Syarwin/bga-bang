@@ -12,21 +12,15 @@ class BlackJack extends \BANG\Models\Player
     $this->character_name = clienttranslate('Black Jack');
     $this->text = [
       clienttranslate(
-        'During phase 1 of his turn, he must show the second card he draws: if it’s Heart or Diamonds, he draws one additional card '
+        'During phase 1 of his turn, he must show the second card he draws: if it’s Heart or Diamonds, he draws one additional card.'
       ),
     ];
     $this->bullets = 4;
     parent::__construct($row);
   }
 
-  public function drawCards($amount)
+  public function drawCardsPhaseOne()
   {
-    // TODO : maybe going to another state at startOfTurn would be safer to detect phase 1 ?
-    // Power only applies at phase 1
-    if (Utils::getStateName() != 'drawCards') {
-      return parent::drawCards($amount);
-    }
-
     // Draw one card not visible
     $cards = Cards::deal($this->id, 1);
     Notifications::drawCards($this, $cards);

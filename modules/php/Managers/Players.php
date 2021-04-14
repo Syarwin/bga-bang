@@ -2,6 +2,7 @@
 namespace BANG\Managers;
 use bang;
 use BANG\Core\Log;
+use BANG\Core\Globals;
 
 /*
  * Players manager : allows to easily access players ...
@@ -133,6 +134,10 @@ class Players extends \BANG\Helpers\DB_Manager
     return self::get(self::getCurrentId());
   }
 
+  public static function getCurrentTurn(){
+    return self::get(Globals::getPIdTurn());
+	}
+
   public function count()
   {
     return self::DB()->count();
@@ -220,13 +225,6 @@ class Players extends \BANG\Helpers\DB_Manager
   /*******************
    ******* TODO *******
    ********************/
-
-  /*
-	public static function getCurrentTurn($asObject = false){
-		$playerId = Log::getPlayerTurn();
-		return $asObject? self::getPlayer($playerId) : $playerId;
-	}
-  */
 
   public static function getSherrifId()
   {

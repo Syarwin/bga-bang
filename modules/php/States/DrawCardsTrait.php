@@ -12,7 +12,7 @@ trait DrawCardsTrait
   public function stDrawCards()
   {
     $player = Players::getActive();
-    $player->drawCards(2);
+    $player->drawCardsPhaseOne();
     Stack::nextState();
   }
 
@@ -22,16 +22,17 @@ trait DrawCardsTrait
   // Only happens for specific character that can draw in hand of other player for instance
   public function argDrawCard()
   {
+    $player = Players::getActive();
     return [
       '_private' => [
-        'active' => ['options' => Log::getLastAction('draw')],
+        'active' => $player->argDrawCard(),
       ],
     ];
   }
 
   public function draw($selected)
   {
-    $newstate = Players::getActivePlayer()->useAbility(['selected' => $selected]);
-    $this->gamestate->nextState($newState ?? 'play');
+    Players::getActive()->useAbility(['selected' => $selected]);
+    Stack::nextState();
   }
 }
