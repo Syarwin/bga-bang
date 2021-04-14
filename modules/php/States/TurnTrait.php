@@ -25,18 +25,6 @@ trait TurnTrait
     $this->gamestate->nextState('start');
   }
 
-
-  /*
-   * stSetupStack: called at the beggining of each player turn
-   */
-  public function stSetupStack()
-  {
-    $player = Players::getActive();
-    Globals::setPIdTurn($player->getId());
-    Stack::setup([ST_START_OF_TURN, ST_DRAW_CARDS, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN]);
-    Stack::resolve();
-  }
-
   /*
    * stStartOfTurn: called at the beggining of each player turn
    */
@@ -44,8 +32,10 @@ trait TurnTrait
   {
     Log::startTurn();
     $player = Players::getActive();
+    Globals::setPIdTurn($player->getId());
+    Stack::setup([ST_DRAW_CARDS, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN]);
     $player->startOfTurn();
-    Stack::nextState();
+    Stack::resolve();
   }
 
   public function stResolveStack()

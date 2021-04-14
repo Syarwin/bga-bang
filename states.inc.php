@@ -12,20 +12,10 @@ $machinestates = [
     'type' => 'manager',
     'action' => 'stGameSetup',
     'transitions' => [
-      '' => ST_SETUP_STACK,
+      '' => ST_START_OF_TURN,
     ],
   ],
 
-
-  /*
-   * Called before a player's turn begin to setup the stack flow for the turn
-   */
-  ST_SETUP_STACK => [
-    'name' => 'setupStack',
-    'description' => '',
-    'type' => 'game',
-    'action' => 'stSetupStack',
-  ],
 
   /*
    * Start of a turn : trigger cards such as Dynamite or Jail before moving on to appropriate state
@@ -153,7 +143,7 @@ $machinestates = [
     'type' => 'game',
     'action' => 'stNextPlayer',
     'transitions' => [
-      'start' => ST_SETUP_STACK,
+      'start' => ST_START_OF_TURN,
     ],
     'updateGameProgression' => true,
   ],

@@ -1,6 +1,7 @@
 <?php
 namespace BANG\Core;
 use bang;
+use BANG\Helpers\Utils;
 
 /*
  * Stack: a class that handle resolution stack

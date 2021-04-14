@@ -202,7 +202,7 @@ class Player extends \BANG\Helpers\DB_Manager
       'pId' => $this->id,
       'src' => $src->jsonSerialize(),
     ];
-    Stack::insertAfter($atom);
+    Stack::insertOnTop($atom);
   }
 
   /*
