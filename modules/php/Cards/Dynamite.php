@@ -27,10 +27,9 @@ class Dynamite extends \BANG\Models\BlueCard
   /*
    * When activated at the start of turn, flip a card and resolve effect
    */
-  public function activate($player, $args = [])
+  public function startOfTurn($player)
   {
-    Log::addCardPlayed($player, $this, []);
-    $player->flip($args, $this);
+    $player->addFlipAtom($this);
   }
 
   public function resolveFlipped($card, $player)
@@ -52,6 +51,9 @@ class Dynamite extends \BANG\Models\BlueCard
     Stack::nextState();
   }
 
+/*
+ * TODO : remove this
+ */
   public function getPlayOptions($player)
   {
     return [

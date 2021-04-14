@@ -28,19 +28,6 @@ abstract class Utils
     self::$logmsg[] = $msg;
   }
 
-  public static function sort(&$array, $callback)
-  {
-    for ($i = 1; $i < count($array); $i++) {
-      for ($j = 0; $j < $i; $j++) {
-        if ($callback($array[$i], $array[$j])) {
-          $el = array_splice($array, $i, 1);
-          array_splice($array, $j, 0, $el);
-          break;
-        }
-      }
-    }
-  }
-
   public static function getStateName()
   {
     return bang::get()->gamestate->state()['name'];

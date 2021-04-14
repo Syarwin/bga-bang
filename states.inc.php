@@ -12,8 +12,19 @@ $machinestates = [
     'type' => 'manager',
     'action' => 'stGameSetup',
     'transitions' => [
-      '' => ST_START_OF_TURN,
+      '' => ST_SETUP_STACK,
     ],
+  ],
+
+
+  /*
+   * Called before a player's turn begin to setup the stack flow for the turn
+   */
+  ST_SETUP_STACK => [
+    'name' => 'setupStack',
+    'description' => '',
+    'type' => 'game',
+    'action' => 'stSetupStack',
   ],
 
   /*
@@ -47,15 +58,18 @@ $machinestates = [
     'action' => 'stDrawCards',
   ],
 
+  ST_FLIP_CARD => [
+    'name' => 'flipCard',
+    'description' => '',
+    'type' => 'game',
+    'action' => 'stFlipCard',
+  ],
+
   ST_RESOLVE_FLIPPED => [
     'name' => 'resolveFlipped',
     'description' => '',
     'type' => 'game',
     'action' => 'stResolveFlipped',
-    'transitions' => [
-      'draw'	=> ST_DRAW_CARDS,
-      'skip' => ST_NEXT_PLAYER,
-    ],
   ],
 
   ST_ACTIVE_DRAW_CARD => [
@@ -139,7 +153,7 @@ $machinestates = [
     'type' => 'game',
     'action' => 'stNextPlayer',
     'transitions' => [
-      'start' => ST_START_OF_TURN,
+      'start' => ST_SETUP_STACK,
     ],
     'updateGameProgression' => true,
   ],

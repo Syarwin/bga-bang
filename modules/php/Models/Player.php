@@ -191,10 +191,24 @@ class Player extends \BANG\Helpers\DB_Manager
     }
   }
 
+
   /*
-   * Draw! (careful, not the same as drawCard), notify and return the card
+   * Ask a card, notify and return the card
    */
-  public function flip($args, $src)
+  public function addFlipAtom($src)
+  {
+    $atom = [
+      'state' => ST_FLIP_CARD,
+      'pId' => $this->id,
+      'src' => $src->jsonSerialize(),
+    ];
+    Stack::insertAfter($atom);
+  }
+
+  /*
+   * Flip a card, notify and return the card
+   */
+  public function flip($src)
   {
     $cards = Cards::drawForLocation(LOCATION_FLIPPED, 1);
     $flipped = $cards->first();
@@ -204,7 +218,7 @@ class Player extends \BANG\Helpers\DB_Manager
       'pId' => $this->id,
       'src' => $src->jsonSerialize(),
     ];
-    Stack::insertOnTop($atom);
+    Stack::insertAfter($atom);
   }
 
   /**
@@ -443,14 +457,15 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function startOfTurn()
   {
-    $equipment = $this->getCardsInPlay();
+    $equipment = $this->getCardsInPlay()->toArray();
+
     // Sort cards to make sure dynamite gets handled before jail
-    Utils::sort($equipment, function ($a, $b) {
+    usort($equipment, function ($a, $b) {
       return $a->getType() > $b->getType();
     });
 
-    foreach ($equipment->toArray() as $card) {
-      $card->activate($this);
+    foreach ($equipment as $card) {
+      $card->startOfTurn($this);
     }
   }
 
@@ -597,6 +612,9 @@ class Player extends \BANG\Helpers\DB_Manager
         $byPlayer->discardAllCards();
       }
     }
+
+    // Remove all related nodes that could still be there (reactions/powers)
+    Stack::removePlayerNodes($this->id);
   }
 
   /**

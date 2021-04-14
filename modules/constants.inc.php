@@ -5,6 +5,7 @@
  */
 define('ST_GAME_SETUP', 1);
 define('ST_NEXT_PLAYER', 3);
+define('ST_SETUP_STACK', 20);
 define('ST_START_OF_TURN', 4);
 define('ST_RESOLVE_STACK', 90);
 
@@ -17,6 +18,7 @@ define('ST_DRAW_CARDS', 13);
 define('ST_SELECT_CARD', 15);
 define('ST_ACTIVE_DRAW_CARD', 17);
 define('ST_ELIMINATE', 16);
+define('ST_FLIP_CARD', 19);
 define('ST_RESOLVE_FLIPPED', 18);
 define('ST_PRE_GAME_END', 98);
 define('ST_GAME_END', 99);

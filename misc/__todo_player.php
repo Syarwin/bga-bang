@@ -102,56 +102,6 @@ public function attack($playerIds, $checkMissed = true)
 }
 
 
-public function eliminate()
-{
-  // get player who eliminated this player
-  $byPlayer = Players::getCurrentTurn(true);
-  if ($byPlayer->id == $this->id) {
-    $byPlayer = null;
-  }
-
-  // let characters react
-  foreach (Players::getLivingPlayers($this->id, true) as $player) {
-    $player->onPlayerEliminated($this);
-  }
-
-  //discard cards
-  $hand = $this->getCardsInHand();
-  $equipment = $this->getCardsInPlay();
-  foreach (array_merge($hand, $equipment) as $card) {
-    Cards::discardCard($card);
-  }
-  Notifications::discardedCards($this, $equipment, true);
-  Notifications::discardedCards($this, $hand, false);
-
-  // eliminate player
-  $this->eliminated = true;
-  $this->save();
-  //bang::$instance->eliminatePlayer($this->id);
-  Notifications::playerEliminated($this);
-
-  //check if game should end
-  if (Players::isEndOfGame()) {
-    return 'endgame';
-  }
-
-  //handle rewards/penalties
-  if (!is_null($byPlayer)) {
-    if ($this->getRole() == OUTLAW) {
-      $byPlayer->drawCards(3);
-    }
-    if ($this->getRole() == DEPUTY && $byPlayer->getRole() == SHERIFF) {
-      Notifications::tell('The Sheriff eliminated his Deputy and must discard all cards', []);
-      $hand = $byPlayer->getCardsInHand();
-      $equipment = $byPlayer->getCardsInPlay();
-      foreach (array_merge($hand, $equipment) as $card) {
-        Cards::discardCard($card);
-      }
-      Notifications::discardedCards($byPlayer, $equipment, true);
-      Notifications::discardedCards($byPlayer, $hand, false);
-    }
-  }
-}
 
 public function registerAbility($args = [])
 {

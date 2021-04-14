@@ -45,10 +45,9 @@ class Jail extends \BANG\Models\BlueCard
     Cards::equip($this->id, $args['player']);
   }
 
-  public function activate($player, $args = [])
+  public function startOfTurn($player)
   {
-    Log::addCardPlayed($player, $this, []);
-    $player->flip($args, $this);
+    $player->addFlipAtom($this);
   }
 
   public function resolveFlipped($card, $player)

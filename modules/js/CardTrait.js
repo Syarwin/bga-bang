@@ -12,7 +12,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
           },
         ],
         ['cardLost', null],
-        ['flipCard', 1000],
+        ['flipCard', 800],
         ['reshuffle', 1500],
         ['updateOptions', 200],
       );

@@ -35,7 +35,7 @@ class BlackJack extends \BANG\Models\Player
     Notifications::drawCards($this, $cards, true);
 
     // If heart or diamond => draw again a private one
-    $card = $cards[0];
+    $card = $cards->first();
     if (in_array($card->getCopyColor(), ['H', 'D'])) {
       $cards = Cards::deal($this->id, 1);
       Notifications::drawCards($this, $cards);

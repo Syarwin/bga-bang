@@ -216,6 +216,9 @@ class AbstractCard implements \JsonSerializable
    */
   public function activate($player, $args = [])
   {
-    return null;
+  }
+
+  public function startOfTurn($player)
+  {
   }
 }
