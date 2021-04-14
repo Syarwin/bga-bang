@@ -57,8 +57,9 @@ class Notifications
 
   public static function lostLife($player, $amount = 1)
   {
+    // TODO: Fix wording "...loses -X life points". Should be "...loses X life points"
     $msg = clienttranslate('${player_name} loses ${amount} life points');
-    $sgYou = clienttranslate('${You} lose ${amount} life points');
+    $msgYou = clienttranslate('${You} lose ${amount} life points');
     if ($amount == 1) {
       $msg = clienttranslate('${player_name} loses a life point');
       $msgYou = clienttranslate('${You} lose a life point');

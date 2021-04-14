@@ -2,6 +2,8 @@
 namespace BANG\Cards;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
+use BANG\Core\Stack;
+use BANG\Managers\Cards;
 use BANG\Managers\Players;
 use BANG\Cards\Card;
 
@@ -20,7 +22,6 @@ class Dynamite extends \BANG\Models\BlueCard
       BASE_GAME => ['2H'],
       DODGE_CITY => [],
     ];
-    $this->effect = ['type' => STARTOFTURN];
   }
 
   /*
@@ -29,29 +30,39 @@ class Dynamite extends \BANG\Models\BlueCard
   public function activate($player, $args = [])
   {
     Log::addCardPlayed($player, $this, []);
-    $mixed = $player->flip($args, $this);
+    $player->flip($args, $this);
+  }
 
-    if ($mixed instanceof Card) {
-      // Beween 2 & 10 of spades ? => kaboom
-      $val = $mixed->getCopyValue();
-      if ($mixed->getCopyColor() == 'S' && is_numeric($val) && intval($val) < 10) {
-        Notifications::tell(clienttranslate('Dynamite explodes'));
-        Cards::discardCard($this->id);
-        Notifications::discardedCard($player, $this, true);
+  public function resolveFlipped($card, $player)
+  {
+    $player->discardCard($card, true); // Discard a flipped card
 
-        // Lose 3hp: if the player dies, skip its turn
-        $player->loseLife(3);
-      }
-      // Move to next player and go on
-      else {
-        // TODO : move to next player WITHOUT a dynamite...
-        $next = Players::getNextPlayer($player);
-        Cards::moveCard($this->id, LOCATION_INPLAY . '_' . $next->getId());
-        Notifications::moveCard($this, $player, $next);
-      }
+    $copyValue = $card->getCopyValue();
+    // Between 2 & 9 of spades ? => kaboom
+    if ($card->getCopyColor() == 'S' && is_numeric($copyValue) && intval($copyValue) < 10) {
+      Notifications::tell(clienttranslate('Dynamite explodes'));
+      $player->discardCard($this, true); // Discard Dynamite itself
+      Notifications::discardedCard($player, $this, true);
+      $player->loseLife(3);
     } else {
-      // If that's not a card, that means that the character has flip ability
-      return $mixed;
+      // TODO : move to next player WITHOUT a dynamite (not needed for base game)
+      $next = Players::getNext($player);
+      Cards::equip($this->id, $next->getId());
+      Notifications::moveCard($this, $player, $next);
     }
+    Stack::nextState();
+  }
+
+  public function getPlayOptions($player)
+  {
+    return [
+      'type' => OPTION_PLAYER,
+      'targets' => Players::getLivingPlayers()->getIds(),
+    ];
+  }
+
+  public function play($player, $args)
+  {
+    Cards::equip($this->id, $args['player']);
   }
 }

@@ -14,7 +14,7 @@ trait ResolveFlippedTrait
     $atom = Stack::top();
     $player = Players::get($atom['pId']);
 
-    $srcCard = Cards::get($atom['srcCardId']);
+    $srcCard = Cards::get($atom['src']['id']);
     $flippedCards = Cards::getInLocation(LOCATION_FLIPPED);
     if ($flippedCards->count() == 1) {
       $srcCard->resolveFlipped($flippedCards->first(), $player);

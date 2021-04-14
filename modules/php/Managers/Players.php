@@ -71,8 +71,8 @@ class Players extends \BANG\Helpers\DB_Manager
         $bullets++;
         $sheriff = $pId;
       }
-      //$values[] = [$pId, $color, $canal, $name, $avatar, $bullets, $bullets, $role, $cId];
-      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, 1, $role, $cId];
+      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, $bullets, $role, $cId];
+      //      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, 1, $role, $cId];
       Cards::deal($pId, $bullets);
       $i++;
     }
@@ -278,6 +278,12 @@ class Players extends \BANG\Helpers\DB_Manager
     self::DbQuery("UPDATE player SET player_score = 0 WHERE player_role not in $roles");
   }
 
+  public static function getNext($player)
+  {
+    $players = self::getLivingPlayersStartingWith($player);
+    return self::get($players[1]);
+  }
+
   /*
 	public static function getPlayersForElimination($asObjects=false) {
 		$ids = self::getObjectListFromDB("SELECT player_id FROM player WHERE player_eliminated = 0 AND player_hp <= 0", true);
@@ -289,12 +295,6 @@ class Players extends \BANG\Helpers\DB_Manager
 		$sql = "SELECT player_id id, player_role role FROM player WHERE player_eliminated = 1";
 		return array_values(self::getObjectListFromDB($sql));
 	}
-
-
-  public static function getNextPlayer($player) {
-    $players = self::getLivingPlayersStartingWith($player);
-		return self::getPlayer($players[1]);
-  }
 
 
 
