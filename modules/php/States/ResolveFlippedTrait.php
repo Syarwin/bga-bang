@@ -15,8 +15,9 @@ trait ResolveFlippedTrait
     $atom = Stack::top();
     $player = Players::get($atom['pId']);
     $src = Cards::get($atom['src']['id']);
+    Stack::shift();
     $player->flip($src);
-    Stack::nextState();
+    Stack::resolve();
   }
 
   /*

@@ -569,13 +569,7 @@ class Player extends \BANG\Helpers\DB_Manager
 
     foreach (array_reverse($playerIds) as $pId) {
       $atom['pId'] = $pId;
-      if ($isPrivate && $toResolveFlipped) {
-        // This must be a start of Lucky Duke's turn and stFlipCard() is going to call Stack::nextState() after this
-        Stack::insertAfter($atom);
-      } else {
-        // This must be General Store effect and we need ST_SELECT_CARD RIGHT NOW without waiting for stack to shift()
-        Stack::insertOnTop($atom);
-      }
+      Stack::insertOnTop($atom);
     }
   }
 
