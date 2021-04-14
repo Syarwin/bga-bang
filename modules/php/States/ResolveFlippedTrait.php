@@ -15,12 +15,13 @@ trait ResolveFlippedTrait
     $atom = Stack::top();
     $player = Players::get($atom['pId']);
     $src = Cards::get($atom['src']['id']);
+    Stack::shift();
     $player->flip($src);
-    Stack::nextState();
+    Stack::resolve();
   }
 
   /*
-   * stResolveFlipped: called during the beginning each player turn if Dynamite/Jail/Barrel required resolving
+   * stResolveFlipped: called during the beginning each player turn if Dynamite/Jail required resolving
    */
   public function stResolveFlipped()
   {
