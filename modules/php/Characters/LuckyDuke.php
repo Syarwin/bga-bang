@@ -36,7 +36,7 @@ class LuckyDuke extends \BANG\Models\Player
     $atom = [
       'state' => ST_RESOLVE_FLIPPED,
       'pId' => $this->id,
-      'srcCardId' => $src->getId(),
+      'src' => $src->jsonSerialize(),
     ];
     Stack::insertOnTop($atom);
     $this->prepareSelection($src, [$this->getId()], true, 1, true);

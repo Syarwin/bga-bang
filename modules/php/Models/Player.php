@@ -202,7 +202,7 @@ class Player extends \BANG\Helpers\DB_Manager
     $atom = [
       'state' => ST_RESOLVE_FLIPPED,
       'pId' => $this->id,
-      'srcCardId' => $src->getId(),
+      'src' => $src->jsonSerialize(),
     ];
     Stack::insertOnTop($atom);
   }
@@ -239,8 +239,8 @@ class Player extends \BANG\Helpers\DB_Manager
       $atom = [
         'state' => ST_REACT_BEER,
         'type' => 'beer',
-        'src' => $ctx['src'],
-        'attacker' => $ctx['attacker'],
+        'src' => $ctx['src'] ?? null,
+        'attacker' => $ctx['attacker'] ?? null,
         'pId' => $this->id,
       ];
       Stack::insertAfterCardResolution($atom);
