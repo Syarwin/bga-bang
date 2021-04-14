@@ -42,7 +42,6 @@ class Dynamite extends \BANG\Models\BlueCard
     if ($card->getCopyColor() == 'S' && is_numeric($copyValue) && intval($copyValue) < 10) {
       Notifications::tell(clienttranslate('Dynamite explodes'));
       $player->discardCard($this, true); // Discard Dynamite itself
-      Notifications::discardedCard($player, $this, true);
       $player->loseLife(3);
     } else {
       // TODO : move to next player WITHOUT a dynamite (not needed for base game)
