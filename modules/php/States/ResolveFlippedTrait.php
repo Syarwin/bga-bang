@@ -20,7 +20,7 @@ trait ResolveFlippedTrait
   }
 
   /*
-   * stResolveFlipped: called during the beginning each player turn if Dynamite/Jail/Barrel required resolving
+   * stResolveFlipped: called during the beginning each player turn if Dynamite/Jail required resolving
    */
   public function stResolveFlipped()
   {

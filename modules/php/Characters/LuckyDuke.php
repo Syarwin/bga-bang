@@ -3,7 +3,6 @@ namespace BANG\Characters;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
 use BANG\Core\Stack;
-use BANG\Helpers\Utils;
 use BANG\Managers\Cards;
 
 class LuckyDuke extends \BANG\Models\Player
@@ -38,7 +37,7 @@ class LuckyDuke extends \BANG\Models\Player
       'pId' => $this->id,
       'src' => $src->jsonSerialize(),
     ];
-    Stack::insertOnTop($atom);
+    Stack::insertAfter($atom);
     $this->prepareSelection($src, [$this->getId()], true, 1, true);
   }
 

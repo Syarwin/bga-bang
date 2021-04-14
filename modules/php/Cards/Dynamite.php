@@ -51,19 +51,8 @@ class Dynamite extends \BANG\Models\BlueCard
     Stack::nextState();
   }
 
-/*
- * TODO : remove this
- */
-  public function getPlayOptions($player)
-  {
-    return [
-      'type' => OPTION_PLAYER,
-      'targets' => Players::getLivingPlayers()->getIds(),
-    ];
-  }
-
   public function play($player, $args)
   {
-    Cards::equip($this->id, $args['player']);
+    Cards::equip($this->id, $player->getId());
   }
 }
