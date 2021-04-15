@@ -209,6 +209,10 @@ class Player extends \BANG\Helpers\DB_Manager
       'pId' => $this->id,
       'src' => $src->jsonSerialize(),
     ];
+    $topAtom = Stack::top();
+    if (array_key_exists('missedNeeded', $topAtom)) {
+      $atom['missedNeeded'] = $topAtom['missedNeeded'];
+    }
     Stack::insertOnTop($atom);
   }
 
@@ -230,6 +234,10 @@ class Player extends \BANG\Helpers\DB_Manager
       'pId' => $this->id,
       'src' => $src->jsonSerialize(),
     ];
+    $topAtom = Stack::top();
+    if (array_key_exists('missedNeeded', $topAtom)) {
+      $atom['missedNeeded'] = $topAtom['missedNeeded'];
+    }
     Stack::insertOnTop($atom);
   }
 
@@ -415,18 +423,17 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function getDefensiveOptions()
   {
-    $args = Log::getLastAction('cardPlayed');
-    $amount = 1; // TODO isset($args['missedNeeded']) ? $args['missedNeeded'] : 1;
+    $missedNeeded = Stack::top()['missedNeeded'] ?? 1;
 
     // Defensive cards in hand
     $res = $this->getHand()
       ->filter(function ($card) {
         return $card->getColor() == BROWN && $card->getEffectType() == DEFENSIVE;
       })
-      ->map(function ($card) use ($amount) {
+      ->map(function ($card) use ($missedNeeded) {
         return [
           'id' => $card->getId(),
-          'amount' => $amount,
+          'amount' => $missedNeeded,
           'options' => ['type' => OPTION_NONE],
         ];
       })
@@ -530,7 +537,7 @@ class Player extends \BANG\Helpers\DB_Manager
   /**
    * attack : performs an attack on all given players
    */
-  public function attack($card, $playerIds)
+  public function attack($card, $playerIds, $missedNeeded = null)
   {
     $src = $card->getName();
     if ($this->character == CALAMITY_JANET && $card->getType() == CARD_MISSED) {
@@ -547,6 +554,7 @@ class Player extends \BANG\Helpers\DB_Manager
       'src' => $card->jsonSerialize(),
       'attacker' => $this->id,
       'selection' => [],
+      'missedNeeded' => $missedNeeded,
     ];
 
     foreach (array_reverse($playerIds) as $pId) {

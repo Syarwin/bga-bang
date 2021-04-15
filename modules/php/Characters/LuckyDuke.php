@@ -24,7 +24,7 @@ class LuckyDuke extends \BANG\Models\Player
     $this->selectedCard = null;
   }
 
-  public function flip($src)
+  public function flip($src, $missedNeeded = null)
   {
     $cards = Cards::drawForLocation(LOCATION_SELECTION, 2);
     foreach ($cards as $card) {

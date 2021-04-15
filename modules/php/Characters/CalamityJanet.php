@@ -2,6 +2,7 @@
 namespace BANG\Characters;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
+use BANG\Core\Stack;
 use BANG\Managers\Cards;
 use BANG\Cards\Bang;
 
@@ -31,8 +32,7 @@ class CalamityJanet extends \BANG\Models\Player
   public function getDefensiveOptions()
   {
     $missed = parent::getDefensiveOptions();
-    $args = Log::getLastAction('cardPlayed');
-    $amount = isset($args['missedNeeded']) ? $args['missedNeeded'] : 1;
+    $amount = Stack::top()['missedNeeded'] ?? 1;
     $bangs = parent::getBangCards();
     foreach ($bangs['cards'] as $card) {
       $card['amount'] = $amount;
