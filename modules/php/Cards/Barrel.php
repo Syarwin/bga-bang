@@ -1,6 +1,8 @@
 <?php
 namespace BANG\Cards;
-use BANG\Cards\Card;
+use BANG\Core\Globals;
+use BANG\Core\Stack;
+use BANG\Managers\Cards;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
 use BANG\Managers\Players;
@@ -25,21 +27,22 @@ class Barrel extends \BANG\Models\BlueCard
   public function activate($player, $args = [])
   {
     Notifications::useCard($player, $this);
+    $player->addFlipAtom($this);
+    Stack::resolve();
+  }
 
-    $mixed = $player->flip(['pattern' => '/H/'], $this);
-    if (!$mixed instanceof Card) {
-      return $mixed;
-    } //shouldn't happen, just in case we decide to let player decide after all
-
+  public function resolveFlipped($card, $player)
+  {
     Cards::markAsPlayed($this->id);
     $args = Log::getLastAction('cardPlayed');
     $args['missedNeeded'] = $args['missedNeeded'] ?? 1;
 
     // Draw an heart => success
-    if ($mixed->getCopyColor() == 'H') {
+    if ($card->getCopyColor() == 'H') {
       Notifications::tell(clienttranslate('Barrel was successfull'));
       if ($args['missedNeeded'] == 1) {
-        return null;
+        Stack::shift();
+        return;
       }
 
       // Against Slab the Killer, need to miss => update args
@@ -51,6 +54,6 @@ class Barrel extends \BANG\Models\BlueCard
       Notifications::tell(clienttranslate('Barrel failed'));
     }
 
-    Log::addCardPlayed(Players::getCurrentTurn(true), Cards::getCurrentCard(), $args);
+    //    Log::addCardPlayed(Players::getCurrentTurn(), Cards::getCurrentCard(), $args);
   }
 }

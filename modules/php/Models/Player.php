@@ -220,6 +220,11 @@ class Player extends \BANG\Helpers\DB_Manager
     $cards = Cards::drawForLocation(LOCATION_FLIPPED, 1);
     $flipped = $cards->first();
     Notifications::flipCard($this, $flipped, $src);
+    $this->addResolveFlippedAtom($src);
+  }
+
+  public function addResolveFlippedAtom($src)
+  {
     $atom = [
       'state' => ST_RESOLVE_FLIPPED,
       'pId' => $this->id,
@@ -517,7 +522,7 @@ class Player extends \BANG\Helpers\DB_Manager
   public function playCard($card, $args)
   {
     Notifications::cardPlayed($this, $card, $args);
-    //Log::addCardPlayed($this, $card, $args);
+    Log::addCardPlayed($this, $card, $args);
     $card->play($this, $args);
     // TODO $this->onCardsLost();
   }

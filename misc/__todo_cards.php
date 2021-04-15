@@ -53,14 +53,3 @@
 	}
 
 
-	public static function wasPlayed($id) {
-		return self::getUniqueValueFromDB("SELECT card_played FROM card WHERE card_id = $id") == 1;
-	}
-
-	public static function markAsPlayed($id) {
-		self::DbQuery("UPDATE card SET card_played = 1 WHERE card_id=$id");
-	}
-
-	public static function resetPlayedColumn() {
-		self::DbQuery("UPDATE card SET card_played = 0");
-	}

@@ -32,12 +32,7 @@ class LuckyDuke extends \BANG\Models\Player
     }
 
     Log::addAction('selection', ['players' => [$this->id], 'src' => $src->getName()]);
-    $atom = [
-      'state' => ST_RESOLVE_FLIPPED,
-      'pId' => $this->id,
-      'src' => $src->jsonSerialize(),
-    ];
-    Stack::insertAfter($atom);
+    parent::addResolveFlippedAtom($src);
     $this->prepareSelection($src, [$this->getId()], true, 1, true);
   }
 
