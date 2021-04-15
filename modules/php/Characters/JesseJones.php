@@ -24,7 +24,7 @@ class JesseJones extends \BANG\Models\Player
   public function drawCardsPhaseOne()
   {
     // TODO : auto skip if argDrawCard only has 'deck' inside
-    Stack::insertAfter([
+    Stack::insertOnTop([
       'state' => ST_ACTIVE_DRAW_CARD,
       'pId' => $this->id,
     ]);
@@ -37,13 +37,13 @@ class JesseJones extends \BANG\Models\Player
         return $player->getHand()->count() > 0;
       })
       ->getIds();
-    $options[] = 'deck';
+    $options[] = LOCATION_DECK;
     return ['options' => $options];
   }
 
   public function useAbility($args)
   {
-    if ($args['selected'] == 'deck') {
+    if ($args['selected'] == LOCATION_DECK) {
       $this->drawCards(2);
     } else {
       // TODO : add sanity check

@@ -32,14 +32,8 @@
 		self::getDeck()->moveCard($id, $location, $arg);
 	}
 
-	public static function putOnDeck($card) {
-		self::getDeck()->insertCardOnExtremePosition($card, 'deck', true);
-	}
 
 
-	public static function dealFromDiscard($player, $amount){
-		return self::deal($player, $amount, "discard");
-	}
 
 
   public static function reshuffle(){

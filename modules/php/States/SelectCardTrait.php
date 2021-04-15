@@ -8,26 +8,15 @@ use BANG\Core\Log;
 // Happens when playing a General Store
 trait SelectCardTrait
 {
-  public function stPrepareSelection()
-  {
-    $args = Log::getLastAction('selection');
-    $players = $args['players'];
-
-    // No more players left to select card => finish selection state
-    if (empty($players)) {
-      return $this->stFinishSelection();
-    }
-
-    // Set active next player who need to select a card
-    $this->gamestate->changeActivePlayer($players[0]);
-    $this->gamestate->nextState('select');
-  }
-
   public function argSelect()
   {
     $args = Globals::getStackCtx();
 
     $selection = Cards::getSelection()->toArray();
+    if(empty($selection)){
+      return []; // Fix for weird bug after KitCarlson selection, TODO : investigate why we are going through this a second time
+    }
+
     $data = [
       'i18n' => ['src'],
       'cards' => [],
@@ -47,13 +36,6 @@ trait SelectCardTrait
 
   public function select($ids)
   {
-    // Compute the remaining cards
-    $rest = Cards::getSelection()->filter(function ($card) use ($ids) {
-      return !in_array($card->getId(), $ids);
-    });
-    // TODO: $rest was used later in $player->useAbility(['selected' => $ids, 'rest' => $rest]); We might want to restore it later
-
-    Log::addAction('selection');
     $stackCtx = Globals::getStackCtx();
     $playerId = $stackCtx['pId'];
     if ($stackCtx['toResolveFlipped']) {
@@ -61,16 +43,5 @@ trait SelectCardTrait
       Cards::moveAllInLocation(LOCATION_SELECTION, DISCARD);
     }
     self::reactAux(Players::get($playerId), $ids);
-  }
-
-  public function stFinishSelection()
-  {
-    $selection = Cards::getSelection();
-    $player = Players::getCurrentTurn(true);
-    if (count($selection['cards']) > 0) {
-      $player->useAbility($selection['cards']);
-    }
-    $this->gamestate->changeActivePlayer($player->getId());
-    $this->gamestate->nextState('finish');
   }
 }

@@ -58,7 +58,6 @@ $machinestates = [
 		'action' => 'stDrawCards',
 		'transitions' => [
 			'play'	=> ST_PLAY_CARD,
-			'selection' => ST_PREPARE_SELECTION,
 			'activeDraw' => ST_ACTIVE_DRAW_CARD
 		],
 	],

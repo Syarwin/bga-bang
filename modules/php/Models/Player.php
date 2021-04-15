@@ -146,6 +146,15 @@ class Player extends \BANG\Helpers\DB_Manager
     ];
   }
 
+  public function jsonSerialize()
+  {
+    return [
+      'id' => $this->id,
+      'characterId' => $this->character,
+    ];
+  }
+
+
   /**
    * saves eliminated status and hp to the database
    */
@@ -217,7 +226,7 @@ class Player extends \BANG\Helpers\DB_Manager
       'pId' => $this->id,
       'src' => $src->jsonSerialize(),
     ];
-    Stack::insertAfter($atom);
+    Stack::insertOnTop($atom);
   }
 
   /**
@@ -548,6 +557,12 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function react($ids, $ctx)
   {
+    // If characterId is set, the player was reacting to its ability, not to a card (eg Kit Carlson)
+    if(isset($ctx['src']['characterId'])){
+      $this->useAbility($ids);
+      return;
+    }
+
     $card = Cards::get($ctx['src']['id']);
     if (is_null($ids)) {
       // PASS
@@ -570,7 +585,7 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function prepareSelection($card, $playerIds, $isPrivate, $amount, $toResolveFlipped = false)
   {
-    $src = $card->getName();
+    $src = ($card instanceof \BANG\Models\Player)? $card->getCharName() : $card->getName();
     $atom = [
       'state' => ST_SELECT_CARD,
       'src_name' => $src,

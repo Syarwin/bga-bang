@@ -13,28 +13,29 @@ class KitCarlson extends \BANG\Models\Player
     $this->character_name = clienttranslate('Kit Carlson');
     $this->text = [
       clienttranslate(
-        'During phase 1 of his turn, he looks at the top three cards of the deck: he chooses 2 to draw, and puts the other one back on the top of the deck, face down. '
+        'During phase 1 of his turn, he looks at the top three cards of the deck: he chooses 2 to draw, and puts the other one back on the top of the deck, face down.'
       ),
     ];
     $this->bullets = 4;
     parent::__construct($row);
   }
 
-  public function statePhaseOne()
+  public function drawCardsPhaseOne()
   {
-    $id = $this->id;
-    Cards::drawForLocation(LOCATION_SELECTION, 3);
-    Log::addAction('selection', ['players' => [$id, $id], 'src' => $this->character_name]);
+    $cards = Cards::drawForLocation(LOCATION_SELECTION, 3);
+    $this->prepareSelection($this, [$this->id], true, 2);
   }
 
   public function useAbility($args)
   {
-    foreach ($args['selected'] as $card) {
-      Cards::moveCard($card, LOCATION_HAND, $this->id);
+    // Move selected cards and notify
+    foreach ($args as $cardId) {
+      Cards::move($cardId, LOCATION_HAND, $this->id);
     }
-    Cards::putOnDeck($args['rest'][0]);
-    Notifications::drawCards($this, Cards::getCards($args['selected']));
+    Notifications::drawCards($this, Cards::getMany($args));
 
-    // TODO notification
+    // Put remeaning card on deck
+    $rest = Cards::getSelection()->first();
+    Cards::putOnDeck($rest->getId());
   }
 }
