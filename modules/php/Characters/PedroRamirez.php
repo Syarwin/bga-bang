@@ -20,7 +20,6 @@ class PedroRamirez extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-
   public function drawCardsPhaseOne()
   {
     // TODO : auto skip if discard is empty

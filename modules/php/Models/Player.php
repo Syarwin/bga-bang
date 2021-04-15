@@ -154,7 +154,6 @@ class Player extends \BANG\Helpers\DB_Manager
     ];
   }
 
-
   /**
    * saves eliminated status and hp to the database
    */
@@ -463,15 +462,14 @@ class Player extends \BANG\Helpers\DB_Manager
    ****************************************
    ***************************************/
 
-   /*
-    * Draw cards at phase one of turn
-    *  -> will be overwriten by character abilities that happens at phase 1
-    */
-   public function drawCardsPhaseOne()
-   {
-     $this->drawCards(2);
-   }
-
+  /*
+   * Draw cards at phase one of turn
+   *  -> will be overwriten by character abilities that happens at phase 1
+   */
+  public function drawCardsPhaseOne()
+  {
+    $this->drawCards(2);
+  }
 
   /**
    * startOfTurn: is called at the beginning of each turn (before the drawing phase)
@@ -558,7 +556,7 @@ class Player extends \BANG\Helpers\DB_Manager
   public function react($ids, $ctx)
   {
     // If characterId is set, the player was reacting to its ability, not to a card (eg Kit Carlson)
-    if(isset($ctx['src']['characterId'])){
+    if (isset($ctx['src']['characterId'])) {
       $this->useAbility($ids);
       return;
     }
@@ -585,7 +583,7 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function prepareSelection($card, $playerIds, $isPrivate, $amount, $toResolveFlipped = false)
   {
-    $src = ($card instanceof \BANG\Models\Player)? $card->getCharName() : $card->getName();
+    $src = $card instanceof \BANG\Models\Player ? $card->getCharName() : $card->getName();
     $atom = [
       'state' => ST_SELECT_CARD,
       'src_name' => $src,

@@ -13,7 +13,7 @@ trait SelectCardTrait
     $args = Globals::getStackCtx();
 
     $selection = Cards::getSelection()->toArray();
-    if(empty($selection)){
+    if (empty($selection)) {
       return []; // Fix for weird bug after KitCarlson selection, TODO : investigate why we are going through this a second time
     }
 

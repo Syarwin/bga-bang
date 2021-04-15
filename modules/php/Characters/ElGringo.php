@@ -38,9 +38,9 @@ class ElGringo extends \BANG\Models\Player
   public function useAbility($ctx)
   {
     $attacker = Players::getCurrentTurn();
-    for($i = 0; $i < $ctx['amount']; $i++){
+    for ($i = 0; $i < $ctx['amount']; $i++) {
       $card = $attacker->getRandomCardInHand();
-      if($card === null){
+      if ($card === null) {
         return; // No more cards in hand of attacker
       }
       Cards::move($card->getId(), LOCATION_HAND, $this->getId());

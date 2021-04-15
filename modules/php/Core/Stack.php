@@ -20,7 +20,7 @@ class Stack
       if (is_int($atom)) {
         $stack[] = [
           'state' => $atom,
-          'pId' => $atom == ST_END_OF_TURN? null : Globals::getPIdTurn(),
+          'pId' => $atom == ST_END_OF_TURN ? null : Globals::getPIdTurn(),
         ];
       }
     }
@@ -116,7 +116,7 @@ class Stack
   public function removePlayerNodes($pId)
   {
     $stack = Globals::getStack();
-    Utils::filter($stack, function($atom) use ($pId){
+    Utils::filter($stack, function ($atom) use ($pId) {
       return !isset($atom['pId']) || $atom['pId'] != $pId;
     });
     Globals::setStack($stack);

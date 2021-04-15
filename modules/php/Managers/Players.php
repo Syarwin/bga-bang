@@ -134,9 +134,10 @@ class Players extends \BANG\Helpers\DB_Manager
     return self::get(self::getCurrentId());
   }
 
-  public static function getCurrentTurn(){
+  public static function getCurrentTurn()
+  {
     return self::get(Globals::getPIdTurn());
-	}
+  }
 
   public function count()
   {
