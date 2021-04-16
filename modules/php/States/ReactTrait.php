@@ -60,7 +60,6 @@ else {
   function actReact($ids)
   {
     $player = Players::getCurrent();
-    Cards::resetPlayedColumn();
 
     if ($player->getId() == self::getActivePlayerId()) {
       if ($this->gamestate->state_id() == ST_REACT_BEER) {
