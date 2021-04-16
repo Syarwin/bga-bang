@@ -13,13 +13,6 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       if (args._private != undefined) {
         this.makeCardSelectable(args._private.cards, 'selectReact');
 
-        // Button for barrel
-        args._private.cards.forEach((card) => {
-          if ($('bang-card-' + card.id).parentNode.id != 'hand-cards') {
-            this.addPrimaryActionButton('buttonUseBarrel', _('Use barrel'), () => this.onClickCardSelectReact(card));
-          }
-        });
-
         if (args._private.selection) this.preSelectCards(args._private.selection);
       }
       this.gamedatas.gamestate.descriptionmyturn = args.msgActive;
@@ -59,10 +52,13 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
         if (this._selectedCards.length < this._amount) {
           if (this._selectedCards.length == 0) this._amount = null;
-          this.removeActionButtons();
+          this.clearActionButtons();
           this.onUpdateActionButtons(this.gamedatas.gamestate.name, this.gamedatas.gamestate.args);
+          if(this._selectedCards.length > 0){
+            this.addDangerActionButton('buttonPlayerOneCard', _('Play and lose life'), () => this.onClickConfirmReact());
+          }
         } else {
-          this.addActionButton('buttonConfirmReact', _('Confirm react'), 'onClickConfirmReact', null, false, 'blue');
+          this.addPrimaryActionButton('buttonConfirmReact', _('Confirm react'), () => this.onClickConfirmReact());
         }
       }
     },

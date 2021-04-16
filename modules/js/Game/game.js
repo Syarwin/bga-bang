@@ -201,6 +201,7 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
     },
 
     clearActionButtons() {
+      this.removeActionButtons();
       dojo.empty('customActions');
     },
 

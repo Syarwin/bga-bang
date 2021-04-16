@@ -139,7 +139,7 @@ define([
           this.addActionButton('buttonCancelEnd', _('Cancel'), 'onClickCancelEndTurn', null, false, 'gray');
 
         if (stateName == 'react') {
-          if (args.attack)
+          if (args.type == "attack")
             this.addActionButton(
               'buttonSkip',
               _('Pass and lose life point'),
@@ -157,6 +157,13 @@ define([
             this._selectedCards.length == 0
           )
             this.makeCharacterAbilityUsable(args._private.character);
+
+          // Button for barrel
+          args._private.cards.forEach((card) => {
+            if ($('bang-card-' + card.id).parentNode.id != 'hand-cards') {
+              this.addPrimaryActionButton('buttonUseBarrel', _('Use barrel'), () => this.onClickCardSelectReact(card));
+            }
+          });
         }
       },
 
