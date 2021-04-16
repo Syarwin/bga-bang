@@ -15,10 +15,14 @@ trait ReactTrait
   {
     $ctx = Globals::getStackCtx();
     $player = Players::getActive();
-    $card = Cards::get($ctx['src']['id']);
+    if ($ctx['state'] == ST_REACT) {
+      $card = Cards::get($ctx['src']['id']);
 
-    $ctx['_private'][$player->getId()] = $card->getReactionOptions($player);
-    return $ctx;
+      $ctx['_private'][$player->getId()] = $card->getReactionOptions($player);
+      return $ctx;
+    } else {
+      return null; // This might happen when we shifted ST_REACT out of Stack but BGA for some reasons still wants args for it
+    }
   }
 
   function reactAux($player, $ids)

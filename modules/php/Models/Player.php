@@ -201,7 +201,7 @@ class Player extends \BANG\Helpers\DB_Manager
   }
 
   /*
-   * Ask a card, notify and return the card
+   * Add atom to Stack to flip a card in the next state
    */
   public function addFlipAtom($src)
   {

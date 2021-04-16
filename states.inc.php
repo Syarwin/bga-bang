@@ -87,7 +87,7 @@ $machinestates = [
     'descriptionmyturn' => clienttranslate('${you} must react'),
     'type' => 'activeplayer',
     'args' => 'argReact',
-    'possibleactions' => ['actReact', 'actPass'],
+    'possibleactions' => ['actReact', 'actPass', 'actUseAbility'],
   ],
 
   ST_SELECT_CARD => [

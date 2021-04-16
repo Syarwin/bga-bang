@@ -1,8 +1,7 @@
 <?php
 namespace BANG\Characters;
 use BANG\Core\Notifications;
-use BANG\Core\Log;
-use BANG\Helpers\Utils;
+use BANG\Core\Stack;
 use BANG\Managers\Cards;
 use bang;
 
@@ -17,7 +16,7 @@ class Jourdonnais extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  // TODO replace with log ?
+  // TODO: Use one source of truth for used Barrel and this skill. And it should NOT be a DB or probably not global. Stack?
   protected function canUseAbility()
   {
     return bang::get()->getGameStateValue('JourdonnaisUsedSkill') == 0;
@@ -31,50 +30,43 @@ class Jourdonnais extends \BANG\Models\Player
   public function getDefensiveOptions()
   {
     $res = parent::getDefensiveOptions();
-    /*
-    TODO
-    $card = Cards::getCurrentCard();
-    if ($this->canUseAbility()) {
-      // Jourdonnais can use his ability on any attack as a Barrel, so I've removed $card->getType() == CARD_BANG &&
+    if ($this->canUseAbility() && Stack::top()['src']['type'] == CARD_BANG) {
       $res['character'] = JOURDONNAIS;
     }
-    */
     return $res;
   }
 
-  public function useAbility($args)
+  public function useAbility()
   {
-    $args = Log::getLastAction('cardPlayed');
-    $amount = $args['missedNeeded'] ?? 1;
-    $this->logUseAbility();
+    Cards::drawForLocation(LOCATION_FLIPPED, 1);
+    $this->addResolveFlippedAtom($this);
+    Stack::resolve();
+  }
 
-    // Draw one card
-    $card = $this->flip([], $this);
+  public function resolveFlipped($card)
+  {
+    $this->logUseAbility();
+    Notifications::flipCard($this, $card, $this);
+    $missedNeeded = Stack::top()['missedNeeded'] ?? 1;
+    Stack::shift();
     if ($card->getCopyColor() == 'H') {
       // Success
-      Notifications::tell(clienttranslate('Jourdonnais effect was successfull'));
-
-      if ($amount == 1) {
-        bang::get()->gamestate->nextState('finishedReaction');
+      Notifications::tell(clienttranslate('Jourdonnais effect was successful'));
+      if ($missedNeeded == 1) {
+        Stack::nextState();
         return;
       }
-      // Might happen againt Slab the Killer
-      else {
-        Notifications::tell(clienttranslate('But ${player_name} needs another miss'), [
-          'player_name' => $this->getName(),
-        ]);
-        $amount--;
-        $args = Cards::getCurrentCard()->getReactionOptions($this);
-        $args['missedNeeded'] = $amount;
-        Log::addCardPlayed(Players::getCurrentTurn(true), Cards::getCurrentCard(), $args);
-      }
-    }
-    // Failure
-    else {
+      // Slab the Killer
+      Notifications::tell(clienttranslate('But ${player_name} needs another miss'), [
+        'player_name' => $this->getName(),
+      ]);
+      $atom = Stack::top();
+      $atom['missedNeeded'] = $missedNeeded - 1;
+      Stack::insertAfter($atom);
+      Stack::nextState();
+    } else {
       Notifications::tell(clienttranslate('Jourdonnais effect failed'));
+      Stack::resolve();
     }
-
-    $args = $this->getDefensiveOptions();
-    Notifications::updateOptions($this, $args);
   }
 }
