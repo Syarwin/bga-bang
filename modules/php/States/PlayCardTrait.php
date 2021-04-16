@@ -18,8 +18,9 @@ trait PlayCardTrait
 
   public function stPlayCard()
   {
+    $this->setGameStateValue('JourdonnaisUsedSkill', 0);
     /*
-		// TODO $this->setGameStateValue('JourdonnaisUsedSkill', 0);
+		// TODO: Do we need this?
 		$players = Players::getLivingPlayers(null, true);
 		$newstate = null;
 		foreach($players as $player) {

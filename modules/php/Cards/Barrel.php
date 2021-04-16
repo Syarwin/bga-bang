@@ -9,9 +9,9 @@ use BANG\Managers\Players;
 
 class Barrel extends \BANG\Models\BlueCard
 {
-  public function __construct($id = null, $copy = '')
+  public function __construct($id = null)
   {
-    parent::__construct($id, $copy);
+    parent::__construct($id);
     $this->type = CARD_BARREL;
     $this->name = clienttranslate('Barrel');
     $this->text = clienttranslate("Reveal top card from the deck when you're attacked. If it's a heart it's a miss.");
