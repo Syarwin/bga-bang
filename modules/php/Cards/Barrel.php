@@ -1,6 +1,8 @@
 <?php
 namespace BANG\Cards;
-use BANG\Cards\Card;
+use BANG\Core\Globals;
+use BANG\Core\Stack;
+use BANG\Managers\Cards;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
 use BANG\Managers\Players;
@@ -25,32 +27,36 @@ class Barrel extends \BANG\Models\BlueCard
   public function activate($player, $args = [])
   {
     Notifications::useCard($player, $this);
+    $player->addFlipAtom($this);
+    Stack::resolve();
+  }
 
-    $mixed = $player->flip(['pattern' => '/H/'], $this);
-    if (!$mixed instanceof Card) {
-      return $mixed;
-    } //shouldn't happen, just in case we decide to let player decide after all
-
+  public function resolveFlipped($card, $player)
+  {
     Cards::markAsPlayed($this->id);
-    $args = Log::getLastAction('cardPlayed');
-    $args['missedNeeded'] = $args['missedNeeded'] ?? 1;
+    $atom = Stack::top();
+    $missedNeeded = $atom['missedNeeded'] ?? 1;
 
     // Draw an heart => success
-    if ($mixed->getCopyColor() == 'H') {
-      Notifications::tell(clienttranslate('Barrel was successfull'));
-      if ($args['missedNeeded'] == 1) {
-        return null;
+    if ($card->getCopyColor() == 'H') {
+      Notifications::tell(clienttranslate('Barrel was successful'));
+      Stack::shift();
+      if ($missedNeeded == 1) {
+        return;
       }
 
-      // Against Slab the Killer, need to miss => update args
-      Notifications::tell(clienttranslate('But ${player_name} needs another miss'), [
+      // Against Slab the Killer, need to miss => update stack atom
+      Notifications::tell(clienttranslate('But ${player_name} needs another Missed!'), [
         'player_name' => $player->getName(),
       ]);
-      $args['missedNeeded']--;
+      $atom = Stack::top();
+      $atom['missedNeeded'] = $missedNeeded - 1;
+      Stack::insertAfter($atom);
+      Stack::resolve();
     } else {
       Notifications::tell(clienttranslate('Barrel failed'));
     }
 
-    Log::addCardPlayed(Players::getCurrentTurn(true), Cards::getCurrentCard(), $args);
+    //    Log::addCardPlayed(Players::getCurrentTurn(), Cards::getCurrentCard(), $args);
   }
 }

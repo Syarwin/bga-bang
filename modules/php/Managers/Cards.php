@@ -200,4 +200,20 @@ class Cards extends \BANG\Helpers\Pieces
   {
     return self::deal($pId, $amount, LOCATION_DISCARD);
   }
+
+  // TODO: Remove the whole approach of storing status of a single card in DB
+  public static function wasPlayed($id)
+  {
+    return self::getUniqueValueFromDB("SELECT played FROM card WHERE card_id = $id") == 1;
+  }
+
+  public static function markAsPlayed($id)
+  {
+    self::DbQuery("UPDATE card SET played = 1 WHERE card_id=$id");
+  }
+
+  public static function resetPlayedColumn()
+  {
+    self::DbQuery('UPDATE card SET played = 0');
+  }
 }

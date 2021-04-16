@@ -24,7 +24,7 @@ class LuckyDuke extends \BANG\Models\Player
     $this->selectedCard = null;
   }
 
-  public function flip($src)
+  public function flip($src, $missedNeeded = null)
   {
     $cards = Cards::drawForLocation(LOCATION_SELECTION, 2);
     foreach ($cards as $card) {
@@ -32,12 +32,7 @@ class LuckyDuke extends \BANG\Models\Player
     }
 
     Log::addAction('selection', ['players' => [$this->id], 'src' => $src->getName()]);
-    $atom = [
-      'state' => ST_RESOLVE_FLIPPED,
-      'pId' => $this->id,
-      'src' => $src->jsonSerialize(),
-    ];
-    Stack::insertAfter($atom);
+    parent::addResolveFlippedAtom($src);
     $this->prepareSelection($src, [$this->getId()], true, 1, true);
   }
 
