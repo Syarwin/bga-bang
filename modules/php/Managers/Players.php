@@ -82,7 +82,7 @@ class Players extends \BANG\Helpers\DB_Manager
     self::getGame()->reloadPlayersBasicInfos();
 
     // TODO : remove
-    if (true) {
+    if (false) {
       Cards::dealCard($sheriff, CARD_GATLING);
       /*
       Cards::dealCard($sheriff, CARD_BARREL);

@@ -82,12 +82,17 @@ class Stack
     return $atom;
   }
 
-  public function insertAfterCardResolution($atom)
+  public function insertAfterCardResolution($atom, $raiseException = true)
   {
     // Compute pos
     $top = Globals::getStackCtx();
     if (!isset($top['src']) || !isset($top['src']['id'])) {
-      throw new \feException('No card resolution in progress');
+      if ($raiseException) {
+        throw new \feException('No card resolution in progress');
+      } else {
+        self::insertOnTop($atom);
+        return;
+      }
     }
 
     $cId = $top['src']['id'];

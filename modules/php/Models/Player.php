@@ -176,6 +176,7 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     $cards = Cards::deal($this->id, $amount);
     Notifications::drawCards($this, $cards);
+    $this->onChangeHand();
   }
 
   /*
@@ -185,7 +186,7 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     $card->discard();
     Notifications::discardedCard($this, $card, $silent);
-    // TODO $this->onCardsLost();
+    $this->onChangeHand();
   }
 
   /*
@@ -540,7 +541,7 @@ class Player extends \BANG\Helpers\DB_Manager
     Notifications::cardPlayed($this, $card, $args);
     Log::addCardPlayed($this, $card, $args);
     $card->play($this, $args);
-    // TODO $this->onCardsLost();
+    $this->onChangeHand();
   }
 
   /**
@@ -595,7 +596,7 @@ class Player extends \BANG\Helpers\DB_Manager
       foreach ($ids as $id) {
         $reactionCard = Cards::get($id);
         $card->react($reactionCard, $this);
-        // TODO $this->onCardsLost();
+        $this->onChangeHand();
       }
     }
   }
@@ -674,6 +675,7 @@ class Player extends \BANG\Helpers\DB_Manager
     });
     Notifications::discardedCards($this, $equipment, true);
     Notifications::discardedCards($this, $hand, false);
+    $this->onChangeHand();
   }
 
   /**
@@ -681,6 +683,20 @@ class Player extends \BANG\Helpers\DB_Manager
    * atm just for Vulture Sam
    */
   public function onPlayerEliminated($player)
+  {
+  }
+
+
+  /**
+   * called whenever the hand of player change
+   * atm just for Suzy
+   */
+  public function onChangeHand()
+  {
+    $this->checkHand();
+  }
+
+  public function checkHand()
   {
   }
 }

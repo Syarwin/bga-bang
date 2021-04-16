@@ -119,7 +119,7 @@ class BrownCard extends AbstractCard
         } else {
           $victim->discardCard($card);
         }
-        // TODO $victim->onCardsLost();
+        $victim->onChangeHand();
         break;
 
       case LIFE_POINT_MODIFIER:
