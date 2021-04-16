@@ -135,13 +135,6 @@ public function checkHand()
 {
 }
 
-/**
- * called whenever a player is eliminated
- * atm just for Vulture Sam
- */
-public function onPlayerEliminated($player)
-{
-}
 
 public function getAmountToCounterBang()
 {

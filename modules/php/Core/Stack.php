@@ -103,7 +103,7 @@ class Stack
   public function isItLastElimination()
   {
     $stack = Globals::getStack();
-    return count($stack) == 1 || $stack[1]['state'] != ST_ELIMINATE;
+    return count($stack) == 0 || $stack[0]['state'] != ST_ELIMINATE;
   }
 
   public function clearAllLeaveLast()

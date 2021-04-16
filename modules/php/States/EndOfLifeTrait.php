@@ -66,6 +66,7 @@ trait EndOfLifeTrait
    */
   public function stEliminate()
   {
+    Stack::shift();
     $ctx = Globals::getStackCtx();
     $player = Players::get($ctx['pId']);
     $player->eliminate();
@@ -75,9 +76,9 @@ trait EndOfLifeTrait
       $atom = [
         'state' => ST_PRE_GAME_END,
       ];
-      Stack::insertAfter($atom);
+      Stack::insertOnTop($atom);
     }
 
-    Stack::nextState();
+    Stack::resolve();
   }
 }

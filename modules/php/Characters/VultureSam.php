@@ -18,14 +18,13 @@ class VultureSam extends \BANG\Models\Player
 
   public function onPlayerEliminated($player)
   {
-    //$cards = array_merge($player->getCardsInHand(), $player->getCardsInPlay());
     // TODO send a single notification?
-    foreach ($player->getCardsInHand() as $card) {
-      Cards::moveCard($card, LOCATION_HAND, $this->id);
+    foreach ($player->getHand() as $card) {
+      Cards::move($card->getId(), LOCATION_HAND, $this->id);
       Notifications::stoleCard($this, $player, $card, false);
     }
     foreach ($player->getCardsInPlay() as $card) {
-      Cards::moveCard($card, LOCATION_HAND, $this->id);
+      Cards::move($card->getId(), LOCATION_HAND, $this->id);
       Notifications::stoleCard($this, $player, $card, true);
     }
   }

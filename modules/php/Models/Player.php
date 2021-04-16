@@ -625,13 +625,10 @@ class Player extends \BANG\Helpers\DB_Manager
       $byPlayer = null;
     }
 
-    /*
-    TODO : VULTURE I guess ?
-    // let characters react
-    foreach (Players::getLivingPlayers($this->id, true) as $player) {
+    // Let characters react => mostly Vulture
+    foreach (Players::getLivingPlayers($this->id) as $player) {
       $player->onPlayerEliminated($this);
     }
-    */
 
     // Discard cards
     $this->discardAllCards();
@@ -668,5 +665,13 @@ class Player extends \BANG\Helpers\DB_Manager
     });
     Notifications::discardedCards($this, $equipment, true);
     Notifications::discardedCards($this, $hand, false);
+  }
+
+  /**
+   * called whenever a player is eliminated
+   * atm just for Vulture Sam
+   */
+  public function onPlayerEliminated($player)
+  {
   }
 }
