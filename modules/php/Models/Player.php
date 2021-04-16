@@ -701,6 +701,7 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function onChangeHand()
   {
+    Notifications::updateHand($this);
     $this->checkHand();
   }
 

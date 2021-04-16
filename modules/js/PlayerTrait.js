@@ -176,15 +176,15 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
      */
     notif_updateHand(n) {
       debug('Notif: update handcount of player', n);
-      this.incHandCount(n.args.player_id, n.args.amount);
+      this.setHandCount(n.args.player_id, n.args.total);
     },
 
     /*
      * Change player cards in hand counter
      */
-    incHandCount(playerId, amount) {
-      var currentHandCount = parseInt(dojo.attr('bang-player-' + playerId, 'data-hand')),
-        newHandCount = currentHandCount + parseInt(amount);
+    setHandCount(playerId, newHandCount) {
+//      var currentHandCount = parseInt(dojo.attr('bang-player-' + playerId, 'data-hand')),
+//        newHandCount = currentHandCount + parseInt(amount);
       dojo.attr('bang-player-' + playerId, 'data-hand', newHandCount);
       dojo.attr('bang-player-board-' + playerId, 'data-hand', newHandCount);
     },

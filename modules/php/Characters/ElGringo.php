@@ -39,12 +39,13 @@ class ElGringo extends \BANG\Models\Player
   {
     $attacker = Players::getCurrentTurn();
     for ($i = 0; $i < $ctx['amount']; $i++) {
-      $card = $attacker->getRandomCardInHand();
+      $card = $attacker->getRandomCardInHand(false);
       if ($card === null) {
         return; // No more cards in hand of attacker
       }
       Cards::move($card->getId(), LOCATION_HAND, $this->getId());
       Notifications::stoleCard($this, $attacker, $card, false);
+      $attacker->onChangeHand();
     }
   }
 }

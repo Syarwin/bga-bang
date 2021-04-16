@@ -429,7 +429,7 @@ class Pieces extends DB_Manager
     if (static::$autoreshuffleListener) {
       $obj = static::$autoreshuffleListener['obj'];
       $method = static::$autoreshuffleListener['method'];
-      $obj->$method($fromLocation);
+      call_user_func([$obj, $method], $fromLocation);
     }
   }
 

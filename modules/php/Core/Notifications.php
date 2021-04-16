@@ -23,6 +23,14 @@ class Notifications
     bang::get()->notifyPlayer($pId, $name, $msg, $data);
   }
 
+  public static function updateHand($player)
+  {
+    self::notifyAll('updateHand', '', [
+      'player' => $player,
+      'total' => $player->getHand()->count(),
+    ]);
+  }
+
   /**
    * cardPlayed: called once a card is played
    */
@@ -48,11 +56,6 @@ class Notifications
     }
 
     self::notifyAll('cardPlayed', $msg, $data);
-
-    self::notifyAll('updateHand', '', [
-      'player' => $player,
-      'amount' => -1,
-    ]);
   }
 
   public static function lostLife($player, $amount = 1)
@@ -169,7 +172,7 @@ class Notifications
       'msgYou' => clienttranslate('${You} discard ${card_name}'),
       'player' => $player,
       'card' => $card,
-      'amount' => -1,
+      'total' => $player->getHand()->count(),
     ]);
   }
 
@@ -205,6 +208,9 @@ class Notifications
       unset($data['card']);
       self::notifyAll('cardsGained', clienttranslate('${player_name} stole a card from ${player_name2}'), $data);
     }
+
+    self::updateHand($receiver);
+    self::updateHand($victim);
   }
 
   // todo change notif name
@@ -261,6 +267,7 @@ class Notifications
       'src' => $player->getId(),
       'amount' => 1,
     ]);
+
   }
 
   public static function playerEliminated($player)

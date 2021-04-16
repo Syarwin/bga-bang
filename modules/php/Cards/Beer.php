@@ -1,6 +1,7 @@
 <?php
 namespace BANG\Cards;
 use BANG\Managers\Players;
+use BANG\Managers\Cards;
 use BANG\Core\Notifications;
 
 class Beer extends \BANG\Models\BrownCard

@@ -1,6 +1,7 @@
 <?php
 namespace BANG\Managers;
 use BANG\Helpers\Utils;
+use BANG\Core\Notifications;
 
 /*
  * Cards: all utility functions concerning cards are here
@@ -11,6 +12,11 @@ class Cards extends \BANG\Helpers\Pieces
   protected static $prefix = 'card_';
   protected static $customFields = ['type', 'played', 'color', 'value'];
   protected static $autoreshuffle = true;
+  protected static $autoreshuffleCustom = ['deck' => 'discard'];
+  protected static $autoreshuffleListener = [
+    'obj' => 'BANG\Managers\Cards',
+    'method' => 'reshuffleListener',
+  ];
   protected static function cast($card)
   {
     return self::getCardByType($card['type'], $card);
@@ -215,5 +221,11 @@ class Cards extends \BANG\Helpers\Pieces
   public static function resetPlayedColumn()
   {
     self::DbQuery('UPDATE card SET played = 0');
+  }
+
+
+  public static function reshuffleListener()
+  {
+    Notifications::reshuffle();
   }
 }

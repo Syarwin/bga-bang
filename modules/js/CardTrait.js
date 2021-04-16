@@ -178,11 +178,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         }
       });
 
-      // Update hand counters
-      if (n.args.target == 'hand') this.incHandCount(n.args.player_id, n.args.amount);
-
       if (n.args.src == 'deck') this.updateDeckCount(n);
-      else if (n.args.src != 'discard') this.incHandCount(n.args.player_id2, -n.args.amount);
     },
 
     /*
