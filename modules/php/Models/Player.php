@@ -407,15 +407,24 @@ class Player extends \BANG\Helpers\DB_Manager
   }
 
   /*
-   * return the list of beer cards for saving his life
+   * return the list of beer cards
    */
   public function getBeerCards()
   {
-    return $this->getHand()
-      ->filter(function ($card) {
-        return $card->getType() == CARD_BEER;
-      })
-      ->toArray();
+    return $this->getHand()->filter(function ($card) {
+      return $card->getType() == CARD_BEER;
+    });
+  }
+
+  /*
+   * Return the list of beer option for reacting when dying
+   * Overwritten by Sid Ketchum
+   */
+  public function getBeerOptions()
+  {
+    return [
+      'cards' => $this->getBeerCards()->toArray(),
+    ];
   }
 
   /*

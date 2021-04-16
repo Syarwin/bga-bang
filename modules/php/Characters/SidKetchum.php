@@ -4,6 +4,7 @@ use BANG\Core\Notifications;
 use BANG\Core\Stack;
 use BANG\Managers\Cards;
 
+// TODO : make its ability available (almost) at any time
 class SidKetchum extends \BANG\Models\Player
 {
   public function __construct($row = null)
@@ -15,13 +16,22 @@ class SidKetchum extends \BANG\Models\Player
     parent::__construct($row);
   }
 
+  protected function addAbility($t)
+  {
+    if ($this->countHand() > 1) {
+      $t['character'] = SID_KETCHUM;
+    }
+    return $t;
+  }
+
   public function getHandOptions()
   {
-    $res = parent::getHandOptions();
-    if ($this->countHand() > 1) {
-      $res['character'] = SID_KETCHUM;
-    }
-    return $res;
+    return $this->addAbility(parent::getHandOptions());
+  }
+
+  public function getBeerOptions()
+  {
+    return $this->addAbility(parent::getBeerOptions());
   }
 
   public function useAbility($args)
@@ -37,6 +47,13 @@ class SidKetchum extends \BANG\Models\Player
     }
     Notifications::discardedCards($this, $cards);
     $this->gainLife();
-    Stack::resolve(); // Loop back in same state
+
+    // If we were in the end of life state and now have enough life point, proceed to next state
+    if (Stack::top()['state'] == ST_REACT_BEER && $this->hp > 0) {
+      Stack::nextState();
+    } else {
+       // Otherwise loop back in same state
+      Stack::resolve();
+    }
   }
 }

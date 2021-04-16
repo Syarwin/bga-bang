@@ -23,13 +23,10 @@ trait EndOfLifeTrait
     $needed = 1 - $player->getHp();
     //  TODO auto kill if not enough cards
     //    if (count($hand) >= $needed) {
-    $cards = $player->getBeerCards();
     return [
       'n' => $needed,
       '_private' => [
-        'active' => [
-          'cards' => $cards,
-        ],
+        'active' => $player->getBeerOptions(),
       ],
     ];
   }

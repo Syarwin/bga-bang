@@ -107,7 +107,7 @@ $machinestates = [
     'descriptionmyturn' => clienttranslate('${you} may play ${n} beer to survive'),
     'type' => 'activeplayer',
     'args' => 'argReactBeer',
-    'possibleactions' => ['actReact', 'actPass'],
+    'possibleactions' => ['actReact', 'actPass', 'actUseAbility'],
   ],
 
   ST_DISCARD_EXCESS => [

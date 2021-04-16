@@ -84,6 +84,8 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       this._amount = args.n;
       this._selectedCards = [];
       if (args._private != undefined) {
+        if (args._private.character != null) this.makeCharacterAbilityUsable(args._private.character);
+
         this.makeCardSelectable(args._private.cards, 'selectReactBeer');
         this.addDangerActionButton('buttonConfirmPass', _('Pass and die'), () => this.onClickPass());
       }
