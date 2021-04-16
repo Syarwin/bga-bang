@@ -80,6 +80,7 @@ TODO : preselection stuff
     }
   }
 
+  /*
   public function actCancelPreSelection()
   {
     $pId = self::getCurrentPlayerId();
@@ -99,59 +100,10 @@ TODO : preselection stuff
     Log::addAction('react', $argReact);
   }
 
+*/
+
   public function useAbility($args)
   {
-    $id = self::getCurrentPlayerId();
-    Players::getPlayer($id)->useAbility($args);
-  }
-
-  public function stEndReaction()
-  {
-    $args = Log::getLastAction('react');
-    $toEliminate = Players::getPlayersForElimination();
-
-    // Handle direct elimination with no cards in hand
-    if (is_null($args)) {
-      // Find the next living player after current player that is not going to be eliminated
-      $living = Players::getLivingPlayersStartingWith(Players::getCurrentTurn(true));
-      foreach ($living as $id) {
-        if (!in_array($id, $toEliminate)) {
-          if ($id != self::getActivePlayerId()) {
-            $this->gamestate->changeActivePlayer($id);
-          }
-          break;
-        }
-      }
-
-      $nextState = array_reduce(
-        $toEliminate,
-        function ($state, $id) {
-          return Players::getPlayer($id)->eliminate() ?? $state;
-        },
-        null
-      );
-      if (is_null($nextState)) {
-        if (Players::getCurrentTurn(true)->isEliminated()) {
-          $nextState = 'next';
-        } else {
-          $nextState = Log::getLastAction('lastState')[0] == 'startOfTurn' ? 'draw' : 'finishedReaction';
-        }
-      }
-      if ($nextState == 'finishedReaction') {
-        Players::handleRemainingEffects();
-        Cards::resetPlayedColumn();
-      }
-      $this->gamestate->nextState($nextState);
-      return;
-    }
-
-    $this->gamestate->changeActivePlayer(Players::getCurrentTurn());
-    if (count($toEliminate) > 0) {
-      $this->gamestate->nextState('eliminate');
-    } else {
-      Players::handleRemainingEffects();
-      Cards::resetPlayedColumn();
-      $this->gamestate->nextState('finishedReaction');
-    }
+    Players::getCurrent()->useAbility($args);
   }
 }

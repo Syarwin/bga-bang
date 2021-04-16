@@ -1,9 +1,8 @@
 <?php
 namespace BANG\Characters;
 use BANG\Core\Notifications;
-use BANG\Core\Log;
+use BANG\Core\Stack;
 use BANG\Managers\Cards;
-use bang;
 
 class SidKetchum extends \BANG\Models\Player
 {
@@ -31,11 +30,13 @@ class SidKetchum extends \BANG\Models\Player
       clienttranslate('${player_name} uses the ability of Sid Ketchum by discarding 2 cards to regain 1 life point'),
       ['player_name' => $this->name]
     );
-    foreach ($args as $card) {
-      Cards::playCard($card);
+
+    $cards = Cards::get($args);
+    foreach ($cards as $card) {
+      $card->discard();
     }
-    Notifications::discardedCards($this, array_map(['BANG\Cards\Cards', 'getCard'], $args));
+    Notifications::discardedCards($this, $cards);
     $this->gainLife();
-    bang::get()->gamestate->nextState('continuePlaying');
+    Stack::resolve(); // Loop back in same state
   }
 }
