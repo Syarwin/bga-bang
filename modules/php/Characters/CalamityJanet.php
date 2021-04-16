@@ -17,6 +17,17 @@ class CalamityJanet extends \BANG\Models\Player
     parent::__construct($row);
   }
 
+  public function getReactAtomForAttack($card)
+  {
+    $atom = parent::getReactAtomForAttack($card);
+    if ($card->getType() == CARD_MISSED) {
+      $atom['src_name'] = clienttranslate('Missed used as a BANG! by Calamity Janet');
+    }
+
+    return $atom;
+  }
+
+
   public function getBangCards()
   {
     $res = parent::getBangCards();

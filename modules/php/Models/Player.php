@@ -547,14 +547,23 @@ class Player extends \BANG\Helpers\DB_Manager
   /**
    * attack : performs an attack on all given players
    */
-  public function attack($card, $playerIds, $missedNeeded = null)
+  public function attack($card, $playerIds)
+  {
+    $atom = $this->getReactAtomForAttack($card);
+    foreach (array_reverse($playerIds) as $pId) {
+      $atom['pId'] = $pId;
+      Stack::insertOnTop($atom);
+    }
+  }
+
+  public function getReactAtomForAttack($card)
   {
     $src = $card->getName();
     if ($this->character == CALAMITY_JANET && $card->getType() == CARD_MISSED) {
       $src = clienttranslate('Missed used as a BANG! by Calamity Janet');
     }
 
-    $atom = [
+    return [
       'state' => ST_REACT,
       'type' => 'attack',
       'msgActive' => clienttranslate('${you} may react to ${src_name}'),
@@ -563,14 +572,8 @@ class Player extends \BANG\Helpers\DB_Manager
       'src_name' => $src,
       'src' => $card->jsonSerialize(),
       'attacker' => $this->id,
-      'selection' => [],
-      'missedNeeded' => $missedNeeded,
+      'missedNeeded' => 1,
     ];
-
-    foreach (array_reverse($playerIds) as $pId) {
-      $atom['pId'] = $pId;
-      Stack::insertOnTop($atom);
-    }
   }
 
   /**
@@ -597,6 +600,12 @@ class Player extends \BANG\Helpers\DB_Manager
         $reactionCard = Cards::get($id);
         $card->react($reactionCard, $this);
         $this->onChangeHand();
+      }
+
+      // Handle responding to Slab the Killer with only one miss
+      $atom = Stack::top();
+      if (isset($atom['missedNeeded']) && $atom['missedNeeded'] > count($ids)) {
+        $card->pass($this);
       }
     }
   }
@@ -685,7 +694,6 @@ class Player extends \BANG\Helpers\DB_Manager
   public function onPlayerEliminated($player)
   {
   }
-
 
   /**
    * called whenever the hand of player change

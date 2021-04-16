@@ -13,11 +13,16 @@ class SlabtheKiller extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function playCard($card, $args)
+
+  public function getReactAtomForAttack($card)
   {
+    $atom = parent::getReactAtomForAttack($card);
     if ($card->getType() == CARD_BANG) {
-      $args['missedNeeded'] = 2;
+      $atom['msgActive'] = clienttranslate('${you} may react to ${src_name} with 2 Missed!');
+      $atom['msgInactive'] = clienttranslate('${actplayer} may react to ${src_name} with 2 Missed!');
+      $atom['missedNeeded'] = 2;
     }
-    return parent::playCard($card, $args);
+
+    return $atom;
   }
 }
