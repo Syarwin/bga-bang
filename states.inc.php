@@ -159,17 +159,6 @@ $machinestates = [
   ],
 
   /*
-   * Compute winners and losers
-   */
-  ST_PRE_GAME_END => [
-    'name' => 'preGameEnd',
-    'description' => '',
-    'type' => 'game',
-    'action' => 'stPreGameEnd',
-    'transitions' => ['' => ST_GAME_END],
-  ],
-
-  /*
    * BGA framework final state. Do not modify.
    */
   ST_GAME_END => [

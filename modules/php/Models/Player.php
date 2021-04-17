@@ -25,6 +25,7 @@ class Player extends \BANG\Helpers\DB_Manager
   protected $hp;
   protected $zombie = false;
   protected $role;
+  protected $score;
 
   // --character properties
   protected $character; //the int-constant
@@ -45,6 +46,7 @@ class Player extends \BANG\Helpers\DB_Manager
       $this->zombie = $row['player_zombie'] == 1;
       $this->role = $row['player_role'];
       $this->bullets = (int) $row['player_bullets'];
+      $this->score = (int) $row['player_score'];
     }
   }
 
@@ -137,6 +139,7 @@ class Player extends \BANG\Helpers\DB_Manager
       'color' => $this->color,
       'characterId' => $this->character,
       'character' => $this->character_name,
+      'score' => $this->score,
       'powers' => $this->text,
       'hp' => $this->hp,
       'bullets' => $this->bullets,
@@ -666,6 +669,12 @@ class Player extends \BANG\Helpers\DB_Manager
     // Eliminate player
     $this->eliminated = true;
     $this->save();
+
+    // Check if game should end
+    if (Stack::isItLastElimination() && Players::isEndOfGame()) {
+      bang::get()->setWinners();
+    }
+
     bang::get()->eliminatePlayer($this->id);
     Notifications::playerEliminated($this);
 

@@ -178,6 +178,10 @@ class Notifications
 
   public static function discardedCards($player, $cards, $silent = false)
   {
+    if (!\is_array($cards)) {
+      $cards = [$cards];
+    }
+
     foreach ($cards as $card) {
       self::discardedCard($player, $card, $silent);
     }
@@ -267,7 +271,6 @@ class Notifications
       'src' => $player->getId(),
       'amount' => 1,
     ]);
-
   }
 
   public static function playerEliminated($player)
