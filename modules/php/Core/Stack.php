@@ -58,8 +58,8 @@ class Stack
 
     $pId = self::getGame()->getActivePlayerId();
     // Jump to resolveStack state to ensure we can change active pId
+    self::getGame()->gamestate->jumpToState(ST_RESOLVE_STACK);
     if (isset($atom['pId']) && $atom['pId'] != null && $pId != $atom['pId']) {
-      self::getGame()->gamestate->jumpToState(ST_RESOLVE_STACK);
       self::getGame()->gamestate->changeActivePlayer($atom['pId']);
     }
 
