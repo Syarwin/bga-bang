@@ -3,6 +3,7 @@ namespace BANG\Characters;
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
 use BANG\Managers\Cards;
+use BANG\Core\Globals;
 use bang;
 
 class Jourdonnais extends \BANG\Models\Player
@@ -48,25 +49,18 @@ class Jourdonnais extends \BANG\Models\Player
     $this->logUseAbility();
     Notifications::flipCard($this, $card, $this);
     $missedNeeded = Stack::top()['missedNeeded'] ?? 1;
-    Stack::shift();
+
     if ($card->getCopyColor() == 'H') {
-      // Success
       Notifications::tell(clienttranslate('Jourdonnais effect was successful'));
-      if ($missedNeeded == 1) {
-        Stack::nextState();
-        return;
-      }
-      // Slab the Killer
-      Notifications::tell(clienttranslate('But ${player_name} needs another miss'), [
-        'player_name' => $this->getName(),
-      ]);
+      Stack::shift();
+
       $atom = Stack::top();
       $atom['missedNeeded'] = $missedNeeded - 1;
       Stack::insertAfter($atom);
-      Stack::nextState();
     } else {
       Notifications::tell(clienttranslate('Jourdonnais effect failed'));
-      Stack::resolve();
     }
+    parent::handleMultipleMissed();
+    Stack::nextState();
   }
 }

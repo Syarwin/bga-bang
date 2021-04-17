@@ -1,6 +1,7 @@
 <?php
 namespace BANG\Cards;
 use BANG\Core\Log;
+use BANG\Core\Stack;
 
 class Bang extends \BANG\Models\BrownCard
 {
@@ -37,5 +38,12 @@ class Bang extends \BANG\Models\BrownCard
   {
     Log::addAction('bangPlayed');
     return parent::play($player, $args);
+  }
+
+  public function react($card, $player) {
+    $atom = Stack::top();
+    $atom['missedNeeded'] = $atom['missedNeeded'] - 1;
+    Stack::insertAfter($atom);
+    parent::react($card, $player);
   }
 }

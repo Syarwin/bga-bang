@@ -33,6 +33,12 @@ class Stack
     return reset($stack);
   }
 
+  public function getNextState()
+  {
+    $stack = Globals::getStack();
+    return $stack[1] ?? null;
+  }
+
   public function shift()
   {
     $stack = Globals::getStack();

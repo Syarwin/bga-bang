@@ -34,29 +34,18 @@ class Barrel extends \BANG\Models\BlueCard
   public function resolveFlipped($card, $player)
   {
     Cards::markAsPlayed($this->id);
-    $atom = Stack::top();
-    $missedNeeded = $atom['missedNeeded'] ?? 1;
+    $missedNeeded = Stack::top()['missedNeeded'] ?? 1;
 
     // Draw an heart => success
     if ($card->getCopyColor() == 'H') {
       Notifications::tell(clienttranslate('Barrel was successful'));
       Stack::shift();
-      if ($missedNeeded == 1) {
-        return;
-      }
 
-      // Against Slab the Killer, need to miss => update stack atom
-      Notifications::tell(clienttranslate('But ${player_name} needs another Missed!'), [
-        'player_name' => $player->getName(),
-      ]);
       $atom = Stack::top();
       $atom['missedNeeded'] = $missedNeeded - 1;
       Stack::insertAfter($atom);
-      Stack::resolve();
     } else {
       Notifications::tell(clienttranslate('Barrel failed'));
     }
-
-    //    Log::addCardPlayed(Players::getCurrentTurn(), Cards::getCurrentCard(), $args);
   }
 }

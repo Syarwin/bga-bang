@@ -495,7 +495,6 @@ class Player extends \BANG\Helpers\DB_Manager
 
   /**
    * startOfTurn: is called at the beginning of each turn (before the drawing phase)
-   *   return: the new state it should continue with
    */
   public function startOfTurn()
   {
@@ -603,10 +602,22 @@ class Player extends \BANG\Helpers\DB_Manager
         $this->onChangeHand();
       }
 
-      // Handle responding to Slab the Killer with only one miss
-      $atom = Stack::top();
-      if (isset($atom['missedNeeded']) && $atom['missedNeeded'] > count($ids)) {
-        $card->pass($this);
+      $this->handleMultipleMissed();
+    }
+  }
+
+  protected function handleMultipleMissed(){
+    $nextAtom = Stack::getNextState();
+
+    if (isset($nextAtom['type']) && $nextAtom['type'] == 'attack' && isset($nextAtom['missedNeeded'])) {
+      if ($nextAtom['missedNeeded'] == 1) {
+        if (Stack::top()['missedNeeded'] == 2) {
+          Notifications::tell(clienttranslate('But ${player_name} needs another Missed!'), [
+            'player_name' => $this->getName(),
+          ]);
+        }
+      } elseif ($nextAtom['missedNeeded'] == 0) {
+        Stack::nextState();
       }
     }
   }
@@ -614,16 +625,16 @@ class Player extends \BANG\Helpers\DB_Manager
   /**
    *
    */
-  public function prepareSelection($card, $playerIds, $isPrivate, $amount, $toResolveFlipped = false)
+  public function prepareSelection($source, $playerIds, $isPrivate, $amount, $toResolveFlipped = false)
   {
-    $src = $card instanceof \BANG\Models\Player ? $card->getCharName() : $card->getName();
+    $src = $source instanceof \BANG\Models\Player ? $source->getCharName() : $source->getName();
     $atom = [
       'state' => ST_SELECT_CARD,
       'src_name' => $src,
       'amount' => $amount,
       'isPrivate' => $isPrivate,
       'toResolveFlipped' => $toResolveFlipped,
-      'src' => $card->jsonSerialize(),
+      'src' => $source->jsonSerialize(),
     ];
 
     foreach (array_reverse($playerIds) as $pId) {
