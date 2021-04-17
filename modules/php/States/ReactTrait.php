@@ -17,7 +17,7 @@ trait ReactTrait
     $args = $this->gamestate->state()['args'];
     $options = $args['_private']['active'];
     $noBarrel = empty($options['cards']);
-    $noSpecialAbility = is_null($options['character']);
+    $noSpecialAbility = !isset($options['character']) || is_null($options['character']);
     $noCardsInHand = $player->getHand()->empty();
     if ($noBarrel && $noSpecialAbility && $noCardsInHand) {
       $this->actPass();

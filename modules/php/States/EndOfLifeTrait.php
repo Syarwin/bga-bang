@@ -67,15 +67,6 @@ trait EndOfLifeTrait
     $ctx = Globals::getStackCtx();
     $player = Players::get($ctx['pId']);
     $player->eliminate();
-
-    // Check if game should end
-    if (Stack::isItLastElimination() && Players::isEndOfGame()) {
-      $atom = [
-        'state' => ST_PRE_GAME_END,
-      ];
-      Stack::insertOnTop($atom);
-    }
-
     Stack::resolve();
   }
 }

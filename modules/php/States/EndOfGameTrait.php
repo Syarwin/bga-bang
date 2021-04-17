@@ -6,9 +6,9 @@ use BANG\Core\Notifications;
 trait EndOfGameTrait
 {
   /*
-   * stPreGameEnd : attribute score to players according to end of game trigger
+   * setWinners : attribute score to players according to end of game trigger
    */
-  public function stPreGameEnd()
+  public function setWinners()
   {
     if (Players::countRoles([SHERIFF]) == 0) {
       $living = Players::getLivingPlayers(null, true);
@@ -31,7 +31,5 @@ trait EndOfGameTrait
         clienttranslate('All the renegades and outlaws have been killed and thus Sheriff and Deputies win this game.')
       );
     }
-
-    $this->gamestate->nextState('');
   }
 }
