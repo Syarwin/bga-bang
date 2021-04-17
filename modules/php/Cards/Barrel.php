@@ -31,7 +31,7 @@ class Barrel extends \BANG\Models\BlueCard
     Stack::resolve();
   }
 
-  public function resolveFlipped($card, $player)
+  public function resolveFlipped($card)
   {
     Cards::markAsPlayed($this->id);
     $missedNeeded = Stack::top()['missedNeeded'] ?? 1;

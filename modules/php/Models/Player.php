@@ -596,17 +596,18 @@ class Player extends \BANG\Helpers\DB_Manager
         $ids = [$ids];
       }
 
+      $needToSwitchState = count($ids) == 2;
       foreach ($ids as $id) {
         $reactionCard = Cards::get($id);
         $card->react($reactionCard, $this);
         $this->onChangeHand();
+        $this->handleMultipleMissed($needToSwitchState);
+        $needToSwitchState = false;
       }
-
-      $this->handleMultipleMissed();
     }
   }
 
-  protected function handleMultipleMissed(){
+  protected function handleMultipleMissed($needToSwitchState = false){
     $nextAtom = Stack::getNextState();
 
     if (isset($nextAtom['type']) && $nextAtom['type'] == 'attack' && isset($nextAtom['missedNeeded'])) {
@@ -619,6 +620,9 @@ class Player extends \BANG\Helpers\DB_Manager
       } elseif ($nextAtom['missedNeeded'] == 0) {
         Stack::nextState();
       }
+    }
+    if ($needToSwitchState) {
+      Stack::nextState();
     }
   }
 
