@@ -80,7 +80,7 @@ trait TurnTrait
 
   public function actDiscardExcess($cardIds)
   {
-    $cards = Cards::get($cardIds);
+    $cards = Cards::getMany($cardIds);
     Cards::discardMany($cardIds);
     $player = Players::getActive();
     Notifications::discardedCards($player, $cards);
