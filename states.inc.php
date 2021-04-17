@@ -87,6 +87,7 @@ $machinestates = [
     'descriptionmyturn' => clienttranslate('${you} must react'),
     'type' => 'activeplayer',
     'args' => 'argReact',
+    'action' => 'stReact',
     'possibleactions' => ['actReact', 'actPass', 'actUseAbility'],
   ],
 
@@ -107,6 +108,7 @@ $machinestates = [
     'descriptionmyturn' => clienttranslate('${you} may play ${n} beer to survive'),
     'type' => 'activeplayer',
     'args' => 'argReactBeer',
+    'action' => 'stReact',
     'possibleactions' => ['actReact', 'actPass', 'actUseAbility'],
   ],
 

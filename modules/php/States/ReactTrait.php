@@ -11,6 +11,16 @@ use BANG\Core\Stack;
 
 trait ReactTrait
 {
+  public function stReact()
+  {
+    $player = Players::getActive();
+    $args = $this->gamestate->state()['args'];
+    $options = $args['_private']['active'];
+    if (empty($options['cards']) && is_null($options['character']) && $player->getHand()->empty()) {
+      $this->actReact(null);
+    }
+  }
+
   public function argReact()
   {
     $ctx = Globals::getStackCtx();
@@ -18,7 +28,7 @@ trait ReactTrait
     if ($ctx['state'] == ST_REACT) {
       $card = Cards::get($ctx['src']['id']);
 
-      $ctx['_private'][$player->getId()] = $card->getReactionOptions($player);
+      $ctx['_private']['active'] = $card->getReactionOptions($player);
       return $ctx;
     } else {
       return null; // This might happen when we shifted ST_REACT out of Stack but BGA for some reasons still wants args for it
