@@ -139,7 +139,7 @@ define([
           this.addActionButton('buttonCancelEnd', _('Cancel'), 'onClickCancelEndTurn', null, false, 'gray');
 
         if (stateName == 'react') {
-          if (args.type == "attack")
+          if (args.type == 'attack')
             this.addActionButton(
               'buttonSkip',
               _('Pass and lose life point'),

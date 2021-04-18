@@ -27,7 +27,6 @@ class CalamityJanet extends \BANG\Models\Player
     return $atom;
   }
 
-
   public function getBangCards()
   {
     $res = parent::getBangCards();

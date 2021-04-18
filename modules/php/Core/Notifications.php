@@ -180,7 +180,7 @@ class Notifications
   {
     if (!is_array($cards)) {
       $cards = [$cards];
-    };
+    }
     foreach ($cards as $card) {
       self::discardedCard($player, $card, $silent);
     }

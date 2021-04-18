@@ -13,7 +13,6 @@ class SlabtheKiller extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-
   public function getReactAtomForAttack($card)
   {
     $atom = parent::getReactAtomForAttack($card);

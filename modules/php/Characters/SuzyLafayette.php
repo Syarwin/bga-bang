@@ -16,10 +16,13 @@ class SuzyLafayette extends \BANG\Models\Player
   public function checkHand()
   {
     if ($this->getHand()->count() == 0) {
-      Stack::insertAfterCardResolution([
-        'pId' => $this->id,
-        'state' => ST_TRIGGER_ABILITY,
-      ], false);
+      Stack::insertAfterCardResolution(
+        [
+          'pId' => $this->id,
+          'state' => ST_TRIGGER_ABILITY,
+        ],
+        false
+      );
     }
   }
 

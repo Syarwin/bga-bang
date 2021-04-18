@@ -72,7 +72,7 @@ class Players extends \BANG\Helpers\DB_Manager
         $bullets++;
         $sheriff = $pId;
       }
-//      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, $bullets, $role, $cId];
+      //      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, $bullets, $role, $cId];
       $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, 1, $role, $cId];
       Cards::deal($pId, $bullets);
       $i++;
@@ -272,8 +272,14 @@ class Players extends \BANG\Helpers\DB_Manager
 
   public static function setWinners($winningRoles)
   {
-    self::DB()->update(['player_score' => 1])->whereIn('player_role', $winningRoles)->run();
-    self::DB()->update(['player_score' => 0])->whereNotIn('player_role', $winningRoles)->run();
+    self::DB()
+      ->update(['player_score' => 1])
+      ->whereIn('player_role', $winningRoles)
+      ->run();
+    self::DB()
+      ->update(['player_score' => 0])
+      ->whereNotIn('player_role', $winningRoles)
+      ->run();
   }
 
   public static function getNext($player)

@@ -609,7 +609,8 @@ class Player extends \BANG\Helpers\DB_Manager
     }
   }
 
-  protected function handleMultipleMissed($needToSwitchState = false){
+  protected function handleMultipleMissed($needToSwitchState = false)
+  {
     $nextAtom = Stack::getNextState();
 
     if (isset($nextAtom['type']) && $nextAtom['type'] == 'attack' && isset($nextAtom['missedNeeded'])) {

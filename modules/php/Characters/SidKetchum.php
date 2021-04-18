@@ -52,7 +52,7 @@ class SidKetchum extends \BANG\Models\Player
     if (Stack::top()['state'] == ST_REACT_BEER && $this->hp > 0) {
       Stack::nextState();
     } else {
-       // Otherwise loop back in same state
+      // Otherwise loop back in same state
       Stack::resolve();
     }
   }

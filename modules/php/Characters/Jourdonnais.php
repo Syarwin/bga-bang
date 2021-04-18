@@ -54,6 +54,5 @@ class Jourdonnais extends \BANG\Models\Player
     $newAtom = Utils::updateAtomAfterAction(Stack::top(), $missedNeeded, $this->character);
     Stack::insertAfter($newAtom);
     $this->handleMultipleMissed(true);
-
   }
 }

@@ -24,7 +24,8 @@ trait ReactTrait
     }
   }
 
-  private function actPass() {
+  private function actPass()
+  {
     $this->actReact(null);
   }
 

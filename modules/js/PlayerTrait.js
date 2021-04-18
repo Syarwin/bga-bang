@@ -183,8 +183,8 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
      * Change player cards in hand counter
      */
     setHandCount(playerId, newHandCount) {
-//      var currentHandCount = parseInt(dojo.attr('bang-player-' + playerId, 'data-hand')),
-//        newHandCount = currentHandCount + parseInt(amount);
+      //      var currentHandCount = parseInt(dojo.attr('bang-player-' + playerId, 'data-hand')),
+      //        newHandCount = currentHandCount + parseInt(amount);
       dojo.attr('bang-player-' + playerId, 'data-hand', newHandCount);
       dojo.attr('bang-player-board-' + playerId, 'data-hand', newHandCount);
     },
