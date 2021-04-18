@@ -551,7 +551,6 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function attack($card, $playerIds)
   {
-    Cards::resetPlayedColumn();
     $atom = $this->getReactAtomForAttack($card);
     foreach (array_reverse($playerIds) as $pId) {
       $atom['pId'] = $pId;

@@ -33,7 +33,6 @@ CREATE TABLE IF NOT EXISTS `card` (
   `card_location` varchar(32) NOT NULL,
   `card_state` int(10),
   `type` int(10),
-  `played` tinyint DEFAULT 0,
   `value` varchar(2) NOT NULL,
   `color` varchar(2) NOT NULL,
   PRIMARY KEY (`card_id`)

@@ -150,7 +150,6 @@ class AbstractCard implements \JsonSerializable
 
   public function wasPlayed()
   {
-    return Cards::wasPlayed($this->id);
   }
 
   public function discard()

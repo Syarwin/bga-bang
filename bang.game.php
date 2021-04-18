@@ -58,9 +58,7 @@ class bang extends Table
   {
     parent::__construct();
     self::$instance = $this;
-    self::initGameStateLabels(array(
-      "JourdonnaisUsedSkill" => 10,
-    ));
+    self::initGameStateLabels([]);
   }
   public static function get()
   {
@@ -84,8 +82,6 @@ class bang extends Table
     // Initialize board and cards
     $expansions = [BASE_GAME];
     Cards::setupNewGame($expansions);
-
-    self::setGameStateInitialValue('JourdonnaisUsedSkill', 0);
 
     // Initialize players
     $sheriff = Players::setupNewGame($bplayers, $expansions, $options);

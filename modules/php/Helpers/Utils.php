@@ -41,4 +41,12 @@ abstract class Utils
   {
     return substr($copy, -1);
   }
+
+  public static function updateAtomAfterAction($atom, $missedNeeded, $abilityOrCardUsed) {
+    $atom['missedNeeded'] = $missedNeeded;
+    $used = $atom['used'] ?? [];
+    array_push($used, $abilityOrCardUsed);
+    $atom['used'] = $used;
+    return $atom;
+  }
 }

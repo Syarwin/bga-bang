@@ -1,11 +1,8 @@
 <?php
 namespace BANG\Cards;
-use BANG\Core\Globals;
 use BANG\Core\Stack;
-use BANG\Managers\Cards;
+use BANG\Helpers\Utils;
 use BANG\Core\Notifications;
-use BANG\Core\Log;
-use BANG\Managers\Players;
 
 class Barrel extends \BANG\Models\BlueCard
 {
@@ -23,7 +20,12 @@ class Barrel extends \BANG\Models\BlueCard
     $this->effect = ['type' => DEFENSIVE];
   }
 
-  //  wasPlayed
+  public function wasPlayed()
+  {
+    $atom = Stack::top();
+    return isset($atom['used']) && in_array($this->type, $atom['used']);
+  }
+
   public function activate($player, $args = [])
   {
     Notifications::useCard($player, $this);
@@ -33,19 +35,18 @@ class Barrel extends \BANG\Models\BlueCard
 
   public function resolveFlipped($card)
   {
-    Cards::markAsPlayed($this->id);
     $missedNeeded = Stack::top()['missedNeeded'] ?? 1;
+    Stack::shift();
 
     // Draw an heart => success
     if ($card->getCopyColor() == 'H') {
       Notifications::tell(clienttranslate('Barrel was successful'));
-      Stack::shift();
 
-      $atom = Stack::top();
-      $atom['missedNeeded'] = $missedNeeded - 1;
-      Stack::insertAfter($atom);
+      $missedNeeded -= 1;
     } else {
       Notifications::tell(clienttranslate('Barrel failed'));
     }
+    $newAtom = Utils::updateAtomAfterAction(Stack::top(), $missedNeeded, $this->type);
+    Stack::insertAfter($newAtom);
   }
 }
