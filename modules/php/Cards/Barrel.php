@@ -1,11 +1,8 @@
 <?php
 namespace BANG\Cards;
-use BANG\Core\Globals;
 use BANG\Core\Stack;
-use BANG\Managers\Cards;
+use BANG\Helpers\Utils;
 use BANG\Core\Notifications;
-use BANG\Core\Log;
-use BANG\Managers\Players;
 
 class Barrel extends \BANG\Models\BlueCard
 {
@@ -23,7 +20,12 @@ class Barrel extends \BANG\Models\BlueCard
     $this->effect = ['type' => DEFENSIVE];
   }
 
-  //  wasPlayed
+  public function wasPlayed()
+  {
+    $atom = Stack::top();
+    return isset($atom['used']) && in_array($this->type, $atom['used']);
+  }
+
   public function activate($player, $args = [])
   {
     Notifications::useCard($player, $this);
@@ -31,32 +33,20 @@ class Barrel extends \BANG\Models\BlueCard
     Stack::resolve();
   }
 
-  public function resolveFlipped($card, $player)
+  public function resolveFlipped($card)
   {
-    Cards::markAsPlayed($this->id);
-    $atom = Stack::top();
-    $missedNeeded = $atom['missedNeeded'] ?? 1;
+    $missedNeeded = Stack::top()['missedNeeded'] ?? 1;
+    Stack::shift();
 
     // Draw an heart => success
     if ($card->getCopyColor() == 'H') {
       Notifications::tell(clienttranslate('Barrel was successful'));
-      Stack::shift();
-      if ($missedNeeded == 1) {
-        return;
-      }
 
-      // Against Slab the Killer, need to miss => update stack atom
-      Notifications::tell(clienttranslate('But ${player_name} needs another Missed!'), [
-        'player_name' => $player->getName(),
-      ]);
-      $atom = Stack::top();
-      $atom['missedNeeded'] = $missedNeeded - 1;
-      Stack::insertAfter($atom);
-      Stack::resolve();
+      $missedNeeded -= 1;
     } else {
       Notifications::tell(clienttranslate('Barrel failed'));
     }
-
-    //    Log::addCardPlayed(Players::getCurrentTurn(), Cards::getCurrentCard(), $args);
+    $newAtom = Utils::updateAtomAfterAction(Stack::top(), $missedNeeded, $this->type);
+    Stack::insertAfter($newAtom);
   }
 }

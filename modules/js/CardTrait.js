@@ -283,12 +283,14 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       if (this._selectedCards.includes(card.id)) {
         this._selectedCards = this._selectedCards.filter((id) => id != card.id);
         dojo.removeClass(domId, 'selected');
-        this._selectableCards.forEach((c) =>
-          dojo
-            .query('#bang-card-' + c.uid)
-            .addClass('selectable')
-            .removeClass('unselectable'),
-        );
+        this._selectableCards.forEach((c) => {
+          let query = '#bang-card-' + c.uid;
+          if (this._selectedCards.length > 0) {
+            // Do it for not inplay cards only
+            query = ':not(.player-inplay .bang-card)' + query;
+          }
+          dojo.query(query).addClass('selectable').removeClass('unselectable');
+        });
       }
       // Not yet selected, add to selection
       else {
@@ -297,9 +299,12 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         this._selectedCards.push(card.id);
         dojo.addClass(domId, 'selected');
 
-        if (this._selectedCards.length == this._amount) {
-          dojo.query('.bang-card.selectable').removeClass('selectable').addClass('unselectable');
-          dojo.query('.bang-card.selected').removeClass('unselectable').addClass('selectable');
+        if (this._selectedCards.length > 0) {
+          dojo.query('.player-inplay .bang-card').removeClass('selectable').addClass('unselectable');
+          if (this._selectedCards.length === this._amount) {
+            dojo.query('.bang-card.selectable').removeClass('selectable').addClass('unselectable');
+            dojo.query('.bang-card.selected').removeClass('unselectable').addClass('selectable');
+          }
         }
       }
 

@@ -2,8 +2,8 @@
 namespace BANG\Characters;
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
+use BANG\Helpers\Utils;
 use BANG\Managers\Cards;
-use bang;
 
 class Jourdonnais extends \BANG\Models\Player
 {
@@ -16,22 +16,17 @@ class Jourdonnais extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  // TODO: Use one source of truth for used Barrel and this skill. And it should NOT be a DB or probably not global. Stack?
-  protected function canUseAbility()
+  protected function abilityHaveBeenUsed()
   {
-    return bang::get()->getGameStateValue('JourdonnaisUsedSkill') == 0;
-  }
-
-  protected function logUseAbility()
-  {
-    bang::get()->setGameStateValue('JourdonnaisUsedSkill', 1);
+    $atom = Stack::top();
+    return isset($atom['used']) && in_array($this->character, $atom['used']);
   }
 
   public function getDefensiveOptions()
   {
     $res = parent::getDefensiveOptions();
-    if ($this->canUseAbility() && Stack::top()['src']['type'] == CARD_BANG) {
-      $res['character'] = JOURDONNAIS;
+    if (!$this->abilityHaveBeenUsed() && Stack::top()['src']['type'] == CARD_BANG) {
+      $res['character'] = $this->character;
     }
     return $res;
   }
@@ -45,28 +40,20 @@ class Jourdonnais extends \BANG\Models\Player
 
   public function resolveFlipped($card)
   {
-    $this->logUseAbility();
     Notifications::flipCard($this, $card, $this);
     $missedNeeded = Stack::top()['missedNeeded'] ?? 1;
+
     Stack::shift();
     if ($card->getCopyColor() == 'H') {
-      // Success
       Notifications::tell(clienttranslate('Jourdonnais effect was successful'));
-      if ($missedNeeded == 1) {
-        Stack::nextState();
-        return;
-      }
-      // Slab the Killer
-      Notifications::tell(clienttranslate('But ${player_name} needs another miss'), [
-        'player_name' => $this->getName(),
-      ]);
-      $atom = Stack::top();
-      $atom['missedNeeded'] = $missedNeeded - 1;
-      Stack::insertAfter($atom);
-      Stack::nextState();
+
+      $missedNeeded -= 1;
     } else {
       Notifications::tell(clienttranslate('Jourdonnais effect failed'));
-      Stack::resolve();
     }
+    $newAtom = Utils::updateAtomAfterAction(Stack::top(), $missedNeeded, $this->character);
+    Stack::insertAfter($newAtom);
+    $this->handleMultipleMissed(true);
+
   }
 }

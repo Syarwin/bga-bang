@@ -34,7 +34,7 @@ class KitCarlson extends \BANG\Models\Player
     }
     Notifications::drawCards($this, Cards::getMany($args));
 
-    // Put remeaning card on deck
+    // Put remaining card on deck
     $rest = Cards::getSelection()->first();
     Cards::putOnDeck($rest->getId());
   }

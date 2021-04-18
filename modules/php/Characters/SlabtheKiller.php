@@ -18,11 +18,11 @@ class SlabtheKiller extends \BANG\Models\Player
   {
     $atom = parent::getReactAtomForAttack($card);
     if ($card->getType() == CARD_BANG) {
-      $atom['msgActive'] = clienttranslate('${you} may react to ${src_name} with 2 Missed!');
-      $atom['msgInactive'] = clienttranslate('${actplayer} may react to ${src_name} with 2 Missed!');
-      $atom['missedNeeded'] = 2;
+      $missedNeeded = 2; // Slab's ability
+      $atom['missedNeeded'] = $missedNeeded;
+      $atom['msgActive'] = clienttranslate('${you} may react to ${src_name} with ${missedNeeded} Missed!');
+      $atom['msgInactive'] = clienttranslate('${actplayer} may react to ${src_name} with ${missedNeeded} Missed!');
     }
-
     return $atom;
   }
 }

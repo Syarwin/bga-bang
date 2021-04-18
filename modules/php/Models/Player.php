@@ -25,6 +25,7 @@ class Player extends \BANG\Helpers\DB_Manager
   protected $hp;
   protected $zombie = false;
   protected $role;
+  protected $score;
 
   // --character properties
   protected $character; //the int-constant
@@ -45,6 +46,7 @@ class Player extends \BANG\Helpers\DB_Manager
       $this->zombie = $row['player_zombie'] == 1;
       $this->role = $row['player_role'];
       $this->bullets = (int) $row['player_bullets'];
+      $this->score = (int) $row['player_score'];
     }
   }
 
@@ -137,6 +139,7 @@ class Player extends \BANG\Helpers\DB_Manager
       'color' => $this->color,
       'characterId' => $this->character,
       'character' => $this->character_name,
+      'score' => $this->score,
       'powers' => $this->text,
       'hp' => $this->hp,
       'bullets' => $this->bullets,
@@ -495,7 +498,6 @@ class Player extends \BANG\Helpers\DB_Manager
 
   /**
    * startOfTurn: is called at the beginning of each turn (before the drawing phase)
-   *   return: the new state it should continue with
    */
   public function startOfTurn()
   {
@@ -549,7 +551,6 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function attack($card, $playerIds)
   {
-    Cards::resetPlayedColumn();
     $atom = $this->getReactAtomForAttack($card);
     foreach (array_reverse($playerIds) as $pId) {
       $atom['pId'] = $pId;
@@ -597,33 +598,49 @@ class Player extends \BANG\Helpers\DB_Manager
         $ids = [$ids];
       }
 
+      $needToSwitchState = count($ids) == 2;
       foreach ($ids as $id) {
         $reactionCard = Cards::get($id);
         $card->react($reactionCard, $this);
         $this->onChangeHand();
+        $this->handleMultipleMissed($needToSwitchState);
+        $needToSwitchState = false;
       }
+    }
+  }
 
-      // Handle responding to Slab the Killer with only one miss
-      $atom = Stack::top();
-      if (isset($atom['missedNeeded']) && $atom['missedNeeded'] > count($ids)) {
-        $card->pass($this);
+  protected function handleMultipleMissed($needToSwitchState = false){
+    $nextAtom = Stack::getNextState();
+
+    if (isset($nextAtom['type']) && $nextAtom['type'] == 'attack' && isset($nextAtom['missedNeeded'])) {
+      if ($nextAtom['missedNeeded'] == 1) {
+        if (Stack::top()['missedNeeded'] == 2) {
+          Notifications::tell(clienttranslate('But ${player_name} needs another Missed!'), [
+            'player_name' => $this->getName(),
+          ]);
+        }
+      } elseif ($nextAtom['missedNeeded'] == 0) {
+        Stack::nextState();
       }
+    }
+    if ($needToSwitchState) {
+      Stack::nextState();
     }
   }
 
   /**
    *
    */
-  public function prepareSelection($card, $playerIds, $isPrivate, $amount, $toResolveFlipped = false)
+  public function prepareSelection($source, $playerIds, $isPrivate, $amount, $toResolveFlipped = false)
   {
-    $src = $card instanceof \BANG\Models\Player ? $card->getCharName() : $card->getName();
+    $src = $source instanceof \BANG\Models\Player ? $source->getCharName() : $source->getName();
     $atom = [
       'state' => ST_SELECT_CARD,
       'src_name' => $src,
       'amount' => $amount,
       'isPrivate' => $isPrivate,
       'toResolveFlipped' => $toResolveFlipped,
-      'src' => $card->jsonSerialize(),
+      'src' => $source->jsonSerialize(),
     ];
 
     foreach (array_reverse($playerIds) as $pId) {
@@ -655,6 +672,12 @@ class Player extends \BANG\Helpers\DB_Manager
     // Eliminate player
     $this->eliminated = true;
     $this->save();
+
+    // Check if game should end
+    if (Stack::isItLastElimination() && Players::isEndOfGame()) {
+      bang::get()->setWinners();
+    }
+
     bang::get()->eliminatePlayer($this->id);
     Notifications::playerEliminated($this);
 

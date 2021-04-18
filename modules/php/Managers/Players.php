@@ -72,8 +72,8 @@ class Players extends \BANG\Helpers\DB_Manager
         $bullets++;
         $sheriff = $pId;
       }
-      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, $bullets, $role, $cId];
-      //$values[] = [$pId, $color, $canal, $name, $avatar, $bullets, 1, $role, $cId];
+//      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, $bullets, $role, $cId];
+      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, 1, $role, $cId];
       Cards::deal($pId, $bullets);
       $i++;
     }
@@ -82,7 +82,7 @@ class Players extends \BANG\Helpers\DB_Manager
     self::getGame()->reloadPlayersBasicInfos();
 
     // TODO : remove
-    if (false) {
+    if (true) {
       Cards::dealCard($sheriff, CARD_GATLING);
       /*
       Cards::dealCard($sheriff, CARD_BARREL);
@@ -272,9 +272,8 @@ class Players extends \BANG\Helpers\DB_Manager
 
   public static function setWinners($winningRoles)
   {
-    $roles = '(' . implode($winningRoles, ',') . ')';
-    self::DbQuery("UPDATE player SET player_score = 1 WHERE player_role in $roles");
-    self::DbQuery("UPDATE player SET player_score = 0 WHERE player_role not in $roles");
+    self::DB()->update(['player_score' => 1])->whereIn('player_role', $winningRoles)->run();
+    self::DB()->update(['player_score' => 0])->whereNotIn('player_role', $winningRoles)->run();
   }
 
   public static function getNext($player)

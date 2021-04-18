@@ -270,7 +270,6 @@ class Notifications
       'src' => $player->getId(),
       'amount' => 1,
     ]);
-
   }
 
   public static function playerEliminated($player)

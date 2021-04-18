@@ -116,7 +116,7 @@ define([
        * 	called by BGA framework before onEnteringState
        *	in this method you can manage "action buttons" that are displayed in the action status bar (ie: the HTML links in the status bar).
        */
-      onUpdateActionButtons(stateName, args) {
+      onUpdateActionButtons(stateName, args, showBarrel = true) {
         debug('Update action buttons: ' + stateName, args);
         this.updatePlayersStatus(); // Called when a player go inactive
 
@@ -160,7 +160,7 @@ define([
 
           // Button for barrel
           args._private.cards.forEach((card) => {
-            if ($('bang-card-' + card.id).parentNode.id != 'hand-cards') {
+            if ($('bang-card-' + card.id).parentNode.id != 'hand-cards' && showBarrel) {
               this.addPrimaryActionButton('buttonUseBarrel', _('Use barrel'), () => this.onClickCardSelectReact(card));
             }
           });

@@ -16,9 +16,16 @@ trait ReactTrait
     $player = Players::getActive();
     $args = $this->gamestate->state()['args'];
     $options = $args['_private']['active'];
-    if (empty($options['cards']) && is_null($options['character']) && $player->getHand()->empty()) {
-      $this->actReact(null);
+    $noBarrel = empty($options['cards']);
+    $noSpecialAbility = !isset($options['character']) || is_null($options['character']);
+    $noCardsInHand = $player->getHand()->empty();
+    if ($noBarrel && $noSpecialAbility && $noCardsInHand) {
+      $this->actPass();
     }
+  }
+
+  private function actPass() {
+    $this->actReact(null);
   }
 
   public function argReact()

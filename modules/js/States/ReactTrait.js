@@ -51,13 +51,23 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         if (!this.toggleCard(card)) return;
 
         if (this._selectedCards.length < this._amount) {
-          if (this._selectedCards.length == 0) this._amount = null;
+          if (this._selectedCards.length === 0) this._amount = null;
           this.clearActionButtons();
-          this.onUpdateActionButtons(this.gamedatas.gamestate.name, this.gamedatas.gamestate.args);
-          if(this._selectedCards.length > 0){
-            this.addDangerActionButton('buttonPlayerOneCard', _('Play and lose life'), () => this.onClickConfirmReact());
+          this.onUpdateActionButtons(
+            this.gamedatas.gamestate.name,
+            this.gamedatas.gamestate.args,
+            this._selectedCards.length == 0,
+          );
+          if (this._selectedCards.length === 1) {
+            this.addPrimaryActionButton('buttonPlayerOneCard', _('Play single card'), () => this.onClickConfirmReact());
           }
         } else {
+          this.clearActionButtons();
+          this.onUpdateActionButtons(
+            this.gamedatas.gamestate.name,
+            this.gamedatas.gamestate.args,
+            this._selectedCards.length == 0,
+          );
           this.addPrimaryActionButton('buttonConfirmReact', _('Confirm react'), () => this.onClickConfirmReact());
         }
       }

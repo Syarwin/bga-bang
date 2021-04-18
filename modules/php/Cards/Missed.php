@@ -21,12 +21,12 @@ class Missed extends \BANG\Models\BrownCard
   public function react($card, $player)
   {
     $bang = new Bang();
-    return $bang->react($card, $player);
+    $bang->react($card, $player);
   }
 
   public function pass($player)
   {
     $bang = new Bang();
-    return $bang->pass($player);
+    $bang->pass($player);
   }
 }

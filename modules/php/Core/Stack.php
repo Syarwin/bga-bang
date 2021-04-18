@@ -33,6 +33,12 @@ class Stack
     return reset($stack);
   }
 
+  public function getNextState()
+  {
+    $stack = Globals::getStack();
+    return $stack[1] ?? null;
+  }
+
   public function shift()
   {
     $stack = Globals::getStack();
@@ -52,8 +58,8 @@ class Stack
 
     $pId = self::getGame()->getActivePlayerId();
     // Jump to resolveStack state to ensure we can change active pId
+    self::getGame()->gamestate->jumpToState(ST_RESOLVE_STACK);
     if (isset($atom['pId']) && $atom['pId'] != null && $pId != $atom['pId']) {
-      self::getGame()->gamestate->jumpToState(ST_RESOLVE_STACK);
       self::getGame()->gamestate->changeActivePlayer($atom['pId']);
     }
 
