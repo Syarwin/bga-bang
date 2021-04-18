@@ -52,6 +52,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         color: ocard.color,
         value: ocard.value,
         flipped: ocard.flipped === undefined || !ocard.flipped ? '' : 'flipped',
+        enforceTooltip: ocard.enforceTooltip === undefined ? false : ocard.enforceTooltip,
       };
 
       if (this._cards[ocard.type]) {
@@ -93,7 +94,8 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       if ($('bang-card-' + card.uid)) dojo.destroy('bang-card-' + card.uid);
 
       var div = dojo.place(this.format_block('jstpl_card', card), container);
-      if (card.flipped === '') this.addTooltipHtml(div.id, this.format_block('jstpl_cardTooltip', card));
+      if (card.flipped === '' || card.enforceTooltip)
+        this.addTooltipHtml(div.id, this.format_block('jstpl_cardTooltip', card));
       dojo.connect(div, 'onclick', (evt) => {
         evt.preventDefault();
         evt.stopPropagation();
@@ -198,6 +200,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       debug('Notif: card flipped', n);
       var card = n.args.card;
       card.flipped = true;
+      card.enforceTooltip = true;
       var div = this.addCard(card, 'discard');
       dojo.style(div, 'zIndex', dojo.query('#discard .bang-card').length);
       setTimeout(() => dojo.removeClass('bang-card-' + card.id, 'flipped'), 100);
