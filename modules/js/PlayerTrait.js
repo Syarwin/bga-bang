@@ -217,7 +217,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     },
 
     /********************
-     *** OPTION_PLAYER ***
+     *** TARGET_PLAYER ***
      ********************/
 
     /*
@@ -263,7 +263,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     },
 
     /******************
-     *** OPTION_CARD ***
+     *** TARGET_CARD ***
      ******************/
     /*
      * Make some players' cards selectable with sometimes the deck

@@ -23,7 +23,7 @@ class BlueCard extends AbstractCard
         return null;
       }
     }
-    return ['type' => OPTION_NONE];
+    return ['target_type' => TARGET_NONE];
   }
 
   public function play($player, $args)

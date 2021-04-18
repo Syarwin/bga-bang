@@ -35,7 +35,7 @@ class Jail extends \BANG\Models\BlueCard
       return $player->getRole() != SHERIFF && !$player->hasCardCopyInPlay($this);
     });
     return [
-      'type' => OPTION_PLAYER,
+      'target_type' => TARGET_PLAYER,
       'targets' => $players->getIds(),
     ];
   }

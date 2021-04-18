@@ -398,7 +398,7 @@ class Player extends \BANG\Helpers\DB_Manager
       ->map(function ($card) {
         return [
           'id' => $card->getId(),
-          'options' => ['type' => OPTION_NONE],
+          'options' => ['target_type' => TARGET_NONE],
           'amount' => 1,
         ];
       })
@@ -447,7 +447,7 @@ class Player extends \BANG\Helpers\DB_Manager
         return [
           'id' => $card->getId(),
           'amount' => $missedNeeded,
-          'options' => ['type' => OPTION_NONE],
+          'options' => ['target_type' => TARGET_NONE],
         ];
       })
       ->toArray();
@@ -460,7 +460,7 @@ class Player extends \BANG\Helpers\DB_Manager
       $res[] = [
         'id' => $card->getId(),
         'amount' => 1,
-        'options' => ['type' => OPTION_NONE],
+        'options' => ['target_type' => TARGET_NONE],
       ];
     }
 
