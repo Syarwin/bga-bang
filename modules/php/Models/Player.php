@@ -2,7 +2,6 @@
 namespace BANG\Models;
 use BANG\Managers\Cards;
 use BANG\Managers\Players;
-use BANG\Helpers\Utils;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
 use BANG\Core\Stack;
@@ -523,6 +522,7 @@ class Player extends \BANG\Helpers\DB_Manager
         return [
           'id' => $card->getId(),
           'options' => $card->getPlayOptions($this),
+          'type' => $card->getType(),
         ];
       })
       ->filter(function ($card) {
