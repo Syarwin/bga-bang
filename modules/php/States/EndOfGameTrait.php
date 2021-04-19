@@ -16,7 +16,7 @@ trait EndOfGameTrait
       // That not's really possible, is it ?
       if (count($living) == 0) {
         Players::setWinners([SHERIFF, DEPUTY, OUTLAW, RENEGADE]);
-      } elseif (count($living) == 1 && $living[0]->getRole() == RENEGADE) {
+      } elseif (count($living) == 1 && $living->first()->getRole() == RENEGADE) {
         Players::setWinners([RENEGADE]); // TODO : if two renegades (with expansion), only the one left win
         Notifications::tell(clienttranslate('The renegade is the only one left and thus wins this game.'));
       } else {
