@@ -49,6 +49,10 @@ class Stack
 
   public function resolve()
   {
+    if (Globals::getGameIsOver()) {
+      return;
+    }
+
     $atom = self::top();
     if ($atom == false) {
       throw new \feException('Stack engine is empty !');

@@ -12,6 +12,7 @@ class Globals extends \BANG\Helpers\DB_Manager
     'stackCtx' => 'obj', // DO NOT MODIFY, USED BY STACK ENGINE
 
     'pIdTurn' => 'int', // Player's id whose turn is
+    'gameIsOver' => 'bool',
   ];
 
   protected static $table = 'global_variables';
@@ -51,7 +52,12 @@ class Globals extends \BANG\Helpers\DB_Manager
       return;
     }
 
-    $val = self::$variables[$name] == 'int' ? 0 : [];
+    $defaults = [
+      'int' => 0,
+      'bool' => false,
+      'obj' => [],
+    ];
+    $val = $defaults[self::$variables[$name]];
     self::DB()->insert([
       'name' => $name,
       'value' => \json_encode($val),

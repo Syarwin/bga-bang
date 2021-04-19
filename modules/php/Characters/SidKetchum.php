@@ -41,7 +41,7 @@ class SidKetchum extends \BANG\Models\Player
       ['player_name' => $this->name]
     );
 
-    $cards = Cards::get($args);
+    $cards = Cards::getMany($args);
     foreach ($cards as $card) {
       $card->discard();
     }
