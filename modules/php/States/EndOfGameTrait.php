@@ -2,6 +2,8 @@
 namespace BANG\States;
 use BANG\Managers\Players;
 use BANG\Core\Notifications;
+use BANG\Core\Stack;
+use BANG\Core\Globals;
 
 trait EndOfGameTrait
 {
@@ -10,8 +12,8 @@ trait EndOfGameTrait
    */
   public function setWinners()
   {
+    $living = Players::getLivingPlayers();
     if (Players::countRoles([SHERIFF]) == 0) {
-      $living = Players::getLivingPlayers(null, true);
 
       // That not's really possible, is it ?
       if (count($living) == 0) {
@@ -31,5 +33,14 @@ trait EndOfGameTrait
         clienttranslate('All the renegades and outlaws have been killed and thus Sheriff and Deputies win this game.')
       );
     }
+
+    if(count($living) == 1){
+      // Framework will auto transition to GAME_END, put this flag to ensure we do not transition (error otherwise)
+      Globals::setGameIsOver(true);
+    } else {
+      // Clear stack and insert ST_GAME_END only
+      Stack::setup([ST_GAME_END]);
+    }
+
   }
 }

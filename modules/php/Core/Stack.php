@@ -20,7 +20,7 @@ class Stack
       if (is_int($atom)) {
         $stack[] = [
           'state' => $atom,
-          'pId' => $atom == ST_END_OF_TURN ? null : Globals::getPIdTurn(),
+          'pId' => ($atom == ST_END_OF_TURN || $atom == ST_GAME_END) ? null : Globals::getPIdTurn(),
         ];
       }
     }

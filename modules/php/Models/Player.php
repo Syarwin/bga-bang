@@ -677,7 +677,6 @@ class Player extends \BANG\Helpers\DB_Manager
     // Check if game should end
     if (Stack::isItLastElimination() && Players::isEndOfGame()) {
       bang::get()->setWinners();
-      Globals::setGameIsOver(true);
     }
 
     bang::get()->eliminatePlayer($this->id);
