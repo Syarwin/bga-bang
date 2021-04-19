@@ -13,12 +13,17 @@ trait ReactTrait
 {
   public function stReact()
   {
+    $atom = Stack::top();
+    if (isset($atom['missedNeeded']) && $atom['missedNeeded'] == 0) {
+      return;
+    }
     $player = Players::getActive();
     $args = $this->gamestate->state()['args'];
     $options = $args['_private']['active'];
     $noBarrel = empty($options['cards']);
     $noSpecialAbility = !isset($options['character']) || is_null($options['character']);
     $noCardsInHand = $player->getHand()->empty();
+    // Auto pass
     if ($noBarrel && $noSpecialAbility && $noCardsInHand) {
       $this->actPass();
     }
