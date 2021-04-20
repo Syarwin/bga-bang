@@ -44,6 +44,12 @@ class Stack
     $stack = Globals::getStack();
     $elem = array_shift($stack);
     Globals::setStack($stack);
+    if (Globals::enabledStackLogger()) {
+      var_dump("[Stack logger] Shifted current element out of Stack:");
+      var_dump($elem);
+      var_dump("[Stack logger] After shift Stack looks like this:");
+      var_dump(Globals::getStack());
+    }
     return $elem;
   }
 
@@ -54,6 +60,10 @@ class Stack
     }
 
     $atom = self::top();
+    if (Globals::enabledStackLogger()) {
+      var_dump("[Stack logger] This atom is going to be resolved now:");
+      var_dump($atom);
+    }
     if ($atom == false) {
       throw new \feException('Stack engine is empty !');
     }
@@ -72,6 +82,9 @@ class Stack
 
   public function nextState()
   {
+    if (Globals::enabledStackLogger()) {
+      var_dump("[Stack logger] nextState is called");
+    }
     self::shift();
     self::resolve();
   }
@@ -81,6 +94,10 @@ class Stack
     $stack = Globals::getStack();
     array_unshift($stack, $atom);
     Globals::setStack($stack);
+    if (Globals::enabledStackLogger()) {
+      var_dump("[Stack logger] Inserted a new atom on top and now Stack looks like this:");
+      var_dump(Globals::getStack());
+    }
     return $atom;
   }
 
@@ -89,11 +106,18 @@ class Stack
     $stack = Globals::getStack();
     array_splice($stack, $pos, 0, [$atom]);
     Globals::setStack($stack);
+    if (Globals::enabledStackLogger()) {
+      var_dump("[Stack logger] Inserted a new atom at position {$pos} and now Stack looks like this:");
+      var_dump(Globals::getStack());
+    }
     return $atom;
   }
 
   public function insertAfterCardResolution($atom, $raiseException = true)
   {
+    if (Globals::enabledStackLogger()) {
+      var_dump("[Stack logger] insertAfterCardResolution is called");
+    }
     // Compute pos
     $top = Globals::getStackCtx();
     if (!isset($top['src']) || !isset($top['src']['id'])) {
