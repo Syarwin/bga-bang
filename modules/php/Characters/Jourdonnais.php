@@ -25,7 +25,8 @@ class Jourdonnais extends \BANG\Models\Player
   public function getDefensiveOptions()
   {
     $res = parent::getDefensiveOptions();
-    if (!$this->abilityHaveBeenUsed() && Stack::top()['src']['type'] == CARD_BANG) {
+    // TODO: In expansion we need to set some property if card has a BANG! action. However it 100% corresponds with SYMBOL_BANG
+    if (!$this->abilityHaveBeenUsed()) {
       $res['character'] = $this->character;
     }
     return $res;
