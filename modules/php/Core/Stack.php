@@ -95,7 +95,7 @@ class Stack
   public function insertAfterCardResolution($atom, $raiseException = true)
   {
     // Compute pos
-    $top = Globals::getStackCtx();
+    $top = Stack::top();
     if (!isset($top['src']) || !isset($top['src']['id'])) {
       if ($raiseException) {
         throw new \feException('No card resolution in progress');
