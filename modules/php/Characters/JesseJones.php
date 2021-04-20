@@ -53,6 +53,7 @@ class JesseJones extends \BANG\Models\Player
       $card = $victim->getRandomCardInHand();
       Cards::move($card->getId(), LOCATION_HAND, $this->id);
       Notifications::stoleCard($this, $victim, $card, false);
+      $victim->onChangeHand();
 
       // Deal the second one
       $this->drawCards(1);

@@ -33,7 +33,8 @@ trait DrawCardsTrait
 
   public function draw($selected)
   {
+    Stack::shift();
     Players::getActive()->useAbility(['selected' => $selected]);
-    Stack::nextState();
+    Stack::resolve();
   }
 }
