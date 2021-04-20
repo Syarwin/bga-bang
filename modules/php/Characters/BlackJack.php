@@ -34,5 +34,6 @@ class BlackJack extends \BANG\Models\Player
       $cards = Cards::deal($this->id, 1);
       Notifications::drawCards($this, $cards);
     }
+    $this->onChangeHand();
   }
 }

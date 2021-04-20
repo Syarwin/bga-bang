@@ -33,6 +33,7 @@ class KitCarlson extends \BANG\Models\Player
       Cards::move($cardId, LOCATION_HAND, $this->id);
     }
     Notifications::drawCards($this, Cards::getMany($args));
+    $this->onChangeHand();
 
     // Put remaining card on deck
     $rest = Cards::getSelection()->first();
