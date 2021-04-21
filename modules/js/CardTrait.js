@@ -227,10 +227,29 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         }, i * 10),
       );
       this.updateDeckCount(n);
+      this.updateDiscardZIndex();
     },
 
     updateDeckCount(n) {
       $('deck').innerHTML = n.args.deckCount;
+    },
+
+    updateDiscardZIndex() {
+      const cardsWas = dojo.query('#discard .bang-card');
+      const cardsWasAmount = cardsWas.length;
+      setTimeout(() => {
+        // Waiting until all cards will be flipped from discard to deck in notif_reshuffle
+        const notReshuffled = dojo.query('#discard .bang-card:not(.flipped)');
+        if (notReshuffled.length === 1) {
+          dojo.style(notReshuffled[0].id, 'zIndex', 1);
+        } else {
+          // There should be just a single card in discard which caused reshuffling or none if it was not a card causing it
+          if (notReshuffled.length !== 0) {
+            debug(`In updateDiscardZIndex notReshuffled.length was === ${notReshuffled.length}`);
+            debug(notReshuffled);
+          }
+        }
+      }, cardsWasAmount * 50);
     },
 
     /*
