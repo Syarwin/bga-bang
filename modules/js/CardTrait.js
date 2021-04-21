@@ -123,7 +123,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         animationDuration = 1600;
       }
 
-      this.notifqueue.setSynchronousDuration(animationDuration);
+      this.notifqueue.setSynchronousDuration(100 + animationDuration);
 
       var card = this.getCard(n.args.card, true);
       card.uid = card.id + 'slide';
