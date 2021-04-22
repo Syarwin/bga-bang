@@ -42,12 +42,15 @@ abstract class Utils
     return substr($copy, -1);
   }
 
-  public static function updateAtomAfterAction($atom, $missedNeeded, $abilityOrCardUsed)
+  public static function updateAtomAfterAction($atom, $missedNeeded, $abilityOrCardUsed, $switchToNextState = null)
   {
     $atom['missedNeeded'] = $missedNeeded;
     $used = $atom['used'] ?? [];
     array_push($used, $abilityOrCardUsed);
     $atom['used'] = $used;
+    if ($switchToNextState) {
+      $atom['switchToNextState'] = $switchToNextState;
+    }
     return $atom;
   }
 }
