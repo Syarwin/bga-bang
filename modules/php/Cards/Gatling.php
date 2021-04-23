@@ -8,7 +8,7 @@ class Gatling extends \BANG\Models\BrownCard
     parent::__construct($id, $copy);
     $this->type = CARD_GATLING;
     $this->name = clienttranslate('Gatling');
-    $this->text = clienttranslate('A Bang to al other players');
+    $this->text = clienttranslate('A Bang to all other players');
     $this->symbols = [[SYMBOL_BANG, SYMBOL_OTHER]];
     $this->copies = [
       BASE_GAME => ['10H'],
