@@ -56,10 +56,6 @@ trait ReactTrait
   {
     $ctx = Globals::getStackCtx();
     $player->react($ids, $ctx);
-    var_dump('$ctx state');
-    var_dump($ctx['state']);
-    var_dump('Stack::top()state');
-    var_dump(Stack::top()['state']);
     if ($ctx['state'] == Stack::top()['state']) { // Dirty hack to support Lucky Duke situation. To be refactored
       Stack::nextState();
     }
