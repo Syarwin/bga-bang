@@ -274,9 +274,12 @@ class Player extends \BANG\Helpers\DB_Manager
     Notifications::lostLife($this, $amount);
     if ($this->hp <= 0) {
       $ctx = Globals::getStackCtx();
+      $isDuel = Players::getLivingPlayers()->count() <= 2;
+      $nextState = $isDuel ? ST_ELIMINATE : ST_REACT_BEER;
+      $atomType = $isDuel ? 'eliminate' : 'beer';
       $atom = [
-        'state' => ST_REACT_BEER,
-        'type' => 'beer',
+        'state' => $nextState,
+        'type' => $atomType,
         'src' => $ctx['src'] ?? null,
         'attacker' => $ctx['attacker'] ?? null,
         'pId' => $this->id,
