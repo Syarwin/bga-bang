@@ -284,13 +284,14 @@ class Notifications
       'player' => $player,
     ]);
     */
-
-    self::notifyAll('updatePlayers', clienttranslate('${player_name} was a ${role_name}.'), [
-      'i18n' => ['role_name'],
-      'player' => $player,
-      'role_name' => $roles[$player->getRole()],
-      'players' => Players::getUiData(0),
-    ]);
+    if ($player->getRole() != SHERIFF) {
+      self::notifyAll('updatePlayers', clienttranslate('${player_name} was a ${role_name}.'), [
+        'i18n' => ['role_name'],
+        'player' => $player,
+        'role_name' => $roles[$player->getRole()],
+        'players' => Players::getUiData(0),
+      ]);
+    }
   }
 
   public static function reshuffle()
