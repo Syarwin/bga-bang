@@ -276,14 +276,14 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       if (this[methodName] !== undefined) {
         const CARD_BEER = 9;
         const currentPlayer = this.gamedatas.players[this.gamedatas.playerTurn];
-        if (ocard.type === CARD_BEER && currentPlayer.bullets === currentPlayer.hp) {
+        if (ocard.type === CARD_BEER && currentPlayer.bullets === currentPlayer.hp && this._action === 'playCard') {
           this.confirmationDialog(
             _(
               'You have maximum amount of bullets. Drinking beer would currently have no effect. Do you still want to drink it?',
             ),
-            dojo.hitch(this, function () {
+            () => {
               this[methodName](card);
-            }),
+            },
           );
         } else {
           this[methodName](card);

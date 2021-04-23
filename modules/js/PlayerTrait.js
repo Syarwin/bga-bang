@@ -260,12 +260,9 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         this._selectedPlayer = playerId;
         const CARD_JAIL = 17;
         if (this._selectedCard.type === CARD_JAIL && playerId === this.gamedatas.playerTurn) {
-          this.confirmationDialog(
-            _('Are you sure you want to put yourself to Jail?'),
-            dojo.hitch(this, function () {
-              this.onSelectOption();
-            }),
-          );
+          this.confirmationDialog(_('Are you sure you want to put yourself to Jail?'), () => {
+            this.onSelectOption();
+          });
         } else {
           this.onSelectOption();
         }
