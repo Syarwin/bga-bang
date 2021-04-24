@@ -23,14 +23,14 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       this._selectedCard = card;
 
       // What kind of target ?
-      let OPTIONS_NONE = 0,
-        OPTION_CARD = 1,
-        OPTION_PLAYER = 2;
-      if (card.options.type == OPTIONS_NONE) {
+      let TARGET_NONE = 0,
+        TARGET_CARD = 1,
+        TARGET_PLAYER = 2;
+      if (card.options.target_type == TARGET_NONE) {
         this.onSelectOption();
-      } else if (card.options.type == OPTION_PLAYER) {
+      } else if (card.options.target_type == TARGET_PLAYER) {
         this.makePlayersSelectable(card.options.targets);
-      } else if (card.options.type == OPTION_CARD) {
+      } else if (card.options.target_type == TARGET_CARD) {
         this.makePlayersCardsSelectable(card.options.targets);
       }
     },

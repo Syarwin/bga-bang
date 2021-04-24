@@ -217,7 +217,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     },
 
     /********************
-     *** OPTION_PLAYER ***
+     *** TARGET_PLAYER ***
      ********************/
 
     /*
@@ -258,12 +258,19 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       } else {
         this._selectedOptionType = 'player';
         this._selectedPlayer = playerId;
-        this.onSelectOption();
+        const CARD_JAIL = 17;
+        if (this._selectedCard.type === CARD_JAIL && playerId === this.gamedatas.playerTurn) {
+          this.confirmationDialog(_('Are you sure you want to put yourself to Jail?'), () => {
+            this.onSelectOption();
+          });
+        } else {
+          this.onSelectOption();
+        }
       }
     },
 
     /******************
-     *** OPTION_CARD ***
+     *** TARGET_CARD ***
      ******************/
     /*
      * Make some players' cards selectable with sometimes the deck

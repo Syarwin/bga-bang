@@ -183,7 +183,7 @@ define([
 
       onClickUseAbility() {
         debug('test');
-        //let OPTIONS_NONE = 0, OPTION_CARDS = 3;
+        //let TARGET_NONE = 0, TARGET_CARDS = 3;
         let SID_KETCHUM = 9,
           JOURDONNAIS = 13;
         this._selectedCards = [];

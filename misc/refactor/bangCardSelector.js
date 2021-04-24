@@ -8,9 +8,9 @@ define([
   'dojo/on',
   g_gamethemeurl + 'modules/js/bangPlayerSelector.js',
 ], function (dojo, declare, Evented) {
-  const S_NONE = 0,
-    OPTION_CARD = 1,
-    OPTION_PLAYER = 2;
+  const TARGET_NONE = 0,
+    TARGET_CARD = 1,
+    TARGET_PLAYER = 2;
 
   return declare('bang.cardSelector', [Evented], {
     game: {},
@@ -119,7 +119,7 @@ define([
         optionArg: null,
       };
 
-      if (card.options && card.options.type == OPTION_PLAYER) {
+      if (card.options && card.options.target_type == TARGET_PLAYER) {
         let playerSelector = new bang.playerSelector({
           game: this.game,
           selectablePlayers: card.options.targets,
@@ -129,7 +129,7 @@ define([
         data.player = pId;
       }
       /*
-      else if(card.options.type == OPTION_CARD){
+      else if(card.options.target_type == TARGET_CARD){
         this.makePlayersCardsSelectable(card.options.targets);
       }
 */
