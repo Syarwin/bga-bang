@@ -15,7 +15,11 @@ trait ReactTrait
   {
     $atom = Stack::top();
     if (isset($atom['missedNeeded']) && $atom['missedNeeded'] == 0) {
-      return;
+      if (isset($atom['switchToNextState']) && $atom['switchToNextState']) {
+        Stack::nextState();
+      } else {
+        return;
+      }
     }
     $player = Players::getActive();
     $args = $this->gamestate->state()['args'];
@@ -52,7 +56,9 @@ trait ReactTrait
   {
     $ctx = Globals::getStackCtx();
     $player->react($ids, $ctx);
-    Stack::nextState();
+    if ($ctx['state'] == Stack::top()['state']) { // Dirty hack to support Lucky Duke situation. To be refactored
+      Stack::nextState();
+    }
   }
 
   /*

@@ -230,12 +230,13 @@ class Player extends \BANG\Helpers\DB_Manager
     $this->addResolveFlippedAtom($src);
   }
 
-  public function addResolveFlippedAtom($src)
+  public function addResolveFlippedAtom($src, $switchToNextState = false)
   {
     $atom = [
       'state' => ST_RESOLVE_FLIPPED,
       'pId' => $this->id,
       'src' => $src->jsonSerialize(),
+      'switchToNextState' => $switchToNextState,
     ];
     $topAtom = Stack::top();
     if (array_key_exists('missedNeeded', $topAtom)) {

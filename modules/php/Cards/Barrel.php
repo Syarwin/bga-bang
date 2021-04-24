@@ -33,7 +33,7 @@ class Barrel extends \BANG\Models\BlueCard
     Stack::resolve();
   }
 
-  public function resolveFlipped($card)
+  public function resolveFlipped($card, $player, $switchToNextState = null)
   {
     $missedNeeded = Stack::top()['missedNeeded'] ?? 1;
     Stack::shift();
@@ -46,7 +46,7 @@ class Barrel extends \BANG\Models\BlueCard
     } else {
       Notifications::tell(clienttranslate('Barrel failed'));
     }
-    $newAtom = Utils::updateAtomAfterAction(Stack::top(), $missedNeeded, $this->type);
+    $newAtom = Utils::updateAtomAfterAction(Stack::top(), $missedNeeded, $this->type, $switchToNextState);
     Stack::insertAfter($newAtom);
   }
 }

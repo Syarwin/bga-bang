@@ -2,7 +2,6 @@
 namespace BANG\Characters;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
-use BANG\Core\Stack;
 use BANG\Managers\Cards;
 
 class LuckyDuke extends \BANG\Models\Player
@@ -32,7 +31,7 @@ class LuckyDuke extends \BANG\Models\Player
     }
 
     Log::addAction('selection', ['players' => [$this->id], 'src' => $src->getName()]);
-    parent::addResolveFlippedAtom($src);
+    parent::addResolveFlippedAtom($src, true);
     $this->prepareSelection($src, [$this->getId()], true, 1, true);
   }
 
