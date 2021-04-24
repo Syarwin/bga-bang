@@ -109,4 +109,9 @@ class Globals extends \BANG\Helpers\DB_Manager
     }
     return undefined;
   }
+
+  public static function enabledStackLogger()
+  {
+    return false;
+  }
 }
