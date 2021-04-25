@@ -33,7 +33,11 @@ class CalamityJanet extends \BANG\Models\Player
     $hand = Cards::getHand($this->id);
     foreach ($hand as $card) {
       if ($card->getType() == CARD_MISSED) {
-        $res['cards'][] = ['id' => $card->getId(), 'options' => ['target_type' => TARGET_NONE]];
+        $res['cards'][] = [
+          'id' => $card->getId(),
+          'options' => ['target_type' => TARGET_NONE],
+          'amount' => 1,
+        ];
       }
     }
     return $res;
