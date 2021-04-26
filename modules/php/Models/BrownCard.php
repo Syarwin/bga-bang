@@ -45,10 +45,7 @@ class BrownCard extends AbstractCard
 
     // Cannot bang myself
     if ($this->effect['type'] == BASIC_ATTACK) {
-      // TODO : use array_diff ?
-      Utils::filter($player_ids, function ($id) use ($player) {
-        return $id != $player->getId();
-      });
+      $player_ids = array_values(array_diff($player_ids, [$player->getId()]));
     }
 
     return $player_ids;
