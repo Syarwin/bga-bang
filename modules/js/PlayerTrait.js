@@ -305,7 +305,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
     onClickCardSelectOption(card) {
       this._selectedPlayer = card.playerId;
-      this._selectedOptionType = 'inplay';
+      this._selectedOptionType = 'inPlay';
       this._selectedOptionArg = card.id;
       this.onSelectOption();
     },
