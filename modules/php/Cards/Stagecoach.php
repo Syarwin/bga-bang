@@ -11,7 +11,7 @@ class Stagecoach extends \BANG\Models\BrownCard
     $this->text = clienttranslate('Draw 2 cards.');
     $this->symbols = [[SYMBOL_DRAW, SYMBOL_DRAW]];
     $this->copies = [
-      BASE_GAME => ['9D', '9D'],
+      BASE_GAME => ['9S', '9S'],
       DODGE_CITY => [],
     ];
     $this->effect = [
