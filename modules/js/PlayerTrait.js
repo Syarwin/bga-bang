@@ -55,6 +55,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
           dojo.addClass(bullet, 'pulse');
         }
       });
+      this.gamedatas.players[n.args.player_id].hp = n.args.hp;
       dojo.attr('bang-player-' + n.args.player_id, 'data-bullets', n.args.hp);
       dojo.attr('bang-player-board-' + n.args.player_id, 'data-bullets', n.args.hp);
     },

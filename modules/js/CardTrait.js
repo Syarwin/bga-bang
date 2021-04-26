@@ -279,7 +279,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         if (ocard.type === CARD_BEER && currentPlayer.bullets === currentPlayer.hp && this._action === 'playCard') {
           this.confirmationDialog(
             _(
-              'You have maximum amount of bullets. Drinking beer would currently have no effect. Do you still want to drink it?',
+              'You have maximum amount of life points. Drinking a beer would currently have no effect. Do you still want to drink it?',
             ),
             () => {
               this[methodName](card);
