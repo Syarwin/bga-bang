@@ -2,10 +2,6 @@
 namespace BANG\States;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
-use BANG\Helpers\Utils;
-use BANG\Core\Notifications;
-use BANG\Core\Stats;
-use BANG\Core\Log;
 use BANG\Core\Globals;
 use BANG\Core\Stack;
 
@@ -88,27 +84,12 @@ else {
 
   function actReact($ids)
   {
-    $player = Players::getCurrent();
-
-    if ($player->getId() == self::getActivePlayerId()) {
-      if ($this->gamestate->state_id() == ST_REACT_BEER) {
-        $this->actReactBeer($ids);
-      } else {
-        $this->reactAux($player, $ids);
-      }
+    $atom = Stack::top();
+    $player = Players::get($atom['pId']);
+    if ($this->gamestate->state_id() == ST_REACT_BEER) {
+      $this->actReactBeer($ids);
     } else {
-      /*
-TODO : preselection stuff
-      // Re-made the same pre-choice => unselect it
-      if ($argReact['_private'][$player->getId()]['selection'] == $ids) {
-        $this->cancelPreSelection();
-      } else {
-        // Store the pre-selection and notify it
-        $argReact['_private'][$player->getId()]['selection'] = $ids;
-        Log::addAction('react', $argReact);
-        Notifications::preSelectCards($player, $ids);
-      }
-*/
+      $this->reactAux($player, $ids);
     }
   }
 
