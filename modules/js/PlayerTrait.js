@@ -276,7 +276,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     /*
      * Make some players' cards selectable with sometimes the deck
      */
-    makePlayersCardsSelectable(players) {
+    makePlayersCardsSelectable(playersIds) {
       this.removeActionButtons();
       this.gamedatas.gamestate.descriptionmyturn = _("You must choose a card in play or a player's hand");
       this.updatePageTitle();
@@ -291,8 +291,10 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       );
 
       var cards = [];
-      this._selectablePlayers = players;
-      players.forEach((playerId) => {
+      this._selectablePlayers = playersIds.filter((playerId) => {
+        return this.gamedatas.players[playerId].handCount > 0;
+      });
+      playersIds.forEach((playerId) => {
         dojo.addClass('bang-player-' + playerId, 'selectable');
         dojo.query('#bang-player-' + playerId + ' .bang-card').forEach((div) => {
           cards.push({
@@ -306,7 +308,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
     onClickCardSelectOption(card) {
       this._selectedPlayer = card.playerId;
-      this._selectedOptionType = 'inplay';
+      this._selectedOptionType = 'inPlay';
       this._selectedOptionArg = card.id;
       this.onSelectOption();
     },
