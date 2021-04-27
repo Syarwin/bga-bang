@@ -177,9 +177,6 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         if (n.args.src == 'deck') {
           // Make sure it will pass in front on discard
           dojo.style('bang-card-' + card.uid, 'zIndex', dojo.query('#discard .bang-card').length);
-          dojo.query('#bang-card-' + card.uid + ' .card-background').forEach((cardBackground) => {
-            dojo.style(cardBackground, 'visibility', 'hidden');
-          });
         }
       });
 
