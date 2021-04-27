@@ -529,7 +529,9 @@ div.bang-character-tooltip div.bang-character-tooltip-sizing {
     position: relative;
     z-index: 2; }
   .bang-player .bang-player-container .player-info .player-name {
-    text-align: center; }
+    text-align: center;
+    width: 80%;
+    margin: auto; }
   .bang-player .bang-player-container .player-info .player-bullets {
     position: absolute;
     width: 30px;
@@ -1033,7 +1035,8 @@ div.bang-card {
     left: 0;
     width: 100%;
     height: 100%;
-    backface-visibility: hidden; }
+    backface-visibility: hidden;
+    transform: rotateY(0deg); }
   div.bang-card .card-back {
     background-image: url("img/cardback.jpg");
     background-size: cover;

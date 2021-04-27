@@ -85,7 +85,7 @@ var jstpl_player = `<div class='bang-player' id='bang-player-\${id}' data-role="
 			<div class="player-character-background">
         <div class="player-character-hourglass"></div>
       </div>
-			<div class='player-name' style="color:#\${color}">\${name}</div>
+			<div class='player-name' style="color:#\${color};"><span style="background:\${background}">\${shortName}</span></div>
 			<div class='player-cards'>
 				<span class="player-hand-card"></span>
 				<span class='player-handcount'></span>

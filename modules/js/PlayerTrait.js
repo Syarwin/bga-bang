@@ -1,3 +1,7 @@
+function truncate(str, n){
+  return (str.length > n) ? str.substr(0, n-1) + '&hellip;' : str;
+}
+
 define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
   return declare('bang.playerTrait', null, {
     constructor() {
@@ -17,7 +21,9 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         player.handCount = isCurrent ? player.hand.length : player.hand;
         player.powers = '<p>' + player.powers.join('</p><p>') + '</p>';
         player.newNo = player.no;
+        player.shortName = truncate(player.name, 11);
 
+        player.background = player.color_back? ('#' + player.color_back) : 'transparent';
         dojo.place(this.format_block('jstpl_player', player), 'board');
         this.addTooltipHtml('player-character-' + player.id, this.format_block('jstpl_characterTooltip', player));
         player.inPlay.forEach((card) => this.addCard(card, 'player-inplay-' + player.id));
@@ -140,7 +146,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       var activePlayers = args.type == 'activeplayer' ? [args.active_player] : [];
       if (args.type == 'multipleactiveplayer') activePlayers = args.multiactive;
       activePlayers.forEach((playerId) => dojo.removeClass('bang-player-' + playerId, 'inactive'));
-      if (args.stateName == 'playCard') this.updateCurrentTurnPlayer(args.active_player);
+      if (args.name == 'playCard') this.updateCurrentTurnPlayer(args.active_player);
     },
 
     /*
