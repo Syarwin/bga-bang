@@ -1088,49 +1088,71 @@ div.bang-card {
   div.bang-card[data-type="4"] .card-front {
     background-position: 100% center; }
   div.bang-card[data-type="0"] .card-background {
-    background-position: 0% center; }
+    background-position-x: 0%;
+    background-position-y: 0%; }
   div.bang-card[data-type="1"] .card-background {
-    background-position: 4.7619047619% center; }
+    background-position-x: 20%;
+    background-position-y: 0%; }
   div.bang-card[data-type="2"] .card-background {
-    background-position: 9.5238095238% center; }
+    background-position-x: 40%;
+    background-position-y: 0%; }
   div.bang-card[data-type="3"] .card-background {
-    background-position: 14.2857142857% center; }
+    background-position-x: 60%;
+    background-position-y: 0%; }
   div.bang-card[data-type="4"] .card-background {
-    background-position: 19.0476190476% center; }
+    background-position-x: 80%;
+    background-position-y: 0%; }
   div.bang-card[data-type="5"] .card-background {
-    background-position: 23.8095238095% center; }
+    background-position-x: 100%;
+    background-position-y: 0%; }
   div.bang-card[data-type="6"] .card-background {
-    background-position: 28.5714285714% center; }
+    background-position-x: 0%;
+    background-position-y: 33.3333333333%; }
   div.bang-card[data-type="7"] .card-background {
-    background-position: 33.3333333333% center; }
+    background-position-x: 20%;
+    background-position-y: 33.3333333333%; }
   div.bang-card[data-type="8"] .card-background {
-    background-position: 38.0952380952% center; }
+    background-position-x: 40%;
+    background-position-y: 33.3333333333%; }
   div.bang-card[data-type="9"] .card-background {
-    background-position: 42.8571428571% center; }
+    background-position-x: 60%;
+    background-position-y: 33.3333333333%; }
   div.bang-card[data-type="10"] .card-background {
-    background-position: 47.619047619% center; }
+    background-position-x: 80%;
+    background-position-y: 33.3333333333%; }
   div.bang-card[data-type="11"] .card-background {
-    background-position: 52.380952381% center; }
+    background-position-x: 100%;
+    background-position-y: 33.3333333333%; }
   div.bang-card[data-type="12"] .card-background {
-    background-position: 57.1428571429% center; }
+    background-position-x: 0%;
+    background-position-y: 66.6666666667%; }
   div.bang-card[data-type="13"] .card-background {
-    background-position: 61.9047619048% center; }
+    background-position-x: 20%;
+    background-position-y: 66.6666666667%; }
   div.bang-card[data-type="14"] .card-background {
-    background-position: 66.6666666667% center; }
+    background-position-x: 40%;
+    background-position-y: 66.6666666667%; }
   div.bang-card[data-type="15"] .card-background {
-    background-position: 71.4285714286% center; }
+    background-position-x: 60%;
+    background-position-y: 66.6666666667%; }
   div.bang-card[data-type="16"] .card-background {
-    background-position: 76.1904761905% center; }
+    background-position-x: 80%;
+    background-position-y: 66.6666666667%; }
   div.bang-card[data-type="17"] .card-background {
-    background-position: 80.9523809524% center; }
+    background-position-x: 100%;
+    background-position-y: 66.6666666667%; }
   div.bang-card[data-type="18"] .card-background {
-    background-position: 85.7142857143% center; }
+    background-position-x: 0%;
+    background-position-y: 100%; }
   div.bang-card[data-type="19"] .card-background {
-    background-position: 90.4761904762% center; }
+    background-position-x: 20%;
+    background-position-y: 100%; }
   div.bang-card[data-type="20"] .card-background {
-    background-position: 95.2380952381% center; }
+    background-position-x: 40%;
+    background-position-y: 100%; }
   div.bang-card[data-type="21"] .card-background {
-    background-position: 100% center; }
+    background-position-x: 60%;
+    background-position-y: 100%; }
   div.bang-card .card-front {
     background-image: url("img/card_borders.png");
     background-size: cover; }
@@ -1152,7 +1174,7 @@ div.bang-card {
       width: 89.25px;
       height: 126.65px;
       background-image: url("img/card_backgrounds.jpg");
-      background-size: cover; }
+      background-size: 600% 400%; }
     div.bang-card .card-front .card-copy {
       position: absolute;
       bottom: -3px;

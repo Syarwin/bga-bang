@@ -87,7 +87,10 @@ div.bang-card {
   @each $card in $guns       { &[data-type="#{$card}"] .card-front { background-position:3 * 100% / 3 center; } }
 
   @for $i from 0 through $numberOfCards {
-    &[data-type="#{$i}"] .card-background { background-position:$i * 100% / $numberOfCards center; }
+    &[data-type="#{$i}"] .card-background {
+      background-position-x: ($i % 6) * 100% / 5;
+      background-position-y: (($i - ($i % 6)) / 6) * 100% / 3;
+    }
   }
 
   .card-front {
@@ -114,7 +117,7 @@ div.bang-card {
     	width: $cardW * 105 / 125;
     	height: $cardH * 149 / 200;
     	background-image:url("img/card_backgrounds.jpg");
-    	background-size:cover;
+    	background-size:600% 400%;
     }
 
     .card-copy {
