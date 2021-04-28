@@ -47,8 +47,10 @@ trait SelectCardTrait
   }
 
   public function stSelect() {
-    $player = Players::get(Stack::top()['pId']);
-    if ($player->getGeneralStorePref()) {
+    $atom = Stack::top();
+    $player = Players::get($atom['pId']);
+
+    if ($atom['src']['type'] == CARD_GENERAL_STORE && $player->isAutoPickGeneralStore()) {
       $cards = Cards::getSelection();
       $cardTypes = array_map(function ($card) {
         return $card->getType();

@@ -47,7 +47,7 @@ class Player extends \BANG\Helpers\DB_Manager
       $this->role = $row['player_role'];
       $this->bullets = (int) $row['player_bullets'];
       $this->score = (int) $row['player_score'];
-      $this->generalStore = (int) $row['player_general_store'];
+      $this->generalStore = (int) $row['player_autopick_general_store'];
     }
   }
 
@@ -124,9 +124,9 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     return Cards::countHand($this->id);
   }
-  public function getGeneralStorePref()
+  public function isAutoPickGeneralStore()
   {
-    return $this->generalStore == 1;
+    return $this->generalStore == GENERAL_STORE_AUTO_PICK;
   }
 
   public function getUiData($currentPlayerId = null)
@@ -738,5 +738,13 @@ class Player extends \BANG\Helpers\DB_Manager
 
   public function checkHand()
   {
+  }
+
+  public function setGeneralStorePref($value)
+  {
+    self::DB()
+      ->update(['player_autopick_general_store' => $value])
+      ->where('player_id', $this->id)
+      ->run();
   }
 }

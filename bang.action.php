@@ -125,8 +125,7 @@ class action_bang extends APP_GameAction
     self::setAjaxMode();
     $pref = self::getArg('pref', AT_posint, false);
     $value = self::getArg('value', AT_posint, false);
-    $player = (int) self::getArg('player', AT_posint, false);
-    $this->game->changePreference($player, $pref, $value);
+    $this->game->changePreference($pref, $value);
     self::ajaxResponse();
   }
 }

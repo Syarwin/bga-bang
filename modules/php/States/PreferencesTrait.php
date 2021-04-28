@@ -8,13 +8,16 @@ trait PreferencesTrait
   /*
    * changePreference: changes some preferences for specific player
    */
-  public function changePreference($playerId, $pref, $value)
+  public function changePreference($pref, $value)
   {
     switch ($pref) {
       case OPTION_GENERAL_STORE_LAST_CARD:
-        Players::setGeneralStorePref($playerId, $value);
+        $playerId = (int) self::getCurrentPId();
+        Players::get($playerId)->setGeneralStorePref($value);
         Notifications::showMessage($playerId, toTranslate('Preference is successfully updated'));
         break;
+      default:
+        throw new \BgaVisibleSystemException("Class PreferencesTrait: unexpected preference '$pref' with value '$value'");
     }
   }
 }

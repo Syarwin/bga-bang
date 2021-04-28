@@ -198,3 +198,9 @@ define('LOCATION_INPLAY', 'inPlay');
 define('LOCATION_FLIPPED', 'flipped');
 define('LOCATION_DECK', 'deck');
 define('LOCATION_DISCARD', 'discard');
+
+/*
+ * Constants for General Store preference
+ */
+define('GENERAL_STORE_MANUAL_CHOOSE', 0);
+define('GENERAL_STORE_AUTO_PICK', 1);

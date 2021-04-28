@@ -37,7 +37,7 @@ class Players extends \BANG\Helpers\DB_Manager
       'player_hp',
       'player_role',
       'player_character',
-      'player_general_store'
+      'player_autopick_general_store'
     ]);
 
     // Compute roles and shuffle them
@@ -287,14 +287,6 @@ class Players extends \BANG\Helpers\DB_Manager
   {
     $players = self::getLivingPlayersStartingWith($player);
     return self::get($players[1]);
-  }
-
-  public static function setGeneralStorePref($playerId, $value)
-  {
-    self::DB()
-    ->update(['player_general_store' => $value])
-    ->where('player_id', $playerId)
-    ->run();
   }
 
   /*
