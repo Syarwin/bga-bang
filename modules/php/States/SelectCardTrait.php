@@ -1,6 +1,7 @@
 <?php
 namespace BANG\States;
 use BANG\Core\Globals;
+use BANG\Core\Stack;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
 use BANG\Core\Log;
@@ -21,7 +22,7 @@ trait SelectCardTrait
       'i18n' => ['src'],
       'cards' => [],
       'amount' => count($selection),
-      'amountToPick' => $args['amount'],
+      'amountToPick' => $args['amountToPick'],
       'src' => $args['src_name'],
     ];
 
@@ -34,7 +35,7 @@ trait SelectCardTrait
     return $data;
   }
 
-  public function select($ids)
+  public function actSelect($ids)
   {
     $stackCtx = Globals::getStackCtx();
     $playerId = $stackCtx['pId'];
@@ -43,5 +44,19 @@ trait SelectCardTrait
       Cards::moveAllInLocation(LOCATION_SELECTION, DISCARD);
     }
     self::reactAux(Players::get($playerId), $ids);
+  }
+
+  public function stSelect() {
+    $player = Players::get(Stack::top()['pId']);
+    if ($player->getGeneralStorePref()) {
+      $cards = Cards::getSelection();
+      $cardTypes = array_map(function ($card) {
+        return $card->getType();
+      }, Cards::getSelection()->toArray());
+      $typesAmount = count(array_unique($cardTypes));
+      if ($typesAmount == 1) {
+        self::reactAux($player, $cards->first()->getId());
+      }
+    }
   }
 }

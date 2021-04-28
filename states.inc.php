@@ -99,6 +99,7 @@ $machinestates = [
     'descriptionsinglemyturn' => clienttranslate('${you} must select a card for the effect of ${src}'),
     'type' => 'activeplayer',
     'args' => 'argSelect',
+    'action' => 'stSelect',
     'possibleactions' => ['actSelect'],
   ],
 

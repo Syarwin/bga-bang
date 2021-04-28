@@ -188,3 +188,13 @@ $game_options = [
     ],
   ],
 ];
+
+$game_preferences = [
+  OPTION_GENERAL_STORE_LAST_CARD => [
+    'name' => totranslate('Get General Store cards automatically'),
+    'values' => [
+      0 => ['name' => totranslate('Always choose cards manually') ],
+      1 => ['name' => totranslate('Get card automatically if possible') ],
+    ]
+  ]
+];
