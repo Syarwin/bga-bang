@@ -742,9 +742,6 @@ class Player extends \BANG\Helpers\DB_Manager
 
   public function setGeneralStorePref($value)
   {
-    self::DB()
-      ->update(['player_autopick_general_store' => $value])
-      ->where('player_id', $this->id)
-      ->run();
+    self::DB()->update(['player_autopick_general_store' => $value], $this->id);
   }
 }

@@ -12,9 +12,8 @@ trait PreferencesTrait
   {
     switch ($pref) {
       case OPTION_GENERAL_STORE_LAST_CARD:
-        $playerId = (int) self::getCurrentPId();
-        Players::get($playerId)->setGeneralStorePref($value);
-        Notifications::showMessage($playerId, toTranslate('Preference is successfully updated'));
+        Players::getCurrent()->setGeneralStorePref($value);
+        Notifications::showMessage((int) self::getCurrentPId(), toTranslate('Preference is successfully updated'));
         break;
       default:
         throw new \BgaVisibleSystemException("Class PreferencesTrait: unexpected preference '$pref' with value '$value'");
