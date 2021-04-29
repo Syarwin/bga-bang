@@ -73,8 +73,8 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       }
     },
 
-    onClickConfirmReact() {
-      if (this._amount > 1 && this._selectedCards.length === 1) {
+    onClickConfirmReact(isBeer = false) {
+      if (!isBeer && this._amount > 1 && this._selectedCards.length === 1) {
         this.confirmationDialog(
           _(
             'Attention: a BANG! by Slab the Killer requires 2 Missed! to be cancelled. Are you sure you want to play just a single one?',
@@ -121,10 +121,10 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         if (this._selectedCards.length == 0) {
           this.addDangerActionButton('buttonConfirmPass', _('Pass and die'), () => this.onClickPass());
         } else {
-          this.addDangerActionButton('buttonConfirmReact', _('Play and die'), () => this.onClickConfirmReact());
+          this.addDangerActionButton('buttonConfirmReact', _('Play and die'), () => this.onClickConfirmReact(true));
         }
       } else {
-        this.addPrimaryActionButton('buttonConfirmReact', _('Confirm'), () => this.onClickConfirmReact());
+        this.addPrimaryActionButton('buttonConfirmReact', _('Confirm'), () => this.onClickConfirmReact(true));
       }
     },
   });
