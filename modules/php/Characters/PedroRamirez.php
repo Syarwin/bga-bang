@@ -22,19 +22,19 @@ class PedroRamirez extends \BANG\Models\Player
 
   public function drawCardsPhaseOne()
   {
-    // TODO : auto skip if discard is empty
-    Stack::insertOnTop([
-      'state' => ST_ACTIVE_DRAW_CARD,
-      'pId' => $this->id,
-    ]);
+    if (is_null(Cards::getLastDiscarded())) {
+      parent::drawCardsPhaseOne();
+    } else {
+      Stack::insertOnTop([
+        'state' => ST_ACTIVE_DRAW_CARD,
+        'pId' => $this->id,
+      ]);
+    }
   }
 
   public function argDrawCard()
   {
-    $options = [LOCATION_DECK];
-    if (!is_null(Cards::getLastDiscarded())) {
-      $options[] = LOCATION_DISCARD;
-    }
+    $options = [LOCATION_DECK, LOCATION_DISCARD];
 
     return ['options' => $options];
   }
