@@ -31,6 +31,11 @@ class Notifications
     ]);
   }
 
+  public static function showMessage($playerId, $message)
+  {
+    self::notify($playerId, 'showMessage', $message, []);
+  }
+
   /**
    * cardPlayed: called once a card is played
    */

@@ -10,6 +10,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         ['updateHand', 200],
         ['playerEliminated', 1000],
         ['updatePlayers', 100],
+        ['showMessage', 1],
       );
     },
 
@@ -80,6 +81,11 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       debug('Notif: update players', n);
       this.gamedatas.players = n.args.players;
       this.updatePlayers();
+    },
+
+    notif_showMessage(n) {
+      debug('Notif: show message', n);
+      this.showMessage(n.log, 'info');
     },
 
     /*
