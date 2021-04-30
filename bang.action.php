@@ -47,7 +47,7 @@ class action_bang extends APP_GameAction
       'player' => $player,
       'arg' => $optionArg,
     ];
-    $result = $this->game->actPlayCard($id, $args);
+    $this->game->actPlayCard($id, $args);
     self::ajaxResponse();
   }
 
@@ -56,21 +56,21 @@ class action_bang extends APP_GameAction
     self::setAjaxMode();
     $cards = explode(';', self::getArg('cards', AT_numberlist, false));
     //		$id = self::getArg( "id", AT_posint, true );
-    $result = $this->game->actReact($cards);
+    $this->game->actReact($cards);
     self::ajaxResponse();
   }
 
   public function actPass()
   {
     self::setAjaxMode();
-    $result = $this->game->actReact(null);
+    $this->game->actReact(null);
     self::ajaxResponse();
   }
 
   public function actCancelPreselection()
   {
     self::setAjaxMode();
-    $result = $this->game->actCancelPreSelection();
+    $this->game->actCancelPreSelection();
     self::ajaxResponse();
   }
 
@@ -78,7 +78,7 @@ class action_bang extends APP_GameAction
   {
     self::setAjaxMode();
     $cards = explode(';', self::getArg('cards', AT_numberlist, false));
-    $result = $this->game->select($cards);
+    $this->game->actSelect($cards);
     self::ajaxResponse();
   }
 
@@ -86,21 +86,21 @@ class action_bang extends APP_GameAction
   {
     self::setAjaxMode();
     $id = self::getArg('selected', AT_alphanum, true);
-    $result = $this->game->draw($id);
+    $this->game->draw($id);
     self::ajaxResponse();
   }
 
   public function actEndTurn()
   {
     self::setAjaxMode();
-    $result = $this->game->actEndTurn();
+    $this->game->actEndTurn();
     self::ajaxResponse();
   }
 
   public function actCancelEndTurn()
   {
     self::setAjaxMode();
-    $result = $this->game->actCancelEndTurn();
+    $this->game->actCancelEndTurn();
     self::ajaxResponse();
   }
 
@@ -108,7 +108,7 @@ class action_bang extends APP_GameAction
   {
     self::setAjaxMode();
     $cards = array_map('intval', explode(';', self::getArg('cards', AT_numberlist, false)));
-    $result = $this->game->actDiscardExcess($cards);
+    $this->game->actDiscardExcess($cards);
     self::ajaxResponse();
   }
 
@@ -116,7 +116,16 @@ class action_bang extends APP_GameAction
   {
     self::setAjaxMode();
     $cards = array_map('intval', explode(';', self::getArg('cards', AT_numberlist, false)));
-    $result = $this->game->useAbility($cards);
+    $this->game->useAbility($cards);
+    self::ajaxResponse();
+  }
+
+  public function actChangePref()
+  {
+    self::setAjaxMode();
+    $pref = self::getArg('pref', AT_posint, false);
+    $value = self::getArg('value', AT_posint, false);
+    $this->game->changePreference($pref, $value);
     self::ajaxResponse();
   }
 }

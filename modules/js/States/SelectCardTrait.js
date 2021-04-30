@@ -14,7 +14,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
       this.gamedatas.gamestate.args.cards = cards;
 
-      // Update message when only 1 card to picl
+      // Update message when only 1 card to pick
       if (args.amountToPick == 1) {
         this.gamedatas.gamestate.descriptionmyturn = this.gamedatas.gamestate.descriptionsinglemyturn;
         this.gamedatas.gamestate.description = this.gamedatas.gamestate.descriptionsingle;

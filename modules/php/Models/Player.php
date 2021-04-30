@@ -25,6 +25,7 @@ class Player extends \BANG\Helpers\DB_Manager
   protected $zombie = false;
   protected $role;
   protected $score;
+  protected $generalStore;
 
   // --character properties
   protected $character; //the int-constant
@@ -46,6 +47,7 @@ class Player extends \BANG\Helpers\DB_Manager
       $this->role = $row['player_role'];
       $this->bullets = (int) $row['player_bullets'];
       $this->score = (int) $row['player_score'];
+      $this->generalStore = (int) $row['player_autopick_general_store'];
     }
   }
 
@@ -122,9 +124,9 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     return Cards::countHand($this->id);
   }
-  public function setHp($hp)
+  public function isAutoPickGeneralStore()
   {
-    $this->hp = $hp;
+    return $this->generalStore == GENERAL_STORE_AUTO_PICK;
   }
 
   public function getUiData($currentPlayerId = null)
@@ -636,13 +638,13 @@ class Player extends \BANG\Helpers\DB_Manager
   /**
    *
    */
-  public function prepareSelection($source, $playerIds, $isPrivate, $amount, $toResolveFlipped = false)
+  public function prepareSelection($source, $playerIds, $isPrivate, $amountToPick, $toResolveFlipped = false)
   {
     $src = $source instanceof \BANG\Models\Player ? $source->getCharName() : $source->getName();
     $atom = [
       'state' => ST_SELECT_CARD,
       'src_name' => $src,
-      'amount' => $amount,
+      'amountToPick' => $amountToPick,
       'isPrivate' => $isPrivate,
       'toResolveFlipped' => $toResolveFlipped,
       'src' => $source->jsonSerialize(),
@@ -736,5 +738,10 @@ class Player extends \BANG\Helpers\DB_Manager
 
   public function checkHand()
   {
+  }
+
+  public function setGeneralStorePref($value)
+  {
+    self::DB()->update(['player_autopick_general_store' => $value], $this->id);
   }
 }

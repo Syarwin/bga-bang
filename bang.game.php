@@ -52,6 +52,7 @@ class bang extends Table
   use BANG\States\EndOfLifeTrait;
   use BANG\States\EndOfGameTrait;
   use BANG\States\TriggerAbilityTrait;
+  use BANG\States\PreferencesTrait;
 
   public static $instance = null;
   public function __construct()

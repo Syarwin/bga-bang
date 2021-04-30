@@ -37,6 +37,7 @@ class Players extends \BANG\Helpers\DB_Manager
       'player_hp',
       'player_role',
       'player_character',
+      'player_autopick_general_store'
     ]);
 
     // Compute roles and shuffle them
@@ -72,8 +73,8 @@ class Players extends \BANG\Helpers\DB_Manager
         $bullets++;
         $sheriff = $pId;
       }
-      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, $bullets, $role, $cId];
-      //      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, 1, $role, $cId];
+      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, $bullets, $role, $cId, 0];
+      //      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, 1, $role, $cId, 0];
       Cards::deal($pId, $bullets);
       $i++;
     }

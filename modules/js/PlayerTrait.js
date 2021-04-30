@@ -11,6 +11,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         ['playerEliminated', 1000],
         ['updatePlayers', 100],
         ['updatePlayersRoles', 1],
+        ['showMessage', 1],
       );
     },
 

@@ -33,6 +33,7 @@ define('OPTION_CHAR_4', 104);
 define('OPTION_CHAR_5', 105);
 define('OPTION_CHAR_6', 106);
 define('OPTION_CHAR_7', 107);
+define('OPTION_GENERAL_STORE_LAST_CARD', 108);
 
 /*
  * Game States(see sql)
@@ -197,3 +198,9 @@ define('LOCATION_INPLAY', 'inPlay');
 define('LOCATION_FLIPPED', 'flipped');
 define('LOCATION_DECK', 'deck');
 define('LOCATION_DISCARD', 'discard');
+
+/*
+ * Constants for General Store preference
+ */
+define('GENERAL_STORE_MANUAL_CHOOSE', 0);
+define('GENERAL_STORE_AUTO_PICK', 1);

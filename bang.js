@@ -318,6 +318,15 @@ define([
       notif_debug: function (notif) {
         debug(notif);
       },
+
+      onPreferenceChange(pref, newValue) {
+        const OPTION_GENERAL_STORE_LAST_CARD = 108;
+        pref = parseInt(pref);
+        if (pref === OPTION_GENERAL_STORE_LAST_CARD) {
+          data = { pref: pref, lock: false, value: newValue, player: this.player_id };
+          this.takeAction('actChangePref', data, false, false);
+        }
+      },
     },
   );
 });
