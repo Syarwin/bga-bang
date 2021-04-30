@@ -41,6 +41,6 @@ trait EndOfGameTrait
       // Clear stack and insert ST_GAME_END only
       Stack::setup([ST_GAME_END]);
     }
-
+    Notifications::revealPlayersRolesEndOfGame();
   }
 }
