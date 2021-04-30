@@ -83,6 +83,13 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       this.updatePlayers();
     },
 
+    notif_updatePlayersRoles(n) {
+      debug('Notif: update players roles', n);
+      Object.values(n.args.players).forEach((player) => {
+        this.displayRoleIfPublic(player);
+      });
+    },
+
     notif_showMessage(n) {
       debug('Notif: show message', n);
       this.showMessage(n.log, 'info');
