@@ -50,7 +50,7 @@ trait SelectCardTrait
     $atom = Stack::top();
     $player = Players::get($atom['pId']);
 
-    if ($atom['src']['type'] == CARD_GENERAL_STORE && $player->isAutoPickGeneralStore()) {
+    if (isset($atom['src']['type']) && $atom['src']['type'] == CARD_GENERAL_STORE && $player->isAutoPickGeneralStore()) {
       $cards = Cards::getSelection();
       $cardTypes = array_map(function ($card) {
         return $card->getType();
