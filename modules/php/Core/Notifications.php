@@ -276,13 +276,6 @@ class Notifications
 
   public static function playerEliminated($player)
   {
-    $roles = [
-      clienttranslate('Sheriff'),
-      clienttranslate('Deputy'),
-      clienttranslate('Outlaw'),
-      clienttranslate('Renegade'),
-    ];
-
     /*
     THIS IS HANDLED BY BGA FRAMEWORK THAT SENDS A NOTIFICATION WHEN A PLAYER GET ELIMINATED FROM THE GAME
     self::notifyAll('playerEliminated', clienttranslate('${player_name} is eliminated'), [
@@ -290,13 +283,34 @@ class Notifications
     ]);
     */
     if ($player->getRole() != SHERIFF) {
-      self::notifyAll('updatePlayers', clienttranslate('${player_name} was a ${role_name}.'), [
-        'i18n' => ['role_name'],
-        'player' => $player,
-        'role_name' => $roles[$player->getRole()],
-        'players' => Players::getUiData(0),
-      ]);
+      self::notifyAll('updatePlayers', clienttranslate('${player_name} was a ${role_name}.'),
+        self::getDataToUpdatePlayer($player));
     }
+  }
+
+  public static function revealPlayersRolesEndOfGame() {
+    $players = Players::getLivingPlayers();
+    foreach ($players as $player) {
+      self::notifyAll('updatePlayersRoles', '', self::getDataToUpdatePlayer($player));
+    }
+  }
+
+  private static function getDataToUpdatePlayer($player) {
+    return [
+      'i18n' => ['role_name'],
+      'player' => $player,
+      'role_name' => self::getRoleName($player),
+      'players' => Players::getUiData(0),
+    ];
+  }
+
+  private static function getRoleName($n) {
+    return [
+      clienttranslate('Sheriff'),
+      clienttranslate('Deputy'),
+      clienttranslate('Outlaw'),
+      clienttranslate('Renegade'),
+    ][$n->getRole()];
   }
 
   public static function reshuffle()

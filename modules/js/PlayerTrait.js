@@ -10,6 +10,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         ['updateHand', 200],
         ['playerEliminated', 1000],
         ['updatePlayers', 100],
+        ['updatePlayersRoles', 1],
         ['showMessage', 1],
       );
     },
@@ -81,6 +82,13 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       debug('Notif: update players', n);
       this.gamedatas.players = n.args.players;
       this.updatePlayers();
+    },
+
+    notif_updatePlayersRoles(n) {
+      debug('Notif: update players roles', n);
+      Object.values(n.args.players).forEach((player) => {
+        this.displayRoleIfPublic(player);
+      });
     },
 
     notif_showMessage(n) {
