@@ -62,6 +62,14 @@ define([
 
         // States that need the player to be active to be entered
         this._activeStates = ['drawCard', 'playCard', 'react', 'multiReact', 'discardExcess'];
+
+        this.default_viewport = 'width=840';
+      },
+
+      onScreenWidthChange () {
+        dojo.style('page-content', 'zoom', '');
+        dojo.style('page-title', 'zoom', '');
+        dojo.style('right-side-first-part', 'zoom', '');
       },
 
       /*
