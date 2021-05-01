@@ -275,7 +275,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       var methodName = 'onClickCard' + this._action.charAt(0).toUpperCase() + this._action.slice(1);
       if (this[methodName] !== undefined) {
         const CARD_BEER = 9;
-        const currentPlayer = this.gamedatas.players[this.gamedatas.playerTurn];
+        const currentPlayer = this.gamedatas.players[this.player_id];
         if (ocard.type === CARD_BEER && currentPlayer.bullets === currentPlayer.hp && this._action === 'playCard') {
           this.confirmationDialog(
             _(
