@@ -31,7 +31,7 @@ class Dynamite extends \BANG\Models\BlueCard
     $player->addFlipAtom($this);
   }
 
-  public function resolveFlipped($card, $player)
+  public function resolveFlipped($card, $player, $anotherAtomWillSwitchToNextState = false)
   {
     $player->discardCard($card, true); // Discard a flipped card
 
@@ -47,7 +47,9 @@ class Dynamite extends \BANG\Models\BlueCard
       Cards::equip($this->id, $next->getId());
       Notifications::moveCard($this, $player, $next);
     }
-    Stack::nextState();
+    if (!$anotherAtomWillSwitchToNextState) {
+      Stack::nextState();
+    }
   }
 
   public function play($player, $args)
