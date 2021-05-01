@@ -116,11 +116,11 @@ class Notifications
     if ($amount == 1) {
       $msg =
         $src == LOCATION_DECK
-          ? clienttranslate('${You} draw ${card_name} from ${src_name}')
-          : clienttranslate('${You} choose ${card_name} from ${src_name}');
+          ? clienttranslate('You draw ${card_name} from ${src_name}')
+          : clienttranslate('You choose ${card_name} from ${src_name}');
       $data['card'] = $cards->first();
     } else {
-      $msg = clienttranslate('${You} draw ${amount} cards from ${src_name}');
+      $msg = clienttranslate('You draw ${amount} cards from ${src_name}');
     }
     self::notify($player, 'cardsGained', $msg, $data);
 
@@ -201,8 +201,8 @@ class Notifications
     ];
 
     // Notify receiver and victim
-    self::notify($receiver, 'cardsGained', clienttranslate('${You} stole ${card_name} from ${player_name2}'), $data);
-    self::notify($victim, 'cardsGained', clienttranslate('${player_name} stole you ${card_name}'), $data);
+    self::notify($receiver, 'cardsGained', clienttranslate('You stole ${card_name} from ${player_name2}'), $data);
+    self::notify($victim, 'cardsGained', clienttranslate('${player_name} stole your ${card_name}'), $data);
 
     // Notify everyone else
     $data['ignore'] = [$receiver, $victim];
