@@ -38,15 +38,19 @@ class Barrel extends \BANG\Models\BlueCard
     $missedNeeded = Stack::top()['missedNeeded'] ?? 1;
     Stack::shift();
 
+    $success = false;
     // Draw an heart => success
     if ($card->getCopyColor() == 'H') {
       Notifications::tell(clienttranslate('Barrel was successful'));
-
+      $success = true;
       $missedNeeded -= 1;
     } else {
       Notifications::tell(clienttranslate('Barrel failed'));
     }
-    $newAtom = Utils::updateAtomAfterAction(Stack::top(), $missedNeeded, $this->type, $switchToNextState);
+    $newAtom = Utils::updateAtomAfterAction(Stack::top(), $missedNeeded, $this->type, $success && $switchToNextState);
     Stack::insertAfter($newAtom);
+    if ($switchToNextState) {
+      Stack::nextState();
+    }
   }
 }

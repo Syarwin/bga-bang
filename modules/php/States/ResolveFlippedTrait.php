@@ -27,18 +27,19 @@ trait ResolveFlippedTrait
   // TODO: We need to refactor Stack to be more smart and control its own changes
   public function stResolveFlipped()
   {
-    $atom = Stack::top();
-    $player = Players::get($atom['pId']);
-    $srcCard = $atom['src']['id'] == $atom['pId'] ? $player : Cards::get($atom['src']['id']);
+    $startingAtom = Stack::top();
+    $player = Players::get($startingAtom['pId']);
+    $srcCard = $startingAtom['src']['id'] == $startingAtom['pId'] ? $player : Cards::get($startingAtom['src']['id']);
     $flippedCards = Cards::getInLocation(LOCATION_FLIPPED);
     if ($flippedCards->count() == 1) {
-      $srcCard->resolveFlipped($flippedCards->first(), $player, $atom['switchToNextState'] ?? null);
+      $srcCard->resolveFlipped($flippedCards->first(), $player, $startingAtom['switchToNextState'] ?? null);
     } else {
       // Shouldn't ever happen. There should be just 1 card flipped
       throw new \BgaVisibleSystemException("There's {$flippedCards->count()} card in LOCATION_FLIPPED");
     }
     Cards::moveAllInLocation(LOCATION_FLIPPED, LOCATION_DISCARD);
-    if (isset($atom['switchToNextState']) && $atom['switchToNextState']) {
+    $currentAtom = Stack::top(); // It might have changed after resolveFlipped
+    if (isset($currentAtom['switchToNextState']) && $currentAtom['switchToNextState']) {
       Stack::nextState();
     }
   }
