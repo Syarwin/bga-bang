@@ -19,7 +19,6 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       this.forEachPlayer((player) => {
         let isCurrent = player.id == this.player_id;
 
-        if (player.role == null) player.role = 'hidden';
         player.handCount = isCurrent ? player.hand.length : player.hand;
         player.powers = '<p>' + player.powers.join('</p><p>') + '</p>';
         player.newNo = player.no;

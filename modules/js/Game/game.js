@@ -264,7 +264,11 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
     },
 
     forEachPlayer(callback) {
-      Object.values(this.gamedatas.players).forEach(callback);
+      var players = Object.values(this.gamedatas.players);
+      players.forEach((player) => {
+        if (player.role === null) player.role = 'hidden';
+      });
+      players.forEach(callback);
     },
 
     /*
