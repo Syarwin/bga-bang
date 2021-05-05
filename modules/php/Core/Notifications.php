@@ -181,9 +181,11 @@ class Notifications
     ]);
   }
 
-  public static function discardedCards($player, $cards, $silent = false)
+  public static function discardedCards($player, $cards, $silent = false, $cardIds = null)
   {
-    foreach ($cards as $card) {
+    $cardsIds = $cardsIds ?? $cards->getIds();
+    foreach ($cardIds as $cId) {
+      $card = $cards[$cId];
       self::discardedCard($player, $card, $silent);
     }
   }

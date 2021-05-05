@@ -83,7 +83,7 @@ trait TurnTrait
     $cards = Cards::getMany($cardIds);
     Cards::discardMany($cardIds);
     $player = Players::getActive();
-    Notifications::discardedCards($player, $cards);
+    Notifications::discardedCards($player, $cards, false, $cardIds);
     Stack::nextState();
   }
 
