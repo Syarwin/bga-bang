@@ -43,6 +43,8 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
           this.addTooltip('role-card', role['role-text'], '');
 
           dojo.place(jstpl_helpIcon, 'bang-player-board-' + player.id);
+
+          this.checkPreferencesConsistency(player.preferences);
         }
       });
 

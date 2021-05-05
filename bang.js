@@ -331,10 +331,19 @@ define([
         const OPTION_GENERAL_STORE_LAST_CARD = 108;
         pref = parseInt(pref);
         if (pref === OPTION_GENERAL_STORE_LAST_CARD) {
-          data = { pref: pref, lock: false, value: newValue, player: this.player_id };
+          data = { pref: pref, lock: false, value: newValue, player: this.player_id, silent:false };
           this.takeAction('actChangePref', data, false, false);
         }
       },
+
+      checkPreferencesConsistency(backPrefs){
+        Object.keys(backPrefs).forEach(pref => {
+          if(this.prefs[pref].value != backPrefs[pref]){
+            data = { pref: pref, lock: false, value: this.prefs[pref].value, player: this.player_id, silent:true };
+            this.takeAction('actChangePref', data, false, false);
+          }
+        })
+      }
     },
   );
 });

@@ -147,6 +147,10 @@ class Player extends \BANG\Helpers\DB_Manager
       'hand' => $current ? $this->getHand($this->id)->toArray() : $this->countHand($this->id),
       'role' => $current || $this->role == SHERIFF || $this->eliminated || Players::isEndOfGame() ? $this->role : null,
       'inPlay' => $this->getCardsInPlay()->toArray(),
+
+      'preferences' => $current? [
+        OPTION_GENERAL_STORE_LAST_CARD => $this->generalStore,
+      ] : [],
     ];
   }
 
