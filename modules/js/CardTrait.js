@@ -21,6 +21,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     slideTemporaryToDiscard(card, sourceId, duration) {
       var ocard = this.getCard(card, true);
       ocard.uid = ocard.id + 'discard';
+      ocard.extraClass = 'slide';
       this.slideTemporary('jstpl_card', ocard, 'board', sourceId, 'discard', duration || 1000, 0).then(() => {
         var div = this.addCard(card, 'discard');
         dojo.style(div, 'zIndex', dojo.query('#discard .bang-card').length);
@@ -53,6 +54,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         value: ocard.value,
         flipped: ocard.flipped === undefined || !ocard.flipped ? '' : 'flipped',
         enforceTooltip: ocard.enforceTooltip === undefined ? false : ocard.enforceTooltip,
+        extraClass:'',
       };
 
       if (this._cards[ocard.type]) {
@@ -75,6 +77,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         text: '',
         type: 'back',
         flipped: true,
+        extraClass:'',
       };
     },
 
@@ -127,6 +130,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
       var card = this.getCard(n.args.card, true);
       card.uid = card.id + 'slide';
+      card.extraClass = 'slide';
       var sourceId = this.getCardAndDestroy(n.args.card, 'player-character-' + playerId);
       if (targetPlayer) {
         var duration = target == 'inPlay' ? animationDuration : animationDuration / 2;
@@ -160,6 +164,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
       cards.forEach((card, i) => {
         card.uid = card.id + 'slide';
+        card.extraClass = 'slide';
         let sourceId =
           n.args.src == 'deck' ? 'deck' : this.getCardAndDestroy(card, 'player-character-' + n.args.player_id2);
         let targetId =

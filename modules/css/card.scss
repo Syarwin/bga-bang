@@ -28,6 +28,9 @@ div.bang-card {
     transform:rotateY(180deg);
   }
 
+  &.slide {
+    z-index:1000;
+  }
 
   &[data-type="empty"] {
     border:none !important;

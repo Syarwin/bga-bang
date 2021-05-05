@@ -115,7 +115,7 @@ var jstpl_characterTooltip = `<div class="bang-character-tooltip">
 </div>`;
 
 
-var jstpl_card = `<div class="bang-card \${flipped}" id="bang-card-\${uid}" data-id="\${id}" data-type="\${type}">
+var jstpl_card = `<div class="bang-card \${flipped} \${extraClass}" id="bang-card-\${uid}" data-id="\${id}" data-type="\${type}">
 	<div class="card-back"></div>
 	<div class="card-front">
 		<div class="card-name">\${name}</div>
