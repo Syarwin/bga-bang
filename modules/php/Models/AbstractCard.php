@@ -135,7 +135,7 @@ class AbstractCard implements \JsonSerializable
 
   public function isWeapon()
   {
-    return $this->effect['type'] == WEAPON;
+    return false;
   }
   public function getNameAndValue()
   {

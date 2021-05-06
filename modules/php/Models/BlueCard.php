@@ -11,6 +11,7 @@ class BlueCard extends AbstractCard
   {
     return BLUE;
   }
+
   public function isEquipment()
   {
     return true;
@@ -28,10 +29,6 @@ class BlueCard extends AbstractCard
 
   public function play($player, $args)
   {
-    // If the card is a weapon, make sure to discard existing weapon
-    if ($this->effect['type'] == WEAPON) {
-      $player->discardWeapon();
-    }
     Cards::equip($this->id, $player->getId());
   }
 }

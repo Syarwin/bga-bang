@@ -54,7 +54,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         value: ocard.value,
         flipped: ocard.flipped === undefined || !ocard.flipped ? '' : 'flipped',
         enforceTooltip: ocard.enforceTooltip === undefined ? false : ocard.enforceTooltip,
-        extraClass:'',
+        extraClass: '',
       };
 
       if (this._cards[ocard.type]) {
@@ -77,7 +77,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         text: '',
         type: 'back',
         flipped: true,
-        extraClass:'',
+        extraClass: '',
       };
     },
 
@@ -279,17 +279,10 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
       var methodName = 'onClickCard' + this._action.charAt(0).toUpperCase() + this._action.slice(1);
       if (this[methodName] !== undefined) {
-        const CARD_BEER = 9;
-        const currentPlayer = this.gamedatas.players[this.player_id];
-        if (ocard.type === CARD_BEER && currentPlayer.bullets === currentPlayer.hp && this._action === 'playCard') {
-          this.confirmationDialog(
-            _(
-              'You have maximum amount of life points. Drinking a beer would currently have no effect. Do you still want to drink it?',
-            ),
-            () => {
-              this[methodName](card);
-            },
-          );
+        if (this._action === 'playCard' && card.options.confirmationMsg) {
+          this.confirmationDialog(_(card.options.confirmationMsg), () => {
+            this[methodName](card);
+          });
         } else {
           this[methodName](card);
         }

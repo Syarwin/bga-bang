@@ -33,4 +33,14 @@ class Beer extends \BANG\Models\BrownCard
       parent::play($player, $args);
     }
   }
+
+  public function getPlayOptions($player)
+  {
+    $options = parent::getPlayOptions($player);
+    if ($options != null && $player->getBullets() == $player->getHp()) {
+      $msg = clienttranslate('You have maximum amount of life points. Drinking a beer would currently have no effect. Do you still want to drink it?');
+      $options['confirmationMsg'] = $msg;
+    }
+    return $options;
+  }
 }
