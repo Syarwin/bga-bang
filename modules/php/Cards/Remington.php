@@ -1,7 +1,7 @@
 <?php
 namespace BANG\Cards;
 
-class Remington extends \BANG\Models\BlueCard
+class Remington extends \BANG\Models\WeaponCard
 {
   public function __construct($id = null, $copy = '')
   {
@@ -15,7 +15,7 @@ class Remington extends \BANG\Models\BlueCard
       DODGE_CITY => [],
     ];
     $this->effect = [
-      'type' => WEAPON,
+      'type' => OTHER,
       'range' => 3,
     ];
   }

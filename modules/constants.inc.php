@@ -154,7 +154,6 @@ define('LIFE_POINT_MODIFIER', 4);
 define('RANGE_INCREASE', 5);
 define('RANGE_DECREASE', 6);
 define('DEFENSIVE', 7);
-define('WEAPON', 8);
 define('STARTOFTURN', 9);
 
 define('NONE', 0);

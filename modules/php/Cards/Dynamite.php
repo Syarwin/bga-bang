@@ -4,7 +4,6 @@ use BANG\Core\Notifications;
 use BANG\Core\Stack;
 use BANG\Managers\Cards;
 use BANG\Managers\Players;
-use BANG\Cards\Card;
 
 class Dynamite extends \BANG\Models\BlueCard
 {
