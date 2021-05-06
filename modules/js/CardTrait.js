@@ -280,7 +280,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       var methodName = 'onClickCard' + this._action.charAt(0).toUpperCase() + this._action.slice(1);
       if (this[methodName] !== undefined) {
         if (this._action === 'playCard' && card.options.confirmationMsg) {
-          this.confirmationDialog(card.options.confirmationMsg, () => {
+          this.confirmationDialog(_(card.options.confirmationMsg), () => {
             this[methodName](card);
           });
         } else {
