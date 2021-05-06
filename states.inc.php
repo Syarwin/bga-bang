@@ -128,6 +128,7 @@ $machinestates = [
     'description' => '',
     'type' => 'game',
     'action' => 'stEliminate',
+    'updateGameProgression' => true,
   ],
 
   ST_TRIGGER_ABILITY => [
@@ -136,7 +137,6 @@ $machinestates = [
     'type' => 'game',
     'action' => 'stTriggerAbility',
   ],
-
 
   ST_END_OF_TURN => [
     'name' => 'endOfTurn',

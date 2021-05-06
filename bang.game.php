@@ -114,9 +114,10 @@ class bang extends Table
    */
   public function getGameProgression()
   {
-    // TODO
-    //    return count($this->board->getPlacedPieces()) / 100;
-    return 0.3;
+    $bulletsSum = (int) self::getUniqueValueFromDb('SELECT SUM(player_bullets) FROM player');
+    $currentHpSum = (int) self::getUniqueValueFromDb('SELECT SUM(player_hp) FROM player');
+    $lostBullets = $bulletsSum - $currentHpSum;
+    return $lostBullets/$bulletsSum * 100;
   }
 
   ////////////////////////////////////
