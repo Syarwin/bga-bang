@@ -184,7 +184,7 @@ class Notifications
   public static function discardedCards($player, $cards, $silent = false, $cardIds = null)
   {
     $cardsIds = $cardsIds ?? $cards->getIds();
-    foreach ($cardIds as $cId) {
+    foreach ($cardsIds as $cId) {
       $card = $cards[$cId];
       self::discardedCard($player, $card, $silent);
     }
