@@ -27,6 +27,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         dojo.style(div, 'zIndex', dojo.query('#discard .bang-card').length);
       });
       dojo.style('bang-card-' + ocard.uid, 'zIndex', dojo.query('#discard .bang-card').length);
+      this.centerCardsIfFew();
     },
 
     getCardAndDestroy(card, val) {
@@ -104,6 +105,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         evt.stopPropagation();
         this.onClickCard(card);
       });
+      this.centerCardsIfFew();
       return div;
     },
 
