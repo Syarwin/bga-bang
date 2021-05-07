@@ -66,10 +66,27 @@ define([
         this.default_viewport = 'width=840';
       },
 
-      onScreenWidthChange () {
+      onScreenWidthChange() {
         dojo.style('page-content', 'zoom', '');
         dojo.style('page-title', 'zoom', '');
         dojo.style('right-side-first-part', 'zoom', '');
+        this.centerCardsIfFew();
+      },
+
+      centerCardsIfFew() {
+        const hand = dojo.query('#hand-cards').shift();
+        if (hand) {
+          const handWidth = hand ? hand.clientWidth : 0;
+          const cards = dojo.query('#hand-cards .bang-card');
+          const cardWidthsSum = cards.reduce(function (acc, val) {
+            return acc + val.clientWidth;
+          }, 0);
+          if (cardWidthsSum < handWidth) {
+            dojo.style(hand, 'justify-content', 'center');
+          } else {
+            dojo.style(hand, 'justify-content', 'flex-start');
+          }
+        }
       },
 
       /*
@@ -331,19 +348,19 @@ define([
         const OPTION_GENERAL_STORE_LAST_CARD = 108;
         pref = parseInt(pref);
         if (pref === OPTION_GENERAL_STORE_LAST_CARD) {
-          data = { pref: pref, lock: false, value: newValue, player: this.player_id, silent:false };
+          data = { pref: pref, lock: false, value: newValue, player: this.player_id, silent: false };
           this.takeAction('actChangePref', data, false, false);
         }
       },
 
-      checkPreferencesConsistency(backPrefs){
-        Object.keys(backPrefs).forEach(pref => {
-          if(this.prefs[pref].value != backPrefs[pref]){
-            data = { pref: pref, lock: false, value: this.prefs[pref].value, player: this.player_id, silent:true };
+      checkPreferencesConsistency(backPrefs) {
+        Object.keys(backPrefs).forEach((pref) => {
+          if (this.prefs[pref].value != backPrefs[pref]) {
+            data = { pref: pref, lock: false, value: this.prefs[pref].value, player: this.player_id, silent: true };
             this.takeAction('actChangePref', data, false, false);
           }
-        })
-      }
+        });
+      },
     },
   );
 });
