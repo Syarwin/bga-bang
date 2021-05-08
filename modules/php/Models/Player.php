@@ -281,8 +281,13 @@ class Player extends \BANG\Helpers\DB_Manager
     if ($this->hp <= 0) {
       $ctx = Globals::getStackCtx();
       $isDuel = Players::getLivingPlayers()->count() <= 2;
-      $nextState = $isDuel ? ST_ELIMINATE : ST_REACT_BEER;
-      $atomType = $isDuel ? 'eliminate' : 'beer';
+      $beersInHand = $this->getHand()
+        ->filter(function ($card) {
+          return $card->getType() == CARD_BEER;
+        })->count();
+      $isEliminateWithoutBeer = $isDuel || $beersInHand == 0;
+      $nextState = $isEliminateWithoutBeer ? ST_ELIMINATE : ST_REACT_BEER;
+      $atomType = $isEliminateWithoutBeer ? 'eliminate' : 'beer';
       $atom = [
         'state' => $nextState,
         'type' => $atomType,
