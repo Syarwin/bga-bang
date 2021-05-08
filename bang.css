@@ -390,6 +390,10 @@ div#board #table {
       left: 0;
       transform-origin: -7% 50%; }
 
+.dijitTooltip {
+  max-width: min-content;
+}
+
 div.bang-character-tooltip div.bang-character-tooltip-sizing {
   width: 226.5330188679px;
   height: 360px;
