@@ -285,9 +285,10 @@ class Player extends \BANG\Helpers\DB_Manager
         ->filter(function ($card) {
           return $card->getType() == CARD_BEER;
         })->count();
-      $isEliminateWithoutBeer = $isDuel || $beersInHand == 0;
-      $nextState = $isEliminateWithoutBeer ? ST_ELIMINATE : ST_REACT_BEER;
-      $atomType = $isEliminateWithoutBeer ? 'eliminate' : 'beer';
+      $isKetchumAndCanUseAbility = $this->character == SID_KETCHUM && $this->getHand()->count() >= 2;
+      $canDrinkBeerToLive = (!$isDuel && $beersInHand > 0) || $isKetchumAndCanUseAbility;
+      $nextState = $canDrinkBeerToLive ? ST_REACT_BEER : ST_ELIMINATE;
+      $atomType = $canDrinkBeerToLive ? 'beer' : 'eliminate';
       $atom = [
         'state' => $nextState,
         'type' => $atomType,
