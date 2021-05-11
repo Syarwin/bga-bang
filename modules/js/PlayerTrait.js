@@ -215,7 +215,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     displayPlayersHelp() {
       new customgame.modal('playersHelp', {
         autoShow: true,
-        title: _('Players informations'),
+        title: _('Players information'),
         class: 'bang_popin',
         closeIcon: 'fa-times',
         openAnimation: true,
