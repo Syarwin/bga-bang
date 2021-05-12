@@ -173,7 +173,6 @@ class Stack
   }
 
   public static function finishState() {
-    var_dump('finishState() started');
     $ctx = Stack::getCtx();
     if (!Stack::isSuspended($ctx)) {
       $ctxIndex = Stack::getAtomIndexByUid($ctx['uid']);
