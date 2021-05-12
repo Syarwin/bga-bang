@@ -12,9 +12,9 @@ trait TriggerAbilityTrait
    */
   public function stTriggerAbility()
   {
-    $atom = Stack::shift();
+    $atom = Stack::top();
     $player = Players::get($atom['pId']);
     $player->useAbility($atom);
-    Stack::resolve();
+    Stack::finishState();
   }
 }

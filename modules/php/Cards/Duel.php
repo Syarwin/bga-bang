@@ -40,8 +40,7 @@ class Duel extends \BANG\Models\BrownCard
   public function play($player, $args)
   {
     parent::play($player, $args);
-    $atom = [
-      'state' => ST_REACT,
+    $atom = Stack::newAtom(ST_REACT, [
       'type' => 'duel',
       'msgActive' => clienttranslate('${you} may react to the duel by discarding a Bang!'),
       'msgInactive' => clienttranslate('${actplayer} may react to the duel by discarding a Bang!'),
@@ -49,7 +48,7 @@ class Duel extends \BANG\Models\BrownCard
       'attacker' => $player->getId(),
       'opponent' => $args['player'],
       'pId' => $args['player'],
-    ];
+    ]);
 
     Stack::insertOnTop($atom);
   }

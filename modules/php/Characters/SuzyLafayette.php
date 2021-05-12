@@ -17,10 +17,9 @@ class SuzyLafayette extends \BANG\Models\Player
   {
     if ($this->getHand()->count() == 0) {
       Stack::insertAfterCardResolution(
-        [
+        Stack::newAtom(ST_TRIGGER_ABILITY, [
           'pId' => $this->id,
-          'state' => ST_TRIGGER_ABILITY,
-        ],
+        ]),
         false
       );
     }

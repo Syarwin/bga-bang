@@ -134,7 +134,6 @@ class bang extends Table
     if (!$player->isEliminated()) {
       $this->stEliminate();
     }
-    Stack::nextState();
     //      throw new BgaVisibleSystemException(
     //        'Zombie player ' . $activePlayer . ' stuck in unexpected state ' . $state['name']
     //      );

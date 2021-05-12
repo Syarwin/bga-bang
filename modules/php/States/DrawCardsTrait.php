@@ -11,10 +11,9 @@ trait DrawCardsTrait
    */
   public function stDrawCards()
   {
-    Stack::shift();
     $player = Players::getActive();
     $player->drawCardsPhaseOne();
-    Stack::resolve();
+    Stack::finishState();
   }
 
   /************************
@@ -33,8 +32,7 @@ trait DrawCardsTrait
 
   public function draw($selected)
   {
-    Stack::shift();
     Players::getActive()->useAbility(['selected' => $selected]);
-    Stack::resolve();
+    Stack::finishState();
   }
 }

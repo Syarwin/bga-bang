@@ -35,7 +35,7 @@ trait TurnTrait
     Globals::setPIdTurn($player->getId());
     Stack::setup([ST_DRAW_CARDS, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN]);
     $player->startOfTurn();
-    Stack::resolve();
+    Stack::finishState();
   }
 
   public function stResolveStack()
@@ -47,14 +47,16 @@ trait TurnTrait
    ****************************************/
   public function actEndTurn()
   {
-    Stack::nextState();
+    Stack::unsuspendNext(ST_PLAY_CARD);
+    Stack::finishState();
   }
 
   public function stDiscardExcess()
   {
+    Stack::unsuspendNext(ST_DISCARD_EXCESS);
     $player = Players::getActive();
     if ($player->countHand() <= $player->getHp()) {
-      Stack::nextState();
+      Stack::finishState();
     }
   }
 
@@ -71,11 +73,12 @@ trait TurnTrait
 
   public function actCancelEndTurn()
   {
-    Stack::insertOnTop([
-      'state' => ST_PLAY_CARD,
+    Stack::suspendCtx();
+    Stack::insertOnTop(Stack::newAtom(ST_PLAY_CARD, [
       'pId' => Players::getActiveId(),
-    ]);
-    Stack::resolve();
+      'suspended' => true,
+    ]));
+    Stack::finishState();
   }
 
   public function actDiscardExcess($cardIds)
@@ -84,7 +87,7 @@ trait TurnTrait
     Cards::discardMany($cardIds);
     $player = Players::getActive();
     Notifications::discardedCards($player, $cards, false, $cardIds);
-    Stack::nextState();
+    Stack::finishState();
   }
 
   /*

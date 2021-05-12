@@ -50,6 +50,6 @@ trait PlayCardTrait
 
     // TODO : not sure what this function was doing before
     //  Players::handleRemainingEffects();
-    Stack::resolve();
+    Stack::finishState();
   }
 }

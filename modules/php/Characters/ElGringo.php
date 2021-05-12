@@ -27,11 +27,10 @@ class ElGringo extends \BANG\Models\Player
 
     $attacker = Players::getCurrentTurn();
     if ($attacker->getId() != $this->id) {
-      Stack::insertAfterCardResolution([
+      Stack::insertAfterCardResolution(Stack::newAtom(ST_TRIGGER_ABILITY, [
         'pId' => $this->id,
-        'state' => ST_TRIGGER_ABILITY,
         'amount' => $amount,
-      ]);
+      ]));
     }
   }
 

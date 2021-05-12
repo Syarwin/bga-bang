@@ -46,7 +46,6 @@ class Dynamite extends \BANG\Models\BlueCard
       Cards::equip($this->id, $next->getId());
       Notifications::moveCard($this, $player, $next);
     }
-    Stack::nextState();
   }
 
   public function play($player, $args)

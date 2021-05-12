@@ -1,6 +1,6 @@
 <?php
 namespace BANG\Models;
-use BANG\Managers\Players;
+use BANG\Core\Stack;
 use BANG\Managers\Cards;
 use BANG\Core\Notifications;
 
@@ -206,6 +206,7 @@ class AbstractCard implements \JsonSerializable
   public function pass($player)
   {
     if ($this->effect['type'] == BASIC_ATTACK) {
+      Stack::unsuspendNext(ST_REACT);
       $player->loseLife();
     }
   }

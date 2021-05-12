@@ -16,7 +16,7 @@ trait EndOfLifeTrait
    */
   public function argReactBeer()
   {
-    $ctx = Globals::getStackCtx();
+    $ctx = Stack::getCtx();
     $player = Players::getActive();
 
     $hand = $player->getHand();
@@ -43,19 +43,15 @@ trait EndOfLifeTrait
 
     // If it's not enough, add a ELIMINATE node
     if ($player->getHp() <= 0) {
-      $ctx = Globals::getStackCtx();
-      $atom = [
-        'state' => ST_ELIMINATE,
+      $ctx = Stack::getCtx();
+      $atom = Stack::newAtom(ST_ELIMINATE, [
         'type' => 'eliminate',
         'src' => $ctx['src'],
         'attacker' => $ctx['attacker'],
         'pId' => $player->getId(),
-      ];
+      ]);
       Stack::insertAfterCardResolution($atom);
     }
-
-    // Resolve current beer state
-    Stack::nextState();
   }
 
   /**
@@ -63,10 +59,9 @@ trait EndOfLifeTrait
    */
   public function stEliminate()
   {
-    Stack::shift();
-    $ctx = Globals::getStackCtx();
+    $ctx = Stack::getCtx();
     $player = Players::get($ctx['pId']);
     $player->eliminate();
-    Stack::resolve();
+    Stack::finishState();
   }
 }
