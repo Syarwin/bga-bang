@@ -11,14 +11,11 @@ trait ResolveFlippedTrait
    */
   public function stFlipCard()
   {
-    var_dump('stFlipCard() started');
     $atom = Stack::top();
     $player = Players::get($atom['pId']);
     $src = Cards::get($atom['src']['id']);
     $player->flip($src);
-    var_dump('stFlipCard() gonna finish');
     Stack::finishState();
-    var_dump('stFlipCard() finished');
   }
 
   /*
@@ -26,7 +23,6 @@ trait ResolveFlippedTrait
    */
   public function stResolveFlipped()
   {
-    var_dump('stResolveFlipped() started');
     $startingAtom = Stack::top();
     $player = Players::get($startingAtom['pId']);
     $srcCard = $startingAtom['src']['id'] == $startingAtom['pId'] ? $player : Cards::get($startingAtom['src']['id']);
@@ -38,8 +34,6 @@ trait ResolveFlippedTrait
       throw new \BgaVisibleSystemException("There's {$flippedCards->count()} card in LOCATION_FLIPPED");
     }
     Cards::moveAllInLocation(LOCATION_FLIPPED, LOCATION_DISCARD);
-    var_dump('stResolveFlipped() gonna finish');
     Stack::finishState();
-    var_dump('stResolveFlipped() finished');
   }
 }

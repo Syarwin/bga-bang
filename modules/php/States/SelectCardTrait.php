@@ -48,7 +48,6 @@ trait SelectCardTrait
   }
 
   public function stSelect() {
-    var_dump('stSelect() started');
     $atom = Stack::top();
     $player = Players::get($atom['pId']);
 
@@ -63,6 +62,5 @@ trait SelectCardTrait
         Stack::finishState();
       }
     }
-    var_dump('stSelect() finished');
   }
 }
