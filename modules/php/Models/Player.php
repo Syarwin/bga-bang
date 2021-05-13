@@ -213,11 +213,10 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function addFlipAtom($src)
   {
-    $atom = [
-      'state' => ST_FLIP_CARD,
+    $atom = Stack::newAtom(ST_FLIP_CARD, [
       'pId' => $this->id,
       'src' => $src->jsonSerialize(),
-    ];
+    ]);
     $topAtom = Stack::top();
     if (array_key_exists('missedNeeded', $topAtom)) {
       $atom['missedNeeded'] = $topAtom['missedNeeded'];
@@ -236,14 +235,12 @@ class Player extends \BANG\Helpers\DB_Manager
     $this->addResolveFlippedAtom($src);
   }
 
-  public function addResolveFlippedAtom($src, $switchToNextState = false)
+  public function addResolveFlippedAtom($src)
   {
-    $atom = [
-      'state' => ST_RESOLVE_FLIPPED,
+    $atom = Stack::newAtom(ST_RESOLVE_FLIPPED, [
       'pId' => $this->id,
       'src' => $src->jsonSerialize(),
-      'switchToNextState' => $switchToNextState,
-    ];
+    ]);
     $topAtom = Stack::top();
     if (array_key_exists('missedNeeded', $topAtom)) {
       $atom['missedNeeded'] = $topAtom['missedNeeded'];
@@ -279,7 +276,7 @@ class Player extends \BANG\Helpers\DB_Manager
     $this->save();
     Notifications::lostLife($this, $amount);
     if ($this->hp <= 0) {
-      $ctx = Globals::getStackCtx();
+      $ctx = Stack::getCtx();
       $isDuel = Players::getLivingPlayers()->count() <= 2;
       $beersInHand = $this->getHand()
         ->filter(function ($card) {
@@ -289,13 +286,12 @@ class Player extends \BANG\Helpers\DB_Manager
       $canDrinkBeerToLive = (!$isDuel && $beersInHand > 0) || $isKetchumAndCanUseAbility;
       $nextState = $canDrinkBeerToLive ? ST_REACT_BEER : ST_ELIMINATE;
       $atomType = $canDrinkBeerToLive ? 'beer' : 'eliminate';
-      $atom = [
-        'state' => $nextState,
+      $atom = Stack::newAtom($nextState, [
         'type' => $atomType,
         'src' => $ctx['src'] ?? null,
         'attacker' => $ctx['attacker'] ?? null,
         'pId' => $this->id,
-      ];
+      ]);
       Stack::insertAfterCardResolution($atom);
     }
   }
@@ -581,8 +577,7 @@ class Player extends \BANG\Helpers\DB_Manager
       $src = clienttranslate('Missed used as a BANG! by Calamity Janet');
     }
 
-    return [
-      'state' => ST_REACT,
+    return Stack::newAtom(ST_REACT, [
       'type' => 'attack',
       'msgActive' => clienttranslate('${you} may react to ${src_name}'),
       'msgWaiting' => clienttranslate('${actplayer} has to react to ${src_name}. You may already select your reaction'),
@@ -591,14 +586,15 @@ class Player extends \BANG\Helpers\DB_Manager
       'src' => $card->jsonSerialize(),
       'attacker' => $this->id,
       'missedNeeded' => 1,
-    ];
+    ]);
   }
 
   /**
    * react: whenever a player react by passing or playing a card
    */
-  public function react($ids, $ctx)
+  public function react($ids)
   {
+    $ctx = Stack::getCtx();
     // If characterId is set, the player was reacting to its ability, not to a card (eg Kit Carlson)
     if (isset($ctx['src']['characterId'])) {
       $this->useAbility($ids);
@@ -614,34 +610,26 @@ class Player extends \BANG\Helpers\DB_Manager
         $ids = [$ids];
       }
 
-      $needToSwitchState = count($ids) == 2;
       foreach ($ids as $id) {
         $reactionCard = Cards::get($id);
         $card->react($reactionCard, $this);
         $this->onChangeHand();
-        $this->handleMultipleMissed($needToSwitchState);
-        $needToSwitchState = false;
+        $this->notifyAboutAnotherMissed();
       }
     }
   }
 
-  protected function handleMultipleMissed($needToSwitchState = false)
+  protected function notifyAboutAnotherMissed()
   {
     $nextAtom = Stack::getNextState();
-
-    if (isset($nextAtom['type']) && $nextAtom['type'] == 'attack' && isset($nextAtom['missedNeeded'])) {
-      if ($nextAtom['missedNeeded'] == 1) {
-        if (Stack::top()['missedNeeded'] == 2) {
-          Notifications::tell(clienttranslate('But ${player_name} needs another Missed!'), [
-            'player_name' => $this->getName(),
-          ]);
-        }
-      } elseif ($nextAtom['missedNeeded'] == 0) {
-        Stack::nextState();
-      }
-    }
-    if ($needToSwitchState) {
-      Stack::nextState();
+    $nextAtomIsAttack = isset($nextAtom['type']) && $nextAtom['type'] == 'attack';
+    $nextAtomMissedNeeded = isset($nextAtom['missedNeeded']) ? $nextAtom['missedNeeded'] : -1;
+    $topAtom = Stack::top();
+    $topAtomMissedNeeded = isset($topAtom['missedNeeded']) ? $topAtom['missedNeeded'] : -1;
+    if ($nextAtomIsAttack && $nextAtomMissedNeeded == 1 && $topAtomMissedNeeded == 2) {
+      Notifications::tell(clienttranslate('But ${player_name} needs another Missed!'), [
+        'player_name' => $this->getName(),
+      ]);
     }
   }
 
@@ -651,14 +639,13 @@ class Player extends \BANG\Helpers\DB_Manager
   public function prepareSelection($source, $playerIds, $isPrivate, $amountToPick, $toResolveFlipped = false)
   {
     $src = $source instanceof \BANG\Models\Player ? $source->getCharName() : $source->getName();
-    $atom = [
-      'state' => ST_SELECT_CARD,
+    $atom = Stack::newAtom(ST_SELECT_CARD, [
       'src_name' => $src,
       'amountToPick' => $amountToPick,
       'isPrivate' => $isPrivate,
       'toResolveFlipped' => $toResolveFlipped,
       'src' => $source->jsonSerialize(),
-    ];
+    ]);
 
     foreach (array_reverse($playerIds) as $pId) {
       $atom['pId'] = $pId;
@@ -671,7 +658,7 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function eliminate()
   {
-    $ctx = Globals::getStackCtx();
+    $ctx = Stack::getCtx();
 
     // get player who eliminated this player
     $byPlayer = Players::get($ctx['attacker']);
@@ -710,7 +697,7 @@ class Player extends \BANG\Helpers\DB_Manager
     }
 
     // Remove all related nodes that could still be there (reactions/powers)
-    Stack::removePlayerNodes($this->id);
+    Stack::removePlayerAtoms($this->id);
   }
 
   /**

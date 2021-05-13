@@ -47,13 +47,5 @@ class SidKetchum extends \BANG\Models\Player
     }
     Notifications::discardedCards($this, $cards);
     $this->gainLife();
-
-    // If we were in the end of life state and now have enough life point, proceed to next state
-    if (Stack::top()['state'] == ST_REACT_BEER && $this->hp > 0) {
-      Stack::nextState();
-    } else {
-      // Otherwise loop back in same state
-      Stack::resolve();
-    }
   }
 }

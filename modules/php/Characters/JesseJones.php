@@ -24,10 +24,9 @@ class JesseJones extends \BANG\Models\Player
   public function drawCardsPhaseOne()
   {
     // TODO : auto skip if argDrawCard only has 'deck' inside
-    Stack::insertOnTop([
-      'state' => ST_ACTIVE_DRAW_CARD,
+    Stack::insertOnTop(Stack::newAtom(ST_ACTIVE_DRAW_CARD, [
       'pId' => $this->id,
-    ]);
+    ]));
   }
 
   public function argDrawCard()

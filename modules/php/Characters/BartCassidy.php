@@ -16,11 +16,10 @@ class BartCassidy extends \BANG\Models\Player
   public function loseLife($amount = 1)
   {
     parent::loseLife($amount);
-    Stack::insertAfterCardResolution([
+    Stack::insertAfterCardResolution(Stack::newAtom(ST_TRIGGER_ABILITY, [
       'pId' => $this->id,
-      'state' => ST_TRIGGER_ABILITY,
       'amount' => $amount,
-    ]);
+    ]));
   }
 
   public function useAbility($ctx)

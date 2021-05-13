@@ -44,9 +44,11 @@ class Bang extends \BANG\Models\BrownCard
   {
     if ($card->getType() != CARD_BARREL) {
       // Barrel knows how to handle this
-      $atom = Stack::top();
-      $atom['missedNeeded'] = $atom['missedNeeded'] - 1;
-      Stack::insertAfter($atom);
+      $missedNeeded = Stack::top()['missedNeeded'] - 1;
+      if ($missedNeeded > 0) {
+        Stack::suspendCtx();
+      }
+      Stack::updateAttackAtomAfterAction($missedNeeded, $card->getType());
     }
     parent::react($card, $player);
   }

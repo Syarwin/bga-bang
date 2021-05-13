@@ -35,8 +35,8 @@ class Jourdonnais extends \BANG\Models\Player
   public function useAbility()
   {
     Cards::drawForLocation(LOCATION_FLIPPED, 1);
+    Stack::suspendCtx();
     $this->addResolveFlippedAtom($this);
-    Stack::resolve();
   }
 
   public function resolveFlipped($card)
@@ -44,7 +44,6 @@ class Jourdonnais extends \BANG\Models\Player
     Notifications::flipCard($this, $card, $this);
     $missedNeeded = Stack::top()['missedNeeded'] ?? 1;
 
-    Stack::shift();
     if ($card->getCopyColor() == 'H') {
       Notifications::tell(clienttranslate('Jourdonnais effect was successful'));
 
@@ -52,8 +51,7 @@ class Jourdonnais extends \BANG\Models\Player
     } else {
       Notifications::tell(clienttranslate('Jourdonnais effect failed'));
     }
-    $newAtom = Utils::updateAtomAfterAction(Stack::top(), $missedNeeded, $this->character);
-    Stack::insertAfter($newAtom);
-    $this->handleMultipleMissed(true);
+    Stack::updateAttackAtomAfterAction($missedNeeded, $this->character);
+    $this->notifyAboutAnotherMissed();
   }
 }

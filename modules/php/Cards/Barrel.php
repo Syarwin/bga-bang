@@ -29,28 +29,21 @@ class Barrel extends \BANG\Models\BlueCard
   public function activate($player, $args = [])
   {
     Notifications::useCard($player, $this);
+    Stack::suspendCtx();
     $player->addFlipAtom($this);
-    Stack::resolve();
   }
 
-  public function resolveFlipped($card, $player, $switchToNextState = null)
+  public function resolveFlipped($card, $player)
   {
     $missedNeeded = Stack::top()['missedNeeded'] ?? 1;
-    Stack::shift();
 
-    $success = false;
     // Draw an heart => success
     if ($card->getCopyColor() == 'H') {
       Notifications::tell(clienttranslate('Barrel was successful'));
-      $success = true;
       $missedNeeded -= 1;
     } else {
       Notifications::tell(clienttranslate('Barrel failed'));
     }
-    $newAtom = Utils::updateAtomAfterAction(Stack::top(), $missedNeeded, $this->type, $success && $switchToNextState);
-    Stack::insertAfter($newAtom);
-    if ($switchToNextState) {
-      Stack::nextState();
-    }
+    Stack::updateAttackAtomAfterAction($missedNeeded, $this->type);
   }
 }

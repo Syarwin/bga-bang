@@ -15,45 +15,43 @@ class Stack
 
   public static function setup($flow)
   {
-    $stack = [];
-    foreach ($flow as $atom) {
-      if (is_int($atom)) {
-        $stack[] = [
-          'state' => $atom,
-          'pId' => ($atom == ST_END_OF_TURN || $atom == ST_GAME_END) ? null : Globals::getPIdTurn(),
+    $ctx = Stack::getCtx();
+    if (empty($ctx)) { // Ok, that should be the very game start
+      $firstAtom = Stack::newAtom(ST_START_OF_TURN, []);
+      Stack::setCtx($firstAtom);
+      $stack = [$firstAtom];
+    } else {
+      $stack = [$ctx];
+    }
+
+    foreach ($flow as $state) {
+      if (is_int($state)) {
+        $options = [
+          'pId' => ($state == ST_END_OF_TURN || $state == ST_GAME_END) ? null : Globals::getPIdTurn(),
         ];
+        if ($state == ST_PLAY_CARD) {
+          $options['suspended'] = true;
+        }
+        $stack[] = Stack::newAtom($state, $options);
       }
     }
-    Globals::setStack($stack);
+    Stack::set($stack);
+    Stack::setCtx($stack[0]);
   }
 
-  public function top()
+  public static function top()
   {
-    $stack = Globals::getStack();
+    $stack = Stack::get();
     return reset($stack);
   }
 
-  public function getNextState()
+  public static function getNextState()
   {
-    $stack = Globals::getStack();
+    $stack = Stack::get();
     return $stack[1] ?? null;
   }
 
-  public function shift()
-  {
-    $stack = Globals::getStack();
-    $elem = array_shift($stack);
-    Globals::setStack($stack);
-    if (Globals::enabledStackLogger()) {
-      var_dump("[Stack logger] Shifted current element out of Stack:");
-      var_dump($elem);
-      var_dump("[Stack logger] After shift Stack looks like this:");
-      var_dump(Globals::getStack());
-    }
-    return $elem;
-  }
-
-  public function resolve()
+  private static function resolve()
   {
     if (Globals::getGameIsOver()) {
       return;
@@ -68,7 +66,7 @@ class Stack
       throw new \feException('Stack engine is empty !');
     }
 
-    Globals::setStackCtx($atom);
+    Stack::setCtx($atom);
 
     $pId = self::getGame()->getActivePlayerId();
     // Jump to resolveStack state to ensure we can change active pId
@@ -80,40 +78,32 @@ class Stack
     self::getGame()->gamestate->jumpToState($atom['state']);
   }
 
-  public function nextState()
+  // TODO: Try to merge with insertAfter(). After Stack refactoring they might not differ
+  public static function insertOnTop($atom)
   {
-    if (Globals::enabledStackLogger()) {
-      var_dump("[Stack logger] nextState is called");
-    }
-    self::shift();
-    self::resolve();
-  }
-
-  public function insertOnTop($atom)
-  {
-    $stack = Globals::getStack();
+    $stack = Stack::get();
     array_unshift($stack, $atom);
-    Globals::setStack($stack);
+    Stack::set($stack);
     if (Globals::enabledStackLogger()) {
       var_dump("[Stack logger] Inserted a new atom on top and now Stack looks like this:");
-      var_dump(Globals::getStack());
+      var_dump(Stack::get());
     }
     return $atom;
   }
 
-  public function insertAfter($atom, $pos = 1)
+  public static function insertAfter($atom, $pos = 1)
   {
-    $stack = Globals::getStack();
+    $stack = Stack::get();
     array_splice($stack, $pos, 0, [$atom]);
-    Globals::setStack($stack);
+    Stack::set($stack);
     if (Globals::enabledStackLogger()) {
       var_dump("[Stack logger] Inserted a new atom at position {$pos} and now Stack looks like this:");
-      var_dump(Globals::getStack());
+      var_dump(Stack::get());
     }
     return $atom;
   }
 
-  public function insertAfterCardResolution($atom, $raiseException = true)
+  public static function insertAfterCardResolution($atom, $raiseException = true)
   {
     if (Globals::enabledStackLogger()) {
       var_dump("[Stack logger] insertAfterCardResolution is called");
@@ -130,7 +120,7 @@ class Stack
     }
 
     $cId = $top['src']['id'];
-    $stack = Globals::getStack();
+    $stack = Stack::get();
     for ($i = 1; $i < count($stack); $i++) {
       if (!isset($stack[$i]['src']) || $stack[$i]['src']['id'] != $cId) {
         break;
@@ -141,23 +131,165 @@ class Stack
 
   public function isItLastElimination()
   {
-    $stack = Globals::getStack();
-    return count($stack) == 0 || $stack[0]['state'] != ST_ELIMINATE;
+    $stack = Stack::get();
+    return count($stack) == 0 || $stack[1]['state'] != ST_ELIMINATE;
   }
 
-  public function clearAllLeaveLast()
+  public static function clearAllLeaveLast()
   {
-    $stack = Globals::getStack();
-    Globals::setStack([end($stack)]);
+    $stack = Stack::get();
+    Stack::set([Stack::getCtx(), end($stack)]);
+  }
+
+  public static function removePlayerAtoms($pId)
+  {
+    $stack = Stack::get();
+    Utils::filter($stack, function ($atom) use ($pId) {
+      return !isset($atom['pId']) || $atom['pId'] != $pId || $atom['uid'] == Stack::getCtx()['uid'];
+    });
+    Stack::set($stack);
+  }
+
+  private static function get() {
+    return Globals::getStack();
+  }
+
+  private static function set($stack) {
+    Globals::setStack($stack);
+  }
+
+  public static function getCtx() {
+    return Globals::getStackCtx();
+  }
+
+  private static function setCtx($ctx) {
+    Globals::setStackCtx($ctx);
+  }
+
+  public static function newAtom($state, $atom) {
+    $atom['state'] = $state;
+    $atom = ['uid' => uniqid()] + $atom;
+    return $atom;
+  }
+
+  public static function finishState() {
+    $ctx = Stack::getCtx();
+    if (!Stack::isSuspended($ctx)) {
+      $ctxIndex = Stack::getAtomIndexByUid($ctx['uid']);
+      $currentStack = Stack::get();
+      if (Globals::enabledStackLogger()) {
+        var_dump('CTX:');
+        var_dump($ctx);
+        var_dump('INDEX:');
+        var_dump($ctxIndex);
+      }
+      array_splice($currentStack, $ctxIndex, 1);
+      if (Globals::enabledStackLogger()) {
+        var_dump('NEW STACK:');
+        var_dump($currentStack);
+      }
+      Stack::set($currentStack);
+    }
+    if (Globals::enabledStackLogger()) {
+      var_dump('FINISHED WITH FINISHING!');
+    }
     Stack::resolve();
   }
 
-  public function removePlayerNodes($pId)
+  private static function isSuspended($atom) {
+    return isset($atom['suspended']) && $atom['suspended'];
+  }
+
+  public static function suspendCtx() {
+    $ctx = Stack::getCtx();
+    if (!Stack::isSuspended($ctx)) {
+      if (Globals::enabledStackLogger()) {
+        var_dump('Ctx isSuspended is');
+        var_dump(Stack::isSuspended($ctx));
+        var_dump('BEFORE stack is');
+        var_dump(Stack::get());
+      }
+
+      $stack = Stack::get();
+      $ctxIndex = Stack::getAtomIndexByUid($ctx['uid']);
+      $atom = array_splice($stack, $ctxIndex, 1);
+      $atom[0]['suspended'] = true;
+      array_splice($stack, $ctxIndex, 0, $atom);
+      Stack::set($stack);
+      Stack::setCtx($stack[$ctxIndex]);
+
+      if (Globals::enabledStackLogger()) {
+        var_dump('AFTER stack is');
+        var_dump(Stack::get());
+      }
+    }
+  }
+
+  public static function unsuspendNext($state = null) {
+    if ($state == null) {
+      $atomIndex = Stack::getFirstSuspendedAtomIndex();
+    } else {
+      $atomIndex = Stack::getFirstAtomIndexByState($state);
+    }
+    $stack = Stack::get();
+    // TODO: Convert atom to object to avoid this splicing
+    if (Stack::isSuspended($stack[$atomIndex])) {
+      $atom = array_splice($stack, $atomIndex, 1);
+      unset($atom[0]['suspended']);
+      array_splice($stack, $atomIndex, 0, $atom);
+      Stack::set($stack);
+    }
+
+    if ($stack[$atomIndex]['uid'] == Stack::getCtx()['uid']) {
+      Stack::setCtx($stack[$atomIndex]);
+    }
+  }
+
+  private static function getAtomIndexByUid($uid) {
+    return Stack::findBy('uid', $uid);
+  }
+
+  private static function getFirstAtomIndexByState($state) {
+    return Stack::findBy('state', $state);
+  }
+
+  private static function getFirstSuspendedAtomIndex() {
+    return Stack::findBy('suspended', true);
+  }
+
+  private static function findBy($option, $value) {
+    $ctxIndex = -1;
+    $stack = Stack::get();
+    foreach ($stack as $key => $atom) {
+      if (isset($atom[$option]) && $atom[$option] == $value) {
+        $ctxIndex = $key;
+        break;
+      }
+    }
+    if ($ctxIndex == -1) {
+      debug_print_backtrace();
+      throw new \BgaVisibleSystemException('Class Stack: ctxIndex == -1. Please report this to BGA bug tracker');
+    }
+    return $ctxIndex;
+  }
+
+  public static function updateAttackAtomAfterAction($missedNeeded, $abilityOrCardUsed)
   {
-    $stack = Globals::getStack();
-    Utils::filter($stack, function ($atom) use ($pId) {
-      return !isset($atom['pId']) || $atom['pId'] != $pId;
-    });
-    Globals::setStack($stack);
+    $stack = Stack::get();
+    $atomIndex = Stack::getFirstAtomIndexByState(ST_REACT);
+    if ($missedNeeded == 0) {
+      Stack::unsuspendNext(ST_REACT);
+      if (Stack::getCtx()['state'] != ST_REACT) {
+        array_splice($stack, $atomIndex, 1);
+      }
+    } else {
+      $atom = array_splice($stack, $atomIndex, 1)[0];
+      $atom['missedNeeded'] = $missedNeeded;
+      $used = $atom['used'] ?? [];
+      array_push($used, $abilityOrCardUsed);
+      $atom['used'] = $used;
+      array_splice($stack, $atomIndex, 0, [$atom]);
+    }
+    Stack::set($stack);
   }
 }

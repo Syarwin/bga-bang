@@ -9,14 +9,6 @@ trait ReactTrait
 {
   public function stReact()
   {
-    $atom = Stack::top();
-    if (isset($atom['missedNeeded']) && $atom['missedNeeded'] == 0) {
-      if (isset($atom['switchToNextState']) && $atom['switchToNextState']) {
-        Stack::nextState();
-      } else {
-        return;
-      }
-    }
     $player = Players::getActive();
     $args = $this->gamestate->state()['args'];
     $options = $args['_private']['active'];
@@ -36,7 +28,7 @@ trait ReactTrait
 
   public function argReact()
   {
-    $ctx = Globals::getStackCtx();
+    $ctx = Stack::getCtx();
     $player = Players::getActive();
     if ($ctx['state'] == ST_REACT) {
       $card = Cards::get($ctx['src']['id']);
@@ -50,11 +42,11 @@ trait ReactTrait
 
   function reactAux($player, $ids)
   {
-    $ctx = Globals::getStackCtx();
-    $player->react($ids, $ctx);
-    if ($ctx['state'] == Stack::top()['state']) { // Dirty hack to support Lucky Duke situation. To be refactored
-      Stack::nextState();
-    }
+//    $ctx = Stack::getCtx();
+//    $player->react($ids);
+//    if ($ctx['state'] == Stack::top()['state']) { // Dirty hack to support Lucky Duke situation. To be refactored
+//      Stack::finishState();
+//    }
   }
 
   /*
@@ -89,8 +81,9 @@ else {
     if ($this->gamestate->state_id() == ST_REACT_BEER) {
       $this->actReactBeer($ids);
     } else {
-      $this->reactAux($player, $ids);
+      $player->react($ids);
     }
+    Stack::finishState();
   }
 
   /*
@@ -118,5 +111,6 @@ else {
   public function useAbility($args)
   {
     Players::getCurrent()->useAbility($args);
+    Stack::finishState();
   }
 }

@@ -75,7 +75,7 @@ class Globals extends \BANG\Helpers\DB_Manager
       // Sanity check : does the name correspond to a declared variable ?
       $name = strtolower($match[2]) . $match[3];
       if (!\array_key_exists($name, self::$variables)) {
-        throw new InvalidArgumentException("Property {$name} doesn't exist");
+        throw new \InvalidArgumentException("Property {$name} doesn't exist");
       }
 
       // Create in DB if don't exist yet
@@ -99,7 +99,7 @@ class Globals extends \BANG\Helpers\DB_Manager
         return $value;
       } elseif ($match[1] == 'inc') {
         if (self::$variables[$name] != 'int') {
-          throw new InvalidArgumentException("Trying to increase {$name} which is not an int");
+          throw new \InvalidArgumentException("Trying to increase {$name} which is not an int");
         }
 
         $getter = 'get' . $match[2] . $match[3];

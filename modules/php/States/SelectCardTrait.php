@@ -11,7 +11,7 @@ trait SelectCardTrait
 {
   public function argSelect()
   {
-    $args = Globals::getStackCtx();
+    $args = Stack::getCtx();
 
     $selection = Cards::getSelection()->toArray();
     if (empty($selection)) {
@@ -37,13 +37,14 @@ trait SelectCardTrait
 
   public function actSelect($ids)
   {
-    $stackCtx = Globals::getStackCtx();
+    $stackCtx = Stack::getCtx();
     $playerId = $stackCtx['pId'];
     if ($stackCtx['toResolveFlipped']) {
       Cards::move($ids, LOCATION_FLIPPED);
       Cards::moveAllInLocation(LOCATION_SELECTION, DISCARD);
     }
-    self::reactAux(Players::get($playerId), $ids);
+    Players::get($playerId)->react($ids);
+    Stack::finishState();
   }
 
   public function stSelect() {
@@ -57,7 +58,8 @@ trait SelectCardTrait
       }, Cards::getSelection()->toArray());
       $typesAmount = count(array_unique($cardTypes));
       if ($typesAmount == 1) {
-        self::reactAux($player, $cards->first()->getId());
+        $player->react($cards->first()->getId());
+        Stack::finishState();
       }
     }
   }
