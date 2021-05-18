@@ -191,6 +191,12 @@ class Stack
         var_dump($currentStack);
       }
       Stack::set($currentStack);
+    } else {
+      if (Globals::enabledStackLogger()) {
+        var_dump('finishState() is called however the ctx atom is suspended');
+        var_dump('CTX:');
+        var_dump($ctx);
+      }
     }
     if (Globals::enabledStackLogger()) {
       var_dump('FINISHED WITH FINISHING!');

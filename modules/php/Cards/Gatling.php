@@ -1,7 +1,9 @@
 <?php
 namespace BANG\Cards;
 
-class Gatling extends \BANG\Models\BrownCard
+use BANG\Models\BangActionCard;
+
+class Gatling extends BangActionCard
 {
   public function __construct($id = null, $copy = '')
   {

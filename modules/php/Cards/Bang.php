@@ -1,9 +1,9 @@
 <?php
 namespace BANG\Cards;
 use BANG\Core\Log;
-use BANG\Core\Stack;
+use BANG\Models\BangActionCard;
 
-class Bang extends \BANG\Models\BrownCard
+class Bang extends BangActionCard
 {
   public function __construct($params = null)
   {
@@ -38,18 +38,5 @@ class Bang extends \BANG\Models\BrownCard
   {
     Log::addAction('bangPlayed');
     return parent::play($player, $args);
-  }
-
-  public function react($card, $player)
-  {
-    if ($card->getType() != CARD_BARREL) {
-      // Barrel knows how to handle this
-      $missedNeeded = Stack::top()['missedNeeded'] - 1;
-      if ($missedNeeded > 0) {
-        Stack::suspendCtx();
-      }
-      Stack::updateAttackAtomAfterAction($missedNeeded, $card->getType());
-    }
-    parent::react($card, $player);
   }
 }
