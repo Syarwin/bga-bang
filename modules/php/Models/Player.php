@@ -296,6 +296,23 @@ class Player extends \BANG\Helpers\DB_Manager
     }
   }
 
+  /**
+   * used when player drinks a beer or Sid Ketchum uses his ability to gain life discarding 2 cards
+   */
+  public function eliminateIfOutOfHp() {
+    // If it's not enough, add a ELIMINATE node
+    if ($this->getHp() <= 0) {
+      $ctx = Stack::getCtx();
+      $atom = Stack::newAtom(ST_ELIMINATE, [
+        'type' => 'eliminate',
+        'src' => $ctx['src'],
+        'attacker' => $ctx['attacker'],
+        'pId' => $this->getId(),
+      ]);
+      Stack::insertAfterCardResolution($atom);
+    }
+  }
+
   /************************************
    ********** Advanced getters *********
    ************************************/

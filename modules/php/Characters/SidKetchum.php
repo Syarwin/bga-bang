@@ -47,5 +47,6 @@ class SidKetchum extends \BANG\Models\Player
     }
     Notifications::discardedCards($this, $cards);
     $this->gainLife();
+    $this->eliminateIfOutOfHp();
   }
 }

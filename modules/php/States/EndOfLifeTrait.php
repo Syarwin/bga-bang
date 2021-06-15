@@ -1,12 +1,7 @@
 <?php
 namespace BANG\States;
-use BANG\Managers\Players;
 use BANG\Managers\Cards;
-use BANG\Helpers\Utils;
-use BANG\Core\Notifications;
-use BANG\Core\Stats;
-use BANG\Core\Log;
-use BANG\Core\Globals;
+use BANG\Managers\Players;
 use BANG\Core\Stack;
 
 trait EndOfLifeTrait
@@ -16,10 +11,8 @@ trait EndOfLifeTrait
    */
   public function argReactBeer()
   {
-    $ctx = Stack::getCtx();
     $player = Players::getActive();
 
-    $hand = $player->getHand();
     $needed = 1 - $player->getHp();
     //  TODO auto kill if not enough cards
     //    if (count($hand) >= $needed) {
@@ -40,18 +33,7 @@ trait EndOfLifeTrait
         $player->playCard($card, []);
       }
     }
-
-    // If it's not enough, add a ELIMINATE node
-    if ($player->getHp() <= 0) {
-      $ctx = Stack::getCtx();
-      $atom = Stack::newAtom(ST_ELIMINATE, [
-        'type' => 'eliminate',
-        'src' => $ctx['src'],
-        'attacker' => $ctx['attacker'],
-        'pId' => $player->getId(),
-      ]);
-      Stack::insertAfterCardResolution($atom);
-    }
+    $player->eliminateIfOutOfHp();
   }
 
   /**
