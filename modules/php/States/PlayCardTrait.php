@@ -1,5 +1,6 @@
 <?php
 namespace BANG\States;
+use BANG\Core\Notifications;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
 use BANG\Helpers\Utils;
@@ -27,6 +28,14 @@ trait PlayCardTrait
 		}
 		if($newstate != null) $this->gamestate->nextState($newState);
     */
+    $player = Players::getActive();
+    if ($player->getHand()->count() == 0) {
+      Notifications::tell(clienttranslate('${player_name} does not have any cards in hand and thus ends their turn'), [
+        'player_name' => $player->getName(),
+      ]);
+      Stack::unsuspendNext(ST_PLAY_CARD);
+      Stack::finishState();
+    }
   }
 
   public function actPlayCard($cardId, $args)

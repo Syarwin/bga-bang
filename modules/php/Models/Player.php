@@ -691,7 +691,7 @@ class Player extends \BANG\Helpers\DB_Manager
         $byPlayer->drawCards(3);
       }
       if ($this->getRole() == DEPUTY && $byPlayer->getRole() == SHERIFF) {
-        Notifications::tell('The Sheriff eliminated his Deputy and must discard all cards', []);
+        Notifications::tell(clienttranslate('The Sheriff eliminated his Deputy and must discard all cards'), []);
         $byPlayer->discardAllCards();
       }
     }

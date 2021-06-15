@@ -57,9 +57,9 @@ class Jail extends \BANG\Models\BlueCard
     $player->discardCard($this, true); // Discard Jail itself
 
     if ($card->getCopyColor() == 'H') {
-      Notifications::tell('${player_name} can make his turn', $args);
+      Notifications::tell(clienttranslate('${player_name} can make his turn'), $args);
     } else {
-      Notifications::tell('${player_name} is skipped', $args);
+      Notifications::tell(clienttranslate('${player_name} is skipped'), $args);
       Stack::clearAllLeaveLast();
     }
   }
