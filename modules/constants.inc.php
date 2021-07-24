@@ -26,13 +26,6 @@ define('ST_GAME_END', 99);
 /*
  * Game options
  */
-define('OPTION_CHAR_1', 101);
-define('OPTION_CHAR_2', 102);
-define('OPTION_CHAR_3', 103);
-define('OPTION_CHAR_4', 104);
-define('OPTION_CHAR_5', 105);
-define('OPTION_CHAR_6', 106);
-define('OPTION_CHAR_7', 107);
 define('OPTION_GENERAL_STORE_LAST_CARD', 108);
 
 /*

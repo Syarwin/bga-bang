@@ -26,7 +26,6 @@ class Players extends \BANG\Helpers\DB_Manager
   {
     // Create players
     $gameInfos = self::getGame()->getGameinfos();
-    $colors = $gameInfos['player_colors'];
     $query = self::DB()->multipleInsert([
       'player_id',
       'player_color',
@@ -46,16 +45,6 @@ class Players extends \BANG\Helpers\DB_Manager
 
     // TODO : remove before beta
     $characters = self::getAvailableCharacters($expansions);
-    $forcedCharacters = [
-      $options[OPTION_CHAR_1],
-      $options[OPTION_CHAR_2],
-      $options[OPTION_CHAR_3],
-      $options[OPTION_CHAR_4],
-      $options[OPTION_CHAR_5],
-      $options[OPTION_CHAR_6],
-      $options[OPTION_CHAR_7],
-    ];
-    $characters = array_diff($characters, $forcedCharacters);
     shuffle($characters);
 
     $values = [];
@@ -63,11 +52,10 @@ class Players extends \BANG\Helpers\DB_Manager
     foreach ($players as $pId => $player) {
       $color = $gameInfos['player_colors'][$i];
       $canal = $player['player_canal'];
-      $name = $player['player_name'];
       $avatar = addslashes($player['player_avatar']);
       $name = addslashes($player['player_name']);
       $role = $roles[$i];
-      $cId = $forcedCharacters[$i] == 100 ? array_pop($characters) : $forcedCharacters[$i];
+      $cId = array_pop($characters);
       $bullets = self::getCharacterBullets($cId);
       if ($role == SHERIFF) {
         $bullets++;
@@ -80,21 +68,6 @@ class Players extends \BANG\Helpers\DB_Manager
     }
     $query->values($values);
     self::getGame()->reattributeColorsBasedOnPreferences($players, $gameInfos['player_colors']);
-    self::getGame()->reloadPlayersBasicInfos();
-
-    // TODO : remove
-    if (false) {
-      Cards::dealCard($sheriff, CARD_GATLING);
-      /*
-      Cards::dealCard($sheriff, CARD_BARREL);
-      Cards::dealCard($sheriff, CARD_INDIANS, 1);
-       Cards::dealCard($sheriff, CARD_INDIANS);
-       Cards::dealCard($sheriff, CARD_REMINGTON);
-       Cards::dealCard($sheriff, CARD_DYNAMITE);
-     	//Cards::dealCard($sheriff, CARD_JAIL, 1);
-       */
-    }
-
     self::getGame()->reloadPlayersBasicInfos();
     return $sheriff;
   }
