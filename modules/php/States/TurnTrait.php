@@ -21,6 +21,12 @@ trait TurnTrait
       return;
     }
 
+    if(Players::get($pId)->isZombie()){
+      Players::get($pId)->eliminate();
+      $this->stNextPlayer();
+      return;
+    }
+
     self::giveExtraTime($pId);
     $this->gamestate->nextState('start');
   }

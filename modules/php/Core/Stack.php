@@ -53,9 +53,11 @@ class Stack
 
   private static function resolve()
   {
+    /*
     if (Globals::getGameIsOver()) {
       return;
     }
+    */
 
     $atom = self::top();
     if (Globals::enabledStackLogger()) {
@@ -132,7 +134,7 @@ class Stack
   public function isItLastElimination()
   {
     $stack = Stack::get();
-    return count($stack) == 0 || $stack[1]['state'] != ST_ELIMINATE;
+    return count($stack) <= 1 || $stack[1]['state'] != ST_ELIMINATE;
   }
 
   public static function clearAllLeaveLast()

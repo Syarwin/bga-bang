@@ -35,8 +35,10 @@ trait EndOfGameTrait
     }
 
     if(count($living) == 1){
+      // THAT'S NO LONGER TRUE IF A ZOMBIE PLAYER IS HERE
       // Framework will auto transition to GAME_END, put this flag to ensure we do not transition (error otherwise)
       Globals::setGameIsOver(true);
+      Stack::setup([ST_GAME_END]);
     } else {
       // Clear stack and insert ST_GAME_END only
       Stack::setup([ST_GAME_END]);

@@ -148,9 +148,11 @@ class Player extends \BANG\Helpers\DB_Manager
       'role' => $current || $this->role == SHERIFF || $this->eliminated || Players::isEndOfGame() ? $this->role : null,
       'inPlay' => $this->getCardsInPlay()->toArray(),
 
-      'preferences' => $current? [
-        OPTION_GENERAL_STORE_LAST_CARD => $this->generalStore,
-      ] : [],
+      'preferences' => $current
+        ? [
+          OPTION_GENERAL_STORE_LAST_CARD => $this->generalStore,
+        ]
+        : [],
     ];
   }
 
@@ -167,9 +169,8 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function save()
   {
-    $eliminated = $this->eliminated ? 1 : 0;
     self::DbQuery(
-      "UPDATE player SET `player_eliminated` = $eliminated, `player_hp` = {$this->hp} WHERE `player_id` = {$this->id}"
+      "UPDATE player SET `player_hp` = {$this->hp} WHERE `player_id` = {$this->id}"
     );
   }
 
@@ -281,7 +282,8 @@ class Player extends \BANG\Helpers\DB_Manager
       $beersInHand = $this->getHand()
         ->filter(function ($card) {
           return $card->getType() == CARD_BEER;
-        })->count();
+        })
+        ->count();
       $isKetchumAndCanUseAbility = $this->character == SID_KETCHUM && $this->getHand()->count() >= 2;
       $canDrinkBeerToLive = (!$isDuel && $beersInHand > 0) || $isKetchumAndCanUseAbility;
       $nextState = $canDrinkBeerToLive ? ST_REACT_BEER : ST_ELIMINATE;
@@ -299,7 +301,8 @@ class Player extends \BANG\Helpers\DB_Manager
   /**
    * used when player drinks a beer or Sid Ketchum uses his ability to gain life discarding 2 cards
    */
-  public function eliminateIfOutOfHp() {
+  public function eliminateIfOutOfHp()
+  {
     // If it's not enough, add a ELIMINATE node
     if ($this->getHp() <= 0) {
       $ctx = Stack::getCtx();
@@ -678,9 +681,9 @@ class Player extends \BANG\Helpers\DB_Manager
     $ctx = Stack::getCtx();
 
     // get player who eliminated this player
-    $byPlayer = Players::get($ctx['attacker']);
-    if ($byPlayer->id == $this->id) {
-      $byPlayer = null;
+    $byPlayer = null;
+    if(array_key_exists('attacker', $ctx) && $ctx['attacker'] != $this->id){
+      $byPlayer = Players::get($ctx['attacker']);
     }
 
     // Let characters react => mostly Vulture
@@ -691,6 +694,7 @@ class Player extends \BANG\Helpers\DB_Manager
     // Discard cards
     $this->discardAllCards();
     // Eliminate player
+    bang::get()->eliminatePlayer($this->id);
     $this->eliminated = true;
     $this->save();
 
@@ -699,7 +703,6 @@ class Player extends \BANG\Helpers\DB_Manager
       bang::get()->setWinners();
     }
 
-    bang::get()->eliminatePlayer($this->id);
     Notifications::playerEliminated($this);
 
     //handle rewards/penalties
