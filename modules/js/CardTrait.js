@@ -25,6 +25,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       this.slideTemporary('jstpl_card', ocard, 'board', sourceId, 'discard', duration || 1000, 0).then(() => {
         var div = this.addCard(card, 'discard');
         dojo.style(div, 'zIndex', dojo.query('#discard .bang-card').length);
+        dojo.style(div, 'transformStyle', "initial");
       });
       dojo.style('bang-card-' + ocard.uid, 'zIndex', dojo.query('#discard .bang-card').length);
       this.centerCardsIfFew();

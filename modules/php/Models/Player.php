@@ -169,9 +169,7 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function save()
   {
-    self::DbQuery(
-      "UPDATE player SET `player_hp` = {$this->hp} WHERE `player_id` = {$this->id}"
-    );
+    self::DbQuery("UPDATE player SET `player_hp` = {$this->hp} WHERE `player_id` = {$this->id}");
   }
 
   /*************************
@@ -362,7 +360,7 @@ class Player extends \BANG\Helpers\DB_Manager
       }
     }
     foreach ($this->getCardsInPlay() as $card) {
-      if ($card->getEffect()['type'] == RANGE_INCREASE) {
+      if (($card->getEffect()['type'] ?? null) == RANGE_INCREASE) {
         $dist++;
       }
     }
@@ -682,7 +680,7 @@ class Player extends \BANG\Helpers\DB_Manager
 
     // get player who eliminated this player
     $byPlayer = null;
-    if(array_key_exists('attacker', $ctx) && $ctx['attacker'] != $this->id){
+    if (array_key_exists('attacker', $ctx) && $ctx['attacker'] != $this->id) {
       $byPlayer = Players::get($ctx['attacker']);
     }
 

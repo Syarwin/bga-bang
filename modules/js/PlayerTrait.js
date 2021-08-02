@@ -44,7 +44,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
           dojo.place(jstpl_helpIcon, 'bang-player-board-' + player.id);
 
-          this.checkPreferencesConsistency(player.preferences);
+          if (!this.isReadOnly()) this.checkPreferencesConsistency(player.preferences);
         }
       });
 
@@ -145,6 +145,8 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
      * Highlight with border whose turn it is (might be different to who is active)
      */
     updateCurrentTurnPlayer(playerId) {
+      if (playerId == 0) return;
+
       dojo.query('div.bang-player-container').style('border', '1px solid rgba(50,50,50,0.8)');
       dojo
         .query('#bang-player-' + playerId + ' .bang-player-container')

@@ -50,7 +50,7 @@ trait PlayCardTrait
       return $card['id'];
     }, $this->argPlayCards()['_private']['active']['cards']);
     if (!in_array($cardId, $cardIds)) {
-      throw new BgaVisibleSystemException('You cannot play this card!');
+      throw new \BgaVisibleSystemException('You cannot play this card!');
     }
 
     $card = Cards::get($cardId);

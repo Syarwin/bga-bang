@@ -39,7 +39,7 @@ trait SelectCardTrait
   {
     $stackCtx = Stack::getCtx();
     $playerId = $stackCtx['pId'];
-    if ($stackCtx['toResolveFlipped']) {
+    if ($stackCtx['toResolveFlipped'] ?? false) {
       Cards::move($ids, LOCATION_FLIPPED);
       Cards::moveAllInLocation(LOCATION_SELECTION, DISCARD);
     }

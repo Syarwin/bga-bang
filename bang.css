@@ -303,6 +303,9 @@ div#board {
       grid-row-start: 6;
       justify-content: flex-start; } }
 
+.dijitTooltip {
+  max-width: min-content; }
+
 div#board div#hand {
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 5px;
@@ -389,10 +392,6 @@ div#board #table {
       top: 0;
       left: 0;
       transform-origin: -7% 50%; }
-
-.dijitTooltip {
-  max-width: min-content;
-}
 
 div.bang-character-tooltip div.bang-character-tooltip-sizing {
   width: 226.5330188679px;
@@ -1042,8 +1041,7 @@ div.bang-card {
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    transform: rotateY(0deg); }
+    -webkit-backface-visibility: hidden; }
   div.bang-card .card-back {
     background-image: url("img/cardback.jpg");
     background-size: cover;

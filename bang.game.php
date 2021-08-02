@@ -132,7 +132,14 @@ class bang extends Table
   {
     $player = Players::get($activePlayer);
     if (!$player->isEliminated()) {
-      $this->stEliminate();
+      $atom = Stack::newAtom(ST_ELIMINATE, [
+        'type' => 'eliminate',
+        'src' => '',
+        'attacker' => $activePlayer,
+        'pId' => $activePlayer,
+      ]);
+      Stack::insertOnTop($atom);
+      Stack::resolve();
     }
     //      throw new BgaVisibleSystemException(
     //        'Zombie player ' . $activePlayer . ' stuck in unexpected state ' . $state['name']

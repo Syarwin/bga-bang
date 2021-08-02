@@ -51,7 +51,7 @@ class Stack
     return $stack[1] ?? null;
   }
 
-  private static function resolve()
+  public static function resolve()
   {
     /*
     if (Globals::getGameIsOver()) {
