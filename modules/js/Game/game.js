@@ -34,7 +34,7 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
       dojo.place("<div id='customActions' style='display:inline-block'></div>", $('generalactions'), 'after');
 
       this.setupNotifications();
-      this.initPreferencesObserver();
+      this.initPreferences();
     },
 
     /*
@@ -209,40 +209,207 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
       dojo.empty('customActions');
     },
 
-    /*
-     * Preference polyfill
-     */
-    setPreferenceValue(number, newValue) {
-      var optionSel = 'option[value="' + newValue + '"]';
-      dojo
-        .query(
-          '#preference_control_' + number + ' > ' + optionSel + ', #preference_fontrol_' + number + ' > ' + optionSel,
-        )
-        .attr('selected', true);
-      var select = $('preference_control_' + number);
-      if (dojo.isIE) {
-        select.fireEvent('onchange');
-      } else {
-        var event = document.createEvent('HTMLEvents');
-        event.initEvent('change', false, true);
-        select.dispatchEvent(event);
-      }
-    },
-
     initPreferencesObserver() {
-      dojo.query('.preference_control').on('change', (e) => {
-        var match = e.target.id.match(/^preference_control_(\d+)$/);
+      dojo.query('.preference_control, preference_fontrol').on('change', (e) => {
+        var match = e.target.id.match(/^preference_[fc]ontrol_(\d+)$/);
         if (!match) {
           return;
         }
         var pref = match[1];
         var newValue = e.target.value;
         this.prefs[pref].value = newValue;
+        if (this.prefs[pref].attribute) {
+          $('ebd-body').setAttribute('data-' + this.prefs[pref].attribute, newValue);
+        }
+
+        $('preference_control_' + pref).value = newValue;
+        if ($('preference_fontrol_' + pref)) {
+          $('preference_fontrol_' + pref).value = newValue;
+        }
+        data = { pref: pref, lock: false, value: newValue, player: this.player_id };
+        this.takeAction('actChangePref', data, false, false);
         this.onPreferenceChange(pref, newValue);
       });
     },
 
     onPreferenceChange(pref, newValue) {},
+
+    // Init preferences will setup local preference and put the corresponding data-attribute on overall-content div if needed
+    initPreferences() {
+      // Attach data attribute on overall-content div
+      Object.keys(this.prefs).forEach((prefId) => {
+        let pref = this.prefs[prefId];
+        if (pref.attribute) {
+          $('ebd-body').setAttribute('data-' + pref.attribute, pref.value);
+        }
+      });
+
+      if (!this.isReadOnly() && this.gamedatas.localPrefs) {
+        // Create local prefs
+        Object.keys(this.gamedatas.localPrefs).forEach((prefId) => {
+          let pref = this.gamedatas.localPrefs[prefId];
+          pref.id = prefId;
+          let selectedValue = this.gamedatas.prefs.find((pref2) => pref2.pref_id == pref.id).pref_value;
+          pref.value = selectedValue;
+          this.prefs[prefId] = pref;
+          this.place('tplPreferenceSelect', pref, 'local-prefs-container');
+        });
+      }
+
+      this.initPreferencesObserver();
+      this.setupSettings();
+    },
+
+    tplPreferenceSelect(pref) {
+      let values = Object.keys(pref.values)
+        .map(
+          (val) =>
+            `<option value='${val}' ${pref.value == val ? 'selected="selected"' : ''}>${_(
+              pref.values[val].name,
+            )}</option>`,
+        )
+        .join('');
+
+      return `
+        <div class="preference_choice">
+          <div class="row-data row-data-large">
+            <div class="row-label">${_(pref.name)}</div>
+            <div class="row-value">
+              <select id="preference_control_${
+                pref.id
+              }" class="preference_control game_local_preference_control" style="display: block;">
+                ${values}
+              </select>
+            </div>
+          </div>
+        </div>
+      `;
+    },
+
+    onPreferenceChange(pref, newValue) {},
+
+    /************************
+     ******* SETTINGS ********
+     ************************/
+    setupSettings() {
+      dojo.connect($('show-settings'), 'onclick', () => this.toggleSettings());
+      this.addTooltip('show-settings', '', _('Display some settings about the game.'));
+      let container = $('settings-controls-container');
+
+      this.settings = {};
+      Object.keys(this._settingsConfig).forEach((settingName) => {
+        let config = this._settingsConfig[settingName];
+        if (config.type == 'pref') {
+          // Pref type => just move the user pref around
+          dojo.place($('preference_control_' + config.prefId).parentNode.parentNode, container);
+          return;
+        }
+
+        let suffix = settingName.charAt(0).toUpperCase() + settingName.slice(1);
+        let value = this.getConfig(this.game_name + suffix, config.default);
+        this.settings[settingName] = value;
+
+        // Slider type => create DOM and initialize noUiSlider
+        if (config.type == 'slider') {
+          this.place('tplSettingSlider', { desc: config.name, id: settingName }, container);
+          config.sliderConfig.start = [value];
+          noUiSlider.create($('setting-' + settingName), config.sliderConfig);
+          $('setting-' + settingName).noUiSlider.on('slide', (arg) =>
+            this.changeSetting(settingName, parseInt(arg[0])),
+          );
+        }
+        // Select type => create a select
+        else if (config.type == 'select') {
+          config.id = settingName;
+          this.place('tplSettingSelect', config, container);
+          $('setting-' + settingName).addEventListener('change', () => {
+            let newValue = $('setting-' + settingName).value;
+            this.changeSetting(settingName, newValue);
+            if (config.attribute) {
+              $('ebd-body').setAttribute('data-' + config.attribute, newValue);
+            }
+          });
+        }
+
+        if (config.attribute) {
+          $('ebd-body').setAttribute('data-' + config.attribute, value);
+        }
+        this.changeSetting(settingName, value);
+      });
+    },
+
+    changeSetting(settingName, value) {
+      let suffix = settingName.charAt(0).toUpperCase() + settingName.slice(1);
+      this.settings[settingName] = value;
+      localStorage.setItem(this.game_name + suffix, value);
+      let methodName = 'onChange' + suffix + 'Setting';
+      if (this[methodName]) {
+        this[methodName](value);
+      }
+    },
+
+    tplSettingSlider(setting) {
+      return `
+      <div class='row-data row-data-large'>
+        <div class='row-label'>${setting.desc}</div>
+        <div class='row-value'>
+          <div id="setting-${setting.id}"></div>
+        </div>
+      </div>
+      `;
+    },
+
+    tplSettingSelect(setting) {
+      let values = Object.keys(setting.values)
+        .map(
+          (val) =>
+            `<option value='${val}' ${this.settings[setting.id] == val ? 'selected="selected"' : ''}>${_(
+              setting.values[val],
+            )}</option>`,
+        )
+        .join('');
+
+      return `
+        <div class="preference_choice">
+          <div class="row-data row-data-large">
+            <div class="row-label">${_(setting.name)}</div>
+            <div class="row-value">
+              <select id="setting-${
+                setting.id
+              }" class="preference_control game_local_preference_control" style="display: block;">
+                ${values}
+              </select>
+            </div>
+          </div>
+        </div>
+      `;
+    },
+
+    updatePlayerOrdering() {
+      this.inherited(arguments);
+      dojo.place('player_board_config', 'player_boards', 'first');
+    },
+
+    toggleSettings() {
+      dojo.toggleClass('settings-controls-container', 'settingsControlsHidden');
+
+      // Hacking BGA framework
+      if (dojo.hasClass('ebd-body', 'mobile_version')) {
+        dojo.query('.player-board').forEach((elt) => {
+          if (elt.style.height != 'auto') {
+            dojo.style(elt, 'min-height', elt.style.height);
+            elt.style.height = 'auto';
+          }
+        });
+      }
+    },
+
+    /* Helper to work with local storage */
+    getConfig(value, v) {
+      return localStorage.getItem(value) == null || isNaN(localStorage.getItem(value))
+        ? v
+        : localStorage.getItem(value);
+    },
 
     /*
      * slideTemporary: a wrapper of slideTemporaryObject using Promise
@@ -321,7 +488,7 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
 
           if (args.card_name && args.card) {
             args.card_name =
-              args.card_name +
+              _(args.card_name) +
               ' (' +
               args.card.value +
               '<span class="card-copy-color" data-color="' +
@@ -334,6 +501,20 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
       }
 
       return this.inherited(arguments);
+    },
+
+    place(tplMethodName, object, container) {
+      if ($(container) == null) {
+        console.error('Trying to place on null container', container);
+        return;
+      }
+
+      if (this[tplMethodName] == undefined) {
+        console.error('Trying to create a non-existing template', tplMethodName);
+        return;
+      }
+
+      return dojo.place(this[tplMethodName](object), container);
     },
   });
 });

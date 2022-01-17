@@ -37,25 +37,14 @@ class Players extends \BANG\Helpers\DB_Manager
       'player_hp',
       'player_role',
       'player_character',
-      'player_autopick_general_store'
+      'player_autopick_general_store',
     ]);
 
     // Compute roles and shuffle them
     $roles = array_slice([SHERIFF, OUTLAW, OUTLAW, RENEGADE, DEPUTY, OUTLAW, DEPUTY], 0, count($players));
     shuffle($roles);
 
-    // TODO : remove before beta
     $characters = self::getAvailableCharacters($expansions);
-    $forcedCharacters = [
-      $options[OPTION_CHAR_1],
-      $options[OPTION_CHAR_2],
-      $options[OPTION_CHAR_3],
-      $options[OPTION_CHAR_4],
-      $options[OPTION_CHAR_5],
-      $options[OPTION_CHAR_6],
-      $options[OPTION_CHAR_7],
-    ];
-    $characters = array_diff($characters, $forcedCharacters);
     shuffle($characters);
 
     $values = [];
@@ -67,7 +56,7 @@ class Players extends \BANG\Helpers\DB_Manager
       $avatar = addslashes($player['player_avatar']);
       $name = addslashes($player['player_name']);
       $role = $roles[$i];
-      $cId = $forcedCharacters[$i] == 100 ? array_pop($characters) : $forcedCharacters[$i];
+      $cId = array_pop($characters);
       $bullets = self::getCharacterBullets($cId);
       if ($role == SHERIFF) {
         $bullets++;
@@ -76,6 +65,7 @@ class Players extends \BANG\Helpers\DB_Manager
       $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, $bullets, $role, $cId, 0];
       //      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, 1, $role, $cId, 0];
       Cards::deal($pId, $bullets);
+      bang::get()->initStat('player', 'role', $role, $pId);
       $i++;
     }
     $query->values($values);
@@ -84,8 +74,8 @@ class Players extends \BANG\Helpers\DB_Manager
 
     // TODO : remove
     if (false) {
-      Cards::dealCard($sheriff, CARD_GATLING);
       /*
+      Cards::dealCard($sheriff, CARD_GATLING);
       Cards::dealCard($sheriff, CARD_BARREL);
       Cards::dealCard($sheriff, CARD_INDIANS, 1);
        Cards::dealCard($sheriff, CARD_INDIANS);
@@ -149,6 +139,17 @@ class Players extends \BANG\Helpers\DB_Manager
   {
     return self::getAll()->map(function ($player) use ($pId) {
       return $player->getUiData($pId);
+    });
+  }
+
+  public function getDistances()
+  {
+    return self::getLivingPlayers()->map(function ($player) {
+      $dist = [];
+      foreach (self::getLivingPlayers() as $pId => $player2) {
+        $dist[$pId] = $player2->getDistanceTo($player);
+      }
+      return $dist;
     });
   }
 
@@ -224,10 +225,6 @@ class Players extends \BANG\Helpers\DB_Manager
     return self::countRoles([SHERIFF]) == 0 || self::countRoles([OUTLAW, RENEGADE]) == 0;
   }
 
-  /*******************
-   ******* TODO *******
-   ********************/
-
   public static function getSherrifId()
   {
     return self::getUniqueValueFromDB('SELECT player_id FROM player WHERE player_role = ' . SHERIFF);
@@ -271,6 +268,15 @@ class Players extends \BANG\Helpers\DB_Manager
     );
   }
 
+  public static function getNext($player)
+  {
+    $players = self::getLivingPlayersStartingWith($player);
+    return self::get($players[1]);
+  }
+
+  /***********************
+   ******* SETTERS *******
+   ***********************/
   public static function setWinners($winningRoles)
   {
     self::DB()
@@ -282,50 +288,4 @@ class Players extends \BANG\Helpers\DB_Manager
       ->whereNotIn('player_role', $winningRoles)
       ->run();
   }
-
-  public static function getNext($player)
-  {
-    $players = self::getLivingPlayersStartingWith($player);
-    return self::get($players[1]);
-  }
-
-  /*
-	public static function getPlayersForElimination($asObjects=false) {
-		$ids = self::getObjectListFromDB("SELECT player_id FROM player WHERE player_eliminated = 0 AND player_hp <= 0", true);
-		return $asObjects ? self::getPlayers($ids) : $ids;
-	}
-
-
-	public static function getEliminatedPlayers() {
-		$sql = "SELECT player_id id, player_role role FROM player WHERE player_eliminated = 1";
-		return array_values(self::getObjectListFromDB($sql));
-	}
-
-
-
-	public static function preparePlayerActivation($playerIds) {
-		self::DbQuery("UPDATE player SET player_activate=0");
-		$ids = implode(",", $playerIds);
-		self::DbQuery("UPDATE player SET player_activate=1 WHERE player_id in($ids)");
-	}
-
-	public static function getPlayersForActivation() {
-		return self::getObjectListFromDB("SELECT player_id FROM player WHERE player_activate=1", true);
-	}
-
-	public static function getTarget() {
-		return Log::getLastAction("target")["target"];
-	}
-
-
-
-	public static function handleRemainingEffects() {
-		$actions = Log::getActionsAfter("registerAbility", "handledAbilities");
-		foreach($actions as $ability) {
-			$player = self::getPlayer($ability['id']);
-			if(!$player->isEliminated()) $player->useAbility($ability['args']);
-		}
-		Log::addAction("handledAbilities");
-	}
-  */
 }

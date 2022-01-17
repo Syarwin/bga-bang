@@ -1,17 +1,17 @@
 div.bang-character-tooltip {
   div.bang-character-tooltip-sizing {
-    width:2*$cardW * 113 / 106;
-    height:2*($cardH + 10px);
-    display:flex;
+    width: 2 * $cardW * 113 / 106;
+    height: 2 * ($cardH + 10px);
+    display: flex;
     justify-content: center;
     align-items: center;
 
     div.player-info {
-      transform:scale(2);
+      transform: scale(2);
     }
 
     .player-character-background {
-      margin-bottom:0px;
+      margin-bottom: 0px;
     }
 
     .player-character-powers {
@@ -19,30 +19,32 @@ div.bang-character-tooltip {
       font-family: 'Palatino Linotype';
       text-align: center;
       font-size: 6px;
-      p { margin:0; }
+      p {
+        margin: 0;
+      }
     }
   }
 }
 
 .player-info {
-  position:relative;
-  min-width:$cardW / 106 * 113;
-  width:$cardW / 106 * 113;
-  height:$cardH + 10px;
-  background-image:url("img/card_borders.png");
-  background-size:cover;
-  border-left:1px solid $darkgray;
+  position: relative;
+  min-width: $cardW / 106 * 113;
+  width: $cardW / 106 * 113;
+  height: $cardH + 10px;
+  background-image: url('img/card_borders.png');
+  background-size: cover;
+  border-left: 1px solid $darkgray;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
 
   .player-character-name {
-    font-family: "Perdido";
+    font-family: 'Perdido';
     width: 100%;
-    max-height:22px;
+    max-height: 22px;
     margin-top: 11px;
     text-align: center;
     font-size: 15px;
-    transform: scale(0.8,1.3);
+    transform: scale(0.8, 1.3);
     transform-origin: top center;
   }
 
@@ -50,68 +52,79 @@ div.bang-character-tooltip {
     width: $cardW / 106 * 90;
     height: $cardH * 105 / 200;
     margin: 5px auto;
-    background-image:url("img/card_characters.jpg");
-    background-size:cover;
-    display:flex;
+    background-image: url('img/card_characters.jpg');
+    background-size: cover;
+    display: flex;
     justify-content: center;
     align-items: center;
 
     .player-character-hourglass {
       width: 50%;
       height: 50%;
-      background-image: url("img/hourglass.gif");
+      background-image: url('img/hourglass.gif');
       background-size: 75%;
-      background-color: rgba(255,255,255,0.7);
+      background-color: rgba(255, 255, 255, 0.7);
       background-position: center center;
       border-radius: 10px;
       background-repeat: no-repeat;
     }
   }
   @for $i from 0 through $numberOfCharacters {
-    &[data-character="#{$i}"] .player-character-background { background-position:$i * 100% / $numberOfCharacters center; }
+    &[data-character='#{$i}'] .player-character-background {
+      background-position: $i * 100% / $numberOfCharacters center;
+    }
   }
 }
 
 .bang-player.inactive .player-character-background .player-character-hourglass {
-  display:none;
+  display: none;
 }
-
 
 .bang-player {
   &.turn .bang-player-container {
-//      border:1px solid blue;
+    //      border:1px solid blue;
   }
 
   &.inactive {
-    opacity:0.6;
+    opacity: 0.6;
   }
 
   &.selectable {
-    opacity:1;
+    opacity: 1;
     .player-info {
-      cursor:pointer;
-      animation:borderBlink 0.9s infinite;
+      cursor: pointer;
+      animation: borderBlink 0.9s infinite;
       &:hover {
-        animation:none;
-        border:1px solid red;
+        animation: none;
+        border: 1px solid red;
       }
 
       @keyframes borderBlink {
-        0%   { border: 1px dashed white; }
-        49%  { border: 1px dashed white; }
-        50%  { border: 1px dashed black; }
-        99% { border: 1px dashed black; }
-        100% { border: 1px dashed white; }
+        0% {
+          border: 1px dashed white;
+        }
+        49% {
+          border: 1px dashed white;
+        }
+        50% {
+          border: 1px dashed black;
+        }
+        99% {
+          border: 1px dashed black;
+        }
+        100% {
+          border: 1px dashed white;
+        }
       }
     }
   }
 
   &.eliminated {
     .bang-player-container {
-      width:$cardW / 106 * 113;
+      width: $cardW / 106 * 113;
 
       .player-character-background {
-        background-image:url("img/tombstone.svg");
+        background-image: url('img/tombstone.svg');
         background-size: 80%;
         background-position: center center;
         background-repeat: no-repeat;
@@ -119,68 +132,104 @@ div.bang-character-tooltip {
     }
   }
 
-
   .bang-player-container {
-    width:96%;
-    height:$cardH + 10px;
-    background-color:$transparentWhite;
-    border-radius:5px;
-    border:1px solid $darkgray;
+    width: 96%;
+    height: $cardH + 10px;
+    background-color: $transparentWhite;
+    border-radius: 5px;
+    border: 1px solid $darkgray;
     box-shadow: 1px 1px 5px $darkgray;
-    display:flex;
-    transition:width 1s;
+    display: flex;
+    transition: width 1s;
 
     .player-inplay {
       width: calc(100% - #{$cardW / 106 * 113 + 2});
-      flex-grow:1;
-      display:flex;
-      flex-flow:row;
+      flex-grow: 1;
+      display: flex;
+      flex-flow: row;
       overflow-x: auto;
       overflow-y: hidden;
       height: 107%;
-      position:relative;
-      z-index:2;
+      position: relative;
+      z-index: 2;
     }
 
     .player-info {
       .player-name {
         text-align: center;
-        width:80%;
-        margin:auto;
+        width: 80%;
+        margin: auto;
       }
 
       .player-bullets {
-        position:absolute;
-        width:30px;
-        right:-8px;
-        top:40px;
+        position: absolute;
+        width: 30px;
+        right: -8px;
+        top: 40px;
       }
 
       .player-star {
-        display:none;
-        position:absolute;
+        display: none;
+        position: absolute;
         top: -17px;
         right: -18px;
         width: 34px;
         height: 34px;
-        background-image:url("img/role-icons.png");
-        background-size:cover;
+        background-image: url('img/role-icons.png');
+        background-size: cover;
         background-position: 66.66% 0%;
+      }
+
+      .player-distance {
+        position: absolute;
+        right: -8px;
+        bottom: -12px;
+        width: 28px;
+        height: 28px;
+        background: white;
+        border-radius: 50%;
+        border: 1px solid black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        font-size: 21px;
+
+        &.current {
+          display: none;
+        }
+
+        &::before {
+          content: '';
+          display: block;
+          position: absolute;
+          width: 34px;
+          height: 34px;
+          left: -3px;
+          top: -3px;
+          background-image: linear-gradient(#717171 1px, transparent 1px),
+            linear-gradient(to right, #717171 1px, transparent 1px);
+          background-size: 40px 40px;
+          background-position: 17px 17px;
+        }
       }
     }
   }
-  &[data-role="0"] .bang-player-container .player-info .player-star { display:block; }
+  &[data-role='0'] .bang-player-container .player-info .player-star {
+    display: block;
+  }
 }
 
-.bang-player, .bang-player-board {
+.bang-player,
+.bang-player-board {
   .player-cards {
     text-align: center;
 
     .player-hand-card {
-      display:inline-block;
+      display: inline-block;
       width: 22px;
       height: 22px;
-      background-image: url("img/cards.svg");
+      background-image: url('img/cards.svg');
       background-size: contain;
       background-repeat: no-repeat;
       vertical-align: bottom;
@@ -190,11 +239,11 @@ div.bang-character-tooltip {
   .bullet {
     width: 35px;
     height: 13px;
-    background-image: url("img/bullet.png");
+    background-image: url('img/bullet.png');
     background-size: cover;
     margin: 1px 0px;
     transform: rotate(13deg);
-    background-position:0% 100%;
+    background-position: 0% 100%;
 
     &.pulse {
       animation-duration: 1.8s;
@@ -203,29 +252,38 @@ div.bang-character-tooltip {
     }
   }
 
-
   @for $maxBullets from 1 through 6 {
     @for $n from $maxBullets + 1 through 6 {
-      &[data-max-bullets="#{$maxBullets}"] .player-bullets .bullet:nth-child(#{$n}) { display:none; }
+      &[data-max-bullets='#{$maxBullets}'] .player-bullets .bullet:nth-child(#{$n}) {
+        display: none;
+      }
     }
   }
 
   @for $bullets from 0 through 6 {
     @for $n from 0 through $bullets {
-      &[data-bullets="#{$bullets}"] .bullet:nth-child(#{$n}) { background-position:0 0; }
+      &[data-bullets='#{$bullets}'] .bullet:nth-child(#{$n}) {
+        background-position: 0 0;
+      }
     }
   }
 
   @for $i from 0 through 20 {
-    &[data-hand="#{$i}"] .player-cards .player-handcount::before { content:"x #{$i}"; }
+    &[data-hand='#{$i}'] .player-cards .player-handcount::before {
+      content: 'x #{$i}';
+    }
   }
   @for $i from 0 through 7 {
-    &[data-bullets="#{$i}"] .player-cards .player-maxhand::before { content:"#{$i}"; }
+    &[data-bullets='#{$i}'] .player-cards .player-maxhand::before {
+      content: '#{$i}';
+    }
   }
 
   @for $i from 0 through 7 {
     @for $j from $i + 1 through 20 {
-      &[data-bullets="#{$i}"][data-hand="#{$j}"] .player-cards { color:red; }
+      &[data-bullets='#{$i}'][data-hand='#{$j}'] .player-cards {
+        color: red;
+      }
     }
   }
 }

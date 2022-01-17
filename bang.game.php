@@ -103,6 +103,7 @@ class bang extends Table
       'discard' => Cards::getLastDiscarded(),
       'playerTurn' => Globals::getPIdTurn(),
       'cards' => Cards::getUIData(),
+      'distances' => Players::getDistances(),
     ];
     return $result;
   }

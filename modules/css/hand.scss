@@ -1,59 +1,62 @@
-div#board {
-  div#hand {
-  	background-color:$transparentWhite;
-  	border-radius: 5px;
-  	grid-row:1;
-  	grid-column:1 / span 12;
-  	height:$cardH + 15px;
-  	display:flex;
-  	flex-flow:row;
-    width:100%;
+div#hand {
+  order: 1;
+  #ebd-body[data-hand='1'] & {
+    order: 2;
+  }
 
-    div#role-container {
-      flex-grow:0;
-      width:$cardW + 15px;
-      display:flex;
-      align-items: center;
-      justify-content: center;
-      background-color:white;
+  background-color: $transparentWhite;
+  border-radius: 5px;
+  grid-row: 1;
+  grid-column: 1 / span 12;
+  height: $cardH + 15px;
+  display: flex;
+  flex-flow: row;
+  width: 100%;
 
-      div#role-card {
-        height:$cardH;
-        width:$cardW - 1px;
-        background-image:url("img/roles.png");
-        background-size:cover;
+  div#role-container {
+    flex-grow: 0;
+    width: $cardW + 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
 
-        div#role-name {
-          width:100%;
-          font-family: "Perdido";
-          font-size:23px;
-          text-align: center;
-          margin-top:9px;
-        }
+    div#role-card {
+      height: $cardH;
+      width: $cardW - 1px;
+      background-image: url('img/roles.png');
+      background-size: cover;
 
-        div#role-text {
-          font-family:'Palatino Linotype';
-          font-style:italic;
-          font-size:9px;
-          margin-top:98px;
-          text-align:center;
-        }
+      div#role-name {
+        width: 100%;
+        font-family: 'Perdido';
+        font-size: 23px;
+        text-align: center;
+        margin-top: 9px;
       }
 
-      @for $i from 0 through 3 {
-        &[data-role="#{$i}"] div#role-card { background-position:$i*100%/3 center; }
+      div#role-text {
+        font-family: 'Palatino Linotype';
+        font-style: italic;
+        font-size: 9px;
+        margin-top: 98px;
+        text-align: center;
       }
     }
 
-
-
-    div#hand-cards {
-      flex-grow:1;
-      display:flex;
-    	flex-flow:row;
-      align-items: center;
-      justify-content: flex-start;
-      overflow-x:auto;
+    @for $i from 0 through 3 {
+      &[data-role='#{$i}'] div#role-card {
+        background-position: $i * 100%/3 center;
+      }
     }
+  }
+
+  div#hand-cards {
+    flex-grow: 1;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-x: auto;
   }
 }

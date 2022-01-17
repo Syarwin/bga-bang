@@ -32,13 +32,21 @@
   50% {
     transform: rotate(13deg) scale(1.1);
     box-shadow: 0 0 0 10px transparent; } }
+div#board-wrapper {
+  display: flex;
+  flex-flow: column; }
+
 div#board {
+  order: 2;
   width: 100%;
   min-height: 800px;
   position: relative;
   display: grid;
   grid-template-columns: repeat(12, 1fr); }
-  div#board .bang-player, div#board #table {
+  #ebd-body[data-hand='1'] div#board {
+    order: 1; }
+  div#board .bang-player,
+  div#board #table {
     display: flex;
     flex-flow: row;
     align-items: center;
@@ -47,258 +55,258 @@ div#board {
     max-height: 190px;
     min-height: 190px;
     max-width: 100%; }
-  div#board[data-players="2"] #table {
+  div#board[data-players='2'] #table {
     grid-column-start: 5;
     grid-row-start: 4; }
-  div#board[data-players="2"] .bang-player[data-no="0"] {
+  div#board[data-players='2'] .bang-player[data-no='0'] {
     grid-column-start: 5;
     grid-row-start: 2;
     justify-content: center; }
-  div#board[data-players="2"] .bang-player[data-no="1"] {
+  div#board[data-players='2'] .bang-player[data-no='1'] {
     grid-column-start: 5;
     grid-row-start: 6;
     justify-content: center; }
-  div#board[data-players="3"] #table {
+  div#board[data-players='3'] #table {
     grid-column-start: 5;
     grid-row-start: 4; }
-  div#board[data-players="3"] .bang-player[data-no="0"] {
+  div#board[data-players='3'] .bang-player[data-no='0'] {
     grid-column-start: 5;
     grid-row-start: 2;
     justify-content: center; }
-  div#board[data-players="3"] .bang-player[data-no="1"] {
+  div#board[data-players='3'] .bang-player[data-no='1'] {
     grid-column-start: 9;
     grid-row-start: 4;
     justify-content: flex-start; }
-  div#board[data-players="3"] .bang-player[data-no="2"] {
+  div#board[data-players='3'] .bang-player[data-no='2'] {
     grid-column-start: 1;
     grid-row-start: 4;
     justify-content: flex-end; }
-  div#board[data-players="4"] #table {
+  div#board[data-players='4'] #table {
     grid-column-start: 5;
     grid-row-start: 4; }
-  div#board[data-players="4"] .bang-player[data-no="0"] {
+  div#board[data-players='4'] .bang-player[data-no='0'] {
     grid-column-start: 5;
     grid-row-start: 2;
     justify-content: center; }
-  div#board[data-players="4"] .bang-player[data-no="1"] {
+  div#board[data-players='4'] .bang-player[data-no='1'] {
     grid-column-start: 9;
     grid-row-start: 4;
     justify-content: flex-start; }
-  div#board[data-players="4"] .bang-player[data-no="2"] {
+  div#board[data-players='4'] .bang-player[data-no='2'] {
     grid-column-start: 5;
     grid-row-start: 6;
     justify-content: center; }
-  div#board[data-players="4"] .bang-player[data-no="3"] {
+  div#board[data-players='4'] .bang-player[data-no='3'] {
     grid-column-start: 1;
     grid-row-start: 4;
     justify-content: flex-end; }
-  div#board[data-players="5"] #table {
+  div#board[data-players='5'] #table {
     grid-column-start: 5;
     grid-row-start: 4; }
-  div#board[data-players="5"] .bang-player[data-no="0"] {
+  div#board[data-players='5'] .bang-player[data-no='0'] {
     grid-column-start: 5;
     grid-row-start: 2;
     justify-content: center; }
-  div#board[data-players="5"] .bang-player[data-no="1"] {
+  div#board[data-players='5'] .bang-player[data-no='1'] {
     grid-column-start: 9;
     grid-row-start: 4;
     justify-content: flex-start; }
-  div#board[data-players="5"] .bang-player[data-no="2"] {
+  div#board[data-players='5'] .bang-player[data-no='2'] {
     grid-column-start: 7;
     grid-row-start: 6;
     justify-content: center; }
-  div#board[data-players="5"] .bang-player[data-no="3"] {
+  div#board[data-players='5'] .bang-player[data-no='3'] {
     grid-column-start: 3;
     grid-row-start: 6;
     justify-content: center; }
-  div#board[data-players="5"] .bang-player[data-no="4"] {
+  div#board[data-players='5'] .bang-player[data-no='4'] {
     grid-column-start: 1;
     grid-row-start: 4;
     justify-content: flex-end; }
-  div#board[data-players="6"] #table {
+  div#board[data-players='6'] #table {
     grid-column-start: 5;
     grid-row-start: 5; }
-  div#board[data-players="6"] .bang-player[data-no="0"] {
+  div#board[data-players='6'] .bang-player[data-no='0'] {
     grid-column-start: 5;
     grid-row-start: 2;
     justify-content: center; }
-  div#board[data-players="6"] .bang-player[data-no="1"] {
+  div#board[data-players='6'] .bang-player[data-no='1'] {
     grid-column-start: 9;
     grid-row-start: 4;
     justify-content: flex-start; }
-  div#board[data-players="6"] .bang-player[data-no="2"] {
+  div#board[data-players='6'] .bang-player[data-no='2'] {
     grid-column-start: 9;
     grid-row-start: 6;
     justify-content: flex-start; }
-  div#board[data-players="6"] .bang-player[data-no="3"] {
+  div#board[data-players='6'] .bang-player[data-no='3'] {
     grid-column-start: 5;
     grid-row-start: 8;
     justify-content: center; }
-  div#board[data-players="6"] .bang-player[data-no="4"] {
+  div#board[data-players='6'] .bang-player[data-no='4'] {
     grid-column-start: 1;
     grid-row-start: 6;
     justify-content: flex-end; }
-  div#board[data-players="6"] .bang-player[data-no="5"] {
+  div#board[data-players='6'] .bang-player[data-no='5'] {
     grid-column-start: 1;
     grid-row-start: 4;
     justify-content: flex-end; }
-  div#board[data-players="7"] #table {
+  div#board[data-players='7'] #table {
     grid-column-start: 5;
     grid-row-start: 5; }
-  div#board[data-players="7"] .bang-player[data-no="0"] {
+  div#board[data-players='7'] .bang-player[data-no='0'] {
     grid-column-start: 5;
     grid-row-start: 2;
     justify-content: center; }
-  div#board[data-players="7"] .bang-player[data-no="1"] {
+  div#board[data-players='7'] .bang-player[data-no='1'] {
     grid-column-start: 9;
     grid-row-start: 4;
     justify-content: flex-start; }
-  div#board[data-players="7"] .bang-player[data-no="2"] {
+  div#board[data-players='7'] .bang-player[data-no='2'] {
     grid-column-start: 9;
     grid-row-start: 6;
     justify-content: flex-start; }
-  div#board[data-players="7"] .bang-player[data-no="3"] {
+  div#board[data-players='7'] .bang-player[data-no='3'] {
     grid-column-start: 7;
     grid-row-start: 8;
     justify-content: center; }
-  div#board[data-players="7"] .bang-player[data-no="4"] {
+  div#board[data-players='7'] .bang-player[data-no='4'] {
     grid-column-start: 3;
     grid-row-start: 8;
     justify-content: center; }
-  div#board[data-players="7"] .bang-player[data-no="5"] {
+  div#board[data-players='7'] .bang-player[data-no='5'] {
     grid-column-start: 1;
     grid-row-start: 6;
     justify-content: flex-end; }
-  div#board[data-players="7"] .bang-player[data-no="6"] {
+  div#board[data-players='7'] .bang-player[data-no='6'] {
     grid-column-start: 1;
     grid-row-start: 4;
     justify-content: flex-end; }
   @media (max-width: 1300px) {
     div#board .bang-player {
       grid-column-end: span 6; }
-    div#board[data-players="2"] #table {
+    div#board[data-players='2'] #table {
       grid-column-start: 8;
       grid-row-start: 2; }
-    div#board[data-players="2"] .bang-player[data-no="0"] {
+    div#board[data-players='2'] .bang-player[data-no='0'] {
       grid-column-start: 2;
       grid-row-start: 2;
       justify-content: flex-start; }
-    div#board[data-players="2"] .bang-player[data-no="1"] {
+    div#board[data-players='2'] .bang-player[data-no='1'] {
       grid-column-start: 4;
       grid-row-start: 4;
       justify-content: center; }
-    div#board[data-players="3"] #table {
+    div#board[data-players='3'] #table {
       grid-column-start: 8;
       grid-row-start: 2; }
-    div#board[data-players="3"] .bang-player[data-no="0"] {
+    div#board[data-players='3'] .bang-player[data-no='0'] {
       grid-column-start: 2;
       grid-row-start: 2;
       justify-content: flex-start; }
-    div#board[data-players="3"] .bang-player[data-no="1"] {
+    div#board[data-players='3'] .bang-player[data-no='1'] {
       grid-column-start: 7;
       grid-row-start: 4;
       justify-content: flex-end; }
-    div#board[data-players="3"] .bang-player[data-no="2"] {
+    div#board[data-players='3'] .bang-player[data-no='2'] {
       grid-column-start: 1;
       grid-row-start: 4;
       justify-content: flex-start; }
-    div#board[data-players="4"] #table {
+    div#board[data-players='4'] #table {
       grid-column-start: 8;
       grid-row-start: 2; }
-    div#board[data-players="4"] .bang-player[data-no="0"] {
+    div#board[data-players='4'] .bang-player[data-no='0'] {
       grid-column-start: 2;
       grid-row-start: 2;
       justify-content: flex-start; }
-    div#board[data-players="4"] .bang-player[data-no="1"] {
+    div#board[data-players='4'] .bang-player[data-no='1'] {
       grid-column-start: 7;
       grid-row-start: 4;
       justify-content: flex-end; }
-    div#board[data-players="4"] .bang-player[data-no="2"] {
+    div#board[data-players='4'] .bang-player[data-no='2'] {
       grid-column-start: 4;
       grid-row-start: 6;
       justify-content: center; }
-    div#board[data-players="4"] .bang-player[data-no="3"] {
+    div#board[data-players='4'] .bang-player[data-no='3'] {
       grid-column-start: 1;
       grid-row-start: 4;
       justify-content: flex-start; }
-    div#board[data-players="5"] #table {
+    div#board[data-players='5'] #table {
       grid-column-start: 8;
       grid-row-start: 2; }
-    div#board[data-players="5"] .bang-player[data-no="0"] {
+    div#board[data-players='5'] .bang-player[data-no='0'] {
       grid-column-start: 2;
       grid-row-start: 2;
       justify-content: flex-start; }
-    div#board[data-players="5"] .bang-player[data-no="1"] {
+    div#board[data-players='5'] .bang-player[data-no='1'] {
       grid-column-start: 7;
       grid-row-start: 6;
       justify-content: flex-end; }
-    div#board[data-players="5"] .bang-player[data-no="2"] {
+    div#board[data-players='5'] .bang-player[data-no='2'] {
       grid-column-start: 7;
       grid-row-start: 8;
       justify-content: center; }
-    div#board[data-players="5"] .bang-player[data-no="3"] {
+    div#board[data-players='5'] .bang-player[data-no='3'] {
       grid-column-start: 1;
       grid-row-start: 8;
       justify-content: center; }
-    div#board[data-players="5"] .bang-player[data-no="4"] {
+    div#board[data-players='5'] .bang-player[data-no='4'] {
       grid-column-start: 1;
       grid-row-start: 6;
       justify-content: flex-start; }
-    div#board[data-players="6"] #table {
+    div#board[data-players='6'] #table {
       grid-column-start: 8;
       grid-row-start: 2; }
-    div#board[data-players="6"] .bang-player[data-no="0"] {
+    div#board[data-players='6'] .bang-player[data-no='0'] {
       grid-column-start: 2;
       grid-row-start: 2;
       justify-content: flex-start; }
-    div#board[data-players="6"] .bang-player[data-no="1"] {
+    div#board[data-players='6'] .bang-player[data-no='1'] {
       grid-column-start: 7;
       grid-row-start: 6;
       justify-content: center; }
-    div#board[data-players="6"] .bang-player[data-no="2"] {
+    div#board[data-players='6'] .bang-player[data-no='2'] {
       grid-column-start: 7;
       grid-row-start: 8;
       justify-content: center; }
-    div#board[data-players="6"] .bang-player[data-no="3"] {
+    div#board[data-players='6'] .bang-player[data-no='3'] {
       grid-column-start: 4;
       grid-row-start: 10;
       justify-content: center; }
-    div#board[data-players="6"] .bang-player[data-no="4"] {
+    div#board[data-players='6'] .bang-player[data-no='4'] {
       grid-column-start: 1;
       grid-row-start: 8;
       justify-content: center; }
-    div#board[data-players="6"] .bang-player[data-no="5"] {
+    div#board[data-players='6'] .bang-player[data-no='5'] {
       grid-column-start: 1;
       grid-row-start: 6;
       justify-content: center; }
-    div#board[data-players="7"] #table {
+    div#board[data-players='7'] #table {
       grid-column-start: 8;
       grid-row-start: 2; }
-    div#board[data-players="7"] .bang-player[data-no="0"] {
+    div#board[data-players='7'] .bang-player[data-no='0'] {
       grid-column-start: 2;
       grid-row-start: 2;
       justify-content: flex-start; }
-    div#board[data-players="7"] .bang-player[data-no="1"] {
+    div#board[data-players='7'] .bang-player[data-no='1'] {
       grid-column-start: 7;
       grid-row-start: 6;
       justify-content: flex-end; }
-    div#board[data-players="7"] .bang-player[data-no="2"] {
+    div#board[data-players='7'] .bang-player[data-no='2'] {
       grid-column-start: 7;
       grid-row-start: 8;
       justify-content: flex-end; }
-    div#board[data-players="7"] .bang-player[data-no="3"] {
+    div#board[data-players='7'] .bang-player[data-no='3'] {
       grid-column-start: 7;
       grid-row-start: 10;
       justify-content: center; }
-    div#board[data-players="7"] .bang-player[data-no="4"] {
+    div#board[data-players='7'] .bang-player[data-no='4'] {
       grid-column-start: 1;
       grid-row-start: 10;
       justify-content: center; }
-    div#board[data-players="7"] .bang-player[data-no="5"] {
+    div#board[data-players='7'] .bang-player[data-no='5'] {
       grid-column-start: 1;
       grid-row-start: 8;
       justify-content: flex-start; }
-    div#board[data-players="7"] .bang-player[data-no="6"] {
+    div#board[data-players='7'] .bang-player[data-no='6'] {
       grid-column-start: 1;
       grid-row-start: 6;
       justify-content: flex-start; } }
@@ -306,7 +314,8 @@ div#board {
 .dijitTooltip {
   max-width: min-content; }
 
-div#board div#hand {
+div#hand {
+  order: 1;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 5px;
   grid-row: 1;
@@ -315,39 +324,41 @@ div#board div#hand {
   display: flex;
   flex-flow: row;
   width: 100%; }
-  div#board div#hand div#role-container {
+  #ebd-body[data-hand='1'] div#hand {
+    order: 2; }
+  div#hand div#role-container {
     flex-grow: 0;
     width: 121.25px;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: white; }
-    div#board div#hand div#role-container div#role-card {
+    div#hand div#role-container div#role-card {
       height: 170px;
       width: 105.25px;
       background-image: url("img/roles.png");
       background-size: cover; }
-      div#board div#hand div#role-container div#role-card div#role-name {
+      div#hand div#role-container div#role-card div#role-name {
         width: 100%;
-        font-family: "Perdido";
+        font-family: 'Perdido';
         font-size: 23px;
         text-align: center;
         margin-top: 9px; }
-      div#board div#hand div#role-container div#role-card div#role-text {
+      div#hand div#role-container div#role-card div#role-text {
         font-family: 'Palatino Linotype';
         font-style: italic;
         font-size: 9px;
         margin-top: 98px;
         text-align: center; }
-    div#board div#hand div#role-container[data-role="0"] div#role-card {
+    div#hand div#role-container[data-role='0'] div#role-card {
       background-position: 0% center; }
-    div#board div#hand div#role-container[data-role="1"] div#role-card {
+    div#hand div#role-container[data-role='1'] div#role-card {
       background-position: 33.3333333333% center; }
-    div#board div#hand div#role-container[data-role="2"] div#role-card {
+    div#hand div#role-container[data-role='2'] div#role-card {
       background-position: 66.6666666667% center; }
-    div#board div#hand div#role-container[data-role="3"] div#role-card {
+    div#hand div#role-container[data-role='3'] div#role-card {
       background-position: 100% center; }
-  div#board div#hand div#hand-cards {
+  div#hand div#hand-cards {
     flex-grow: 1;
     display: flex;
     flex-flow: row;
@@ -422,7 +433,7 @@ div.bang-character-tooltip div.bang-character-tooltip-sizing {
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px; }
   .player-info .player-character-name {
-    font-family: "Perdido";
+    font-family: 'Perdido';
     width: 100%;
     max-height: 22px;
     margin-top: 11px;
@@ -448,37 +459,37 @@ div.bang-character-tooltip div.bang-character-tooltip-sizing {
       background-position: center center;
       border-radius: 10px;
       background-repeat: no-repeat; }
-  .player-info[data-character="0"] .player-character-background {
+  .player-info[data-character='0'] .player-character-background {
     background-position: 0% center; }
-  .player-info[data-character="1"] .player-character-background {
+  .player-info[data-character='1'] .player-character-background {
     background-position: 6.6666666667% center; }
-  .player-info[data-character="2"] .player-character-background {
+  .player-info[data-character='2'] .player-character-background {
     background-position: 13.3333333333% center; }
-  .player-info[data-character="3"] .player-character-background {
+  .player-info[data-character='3'] .player-character-background {
     background-position: 20% center; }
-  .player-info[data-character="4"] .player-character-background {
+  .player-info[data-character='4'] .player-character-background {
     background-position: 26.6666666667% center; }
-  .player-info[data-character="5"] .player-character-background {
+  .player-info[data-character='5'] .player-character-background {
     background-position: 33.3333333333% center; }
-  .player-info[data-character="6"] .player-character-background {
+  .player-info[data-character='6'] .player-character-background {
     background-position: 40% center; }
-  .player-info[data-character="7"] .player-character-background {
+  .player-info[data-character='7'] .player-character-background {
     background-position: 46.6666666667% center; }
-  .player-info[data-character="8"] .player-character-background {
+  .player-info[data-character='8'] .player-character-background {
     background-position: 53.3333333333% center; }
-  .player-info[data-character="9"] .player-character-background {
+  .player-info[data-character='9'] .player-character-background {
     background-position: 60% center; }
-  .player-info[data-character="10"] .player-character-background {
+  .player-info[data-character='10'] .player-character-background {
     background-position: 66.6666666667% center; }
-  .player-info[data-character="11"] .player-character-background {
+  .player-info[data-character='11'] .player-character-background {
     background-position: 73.3333333333% center; }
-  .player-info[data-character="12"] .player-character-background {
+  .player-info[data-character='12'] .player-character-background {
     background-position: 80% center; }
-  .player-info[data-character="13"] .player-character-background {
+  .player-info[data-character='13'] .player-character-background {
     background-position: 86.6666666667% center; }
-  .player-info[data-character="14"] .player-character-background {
+  .player-info[data-character='14'] .player-character-background {
     background-position: 93.3333333333% center; }
-  .player-info[data-character="15"] .player-character-background {
+  .player-info[data-character='15'] .player-character-background {
     background-position: 100% center; }
 
 .bang-player.inactive .player-character-background .player-character-hourglass {
@@ -550,12 +561,41 @@ div.bang-character-tooltip div.bang-character-tooltip-sizing {
     background-image: url("img/role-icons.png");
     background-size: cover;
     background-position: 66.66% 0%; }
-.bang-player[data-role="0"] .bang-player-container .player-info .player-star {
+  .bang-player .bang-player-container .player-info .player-distance {
+    position: absolute;
+    right: -8px;
+    bottom: -12px;
+    width: 28px;
+    height: 28px;
+    background: white;
+    border-radius: 50%;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 21px; }
+    .bang-player .bang-player-container .player-info .player-distance.current {
+      display: none; }
+    .bang-player .bang-player-container .player-info .player-distance::before {
+      content: '';
+      display: block;
+      position: absolute;
+      width: 34px;
+      height: 34px;
+      left: -3px;
+      top: -3px;
+      background-image: linear-gradient(#717171 1px, transparent 1px), linear-gradient(to right, #717171 1px, transparent 1px);
+      background-size: 40px 40px;
+      background-position: 17px 17px; }
+.bang-player[data-role='0'] .bang-player-container .player-info .player-star {
   display: block; }
 
-.bang-player .player-cards, .bang-player-board .player-cards {
+.bang-player .player-cards,
+.bang-player-board .player-cards {
   text-align: center; }
-  .bang-player .player-cards .player-hand-card, .bang-player-board .player-cards .player-hand-card {
+  .bang-player .player-cards .player-hand-card,
+  .bang-player-board .player-cards .player-hand-card {
     display: inline-block;
     width: 22px;
     height: 22px;
@@ -563,7 +603,8 @@ div.bang-character-tooltip div.bang-character-tooltip-sizing {
     background-size: contain;
     background-repeat: no-repeat;
     vertical-align: bottom; }
-.bang-player .bullet, .bang-player-board .bullet {
+.bang-player .bullet,
+.bang-player-board .bullet {
   width: 35px;
   height: 13px;
   background-image: url("img/bullet.png");
@@ -571,421 +612,628 @@ div.bang-character-tooltip div.bang-character-tooltip-sizing {
   margin: 1px 0px;
   transform: rotate(13deg);
   background-position: 0% 100%; }
-  .bang-player .bullet.pulse, .bang-player-board .bullet.pulse {
+  .bang-player .bullet.pulse,
+  .bang-player-board .bullet.pulse {
     animation-duration: 1.8s;
     animation-name: pulsate;
     animation-iteration-count: 3; }
-.bang-player[data-max-bullets="1"] .player-bullets .bullet:nth-child(2), .bang-player-board[data-max-bullets="1"] .player-bullets .bullet:nth-child(2) {
+.bang-player[data-max-bullets='1'] .player-bullets .bullet:nth-child(2),
+.bang-player-board[data-max-bullets='1'] .player-bullets .bullet:nth-child(2) {
   display: none; }
-.bang-player[data-max-bullets="1"] .player-bullets .bullet:nth-child(3), .bang-player-board[data-max-bullets="1"] .player-bullets .bullet:nth-child(3) {
+.bang-player[data-max-bullets='1'] .player-bullets .bullet:nth-child(3),
+.bang-player-board[data-max-bullets='1'] .player-bullets .bullet:nth-child(3) {
   display: none; }
-.bang-player[data-max-bullets="1"] .player-bullets .bullet:nth-child(4), .bang-player-board[data-max-bullets="1"] .player-bullets .bullet:nth-child(4) {
+.bang-player[data-max-bullets='1'] .player-bullets .bullet:nth-child(4),
+.bang-player-board[data-max-bullets='1'] .player-bullets .bullet:nth-child(4) {
   display: none; }
-.bang-player[data-max-bullets="1"] .player-bullets .bullet:nth-child(5), .bang-player-board[data-max-bullets="1"] .player-bullets .bullet:nth-child(5) {
+.bang-player[data-max-bullets='1'] .player-bullets .bullet:nth-child(5),
+.bang-player-board[data-max-bullets='1'] .player-bullets .bullet:nth-child(5) {
   display: none; }
-.bang-player[data-max-bullets="1"] .player-bullets .bullet:nth-child(6), .bang-player-board[data-max-bullets="1"] .player-bullets .bullet:nth-child(6) {
+.bang-player[data-max-bullets='1'] .player-bullets .bullet:nth-child(6),
+.bang-player-board[data-max-bullets='1'] .player-bullets .bullet:nth-child(6) {
   display: none; }
-.bang-player[data-max-bullets="2"] .player-bullets .bullet:nth-child(3), .bang-player-board[data-max-bullets="2"] .player-bullets .bullet:nth-child(3) {
+.bang-player[data-max-bullets='2'] .player-bullets .bullet:nth-child(3),
+.bang-player-board[data-max-bullets='2'] .player-bullets .bullet:nth-child(3) {
   display: none; }
-.bang-player[data-max-bullets="2"] .player-bullets .bullet:nth-child(4), .bang-player-board[data-max-bullets="2"] .player-bullets .bullet:nth-child(4) {
+.bang-player[data-max-bullets='2'] .player-bullets .bullet:nth-child(4),
+.bang-player-board[data-max-bullets='2'] .player-bullets .bullet:nth-child(4) {
   display: none; }
-.bang-player[data-max-bullets="2"] .player-bullets .bullet:nth-child(5), .bang-player-board[data-max-bullets="2"] .player-bullets .bullet:nth-child(5) {
+.bang-player[data-max-bullets='2'] .player-bullets .bullet:nth-child(5),
+.bang-player-board[data-max-bullets='2'] .player-bullets .bullet:nth-child(5) {
   display: none; }
-.bang-player[data-max-bullets="2"] .player-bullets .bullet:nth-child(6), .bang-player-board[data-max-bullets="2"] .player-bullets .bullet:nth-child(6) {
+.bang-player[data-max-bullets='2'] .player-bullets .bullet:nth-child(6),
+.bang-player-board[data-max-bullets='2'] .player-bullets .bullet:nth-child(6) {
   display: none; }
-.bang-player[data-max-bullets="3"] .player-bullets .bullet:nth-child(4), .bang-player-board[data-max-bullets="3"] .player-bullets .bullet:nth-child(4) {
+.bang-player[data-max-bullets='3'] .player-bullets .bullet:nth-child(4),
+.bang-player-board[data-max-bullets='3'] .player-bullets .bullet:nth-child(4) {
   display: none; }
-.bang-player[data-max-bullets="3"] .player-bullets .bullet:nth-child(5), .bang-player-board[data-max-bullets="3"] .player-bullets .bullet:nth-child(5) {
+.bang-player[data-max-bullets='3'] .player-bullets .bullet:nth-child(5),
+.bang-player-board[data-max-bullets='3'] .player-bullets .bullet:nth-child(5) {
   display: none; }
-.bang-player[data-max-bullets="3"] .player-bullets .bullet:nth-child(6), .bang-player-board[data-max-bullets="3"] .player-bullets .bullet:nth-child(6) {
+.bang-player[data-max-bullets='3'] .player-bullets .bullet:nth-child(6),
+.bang-player-board[data-max-bullets='3'] .player-bullets .bullet:nth-child(6) {
   display: none; }
-.bang-player[data-max-bullets="4"] .player-bullets .bullet:nth-child(5), .bang-player-board[data-max-bullets="4"] .player-bullets .bullet:nth-child(5) {
+.bang-player[data-max-bullets='4'] .player-bullets .bullet:nth-child(5),
+.bang-player-board[data-max-bullets='4'] .player-bullets .bullet:nth-child(5) {
   display: none; }
-.bang-player[data-max-bullets="4"] .player-bullets .bullet:nth-child(6), .bang-player-board[data-max-bullets="4"] .player-bullets .bullet:nth-child(6) {
+.bang-player[data-max-bullets='4'] .player-bullets .bullet:nth-child(6),
+.bang-player-board[data-max-bullets='4'] .player-bullets .bullet:nth-child(6) {
   display: none; }
-.bang-player[data-max-bullets="5"] .player-bullets .bullet:nth-child(6), .bang-player-board[data-max-bullets="5"] .player-bullets .bullet:nth-child(6) {
+.bang-player[data-max-bullets='5'] .player-bullets .bullet:nth-child(6),
+.bang-player-board[data-max-bullets='5'] .player-bullets .bullet:nth-child(6) {
   display: none; }
-.bang-player[data-max-bullets="6"] .player-bullets .bullet:nth-child(7), .bang-player-board[data-max-bullets="6"] .player-bullets .bullet:nth-child(7) {
+.bang-player[data-max-bullets='6'] .player-bullets .bullet:nth-child(7),
+.bang-player-board[data-max-bullets='6'] .player-bullets .bullet:nth-child(7) {
   display: none; }
-.bang-player[data-max-bullets="6"] .player-bullets .bullet:nth-child(6), .bang-player-board[data-max-bullets="6"] .player-bullets .bullet:nth-child(6) {
+.bang-player[data-max-bullets='6'] .player-bullets .bullet:nth-child(6),
+.bang-player-board[data-max-bullets='6'] .player-bullets .bullet:nth-child(6) {
   display: none; }
-.bang-player[data-bullets="0"] .bullet:nth-child(0), .bang-player-board[data-bullets="0"] .bullet:nth-child(0) {
+.bang-player[data-bullets='0'] .bullet:nth-child(0),
+.bang-player-board[data-bullets='0'] .bullet:nth-child(0) {
   background-position: 0 0; }
-.bang-player[data-bullets="1"] .bullet:nth-child(0), .bang-player-board[data-bullets="1"] .bullet:nth-child(0) {
+.bang-player[data-bullets='1'] .bullet:nth-child(0),
+.bang-player-board[data-bullets='1'] .bullet:nth-child(0) {
   background-position: 0 0; }
-.bang-player[data-bullets="1"] .bullet:nth-child(1), .bang-player-board[data-bullets="1"] .bullet:nth-child(1) {
+.bang-player[data-bullets='1'] .bullet:nth-child(1),
+.bang-player-board[data-bullets='1'] .bullet:nth-child(1) {
   background-position: 0 0; }
-.bang-player[data-bullets="2"] .bullet:nth-child(0), .bang-player-board[data-bullets="2"] .bullet:nth-child(0) {
+.bang-player[data-bullets='2'] .bullet:nth-child(0),
+.bang-player-board[data-bullets='2'] .bullet:nth-child(0) {
   background-position: 0 0; }
-.bang-player[data-bullets="2"] .bullet:nth-child(1), .bang-player-board[data-bullets="2"] .bullet:nth-child(1) {
+.bang-player[data-bullets='2'] .bullet:nth-child(1),
+.bang-player-board[data-bullets='2'] .bullet:nth-child(1) {
   background-position: 0 0; }
-.bang-player[data-bullets="2"] .bullet:nth-child(2), .bang-player-board[data-bullets="2"] .bullet:nth-child(2) {
+.bang-player[data-bullets='2'] .bullet:nth-child(2),
+.bang-player-board[data-bullets='2'] .bullet:nth-child(2) {
   background-position: 0 0; }
-.bang-player[data-bullets="3"] .bullet:nth-child(0), .bang-player-board[data-bullets="3"] .bullet:nth-child(0) {
+.bang-player[data-bullets='3'] .bullet:nth-child(0),
+.bang-player-board[data-bullets='3'] .bullet:nth-child(0) {
   background-position: 0 0; }
-.bang-player[data-bullets="3"] .bullet:nth-child(1), .bang-player-board[data-bullets="3"] .bullet:nth-child(1) {
+.bang-player[data-bullets='3'] .bullet:nth-child(1),
+.bang-player-board[data-bullets='3'] .bullet:nth-child(1) {
   background-position: 0 0; }
-.bang-player[data-bullets="3"] .bullet:nth-child(2), .bang-player-board[data-bullets="3"] .bullet:nth-child(2) {
+.bang-player[data-bullets='3'] .bullet:nth-child(2),
+.bang-player-board[data-bullets='3'] .bullet:nth-child(2) {
   background-position: 0 0; }
-.bang-player[data-bullets="3"] .bullet:nth-child(3), .bang-player-board[data-bullets="3"] .bullet:nth-child(3) {
+.bang-player[data-bullets='3'] .bullet:nth-child(3),
+.bang-player-board[data-bullets='3'] .bullet:nth-child(3) {
   background-position: 0 0; }
-.bang-player[data-bullets="4"] .bullet:nth-child(0), .bang-player-board[data-bullets="4"] .bullet:nth-child(0) {
+.bang-player[data-bullets='4'] .bullet:nth-child(0),
+.bang-player-board[data-bullets='4'] .bullet:nth-child(0) {
   background-position: 0 0; }
-.bang-player[data-bullets="4"] .bullet:nth-child(1), .bang-player-board[data-bullets="4"] .bullet:nth-child(1) {
+.bang-player[data-bullets='4'] .bullet:nth-child(1),
+.bang-player-board[data-bullets='4'] .bullet:nth-child(1) {
   background-position: 0 0; }
-.bang-player[data-bullets="4"] .bullet:nth-child(2), .bang-player-board[data-bullets="4"] .bullet:nth-child(2) {
+.bang-player[data-bullets='4'] .bullet:nth-child(2),
+.bang-player-board[data-bullets='4'] .bullet:nth-child(2) {
   background-position: 0 0; }
-.bang-player[data-bullets="4"] .bullet:nth-child(3), .bang-player-board[data-bullets="4"] .bullet:nth-child(3) {
+.bang-player[data-bullets='4'] .bullet:nth-child(3),
+.bang-player-board[data-bullets='4'] .bullet:nth-child(3) {
   background-position: 0 0; }
-.bang-player[data-bullets="4"] .bullet:nth-child(4), .bang-player-board[data-bullets="4"] .bullet:nth-child(4) {
+.bang-player[data-bullets='4'] .bullet:nth-child(4),
+.bang-player-board[data-bullets='4'] .bullet:nth-child(4) {
   background-position: 0 0; }
-.bang-player[data-bullets="5"] .bullet:nth-child(0), .bang-player-board[data-bullets="5"] .bullet:nth-child(0) {
+.bang-player[data-bullets='5'] .bullet:nth-child(0),
+.bang-player-board[data-bullets='5'] .bullet:nth-child(0) {
   background-position: 0 0; }
-.bang-player[data-bullets="5"] .bullet:nth-child(1), .bang-player-board[data-bullets="5"] .bullet:nth-child(1) {
+.bang-player[data-bullets='5'] .bullet:nth-child(1),
+.bang-player-board[data-bullets='5'] .bullet:nth-child(1) {
   background-position: 0 0; }
-.bang-player[data-bullets="5"] .bullet:nth-child(2), .bang-player-board[data-bullets="5"] .bullet:nth-child(2) {
+.bang-player[data-bullets='5'] .bullet:nth-child(2),
+.bang-player-board[data-bullets='5'] .bullet:nth-child(2) {
   background-position: 0 0; }
-.bang-player[data-bullets="5"] .bullet:nth-child(3), .bang-player-board[data-bullets="5"] .bullet:nth-child(3) {
+.bang-player[data-bullets='5'] .bullet:nth-child(3),
+.bang-player-board[data-bullets='5'] .bullet:nth-child(3) {
   background-position: 0 0; }
-.bang-player[data-bullets="5"] .bullet:nth-child(4), .bang-player-board[data-bullets="5"] .bullet:nth-child(4) {
+.bang-player[data-bullets='5'] .bullet:nth-child(4),
+.bang-player-board[data-bullets='5'] .bullet:nth-child(4) {
   background-position: 0 0; }
-.bang-player[data-bullets="5"] .bullet:nth-child(5), .bang-player-board[data-bullets="5"] .bullet:nth-child(5) {
+.bang-player[data-bullets='5'] .bullet:nth-child(5),
+.bang-player-board[data-bullets='5'] .bullet:nth-child(5) {
   background-position: 0 0; }
-.bang-player[data-bullets="6"] .bullet:nth-child(0), .bang-player-board[data-bullets="6"] .bullet:nth-child(0) {
+.bang-player[data-bullets='6'] .bullet:nth-child(0),
+.bang-player-board[data-bullets='6'] .bullet:nth-child(0) {
   background-position: 0 0; }
-.bang-player[data-bullets="6"] .bullet:nth-child(1), .bang-player-board[data-bullets="6"] .bullet:nth-child(1) {
+.bang-player[data-bullets='6'] .bullet:nth-child(1),
+.bang-player-board[data-bullets='6'] .bullet:nth-child(1) {
   background-position: 0 0; }
-.bang-player[data-bullets="6"] .bullet:nth-child(2), .bang-player-board[data-bullets="6"] .bullet:nth-child(2) {
+.bang-player[data-bullets='6'] .bullet:nth-child(2),
+.bang-player-board[data-bullets='6'] .bullet:nth-child(2) {
   background-position: 0 0; }
-.bang-player[data-bullets="6"] .bullet:nth-child(3), .bang-player-board[data-bullets="6"] .bullet:nth-child(3) {
+.bang-player[data-bullets='6'] .bullet:nth-child(3),
+.bang-player-board[data-bullets='6'] .bullet:nth-child(3) {
   background-position: 0 0; }
-.bang-player[data-bullets="6"] .bullet:nth-child(4), .bang-player-board[data-bullets="6"] .bullet:nth-child(4) {
+.bang-player[data-bullets='6'] .bullet:nth-child(4),
+.bang-player-board[data-bullets='6'] .bullet:nth-child(4) {
   background-position: 0 0; }
-.bang-player[data-bullets="6"] .bullet:nth-child(5), .bang-player-board[data-bullets="6"] .bullet:nth-child(5) {
+.bang-player[data-bullets='6'] .bullet:nth-child(5),
+.bang-player-board[data-bullets='6'] .bullet:nth-child(5) {
   background-position: 0 0; }
-.bang-player[data-bullets="6"] .bullet:nth-child(6), .bang-player-board[data-bullets="6"] .bullet:nth-child(6) {
+.bang-player[data-bullets='6'] .bullet:nth-child(6),
+.bang-player-board[data-bullets='6'] .bullet:nth-child(6) {
   background-position: 0 0; }
-.bang-player[data-hand="0"] .player-cards .player-handcount::before, .bang-player-board[data-hand="0"] .player-cards .player-handcount::before {
+.bang-player[data-hand='0'] .player-cards .player-handcount::before,
+.bang-player-board[data-hand='0'] .player-cards .player-handcount::before {
   content: "x 0"; }
-.bang-player[data-hand="1"] .player-cards .player-handcount::before, .bang-player-board[data-hand="1"] .player-cards .player-handcount::before {
+.bang-player[data-hand='1'] .player-cards .player-handcount::before,
+.bang-player-board[data-hand='1'] .player-cards .player-handcount::before {
   content: "x 1"; }
-.bang-player[data-hand="2"] .player-cards .player-handcount::before, .bang-player-board[data-hand="2"] .player-cards .player-handcount::before {
+.bang-player[data-hand='2'] .player-cards .player-handcount::before,
+.bang-player-board[data-hand='2'] .player-cards .player-handcount::before {
   content: "x 2"; }
-.bang-player[data-hand="3"] .player-cards .player-handcount::before, .bang-player-board[data-hand="3"] .player-cards .player-handcount::before {
+.bang-player[data-hand='3'] .player-cards .player-handcount::before,
+.bang-player-board[data-hand='3'] .player-cards .player-handcount::before {
   content: "x 3"; }
-.bang-player[data-hand="4"] .player-cards .player-handcount::before, .bang-player-board[data-hand="4"] .player-cards .player-handcount::before {
+.bang-player[data-hand='4'] .player-cards .player-handcount::before,
+.bang-player-board[data-hand='4'] .player-cards .player-handcount::before {
   content: "x 4"; }
-.bang-player[data-hand="5"] .player-cards .player-handcount::before, .bang-player-board[data-hand="5"] .player-cards .player-handcount::before {
+.bang-player[data-hand='5'] .player-cards .player-handcount::before,
+.bang-player-board[data-hand='5'] .player-cards .player-handcount::before {
   content: "x 5"; }
-.bang-player[data-hand="6"] .player-cards .player-handcount::before, .bang-player-board[data-hand="6"] .player-cards .player-handcount::before {
+.bang-player[data-hand='6'] .player-cards .player-handcount::before,
+.bang-player-board[data-hand='6'] .player-cards .player-handcount::before {
   content: "x 6"; }
-.bang-player[data-hand="7"] .player-cards .player-handcount::before, .bang-player-board[data-hand="7"] .player-cards .player-handcount::before {
+.bang-player[data-hand='7'] .player-cards .player-handcount::before,
+.bang-player-board[data-hand='7'] .player-cards .player-handcount::before {
   content: "x 7"; }
-.bang-player[data-hand="8"] .player-cards .player-handcount::before, .bang-player-board[data-hand="8"] .player-cards .player-handcount::before {
+.bang-player[data-hand='8'] .player-cards .player-handcount::before,
+.bang-player-board[data-hand='8'] .player-cards .player-handcount::before {
   content: "x 8"; }
-.bang-player[data-hand="9"] .player-cards .player-handcount::before, .bang-player-board[data-hand="9"] .player-cards .player-handcount::before {
+.bang-player[data-hand='9'] .player-cards .player-handcount::before,
+.bang-player-board[data-hand='9'] .player-cards .player-handcount::before {
   content: "x 9"; }
-.bang-player[data-hand="10"] .player-cards .player-handcount::before, .bang-player-board[data-hand="10"] .player-cards .player-handcount::before {
+.bang-player[data-hand='10'] .player-cards .player-handcount::before,
+.bang-player-board[data-hand='10'] .player-cards .player-handcount::before {
   content: "x 10"; }
-.bang-player[data-hand="11"] .player-cards .player-handcount::before, .bang-player-board[data-hand="11"] .player-cards .player-handcount::before {
+.bang-player[data-hand='11'] .player-cards .player-handcount::before,
+.bang-player-board[data-hand='11'] .player-cards .player-handcount::before {
   content: "x 11"; }
-.bang-player[data-hand="12"] .player-cards .player-handcount::before, .bang-player-board[data-hand="12"] .player-cards .player-handcount::before {
+.bang-player[data-hand='12'] .player-cards .player-handcount::before,
+.bang-player-board[data-hand='12'] .player-cards .player-handcount::before {
   content: "x 12"; }
-.bang-player[data-hand="13"] .player-cards .player-handcount::before, .bang-player-board[data-hand="13"] .player-cards .player-handcount::before {
+.bang-player[data-hand='13'] .player-cards .player-handcount::before,
+.bang-player-board[data-hand='13'] .player-cards .player-handcount::before {
   content: "x 13"; }
-.bang-player[data-hand="14"] .player-cards .player-handcount::before, .bang-player-board[data-hand="14"] .player-cards .player-handcount::before {
+.bang-player[data-hand='14'] .player-cards .player-handcount::before,
+.bang-player-board[data-hand='14'] .player-cards .player-handcount::before {
   content: "x 14"; }
-.bang-player[data-hand="15"] .player-cards .player-handcount::before, .bang-player-board[data-hand="15"] .player-cards .player-handcount::before {
+.bang-player[data-hand='15'] .player-cards .player-handcount::before,
+.bang-player-board[data-hand='15'] .player-cards .player-handcount::before {
   content: "x 15"; }
-.bang-player[data-hand="16"] .player-cards .player-handcount::before, .bang-player-board[data-hand="16"] .player-cards .player-handcount::before {
+.bang-player[data-hand='16'] .player-cards .player-handcount::before,
+.bang-player-board[data-hand='16'] .player-cards .player-handcount::before {
   content: "x 16"; }
-.bang-player[data-hand="17"] .player-cards .player-handcount::before, .bang-player-board[data-hand="17"] .player-cards .player-handcount::before {
+.bang-player[data-hand='17'] .player-cards .player-handcount::before,
+.bang-player-board[data-hand='17'] .player-cards .player-handcount::before {
   content: "x 17"; }
-.bang-player[data-hand="18"] .player-cards .player-handcount::before, .bang-player-board[data-hand="18"] .player-cards .player-handcount::before {
+.bang-player[data-hand='18'] .player-cards .player-handcount::before,
+.bang-player-board[data-hand='18'] .player-cards .player-handcount::before {
   content: "x 18"; }
-.bang-player[data-hand="19"] .player-cards .player-handcount::before, .bang-player-board[data-hand="19"] .player-cards .player-handcount::before {
+.bang-player[data-hand='19'] .player-cards .player-handcount::before,
+.bang-player-board[data-hand='19'] .player-cards .player-handcount::before {
   content: "x 19"; }
-.bang-player[data-hand="20"] .player-cards .player-handcount::before, .bang-player-board[data-hand="20"] .player-cards .player-handcount::before {
+.bang-player[data-hand='20'] .player-cards .player-handcount::before,
+.bang-player-board[data-hand='20'] .player-cards .player-handcount::before {
   content: "x 20"; }
-.bang-player[data-bullets="0"] .player-cards .player-maxhand::before, .bang-player-board[data-bullets="0"] .player-cards .player-maxhand::before {
+.bang-player[data-bullets='0'] .player-cards .player-maxhand::before,
+.bang-player-board[data-bullets='0'] .player-cards .player-maxhand::before {
   content: "0"; }
-.bang-player[data-bullets="1"] .player-cards .player-maxhand::before, .bang-player-board[data-bullets="1"] .player-cards .player-maxhand::before {
+.bang-player[data-bullets='1'] .player-cards .player-maxhand::before,
+.bang-player-board[data-bullets='1'] .player-cards .player-maxhand::before {
   content: "1"; }
-.bang-player[data-bullets="2"] .player-cards .player-maxhand::before, .bang-player-board[data-bullets="2"] .player-cards .player-maxhand::before {
+.bang-player[data-bullets='2'] .player-cards .player-maxhand::before,
+.bang-player-board[data-bullets='2'] .player-cards .player-maxhand::before {
   content: "2"; }
-.bang-player[data-bullets="3"] .player-cards .player-maxhand::before, .bang-player-board[data-bullets="3"] .player-cards .player-maxhand::before {
+.bang-player[data-bullets='3'] .player-cards .player-maxhand::before,
+.bang-player-board[data-bullets='3'] .player-cards .player-maxhand::before {
   content: "3"; }
-.bang-player[data-bullets="4"] .player-cards .player-maxhand::before, .bang-player-board[data-bullets="4"] .player-cards .player-maxhand::before {
+.bang-player[data-bullets='4'] .player-cards .player-maxhand::before,
+.bang-player-board[data-bullets='4'] .player-cards .player-maxhand::before {
   content: "4"; }
-.bang-player[data-bullets="5"] .player-cards .player-maxhand::before, .bang-player-board[data-bullets="5"] .player-cards .player-maxhand::before {
+.bang-player[data-bullets='5'] .player-cards .player-maxhand::before,
+.bang-player-board[data-bullets='5'] .player-cards .player-maxhand::before {
   content: "5"; }
-.bang-player[data-bullets="6"] .player-cards .player-maxhand::before, .bang-player-board[data-bullets="6"] .player-cards .player-maxhand::before {
+.bang-player[data-bullets='6'] .player-cards .player-maxhand::before,
+.bang-player-board[data-bullets='6'] .player-cards .player-maxhand::before {
   content: "6"; }
-.bang-player[data-bullets="7"] .player-cards .player-maxhand::before, .bang-player-board[data-bullets="7"] .player-cards .player-maxhand::before {
+.bang-player[data-bullets='7'] .player-cards .player-maxhand::before,
+.bang-player-board[data-bullets='7'] .player-cards .player-maxhand::before {
   content: "7"; }
-.bang-player[data-bullets="0"][data-hand="1"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="1"] .player-cards {
+.bang-player[data-bullets='0'][data-hand='1'] .player-cards,
+.bang-player-board[data-bullets='0'][data-hand='1'] .player-cards {
   color: red; }
-.bang-player[data-bullets="0"][data-hand="2"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="2"] .player-cards {
+.bang-player[data-bullets='0'][data-hand='2'] .player-cards,
+.bang-player-board[data-bullets='0'][data-hand='2'] .player-cards {
   color: red; }
-.bang-player[data-bullets="0"][data-hand="3"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="3"] .player-cards {
+.bang-player[data-bullets='0'][data-hand='3'] .player-cards,
+.bang-player-board[data-bullets='0'][data-hand='3'] .player-cards {
   color: red; }
-.bang-player[data-bullets="0"][data-hand="4"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="4"] .player-cards {
+.bang-player[data-bullets='0'][data-hand='4'] .player-cards,
+.bang-player-board[data-bullets='0'][data-hand='4'] .player-cards {
   color: red; }
-.bang-player[data-bullets="0"][data-hand="5"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="5"] .player-cards {
+.bang-player[data-bullets='0'][data-hand='5'] .player-cards,
+.bang-player-board[data-bullets='0'][data-hand='5'] .player-cards {
   color: red; }
-.bang-player[data-bullets="0"][data-hand="6"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="6"] .player-cards {
+.bang-player[data-bullets='0'][data-hand='6'] .player-cards,
+.bang-player-board[data-bullets='0'][data-hand='6'] .player-cards {
   color: red; }
-.bang-player[data-bullets="0"][data-hand="7"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="7"] .player-cards {
+.bang-player[data-bullets='0'][data-hand='7'] .player-cards,
+.bang-player-board[data-bullets='0'][data-hand='7'] .player-cards {
   color: red; }
-.bang-player[data-bullets="0"][data-hand="8"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="8"] .player-cards {
+.bang-player[data-bullets='0'][data-hand='8'] .player-cards,
+.bang-player-board[data-bullets='0'][data-hand='8'] .player-cards {
   color: red; }
-.bang-player[data-bullets="0"][data-hand="9"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="9"] .player-cards {
+.bang-player[data-bullets='0'][data-hand='9'] .player-cards,
+.bang-player-board[data-bullets='0'][data-hand='9'] .player-cards {
   color: red; }
-.bang-player[data-bullets="0"][data-hand="10"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="10"] .player-cards {
+.bang-player[data-bullets='0'][data-hand='10'] .player-cards,
+.bang-player-board[data-bullets='0'][data-hand='10'] .player-cards {
   color: red; }
-.bang-player[data-bullets="0"][data-hand="11"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="11"] .player-cards {
+.bang-player[data-bullets='0'][data-hand='11'] .player-cards,
+.bang-player-board[data-bullets='0'][data-hand='11'] .player-cards {
   color: red; }
-.bang-player[data-bullets="0"][data-hand="12"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="12"] .player-cards {
+.bang-player[data-bullets='0'][data-hand='12'] .player-cards,
+.bang-player-board[data-bullets='0'][data-hand='12'] .player-cards {
   color: red; }
-.bang-player[data-bullets="0"][data-hand="13"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="13"] .player-cards {
+.bang-player[data-bullets='0'][data-hand='13'] .player-cards,
+.bang-player-board[data-bullets='0'][data-hand='13'] .player-cards {
   color: red; }
-.bang-player[data-bullets="0"][data-hand="14"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="14"] .player-cards {
+.bang-player[data-bullets='0'][data-hand='14'] .player-cards,
+.bang-player-board[data-bullets='0'][data-hand='14'] .player-cards {
   color: red; }
-.bang-player[data-bullets="0"][data-hand="15"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="15"] .player-cards {
+.bang-player[data-bullets='0'][data-hand='15'] .player-cards,
+.bang-player-board[data-bullets='0'][data-hand='15'] .player-cards {
   color: red; }
-.bang-player[data-bullets="0"][data-hand="16"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="16"] .player-cards {
+.bang-player[data-bullets='0'][data-hand='16'] .player-cards,
+.bang-player-board[data-bullets='0'][data-hand='16'] .player-cards {
   color: red; }
-.bang-player[data-bullets="0"][data-hand="17"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="17"] .player-cards {
+.bang-player[data-bullets='0'][data-hand='17'] .player-cards,
+.bang-player-board[data-bullets='0'][data-hand='17'] .player-cards {
   color: red; }
-.bang-player[data-bullets="0"][data-hand="18"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="18"] .player-cards {
+.bang-player[data-bullets='0'][data-hand='18'] .player-cards,
+.bang-player-board[data-bullets='0'][data-hand='18'] .player-cards {
   color: red; }
-.bang-player[data-bullets="0"][data-hand="19"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="19"] .player-cards {
+.bang-player[data-bullets='0'][data-hand='19'] .player-cards,
+.bang-player-board[data-bullets='0'][data-hand='19'] .player-cards {
   color: red; }
-.bang-player[data-bullets="0"][data-hand="20"] .player-cards, .bang-player-board[data-bullets="0"][data-hand="20"] .player-cards {
+.bang-player[data-bullets='0'][data-hand='20'] .player-cards,
+.bang-player-board[data-bullets='0'][data-hand='20'] .player-cards {
   color: red; }
-.bang-player[data-bullets="1"][data-hand="2"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="2"] .player-cards {
+.bang-player[data-bullets='1'][data-hand='2'] .player-cards,
+.bang-player-board[data-bullets='1'][data-hand='2'] .player-cards {
   color: red; }
-.bang-player[data-bullets="1"][data-hand="3"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="3"] .player-cards {
+.bang-player[data-bullets='1'][data-hand='3'] .player-cards,
+.bang-player-board[data-bullets='1'][data-hand='3'] .player-cards {
   color: red; }
-.bang-player[data-bullets="1"][data-hand="4"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="4"] .player-cards {
+.bang-player[data-bullets='1'][data-hand='4'] .player-cards,
+.bang-player-board[data-bullets='1'][data-hand='4'] .player-cards {
   color: red; }
-.bang-player[data-bullets="1"][data-hand="5"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="5"] .player-cards {
+.bang-player[data-bullets='1'][data-hand='5'] .player-cards,
+.bang-player-board[data-bullets='1'][data-hand='5'] .player-cards {
   color: red; }
-.bang-player[data-bullets="1"][data-hand="6"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="6"] .player-cards {
+.bang-player[data-bullets='1'][data-hand='6'] .player-cards,
+.bang-player-board[data-bullets='1'][data-hand='6'] .player-cards {
   color: red; }
-.bang-player[data-bullets="1"][data-hand="7"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="7"] .player-cards {
+.bang-player[data-bullets='1'][data-hand='7'] .player-cards,
+.bang-player-board[data-bullets='1'][data-hand='7'] .player-cards {
   color: red; }
-.bang-player[data-bullets="1"][data-hand="8"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="8"] .player-cards {
+.bang-player[data-bullets='1'][data-hand='8'] .player-cards,
+.bang-player-board[data-bullets='1'][data-hand='8'] .player-cards {
   color: red; }
-.bang-player[data-bullets="1"][data-hand="9"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="9"] .player-cards {
+.bang-player[data-bullets='1'][data-hand='9'] .player-cards,
+.bang-player-board[data-bullets='1'][data-hand='9'] .player-cards {
   color: red; }
-.bang-player[data-bullets="1"][data-hand="10"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="10"] .player-cards {
+.bang-player[data-bullets='1'][data-hand='10'] .player-cards,
+.bang-player-board[data-bullets='1'][data-hand='10'] .player-cards {
   color: red; }
-.bang-player[data-bullets="1"][data-hand="11"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="11"] .player-cards {
+.bang-player[data-bullets='1'][data-hand='11'] .player-cards,
+.bang-player-board[data-bullets='1'][data-hand='11'] .player-cards {
   color: red; }
-.bang-player[data-bullets="1"][data-hand="12"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="12"] .player-cards {
+.bang-player[data-bullets='1'][data-hand='12'] .player-cards,
+.bang-player-board[data-bullets='1'][data-hand='12'] .player-cards {
   color: red; }
-.bang-player[data-bullets="1"][data-hand="13"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="13"] .player-cards {
+.bang-player[data-bullets='1'][data-hand='13'] .player-cards,
+.bang-player-board[data-bullets='1'][data-hand='13'] .player-cards {
   color: red; }
-.bang-player[data-bullets="1"][data-hand="14"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="14"] .player-cards {
+.bang-player[data-bullets='1'][data-hand='14'] .player-cards,
+.bang-player-board[data-bullets='1'][data-hand='14'] .player-cards {
   color: red; }
-.bang-player[data-bullets="1"][data-hand="15"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="15"] .player-cards {
+.bang-player[data-bullets='1'][data-hand='15'] .player-cards,
+.bang-player-board[data-bullets='1'][data-hand='15'] .player-cards {
   color: red; }
-.bang-player[data-bullets="1"][data-hand="16"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="16"] .player-cards {
+.bang-player[data-bullets='1'][data-hand='16'] .player-cards,
+.bang-player-board[data-bullets='1'][data-hand='16'] .player-cards {
   color: red; }
-.bang-player[data-bullets="1"][data-hand="17"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="17"] .player-cards {
+.bang-player[data-bullets='1'][data-hand='17'] .player-cards,
+.bang-player-board[data-bullets='1'][data-hand='17'] .player-cards {
   color: red; }
-.bang-player[data-bullets="1"][data-hand="18"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="18"] .player-cards {
+.bang-player[data-bullets='1'][data-hand='18'] .player-cards,
+.bang-player-board[data-bullets='1'][data-hand='18'] .player-cards {
   color: red; }
-.bang-player[data-bullets="1"][data-hand="19"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="19"] .player-cards {
+.bang-player[data-bullets='1'][data-hand='19'] .player-cards,
+.bang-player-board[data-bullets='1'][data-hand='19'] .player-cards {
   color: red; }
-.bang-player[data-bullets="1"][data-hand="20"] .player-cards, .bang-player-board[data-bullets="1"][data-hand="20"] .player-cards {
+.bang-player[data-bullets='1'][data-hand='20'] .player-cards,
+.bang-player-board[data-bullets='1'][data-hand='20'] .player-cards {
   color: red; }
-.bang-player[data-bullets="2"][data-hand="3"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="3"] .player-cards {
+.bang-player[data-bullets='2'][data-hand='3'] .player-cards,
+.bang-player-board[data-bullets='2'][data-hand='3'] .player-cards {
   color: red; }
-.bang-player[data-bullets="2"][data-hand="4"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="4"] .player-cards {
+.bang-player[data-bullets='2'][data-hand='4'] .player-cards,
+.bang-player-board[data-bullets='2'][data-hand='4'] .player-cards {
   color: red; }
-.bang-player[data-bullets="2"][data-hand="5"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="5"] .player-cards {
+.bang-player[data-bullets='2'][data-hand='5'] .player-cards,
+.bang-player-board[data-bullets='2'][data-hand='5'] .player-cards {
   color: red; }
-.bang-player[data-bullets="2"][data-hand="6"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="6"] .player-cards {
+.bang-player[data-bullets='2'][data-hand='6'] .player-cards,
+.bang-player-board[data-bullets='2'][data-hand='6'] .player-cards {
   color: red; }
-.bang-player[data-bullets="2"][data-hand="7"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="7"] .player-cards {
+.bang-player[data-bullets='2'][data-hand='7'] .player-cards,
+.bang-player-board[data-bullets='2'][data-hand='7'] .player-cards {
   color: red; }
-.bang-player[data-bullets="2"][data-hand="8"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="8"] .player-cards {
+.bang-player[data-bullets='2'][data-hand='8'] .player-cards,
+.bang-player-board[data-bullets='2'][data-hand='8'] .player-cards {
   color: red; }
-.bang-player[data-bullets="2"][data-hand="9"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="9"] .player-cards {
+.bang-player[data-bullets='2'][data-hand='9'] .player-cards,
+.bang-player-board[data-bullets='2'][data-hand='9'] .player-cards {
   color: red; }
-.bang-player[data-bullets="2"][data-hand="10"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="10"] .player-cards {
+.bang-player[data-bullets='2'][data-hand='10'] .player-cards,
+.bang-player-board[data-bullets='2'][data-hand='10'] .player-cards {
   color: red; }
-.bang-player[data-bullets="2"][data-hand="11"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="11"] .player-cards {
+.bang-player[data-bullets='2'][data-hand='11'] .player-cards,
+.bang-player-board[data-bullets='2'][data-hand='11'] .player-cards {
   color: red; }
-.bang-player[data-bullets="2"][data-hand="12"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="12"] .player-cards {
+.bang-player[data-bullets='2'][data-hand='12'] .player-cards,
+.bang-player-board[data-bullets='2'][data-hand='12'] .player-cards {
   color: red; }
-.bang-player[data-bullets="2"][data-hand="13"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="13"] .player-cards {
+.bang-player[data-bullets='2'][data-hand='13'] .player-cards,
+.bang-player-board[data-bullets='2'][data-hand='13'] .player-cards {
   color: red; }
-.bang-player[data-bullets="2"][data-hand="14"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="14"] .player-cards {
+.bang-player[data-bullets='2'][data-hand='14'] .player-cards,
+.bang-player-board[data-bullets='2'][data-hand='14'] .player-cards {
   color: red; }
-.bang-player[data-bullets="2"][data-hand="15"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="15"] .player-cards {
+.bang-player[data-bullets='2'][data-hand='15'] .player-cards,
+.bang-player-board[data-bullets='2'][data-hand='15'] .player-cards {
   color: red; }
-.bang-player[data-bullets="2"][data-hand="16"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="16"] .player-cards {
+.bang-player[data-bullets='2'][data-hand='16'] .player-cards,
+.bang-player-board[data-bullets='2'][data-hand='16'] .player-cards {
   color: red; }
-.bang-player[data-bullets="2"][data-hand="17"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="17"] .player-cards {
+.bang-player[data-bullets='2'][data-hand='17'] .player-cards,
+.bang-player-board[data-bullets='2'][data-hand='17'] .player-cards {
   color: red; }
-.bang-player[data-bullets="2"][data-hand="18"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="18"] .player-cards {
+.bang-player[data-bullets='2'][data-hand='18'] .player-cards,
+.bang-player-board[data-bullets='2'][data-hand='18'] .player-cards {
   color: red; }
-.bang-player[data-bullets="2"][data-hand="19"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="19"] .player-cards {
+.bang-player[data-bullets='2'][data-hand='19'] .player-cards,
+.bang-player-board[data-bullets='2'][data-hand='19'] .player-cards {
   color: red; }
-.bang-player[data-bullets="2"][data-hand="20"] .player-cards, .bang-player-board[data-bullets="2"][data-hand="20"] .player-cards {
+.bang-player[data-bullets='2'][data-hand='20'] .player-cards,
+.bang-player-board[data-bullets='2'][data-hand='20'] .player-cards {
   color: red; }
-.bang-player[data-bullets="3"][data-hand="4"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="4"] .player-cards {
+.bang-player[data-bullets='3'][data-hand='4'] .player-cards,
+.bang-player-board[data-bullets='3'][data-hand='4'] .player-cards {
   color: red; }
-.bang-player[data-bullets="3"][data-hand="5"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="5"] .player-cards {
+.bang-player[data-bullets='3'][data-hand='5'] .player-cards,
+.bang-player-board[data-bullets='3'][data-hand='5'] .player-cards {
   color: red; }
-.bang-player[data-bullets="3"][data-hand="6"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="6"] .player-cards {
+.bang-player[data-bullets='3'][data-hand='6'] .player-cards,
+.bang-player-board[data-bullets='3'][data-hand='6'] .player-cards {
   color: red; }
-.bang-player[data-bullets="3"][data-hand="7"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="7"] .player-cards {
+.bang-player[data-bullets='3'][data-hand='7'] .player-cards,
+.bang-player-board[data-bullets='3'][data-hand='7'] .player-cards {
   color: red; }
-.bang-player[data-bullets="3"][data-hand="8"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="8"] .player-cards {
+.bang-player[data-bullets='3'][data-hand='8'] .player-cards,
+.bang-player-board[data-bullets='3'][data-hand='8'] .player-cards {
   color: red; }
-.bang-player[data-bullets="3"][data-hand="9"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="9"] .player-cards {
+.bang-player[data-bullets='3'][data-hand='9'] .player-cards,
+.bang-player-board[data-bullets='3'][data-hand='9'] .player-cards {
   color: red; }
-.bang-player[data-bullets="3"][data-hand="10"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="10"] .player-cards {
+.bang-player[data-bullets='3'][data-hand='10'] .player-cards,
+.bang-player-board[data-bullets='3'][data-hand='10'] .player-cards {
   color: red; }
-.bang-player[data-bullets="3"][data-hand="11"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="11"] .player-cards {
+.bang-player[data-bullets='3'][data-hand='11'] .player-cards,
+.bang-player-board[data-bullets='3'][data-hand='11'] .player-cards {
   color: red; }
-.bang-player[data-bullets="3"][data-hand="12"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="12"] .player-cards {
+.bang-player[data-bullets='3'][data-hand='12'] .player-cards,
+.bang-player-board[data-bullets='3'][data-hand='12'] .player-cards {
   color: red; }
-.bang-player[data-bullets="3"][data-hand="13"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="13"] .player-cards {
+.bang-player[data-bullets='3'][data-hand='13'] .player-cards,
+.bang-player-board[data-bullets='3'][data-hand='13'] .player-cards {
   color: red; }
-.bang-player[data-bullets="3"][data-hand="14"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="14"] .player-cards {
+.bang-player[data-bullets='3'][data-hand='14'] .player-cards,
+.bang-player-board[data-bullets='3'][data-hand='14'] .player-cards {
   color: red; }
-.bang-player[data-bullets="3"][data-hand="15"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="15"] .player-cards {
+.bang-player[data-bullets='3'][data-hand='15'] .player-cards,
+.bang-player-board[data-bullets='3'][data-hand='15'] .player-cards {
   color: red; }
-.bang-player[data-bullets="3"][data-hand="16"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="16"] .player-cards {
+.bang-player[data-bullets='3'][data-hand='16'] .player-cards,
+.bang-player-board[data-bullets='3'][data-hand='16'] .player-cards {
   color: red; }
-.bang-player[data-bullets="3"][data-hand="17"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="17"] .player-cards {
+.bang-player[data-bullets='3'][data-hand='17'] .player-cards,
+.bang-player-board[data-bullets='3'][data-hand='17'] .player-cards {
   color: red; }
-.bang-player[data-bullets="3"][data-hand="18"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="18"] .player-cards {
+.bang-player[data-bullets='3'][data-hand='18'] .player-cards,
+.bang-player-board[data-bullets='3'][data-hand='18'] .player-cards {
   color: red; }
-.bang-player[data-bullets="3"][data-hand="19"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="19"] .player-cards {
+.bang-player[data-bullets='3'][data-hand='19'] .player-cards,
+.bang-player-board[data-bullets='3'][data-hand='19'] .player-cards {
   color: red; }
-.bang-player[data-bullets="3"][data-hand="20"] .player-cards, .bang-player-board[data-bullets="3"][data-hand="20"] .player-cards {
+.bang-player[data-bullets='3'][data-hand='20'] .player-cards,
+.bang-player-board[data-bullets='3'][data-hand='20'] .player-cards {
   color: red; }
-.bang-player[data-bullets="4"][data-hand="5"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="5"] .player-cards {
+.bang-player[data-bullets='4'][data-hand='5'] .player-cards,
+.bang-player-board[data-bullets='4'][data-hand='5'] .player-cards {
   color: red; }
-.bang-player[data-bullets="4"][data-hand="6"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="6"] .player-cards {
+.bang-player[data-bullets='4'][data-hand='6'] .player-cards,
+.bang-player-board[data-bullets='4'][data-hand='6'] .player-cards {
   color: red; }
-.bang-player[data-bullets="4"][data-hand="7"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="7"] .player-cards {
+.bang-player[data-bullets='4'][data-hand='7'] .player-cards,
+.bang-player-board[data-bullets='4'][data-hand='7'] .player-cards {
   color: red; }
-.bang-player[data-bullets="4"][data-hand="8"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="8"] .player-cards {
+.bang-player[data-bullets='4'][data-hand='8'] .player-cards,
+.bang-player-board[data-bullets='4'][data-hand='8'] .player-cards {
   color: red; }
-.bang-player[data-bullets="4"][data-hand="9"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="9"] .player-cards {
+.bang-player[data-bullets='4'][data-hand='9'] .player-cards,
+.bang-player-board[data-bullets='4'][data-hand='9'] .player-cards {
   color: red; }
-.bang-player[data-bullets="4"][data-hand="10"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="10"] .player-cards {
+.bang-player[data-bullets='4'][data-hand='10'] .player-cards,
+.bang-player-board[data-bullets='4'][data-hand='10'] .player-cards {
   color: red; }
-.bang-player[data-bullets="4"][data-hand="11"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="11"] .player-cards {
+.bang-player[data-bullets='4'][data-hand='11'] .player-cards,
+.bang-player-board[data-bullets='4'][data-hand='11'] .player-cards {
   color: red; }
-.bang-player[data-bullets="4"][data-hand="12"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="12"] .player-cards {
+.bang-player[data-bullets='4'][data-hand='12'] .player-cards,
+.bang-player-board[data-bullets='4'][data-hand='12'] .player-cards {
   color: red; }
-.bang-player[data-bullets="4"][data-hand="13"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="13"] .player-cards {
+.bang-player[data-bullets='4'][data-hand='13'] .player-cards,
+.bang-player-board[data-bullets='4'][data-hand='13'] .player-cards {
   color: red; }
-.bang-player[data-bullets="4"][data-hand="14"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="14"] .player-cards {
+.bang-player[data-bullets='4'][data-hand='14'] .player-cards,
+.bang-player-board[data-bullets='4'][data-hand='14'] .player-cards {
   color: red; }
-.bang-player[data-bullets="4"][data-hand="15"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="15"] .player-cards {
+.bang-player[data-bullets='4'][data-hand='15'] .player-cards,
+.bang-player-board[data-bullets='4'][data-hand='15'] .player-cards {
   color: red; }
-.bang-player[data-bullets="4"][data-hand="16"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="16"] .player-cards {
+.bang-player[data-bullets='4'][data-hand='16'] .player-cards,
+.bang-player-board[data-bullets='4'][data-hand='16'] .player-cards {
   color: red; }
-.bang-player[data-bullets="4"][data-hand="17"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="17"] .player-cards {
+.bang-player[data-bullets='4'][data-hand='17'] .player-cards,
+.bang-player-board[data-bullets='4'][data-hand='17'] .player-cards {
   color: red; }
-.bang-player[data-bullets="4"][data-hand="18"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="18"] .player-cards {
+.bang-player[data-bullets='4'][data-hand='18'] .player-cards,
+.bang-player-board[data-bullets='4'][data-hand='18'] .player-cards {
   color: red; }
-.bang-player[data-bullets="4"][data-hand="19"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="19"] .player-cards {
+.bang-player[data-bullets='4'][data-hand='19'] .player-cards,
+.bang-player-board[data-bullets='4'][data-hand='19'] .player-cards {
   color: red; }
-.bang-player[data-bullets="4"][data-hand="20"] .player-cards, .bang-player-board[data-bullets="4"][data-hand="20"] .player-cards {
+.bang-player[data-bullets='4'][data-hand='20'] .player-cards,
+.bang-player-board[data-bullets='4'][data-hand='20'] .player-cards {
   color: red; }
-.bang-player[data-bullets="5"][data-hand="6"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="6"] .player-cards {
+.bang-player[data-bullets='5'][data-hand='6'] .player-cards,
+.bang-player-board[data-bullets='5'][data-hand='6'] .player-cards {
   color: red; }
-.bang-player[data-bullets="5"][data-hand="7"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="7"] .player-cards {
+.bang-player[data-bullets='5'][data-hand='7'] .player-cards,
+.bang-player-board[data-bullets='5'][data-hand='7'] .player-cards {
   color: red; }
-.bang-player[data-bullets="5"][data-hand="8"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="8"] .player-cards {
+.bang-player[data-bullets='5'][data-hand='8'] .player-cards,
+.bang-player-board[data-bullets='5'][data-hand='8'] .player-cards {
   color: red; }
-.bang-player[data-bullets="5"][data-hand="9"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="9"] .player-cards {
+.bang-player[data-bullets='5'][data-hand='9'] .player-cards,
+.bang-player-board[data-bullets='5'][data-hand='9'] .player-cards {
   color: red; }
-.bang-player[data-bullets="5"][data-hand="10"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="10"] .player-cards {
+.bang-player[data-bullets='5'][data-hand='10'] .player-cards,
+.bang-player-board[data-bullets='5'][data-hand='10'] .player-cards {
   color: red; }
-.bang-player[data-bullets="5"][data-hand="11"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="11"] .player-cards {
+.bang-player[data-bullets='5'][data-hand='11'] .player-cards,
+.bang-player-board[data-bullets='5'][data-hand='11'] .player-cards {
   color: red; }
-.bang-player[data-bullets="5"][data-hand="12"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="12"] .player-cards {
+.bang-player[data-bullets='5'][data-hand='12'] .player-cards,
+.bang-player-board[data-bullets='5'][data-hand='12'] .player-cards {
   color: red; }
-.bang-player[data-bullets="5"][data-hand="13"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="13"] .player-cards {
+.bang-player[data-bullets='5'][data-hand='13'] .player-cards,
+.bang-player-board[data-bullets='5'][data-hand='13'] .player-cards {
   color: red; }
-.bang-player[data-bullets="5"][data-hand="14"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="14"] .player-cards {
+.bang-player[data-bullets='5'][data-hand='14'] .player-cards,
+.bang-player-board[data-bullets='5'][data-hand='14'] .player-cards {
   color: red; }
-.bang-player[data-bullets="5"][data-hand="15"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="15"] .player-cards {
+.bang-player[data-bullets='5'][data-hand='15'] .player-cards,
+.bang-player-board[data-bullets='5'][data-hand='15'] .player-cards {
   color: red; }
-.bang-player[data-bullets="5"][data-hand="16"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="16"] .player-cards {
+.bang-player[data-bullets='5'][data-hand='16'] .player-cards,
+.bang-player-board[data-bullets='5'][data-hand='16'] .player-cards {
   color: red; }
-.bang-player[data-bullets="5"][data-hand="17"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="17"] .player-cards {
+.bang-player[data-bullets='5'][data-hand='17'] .player-cards,
+.bang-player-board[data-bullets='5'][data-hand='17'] .player-cards {
   color: red; }
-.bang-player[data-bullets="5"][data-hand="18"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="18"] .player-cards {
+.bang-player[data-bullets='5'][data-hand='18'] .player-cards,
+.bang-player-board[data-bullets='5'][data-hand='18'] .player-cards {
   color: red; }
-.bang-player[data-bullets="5"][data-hand="19"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="19"] .player-cards {
+.bang-player[data-bullets='5'][data-hand='19'] .player-cards,
+.bang-player-board[data-bullets='5'][data-hand='19'] .player-cards {
   color: red; }
-.bang-player[data-bullets="5"][data-hand="20"] .player-cards, .bang-player-board[data-bullets="5"][data-hand="20"] .player-cards {
+.bang-player[data-bullets='5'][data-hand='20'] .player-cards,
+.bang-player-board[data-bullets='5'][data-hand='20'] .player-cards {
   color: red; }
-.bang-player[data-bullets="6"][data-hand="7"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="7"] .player-cards {
+.bang-player[data-bullets='6'][data-hand='7'] .player-cards,
+.bang-player-board[data-bullets='6'][data-hand='7'] .player-cards {
   color: red; }
-.bang-player[data-bullets="6"][data-hand="8"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="8"] .player-cards {
+.bang-player[data-bullets='6'][data-hand='8'] .player-cards,
+.bang-player-board[data-bullets='6'][data-hand='8'] .player-cards {
   color: red; }
-.bang-player[data-bullets="6"][data-hand="9"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="9"] .player-cards {
+.bang-player[data-bullets='6'][data-hand='9'] .player-cards,
+.bang-player-board[data-bullets='6'][data-hand='9'] .player-cards {
   color: red; }
-.bang-player[data-bullets="6"][data-hand="10"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="10"] .player-cards {
+.bang-player[data-bullets='6'][data-hand='10'] .player-cards,
+.bang-player-board[data-bullets='6'][data-hand='10'] .player-cards {
   color: red; }
-.bang-player[data-bullets="6"][data-hand="11"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="11"] .player-cards {
+.bang-player[data-bullets='6'][data-hand='11'] .player-cards,
+.bang-player-board[data-bullets='6'][data-hand='11'] .player-cards {
   color: red; }
-.bang-player[data-bullets="6"][data-hand="12"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="12"] .player-cards {
+.bang-player[data-bullets='6'][data-hand='12'] .player-cards,
+.bang-player-board[data-bullets='6'][data-hand='12'] .player-cards {
   color: red; }
-.bang-player[data-bullets="6"][data-hand="13"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="13"] .player-cards {
+.bang-player[data-bullets='6'][data-hand='13'] .player-cards,
+.bang-player-board[data-bullets='6'][data-hand='13'] .player-cards {
   color: red; }
-.bang-player[data-bullets="6"][data-hand="14"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="14"] .player-cards {
+.bang-player[data-bullets='6'][data-hand='14'] .player-cards,
+.bang-player-board[data-bullets='6'][data-hand='14'] .player-cards {
   color: red; }
-.bang-player[data-bullets="6"][data-hand="15"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="15"] .player-cards {
+.bang-player[data-bullets='6'][data-hand='15'] .player-cards,
+.bang-player-board[data-bullets='6'][data-hand='15'] .player-cards {
   color: red; }
-.bang-player[data-bullets="6"][data-hand="16"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="16"] .player-cards {
+.bang-player[data-bullets='6'][data-hand='16'] .player-cards,
+.bang-player-board[data-bullets='6'][data-hand='16'] .player-cards {
   color: red; }
-.bang-player[data-bullets="6"][data-hand="17"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="17"] .player-cards {
+.bang-player[data-bullets='6'][data-hand='17'] .player-cards,
+.bang-player-board[data-bullets='6'][data-hand='17'] .player-cards {
   color: red; }
-.bang-player[data-bullets="6"][data-hand="18"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="18"] .player-cards {
+.bang-player[data-bullets='6'][data-hand='18'] .player-cards,
+.bang-player-board[data-bullets='6'][data-hand='18'] .player-cards {
   color: red; }
-.bang-player[data-bullets="6"][data-hand="19"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="19"] .player-cards {
+.bang-player[data-bullets='6'][data-hand='19'] .player-cards,
+.bang-player-board[data-bullets='6'][data-hand='19'] .player-cards {
   color: red; }
-.bang-player[data-bullets="6"][data-hand="20"] .player-cards, .bang-player-board[data-bullets="6"][data-hand="20"] .player-cards {
+.bang-player[data-bullets='6'][data-hand='20'] .player-cards,
+.bang-player-board[data-bullets='6'][data-hand='20'] .player-cards {
   color: red; }
-.bang-player[data-bullets="7"][data-hand="8"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="8"] .player-cards {
+.bang-player[data-bullets='7'][data-hand='8'] .player-cards,
+.bang-player-board[data-bullets='7'][data-hand='8'] .player-cards {
   color: red; }
-.bang-player[data-bullets="7"][data-hand="9"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="9"] .player-cards {
+.bang-player[data-bullets='7'][data-hand='9'] .player-cards,
+.bang-player-board[data-bullets='7'][data-hand='9'] .player-cards {
   color: red; }
-.bang-player[data-bullets="7"][data-hand="10"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="10"] .player-cards {
+.bang-player[data-bullets='7'][data-hand='10'] .player-cards,
+.bang-player-board[data-bullets='7'][data-hand='10'] .player-cards {
   color: red; }
-.bang-player[data-bullets="7"][data-hand="11"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="11"] .player-cards {
+.bang-player[data-bullets='7'][data-hand='11'] .player-cards,
+.bang-player-board[data-bullets='7'][data-hand='11'] .player-cards {
   color: red; }
-.bang-player[data-bullets="7"][data-hand="12"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="12"] .player-cards {
+.bang-player[data-bullets='7'][data-hand='12'] .player-cards,
+.bang-player-board[data-bullets='7'][data-hand='12'] .player-cards {
   color: red; }
-.bang-player[data-bullets="7"][data-hand="13"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="13"] .player-cards {
+.bang-player[data-bullets='7'][data-hand='13'] .player-cards,
+.bang-player-board[data-bullets='7'][data-hand='13'] .player-cards {
   color: red; }
-.bang-player[data-bullets="7"][data-hand="14"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="14"] .player-cards {
+.bang-player[data-bullets='7'][data-hand='14'] .player-cards,
+.bang-player-board[data-bullets='7'][data-hand='14'] .player-cards {
   color: red; }
-.bang-player[data-bullets="7"][data-hand="15"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="15"] .player-cards {
+.bang-player[data-bullets='7'][data-hand='15'] .player-cards,
+.bang-player-board[data-bullets='7'][data-hand='15'] .player-cards {
   color: red; }
-.bang-player[data-bullets="7"][data-hand="16"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="16"] .player-cards {
+.bang-player[data-bullets='7'][data-hand='16'] .player-cards,
+.bang-player-board[data-bullets='7'][data-hand='16'] .player-cards {
   color: red; }
-.bang-player[data-bullets="7"][data-hand="17"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="17"] .player-cards {
+.bang-player[data-bullets='7'][data-hand='17'] .player-cards,
+.bang-player-board[data-bullets='7'][data-hand='17'] .player-cards {
   color: red; }
-.bang-player[data-bullets="7"][data-hand="18"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="18"] .player-cards {
+.bang-player[data-bullets='7'][data-hand='18'] .player-cards,
+.bang-player-board[data-bullets='7'][data-hand='18'] .player-cards {
   color: red; }
-.bang-player[data-bullets="7"][data-hand="19"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="19"] .player-cards {
+.bang-player[data-bullets='7'][data-hand='19'] .player-cards,
+.bang-player-board[data-bullets='7'][data-hand='19'] .player-cards {
   color: red; }
-.bang-player[data-bullets="7"][data-hand="20"] .player-cards, .bang-player-board[data-bullets="7"][data-hand="20"] .player-cards {
+.bang-player[data-bullets='7'][data-hand='20'] .player-cards,
+.bang-player-board[data-bullets='7'][data-hand='20'] .player-cards {
   color: red; }
 
 div.bang-card-tooltip div.bang-card-tooltip-sizing {
@@ -1265,17 +1513,6 @@ div.bang-card {
   .bang-player-board .player-cards {
     margin-left: 15px; }
 
-#help-icon {
-  height: 35px;
-  width: 35px;
-  margin-left: auto;
-  cursor: pointer; }
-  #help-icon:hover {
-    color: grey; }
-  #help-icon svg {
-    width: 100%;
-    height: 100%; }
-
 .bang_popin {
   width: auto;
   position: relative;
@@ -1442,5 +1679,78 @@ div.bang-card {
         background-position: 93.3333333333% center; }
       #popin_playersHelp #dialog-players .dialog-character[data-character="15"] .dialog-character-background {
         background-position: 100% center; }
+
+#player_config {
+  margin: 10px 0px; }
+  #player_config #player_config_row {
+    display: flex;
+    justify-content: space-around; }
+  #player_config #player_info_row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 10px; }
+  #player_config #show-help,
+  #player_config #show-settings,
+  #player_config #show-scores {
+    height: 40px;
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer; }
+    #player_config #show-help:hover,
+    #player_config #show-settings:hover,
+    #player_config #show-scores:hover {
+      color: grey; }
+    #player_config #show-help svg,
+    #player_config #show-settings svg,
+    #player_config #show-scores svg {
+      width: auto;
+      height: 40px; }
+  #player_config #show-settings .fa-primary {
+    transform-origin: 216px 255px;
+    transition: transform 1s; }
+  #player_config #show-settings:hover .fa-primary {
+    transform: rotate(180deg); }
+
+/*
+ * Controls in the top bar
+ */
+#settings-controls-container {
+  position: relative;
+  text-align: center;
+  border-top: 1px solid gray;
+  margin-top: 10px; }
+  #settings-controls-container.settingsControlsHidden {
+    display: none; }
+  #settings-controls-container .row-data {
+    border: none;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid gray; }
+    #settings-controls-container .row-data .row-label {
+      width: 100%;
+      float: none;
+      color: black;
+      padding-bottom: 0px;
+      text-overflow: initial;
+      white-space: normal;
+      padding: 2px 4px 0px; }
+    #settings-controls-container .row-data .row-value {
+      width: 85%;
+      margin: 0; }
+
+#help-icon {
+  height: 35px;
+  width: 35px;
+  cursor: pointer; }
+  #help-icon:hover {
+    color: grey; }
+  #help-icon svg {
+    width: 100%;
+    height: 100%; }
 
 /*# sourceMappingURL=bang.css.map */

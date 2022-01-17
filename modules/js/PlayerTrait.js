@@ -10,16 +10,17 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         ['updateHand', 200],
         ['playerEliminated', 1000],
         ['updatePlayers', 100],
+        ['updateDistances', 100],
         ['updatePlayersRoles', 1],
         ['showMessage', 1],
       );
+      this._playerInitialized = false;
     },
 
     setupPlayerBoards() {
       this.forEachPlayer((player) => {
         let isCurrent = player.id == this.player_id;
 
-        player.handCount = isCurrent ? player.hand.length : player.hand;
         player.powers = '<p>' + player.powers.join('</p><p>') + '</p>';
         player.newNo = player.no;
         player.shortName = truncate(player.name, 11);
@@ -38,17 +39,21 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
         if (isCurrent) {
           let role = this.getRole(player.role);
-          dojo.place(this.format_block('jstpl_hand', role), 'board');
+          dojo.place(this.format_block('jstpl_hand', role), 'board-wrapper');
           player.hand.forEach((card) => this.addCard(card, 'hand-cards'));
           this.addTooltip('role-card', role['role-text'], '');
 
-          dojo.place(jstpl_helpIcon, 'bang-player-board-' + player.id);
-
           if (!this.isReadOnly()) this.checkPreferencesConsistency(player.preferences);
+        }
+
+        if (isCurrent || this.isSpectator) {
+          $('player-distance-' + this.player_id).classList.add('current');
         }
       });
 
       this.updatePlayers();
+      this.updateDistances();
+      this._playerInitialized = true;
     },
 
     /*
@@ -78,11 +83,16 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       dojo.addClass('bang-player-' + n.args.who_quits, 'eliminated');
     },
 
-    // TODO
     notif_updatePlayers(n) {
       debug('Notif: update players', n);
       this.gamedatas.players = n.args.players;
       this.updatePlayers();
+    },
+
+    notif_updateDistances(n) {
+      debug('Notif: update player distances', n);
+      this.gamedatas.distances = n.args.distances;
+      this.updateDistances();
     },
 
     notif_updatePlayersRoles(n) {
@@ -115,6 +125,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         (carry, player) => (player.id == this.player_id && !player.eliminated ? player.newNo : carry),
         0,
       );
+      var playerOffset = this.settings.playerPosition == 0 ? 0 : Math.ceil(playersAlive / 2);
 
       players.forEach((player) => {
         this.displayRoleIfPublic(player);
@@ -125,12 +136,23 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
           if (player.id == this.player_id && $('hand')) dojo.destroy('hand');
         } else {
-          player.newNo = (player.newNo + playersAlive - currentPlayerNo) % playersAlive;
+          player.newNo = (player.newNo + playersAlive - currentPlayerNo + playerOffset) % playersAlive;
           dojo.attr('bang-player-' + player.id, 'data-no', player.newNo);
         }
       });
 
       dojo.attr('board', 'data-players', playersAlive);
+    },
+
+    onChangePlayerPositionSetting(val) {
+      if (this._playerInitialized) this.updatePlayers();
+    },
+
+    updateDistances() {
+      if (this.isSpectator) return;
+
+      let dist = this.gamedatas.distances[this.player_id];
+      Object.keys(dist).forEach((pId) => ($('player-distance-' + pId).innerHTML = dist[pId]));
     },
 
     displayRoleIfPublic(player) {

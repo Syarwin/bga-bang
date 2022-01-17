@@ -144,7 +144,8 @@ class Player extends \BANG\Helpers\DB_Manager
       'powers' => $this->text,
       'hp' => $this->hp,
       'bullets' => $this->bullets,
-      'hand' => $current ? $this->getHand($this->id)->toArray() : $this->countHand($this->id),
+      'hand' => $current ? $this->getHand($this->id)->toArray() : [],
+      'handCount' => $this->countHand($this->id),
       'role' => $current || $this->role == SHERIFF || $this->eliminated || Players::isEndOfGame() ? $this->role : null,
       'inPlay' => $this->getCardsInPlay()->toArray(),
 
@@ -573,6 +574,7 @@ class Player extends \BANG\Helpers\DB_Manager
     Notifications::cardPlayed($this, $card, $args);
     Log::addCardPlayed($this, $card, $args);
     $card->play($this, $args);
+    Notifications::updateDistances();
     $this->onChangeHand();
   }
 

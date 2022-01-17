@@ -64,6 +64,29 @@ define([
         this._activeStates = ['drawCard', 'playCard', 'react', 'multiReact', 'discardExcess'];
 
         this.default_viewport = 'width=840';
+
+        this._settingsConfig = {
+          magasin: { type: 'pref', prefId: 108 },
+          handPosition: {
+            default: 0,
+            name: _('Hand position'),
+            attribute: 'hand',
+            type: 'select',
+            values: {
+              0: _('Top'),
+              1: _('Bottom'),
+            },
+          },
+          playerPosition: {
+            default: 0,
+            name: _('Current player position'),
+            type: 'select',
+            values: {
+              0: _('Top'),
+              1: _('Bottom'),
+            },
+          },
+        };
       },
 
       onScreenWidthChange() {
@@ -99,6 +122,9 @@ define([
        */
       setup(gamedatas) {
         debug('SETUP', gamedatas);
+        this.setupInfoPanel();
+        this.inherited(arguments);
+
         // Formatting cards
         this._cards = [];
         Object.values(gamedatas.cards).forEach((card) => {
@@ -123,17 +149,10 @@ define([
 
         // Make the current player stand out
         this.updateCurrentTurnPlayer(gamedatas.playerTurn);
-
-        this.inherited(arguments);
       },
 
       onLoadingComplete() {
         debug('Loading complete');
-        /*
-  if(this.gamedatas.turn == 1){
-    this.displayPlayersHelp();
-  }
-  */
       },
 
       /*
@@ -299,6 +318,11 @@ define([
 
       onClickDraw: function (arg) {
         this.takeAction('actDraw', { selected: arg });
+      },
+
+      setupInfoPanel() {
+        dojo.place(this.format_string(jstpl_configPlayerBoard, {}), 'player_boards', 'first');
+        this.addTooltip('help-icon', _('Informations about each role and character'), '');
       },
 
       ////////////////////////////////

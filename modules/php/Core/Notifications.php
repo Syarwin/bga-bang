@@ -218,6 +218,7 @@ class Notifications
 
     self::updateHand($receiver);
     self::updateHand($victim);
+    self::updateDistances();
   }
 
   // todo change notif name
@@ -276,6 +277,13 @@ class Notifications
     ]);
   }
 
+  public static function updateDistances()
+  {
+    self::notifyAll('updateDistances', '', [
+      'distances' => Players::getDistances(),
+    ]);
+  }
+
   public static function playerEliminated($player)
   {
     /*
@@ -285,19 +293,25 @@ class Notifications
     ]);
     */
     if ($player->getRole() != SHERIFF) {
-      self::notifyAll('updatePlayers', clienttranslate('${player_name} was a ${role_name}.'),
-        self::getDataToUpdatePlayer($player));
+      self::notifyAll(
+        'updatePlayers',
+        clienttranslate('${player_name} was a ${role_name}.'),
+        self::getDataToUpdatePlayer($player)
+      );
+      self::updateDistances();
     }
   }
 
-  public static function revealPlayersRolesEndOfGame() {
+  public static function revealPlayersRolesEndOfGame()
+  {
     $players = Players::getLivingPlayers();
     foreach ($players as $player) {
       self::notifyAll('updatePlayersRoles', '', self::getDataToUpdatePlayer($player));
     }
   }
 
-  private static function getDataToUpdatePlayer($player) {
+  private static function getDataToUpdatePlayer($player)
+  {
     return [
       'i18n' => ['role_name'],
       'player' => $player,
@@ -306,7 +320,8 @@ class Notifications
     ];
   }
 
-  private static function getRoleName($n) {
+  private static function getRoleName($n)
+  {
     return [
       clienttranslate('Sheriff'),
       clienttranslate('Deputy'),

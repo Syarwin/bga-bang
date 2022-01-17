@@ -1,68 +1,89 @@
-div#board {
-	width:100%;
-	min-height:800px;
-	position:relative;
-	display:grid;
-	grid-template-columns: repeat(12, 1fr);
+div#board-wrapper {
+  display: flex;
+  flex-flow: column;
+}
 
-  .bang-player, #table {
-    display:flex;
-    flex-flow:row;
+div#board {
+  order: 2;
+  #ebd-body[data-hand='1'] & {
+    order: 1;
+  }
+
+  width: 100%;
+  min-height: 800px;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+
+  .bang-player,
+  #table {
+    display: flex;
+    flex-flow: row;
     align-items: center;
-    grid-row-end:span 2;
-    grid-column-end:span 4;
-    max-height:$cardH + 20px;
-    min-height:$cardH + 20px;
+    grid-row-end: span 2;
+    grid-column-end: span 4;
+    max-height: $cardH + 20px;
+    min-height: $cardH + 20px;
     max-width: 100%;
   }
 
-  // TODO : add media query
   @each $nPlayers, $layout in $layoutBig {
-    &[data-players="#{$nPlayers}"] #table {
-      $place : map-get($layout, "table");
+    &[data-players='#{$nPlayers}'] #table {
+      $place: map-get($layout, 'table');
       grid-column-start: map-get($place, 'col');
       grid-row-start: map-get($place, 'row');
     }
 
-    &[data-players="#{$nPlayers}"] .bang-player {
+    &[data-players='#{$nPlayers}'] .bang-player {
       @each $i, $place in $layout {
-        @if $i != "table" {
-          &[data-no="#{$i}"] {
+        @if $i != 'table' {
+          &[data-no='#{$i}'] {
             grid-column-start: map-get($place, 'col');
             grid-row-start: map-get($place, 'row');
 
-            @if map-get($place, 'align') == left   { justify-content: flex-start; }
-            @if map-get($place, 'align') == center { justify-content: center; }
-            @if map-get($place, 'align') == right  { justify-content: flex-end; }
+            @if map-get($place, 'align') == left {
+              justify-content: flex-start;
+            }
+            @if map-get($place, 'align') == center {
+              justify-content: center;
+            }
+            @if map-get($place, 'align') == right {
+              justify-content: flex-end;
+            }
           }
         }
       }
     }
   }
 
-
   @media (max-width: 1300px) {
     .bang-player {
-      grid-column-end:span 6;
+      grid-column-end: span 6;
     }
 
     @each $nPlayers, $layout in $layoutSmall {
-      &[data-players="#{$nPlayers}"] #table {
-        $place : map-get($layout, "table");
+      &[data-players='#{$nPlayers}'] #table {
+        $place: map-get($layout, 'table');
         grid-column-start: map-get($place, 'col');
         grid-row-start: map-get($place, 'row');
       }
 
-      &[data-players="#{$nPlayers}"] .bang-player {
+      &[data-players='#{$nPlayers}'] .bang-player {
         @each $i, $place in $layout {
-          @if $i != "table" {
-            &[data-no="#{$i}"] {
+          @if $i != 'table' {
+            &[data-no='#{$i}'] {
               grid-column-start: map-get($place, 'col');
               grid-row-start: map-get($place, 'row');
 
-              @if map-get($place, 'align') == left   { justify-content: flex-start; }
-              @if map-get($place, 'align') == center { justify-content: center; }
-              @if map-get($place, 'align') == right  { justify-content: flex-end; }
+              @if map-get($place, 'align') == left {
+                justify-content: flex-start;
+              }
+              @if map-get($place, 'align') == center {
+                justify-content: center;
+              }
+              @if map-get($place, 'align') == right {
+                justify-content: flex-end;
+              }
             }
           }
         }

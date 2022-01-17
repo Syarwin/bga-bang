@@ -33,7 +33,9 @@ trait ResolveFlippedTrait
       // Shouldn't ever happen. There should be just 1 card flipped
       throw new \BgaVisibleSystemException("There's {$flippedCards->count()} card in LOCATION_FLIPPED");
     }
-    Cards::moveAllInLocation(LOCATION_FLIPPED, LOCATION_DISCARD);
+    foreach ($flippedCards as $card) {
+      Cards::discard($card);
+    }
     Stack::finishState();
   }
 }

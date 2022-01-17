@@ -50,6 +50,21 @@ $stats_type = [
   // Statistics global to table
   'table' => [],
 
+  "value_labels" => [
+  		109 => [
+  			0 => totranslate("Sheriff"),
+        1 => totranslate("Deputy"),
+        2 => totranslate("Outlaw"),
+  			3 => totranslate("Renegade"),
+  		]
+  ],
+
   // Statistics existing for each player
-  'player' => [],
+  "player" => [
+    "role" => [
+      "id" => 109,
+      "name" => totranslate("Player's role"),
+      "type" => "int"
+    ],
+  ]
 ];

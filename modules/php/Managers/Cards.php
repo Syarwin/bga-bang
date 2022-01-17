@@ -180,7 +180,23 @@ class Cards extends \BANG\Helpers\Pieces
     return self::getInLocation(LOCATION_SELECTION);
   }
 
-  // only for testing
+  public static function putOnDeck($cId)
+  {
+    self::insertOnTop($cId, LOCATION_DECK);
+  }
+
+  public static function dealFromDiscard($pId, $amount)
+  {
+    return self::deal($pId, $amount, LOCATION_DISCARD);
+  }
+
+  public static function reshuffleListener()
+  {
+    Notifications::reshuffle();
+  }
+
+
+  // Only for testing
   public static function dealCard($player, $type, $playerOffset = 0)
   {
     //$cards = self::getDeck()->getCardsOfType($type);
@@ -195,20 +211,5 @@ class Cards extends \BANG\Helpers\Pieces
     }
     $cards = self::getObjectListFromDB("SELECT card_id FROM card WHERE type=$type AND card_location='deck'", true);
     self::move($cards[0], [LOCATION_HAND, $player]);
-  }
-
-  public static function putOnDeck($cId)
-  {
-    self::insertOnTop($cId, LOCATION_DECK);
-  }
-
-  public static function dealFromDiscard($pId, $amount)
-  {
-    return self::deal($pId, $amount, LOCATION_DISCARD);
-  }
-
-  public static function reshuffleListener()
-  {
-    Notifications::reshuffle();
   }
 }

@@ -56,9 +56,22 @@ define(['dojo', 'dojo/_base/declare', 'dojo/fx', 'dojox/fx/ext-dojo/complex'], f
 
     onShow: null,
     onHide: null,
+
+    statusElt: null, // If specified, will add/remove "opened" class on this element
+
+    scale: 1,
+    breakpoint: null, // auto resize if < breakpoint using scale
   };
 
   return declare('customgame.modal', null, {
+    _open: false,
+    isDisplayed() {
+      return this._open;
+    },
+    isCreated() {
+      return this.id != null;
+    },
+
     constructor(id, config) {
       if (typeof id == 'undefined') {
         console.error('You need an ID to create a modal');
@@ -122,13 +135,14 @@ define(['dojo', 'dojo/_base/declare', 'dojo/fx', 'dojox/fx/ext-dojo/complex'], f
         position: 'absolute',
         left: '0px',
         top: '0px',
-        width: '100vw',
+        width: 'min(100%,100vw)',
         height: '100vh',
         zIndex: 950,
         opacity: 0,
         display: 'flex',
         justifyContent: 'center',
         alignItems: this.verticalAlign,
+        paddingTop: this.verticalAlign == 'center' ? 0 : '125px',
         transformOrigin: 'top left',
       });
 
@@ -152,6 +166,16 @@ define(['dojo', 'dojo/_base/declare', 'dojo/fx', 'dojox/fx/ext-dojo/complex'], f
         width: bdy.w + 'px',
         height: bdy.h + 'px',
       });
+
+      if (this.breakpoint != null) {
+        let newModalWidth = bdy.w * this.scale;
+        let modalScale = newModalWidth / this.breakpoint;
+        if (modalScale > 1) modalScale = 1;
+        dojo.style('popin_' + this.id, {
+          transform: `scale(${modalScale})`,
+          transformOrigin: this.verticalAlign == 'center' ? 'center center' : 'top center',
+        });
+      }
     },
 
     getOpeningTargetCenter() {
@@ -179,6 +203,7 @@ define(['dojo', 'dojo/_base/declare', 'dojo/fx', 'dojox/fx/ext-dojo/complex'], f
         let containerId = 'popin_' + this.id + '_container';
         if (!$(containerId)) reject();
 
+        if (this._runningAnimation) this._runningAnimation.stop();
         let duration = this.fadeIn ? this.animationDuration : 0;
         var animations = [];
 
@@ -215,9 +240,9 @@ define(['dojo', 'dojo/_base/declare', 'dojo/fx', 'dojox/fx/ext-dojo/complex'], f
         }
 
         // Create the overall animation
-        let anim = dojo.fx.combine(animations);
-        dojo.connect(anim, 'onEnd', () => resolve());
-        anim.play();
+        this._runningAnimation = dojo.fx.combine(animations);
+        dojo.connect(this._runningAnimation, 'onEnd', () => resolve());
+        this._runningAnimation.play();
         setTimeout(() => {
           if ($('popin_' + this.id + '_container')) dojo.style('popin_' + this.id + '_container', 'display', 'block');
         }, 10);
@@ -225,7 +250,20 @@ define(['dojo', 'dojo/_base/declare', 'dojo/fx', 'dojox/fx/ext-dojo/complex'], f
     },
 
     show() {
+      if (this._isOpening) return;
+
+      if (this.statusElt !== null) {
+        dojo.addClass(this.statusElt, 'opened');
+      }
+
+      this.adjustSize();
+      this._isOpening = true;
+      this._isClosing = false;
       this.fadeInAnimation().then(() => {
+        if (!this._isOpening) return;
+
+        this._isOpening = false;
+        this._open = true;
         if (this.onShow !== null) {
           this.onShow();
         }
@@ -239,6 +277,7 @@ define(['dojo', 'dojo/_base/declare', 'dojo/fx', 'dojox/fx/ext-dojo/complex'], f
       return new Promise((resolve, reject) => {
         let containerId = 'popin_' + this.id + '_container';
         if (!$(containerId)) reject();
+        if (this._runningAnimation) this._runningAnimation.stop();
 
         let duration = this.fadeOut ? this.animationDuration + (this.openAnimation ? this.openAnimationDelta : 0) : 0;
         var animations = [];
@@ -276,9 +315,9 @@ define(['dojo', 'dojo/_base/declare', 'dojo/fx', 'dojox/fx/ext-dojo/complex'], f
         }
 
         // Create the overall animation
-        let anim = dojo.fx.combine(animations);
-        dojo.connect(anim, 'onEnd', () => resolve());
-        anim.play();
+        this._runningAnimation = dojo.fx.combine(animations);
+        dojo.connect(this._runningAnimation, 'onEnd', () => resolve());
+        this._runningAnimation.play();
       });
     },
 
@@ -286,11 +325,24 @@ define(['dojo', 'dojo/_base/declare', 'dojo/fx', 'dojox/fx/ext-dojo/complex'], f
      * Hide : hide the modal without destroying it
      */
     hide() {
+      if (this._isClosing) return;
+
+      this._isClosing = true;
+      this._isOpening = false;
       this.fadeOutAnimation().then(() => {
+        if(!this._isClosing || this._isOpening)
+          return;
+        this._isClosing = false;
+        this._open = false;
+
         dojo.style('popin_' + this.id + '_container', 'display', 'none');
 
         if (this.onHide !== null) {
           this.onHide();
+        }
+
+        if (this.statusElt !== null) {
+          dojo.removeClass(this.statusElt, 'opened');
         }
       });
     },
@@ -299,15 +351,38 @@ define(['dojo', 'dojo/_base/declare', 'dojo/fx', 'dojox/fx/ext-dojo/complex'], f
      * Destroy : destroy the object and all DOM elements
      */
     destroy() {
-      this.fadeOutAnimation().then(() => {
-        let underlayId = 'popin_' + this.id + '_container';
-        if ($(underlayId)) {
-          dojo.destroy(underlayId);
-        }
+      if (this._isClosing) return;
 
-        dojo.disconnect(this.resizeListener);
-        this.id = null;
+      this._isOpening = false;
+      this._isClosing = true;
+      this.fadeOutAnimation().then(() => {
+        if(!this._isClosing || this._isOpening)
+          return;
+        this._isClosing = false;
+        this._open = false;
+
+        this.kill();
       });
+    },
+
+    /*
+     * Kill : destroy the object and all DOM elements
+     */
+    kill() {
+      if (this._runningAnimation) this._runningAnimation.stop();
+      let underlayId = 'popin_' + this.id + '_container';
+      dojo.destroy(underlayId);
+
+      dojo.disconnect(this.resizeListener);
+      this.id = null;
+
+      if (this.statusElt !== null) {
+        dojo.removeClass(this.statusElt, 'opened');
+      }
+
+      if (this.onHide !== null) {
+        this.onHide();
+      }
     },
   });
 });
