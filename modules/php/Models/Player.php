@@ -356,7 +356,7 @@ class Player extends \BANG\Helpers\DB_Manager
     $d = abs($pos2 - $pos1);
     $dist = min($d, count($positions) - $d);
     foreach ($enemy->getCardsInPlay() as $card) {
-      if ($card->getEffect()['type'] == RANGE_DECREASE) {
+      if (($card->getEffect()['type'] ?? null) == RANGE_DECREASE) {
         $dist--;
       }
     }

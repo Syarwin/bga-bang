@@ -66,7 +66,8 @@ class Players extends \BANG\Helpers\DB_Manager
     // Fill with random characters
     $characters = array_diff($characters, $forcedCharacters);
     shuffle($characters);
-    for($i = 0; $i <= count($players) - count($forcedCharacters); $i++){
+    $needed = count($players) - count($forcedCharacters);
+    for($i = 0; $i < $needed; $i++){
       $forcedCharacters[] = array_pop($characters);
     }
     shuffle($forcedCharacters);
