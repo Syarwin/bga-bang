@@ -44,8 +44,32 @@ class Players extends \BANG\Helpers\DB_Manager
     $roles = array_slice([SHERIFF, OUTLAW, OUTLAW, RENEGADE, DEPUTY, OUTLAW, DEPUTY], 0, count($players));
     shuffle($roles);
 
+    // Handle forced characters
     $characters = self::getAvailableCharacters($expansions);
+    $forcedCharacters = [];
+    $optionIds = [
+      OPTION_CHAR_1,
+      OPTION_CHAR_2,
+      OPTION_CHAR_3,
+      OPTION_CHAR_4,
+      OPTION_CHAR_5,
+      OPTION_CHAR_6,
+      OPTION_CHAR_7,
+    ];
+    foreach ($optionIds as $oId) {
+      $c = $options[$oId];
+      if ($c != 100 && in_array($c, $characters) && !in_array($c, $forcedCharacters)) {
+        $forcedCharacters[] = $c;
+      }
+    }
+
+    // Fill with random characters
+    $characters = array_diff($characters, $forcedCharacters);
     shuffle($characters);
+    for($i = 0; $i <= count($players) - count($forcedCharacters); $i++){
+      $forcedCharacters[] = array_pop($characters);
+    }
+    shuffle($forcedCharacters);
 
     $values = [];
     $i = 0;
@@ -56,7 +80,7 @@ class Players extends \BANG\Helpers\DB_Manager
       $avatar = addslashes($player['player_avatar']);
       $name = addslashes($player['player_name']);
       $role = $roles[$i];
-      $cId = array_pop($characters);
+      $cId = array_pop($forcedCharacters);
       $bullets = self::getCharacterBullets($cId);
       if ($role == SHERIFF) {
         $bullets++;
