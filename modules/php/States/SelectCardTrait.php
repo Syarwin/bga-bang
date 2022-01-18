@@ -41,7 +41,10 @@ trait SelectCardTrait
     $playerId = $stackCtx['pId'];
     if ($stackCtx['toResolveFlipped'] ?? false) {
       Cards::move($ids, LOCATION_FLIPPED);
-      Cards::moveAllInLocation(LOCATION_SELECTION, DISCARD);
+      $unselectedCards = Cards::getInLocation(LOCATION_SELECTION);
+      foreach ($unselectedCards as $card) {
+        Cards::discard($card);
+      }
     }
     Players::get($playerId)->react($ids);
     Stack::finishState();
