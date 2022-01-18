@@ -141,10 +141,6 @@ define([
         // Setting up player boards order
         this.setupPlayerBoards();
 
-        if (this.isSpectator) {
-          dojo.place(jstpl_helpIcon, document.querySelector('.player-board.spectator-mode'));
-          dojo.query('.player-board.spectator-mode .roundedbox_main').style('display', 'none');
-        }
         dojo.connect($('help-icon'), 'click', () => this.displayPlayersHelp());
 
         // Make the current player stand out

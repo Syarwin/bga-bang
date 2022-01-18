@@ -47,7 +47,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         }
 
         if (isCurrent || this.isSpectator) {
-          $('player-distance-' + this.player_id).classList.add('current');
+          $('player-distance-' + player.id).classList.add('current');
         }
       });
 
