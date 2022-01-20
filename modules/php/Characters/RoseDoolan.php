@@ -16,4 +16,13 @@ class RoseDoolan extends \BANG\Models\Player
   {
     return parent::isInRange($enemy, $range + 1);
   }
+
+  public function getDistances()
+  {
+    $dist = parent::getDistances();
+    foreach ($dist as $pId => &$dist) {
+      $dist--;
+    }
+    return $dist;
+  }
 }

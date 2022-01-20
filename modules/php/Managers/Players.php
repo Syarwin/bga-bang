@@ -67,7 +67,7 @@ class Players extends \BANG\Helpers\DB_Manager
     $characters = array_diff($characters, $forcedCharacters);
     shuffle($characters);
     $needed = count($players) - count($forcedCharacters);
-    for($i = 0; $i < $needed; $i++){
+    for ($i = 0; $i < $needed; $i++) {
       $forcedCharacters[] = array_pop($characters);
     }
     shuffle($forcedCharacters);
@@ -170,11 +170,7 @@ class Players extends \BANG\Helpers\DB_Manager
   public function getDistances()
   {
     return self::getLivingPlayers()->map(function ($player) {
-      $dist = [];
-      foreach (self::getLivingPlayers() as $pId => $player2) {
-        $dist[$pId] = $player2->getDistanceTo($player);
-      }
-      return $dist;
+      return $player->getDistances();
     });
   }
 

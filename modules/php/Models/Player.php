@@ -373,6 +373,15 @@ class Player extends \BANG\Helpers\DB_Manager
     return $enemy->getDistanceTo($this) <= $range;
   }
 
+  public function getDistances()
+  {
+    $dist = [];
+    foreach (Players::getLivingPlayers() as $pId => $player2) {
+      $dist[$pId] = $player2->getDistanceTo($this);
+    }
+    return $dist;
+  }
+
   /**
    * getPlayerInRange : Returns the players ids in range of weapon
    */
