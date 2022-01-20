@@ -60,8 +60,8 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       };
 
       if (this._cards[ocard.type]) {
-        card.name = this._cards[ocard.type].name;
-        card.text = this._cards[ocard.type].text;
+        card.name = _(this._cards[ocard.type].name);
+        card.text = _(this._cards[ocard.type].text);
       }
 
       return card;

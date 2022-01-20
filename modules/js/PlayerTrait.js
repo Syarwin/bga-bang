@@ -21,9 +21,10 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       this.forEachPlayer((player) => {
         let isCurrent = player.id == this.player_id;
 
-        player.powers = '<p>' + player.powers.join('</p><p>') + '</p>';
+        player.powers = '<p>' + player.powers.map(t => _(t)).join('</p><p>') + '</p>';
         player.newNo = player.no;
         player.shortName = truncate(player.name, 11);
+        player.character = _(player.character);
 
         player.background = player.color_back ? '#' + player.color_back : 'transparent';
         dojo.place(this.format_block('jstpl_player', player), 'board');
