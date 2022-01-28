@@ -189,7 +189,7 @@ class AbstractCard implements \JsonSerializable
    */
   public function react($card, $player)
   {
-    if ($this->effect['type'] == BASIC_ATTACK) {
+    if (($this->effect['type'] ?? null) == BASIC_ATTACK) {
       if ($card->getColor() == BROWN) {
         Cards::play($card->id);
         Notifications::cardPlayed($player, $card);
