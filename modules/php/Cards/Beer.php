@@ -41,6 +41,10 @@ class Beer extends \BANG\Models\BrownCard
       $msg = clienttranslate('You have maximum amount of life points. Drinking a beer would currently have no effect. Do you still want to drink it?');
       $options['confirmationMsg'] = $msg;
     }
+    if ($options != null && Players::count() == 2) {
+      $msg = clienttranslate('Drinking a beer when only 2 players are left have no effect. Do you still want to drink it?');
+      $options['confirmationMsg'] = $msg;
+    }
     return $options;
   }
 }

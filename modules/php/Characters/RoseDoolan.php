@@ -20,8 +20,8 @@ class RoseDoolan extends \BANG\Models\Player
   public function getDistances()
   {
     $dist = parent::getDistances();
-    foreach ($dist as $pId => &$dist) {
-      $dist--;
+    foreach ($dist as $pId => &$d) {
+      $d--;
     }
     return $dist;
   }
