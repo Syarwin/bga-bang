@@ -16,7 +16,7 @@ class VultureSam extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function onPlayerEliminated($player)
+  public function onPlayerPreEliminated($player)
   {
     // TODO send a single notification?
     foreach ($player->getHand() as $card) {

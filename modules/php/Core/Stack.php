@@ -134,7 +134,7 @@ class Stack
   public function isItLastElimination()
   {
     $stack = Stack::get();
-    return count($stack) <= 1 || $stack[1]['state'] != ST_PRE_ELIMINATE;
+    return count($stack) <= 1 || $stack[1]['state'] != ST_PRE_ELIMINATE_CHECK;
   }
 
   public static function clearAllLeaveLast()

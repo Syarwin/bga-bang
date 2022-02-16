@@ -63,6 +63,22 @@ trait EndOfLifeTrait
     $this->gamestate->jumpToState(ST_ELIMINATE);
   }
 
+  public function stDiscardEliminate()
+  {
+    $player = Players::getActive();
+    // Let characters react => mostly Vulture
+    foreach (Players::getLivingPlayers($player->getId()) as $opp) {
+      $opp->onPlayerPreEliminated($player);
+    }
+
+    $cards = $player->getCardsInPlay()->merge($player->getHand());
+    if($cards->empty()){
+      $this->gamestate->jumpToState(ST_ELIMINATE);
+    } else {
+      $this->gamestate->jumpToState(ST_PRE_ELIMINATE);
+    }
+  }
+
   /**
    * Eliminate a player
    */

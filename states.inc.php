@@ -122,6 +122,12 @@ $machinestates = [
     'possibleactions' => ['actCancelEndTurn', 'actDiscardExcess'],
   ],
 
+  ST_PRE_ELIMINATE_CHECK => [
+    'name' => 'preEliminateCheck',
+    'type' => 'game',
+    'action' => 'stDiscardEliminate',
+  ],
+
   ST_PRE_ELIMINATE => [
     'name' => 'preEliminate',
     'description' => clienttranslate('${actplayer} must discard all their cards'),
@@ -142,7 +148,9 @@ $machinestates = [
   ST_VICE_PENALTY => [
     'name' => 'vicePenalty',
     'description' => clienttranslate('${actplayer} must discard all their cards (killing Vice penalty)'),
-    'descriptionmyturn' => clienttranslate('${you} must select the order in which you want to discard your cards (killing Vice penalty)'),
+    'descriptionmyturn' => clienttranslate(
+      '${you} must select the order in which you want to discard your cards (killing Vice penalty)'
+    ),
     'type' => 'activeplayer',
     'args' => 'argDiscardEliminate',
     'possibleactions' => ['actDiscardVicePenalty', 'actDefautDiscardVicePenalty'],
