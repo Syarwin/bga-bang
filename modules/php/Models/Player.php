@@ -285,7 +285,7 @@ class Player extends \BANG\Helpers\DB_Manager
         ->count();
       $isKetchumAndCanUseAbility = $this->character == SID_KETCHUM && $this->getHand()->count() >= 2;
       $canDrinkBeerToLive = (!$isDuel && $beersInHand > 0) || $isKetchumAndCanUseAbility;
-      $nextState = $canDrinkBeerToLive ? ST_REACT_BEER : ST_ELIMINATE;
+      $nextState = $canDrinkBeerToLive ? ST_REACT_BEER : ST_PRE_ELIMINATE;
       $atomType = $canDrinkBeerToLive ? 'beer' : 'eliminate';
       $atom = Stack::newAtom($nextState, [
         'type' => $atomType,
@@ -305,7 +305,7 @@ class Player extends \BANG\Helpers\DB_Manager
     // If it's not enough, add a ELIMINATE node
     if ($this->getHp() <= 0) {
       $ctx = Stack::getCtx();
-      $atom = Stack::newAtom(ST_ELIMINATE, [
+      $atom = Stack::newAtom(ST_PRE_ELIMINATE, [
         'type' => 'eliminate',
         'src' => $ctx['src'],
         'attacker' => $ctx['attacker'],
@@ -721,12 +721,13 @@ class Player extends \BANG\Helpers\DB_Manager
       }
       if ($this->getRole() == DEPUTY && $byPlayer->getRole() == SHERIFF) {
         Notifications::tell(clienttranslate('The Sheriff eliminated his Deputy and must discard all cards'), []);
-        $byPlayer->discardAllCards();
+        return $byPlayer->getId();
       }
     }
 
     // Remove all related nodes that could still be there (reactions/powers)
     Stack::removePlayerAtoms($this->id);
+    return true;
   }
 
   /**
@@ -739,8 +740,8 @@ class Player extends \BANG\Helpers\DB_Manager
     $hand->merge($equipment)->map(function ($card) {
       Cards::discard($card);
     });
-    Notifications::discardedCards($this, $equipment, true);
-    Notifications::discardedCards($this, $hand, false);
+    Notifications::discardedCards($this, $equipment, true, $equipment->getIds());
+    Notifications::discardedCards($this, $hand, false, $hand->getIds());
     $this->onChangeHand();
   }
 

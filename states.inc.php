@@ -16,7 +16,6 @@ $machinestates = [
     ],
   ],
 
-
   /*
    * Start of a turn : trigger cards such as Dynamite or Jail before moving on to appropriate state
    */
@@ -123,12 +122,30 @@ $machinestates = [
     'possibleactions' => ['actCancelEndTurn', 'actDiscardExcess'],
   ],
 
+  ST_PRE_ELIMINATE => [
+    'name' => 'preEliminate',
+    'description' => clienttranslate('${actplayer} must discard all their cards'),
+    'descriptionmyturn' => clienttranslate('${you} must select the order in which you want to discard your cards'),
+    'type' => 'activeplayer',
+    'args' => 'argDiscardEliminate',
+    'possibleactions' => ['actDiscardEliminate', 'actDefautDiscardExcess'],
+  ],
+
   ST_ELIMINATE => [
     'name' => 'eliminate',
     'description' => '',
     'type' => 'game',
     'action' => 'stEliminate',
     'updateGameProgression' => true,
+  ],
+
+  ST_VICE_PENALTY => [
+    'name' => 'vicePenalty',
+    'description' => clienttranslate('${actplayer} must discard all their cards (killing Vice penalty)'),
+    'descriptionmyturn' => clienttranslate('${you} must select the order in which you want to discard your cards (killing Vice penalty)'),
+    'type' => 'activeplayer',
+    'args' => 'argDiscardEliminate',
+    'possibleactions' => ['actDiscardVicePenalty', 'actDefautDiscardVicePenalty'],
   ],
 
   ST_TRIGGER_ABILITY => [

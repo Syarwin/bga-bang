@@ -61,7 +61,15 @@ define([
         this._dial = null;
 
         // States that need the player to be active to be entered
-        this._activeStates = ['drawCard', 'playCard', 'react', 'multiReact', 'discardExcess'];
+        this._activeStates = [
+          'drawCard',
+          'playCard',
+          'react',
+          'multiReact',
+          'discardExcess',
+          'preEliminate',
+          'vicePenalty',
+        ];
 
         this.default_viewport = 'width=840';
 
@@ -204,6 +212,29 @@ define([
               this.addPrimaryActionButton('buttonUseBarrel', _('Use barrel'), () => this.onClickCardSelectReact(card));
             }
           });
+        }
+
+        if (stateName == 'preEliminate') {
+          this.addActionButton(
+            'buttonDefaultDiscardExcess',
+            _('Use default order'),
+            () => this.takeAction('actDefautDiscardExcess', {}),
+            null,
+            false,
+            'gray',
+          );
+        }
+
+
+        if (stateName == 'vicePenalty') {
+          this.addActionButton(
+            'buttonDefaultDiscardVicePenalty',
+            _('Use default order'),
+            () => this.takeAction('actDefautDiscardVicePenalty', {}),
+            null,
+            false,
+            'gray',
+          );
         }
       },
 

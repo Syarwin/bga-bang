@@ -21,7 +21,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       this.forEachPlayer((player) => {
         let isCurrent = player.id == this.player_id;
 
-        player.powers = '<p>' + player.powers.map(t => _(t)).join('</p><p>') + '</p>';
+        player.powers = '<p>' + player.powers.map((t) => _(t)).join('</p><p>') + '</p>';
         player.newNo = player.no;
         player.shortName = truncate(player.name, 11);
         player.character = _(player.character);
@@ -151,6 +151,10 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
     updateDistances() {
       if (this.isSpectator) return;
+      if (!this.gamedatas.distances[this.player_id]) {
+        dojo.query('.player-distance').addClass('current');
+        return;
+      }
 
       let dist = this.gamedatas.distances[this.player_id];
       Object.keys(dist).forEach((pId) => ($('player-distance-' + pId).innerHTML = dist[pId]));

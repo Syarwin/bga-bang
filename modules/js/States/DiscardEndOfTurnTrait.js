@@ -42,5 +42,71 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         cards: this._selectedCards.join(';'),
       });
     },
+
+    /** End of Life discard **/
+
+    onEnteringStatePreEliminate(args) {
+      debug('Discard before dying', args);
+      this._amount = args.amount;
+      this._selectedCards = [];
+      this.makeCardSelectable(args._private, 'discardEliminate');
+    },
+
+    onClickCardDiscardEliminate(card) {
+      if (!this.toggleCard(card)) return;
+
+      if (this._selectedCards.length < this._amount) {
+        this.removeActionButtons();
+        this.onUpdateActionButtons(this.gamedatas.gamestate.name, this.gamedatas.gamestate.args);
+      } else {
+        this.addActionButton(
+          'buttonConfirmDiscardEliminate',
+          _('Confirm discard order'),
+          'onClickConfirmDiscardEliminate',
+          null,
+          false,
+          'blue',
+        );
+      }
+    },
+
+    onClickConfirmDiscardEliminate() {
+      this.takeAction('actDiscardEliminate', {
+        cards: this._selectedCards.join(';'),
+      });
+    },
+
+    /** Vice Penalty Discard **/
+
+    onEnteringStateVicePenalty(args) {
+      debug('Discard because killing vice', args);
+      this._amount = args.amount;
+      this._selectedCards = [];
+      this.makeCardSelectable(args._private, 'discardVicePenalty');
+    },
+
+    onClickCardDiscardVicePenalty(card) {
+      if (!this.toggleCard(card)) return;
+
+      if (this._selectedCards.length < this._amount) {
+        this.removeActionButtons();
+        this.onUpdateActionButtons(this.gamedatas.gamestate.name, this.gamedatas.gamestate.args);
+      } else {
+        this.addActionButton(
+          'buttonConfirmDiscardVicePenalty',
+          _('Confirm discard order'),
+          'onClickConfirmDiscardVicePenalty',
+          null,
+          false,
+          'blue',
+        );
+      }
+    },
+
+    onClickConfirmDiscardVicePenalty() {
+      this.takeAction('actDiscardVicePenalty', {
+        cards: this._selectedCards.join(';'),
+      });
+    },
   });
 });

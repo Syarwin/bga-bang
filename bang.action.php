@@ -112,6 +112,36 @@ class action_bang extends APP_GameAction
     self::ajaxResponse();
   }
 
+  public function actDefautDiscardExcess()
+  {
+    self::setAjaxMode();
+    $this->game->actDefautDiscardExcess();
+    self::ajaxResponse();
+  }
+
+  public function actDiscardEliminate()
+  {
+    self::setAjaxMode();
+    $cards = array_map('intval', explode(';', self::getArg('cards', AT_numberlist, false)));
+    $this->game->actDiscardEliminate($cards);
+    self::ajaxResponse();
+  }
+
+  public function actDiscardVicePenalty()
+  {
+    self::setAjaxMode();
+    $cards = array_map('intval', explode(';', self::getArg('cards', AT_numberlist, false)));
+    $this->game->actDiscardVicePenalty($cards);
+    self::ajaxResponse();
+  }
+
+  public function actDefautDiscardVicePenalty()
+  {
+    self::setAjaxMode();
+    $this->game->actDefautDiscardVicePenalty();
+    self::ajaxResponse();
+  }
+
   public function actUseAbility()
   {
     self::setAjaxMode();

@@ -3,6 +3,7 @@ namespace BANG\States;
 use BANG\Managers\Cards;
 use BANG\Managers\Players;
 use BANG\Core\Stack;
+use BANG\Core\Notifications;
 
 trait EndOfLifeTrait
 {
@@ -36,6 +37,32 @@ trait EndOfLifeTrait
     $player->eliminateIfOutOfHp();
   }
 
+  public function argDiscardEliminate()
+  {
+    $player = Players::getActive();
+    $cards = $player->getCardsInPlay()->merge($player->getHand());
+    return [
+      'amount' => $cards->count(),
+      '_private' => [
+        'active' => $cards->toArray(),
+      ],
+    ];
+  }
+
+  public function actDiscardEliminate($cardIds)
+  {
+    $cards = Cards::getMany($cardIds);
+    Cards::discardMany($cardIds);
+    $player = Players::getActive();
+    Notifications::discardedCards($player, $cards, false, $cardIds);
+    $this->gamestate->jumpToState(ST_ELIMINATE);
+  }
+
+  public function actDefautDiscardExcess()
+  {
+    $this->gamestate->jumpToState(ST_ELIMINATE);
+  }
+
   /**
    * Eliminate a player
    */
@@ -43,7 +70,28 @@ trait EndOfLifeTrait
   {
     $ctx = Stack::getCtx();
     $player = Players::get($ctx['pId']);
-    $player->eliminate();
+    $pId = $player->eliminate();
+    if ($pId === true) {
+      Stack::finishState();
+    } else {
+      $this->gamestate->changeActivePlayer($pId);
+      $this->gamestate->jumpToState(ST_VICE_PENALTY);
+    }
+  }
+
+  public function actDiscardVicePenalty($cardIds)
+  {
+    $cards = Cards::getMany($cardIds);
+    Cards::discardMany($cardIds);
+    $player = Players::getActive();
+    Notifications::discardedCards($player, $cards, false, $cardIds);
+    Stack::finishState();
+  }
+
+  public function actDefautDiscardVicePenalty()
+  {
+    $player = Players::getActive();
+    $player->discardAllCards();
     Stack::finishState();
   }
 }
