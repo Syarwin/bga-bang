@@ -13,4 +13,9 @@ class Curse extends AbstractEventCard
     $this->effect = EFFECT_PERMANENT;
     $this->expansion = HIGH_NOON;
   }
+
+  public function getColorOverride()
+  {
+    return 'S';
+  }
 }

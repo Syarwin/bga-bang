@@ -43,8 +43,8 @@ class EventCards extends \BANG\Helpers\Pieces
   public static $classes = [
     CARD_BLESSING => 'Blessing',
     CARD_CURSE => 'Curse',
-    CARD_DALTONS => 'Daltons',
-    CARD_HIGH_NOON => 'HighNoon',
+//    CARD_DALTONS => 'Daltons',
+//    CARD_HIGH_NOON => 'HighNoon',
   ];
 
   /*

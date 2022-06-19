@@ -63,6 +63,10 @@ class AbstractEventCard implements \JsonSerializable
   {
   }
 
+  public function getColorOverride()
+  {
+  }
+
   /*
    * jsonSerialize: used in frontend to manipulate cards
    */
