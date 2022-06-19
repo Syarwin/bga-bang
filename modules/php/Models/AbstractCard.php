@@ -3,6 +3,7 @@ namespace BANG\Models;
 use BANG\Core\Stack;
 use BANG\Managers\Cards;
 use BANG\Core\Notifications;
+use BANG\Managers\EventCards;
 
 /*
  * AbstractCard: base class to handle actions cards
@@ -55,7 +56,7 @@ class AbstractCard implements \JsonSerializable
     return [
       'id' => $this->id,
       'type' => $this->type,
-      'color' => $this->color,
+      'color' => $this->getCopyColor(),
       'value' => $this->value,
     ];
   }
@@ -115,7 +116,9 @@ class AbstractCard implements \JsonSerializable
 
   public function getCopyColor()
   {
-    return $this->color;
+    $eventCard = EventCards::getActive();
+    $eventColorOverride = $eventCard->getEffect() === EFFECT_PERMANENT ? $eventCard->getColorOverride() : null;
+    return $eventColorOverride ?? $this->color;
   }
 
   public function getEffectType()
