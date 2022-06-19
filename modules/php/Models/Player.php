@@ -44,7 +44,7 @@ class Player extends \BANG\Helpers\DB_Manager
       $this->eliminated = $row['player_eliminated'] == 1;
       $this->hp = (int) $row['player_hp'];
       $this->zombie = $row['player_zombie'] == 1;
-      $this->role = $row['player_role'];
+      $this->role = (int) $row['player_role'];
       $this->bullets = (int) $row['player_bullets'];
       $this->score = (int) $row['player_score'];
       $this->generalStore = (int) $row['player_autopick_general_store'];

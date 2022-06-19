@@ -12,6 +12,7 @@ class Scope extends \BANG\Models\BlueCard
     $this->symbols = [[$this->text]];
     $this->copies = [
       BASE_GAME => ['AS'],
+      HIGH_NOON => [],
       DODGE_CITY => [],
     ];
     $this->effect = ['type' => RANGE_DECREASE];

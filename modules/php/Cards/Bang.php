@@ -15,6 +15,7 @@ class Bang extends BangActionCard
     $this->copies = [
       // prettier-ignore
       BASE_GAME => [ 'AS', '8D', '9D', '10D', 'JD', 'QD', 'KD', 'AD', '2C', '3C', 'QH', 'KH', 'AH', '2D', '3D', '4D', '5D', '6D', '7D', '4C', '5C', '6C', '7C', '8C', '9C' ],
+      HIGH_NOON => [],
       DODGE_CITY => ['8S', '5C', '6C', 'KC'],
     ];
     $this->effect = [

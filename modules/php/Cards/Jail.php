@@ -24,6 +24,7 @@ class Jail extends \BANG\Models\BlueCard
     ];
     $this->copies = [
       BASE_GAME => ['JS', '4H', '10S'],
+      HIGH_NOON => [],
       DODGE_CITY => [],
     ];
   }

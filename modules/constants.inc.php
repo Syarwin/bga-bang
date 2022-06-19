@@ -23,6 +23,7 @@ define('ST_TRIGGER_ABILITY', 20);
 define('ST_PRE_ELIMINATE', 21);
 define('ST_VICE_PENALTY', 22);
 define('ST_PRE_ELIMINATE_CHECK', 23);
+define('ST_NEW_EVENT', 24);
 define('ST_PRE_GAME_END', 98);
 define('ST_GAME_END', 99);
 
@@ -55,7 +56,7 @@ define('TARGET_CARDS', 3);
 //define('RANDOM', 1);
 
 /*
- * Extensions
+ * Expansions
  */
 define('BASE_GAME', 0);
 define('HIGH_NOON', 1);
@@ -99,6 +100,21 @@ define('CARD_WHISKY', 26);
 define('CARD_TEQUILA', 27);
 define('CARD_BRAWL', 28);
 define('CARD_RAG_TIME', 29);
+
+// Event cards
+define('CARD_BLESSING', 100);
+define('CARD_CURSE', 101);
+define('CARD_DALTONS', 102);
+define('CARD_DOCTOR', 103);
+define('CARD_GHOST_TOWN', 104);
+define('CARD_GOLD_RUSH', 105);
+define('CARD_HANGOVER', 106);
+define('CARD_REVEREND', 107);
+define('CARD_SERMON', 108);
+define('CARD_SHOOTOUT', 109);
+define('CARD_THIRST', 110);
+define('CARD_TRAIN_ARRIVAL', 111);
+define('CARD_HIGH_NOON', 112);
 
 define('PASS', 999); //has to be bigger than the maximum number of cards in the game
 
@@ -157,7 +173,10 @@ define('LIFE_POINT_MODIFIER', 4);
 define('RANGE_INCREASE', 5);
 define('RANGE_DECREASE', 6);
 define('DEFENSIVE', 7);
-define('STARTOFTURN', 9);
+
+define('EFFECT_STARTOFTURN', 100);
+define('EFFECT_INSTANT', 101);
+define('EFFECT_PERMANENT', 102);
 
 define('NONE', 0);
 define('INRANGE', 1);
@@ -200,6 +219,8 @@ define('LOCATION_INPLAY', 'inPlay');
 define('LOCATION_FLIPPED', 'flipped');
 define('LOCATION_DECK', 'deck');
 define('LOCATION_DISCARD', 'discard');
+define('LOCATION_EVENTS_DECK', 'eventDeck');
+define('LOCATION_EVENTS_DISCARD', 'eventDiscard');
 
 /*
  * Constants for General Store preference

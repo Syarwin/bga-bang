@@ -40,6 +40,13 @@ $machinestates = [
     'transitions' => [],
   ],
 
+  ST_NEW_EVENT => [
+    'name' => 'newEvent',
+    'description' => '',
+    'type' => 'game',
+    'action' => 'stNewEvent',
+  ],
+
   ST_DRAW_CARDS => [
     'name' => 'drawCards',
     'description' => '',

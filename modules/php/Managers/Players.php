@@ -155,19 +155,19 @@ class Players extends \BANG\Helpers\DB_Manager
     return self::get(Globals::getPIdTurn());
   }
 
-  public function count()
+  public static function count()
   {
     return self::DB()->count();
   }
 
-  public function getUiData($pId)
+  public static function getUiData($pId)
   {
     return self::getAll()->map(function ($player) use ($pId) {
       return $player->getUiData($pId);
     });
   }
 
-  public function getDistances()
+  public static function getDistances()
   {
     return self::getLivingPlayers()->map(function ($player) {
       return $player->getDistances();

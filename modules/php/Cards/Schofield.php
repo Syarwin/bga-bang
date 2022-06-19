@@ -12,6 +12,7 @@ class Schofield extends \BANG\Models\WeaponCard
     $this->symbols = [[SYMBOL_RANGE2]];
     $this->copies = [
       BASE_GAME => ['JC', 'QC', 'KS'],
+      HIGH_NOON => [],
       DODGE_CITY => [],
     ];
     $this->effect = [

@@ -33,11 +33,11 @@ abstract class Utils
     return bang::get()->gamestate->state()['name'];
   }
 
-  public function getCopyValue($copy)
+  public static function getCopyValue($copy)
   {
     return substr($copy, 0, -1);
   }
-  public function getCopyColor($copy)
+  public static function getCopyColor($copy)
   {
     return substr($copy, -1);
   }

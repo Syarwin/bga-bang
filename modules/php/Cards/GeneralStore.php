@@ -15,6 +15,7 @@ class GeneralStore extends \BANG\Models\BrownCard
     $this->symbols = [[clienttranslate('Reveal as many card as players. Each player draws one.')]];
     $this->copies = [
       BASE_GAME => ['9C', 'QS'],
+      HIGH_NOON => [],
       DODGE_CITY => [],
     ];
     $this->effect = ['type' => OTHER];

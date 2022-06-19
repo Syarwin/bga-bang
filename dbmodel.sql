@@ -39,7 +39,13 @@ CREATE TABLE IF NOT EXISTS `card` (
   PRIMARY KEY (`card_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
+CREATE TABLE IF NOT EXISTS `events` (
+    `card_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `card_location` varchar(32) NOT NULL,
+    `card_state` int(10),
+    `type` int(10),
+    PRIMARY KEY (`card_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `global_variables` (
   `name` varchar(255) NOT NULL,
