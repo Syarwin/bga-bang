@@ -12,6 +12,7 @@ class WellsFargo extends \BANG\Models\BrownCard
     $this->symbols = [[SYMBOL_DRAW, SYMBOL_DRAW, SYMBOL_DRAW]];
     $this->copies = [
       BASE_GAME => ['3H'],
+      HIGH_NOON => [],
       DODGE_CITY => [],
     ];
     $this->effect = [

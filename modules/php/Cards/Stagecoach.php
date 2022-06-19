@@ -12,6 +12,7 @@ class Stagecoach extends \BANG\Models\BrownCard
     $this->symbols = [[SYMBOL_DRAW, SYMBOL_DRAW]];
     $this->copies = [
       BASE_GAME => ['9S', '9S'],
+      HIGH_NOON => [],
       DODGE_CITY => [],
     ];
     $this->effect = [

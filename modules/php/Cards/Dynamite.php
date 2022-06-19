@@ -18,6 +18,7 @@ class Dynamite extends \BANG\Models\BlueCard
     $this->symbols = [[SYMBOL_DYNAMITE, clienttranslate('Lose 3 life points. Else pass the Dynamite on your left.')]];
     $this->copies = [
       BASE_GAME => ['2H'],
+      HIGH_NOON => [],
       DODGE_CITY => [],
     ];
   }

@@ -12,6 +12,7 @@ class Saloon extends \BANG\Models\BrownCard
     $this->symbols = [[SYMBOL_LIFEPOINT, SYMBOL_OTHER], [SYMBOL_LIFEPOINT]];
     $this->copies = [
       BASE_GAME => ['5H'],
+      HIGH_NOON => [],
       DODGE_CITY => [],
     ];
     $this->effect = [

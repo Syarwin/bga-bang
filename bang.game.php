@@ -34,11 +34,8 @@ require_once APP_GAMEMODULE_PATH . 'module/table/table.game.php';
 
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
-use BANG\Helpers\Utils;
-use BANG\Core\Notifications;
-use BANG\Core\Stats;
+use BANG\Managers\EventCards;
 use BANG\Core\Globals;
-use BANG\Core\Log;
 use BANG\Core\Stack;
 
 class bang extends Table
@@ -53,6 +50,7 @@ class bang extends Table
   use BANG\States\EndOfGameTrait;
   use BANG\States\TriggerAbilityTrait;
   use BANG\States\PreferencesTrait;
+  use BANG\States\NewEventTrait;
 
   public static $instance = null;
   public function __construct()
@@ -81,8 +79,9 @@ class bang extends Table
   protected function setupNewGame($bplayers, $options = [])
   {
     // Initialize board and cards
-    $expansions = [BASE_GAME];
+    $expansions = [BASE_GAME, HIGH_NOON]; // TODO: Parametrise and let players choose
     Cards::setupNewGame($expansions);
+    EventCards::setupNewGame($expansions);
 
     // Initialize players
     $sheriff = Players::setupNewGame($bplayers, $expansions, $options);
@@ -101,8 +100,10 @@ class bang extends Table
       'players' => Players::getUiData($pId),
       'deck' => Cards::getDeckCount(),
       'discard' => Cards::getLastDiscarded(),
+      'eventsDeck' => EventCards::getDeckCount(),
+      'eventActive' => EventCards::getActive(),
       'playerTurn' => Globals::getPIdTurn(),
-      'cards' => Cards::getUIData(),
+      'cards' => array_merge(Cards::getUIData(), EventCards::getUiData()),
       'distances' => Players::getDistances(),
     ];
     return $result;

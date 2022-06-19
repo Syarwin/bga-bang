@@ -15,6 +15,7 @@ class Barrel extends \BANG\Models\BlueCard
     $this->symbols = [[SYMBOL_DRAW_HEART, SYMBOL_MISSED]];
     $this->copies = [
       BASE_GAME => ['QS', 'KS'],
+      HIGH_NOON => [],
       DODGE_CITY => [],
     ];
     $this->effect = ['type' => DEFENSIVE];

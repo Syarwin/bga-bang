@@ -269,7 +269,6 @@ class Pieces extends DB_Manager
    */
   public static function getExtremePosition($getMax, $location, $id = null)
   {
-    $whereOp = self::checkLocation($location, true);
     $query = self::DB();
     self::addWhereClause($query, $id, $location);
     return $query->func($getMax ? 'MAX' : 'MIN', static::$prefix . 'state') ?? 0;
@@ -411,7 +410,7 @@ class Pieces extends DB_Manager
   }
 
   /*
-   * Reform a location from another location when enmpty
+   * Reform a location from another location when empty
    */
   public static function reformDeckFromDiscard($fromLocation)
   {
@@ -470,7 +469,7 @@ class Pieces extends DB_Manager
   public static function insertAtBottom($id, $location)
   {
     $pos = self::getExtremePosition(false, $location);
-    self::insertAt($id, $location, $pos - 1);
+    self::insertAt($id, $location, $pos);
   }
 
   /************************************
@@ -491,7 +490,7 @@ class Pieces extends DB_Manager
    *     "state" => <state>             // Optional argument specifies integer state, if not specified and $token_state_global is not specified auto-increment is used
    */
 
-  function create($pieces, $globalLocation = null, $globalState = null, $globalId = null)
+  static function create($pieces, $globalLocation = null, $globalState = null, $globalId = null)
   {
     $pos = is_null($globalLocation) ? 0 : self::getExtremePosition(true, $globalLocation) + 1;
 
@@ -520,7 +519,6 @@ class Pieces extends DB_Manager
       self::checkLocation($location);
 
       for ($i = $start; $i < $n + $start; $i++) {
-        $data = [];
         if (static::$autoIncrement) {
           $data = [$location, $state];
         } else {
@@ -554,9 +552,9 @@ class Pieces extends DB_Manager
   /*
    * Create a single token
    */
-  function singleCreate($id, $location, $state = null)
+  static function singleCreate($type, $location)
   {
-    self::checkState($state);
-    return self::create(['id' => $id, 'location' => $location, 'state' => $state]);
+//    self::checkState($state);
+    return self::create([['type' => $type]], $location);
   }
 }

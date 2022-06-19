@@ -13,6 +13,7 @@ class Indians extends \BANG\Models\BrownCard
     $this->symbols = [[$this->text]];
     $this->copies = [
       BASE_GAME => ['KD', 'AD'],
+      HIGH_NOON => [],
       DODGE_CITY => [],
     ];
     $this->effect = [

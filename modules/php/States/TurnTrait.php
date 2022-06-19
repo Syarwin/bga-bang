@@ -42,6 +42,12 @@ trait TurnTrait
     Globals::setPIdTurn($player->getId());
     Stack::setup([ST_DRAW_CARDS, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN]);
     $player->startOfTurn();
+    if ($player->getRole() === SHERIFF) { // TODO: New event should be drawn on Sheriff's second turn. First turn is ok while developing though
+      $atom = Stack::newAtom(ST_NEW_EVENT, [
+        'pId' => $player->getId(),
+      ]);
+      Stack::insertOnTop($atom);
+    }
     Stack::finishState();
   }
 

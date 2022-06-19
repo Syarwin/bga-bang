@@ -12,6 +12,7 @@ class CatBalou extends \BANG\Models\BrownCard
     $this->symbols = [[SYMBOL_DISCARD, SYMBOL_ANY]];
     $this->copies = [
       BASE_GAME => ['KH', '9D', '10D', 'JD'],
+      HIGH_NOON => [],
       DODGE_CITY => [],
     ];
     $this->effect = [

@@ -12,6 +12,7 @@ class RevCarabine extends \BANG\Models\WeaponCard
     $this->symbols = [[SYMBOL_RANGE4]];
     $this->copies = [
       BASE_GAME => ['AC'],
+      HIGH_NOON => [],
       DODGE_CITY => [],
     ];
     $this->effect = [
