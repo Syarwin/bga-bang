@@ -177,6 +177,7 @@ define('DEFENSIVE', 7);
 define('EFFECT_STARTOFTURN', 100);
 define('EFFECT_INSTANT', 101);
 define('EFFECT_PERMANENT', 102);
+define('EFFECT_ENDOFTURN', 103);
 
 define('NONE', 0);
 define('INRANGE', 1);
