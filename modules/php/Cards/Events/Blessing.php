@@ -9,7 +9,7 @@ class Blessing extends AbstractEventCard
     parent::__construct($id);
     $this->type = CARD_BLESSING;
     $this->name = clienttranslate('Blessing');
-    $this->text = clienttranslate('All cards are considered Hearts');
+    $this->text = clienttranslate('The suit of all cards is Hearts for the whole round');
     $this->effect = EFFECT_PERMANENT;
     $this->expansion = HIGH_NOON;
   }

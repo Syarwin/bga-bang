@@ -9,7 +9,7 @@ class TrainArrival extends AbstractEventCard
     parent::__construct($id);
     $this->type = CARD_TRAIN_ARRIVAL;
     $this->name = clienttranslate('Train Arrival');
-    $this->text = clienttranslate('Players draw 1 extra card at the start of their turn');
+    $this->text = clienttranslate('Each player draws one extra card at the end of phase 1 of his turn');
     $this->effect = EFFECT_STARTOFTURN;
     $this->expansion = HIGH_NOON;
   }

@@ -9,8 +9,8 @@ class Doctor extends AbstractEventCard
   {
     parent::__construct($id);
     $this->type = CARD_DOCTOR;
-    $this->name = clienttranslate('Doctor');
-    $this->text = clienttranslate('When this card enters play, the player(s) with the lowest life points gain 1 life point');
+    $this->name = clienttranslate('The Doctor');
+    $this->text = clienttranslate('When The Doctor enters in play, the player(s) still in the game with the fewest current life points regain(s) 1 life point');
     $this->effect = EFFECT_INSTANT;
     $this->expansion = HIGH_NOON;
   }

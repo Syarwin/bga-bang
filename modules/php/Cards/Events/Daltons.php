@@ -9,7 +9,7 @@ class Daltons extends AbstractEventCard
     parent::__construct($id);
     $this->type = CARD_DALTONS;
     $this->name = clienttranslate('The Daltons');
-    $this->text = clienttranslate('When this card enters play, all players with a blue card in play discard one of them');
+    $this->text = clienttranslate('When The Daltons enter play, each player who has any blue cards in front of him, chooses one of them and discard it');
     $this->effect = EFFECT_INSTANT;
     $this->expansion = HIGH_NOON;
   }
