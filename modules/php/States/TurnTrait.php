@@ -16,7 +16,7 @@ trait TurnTrait
    */
   public function stNextPlayer()
   {
-    $pId = $this->activeNextPlayer();
+    $pId = EventCards::getActive()->nextPlayerClockwise() ? $this->activeNextPlayer() : $this->activePrevPlayer();
 
     if (Players::get($pId)->isEliminated()) {
       $this->stNextPlayer();

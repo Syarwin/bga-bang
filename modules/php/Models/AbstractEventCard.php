@@ -68,6 +68,11 @@ class AbstractEventCard implements \JsonSerializable
     return $currentColor;
   }
 
+  public function nextPlayerClockwise()
+  {
+    return true;
+  }
+
   /*
    * jsonSerialize: used in frontend to manipulate cards
    */
