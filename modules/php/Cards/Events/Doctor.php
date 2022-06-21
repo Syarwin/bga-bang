@@ -15,7 +15,7 @@ class Doctor extends AbstractEventCard
     $this->expansion = HIGH_NOON;
   }
 
-  public function resolveEffect()
+  public function resolveEffect($player = null)
   {
     $players = Players::getLivingPlayers();
     $minHp = min($players->map(function ($player) { return $player->getHp(); })->toArray());

@@ -25,9 +25,7 @@ class PedroRamirez extends \BANG\Models\Player
     if (is_null(Cards::getLastDiscarded())) {
       parent::drawCardsPhaseOne();
     } else {
-      Stack::insertOnTop(Stack::newAtom(ST_ACTIVE_DRAW_CARD, [
-        'pId' => $this->id,
-      ]));
+      Stack::insertOnTop(Stack::newSimpleAtom(ST_ACTIVE_DRAW_CARD, $this));
     }
   }
 

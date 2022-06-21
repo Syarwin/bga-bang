@@ -14,7 +14,7 @@ class GoldRush extends AbstractEventCard
     $this->expansion = HIGH_NOON;
   }
 
-  public function resolveEffect()
+  public function resolveEffect($player = null)
   {
 
   }

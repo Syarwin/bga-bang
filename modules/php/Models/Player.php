@@ -297,7 +297,7 @@ class Player extends \BANG\Helpers\DB_Manager
         'attacker' => $ctx['attacker'] ?? null,
         'pId' => $this->id,
       ]);
-      Stack::insertAfterCardResolution($atom);
+      Stack::insertAfterCardResolution($atom, false);
     }
   }
 

@@ -17,7 +17,7 @@ class Stack
   {
     $ctx = Stack::getCtx();
     if (empty($ctx)) { // Ok, that should be the very game start
-      $firstAtom = Stack::newAtom(ST_START_OF_TURN, []);
+      $firstAtom = Stack::newAtom(ST_START_OF_TURN);
       Stack::setCtx($firstAtom);
       $stack = [$firstAtom];
     } else {
@@ -168,11 +168,18 @@ class Stack
     Globals::setStackCtx($ctx);
   }
 
-  public static function newAtom($state, $atom) {
+  public static function newAtom($state, $atom = []) {
     Stack::makeStackBackwardCompatible();
     $atom['state'] = $state;
     $atom = ['uid' => uniqid()] + $atom;
     return $atom;
+  }
+
+  public static function newSimpleAtom($state, $player) {
+    $pId = is_int($player) ? $player : $player->getId();
+    return self::newAtom($state, [
+      'pId' => $pId,
+    ]);
   }
 
   public static function finishState() {

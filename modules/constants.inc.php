@@ -24,6 +24,7 @@ define('ST_PRE_ELIMINATE', 21);
 define('ST_VICE_PENALTY', 22);
 define('ST_PRE_ELIMINATE_DISCARD', 23);
 define('ST_NEW_EVENT', 24);
+define('ST_RESOLVE_EVENT_EFFECT', 25);
 define('ST_PRE_GAME_END', 98);
 define('ST_GAME_END', 99);
 

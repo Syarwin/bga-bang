@@ -14,4 +14,9 @@ class HighNoon extends AbstractEventCard
     $this->lastCard = true;
     $this->expansion = HIGH_NOON;
   }
+
+  public function resolveEffect($player = null)
+  {
+    $player->loseLife();
+  }
 }

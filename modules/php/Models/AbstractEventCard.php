@@ -59,7 +59,7 @@ class AbstractEventCard implements \JsonSerializable
     return $this->effect;
   }
 
-  public function resolveEffect()
+  public function resolveEffect($player = null)
   {
   }
 

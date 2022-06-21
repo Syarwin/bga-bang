@@ -47,6 +47,13 @@ $machinestates = [
     'action' => 'stNewEvent',
   ],
 
+  ST_RESOLVE_EVENT_EFFECT => [
+    'name' => 'resolveEventEffect',
+    'description' => '',
+    'type' => 'game',
+    'action' => 'stResolveEventEffect',
+  ],
+
   ST_DRAW_CARDS => [
     'name' => 'drawCards',
     'description' => '',

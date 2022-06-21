@@ -1,5 +1,6 @@
 <?php
 namespace BANG\States;
+use BANG\Managers\EventCards;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
 use BANG\Core\Log;
@@ -33,7 +34,7 @@ trait TurnTrait
   }
 
   /*
-   * stStartOfTurn: called at the beggining of each player turn
+   * stStartOfTurn: called at the beginning of each player turn
    */
   public function stStartOfTurn()
   {
@@ -42,11 +43,11 @@ trait TurnTrait
     Globals::setPIdTurn($player->getId());
     Stack::setup([ST_DRAW_CARDS, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN]);
     $player->startOfTurn();
+    $activeEvent = EventCards::getActive();
     if ($player->getRole() === SHERIFF) { // TODO: New event should be drawn on Sheriff's second turn. First turn is ok while developing though
-      $atom = Stack::newAtom(ST_NEW_EVENT, [
-        'pId' => $player->getId(),
-      ]);
-      Stack::insertOnTop($atom);
+      Stack::insertOnTop(Stack::newSimpleAtom(ST_NEW_EVENT, $player));
+    } elseif ($activeEvent && $activeEvent->getEffect() === EFFECT_STARTOFTURN) {
+      Stack::insertOnTop(Stack::newSimpleAtom(ST_RESOLVE_EVENT_EFFECT, $player));
     }
     Stack::finishState();
   }
