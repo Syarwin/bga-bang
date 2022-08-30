@@ -72,10 +72,11 @@ trait EndOfLifeTrait
     }
 
     $cards = $player->getCardsInPlay()->merge($player->getHand());
-    if($cards->empty()){
-      $this->gamestate->jumpToState(ST_ELIMINATE);
-    } else {
+    $nextIsPedro = Players::getNext($player)->getCharacter() === PEDRO_RAMIREZ;
+    if ($cards->count() > 1 && $nextIsPedro) {
       $this->gamestate->jumpToState(ST_PRE_ELIMINATE);
+    } else {
+      $this->gamestate->jumpToState(ST_ELIMINATE);
     }
   }
 

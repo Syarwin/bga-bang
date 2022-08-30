@@ -78,6 +78,10 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     return $this->role;
   }
+  public function getCharacter()
+  {
+    return $this->character;
+  }
   public function getCharName()
   {
     return $this->character_name;

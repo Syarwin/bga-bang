@@ -22,7 +22,7 @@ class Players extends \BANG\Helpers\DB_Manager
     return self::getCharacter($cId, $row);
   }
 
-  public function setupNewGame($players, $expansions, $options)
+  public static function setupNewGame($players, $expansions, $options)
   {
     // Create players
     $gameInfos = self::getGame()->getGameinfos();
@@ -88,7 +88,7 @@ class Players extends \BANG\Helpers\DB_Manager
         $sheriff = $pId;
       }
       $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, $bullets, $role, $cId, 0];
-      //      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, 1, $role, $cId, 0];
+//            $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, 1, $role, $cId, 0];
       Cards::deal($pId, $bullets);
       bang::get()->initStat('player', 'role', $role, $pId);
       $i++;
