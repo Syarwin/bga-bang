@@ -294,16 +294,6 @@ class Player extends \BANG\Helpers\DB_Manager
     }
   }
 
-  private function newAtom($nextState, $atomType, $src, $attacker, $pId)
-  {
-    return Stack::newAtom($nextState, [
-      'type' => $atomType,
-      'src' => $src,
-      'attacker' => $attacker,
-      'pId' => $pId,
-    ]);
-  }
-
   /**
    * used when player drinks a beer or Sid Ketchum uses his ability to gain life discarding 2 cards
    */
@@ -312,8 +302,8 @@ class Player extends \BANG\Helpers\DB_Manager
     // If it's not enough, add a ELIMINATE node
     if ($this->getHp() <= 0) {
       $ctx = Stack::getCtx();
-      $atom = Stack::newAtom(ST_PRE_ELIMINATE, [
-        'type' => 'eliminate',
+      $atom = Stack::newAtom(ST_PRE_ELIMINATE_DISCARD, [
+        'type' => 'eliminateDiscard',
         'src' => $ctx['src'],
         'attacker' => $ctx['attacker'],
         'pId' => $this->getId(),
