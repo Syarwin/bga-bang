@@ -285,11 +285,14 @@ class Player extends \BANG\Helpers\DB_Manager
         ->count();
       $isKetchumAndCanUseAbility = $this->character == SID_KETCHUM && $this->getHand()->count() >= 2;
       $canDrinkBeerToLive = (!$isDuel && $beersInHand > 0) || $isKetchumAndCanUseAbility;
-      if ($canDrinkBeerToLive) {
-        $atom = $this->newAtom(ST_REACT_BEER, 'beer', $ctx['src'] ?? null, $ctx['attacker'] ?? null, $this->id);
-        Stack::insertAfterCardResolution($atom);
-      }
-      $atom = $this->newAtom(ST_PRE_ELIMINATE_CHECK, 'eliminate', $ctx['src'] ?? null, $ctx['attacker'] ?? null, $this->id);
+      $nextState = $canDrinkBeerToLive ? ST_REACT_BEER : ST_PRE_ELIMINATE_CHECK;
+      $atomType = $canDrinkBeerToLive ? 'beer' : 'eliminate';
+      $atom = Stack::newAtom($nextState, [
+        'type' => $atomType,
+        'src' => $ctx['src'] ?? null,
+        'attacker' => $ctx['attacker'] ?? null,
+        'pId' => $this->id,
+      ]);
       Stack::insertAfterCardResolution($atom);
     }
   }
