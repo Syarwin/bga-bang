@@ -285,7 +285,7 @@ class Player extends \BANG\Helpers\DB_Manager
         ->count();
       $isKetchumAndCanUseAbility = $this->character == SID_KETCHUM && $this->getHand()->count() >= 2;
       $canDrinkBeerToLive = (!$isDuel && $beersInHand > 0) || $isKetchumAndCanUseAbility;
-      $nextState = $canDrinkBeerToLive ? ST_REACT_BEER : ST_PRE_ELIMINATE_CHECK;
+      $nextState = $canDrinkBeerToLive ? ST_REACT_BEER : ST_PRE_ELIMINATE_DISCARD;
       $atomType = $canDrinkBeerToLive ? 'beer' : 'eliminate';
       $atom = Stack::newAtom($nextState, [
         'type' => $atomType,
