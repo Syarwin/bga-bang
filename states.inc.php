@@ -122,10 +122,10 @@ $machinestates = [
     'possibleactions' => ['actCancelEndTurn', 'actDiscardExcess'],
   ],
 
-  ST_PRE_ELIMINATE_CHECK => [
-    'name' => 'preEliminateCheck',
+  ST_PRE_ELIMINATE_DISCARD => [
+    'name' => 'preEliminateDiscard',
     'type' => 'game',
-    'action' => 'stDiscardEliminate',
+    'action' => 'stPreEliminateDiscard',
   ],
 
   ST_PRE_ELIMINATE => [

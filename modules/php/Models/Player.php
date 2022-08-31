@@ -289,7 +289,7 @@ class Player extends \BANG\Helpers\DB_Manager
         ->count();
       $isKetchumAndCanUseAbility = $this->character == SID_KETCHUM && $this->getHand()->count() >= 2;
       $canDrinkBeerToLive = (!$isDuel && $beersInHand > 0) || $isKetchumAndCanUseAbility;
-      $nextState = $canDrinkBeerToLive ? ST_REACT_BEER : ST_PRE_ELIMINATE_CHECK;
+      $nextState = $canDrinkBeerToLive ? ST_REACT_BEER : ST_PRE_ELIMINATE_DISCARD;
       $atomType = $canDrinkBeerToLive ? 'beer' : 'eliminate';
       $atom = Stack::newAtom($nextState, [
         'type' => $atomType,
@@ -309,8 +309,8 @@ class Player extends \BANG\Helpers\DB_Manager
     // If it's not enough, add a ELIMINATE node
     if ($this->getHp() <= 0) {
       $ctx = Stack::getCtx();
-      $atom = Stack::newAtom(ST_PRE_ELIMINATE, [
-        'type' => 'eliminate',
+      $atom = Stack::newAtom(ST_PRE_ELIMINATE_DISCARD, [
+        'type' => 'eliminateDiscard',
         'src' => $ctx['src'],
         'attacker' => $ctx['attacker'],
         'pId' => $this->getId(),

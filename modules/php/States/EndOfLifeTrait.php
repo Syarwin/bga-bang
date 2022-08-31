@@ -63,7 +63,7 @@ trait EndOfLifeTrait
     $this->gamestate->jumpToState(ST_ELIMINATE);
   }
 
-  public function stDiscardEliminate()
+  public function stPreEliminateDiscard()
   {
     $player = Players::getActive();
     // Let characters react => mostly Vulture
