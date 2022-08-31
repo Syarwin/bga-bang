@@ -6,6 +6,7 @@ use BANG\Core\Log;
 use BANG\Core\Globals;
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
+use bang;
 
 trait TurnTrait
 {
@@ -101,6 +102,10 @@ trait TurnTrait
    */
   public function stEndOfTurn()
   {
+    // To make sure we will switch to next player after this one.
+    // We had a bug when Suzy Lafayette was drawing a card and "capturing" active player status while real active player was dying
+    $ctx = Stack::getCtx();
+    bang::get()->gamestate->changeActivePlayer($ctx['pId']);
     $this->gamestate->nextState('next');
   }
 }

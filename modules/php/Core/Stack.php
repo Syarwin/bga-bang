@@ -27,7 +27,7 @@ class Stack
     foreach ($flow as $state) {
       if (is_int($state)) {
         $options = [
-          'pId' => ($state == ST_END_OF_TURN || $state == ST_GAME_END) ? null : Globals::getPIdTurn(),
+          'pId' => $state == ST_GAME_END ? null : Globals::getPIdTurn(),
         ];
         if ($state == ST_PLAY_CARD) {
           $options['suspended'] = true;
@@ -131,7 +131,7 @@ class Stack
     self::insertAfter($atom, $i);
   }
 
-  public function isItLastElimination()
+  public static function isItLastElimination()
   {
     $stack = Stack::get();
     return count($stack) <= 1 || $stack[1]['state'] != ST_PRE_ELIMINATE_CHECK;
@@ -147,7 +147,7 @@ class Stack
   {
     $stack = Stack::get();
     Utils::filter($stack, function ($atom) use ($pId) {
-      return !isset($atom['pId']) || $atom['pId'] != $pId || $atom['uid'] == Stack::getCtx()['uid'];
+      return !isset($atom['pId']) || $atom['pId'] != $pId || $atom['uid'] == Stack::getCtx()['uid'] || $atom['state'] === ST_END_OF_TURN;
     });
     Stack::set($stack);
   }
