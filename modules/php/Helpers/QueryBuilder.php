@@ -417,4 +417,9 @@ class Collection extends \ArrayObject
   {
     return in_array($value, $this->toArray());
   }
+
+  public function count()
+  {
+    return count($this->getArrayCopy());
+  }
 }
