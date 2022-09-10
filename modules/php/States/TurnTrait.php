@@ -105,7 +105,9 @@ trait TurnTrait
     // To make sure we will switch to next player after this one.
     // We had a bug when Suzy Lafayette was drawing a card and "capturing" active player status while real active player was dying
     $ctx = Stack::getCtx();
-    bang::get()->gamestate->changeActivePlayer($ctx['pId']);
+    if ($ctx['pId']) {
+      bang::get()->gamestate->changeActivePlayer($ctx['pId']);
+    }
     $this->gamestate->nextState('next');
   }
 }
