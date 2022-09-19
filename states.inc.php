@@ -21,7 +21,6 @@ $machinestates = [
    */
   ST_START_OF_TURN => [
     'name' => 'startOfTurn',
-    'description' => '',
     'type' => 'game',
     'action' => 'stStartOfTurn',
     'transitions' => [
@@ -34,29 +33,31 @@ $machinestates = [
    */
   ST_RESOLVE_STACK => [
     'name' => 'resolveStack',
-    'description' => '',
     'type' => 'game',
     'action' => 'stResolveStack',
     'transitions' => [],
   ],
 
-  ST_DRAW_CARDS => [
-    'name' => 'drawCards',
-    'description' => '',
+  ST_PHASE_ONE_SETUP => [
+    'name' => 'phaseOneSetup',
     'type' => 'game',
-    'action' => 'stDrawCards',
+    'action' => 'stPhaseOneSetup',
+  ],
+
+  ST_PHASE_ONE_DRAW_CARDS => [
+    'name' => 'phaseOneDrawCards',
+    'type' => 'game',
+    'action' => 'stPhaseOneDrawCards',
   ],
 
   ST_FLIP_CARD => [
     'name' => 'flipCard',
-    'description' => '',
     'type' => 'game',
     'action' => 'stFlipCard',
   ],
 
   ST_RESOLVE_FLIPPED => [
     'name' => 'resolveFlipped',
-    'description' => '',
     'type' => 'game',
     'action' => 'stResolveFlipped',
   ],
@@ -139,7 +140,6 @@ $machinestates = [
 
   ST_ELIMINATE => [
     'name' => 'eliminate',
-    'description' => '',
     'type' => 'game',
     'action' => 'stEliminate',
     'updateGameProgression' => true,
@@ -158,14 +158,12 @@ $machinestates = [
 
   ST_TRIGGER_ABILITY => [
     'name' => 'triggerAbility',
-    'description' => '',
     'type' => 'game',
     'action' => 'stTriggerAbility',
   ],
 
   ST_END_OF_TURN => [
     'name' => 'endOfTurn',
-    'description' => '',
     'type' => 'game',
     'action' => 'stEndOfTurn',
     'transitions' => [
@@ -175,7 +173,6 @@ $machinestates = [
 
   ST_NEXT_PLAYER => [
     'name' => 'nextPlayer',
-    'description' => '',
     'type' => 'game',
     'action' => 'stNextPlayer',
     'transitions' => [

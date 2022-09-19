@@ -117,22 +117,22 @@ class Players extends \BANG\Helpers\DB_Manager
   /******************************
    ******* GENERIC GETTERS *******
    ******************************/
-  public function getActiveId()
+  public static function getActiveId()
   {
     return self::getGame()->getActivePlayerId();
   }
 
-  public function getCurrentId()
+  public static function getCurrentId()
   {
     return self::getGame()->getCurrentPId();
   }
 
-  public function getAll()
+  public static function getAll()
   {
     return self::DB()->get(false);
   }
 
-  public function get($pId = null)
+  public static function get($pId = null)
   {
     $pId = $pId ?: self::getActiveId();
     return self::DB()
@@ -140,12 +140,12 @@ class Players extends \BANG\Helpers\DB_Manager
       ->getSingle();
   }
 
-  public function getActive()
+  public static function getActive()
   {
     return self::get();
   }
 
-  public function getCurrent()
+  public static function getCurrent()
   {
     return self::get(self::getCurrentId());
   }
@@ -155,19 +155,19 @@ class Players extends \BANG\Helpers\DB_Manager
     return self::get(Globals::getPIdTurn());
   }
 
-  public function count()
+  public static function count()
   {
     return self::DB()->count();
   }
 
-  public function getUiData($pId)
+  public static function getUiData($pId)
   {
     return self::getAll()->map(function ($player) use ($pId) {
       return $player->getUiData($pId);
     });
   }
 
-  public function getDistances()
+  public static function getDistances()
   {
     return self::getLivingPlayers()->map(function ($player) {
       return $player->getDistances();
@@ -211,13 +211,13 @@ class Players extends \BANG\Helpers\DB_Manager
     return $result;
   }
 
-  public function getCharacter($cId, $row = null)
+  public static function getCharacter($cId, $row = null)
   {
     $className = 'BANG\Characters\\' . self::$classes[$cId];
     return new $className($row);
   }
 
-  public function getCharacterBullets($cId)
+  public static function getCharacterBullets($cId)
   {
     $char = self::getCharacter($cId, null);
     return $char->getBullets();

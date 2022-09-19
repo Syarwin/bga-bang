@@ -2,8 +2,8 @@
 namespace BANG\Characters;
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
-use BANG\Helpers\Utils;
 use BANG\Managers\Cards;
+use BANG\Managers\Rules;
 
 class PedroRamirez extends \BANG\Models\Player
 {
@@ -20,10 +20,10 @@ class PedroRamirez extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function drawCardsPhaseOne()
+  public function drawCardsAbility()
   {
     if (is_null(Cards::getLastDiscarded())) {
-      parent::drawCardsPhaseOne();
+      Rules::amendRules([RULE_PHASE_ONE_CARDS_DRAW_END => 2]);
     } else {
       Stack::insertOnTop(Stack::newAtom(ST_ACTIVE_DRAW_CARD, [
         'pId' => $this->id,
@@ -40,13 +40,14 @@ class PedroRamirez extends \BANG\Models\Player
   public function useAbility($args)
   {
     if ($args['selected'] == LOCATION_DECK) {
-      $this->drawCards(2);
+      $cardsToDraw = 2;
     } else {
       // Draw the first one from discard
       $cards = Cards::dealFromDiscard($this->id, 1);
       Notifications::drawCardFromDiscard($this, $cards);
       // The second one from deck
-      $this->drawCards(1);
+      $cardsToDraw = 1;
     }
+    Rules::amendRules([RULE_PHASE_ONE_CARDS_DRAW_END => $cardsToDraw]);
   }
 }
