@@ -57,7 +57,7 @@ class Rules extends DB_Manager
     self::DB()->insert([
       'player_id' => $player->getId(),
       RULE_PHASE_ONE_CARDS_DRAW_BEGINNING => $rules[0],
-      RULE_PHASE_ONE_PLAYER_ABILITY_DRAW => $rules[1],
+      RULE_PHASE_ONE_PLAYER_ABILITY_DRAW => (int)$rules[1],
       RULE_PHASE_ONE_CARDS_DRAW_END => $rules[2],
     ]);
   }
@@ -73,5 +73,10 @@ class Rules extends DB_Manager
   public static function isPhaseOnePlayerSpecialDraw()
   {
     return self::getRule(RULE_PHASE_ONE_PLAYER_ABILITY_DRAW) === '1';
+  }
+
+  public static function getCurrentPlayerId()
+  {
+    return (int) self::get()['player_id'];
   }
 }

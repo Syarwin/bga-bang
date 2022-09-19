@@ -5,6 +5,7 @@ use BANG\Core\Globals;
 use BANG\Core\Stack;
 use BANG\Managers\Cards;
 use BANG\Managers\Players;
+use BANG\Managers\Rules;
 
 class ElGringo extends \BANG\Models\Player
 {
@@ -25,8 +26,8 @@ class ElGringo extends \BANG\Models\Player
   {
     parent::loseLife($amount);
 
-    $attacker = Players::getCurrentTurn();
-    if ($attacker->getId() != $this->id) {
+    $attackerId = Rules::getCurrentPlayerId();
+    if ($attackerId != $this->id) {
       Stack::insertAfterCardResolution(Stack::newAtom(ST_TRIGGER_ABILITY, [
         'pId' => $this->id,
         'amount' => $amount,
@@ -36,7 +37,7 @@ class ElGringo extends \BANG\Models\Player
 
   public function useAbility($ctx)
   {
-    $attacker = Players::getCurrentTurn();
+    $attacker = Players::get(Rules::getCurrentPlayerId());
     for ($i = 0; $i < $ctx['amount']; $i++) {
       $card = $attacker->getRandomCardInHand(false);
       if ($card === null) {

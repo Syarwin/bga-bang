@@ -37,6 +37,7 @@ use BANG\Managers\Cards;
 use BANG\Managers\EventCards;
 use BANG\Core\Globals;
 use BANG\Core\Stack;
+use BANG\Managers\Rules;
 
 class bang extends Table
 {
@@ -103,7 +104,7 @@ class bang extends Table
       'discard' => Cards::getLastDiscarded(),
       'eventsDeck' => EventCards::getDeckCount(),
       'eventActive' => EventCards::getActive(),
-      'playerTurn' => Globals::getPIdTurn(),
+      'playerTurn' => Rules::getCurrentPlayerId(),
       'cards' => array_merge(Cards::getUIData(), EventCards::getUiData()),
       'distances' => Players::getDistances(),
     ];

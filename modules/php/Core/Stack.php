@@ -1,5 +1,6 @@
 <?php
 namespace BANG\Core;
+use BANG\Managers\Rules;
 use bang;
 use BANG\Helpers\Utils;
 
@@ -27,7 +28,7 @@ class Stack
     foreach ($flow as $state) {
       if (is_int($state)) {
         $options = [
-          'pId' => $state == ST_GAME_END ? null : Globals::getPIdTurn(),
+          'pId' => ($state == ST_END_OF_TURN || $state == ST_GAME_END) ? null : Rules::getCurrentPlayerId(),
         ];
         if ($state == ST_PLAY_CARD) {
           $options['suspended'] = true;
@@ -147,7 +148,7 @@ class Stack
   {
     $stack = Stack::get();
     Utils::filter($stack, function ($atom) use ($pId) {
-      return !isset($atom['pId']) || $atom['pId'] != $pId || $atom['uid'] == Stack::getCtx()['uid'] || $atom['state'] === ST_END_OF_TURN;
+      return !isset($atom['pId']) || $atom['pId'] != $pId || $atom['uid'] == Stack::getCtx()['uid'];
     });
     Stack::set($stack);
   }

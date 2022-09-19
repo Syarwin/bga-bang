@@ -42,7 +42,6 @@ trait TurnTrait
     Log::startTurn();
     $player = Players::getActive();
     Rules::setNewTurnRules($player);
-    Globals::setPIdTurn($player->getId());
     Stack::setup([ST_PHASE_ONE_SETUP, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN]);
     $player->startOfTurn();
     $activeEvent = EventCards::getActive();
@@ -115,7 +114,7 @@ trait TurnTrait
     // We had a bug when Suzy Lafayette was drawing a card and "capturing" active player status while real active player was dying
     $ctx = Stack::getCtx();
     if ($ctx['pId']) {
-      bang::get()->gamestate->changeActivePlayer($ctx['pId']);
+      bang::get()->gamestate->changeActivePlayer(Rules::getCurrentPlayerId());
     }
     $this->gamestate->nextState('next');
   }
