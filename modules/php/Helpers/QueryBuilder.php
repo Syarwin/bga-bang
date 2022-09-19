@@ -130,14 +130,13 @@ class QueryBuilder extends \APP_DbObject
    */
   public function select($columns)
   {
+    if (!is_array($columns)) {
+      $columns = [$columns];
+    }
     $cols = ["{$this->primary} AS `result_associative_index`"];
 
-    if (!is_array($columns)) {
-      $cols = [$columns];
-    } else {
-      foreach ($columns as $alias => $col) {
-        $cols[] = is_numeric($alias) ? "$col" : "$col AS `$alias`";
-      }
+    foreach ($columns as $alias => $col) {
+      $cols[] = is_numeric($alias) ? "$col" : "$col AS `$alias`";
     }
 
     $this->columns = implode(' , ', $cols);

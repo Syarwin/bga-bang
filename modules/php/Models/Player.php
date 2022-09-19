@@ -186,9 +186,11 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function drawCards($amount)
   {
-    $cards = Cards::deal($this->id, $amount);
-    Notifications::drawCards($this, $cards);
-    $this->onChangeHand();
+    if ($amount > 0) {
+      $cards = Cards::deal($this->id, $amount);
+      Notifications::drawCards($this, $cards);
+      $this->onChangeHand();
+    }
   }
 
   /*
@@ -529,15 +531,6 @@ class Player extends \BANG\Helpers\DB_Manager
    **************** Actions ***************
    ****************************************
    ***************************************/
-
-  /*
-   * Draw cards at phase one of turn
-   *  -> will be overwriten by character abilities that happens at phase 1
-   */
-  public function drawCardsPhaseOne()
-  {
-    $this->drawCards(2);
-  }
 
   /**
    * startOfTurn: is called at the beginning of each turn (before the drawing phase)

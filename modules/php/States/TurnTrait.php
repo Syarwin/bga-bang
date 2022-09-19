@@ -7,6 +7,7 @@ use BANG\Core\Log;
 use BANG\Core\Globals;
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
+use BANG\Managers\Rules;
 use bang;
 
 trait TurnTrait
@@ -40,8 +41,9 @@ trait TurnTrait
   {
     Log::startTurn();
     $player = Players::getActive();
+    Rules::setNewTurnRules($player);
     Globals::setPIdTurn($player->getId());
-    Stack::setup([ST_DRAW_CARDS, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN]);
+    Stack::setup([ST_PHASE_ONE_SETUP, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN]);
     $player->startOfTurn();
     $activeEvent = EventCards::getActive();
     if ($player->getRole() === SHERIFF) { // TODO: New event should be drawn on Sheriff's second turn. First turn is ok while developing though

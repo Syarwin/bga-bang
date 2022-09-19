@@ -50,6 +50,7 @@ class bang extends Table
   use BANG\States\EndOfGameTrait;
   use BANG\States\TriggerAbilityTrait;
   use BANG\States\PreferencesTrait;
+  use BANG\States\PhaseOneTrait;
   use BANG\States\EventTrait;
 
   public static $instance = null;

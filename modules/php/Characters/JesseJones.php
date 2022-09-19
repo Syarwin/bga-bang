@@ -2,9 +2,9 @@
 namespace BANG\Characters;
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
-use BANG\Helpers\Utils;
 use BANG\Managers\Cards;
 use BANG\Managers\Players;
+use BANG\Managers\Rules;
 
 class JesseJones extends \BANG\Models\Player
 {
@@ -21,7 +21,7 @@ class JesseJones extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function drawCardsPhaseOne()
+  public function drawCardsAbility()
   {
     // TODO : auto skip if argDrawCard only has 'deck' inside
     Stack::insertOnTop(Stack::newAtom(ST_ACTIVE_DRAW_CARD, [
@@ -43,7 +43,7 @@ class JesseJones extends \BANG\Models\Player
   public function useAbility($args)
   {
     if ($args['selected'] == LOCATION_DECK) {
-      $this->drawCards(2);
+      $cardsToDraw = 2;
     } else {
       // TODO : add sanity check
 
@@ -55,7 +55,8 @@ class JesseJones extends \BANG\Models\Player
       $victim->onChangeHand();
 
       // Deal the second one
-      $this->drawCards(1);
+      $cardsToDraw = 1;
     }
+    Rules::amendRules([RULE_PHASE_ONE_CARDS_DRAW_END => $cardsToDraw]);
   }
 }

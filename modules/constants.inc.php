@@ -13,7 +13,8 @@ define('ST_REACT', 8);
 define('ST_REACT_BEER', 9);
 define('ST_END_OF_TURN', 11);
 define('ST_DISCARD_EXCESS', 12);
-define('ST_DRAW_CARDS', 13);
+define('ST_DRAW_CARDS', 13); // Deprecated, used for backward compatibility
+define('ST_PHASE_ONE_SETUP', 13);
 define('ST_SELECT_CARD', 15);
 define('ST_ACTIVE_DRAW_CARD', 17);
 define('ST_ELIMINATE', 16);
@@ -23,8 +24,9 @@ define('ST_TRIGGER_ABILITY', 20);
 define('ST_PRE_ELIMINATE', 21);
 define('ST_VICE_PENALTY', 22);
 define('ST_PRE_ELIMINATE_DISCARD', 23);
-define('ST_NEW_EVENT', 24);
-define('ST_RESOLVE_EVENT_EFFECT', 25);
+define('ST_PHASE_ONE_DRAW_CARDS', 24);
+define('ST_NEW_EVENT', 25);
+define('ST_RESOLVE_EVENT_EFFECT', 26);
 define('ST_PRE_GAME_END', 98);
 define('ST_GAME_END', 99);
 
@@ -229,3 +231,10 @@ define('LOCATION_EVENTS_DISCARD', 'eventDiscard');
  */
 define('GENERAL_STORE_MANUAL_CHOOSE', 0);
 define('GENERAL_STORE_AUTO_PICK', 1);
+
+/*
+ * Constants for rules
+ */
+define('RULE_PHASE_ONE_CARDS_DRAW_BEGINNING', 'phase_one_amount_to_draw_beginning');
+define('RULE_PHASE_ONE_PLAYER_ABILITY_DRAW', 'phase_one_player_ability_draw');
+define('RULE_PHASE_ONE_CARDS_DRAW_END', 'phase_one_amount_to_draw_end');
