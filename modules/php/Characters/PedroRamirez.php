@@ -23,7 +23,7 @@ class PedroRamirez extends \BANG\Models\Player
   public function drawCardsAbility()
   {
     if (is_null(Cards::getLastDiscarded())) {
-      Rules::amendRules([RULE_PHASE_ONE_CARDS_DRAW_END => 2]);
+      Rules::incrementPhaseOneDrawEndAmount();
     } else {
       Stack::insertOnTop(Stack::newSimpleAtom(ST_ACTIVE_DRAW_CARD, $this));
     }
@@ -38,14 +38,24 @@ class PedroRamirez extends \BANG\Models\Player
   public function useAbility($args)
   {
     if ($args['selected'] == LOCATION_DECK) {
-      $cardsToDraw = 2;
+      $cardsToDraw = 1;
     } else {
       // Draw the first one from discard
       $cards = Cards::dealFromDiscard($this->id, 1);
       Notifications::drawCardFromDiscard($this, $cards);
-      // The second one from deck
-      $cardsToDraw = 1;
+
+      // Second one is already implied in Rules
+      $cardsToDraw = 0;
     }
-    Rules::amendRules([RULE_PHASE_ONE_CARDS_DRAW_END => $cardsToDraw]);
+    Rules::incrementPhaseOneDrawEndAmount($cardsToDraw);
+  }
+
+  public function getPhaseOneRules($defaultAmount)
+  {
+    return [
+      RULE_PHASE_ONE_CARDS_DRAW_BEGINNING => 0,
+      RULE_PHASE_ONE_PLAYER_ABILITY_DRAW => true,
+      RULE_PHASE_ONE_CARDS_DRAW_END => $defaultAmount - 1
+    ];
   }
 }

@@ -6,8 +6,18 @@ use BANG\Managers\Rules;
 
 trait PhaseOneTrait
 {
+
   /*
-   * stPhaseOneSetup: called on the beginning of each player turn, if the turn was not skipped, to add 3 phase on sub-phases
+   * stPrePhaseOne: called before the beginning of each player turn resolving Jail/Dynamite effects
+   */
+  public function stPrePhaseOne()
+  {
+    Players::getActive()->startOfTurn();
+    Stack::finishState();
+  }
+
+  /*
+   * stPhaseOneSetup: called on the beginning of each player turn, if the turn was not skipped, to add 3 phase one sub-phases
    */
   public function stPhaseOneSetup()
   {

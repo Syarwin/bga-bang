@@ -10,12 +10,12 @@ class TrainArrival extends AbstractEventCard
     $this->type = CARD_TRAIN_ARRIVAL;
     $this->name = clienttranslate('Train Arrival');
     $this->text = clienttranslate('Each player draws one extra card at the end of phase 1 of his turn');
-    $this->effect = EFFECT_STARTOFTURN;
+    $this->effect = EFFECT_PHASE_ONE;
     $this->expansion = HIGH_NOON;
   }
 
-  public function resolveEffect($player = null)
+  public function getPhaseOneAmountOfCardsToDraw()
   {
-
+    return 3;
   }
 }

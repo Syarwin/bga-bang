@@ -27,6 +27,7 @@ define('ST_PRE_ELIMINATE_DISCARD', 23);
 define('ST_PHASE_ONE_DRAW_CARDS', 24);
 define('ST_NEW_EVENT', 25);
 define('ST_RESOLVE_EVENT_EFFECT', 26);
+define('ST_PRE_PHASE_ONE', 27);
 define('ST_PRE_GAME_END', 98);
 define('ST_GAME_END', 99);
 
@@ -181,6 +182,7 @@ define('EFFECT_STARTOFTURN', 100);
 define('EFFECT_INSTANT', 101);
 define('EFFECT_PERMANENT', 102);
 define('EFFECT_ENDOFTURN', 103);
+define('EFFECT_PHASE_ONE', 104);
 
 define('NONE', 0);
 define('INRANGE', 1);

@@ -43,7 +43,7 @@ class JesseJones extends \BANG\Models\Player
   public function useAbility($args)
   {
     if ($args['selected'] == LOCATION_DECK) {
-      $cardsToDraw = 2;
+      $cardsToDraw = 1;
     } else {
       // TODO : add sanity check
 
@@ -54,9 +54,18 @@ class JesseJones extends \BANG\Models\Player
       Notifications::stoleCard($this, $victim, $card, false);
       $victim->onChangeHand();
 
-      // Deal the second one
-      $cardsToDraw = 1;
+      // Second one is already implied in Rules
+      $cardsToDraw = 0;
     }
-    Rules::amendRules([RULE_PHASE_ONE_CARDS_DRAW_END => $cardsToDraw]);
+    Rules::incrementPhaseOneDrawEndAmount($cardsToDraw);
+  }
+
+  public function getPhaseOneRules($defaultAmount)
+  {
+    return [
+      RULE_PHASE_ONE_CARDS_DRAW_BEGINNING => 0,
+      RULE_PHASE_ONE_PLAYER_ABILITY_DRAW => true,
+      RULE_PHASE_ONE_CARDS_DRAW_END => $defaultAmount - 1
+    ];
   }
 }

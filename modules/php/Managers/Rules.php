@@ -37,29 +37,21 @@ class Rules extends DB_Manager
     self::DB()->insert($rules);
   }
 
-  public static function setNewTurnRules($player)
+  public static function incrementPhaseOneDrawEndAmount($amount = 1)
   {
-    $playerCharacter = $player->getCharacter();
-    switch ($playerCharacter) {
-      case BLACK_JACK:
-        $rules = [1, true, 0];
-        break;
-      case JESSE_JONES:
-      case PEDRO_RAMIREZ:
-        $rules = [0, true, 1];
-        break;
-      case KIT_CARLSON:
-        $rules = [0, true, 0];
-        break;
-      default:
-        $rules = [2, false, 0];
+    $oldPhaseOneDrawEnd = self::getRule(RULE_PHASE_ONE_CARDS_DRAW_END);
+    if ($amount > 0) {
+      Rules::amendRules([RULE_PHASE_ONE_CARDS_DRAW_END => $oldPhaseOneDrawEnd + $amount]);
     }
-    self::DB()->insert([
-      'player_id' => $player->getId(),
-      RULE_PHASE_ONE_CARDS_DRAW_BEGINNING => $rules[0],
-      RULE_PHASE_ONE_PLAYER_ABILITY_DRAW => (int)$rules[1],
-      RULE_PHASE_ONE_CARDS_DRAW_END => $rules[2],
-    ]);
+  }
+
+  public static function setNewTurnRules($player, $eventCard = null)
+  {
+    $amountOfCardsToDraw = $eventCard ? $eventCard->getPhaseOneAmountOfCardsToDraw() : 2;
+    $rules = $player->getPhaseOneRules($amountOfCardsToDraw);
+    $query = array_merge(['player_id' => $player->getId()], $rules);
+    $query[RULE_PHASE_ONE_PLAYER_ABILITY_DRAW] = (int) $query[RULE_PHASE_ONE_PLAYER_ABILITY_DRAW];
+    self::DB()->insert($query);
   }
 
   public static function getPhaseOneCardsAmount($rule)

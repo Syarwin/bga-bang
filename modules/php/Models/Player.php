@@ -515,6 +515,15 @@ class Player extends \BANG\Helpers\DB_Manager
     ];
   }
 
+  public function getPhaseOneRules($defaultAmount)
+  {
+    return [
+      RULE_PHASE_ONE_CARDS_DRAW_BEGINNING => $defaultAmount,
+      RULE_PHASE_ONE_PLAYER_ABILITY_DRAW => false,
+      RULE_PHASE_ONE_CARDS_DRAW_END => 0
+    ];
+  }
+
   public function hasCardCopyInPlay($targetCard)
   {
     $equipment = $this->getCardsInPlay();

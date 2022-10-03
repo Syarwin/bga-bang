@@ -4,7 +4,6 @@ use BANG\Managers\EventCards;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
 use BANG\Core\Log;
-use BANG\Core\Globals;
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
 use BANG\Managers\Rules;
@@ -41,14 +40,11 @@ trait TurnTrait
   {
     Log::startTurn();
     $player = Players::getActive();
-    Rules::setNewTurnRules($player);
-    Stack::setup([ST_PHASE_ONE_SETUP, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN]);
-    $player->startOfTurn();
-    $activeEvent = EventCards::getActive();
+    $eventCard = EventCards::getActive();
+    Rules::setNewTurnRules($player, $eventCard);
+    Stack::setup([ST_RESOLVE_EVENT_EFFECT, ST_PRE_PHASE_ONE, ST_PHASE_ONE_SETUP, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN]);
     if ($player->getRole() === SHERIFF) { // TODO: New event should be drawn on Sheriff's second turn. First turn is ok while developing though
       Stack::insertOnTop(Stack::newSimpleAtom(ST_NEW_EVENT, $player));
-    } elseif ($activeEvent && $activeEvent->getEffect() === EFFECT_STARTOFTURN) {
-      Stack::insertOnTop(Stack::newSimpleAtom(ST_RESOLVE_EVENT_EFFECT, $player));
     }
     Stack::finishState();
   }

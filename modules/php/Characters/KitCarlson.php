@@ -1,9 +1,8 @@
 <?php
 namespace BANG\Characters;
 use BANG\Core\Notifications;
-use BANG\Core\Log;
-use BANG\Helpers\Utils;
 use BANG\Managers\Cards;
+use BANG\Managers\EventCards;
 
 class KitCarlson extends \BANG\Models\Player
 {
@@ -23,7 +22,8 @@ class KitCarlson extends \BANG\Models\Player
   public function drawCardsAbility()
   {
     Cards::drawForLocation(LOCATION_SELECTION, 3);
-    $this->prepareSelection($this, [$this->id], true, 2);
+    $eventCard = EventCards::getActive();
+    $this->prepareSelection($this, [$this->id], true, $eventCard->getPhaseOneAmountOfCardsToDraw());
   }
 
   public function useAbility($args)
@@ -35,8 +35,23 @@ class KitCarlson extends \BANG\Models\Player
     Notifications::drawCards($this, Cards::getMany($args));
     $this->onChangeHand();
 
-    // Put remaining card on deck
-    $rest = Cards::getSelection()->first();
-    Cards::putOnDeck($rest->getId());
+    // Put remaining cards on deck
+    // TODO: Add ability to choose the order
+    $rest = Cards::getSelection();
+    if ($rest) {
+      foreach ($rest->toArray() as $card) {
+        // TODO: Notify about returning card. We have a bug here, number of cards is incorrect
+        Cards::putOnDeck($card->getId());
+      }
+    }
+  }
+
+  public function getPhaseOneRules($defaultAmount)
+  {
+    return [
+      RULE_PHASE_ONE_CARDS_DRAW_BEGINNING => 0,
+      RULE_PHASE_ONE_PLAYER_ABILITY_DRAW => true,
+      RULE_PHASE_ONE_CARDS_DRAW_END => 0
+    ];
   }
 }

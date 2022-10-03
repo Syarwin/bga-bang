@@ -3,6 +3,7 @@ namespace BANG\States;
 use BANG\Core\Stack;
 use BANG\Managers\EventCards;
 use BANG\Managers\Players;
+use BANG\Managers\Rules;
 
 trait EventTrait
 {
@@ -12,11 +13,13 @@ trait EventTrait
   public function stNewEvent()
   {
     $ctx = Stack::getCtx();
+    $player = Players::get($ctx['pId']);
     $eventCard = EventCards::next();
     $effect = $eventCard->getEffect();
-    if ($effect === EFFECT_INSTANT || $effect === EFFECT_STARTOFTURN) {
-      Stack::insertOnTop(Stack::newSimpleAtom(ST_RESOLVE_EVENT_EFFECT, $ctx['pId']));
-    };
+    if ($effect === EFFECT_INSTANT) {
+      $eventCard->resolveEffect();
+    }
+    Rules::setNewTurnRules($player, $eventCard);
     Stack::finishState();
   }
 
@@ -25,10 +28,12 @@ trait EventTrait
    */
   public function stResolveEventEffect()
   {
-    $ctx = Stack::getCtx();
-    $player = Players::get($ctx['pId']);
     $eventCard = EventCards::getActive();
-    $eventCard->resolveEffect($player);
+    if ($eventCard->getEffect() === EFFECT_STARTOFTURN) {
+      $ctx = Stack::getCtx();
+      $player = Players::get($ctx['pId']);
+      $eventCard->resolveEffect($player);
+    }
     Stack::finishState();
   }
 }

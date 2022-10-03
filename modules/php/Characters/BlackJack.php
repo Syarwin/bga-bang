@@ -28,8 +28,21 @@ class BlackJack extends \BANG\Models\Player
     // If heart or diamond => draw again a private one
     $card = $cards->first();
     if (in_array($card->getCopyColor(), ['H', 'D'])) {
-      Rules::amendRules([RULE_PHASE_ONE_CARDS_DRAW_END => 1]);
+      Rules::incrementPhaseOneDrawEndAmount();
     }
     $this->onChangeHand();
+  }
+
+  public function getPhaseOneRules($defaultAmount)
+  {
+    if ($defaultAmount === 1) {
+      return parent::getPhaseOneRules($defaultAmount);
+    } else {
+      return [
+        RULE_PHASE_ONE_CARDS_DRAW_BEGINNING => 1,
+        RULE_PHASE_ONE_PLAYER_ABILITY_DRAW => true,
+        RULE_PHASE_ONE_CARDS_DRAW_END => $defaultAmount - 2
+      ];
+    }
   }
 }

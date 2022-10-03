@@ -10,12 +10,12 @@ class Thirst extends AbstractEventCard
     $this->type = CARD_THIRST;
     $this->name = clienttranslate('Thirst');
     $this->text = clienttranslate('Each player only draws his first card, not the second one, during phase 1 of his turn');
-    $this->effect = EFFECT_STARTOFTURN;
+    $this->effect = EFFECT_PHASE_ONE;
     $this->expansion = HIGH_NOON;
   }
 
-  public function resolveEffect($player = null)
+  public function getPhaseOneAmountOfCardsToDraw()
   {
-
+    return 1;
   }
 }

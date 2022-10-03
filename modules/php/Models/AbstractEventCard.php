@@ -73,6 +73,11 @@ class AbstractEventCard implements \JsonSerializable
     return true;
   }
 
+  public function getPhaseOneAmountOfCardsToDraw()
+  {
+    return 2;
+  }
+
   /*
    * jsonSerialize: used in frontend to manipulate cards
    */

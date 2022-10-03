@@ -38,17 +38,23 @@ $machinestates = [
     'transitions' => [],
   ],
 
+  ST_PRE_PHASE_ONE => [
+    'name' => 'prePhaseOne',
+    'type' => 'game',
+    'action' => 'stPrePhaseOne',
+  ],
+
   ST_PHASE_ONE_SETUP => [
     'name' => 'phaseOneSetup',
     'type' => 'game',
     'action' => 'stPhaseOneSetup',
   ],
 
-    ST_PHASE_ONE_DRAW_CARDS => [
-      'name' => 'phaseOneDrawCards',
-      'type' => 'game',
-      'action' => 'stPhaseOneDrawCards',
-    ],
+  ST_PHASE_ONE_DRAW_CARDS => [
+    'name' => 'phaseOneDrawCards',
+    'type' => 'game',
+    'action' => 'stPhaseOneDrawCards',
+  ],
 
   ST_NEW_EVENT => [
     'name' => 'newEvent',
