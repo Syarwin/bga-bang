@@ -28,6 +28,8 @@ define('ST_PHASE_ONE_DRAW_CARDS', 24);
 define('ST_NEW_EVENT', 25);
 define('ST_RESOLVE_EVENT_EFFECT', 26);
 define('ST_PRE_PHASE_ONE', 27);
+define('ST_CHOOSE_AND_DISCARD_BLUE_CARD', 28);
+define('ST_DISCARD_BLUE_CARD', 29);
 define('ST_PRE_GAME_END', 98);
 define('ST_GAME_END', 99);
 

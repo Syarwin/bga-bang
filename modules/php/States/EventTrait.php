@@ -17,14 +17,14 @@ trait EventTrait
     $eventCard = EventCards::next();
     $effect = $eventCard->getEffect();
     if ($effect === EFFECT_INSTANT) {
-      $eventCard->resolveEffect();
+      $eventCard->resolveEffect($player);
     }
     Rules::setNewTurnRules($player, $eventCard);
     Stack::finishState();
   }
 
   /*
-   * stNewEvent: Resolves event effect
+   * stResolveEventEffect: Resolves event effect
    */
   public function stResolveEventEffect()
   {

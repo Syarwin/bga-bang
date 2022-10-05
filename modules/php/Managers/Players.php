@@ -1,8 +1,7 @@
 <?php
 namespace BANG\Managers;
+use BANG\Helpers\Collection;
 use bang;
-use BANG\Core\Log;
-use BANG\Core\Globals;
 
 /*
  * Players manager : allows to easily access players ...
@@ -271,22 +270,33 @@ class Players extends \BANG\Helpers\DB_Manager
     return $query->get();
   }
 
-  public static function getLivingPlayersStartingWith($player, $except = null)
+  public static function getLivingPlayerIdsStartingWith($player, $except = null)
   {
     $and = '';
     if ($except != null) {
       $ids = is_array($except) ? $except : [$except];
       $and = " AND player_id NOT IN ('" . implode("','", $ids) . "')";
     }
-    return self::getObjectListFromDB(
+    $playerIds = self::getObjectListFromDB(
       "SELECT player_id FROM player WHERE player_eliminated = 0$and ORDER BY player_no < {$player->getNo()}, player_no",
       true
     );
+    return array_map(function ($pId) {
+      return (int) $pId;
+    }, $playerIds);
+  }
+
+  public static function getLivingPlayersStartingWith($player)
+  {
+    $playerIds = self::getLivingPlayerIdsStartingWith($player);
+    return new Collection(array_map(function ($pId) {
+      return self::get($pId);
+    }, $playerIds));
   }
 
   public static function getNext($player)
   {
-    $players = self::getLivingPlayersStartingWith($player);
+    $players = self::getLivingPlayerIdsStartingWith($player);
     return self::get($players[1]);
   }
 

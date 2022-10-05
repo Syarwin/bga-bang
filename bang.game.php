@@ -53,6 +53,7 @@ class bang extends Table
   use BANG\States\PreferencesTrait;
   use BANG\States\PhaseOneTrait;
   use BANG\States\EventTrait;
+  use BANG\States\DiscardBlueCardTrait;
 
   public static $instance = null;
   public function __construct()

@@ -182,6 +182,21 @@ $machinestates = [
     'action' => 'stTriggerAbility',
   ],
 
+  ST_CHOOSE_AND_DISCARD_BLUE_CARD => [
+    'name' => 'chooseAndDiscardBlueCard',
+    'description' => clienttranslate('${actplayer} must discard one blue card in front of them'),
+    'descriptionmyturn' => clienttranslate('${you} must discard one blue card in front of you'),
+    'type' => 'activeplayer',
+    'args' => 'argChooseAndDiscardBlueCard',
+    'possibleactions' => ['actDiscardBlue'],
+  ],
+
+  ST_DISCARD_BLUE_CARD => [
+    'name' => 'discardBlueCard',
+    'type' => 'game',
+    'action' => 'stDiscardBlueCard',
+  ],
+
   ST_END_OF_TURN => [
     'name' => 'endOfTurn',
     'type' => 'game',

@@ -120,14 +120,24 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     return Cards::getHand($this->id);
   }
+
   public function getCardsInPlay()
   {
     return Cards::getInPlay($this->id);
   }
+
+  public function getBlueCardsInPlay()
+  {
+    return $this->getCardsInPlay()->filter(function ($card) {
+      return $card->getColor() === BLUE;
+    });
+  }
+
   public function countHand()
   {
     return Cards::countHand($this->id);
   }
+
   public function isAutoPickGeneralStore()
   {
     return $this->generalStore == GENERAL_STORE_AUTO_PICK;
@@ -148,8 +158,8 @@ class Player extends \BANG\Helpers\DB_Manager
       'powers' => $this->text,
       'hp' => $this->hp,
       'bullets' => $this->bullets,
-      'hand' => $current ? $this->getHand($this->id)->toArray() : [],
-      'handCount' => $this->countHand($this->id),
+      'hand' => $current ? $this->getHand()->toArray() : [],
+      'handCount' => $this->countHand(),
       'role' => $current || $this->role == SHERIFF || $this->eliminated || Players::isEndOfGame() ? $this->role : null,
       'inPlay' => $this->getCardsInPlay()->toArray(),
 
@@ -330,7 +340,7 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function getOrderedOtherPlayers()
   {
-    return Players::getLivingPlayersStartingWith($this, [$this->id]);
+    return Players::getLivingPlayerIdsStartingWith($this, [$this->id]);
   }
 
   /*
