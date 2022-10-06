@@ -13,7 +13,12 @@ trait EndOfGameTrait
   public function setWinners()
   {
     $living = Players::getLivingPlayers();
-    if (Players::countRoles([SHERIFF]) == 0) {
+    if (Players::countRoles([OUTLAW, RENEGADE]) == 0) {
+      Players::setWinners([SHERIFF, DEPUTY]);
+      Notifications::tell(
+        clienttranslate('All the renegades and outlaws have been killed and thus Sheriff and Deputies win this game.')
+      );
+    } elseif (Players::countRoles([SHERIFF]) == 0) {
 
       // That not's really possible, is it ?
       if (count($living) == 0) {
@@ -25,13 +30,6 @@ trait EndOfGameTrait
         Players::setWinners([OUTLAW]);
         Notifications::tell(clienttranslate('The sheriff has been killed and thus the outlaws win this game.'));
       }
-    }
-
-    if (Players::countRoles([OUTLAW, RENEGADE]) == 0) {
-      Players::setWinners([SHERIFF, DEPUTY]);
-      Notifications::tell(
-        clienttranslate('All the renegades and outlaws have been killed and thus Sheriff and Deputies win this game.')
-      );
     }
 
     if(count($living) == 1){
