@@ -702,7 +702,7 @@ class Player extends \BANG\Helpers\DB_Manager
     $this->save();
 
     // Check if game should end
-    if (Stack::isItLastElimination() && Players::isEndOfGame()) {
+    if ($this->role == SHERIFF || (Stack::isItLastElimination() && Players::isEndOfGame())) {
       bang::get()->setWinners();
     }
 
