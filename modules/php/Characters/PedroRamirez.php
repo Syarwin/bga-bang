@@ -52,10 +52,14 @@ class PedroRamirez extends \BANG\Models\Player
 
   public function getPhaseOneRules($defaultAmount)
   {
-    return [
-      RULE_PHASE_ONE_CARDS_DRAW_BEGINNING => 0,
-      RULE_PHASE_ONE_PLAYER_ABILITY_DRAW => true,
-      RULE_PHASE_ONE_CARDS_DRAW_END => $defaultAmount - 1
-    ];
+    if (Rules::isAbilityAvailable()) {
+      return [
+        RULE_PHASE_ONE_CARDS_DRAW_BEGINNING => 0,
+        RULE_PHASE_ONE_PLAYER_ABILITY_DRAW => true,
+        RULE_PHASE_ONE_CARDS_DRAW_END => $defaultAmount - 1
+      ];
+    } else {
+      return parent::getPhaseOneRules($defaultAmount);
+    }
   }
 }

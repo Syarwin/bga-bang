@@ -13,4 +13,9 @@ class Hangover extends AbstractEventCard
     $this->effect = EFFECT_PERMANENT;
     $this->expansion = HIGH_NOON;
   }
+
+  public function isAbilityAvailable()
+  {
+    return false;
+  }
 }

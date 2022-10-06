@@ -49,8 +49,12 @@ class Rules extends DB_Manager
   {
     $amountOfCardsToDraw = $eventCard ? $eventCard->getPhaseOneAmountOfCardsToDraw() : 2;
     $rules = $player->getPhaseOneRules($amountOfCardsToDraw);
+    $rules[RULE_ABILITY_AVAILABLE] = $eventCard ? $eventCard->isAbilityAvailable() : true;
+
     $query = array_merge(['player_id' => $player->getId()], $rules);
-    $query[RULE_PHASE_ONE_PLAYER_ABILITY_DRAW] = (int) $query[RULE_PHASE_ONE_PLAYER_ABILITY_DRAW];
+    $query = array_map(function ($value) {
+      return is_bool($value) ? (int) $value : $value;
+    }, $query);
     self::DB()->insert($query);
   }
 
@@ -70,5 +74,10 @@ class Rules extends DB_Manager
   public static function getCurrentPlayerId()
   {
     return (int) self::get()['player_id'];
+  }
+
+  public static function isAbilityAvailable()
+  {
+    return self::getRule(RULE_ABILITY_AVAILABLE) === '1';
   }
 }

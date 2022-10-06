@@ -1,6 +1,8 @@
 <?php
 namespace BANG\Characters;
 
+use BANG\Managers\Rules;
+
 class WillytheKid extends \BANG\Models\Player
 {
   public function __construct($row = null)
@@ -14,6 +16,6 @@ class WillytheKid extends \BANG\Models\Player
 
   public function hasUnlimitedBangs()
   {
-    return true;
+    return Rules::isAbilityAvailable();
   }
 }

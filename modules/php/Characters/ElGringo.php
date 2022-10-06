@@ -25,13 +25,14 @@ class ElGringo extends \BANG\Models\Player
   public function loseLife($amount = 1)
   {
     parent::loseLife($amount);
-
-    $attackerId = Rules::getCurrentPlayerId();
-    if ($attackerId != $this->id) {
-      Stack::insertAfterCardResolution(Stack::newAtom(ST_TRIGGER_ABILITY, [
-        'pId' => $this->id,
-        'amount' => $amount,
-      ]));
+    if (Rules::isAbilityAvailable()) {
+      $attackerId = Rules::getCurrentPlayerId();
+      if ($attackerId != $this->id) {
+        Stack::insertAfterCardResolution(Stack::newAtom(ST_TRIGGER_ABILITY, [
+          'pId' => $this->id,
+          'amount' => $amount,
+        ]));
+      }
     }
   }
 

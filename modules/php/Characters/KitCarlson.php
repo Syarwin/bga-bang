@@ -3,6 +3,7 @@ namespace BANG\Characters;
 use BANG\Core\Notifications;
 use BANG\Managers\Cards;
 use BANG\Managers\EventCards;
+use BANG\Managers\Rules;
 
 class KitCarlson extends \BANG\Models\Player
 {
@@ -48,10 +49,14 @@ class KitCarlson extends \BANG\Models\Player
 
   public function getPhaseOneRules($defaultAmount)
   {
-    return [
-      RULE_PHASE_ONE_CARDS_DRAW_BEGINNING => 0,
-      RULE_PHASE_ONE_PLAYER_ABILITY_DRAW => true,
-      RULE_PHASE_ONE_CARDS_DRAW_END => 0
-    ];
+    if (Rules::isAbilityAvailable()) {
+      return [
+        RULE_PHASE_ONE_CARDS_DRAW_BEGINNING => 0,
+        RULE_PHASE_ONE_PLAYER_ABILITY_DRAW => true,
+        RULE_PHASE_ONE_CARDS_DRAW_END => 0
+      ];
+    } else {
+      parent::getPhaseOneRules($defaultAmount);
+    }
   }
 }
