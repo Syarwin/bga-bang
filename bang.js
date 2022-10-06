@@ -268,7 +268,11 @@ define([
           this._amount = 2;
           this.makeCardSelectable(cards, 'useAbility');
 
-          $('pagemaintitletext').innerHTML = _('You must select two cards');
+          var oldStateDescription = this.gamedatas.gamestate.descriptionmyturn;
+          this.gamedatas.gamestate.descriptionmyturn = _('You must select two cards');
+          this.updatePageTitle();
+          this.gamedatas.gamestate.descriptionmyturn = oldStateDescription;
+
           this.removeActionButtons();
           this.addActionButton('buttonCancelUseAbility', _('Cancel'), () => this.restartState(), null, false, 'gray');
         }
@@ -382,6 +386,7 @@ define([
         this.removeActionButtons();
         dojo.empty('customActions');
         this.onUpdateActionButtons(this.gamedatas.gamestate.name, this.gamedatas.gamestate.args);
+        this.updatePageTitle();
       },
 
       restartState: function () {
