@@ -277,17 +277,20 @@ define([
       onClickCardUseAbility: function (card) {
         this.toggleCard(card);
 
+        const buttonVisible = $('buttonConfirmUseAbility');
         if (this._selectedCards.length < this._amount) {
-          if ($('buttonConfirmUseAbility')) dojo.destroy('buttonConfirmUseAbility');
+          if (buttonVisible) dojo.destroy('buttonConfirmUseAbility');
         } else {
-          this.addActionButton(
-            'buttonConfirmUseAbility',
-            _('Confirm'),
-            'onClickConfirmUseAbility',
-            null,
-            false,
-            'blue',
-          );
+          if (!buttonVisible) {
+            this.addActionButton(
+                'buttonConfirmUseAbility',
+                _('Confirm'),
+                'onClickConfirmUseAbility',
+                null,
+                false,
+                'blue',
+            );
+          }
         }
       },
 

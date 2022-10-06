@@ -279,6 +279,14 @@ class Player extends \BANG\Helpers\DB_Manager
     $this->hp -= $amount;
     $this->save();
     Notifications::lostLife($this, $amount);
+    $this->addRevivalAtomOrEliminate();
+  }
+
+  /**
+   * used when player drinks a beer or Sid Ketchum uses his ability to gain life discarding 2 cards
+   */
+  public function addRevivalAtomOrEliminate()
+  {
     if ($this->hp <= 0) {
       $ctx = Stack::getCtx();
       $isDuel = Players::getLivingPlayers()->count() <= 2;
@@ -296,24 +304,6 @@ class Player extends \BANG\Helpers\DB_Manager
         'src' => $ctx['src'] ?? null,
         'attacker' => $ctx['attacker'] ?? null,
         'pId' => $this->id,
-      ]);
-      Stack::insertAfterCardResolution($atom);
-    }
-  }
-
-  /**
-   * used when player drinks a beer or Sid Ketchum uses his ability to gain life discarding 2 cards
-   */
-  public function eliminateIfOutOfHp()
-  {
-    // If it's not enough, add a ELIMINATE node
-    if ($this->getHp() <= 0) {
-      $ctx = Stack::getCtx();
-      $atom = Stack::newAtom(ST_PRE_ELIMINATE_DISCARD, [
-        'type' => 'eliminateDiscard',
-        'src' => $ctx['src'],
-        'attacker' => $ctx['attacker'],
-        'pId' => $this->getId(),
       ]);
       Stack::insertAfterCardResolution($atom);
     }

@@ -117,11 +117,11 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       if (!this.toggleCard(card)) return;
 
       this.clearActionButtons();
-      if (this._selectedCards.length < this._amount) {
-        if (this._selectedCards.length == 0) {
-          this.addDangerActionButton('buttonConfirmPass', _('Pass and die'), () => this.onClickPass());
-        } else {
-          this.addDangerActionButton('buttonConfirmReact', _('Play and die'), () => this.onClickConfirmReact(true));
+      if (this._selectedCards.length === 0) {
+        let SID_KETCHUM = 9;
+        this.addDangerActionButton('buttonConfirmPass', _('Pass and die'), () => this.onClickPass());
+        if (this.gamedatas.players[this.player_id].characterId === SID_KETCHUM) {
+          this.makeCharacterAbilityUsable(SID_KETCHUM);
         }
       } else {
         this.addPrimaryActionButton('buttonConfirmReact', _('Confirm'), () => this.onClickConfirmReact(true));
