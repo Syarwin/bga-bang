@@ -51,6 +51,7 @@ class Rules extends DB_Manager
     $rules = $player->getPhaseOneRules($amountOfCardsToDraw);
     $rules[RULE_ABILITY_AVAILABLE] = $eventCard ? $eventCard->isAbilityAvailable() : true;
     $rules[RULE_BEER_AVAILABLE] = $eventCard ? $eventCard->isBeerAvailable() : true;
+    $rules[RULE_BANGS_AMOUNT_LEFT] = $eventCard ? $eventCard->getBangsAmount() : 1;
 
     $query = array_merge(['player_id' => $player->getId()], $rules);
     $query = array_map(function ($value) {
@@ -85,5 +86,20 @@ class Rules extends DB_Manager
   public static function isBeerAvailable()
   {
     return self::getRule(RULE_BEER_AVAILABLE) === 1;
+  }
+
+  public static function getBangsAmountLeft()
+  {
+    return (int) self::getRule(RULE_BANGS_AMOUNT_LEFT);
+  }
+
+  public static function bangPlayed()
+  {
+    $oldAmount = self::getBangsAmountLeft();
+    if ($oldAmount > 0) {
+      Rules::amendRules([RULE_BANGS_AMOUNT_LEFT => --$oldAmount]);
+    } else {
+      throw new \BgaVisibleSystemException('Error: Bang played while no bangs were available. Please report this as a bug');
+    }
   }
 }

@@ -1,6 +1,6 @@
 <?php
 namespace BANG\Cards;
-use BANG\Core\Log;
+use BANG\Managers\Rules;
 use BANG\Models\BangActionCard;
 
 class Bang extends BangActionCard
@@ -30,14 +30,14 @@ class Bang extends BangActionCard
    */
   public function getPlayOptions($player)
   {
-    if ($player->hasUnlimitedBangs() || !$player->hasPlayedBang()) {
+    if ($player->hasUnlimitedBangs() || Rules::getBangsAmountLeft() > 0) {
       return parent::getPlayOptions($player);
     }
   }
 
   public function play($player, $args)
   {
-    Log::addAction('bangPlayed');
+    Rules::bangPlayed();
     return parent::play($player, $args);
   }
 }

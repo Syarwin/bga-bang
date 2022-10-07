@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS `rules` (
     `phase_one_amount_to_draw_end` int(1) NOT NULL,
     `ability_available` int(1) NOT NULL,
     `beer_availability` int(1) NOT NULL,
+    `bangs_amount_left` int(1) NOT NULL,
     PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

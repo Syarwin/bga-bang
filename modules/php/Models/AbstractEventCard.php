@@ -88,6 +88,11 @@ class AbstractEventCard implements \JsonSerializable
     return true;
   }
 
+  public function getBangsAmount()
+  {
+    return 1;
+  }
+
   /*
    * jsonSerialize: used in frontend to manipulate cards
    */

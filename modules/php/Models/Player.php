@@ -442,11 +442,6 @@ class Player extends \BANG\Helpers\DB_Manager
     return !is_null($weapon) && $weapon->getType() == CARD_VOLCANIC;
   }
 
-  public function hasPlayedBang()
-  {
-    return !is_null(Log::getLastAction('bangPlayed', $this->id));
-  }
-
   /*
    * return the list of bang cards (for indians and duel for instance)
    */

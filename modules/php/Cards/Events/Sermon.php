@@ -13,4 +13,9 @@ class Sermon extends AbstractEventCard
     $this->effect = EFFECT_PERMANENT;
     $this->expansion = HIGH_NOON;
   }
+
+  public function getBangsAmount()
+  {
+    return 0;
+  }
 }
