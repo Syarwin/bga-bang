@@ -243,3 +243,4 @@ define('RULE_PHASE_ONE_CARDS_DRAW_BEGINNING', 'phase_one_amount_to_draw_beginnin
 define('RULE_PHASE_ONE_PLAYER_ABILITY_DRAW', 'phase_one_player_ability_draw');
 define('RULE_PHASE_ONE_CARDS_DRAW_END', 'phase_one_amount_to_draw_end');
 define('RULE_ABILITY_AVAILABLE', 'ability_available');
+define('RULE_BEER_AVAILABLE', 'beer_availability');

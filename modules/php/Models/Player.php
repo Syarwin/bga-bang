@@ -5,7 +5,7 @@ use BANG\Managers\Players;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
 use BANG\Core\Stack;
-use BANG\Core\Globals;
+use BANG\Managers\Rules;
 use bang;
 
 /*
@@ -301,6 +301,12 @@ class Player extends \BANG\Helpers\DB_Manager
         ->count();
       $isKetchumAndCanUseAbility = $this->character == SID_KETCHUM && $this->getHand()->count() >= 2;
       $canDrinkBeerToLive = (!$isDuel && $beersInHand > 0) || $isKetchumAndCanUseAbility;
+      if ($beersInHand > 0 && !Rules::isBeerAvailable() && !$isKetchumAndCanUseAbility) {
+        $canDrinkBeerToLive = false;
+        // Assuming The Reverend is the only reason of beer unavailability status for now. This might change in future
+        $msg = clienttranslate('Even though ${player_name} had beers while dying, they could not be played because of The Reverend event card');
+        Notifications::tell($msg, ['player' => $this]);
+      }
       $nextState = $canDrinkBeerToLive ? ST_REACT_BEER : ST_PRE_ELIMINATE_DISCARD;
       $atomType = $canDrinkBeerToLive ? 'beer' : 'eliminate';
       $atom = Stack::newAtom($nextState, [
@@ -481,8 +487,9 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function getBeerOptions()
   {
+    $beerCards = Rules::isBeerAvailable() ? $this->getBeerCards()->toArray() : [];
     return [
-      'cards' => $this->getBeerCards()->toArray(),
+      'cards' => $beerCards,
     ];
   }
 

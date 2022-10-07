@@ -125,6 +125,7 @@ $machinestates = [
 
   ST_REACT_BEER => [
     'name' => 'reactBeer',
+    // TODO: Specify Sid Ketchum's ability here and in the case of The Reverend event it should reflect the options correctly
     'description' => clienttranslate('${actplayer} may play ${n} beer to survive'),
     'descriptionmyturn' => clienttranslate('${you} may play ${n} beer to survive'),
     'type' => 'activeplayer',

@@ -83,6 +83,11 @@ class AbstractEventCard implements \JsonSerializable
     return true;
   }
 
+  public function isBeerAvailable()
+  {
+    return true;
+  }
+
   /*
    * jsonSerialize: used in frontend to manipulate cards
    */
