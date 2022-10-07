@@ -61,7 +61,7 @@ div#board {
     align-items: center;
     grid-row-end: span 2;
     grid-column-end: span 4;
-    max-height: 190px;
+    height: 370px;
     min-height: 190px;
     max-width: 100%; }
   div#board[data-players='2'] #table {
@@ -362,9 +362,9 @@ div#hand {
     div#hand div#role-container[data-role='0'] div#role-card {
       background-position: 0% center; }
     div#hand div#role-container[data-role='1'] div#role-card {
-      background-position: 33.3333333333% center; }
+      background-position: 33.33333% center; }
     div#hand div#role-container[data-role='2'] div#role-card {
-      background-position: 66.6666666667% center; }
+      background-position: 66.66667% center; }
     div#hand div#role-container[data-role='3'] div#role-card {
       background-position: 100% center; }
   div#hand div#hand-cards {
@@ -379,20 +379,26 @@ div#board #table {
   justify-content: center; }
   div#board #table #table-container {
     width: 242.5px;
-    height: 185px;
+    height: 355px;
     background-color: rgba(255, 255, 255, 0.5);
     border-radius: 5px;
     border: 1px solid rgba(50, 50, 50, 0.8);
     box-shadow: 1px 1px 5px rgba(50, 50, 50, 0.8);
     display: flex;
-    flex-flow: row;
+    flex-flow: column;
     align-items: center;
     justify-content: space-around; }
-    div#board #table #table-container #deck, div#board #table #table-container #discard {
+    div#board #table #table-container .cards-row {
+      width: 100%;
+      display: flex;
+      flex-flow: row;
+      align-items: center;
+      justify-content: space-around; }
+    div#board #table #table-container #deck, div#board #table #table-container #discard, div#board #table #table-container #eventNext, div#board #table #table-container #eventActive {
       width: 106.25px;
       height: 170px;
       position: relative; }
-      div#board #table #table-container #deck.selectable, div#board #table #table-container #discard.selectable {
+      div#board #table #table-container #deck.selectable, div#board #table #table-container #discard.selectable, div#board #table #table-container #eventNext.selectable, div#board #table #table-container #eventActive.selectable {
         cursor: pointer;
         animation: borderBlink 0.9s infinite; }
     div#board #table #table-container #deck {
@@ -405,16 +411,32 @@ div#board #table {
       display: flex;
       align-items: center;
       justify-content: center; }
-    div#board #table #table-container #discard div.bang-card {
+    div#board #table #table-container #discard div.bang-card, div#board #table #table-container #eventActive div.bang-card {
       margin: 0px;
       opacity: 1 !important;
       position: absolute;
       top: 0;
       left: 0;
       transform-origin: -7% 50%; }
+    div#board #table #table-container #eventNext {
+      display: flex;
+      align-items: center;
+      justify-content: center; }
+    div#board #table #table-container #eventNext div.bang-card {
+      margin: 0px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform-origin: -7% 50%;
+      opacity: 0.5; }
+    div#board #table #table-container #eventsDeck {
+      opacity: 1 !important;
+      font-size: 30px;
+      text-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white;
+      z-index: 2; }
 
 div.bang-character-tooltip div.bang-character-tooltip-sizing {
-  width: 226.5330188679px;
+  width: 226.53302px;
   height: 360px;
   display: flex;
   justify-content: center;
@@ -433,8 +455,8 @@ div.bang-character-tooltip div.bang-character-tooltip-sizing {
 
 .player-info {
   position: relative;
-  min-width: 113.266509434px;
-  width: 113.266509434px;
+  min-width: 113.26651px;
+  width: 113.26651px;
   height: 180px;
   background-image: url("img/card_borders.png");
   background-size: cover;
@@ -453,7 +475,7 @@ div.bang-character-tooltip div.bang-character-tooltip-sizing {
     transform: scale(0.8, 1.3);
     transform-origin: top center; }
   .player-info .player-character-background {
-    width: 90.2122641509px;
+    width: 90.21226px;
     height: 89.25px;
     margin: 5px auto;
     background-image: url("img/card_characters.jpg");
@@ -473,33 +495,33 @@ div.bang-character-tooltip div.bang-character-tooltip-sizing {
   .player-info[data-character='0'] .player-character-background {
     background-position: 0% center; }
   .player-info[data-character='1'] .player-character-background {
-    background-position: 6.6666666667% center; }
+    background-position: 6.66667% center; }
   .player-info[data-character='2'] .player-character-background {
-    background-position: 13.3333333333% center; }
+    background-position: 13.33333% center; }
   .player-info[data-character='3'] .player-character-background {
     background-position: 20% center; }
   .player-info[data-character='4'] .player-character-background {
-    background-position: 26.6666666667% center; }
+    background-position: 26.66667% center; }
   .player-info[data-character='5'] .player-character-background {
-    background-position: 33.3333333333% center; }
+    background-position: 33.33333% center; }
   .player-info[data-character='6'] .player-character-background {
     background-position: 40% center; }
   .player-info[data-character='7'] .player-character-background {
-    background-position: 46.6666666667% center; }
+    background-position: 46.66667% center; }
   .player-info[data-character='8'] .player-character-background {
-    background-position: 53.3333333333% center; }
+    background-position: 53.33333% center; }
   .player-info[data-character='9'] .player-character-background {
     background-position: 60% center; }
   .player-info[data-character='10'] .player-character-background {
-    background-position: 66.6666666667% center; }
+    background-position: 66.66667% center; }
   .player-info[data-character='11'] .player-character-background {
-    background-position: 73.3333333333% center; }
+    background-position: 73.33333% center; }
   .player-info[data-character='12'] .player-character-background {
     background-position: 80% center; }
   .player-info[data-character='13'] .player-character-background {
-    background-position: 86.6666666667% center; }
+    background-position: 86.66667% center; }
   .player-info[data-character='14'] .player-character-background {
-    background-position: 93.3333333333% center; }
+    background-position: 93.33333% center; }
   .player-info[data-character='15'] .player-character-background {
     background-position: 100% center; }
 
@@ -528,7 +550,7 @@ div.bang-character-tooltip div.bang-character-tooltip-sizing {
   100% {
     border: 1px dashed white; } }
 .bang-player.eliminated .bang-player-container {
-  width: 113.266509434px; }
+  width: 113.26651px; }
   .bang-player.eliminated .bang-player-container .player-character-background {
     background-image: url("img/tombstone.svg");
     background-size: 80%;
@@ -544,7 +566,7 @@ div.bang-character-tooltip div.bang-character-tooltip-sizing {
   display: flex;
   transition: width 1s; }
   .bang-player .bang-player-container .player-inplay {
-    width: calc(100% - 115.266509434px);
+    width: calc(100% - 115.26651px);
     flex-grow: 1;
     display: flex;
     flex-flow: row;
@@ -1308,39 +1330,39 @@ div.bang-card {
     border-radius: 10px;
     z-index: 2; }
   div.bang-card[data-type="5"] .card-front {
-    background-position: 33.3333333333% center; }
+    background-position: 33.33333% center; }
   div.bang-card[data-type="6"] .card-front {
-    background-position: 33.3333333333% center; }
+    background-position: 33.33333% center; }
   div.bang-card[data-type="7"] .card-front {
-    background-position: 33.3333333333% center; }
+    background-position: 33.33333% center; }
   div.bang-card[data-type="8"] .card-front {
-    background-position: 33.3333333333% center; }
+    background-position: 33.33333% center; }
   div.bang-card[data-type="9"] .card-front {
-    background-position: 33.3333333333% center; }
+    background-position: 33.33333% center; }
   div.bang-card[data-type="10"] .card-front {
-    background-position: 33.3333333333% center; }
+    background-position: 33.33333% center; }
   div.bang-card[data-type="11"] .card-front {
-    background-position: 33.3333333333% center; }
+    background-position: 33.33333% center; }
   div.bang-card[data-type="12"] .card-front {
-    background-position: 33.3333333333% center; }
+    background-position: 33.33333% center; }
   div.bang-card[data-type="13"] .card-front {
-    background-position: 33.3333333333% center; }
+    background-position: 33.33333% center; }
   div.bang-card[data-type="14"] .card-front {
-    background-position: 33.3333333333% center; }
+    background-position: 33.33333% center; }
   div.bang-card[data-type="15"] .card-front {
-    background-position: 33.3333333333% center; }
+    background-position: 33.33333% center; }
   div.bang-card[data-type="16"] .card-front {
-    background-position: 33.3333333333% center; }
+    background-position: 33.33333% center; }
   div.bang-card[data-type="17"] .card-front {
-    background-position: 66.6666666667% center; }
+    background-position: 66.66667% center; }
   div.bang-card[data-type="18"] .card-front {
-    background-position: 66.6666666667% center; }
+    background-position: 66.66667% center; }
   div.bang-card[data-type="19"] .card-front {
-    background-position: 66.6666666667% center; }
+    background-position: 66.66667% center; }
   div.bang-card[data-type="20"] .card-front {
-    background-position: 66.6666666667% center; }
+    background-position: 66.66667% center; }
   div.bang-card[data-type="21"] .card-front {
-    background-position: 66.6666666667% center; }
+    background-position: 66.66667% center; }
   div.bang-card[data-type="0"] .card-front {
     background-position: 100% center; }
   div.bang-card[data-type="1"] .card-front {
@@ -1371,40 +1393,40 @@ div.bang-card {
     background-position-y: 0%; }
   div.bang-card[data-type="6"] .card-background {
     background-position-x: 0%;
-    background-position-y: 33.3333333333%; }
+    background-position-y: 33.33333%; }
   div.bang-card[data-type="7"] .card-background {
     background-position-x: 20%;
-    background-position-y: 33.3333333333%; }
+    background-position-y: 33.33333%; }
   div.bang-card[data-type="8"] .card-background {
     background-position-x: 40%;
-    background-position-y: 33.3333333333%; }
+    background-position-y: 33.33333%; }
   div.bang-card[data-type="9"] .card-background {
     background-position-x: 60%;
-    background-position-y: 33.3333333333%; }
+    background-position-y: 33.33333%; }
   div.bang-card[data-type="10"] .card-background {
     background-position-x: 80%;
-    background-position-y: 33.3333333333%; }
+    background-position-y: 33.33333%; }
   div.bang-card[data-type="11"] .card-background {
     background-position-x: 100%;
-    background-position-y: 33.3333333333%; }
+    background-position-y: 33.33333%; }
   div.bang-card[data-type="12"] .card-background {
     background-position-x: 0%;
-    background-position-y: 66.6666666667%; }
+    background-position-y: 66.66667%; }
   div.bang-card[data-type="13"] .card-background {
     background-position-x: 20%;
-    background-position-y: 66.6666666667%; }
+    background-position-y: 66.66667%; }
   div.bang-card[data-type="14"] .card-background {
     background-position-x: 40%;
-    background-position-y: 66.6666666667%; }
+    background-position-y: 66.66667%; }
   div.bang-card[data-type="15"] .card-background {
     background-position-x: 60%;
-    background-position-y: 66.6666666667%; }
+    background-position-y: 66.66667%; }
   div.bang-card[data-type="16"] .card-background {
     background-position-x: 80%;
-    background-position-y: 66.6666666667%; }
+    background-position-y: 66.66667%; }
   div.bang-card[data-type="17"] .card-background {
     background-position-x: 100%;
-    background-position-y: 66.6666666667%; }
+    background-position-y: 66.66667%; }
   div.bang-card[data-type="18"] .card-background {
     background-position-x: 0%;
     background-position-y: 100%; }
@@ -1608,9 +1630,9 @@ div.bang-card {
       #popin_playersHelp #dialog-roles .dialog-role[data-role="0"] .dialog-role-img {
         background-position: 0% center; }
       #popin_playersHelp #dialog-roles .dialog-role[data-role="1"] .dialog-role-img {
-        background-position: 33.3333333333% center; }
+        background-position: 33.33333% center; }
       #popin_playersHelp #dialog-roles .dialog-role[data-role="2"] .dialog-role-img {
-        background-position: 66.6666666667% center; }
+        background-position: 66.66667% center; }
       #popin_playersHelp #dialog-roles .dialog-role[data-role="3"] .dialog-role-img {
         background-position: 100% center; }
   #popin_playersHelp #dialog-players {
@@ -1662,33 +1684,33 @@ div.bang-card {
       #popin_playersHelp #dialog-players .dialog-character[data-character="0"] .dialog-character-background {
         background-position: 0% center; }
       #popin_playersHelp #dialog-players .dialog-character[data-character="1"] .dialog-character-background {
-        background-position: 6.6666666667% center; }
+        background-position: 6.66667% center; }
       #popin_playersHelp #dialog-players .dialog-character[data-character="2"] .dialog-character-background {
-        background-position: 13.3333333333% center; }
+        background-position: 13.33333% center; }
       #popin_playersHelp #dialog-players .dialog-character[data-character="3"] .dialog-character-background {
         background-position: 20% center; }
       #popin_playersHelp #dialog-players .dialog-character[data-character="4"] .dialog-character-background {
-        background-position: 26.6666666667% center; }
+        background-position: 26.66667% center; }
       #popin_playersHelp #dialog-players .dialog-character[data-character="5"] .dialog-character-background {
-        background-position: 33.3333333333% center; }
+        background-position: 33.33333% center; }
       #popin_playersHelp #dialog-players .dialog-character[data-character="6"] .dialog-character-background {
         background-position: 40% center; }
       #popin_playersHelp #dialog-players .dialog-character[data-character="7"] .dialog-character-background {
-        background-position: 46.6666666667% center; }
+        background-position: 46.66667% center; }
       #popin_playersHelp #dialog-players .dialog-character[data-character="8"] .dialog-character-background {
-        background-position: 53.3333333333% center; }
+        background-position: 53.33333% center; }
       #popin_playersHelp #dialog-players .dialog-character[data-character="9"] .dialog-character-background {
         background-position: 60% center; }
       #popin_playersHelp #dialog-players .dialog-character[data-character="10"] .dialog-character-background {
-        background-position: 66.6666666667% center; }
+        background-position: 66.66667% center; }
       #popin_playersHelp #dialog-players .dialog-character[data-character="11"] .dialog-character-background {
-        background-position: 73.3333333333% center; }
+        background-position: 73.33333% center; }
       #popin_playersHelp #dialog-players .dialog-character[data-character="12"] .dialog-character-background {
         background-position: 80% center; }
       #popin_playersHelp #dialog-players .dialog-character[data-character="13"] .dialog-character-background {
-        background-position: 86.6666666667% center; }
+        background-position: 86.66667% center; }
       #popin_playersHelp #dialog-players .dialog-character[data-character="14"] .dialog-character-background {
-        background-position: 93.3333333333% center; }
+        background-position: 93.33333% center; }
       #popin_playersHelp #dialog-players .dialog-character[data-character="15"] .dialog-character-background {
         background-position: 100% center; }
 

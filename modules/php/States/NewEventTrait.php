@@ -1,5 +1,6 @@
 <?php
 namespace BANG\States;
+use BANG\Core\Notifications;
 use BANG\Core\Stack;
 use BANG\Managers\EventCards;
 
@@ -11,6 +12,8 @@ trait NewEventTrait
   public function stNewEvent()
   {
     $eventCard = EventCards::next();
+    $nextEventCard = EventCards::getNext();
+    Notifications::newEvent($eventCard, $nextEventCard);
     if ($eventCard->getEffect() === EFFECT_INSTANT) {
       $eventCard->resolveEffect();
     }

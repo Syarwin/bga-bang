@@ -18,8 +18,16 @@ var jstpl_hand = `<div id="hand">
 
 var jstpl_table = `<div id="table">
 	<div id="table-container">
-		<div id="deck">\${deck}</div>
-		<div id="discard"></div>
+	    <div class="cards-row">
+            <div id="deck">\${deck}</div>
+            <div id="discard"></div>
+	    </div>
+	    <div class="cards-row">
+	        <div id="eventNext">
+	            <span id="eventsDeck">\${eventsDeck}</span>
+	        </div>
+		    <div id="eventActive"></div>
+	    </div>
 	</div>
 </div>
 `;
@@ -130,6 +138,13 @@ var jstpl_card = `<div class="bang-card \${flipped} \${extraClass}" id="bang-car
 	</div>
 </div>`;
 
+var jstpl_eventCard = `<div class="bang-card \${extraClass}" id="bang-card-\${uid}" data-id="\${id}" data-type="\${type}">
+	<div class="card-front">
+		<div class="card-name">\${name}</div>
+		<div class="card-background"></div>
+	</div>
+</div>`;
+
 var jstpl_cardTooltip = `<div class="bang-card-tooltip">
 	<div class="bang-card-tooltip-sizing">
 		<div class="bang-card" id="bang-card-tooltip-\${id}" data-type="\${type}">
@@ -141,6 +156,20 @@ var jstpl_cardTooltip = `<div class="bang-card-tooltip">
 					<span class="card-copy-value">\${value}</span>
 					<span class="card-copy-color" data-color="\${color}"></span>
 				</div>
+			</div>
+		</div>
+	</div>
+	<p>
+	\${text}
+	</p>
+</div>`;
+
+var jstpl_eventCardTooltip = `<div class="bang-card-tooltip">
+	<div class="bang-card-tooltip-sizing">
+		<div class="bang-card" id="bang-card-tooltip-\${id}" data-type="\${type}">
+			<div class="card-front">
+				<div class="card-name">\${name}</div>
+				<div class="card-background"></div>
 			</div>
 		</div>
 	</div>

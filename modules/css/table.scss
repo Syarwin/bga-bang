@@ -4,17 +4,25 @@ div#board {
 
     #table-container {
       width:2*$cardW + 30px;
-      height:$cardH + 15px;
+      height:2*$cardH + 15px;
       background-color:$transparentWhite;
       border-radius:5px;
       border:1px solid $darkgray;
       box-shadow: 1px 1px 5px $darkgray;
-      display:flex;
-      flex-flow:row;
+      display: flex;
+      flex-flow: column;
       align-items: center;
       justify-content: space-around;
 
-      #deck, #discard {
+      .cards-row {
+        width: 100%;
+        display:flex;
+        flex-flow:row;
+        align-items: center;
+        justify-content: space-around;
+      }
+
+      #deck, #discard, #eventNext, #eventActive {
         width:$cardW;
         height:$cardH;
         position:relative;
@@ -37,13 +45,35 @@ div#board {
         justify-content: center;
       }
 
-      #discard div.bang-card {
+      #discard div.bang-card, #eventActive div.bang-card {
         margin:0px;
         opacity:1 !important;
         position:absolute;
         top:0;
         left:0;
         transform-origin: -7% 50%;
+      }
+
+      #eventNext {
+        display:flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #eventNext div.bang-card{
+        margin:0px;
+        position:absolute;
+        top:0;
+        left:0;
+        transform-origin: -7% 50%;
+        opacity: 0.5;
+      }
+
+      #eventsDeck {
+        opacity:1 !important;
+        font-size:30px;
+        text-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white;
+        z-index: 2;
       }
     }
   }

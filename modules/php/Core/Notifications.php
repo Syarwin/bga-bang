@@ -1,5 +1,6 @@
 <?php
 namespace BANG\Core;
+use BANG\Managers\EventCards;
 use bang;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
@@ -379,5 +380,15 @@ class Notifications
     if (isset($data['msgYou'])) {
       $data['preserve'][4] = 'msgYou';
     }
+  }
+
+  public static function newEvent($eventCard, $nextEventCard)
+  {
+    $msg = clienttranslate('The new active event is {$active_name}. Next will be {$next_name}. {$eventsDeck} event cards left.');
+    self::notifyAll('newEvent', $msg, [
+      'eventActive' => $eventCard,
+      'eventNext' => $nextEventCard,
+      'eventsDeck' => EventCards::getDeckCount(),
+    ]);
   }
 }
