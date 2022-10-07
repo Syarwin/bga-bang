@@ -105,6 +105,7 @@ class banghighnoon extends Table
       'discard' => Cards::getLastDiscarded(),
       'eventsDeck' => EventCards::getDeckCount(),
       'eventActive' => EventCards::getActive(),
+      'eventNext' => EventCards::getNext(),
       'playerTurn' => Rules::getCurrentPlayerId(),
       'cards' => array_merge(Cards::getUIData(), EventCards::getUiData()),
       'distances' => Players::getDistances(),

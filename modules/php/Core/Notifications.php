@@ -1,9 +1,11 @@
 <?php
 namespace BANG\Core;
+use BANG\Managers\EventCards;
 use banghighnoon;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
 use BANG\Models\AbstractCard;
+use BANG\Models\AbstractEventCard;
 
 /*
  * Notifications
@@ -248,13 +250,14 @@ class Notifications
   {
     $src_name = $src instanceof AbstractCard ? $src->getName() : $src->getCharName();
 
-    self::notifyAll('flipCard', clienttranslate('${player_name} draws ${card_name} for ${src_name}\'s effect.'), [
+    self::notifyAll('flipCard', clienttranslate('${player_name} draws ${card_name} for ${src_name}\'s effect'), [
       'i18n' => ['src_name'],
       'player' => $player,
       'card' => $card,
       'src_name' => $src_name,
       'src_id' => $src->getId(),
       'deckCount' => Cards::getDeckCount(),
+      'event' => EventCards::getActive(),
     ]);
   }
 
@@ -376,8 +379,32 @@ class Notifications
       }, $data['ignore']);
     }
 
+    if (isset($data['event'])) {
+      $data['event_name'] = $eventName = $data['event']->getName();
+      $data['flipEventMsg'] = " because of $eventName";
+      $data['eventColorOverride'] = $data['event']->getColorOverride();
+      $data['preserve'][] = 'eventColorOverride';
+    } else {
+      $data['flipEventMsg'] = '';
+    }
+
     if (isset($data['msgYou'])) {
       $data['preserve'][4] = 'msgYou';
     }
+  }
+
+  /**
+   * @param AbstractEventCard $eventCard
+   * @param AbstractEventCard $nextEventCard
+   */
+  public static function newEvent($eventCard, $nextEventCard)
+  {
+    $msg = clienttranslate('${eventActiveName} is now active!');
+    self::notifyAll('newEvent', $msg, [
+      'eventActive' => $eventCard,
+      'eventActiveName' => $eventCard->getName(),
+      'eventNext' => $nextEventCard,
+      'eventsDeck' => EventCards::getDeckCount(),
+    ]);
   }
 }

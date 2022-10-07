@@ -487,13 +487,16 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
           args.You = this.coloredYou();
 
           if (args.card_name && args.card) {
+            let nc = args.eventColorOverride || '';
             args.card_name =
               _(args.card_name) +
               ' (' +
               args.card.value +
-              '<span class="card-copy-color" data-color="' +
-              args.card.color +
-              '"></span>)';
+              '<span class="card-copy-color" data-color="'+args.card.color+'" data-color-override="'+nc+'"></span>';
+            if (args.eventColorOverride) {
+              args.card_name += '<span class="card-copy-color-override" data-color="'+args.card.color+'" data-color-override="'+nc+'"></span>';
+            }
+            args.card_name += ')</span>';
           }
         }
       } catch (e) {

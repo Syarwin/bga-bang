@@ -44,13 +44,16 @@ class Jourdonnais extends \BANG\Models\Player
     Notifications::flipCard($this, $card, $this);
     $missedNeeded = Stack::top()['missedNeeded'] ?? 1;
 
-    if ($card->getCopyColor() == 'H') {
-      Notifications::tell(clienttranslate('Jourdonnais effect was successful'));
-
+    $event = null;
+    if ($card->getCopyColor($event) == 'H') {
+      Notifications::tell(clienttranslate('Jourdonnais effect was successful${flipEventMsg}'), ['event' => $event]);
       $missedNeeded -= 1;
     } else {
-      Notifications::tell(clienttranslate('Jourdonnais effect failed'));
+      Notifications::tell(clienttranslate('Jourdonnais effect failed${flipEventMsg}'), [
+        'event' => ($card->getSuit() !== 'H') ? null : $event //result changed because of event?
+      ]);
     }
+
     Stack::updateAttackAtomAfterAction($missedNeeded, $this->character);
     $this->notifyAboutAnotherMissed();
   }

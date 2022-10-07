@@ -1,5 +1,6 @@
 <?php
 namespace BANG\States;
+use BANG\Core\Notifications;
 use BANG\Core\Stack;
 use BANG\Managers\EventCards;
 use BANG\Managers\Players;
@@ -15,8 +16,11 @@ trait EventTrait
     $ctx = Stack::getCtx();
     $player = Players::get($ctx['pId']);
     $eventCard = EventCards::next();
-    $effect = $eventCard->getEffect();
-    if ($effect === EFFECT_INSTANT) {
+    $nextEventCard = EventCards::getNext();
+    if ($nextEventCard) {
+      Notifications::newEvent($eventCard, $nextEventCard);
+    }
+    if ($eventCard->getEffect() === EFFECT_INSTANT) {
       $eventCard->resolveEffect($player);
     }
     Rules::setNewTurnRules($player, $eventCard);

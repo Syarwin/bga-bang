@@ -1,8 +1,15 @@
 <?php
 namespace BANG\Models;
 
-/*
+/**
  * EventCard:  class to handle blue cards
+ *
+ * @property-read $type
+ * @property-read string $name
+ * @property-read string $text
+ * @property-read $effect
+ * @property-read $lastCard
+ * @property-read $expansion
  */
 class AbstractEventCard implements \JsonSerializable
 {
@@ -44,6 +51,11 @@ class AbstractEventCard implements \JsonSerializable
     return $this->id;
   }
 
+  public function getName()
+  {
+    return $this->name;
+  }
+
   public function getExpansion()
   {
     return $this->expansion;
@@ -63,6 +75,10 @@ class AbstractEventCard implements \JsonSerializable
   {
   }
 
+  /**
+   * @param $currentColor
+   * @return string
+   */
   public function getColorOverride($currentColor)
   {
     return $currentColor;
@@ -106,6 +122,7 @@ class AbstractEventCard implements \JsonSerializable
     return [
       'id' => $this->id,
       'type' => $this->type,
+      'colorOverride' => $this->getColorOverride(),
     ];
   }
 }

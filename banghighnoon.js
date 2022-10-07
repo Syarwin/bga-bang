@@ -32,7 +32,9 @@ define([
   g_gamethemeurl + 'modules/js/States/SelectCardTrait.js',
   g_gamethemeurl + 'modules/js/States/DiscardEndOfTurnTrait.js',
   g_gamethemeurl + 'modules/js/States/DiscardBlueCardTrait.js',
+  g_gamethemeurl + 'modules/js/States/EventTrait.js',
 
+  g_gamethemeurl + 'modules/js/EventTrait.js',
   g_gamethemeurl + 'modules/js/CardTrait.js',
   g_gamethemeurl + 'modules/js/PlayerTrait.js',
 ], function (dojo, declare) {
@@ -47,6 +49,7 @@ define([
       bang.playerTrait,
       bang.cardTrait,
       bang.discardBlueCardTrait,
+      bang.eventTrait,
     ],
     {
       /*
@@ -143,8 +146,13 @@ define([
         });
 
         // Adding deck/discard
-        dojo.place(this.format_block('jstpl_table', { deck: gamedatas.deck }), 'board');
-        if (gamedatas.discard) this.addCard(gamedatas.discard, 'discard');
+        dojo.place(this.format_block('jstpl_table', { deck: gamedatas.deck, eventsDeck: gamedatas.eventsDeck || '' }), 'board');
+        if (gamedatas.discard) {
+          // gamedatas.discard.extraClass = ' '; //empty space is important
+          this.addCard(gamedatas.discard, 'discard');
+        }
+        if (gamedatas.eventActive) this.addEventCard(gamedatas.eventActive, 'eventActive');
+        if (gamedatas.eventNext) this.addEventCard(gamedatas.eventNext, 'eventNext');
         dojo.connect($('deck'), 'onclick', () => this.onClickDeck());
         dojo.connect($('discard'), 'onclick', () => this.onClickDiscard());
 
