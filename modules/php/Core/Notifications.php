@@ -377,6 +377,13 @@ class Notifications
       }, $data['ignore']);
     }
 
+    if (isset($data['event'])) {
+      $data['event_name'] = $eventName = $data['event']->getUIData()['name'];
+      $data['flipEventMsg'] = " because of $eventName";
+    } else {
+      $data['flipEventMsg'] = '';
+    }
+
     if (isset($data['msgYou'])) {
       $data['preserve'][4] = 'msgYou';
     }

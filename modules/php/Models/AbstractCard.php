@@ -56,7 +56,7 @@ class AbstractCard implements \JsonSerializable
     return [
       'id' => $this->id,
       'type' => $this->type,
-      'color' => $this->getCopyColor(),
+      'color' => $this->color,
       'value' => $this->value,
     ];
   }
@@ -109,16 +109,24 @@ class AbstractCard implements \JsonSerializable
     return null; // Will be overwrite by Blue/Brown class
   }
 
+  public function getSuit()
+  {
+    return $this->color;
+  }
+
   public function getCopyValue()
   {
     return $this->value;
   }
 
-  public function getCopyColor()
+  public function getCopyColor(&$event = null)
   {
     $eventCard = EventCards::getActive();
-    $eventColorOverride = $eventCard->getEffect() === EFFECT_PERMANENT ? $eventCard->getColorOverride() : null;
-    return $eventColorOverride ?? $this->color;
+    if ($eventCard->getEffect() === EFFECT_PERMANENT && ($eventColorOverride = $eventCard->getColorOverride())) {
+      $event = $eventCard;
+      return $eventColorOverride;
+    }
+    return $this->color;
   }
 
   public function getEffectType()

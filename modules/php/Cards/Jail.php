@@ -53,11 +53,11 @@ class Jail extends \BANG\Models\BlueCard
 
   public function resolveFlipped($card, $player)
   {
-    $args = ['player' => $player];
     $player->discardCard($card, true); // Discard a flipped card
     $player->discardCard($this, true); // Discard Jail itself
 
-    if ($card->getCopyColor() == 'H') {
+    $args = ['player' => $player, 'event' => null];
+    if ($card->getSuit() == 'H' || $card->getCopyColor($args['event']) == 'H') {
       Notifications::tell(clienttranslate('${player_name} can make his turn'), $args);
     } else {
       Notifications::tell(clienttranslate('${player_name} is skipped'), $args);
