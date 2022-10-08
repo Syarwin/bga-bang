@@ -21,7 +21,7 @@ class BartCassidy extends \BANG\Models\Player
       Stack::insertAfterCardResolution(Stack::newAtom(ST_TRIGGER_ABILITY, [
         'pId' => $this->id,
         'amount' => $amount,
-      ]));
+      ]), false);
     }
   }
 

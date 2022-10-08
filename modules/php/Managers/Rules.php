@@ -85,7 +85,7 @@ class Rules extends DB_Manager
 
   public static function isBeerAvailable()
   {
-    return self::getRule(RULE_BEER_AVAILABLE) === 1;
+    return (int) self::getRule(RULE_BEER_AVAILABLE) === 1;
   }
 
   public static function getBangsAmountLeft()
