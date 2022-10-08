@@ -138,10 +138,11 @@ var jstpl_card = `<div class="bang-card \${flipped} \${extraClass}" id="bang-car
 	</div>
 </div>`;
 
+//TODO: replace card-description with graphics
 var jstpl_eventCard = `<div class="bang-card \${extraClass}" id="bang-card-\${uid}" data-id="\${id}" data-type="\${type}">
 	<div class="card-front">
 		<div class="card-name">\${name}</div>
-		<div class="card-background"></div>
+		<p class="card-description">\${text}</p>
 	</div>
 </div>`;
 

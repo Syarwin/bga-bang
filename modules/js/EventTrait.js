@@ -6,39 +6,35 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
     notif_newEvent(n)
     {
-      //add nextEvent card
-      dojo.style(dojo.query('#eventNext .bang-card'), 'zIndex', 1);
+      var eventActiveCard = n.args.eventActive;
       this.addEventCard(n.args.eventNext, 'eventNext')
-
-      this.slideEventCard(n.args.eventActive);
       this.updateEventCount(n.args.eventsDeck);
+      this.slideEventCard(eventActiveCard);
     },
 
     slideEventCard(card) {
-      var tempCard = this.getCard(card, true);
-      tempCard.uid = tempCard.id + 'discard';
+      var tempCard = this.getCard(card);
+      tempCard.uid = tempCard.id;
       tempCard.extraClass = 'slide';
 
+      dojo.destroy('bang-card-' + card.id +'event');
       this.slideTemporary('jstpl_eventCard', tempCard, 'board', 'eventNext', 'eventActive', 700, 0).then(() => {
-        var div = this.addEventCard(card, 'eventActive');
-        dojo.style(div, 'zIndex', dojo.query('#eventActive .bang-card').length);
-        dojo.style(div, 'transformStyle', "initial");
+        dojo.query('#eventActive .bang-card').forEach((card) => dojo.destroy(card));
+        this.addEventCard(card, 'eventActive');
       });
     },
 
-    addEventCard(ocard, container, suffix = '') {
+    addEventCard(ocard, container, suffix = 'event') {
       var card = this.getCard(ocard);
       card.uid = card.id + suffix;
       if ($('bang-card-' + card.uid)) dojo.destroy('bang-card-' + card.uid);
 
       var div = dojo.place(this.format_block('jstpl_eventCard', card), container);
-      if (card.flipped === '' || card.enforceTooltip)
-        this.addTooltipHtml(div.id, this.format_block('jstpl_eventCardTooltip', card));
-      return div;
+      this.addTooltipHtml(div.id, this.format_block('jstpl_eventCardTooltip', card));
     },
 
     updateEventCount(count) {
-      $('eventsDeck').innerHTML = count;
+      $('eventsDeck').innerHTML = count || null;
     }
 
   });

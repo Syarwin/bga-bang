@@ -12,8 +12,9 @@ trait NewEventTrait
   public function stNewEvent()
   {
     $eventCard = EventCards::next();
-    $nextEventCard = EventCards::getNext();
-    Notifications::newEvent($eventCard, $nextEventCard);
+    if ($nextEventCard = EventCards::getNext()) {
+      Notifications::newEvent($eventCard, $nextEventCard);
+    }
     if ($eventCard->getEffect() === EFFECT_INSTANT) {
       $eventCard->resolveEffect();
     }

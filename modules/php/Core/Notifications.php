@@ -384,9 +384,10 @@ class Notifications
 
   public static function newEvent($eventCard, $nextEventCard)
   {
-    $msg = clienttranslate('The new active event is {$active_name}. Next will be {$next_name}. {$eventsDeck} event cards left.');
+    $msg = clienttranslate('${eventActiveName} is now active!');
     self::notifyAll('newEvent', $msg, [
       'eventActive' => $eventCard,
+      'eventActiveName' => $eventCard->getUIData()['name'],
       'eventNext' => $nextEventCard,
       'eventsDeck' => EventCards::getDeckCount(),
     ]);
