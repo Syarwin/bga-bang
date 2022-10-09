@@ -10,9 +10,11 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       this.gamedatas.eventActive = eventActiveCard;
 
       this.updateColorOverride(eventActiveCard.colorOverride);
-      if (n.args.eventNext) this.addEventCard(n.args.eventNext, 'eventNext')
-      this.updateEventCount(n.args.eventsDeck);
+      if (n.args.eventNext) {
+        this.addEventCard(n.args.eventNext, 'eventNext')
+      }
       this.slideEventCard(eventActiveCard);
+      this.updateEventCount(n.args.eventsDeck);
     },
 
     slideEventCard(card) {
@@ -37,7 +39,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     },
 
     updateEventCount(count) {
-      $('eventsDeck').innerHTML = count || null;
+      $('eventsDeck').innerHTML = count || '';
     },
 
     updateColorOverride(col) {

@@ -186,7 +186,7 @@ div.bang-card {
     color:$color;
   }
 
-  .live-card .card-copy-color[data-color=#{$suitChar}]:not([data-color-override=#{$suitChar}]):not([data-color-override=""])::after {
+  .card-copy-color[data-color=#{$suitChar}]:not([data-color-override=#{$suitChar}]):not([data-color-override=""])::after {
     content: "/";
   }
 

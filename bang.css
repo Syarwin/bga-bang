@@ -1505,7 +1505,7 @@ div.bang-card {
   content: "♣";
   color: black; }
 
-.live-card .card-copy-color[data-color=C]:not([data-color-override=C]):not([data-color-override=""])::after {
+.card-copy-color[data-color=C]:not([data-color-override=C]):not([data-color-override=""])::after {
   content: "/"; }
 
 .card-copy-color-override[data-color-override=C]:not([data-color=C])::before {
@@ -1516,7 +1516,7 @@ div.bang-card {
   content: "♦";
   color: red; }
 
-.live-card .card-copy-color[data-color=D]:not([data-color-override=D]):not([data-color-override=""])::after {
+.card-copy-color[data-color=D]:not([data-color-override=D]):not([data-color-override=""])::after {
   content: "/"; }
 
 .card-copy-color-override[data-color-override=D]:not([data-color=D])::before {
@@ -1527,7 +1527,7 @@ div.bang-card {
   content: "♥";
   color: red; }
 
-.live-card .card-copy-color[data-color=H]:not([data-color-override=H]):not([data-color-override=""])::after {
+.card-copy-color[data-color=H]:not([data-color-override=H]):not([data-color-override=""])::after {
   content: "/"; }
 
 .card-copy-color-override[data-color-override=H]:not([data-color=H])::before {
@@ -1538,7 +1538,7 @@ div.bang-card {
   content: "♠";
   color: black; }
 
-.live-card .card-copy-color[data-color=S]:not([data-color-override=S]):not([data-color-override=""])::after {
+.card-copy-color[data-color=S]:not([data-color-override=S]):not([data-color-override=""])::after {
   content: "/"; }
 
 .card-copy-color-override[data-color-override=S]:not([data-color=S])::before {
