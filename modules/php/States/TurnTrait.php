@@ -41,9 +41,10 @@ trait TurnTrait
     Log::startTurn();
     $player = Players::getActive();
     $eventCard = EventCards::getActive();
+    $nextEventCard = EventCards::getNext();
     Rules::setNewTurnRules($player, $eventCard);
     Stack::setup([ST_RESOLVE_EVENT_EFFECT, ST_PRE_PHASE_ONE, ST_PHASE_ONE_SETUP, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN]);
-    if ($player->getRole() === SHERIFF) { // TODO: New event should be drawn on Sheriff's second turn. First turn is ok while developing though
+    if ($player->getRole() === SHERIFF && $nextEventCard) { // TODO: New event should be drawn on Sheriff's second turn. First turn is ok while developing though
       Stack::insertOnTop(Stack::newSimpleAtom(ST_NEW_EVENT, $player));
     }
     Stack::finishState();
