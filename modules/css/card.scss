@@ -146,27 +146,52 @@ div.bang-card {
   }
 }
 
-.card-copy-color::before {
+.card-copy-color {
+  font-size:$cardH / 8;
+  display: inline-grid;
+}
+.card-copy-color-override {
   font-size:$cardH / 8;
 }
-#logs_wrap .card-copy-color::before {
-  font-size:17px;
-  margin-left:1px;
+
+#logs_wrap {
+  .card-copy-color,.card-color-override {
+    font-size: 17px;
+    margin-left: 1px;
+  }
+  .card-copy-color::after{
+    left: 1.5px;
+  }
 }
 
-.card-copy-color[data-color="D"]::before {
-  content:"♦";
-  color:red;
+.card-copy-color::after {
+  grid-row: 1;
+  grid-column: 1;
+  position: relative;
+  left: 2.5px;
+  color: black;
+  text-shadow: -1px -1px 2px white;
 }
-.card-copy-color[data-color="H"]::before {
-  content:"♥";
-  color:red;
+.card-copy-color::before {
+  grid-row: 1;
+  grid-column: 1;
 }
-.card-copy-color[data-color="S"]::before {
-  content:"♠";
-  color:black;
-}
-.card-copy-color[data-color="C"]::before {
-  content:"♣";
-  color:black;
+
+@each $suitChar, $suit in $suits {
+  $color: map-get($suit,'color');
+  $icon: map-get($suit,'icon');
+
+  .card-copy-color[data-color=#{$suitChar}]::before {
+    content:$icon;
+    color:$color;
+  }
+
+  .live-card .card-copy-color[data-color=#{$suitChar}]:not([data-color-override=#{$suitChar}]):not([data-color-override=""])::after {
+    content: "/";
+  }
+
+  .card-copy-color-override[data-color-override=#{$suitChar}]:not([data-color=#{$suitChar}])::before {
+    content:$icon;
+    color:$color;
+  }
 }

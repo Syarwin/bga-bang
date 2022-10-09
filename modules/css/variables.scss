@@ -10,6 +10,12 @@ $equipments: 17,18,19,20,21;
 $cardH: 170px;
 $cardW: $cardH / 200 * 125;
 
+$suits:(
+  'C':('icon':'♣','color':black),
+  'D':('icon':'♦','color':red),
+  'H':('icon':'♥','color':red),
+  'S':('icon':'♠','color':black)
+);
 
 $layoutBig:(
   2:(

@@ -133,7 +133,8 @@ var jstpl_card = `<div class="bang-card \${flipped} \${extraClass}" id="bang-car
 		<div class="card-background"></div>
 		<div class="card-copy">
 			<span class="card-copy-value">\${value}</span>
-			<span class="card-copy-color" data-color="\${color}"></span>
+			<span class="card-copy-color" data-color="\${color}" data-color-override="\${colorOverride}"></span>
+			<span class="card-copy-color-override" data-color="\${color}" data-color-override="\${colorOverride}"></span>
 		</div>
 	</div>
 </div>`;
@@ -155,7 +156,8 @@ var jstpl_cardTooltip = `<div class="bang-card-tooltip">
 				<div class="card-background"></div>
 				<div class="card-copy">
 					<span class="card-copy-value">\${value}</span>
-					<span class="card-copy-color" data-color="\${color}"></span>
+                    <span class="card-copy-color" data-color="\${color}" data-color-override="\${colorOverride}"></span>
+                    <span class="card-copy-color-override" data-color="\${color}" data-color-override="\${colorOverride}"></span>
 				</div>
 			</div>
 		</div>

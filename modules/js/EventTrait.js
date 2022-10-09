@@ -7,6 +7,9 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     notif_newEvent(n)
     {
       var eventActiveCard = n.args.eventActive;
+      this.gamedatas.eventActive = eventActiveCard;
+
+      this.updateColorOverride(eventActiveCard.colorOverride);
       this.addEventCard(n.args.eventNext, 'eventNext')
       this.updateEventCount(n.args.eventsDeck);
       this.slideEventCard(eventActiveCard);
@@ -35,6 +38,10 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
     updateEventCount(count) {
       $('eventsDeck').innerHTML = count || null;
+    },
+
+    updateColorOverride(col) {
+      dojo.query('.card-copy-color,.card-copy-color-override').forEach((n) => n.setAttribute('data-color-override', col));
     }
 
   });

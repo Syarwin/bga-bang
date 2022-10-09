@@ -256,6 +256,7 @@ class Notifications
       'src_name' => $src_name,
       'src_id' => $src->getId(),
       'deckCount' => Cards::getDeckCount(),
+      'event' => EventCards::getActive(),
     ]);
   }
 
@@ -380,6 +381,8 @@ class Notifications
     if (isset($data['event'])) {
       $data['event_name'] = $eventName = $data['event']->getUIData()['name'];
       $data['flipEventMsg'] = " because of $eventName";
+      $data['eventColorOverride'] = $data['event']->getColorOverride();
+      $data['preserve'][] = 'eventColorOverride';
     } else {
       $data['flipEventMsg'] = '';
     }

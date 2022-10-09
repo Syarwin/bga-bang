@@ -1476,27 +1476,73 @@ div.bang-card {
       div.bang-card .card-front .card-copy .card-copy-color {
         margin-left: -2px; }
 
-.card-copy-color::before {
+.card-copy-color {
+  font-size: 21.25px;
+  display: inline-grid; }
+
+.card-copy-color-override {
   font-size: 21.25px; }
 
-#logs_wrap .card-copy-color::before {
+#logs_wrap .card-copy-color, #logs_wrap .card-color-override {
   font-size: 17px;
   margin-left: 1px; }
+#logs_wrap .card-copy-color::after {
+  left: 1.5px; }
 
-.card-copy-color[data-color="D"]::before {
+.card-copy-color::after {
+  grid-row: 1;
+  grid-column: 1;
+  position: relative;
+  left: 2.5px;
+  color: black;
+  text-shadow: -1px -1px 2px white; }
+
+.card-copy-color::before {
+  grid-row: 1;
+  grid-column: 1; }
+
+.card-copy-color[data-color=C]::before {
+  content: "♣";
+  color: black; }
+
+.live-card .card-copy-color[data-color=C]:not([data-color-override=C]):not([data-color-override=""])::after {
+  content: "/"; }
+
+.card-copy-color-override[data-color-override=C]:not([data-color=C])::before {
+  content: "♣";
+  color: black; }
+
+.card-copy-color[data-color=D]::before {
   content: "♦";
   color: red; }
 
-.card-copy-color[data-color="H"]::before {
+.live-card .card-copy-color[data-color=D]:not([data-color-override=D]):not([data-color-override=""])::after {
+  content: "/"; }
+
+.card-copy-color-override[data-color-override=D]:not([data-color=D])::before {
+  content: "♦";
+  color: red; }
+
+.card-copy-color[data-color=H]::before {
   content: "♥";
   color: red; }
 
-.card-copy-color[data-color="S"]::before {
+.live-card .card-copy-color[data-color=H]:not([data-color-override=H]):not([data-color-override=""])::after {
+  content: "/"; }
+
+.card-copy-color-override[data-color-override=H]:not([data-color=H])::before {
+  content: "♥";
+  color: red; }
+
+.card-copy-color[data-color=S]::before {
   content: "♠";
   color: black; }
 
-.card-copy-color[data-color="C"]::before {
-  content: "♣";
+.live-card .card-copy-color[data-color=S]:not([data-color-override=S]):not([data-color-override=""])::after {
+  content: "/"; }
+
+.card-copy-color-override[data-color-override=S]:not([data-color=S])::before {
+  content: "♠";
   color: black; }
 
 .player-board .player-role {
