@@ -1,9 +1,11 @@
 <?php
 namespace BANG\States;
+use BANG\Core\Notifications;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
-use BANG\Core\Globals;
 use BANG\Core\Stack;
+use BANG\Managers\Rules;
+use BANG\Managers\EventCards;
 
 trait ReactTrait
 {
@@ -17,6 +19,16 @@ trait ReactTrait
     $noCardsInHand = $player->getHand()->empty();
     // Auto pass
     if ($noBarrel && $noSpecialAbility && $noCardsInHand) {
+      $this->actPass();
+    }
+
+    $activeEvent = EventCards::getActive();
+    // This is according to High Noon FAQ Q02. During Sermon players automatically lose a life point in Duel if opponent plays a BANG! card
+    if ($activeEvent &&
+      $activeEvent->isBangStrictlyForbidden() &&
+      Rules::getCurrentPlayerId() === $player->getId() &&
+      $args['src']['type'] === CARD_DUEL) {
+      Notifications::tell('${player_name} automatically loses in a Duel because of The Sermon event card rules', ['player' => $player]);
       $this->actPass();
     }
   }
