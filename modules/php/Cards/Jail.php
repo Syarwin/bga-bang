@@ -58,12 +58,12 @@ class Jail extends \BANG\Models\BlueCard
 
     $args = ['player' => $player, 'event' => null];
     if ($card->getCopyColor($args['event']) == 'H') {
-      Notifications::tell(clienttranslate('${player_name} can make his turn'), $args);
+      Notifications::tell(clienttranslate('${player_name} can make his turn${flipEventMsg}'), $args);
     } else {
       if ($card->getSuit() !== 'H') { //result changed because of event?
         $args['event'] = null;
       }
-      Notifications::tell(clienttranslate('${player_name} is skipped'), $args);
+      Notifications::tell(clienttranslate('${player_name} is skipped${flipEventMsg}'), $args);
       Stack::clearAllLeaveLast();
     }
   }

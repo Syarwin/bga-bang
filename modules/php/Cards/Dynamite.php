@@ -39,7 +39,7 @@ class Dynamite extends \BANG\Models\BlueCard
     $event = null;
     // Between 2 & 9 of spades ? => kaboom
     if ($card->getCopyColor($event) == 'S' && is_numeric($copyValue) && intval($copyValue) < 10) {
-      Notifications::tell(clienttranslate('Dynamite explodes ${flipEventMsg}'), ['event' => $event]);
+      Notifications::tell(clienttranslate('Dynamite explodes${flipEventMsg}'), ['event' => $event]);
       $player->discardCard($this, true); // Discard Dynamite itself
       $player->loseLife(3);
     } else {
