@@ -14,14 +14,14 @@ class Notifications
   protected static function notifyAll($name, $msg, $data)
   {
     self::updateArgs($data);
-    bang::get()->notifyAllPlayers($name, $msg, $data);
+      bang::get()->notifyAllPlayers($name, $msg, $data);
   }
 
   protected static function notify($pId, $name, $msg, $data)
   {
     self::updateArgs($data);
     $pId = is_int($pId) ? $pId : $pId->getId();
-    bang::get()->notifyPlayer($pId, $name, $msg, $data);
+      bang::get()->notifyPlayer($pId, $name, $msg, $data);
   }
 
   public static function updateHand($player)
@@ -381,7 +381,7 @@ class Notifications
     if (isset($data['event'])) {
       $data['event_name'] = $eventName = $data['event']->getUIData()['name'];
       $data['flipEventMsg'] = " because of $eventName";
-      $data['eventColorOverride'] = $data['event']->getColorOverride();
+      $data['eventColorOverride'] = $data['event']->getColorOverride(null);
       $data['preserve'][] = 'eventColorOverride';
     } else {
       $data['flipEventMsg'] = '';
