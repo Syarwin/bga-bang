@@ -249,7 +249,7 @@ class Notifications
   {
     $src_name = $src instanceof AbstractCard ? $src->getName() : $src->getCharName();
 
-    self::notifyAll('flipCard', clienttranslate('${player_name} draws ${card_name} for ${src_name}\'s effect.'), [
+    self::notifyAll('flipCard', clienttranslate('${player_name} draws ${card_name} for ${src_name}\'s effect'), [
       'i18n' => ['src_name'],
       'player' => $player,
       'card' => $card,

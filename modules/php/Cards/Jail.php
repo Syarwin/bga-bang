@@ -57,9 +57,12 @@ class Jail extends \BANG\Models\BlueCard
     $player->discardCard($this, true); // Discard Jail itself
 
     $args = ['player' => $player, 'event' => null];
-    if ($card->getSuit() == 'H' || $card->getCopyColor($args['event']) == 'H') {
+    if ($card->getCopyColor($args['event']) == 'H') {
       Notifications::tell(clienttranslate('${player_name} can make his turn'), $args);
     } else {
+      if ($card->getSuit() !== 'H') { //result changed because of event?
+        $args['event'] = null;
+      }
       Notifications::tell(clienttranslate('${player_name} is skipped'), $args);
       Stack::clearAllLeaveLast();
     }

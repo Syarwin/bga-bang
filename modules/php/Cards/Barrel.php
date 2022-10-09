@@ -40,11 +40,13 @@ class Barrel extends \BANG\Models\BlueCard
 
     // Draw an heart => success
     $event = null;
-    if ($card->getSuit() == 'H' || $card->getCopyColor($event) == 'H') {
+    if ($card->getCopyColor($event) == 'H') {
       Notifications::tell(clienttranslate('Barrel was successful ${flipEventMsg}'), ['event' => $event]);
       $missedNeeded -= 1;
     } else {
-      Notifications::tell(clienttranslate('Barrel failed ${flipEventMsg}'), ['event' => $event]);
+      Notifications::tell(clienttranslate('Barrel failed ${flipEventMsg}'), [
+        'event' => ($card->getSuit() !== 'H') ? null : $event //result changed because of event?
+      ]);
     }
     Stack::updateAttackAtomAfterAction($missedNeeded, $this->type);
   }
