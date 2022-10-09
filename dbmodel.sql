@@ -39,6 +39,19 @@ CREATE TABLE IF NOT EXISTS `card` (
   PRIMARY KEY (`card_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Please make sure all fields correspond with constants for rules from constants.inc.php
+CREATE TABLE IF NOT EXISTS `rules` (
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `player_id` int(11) NOT NULL,
+    `phase_one_amount_to_draw_beginning` int(1) NOT NULL,
+    `phase_one_player_ability_draw` int(1) NOT NULL,
+    `phase_one_amount_to_draw_end` int(1) NOT NULL,
+    `ability_available` int(1) NOT NULL,
+    `beer_availability` int(1) NOT NULL,
+    `bangs_amount_left` int(1) NOT NULL,
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `events` (
     `card_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `card_location` varchar(32) NOT NULL,

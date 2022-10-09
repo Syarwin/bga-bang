@@ -9,8 +9,13 @@ class Hangover extends AbstractEventCard
     parent::__construct($id);
     $this->type = CARD_HANGOVER;
     $this->name = clienttranslate('Hangover');
-    $this->text = clienttranslate('Players lose their character ability');
+    $this->text = clienttranslate('All characters lose their special abilities for the whole round');
     $this->effect = EFFECT_PERMANENT;
     $this->expansion = HIGH_NOON;
+  }
+
+  public function isAbilityAvailable()
+  {
+    return false;
   }
 }

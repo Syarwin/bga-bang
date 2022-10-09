@@ -1,5 +1,6 @@
 <?php
 namespace BANG\Core;
+use BANG\Managers\Rules;
 use bang;
 use BANG\Helpers\Utils;
 
@@ -17,7 +18,7 @@ class Stack
   {
     $ctx = Stack::getCtx();
     if (empty($ctx)) { // Ok, that should be the very game start
-      $firstAtom = Stack::newAtom(ST_START_OF_TURN, []);
+      $firstAtom = Stack::newAtom(ST_START_OF_TURN);
       Stack::setCtx($firstAtom);
       $stack = [$firstAtom];
     } else {
@@ -27,7 +28,7 @@ class Stack
     foreach ($flow as $state) {
       if (is_int($state)) {
         $options = [
-          'pId' => ($state == ST_END_OF_TURN || $state == ST_GAME_END) ? null : Globals::getPIdTurn(),
+          'pId' => ($state == ST_END_OF_TURN || $state == ST_GAME_END) ? null : Rules::getCurrentPlayerId(),
         ];
         if ($state == ST_PLAY_CARD) {
           $options['suspended'] = true;
@@ -131,10 +132,10 @@ class Stack
     self::insertAfter($atom, $i);
   }
 
-  public function isItLastElimination()
+  public static function isItLastElimination()
   {
     $stack = Stack::get();
-    return count($stack) <= 1 || $stack[1]['state'] != ST_PRE_ELIMINATE_CHECK;
+    return count($stack) <= 1 || $stack[1]['state'] != ST_PRE_ELIMINATE_DISCARD;
   }
 
   public static function clearAllLeaveLast()
@@ -168,11 +169,18 @@ class Stack
     Globals::setStackCtx($ctx);
   }
 
-  public static function newAtom($state, $atom) {
+  public static function newAtom($state, $atom = []) {
     Stack::makeStackBackwardCompatible();
     $atom['state'] = $state;
     $atom = ['uid' => uniqid()] + $atom;
     return $atom;
+  }
+
+  public static function newSimpleAtom($state, $player) {
+    $pId = is_int($player) ? $player : $player->getId();
+    return self::newAtom($state, [
+      'pId' => $pId,
+    ]);
   }
 
   public static function finishState() {

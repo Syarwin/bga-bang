@@ -159,4 +159,12 @@ class action_bang extends APP_GameAction
     $this->game->changePreference($pref, $value, $silent);
     self::ajaxResponse();
   }
+
+  public function actDiscardBlue()
+  {
+    self::setAjaxMode();
+    $card = (int) self::getArg('card', AT_posint, false);
+    $this->game->actDiscardBlue($card);
+    self::ajaxResponse();
+  }
 }

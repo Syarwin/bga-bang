@@ -1,11 +1,13 @@
 <?php
 namespace BANG\States;
+use BANG\Managers\EventCards;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
 use BANG\Core\Log;
-use BANG\Core\Globals;
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
+use BANG\Managers\Rules;
+use bang;
 
 trait TurnTrait
 {
@@ -14,7 +16,7 @@ trait TurnTrait
    */
   public function stNextPlayer()
   {
-    $pId = $this->activeNextPlayer();
+    $pId = EventCards::getActive()->nextPlayerClockwise() ? $this->activeNextPlayer() : $this->activePrevPlayer();
 
     if (Players::get($pId)->isEliminated()) {
       $this->stNextPlayer();
@@ -32,20 +34,17 @@ trait TurnTrait
   }
 
   /*
-   * stStartOfTurn: called at the beggining of each player turn
+   * stStartOfTurn: called at the beginning of each player turn
    */
   public function stStartOfTurn()
   {
     Log::startTurn();
     $player = Players::getActive();
-    Globals::setPIdTurn($player->getId());
-    Stack::setup([ST_DRAW_CARDS, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN]);
-    $player->startOfTurn();
+    $eventCard = EventCards::getActive();
+    Rules::setNewTurnRules($player, $eventCard);
+    Stack::setup([ST_RESOLVE_EVENT_EFFECT, ST_PRE_PHASE_ONE, ST_PHASE_ONE_SETUP, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN]);
     if ($player->getRole() === SHERIFF) { // TODO: New event should be drawn on Sheriff's second turn. First turn is ok while developing though
-      $atom = Stack::newAtom(ST_NEW_EVENT, [
-        'pId' => $player->getId(),
-      ]);
-      Stack::insertOnTop($atom);
+      Stack::insertOnTop(Stack::newSimpleAtom(ST_NEW_EVENT, $player));
     }
     Stack::finishState();
   }
@@ -107,6 +106,12 @@ trait TurnTrait
    */
   public function stEndOfTurn()
   {
+    // To make sure we will switch to next player after this one.
+    // We had a bug when Suzy Lafayette was drawing a card and "capturing" active player status while real active player was dying
+    $ctx = Stack::getCtx();
+    if ($ctx['pId']) {
+      bang::get()->gamestate->changeActivePlayer(Rules::getCurrentPlayerId());
+    }
     $this->gamestate->nextState('next');
   }
 }

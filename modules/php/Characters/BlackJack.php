@@ -1,8 +1,8 @@
 <?php
 namespace BANG\Characters;
 use BANG\Core\Notifications;
-use BANG\Helpers\Utils;
 use BANG\Managers\Cards;
+use BANG\Managers\Rules;
 
 class BlackJack extends \BANG\Models\Player
 {
@@ -19,21 +19,30 @@ class BlackJack extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function drawCardsPhaseOne()
+  public function drawCardsAbility()
   {
-    // Draw one card not visible
-    $cards = Cards::deal($this->id, 1);
-    Notifications::drawCards($this, $cards);
-    // Then draw one visible
+    // Draw one visible
     $cards = Cards::deal($this->id, 1);
     Notifications::drawCards($this, $cards, true);
 
     // If heart or diamond => draw again a private one
     $card = $cards->first();
     if (in_array($card->getCopyColor(), ['H', 'D'])) {
-      $cards = Cards::deal($this->id, 1);
-      Notifications::drawCards($this, $cards);
+      Rules::incrementPhaseOneDrawEndAmount();
     }
     $this->onChangeHand();
+  }
+
+  public function getPhaseOneRules($defaultAmount)
+  {
+    if ($defaultAmount === 1 || !Rules::isAbilityAvailable()) {
+      return parent::getPhaseOneRules($defaultAmount);
+    } else {
+      return [
+        RULE_PHASE_ONE_CARDS_DRAW_BEGINNING => 1,
+        RULE_PHASE_ONE_PLAYER_ABILITY_DRAW => true,
+        RULE_PHASE_ONE_CARDS_DRAW_END => $defaultAmount - 2
+      ];
+    }
   }
 }

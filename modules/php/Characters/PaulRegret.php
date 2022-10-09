@@ -1,6 +1,8 @@
 <?php
 namespace BANG\Characters;
 
+use BANG\Managers\Rules;
+
 class PaulRegret extends \BANG\Models\Player
 {
   public function __construct($row = null)
@@ -14,6 +16,6 @@ class PaulRegret extends \BANG\Models\Player
 
   public function getDistanceTo($enemy)
   {
-    return parent::getDistanceTo($enemy) + 1;
+    return parent::getDistanceTo($enemy) + Rules::isAbilityAvailable() ? 1 : 0;
   }
 }

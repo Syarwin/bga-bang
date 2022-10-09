@@ -5,6 +5,7 @@ use BANG\Core\Log;
 use BANG\Core\Stack;
 use BANG\Managers\Cards;
 use BANG\Cards\Bang;
+use BANG\Managers\Rules;
 
 class CalamityJanet extends \BANG\Models\Player
 {
@@ -30,14 +31,16 @@ class CalamityJanet extends \BANG\Models\Player
   public function getBangCards()
   {
     $res = parent::getBangCards();
-    $hand = Cards::getHand($this->id);
-    foreach ($hand as $card) {
-      if ($card->getType() == CARD_MISSED) {
-        $res['cards'][] = [
-          'id' => $card->getId(),
-          'options' => ['target_type' => TARGET_NONE],
-          'amount' => 1,
-        ];
+    if (Rules::isAbilityAvailable()) {
+      $hand = Cards::getHand($this->id);
+      foreach ($hand as $card) {
+        if ($card->getType() == CARD_MISSED) {
+          $res['cards'][] = [
+            'id' => $card->getId(),
+            'options' => ['target_type' => TARGET_NONE],
+            'amount' => 1,
+          ];
+        }
       }
     }
     return $res;
@@ -46,11 +49,13 @@ class CalamityJanet extends \BANG\Models\Player
   public function getDefensiveOptions()
   {
     $missed = parent::getDefensiveOptions();
-    $amount = Stack::top()['missedNeeded'] ?? 1;
-    $bangs = parent::getBangCards();
-    foreach ($bangs['cards'] as $card) {
-      $card['amount'] = $amount;
-      $missed['cards'][] = $card;
+    if (Rules::isAbilityAvailable()) {
+      $amount = Stack::top()['missedNeeded'] ?? 1;
+      $bangs = parent::getBangCards();
+      foreach ($bangs['cards'] as $card) {
+        $card['amount'] = $amount;
+        $missed['cards'][] = $card;
+      }
     }
     return $missed;
   }
@@ -58,12 +63,14 @@ class CalamityJanet extends \BANG\Models\Player
   public function getHandOptions()
   {
     $res = parent::getHandOptions();
-    $hand = Cards::getHand($this->id);
-    $bang = new Bang();
-    $options = $bang->getPlayOptions($this);
-    foreach ($hand as $card) {
-      if ($card->getType() == CARD_MISSED) {
-        $res['cards'][] = ['id' => $card->getID(), 'options' => $options];
+    if (Rules::isAbilityAvailable()) {
+      $hand = Cards::getHand($this->id);
+      $bang = new Bang();
+      $options = $bang->getPlayOptions($this);
+      foreach ($hand as $card) {
+        if ($card->getType() == CARD_MISSED) {
+          $res['cards'][] = ['id' => $card->getID(), 'options' => $options];
+        }
       }
     }
     return $res;

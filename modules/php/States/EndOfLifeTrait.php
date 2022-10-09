@@ -63,7 +63,7 @@ trait EndOfLifeTrait
     $this->gamestate->jumpToState(ST_ELIMINATE);
   }
 
-  public function stDiscardEliminate()
+  public function stPreEliminateDiscard()
   {
     $player = Players::getActive();
     // Let characters react => mostly Vulture
@@ -72,10 +72,11 @@ trait EndOfLifeTrait
     }
 
     $cards = $player->getCardsInPlay()->merge($player->getHand());
-    if($cards->empty()){
-      $this->gamestate->jumpToState(ST_ELIMINATE);
-    } else {
+    $nextIsPedro = Players::getNext($player)->getCharacter() === PEDRO_RAMIREZ;
+    if ($cards->count() > 1 && $nextIsPedro) {
       $this->gamestate->jumpToState(ST_PRE_ELIMINATE);
+    } else {
+      $this->gamestate->jumpToState(ST_ELIMINATE);
     }
   }
 

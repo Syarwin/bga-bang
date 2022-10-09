@@ -59,12 +59,38 @@ class AbstractEventCard implements \JsonSerializable
     return $this->effect;
   }
 
-  public function resolveEffect()
+  public function resolveEffect($player = null)
   {
   }
 
-  public function getColorOverride()
+  public function getColorOverride($currentColor)
   {
+    return $currentColor;
+  }
+
+  public function nextPlayerClockwise()
+  {
+    return true;
+  }
+
+  public function getPhaseOneAmountOfCardsToDraw()
+  {
+    return 2;
+  }
+
+  public function isAbilityAvailable()
+  {
+    return true;
+  }
+
+  public function isBeerAvailable()
+  {
+    return true;
+  }
+
+  public function getBangsAmount()
+  {
+    return 1;
   }
 
   /*

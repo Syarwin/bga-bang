@@ -1,8 +1,8 @@
 <?php
 namespace BANG\Characters;
 use BANG\Core\Notifications;
-use BANG\Core\Stack;
 use BANG\Managers\Cards;
+use BANG\Managers\Rules;
 
 // TODO : make its ability available (almost) at any time
 class SidKetchum extends \BANG\Models\Player
@@ -18,7 +18,7 @@ class SidKetchum extends \BANG\Models\Player
 
   protected function addAbility($t)
   {
-    if ($this->countHand() > 1) {
+    if ($this->countHand() > 1 && Rules::isAbilityAvailable()) {
       $t['character'] = SID_KETCHUM;
     }
     return $t;

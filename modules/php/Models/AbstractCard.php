@@ -121,14 +121,7 @@ class AbstractCard implements \JsonSerializable
 
   public function getCopyColor(&$event = null)
   {
-    $eventCard = EventCards::getActive();
-    if ($eventCard->getEffect() === EFFECT_PERMANENT && ($eventColorOverride = $eventCard->getColorOverride())) {
-      if ($eventColorOverride !== $this->color) {//result changed because of event?
-        $event = $eventCard;
-      }
-      return $eventColorOverride;
-    }
-    return $this->color;
+    return EventCards::getActive()->getColorOverride($this->color);
   }
 
   public function getEffectType()

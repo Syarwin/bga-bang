@@ -9,12 +9,12 @@ class Curse extends AbstractEventCard
     parent::__construct($id);
     $this->type = CARD_CURSE;
     $this->name = clienttranslate('Curse');
-    $this->text = clienttranslate('All cards are considered Spades');
+    $this->text = clienttranslate('The suit of all cards is Spades for the whole round');
     $this->effect = EFFECT_PERMANENT;
     $this->expansion = HIGH_NOON;
   }
 
-  public function getColorOverride()
+  public function getColorOverride($currentColor)
   {
     return 'S';
   }

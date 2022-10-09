@@ -5,7 +5,7 @@ use BANG\Managers\Players;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
 use BANG\Core\Stack;
-use BANG\Core\Globals;
+use BANG\Managers\Rules;
 use bang;
 
 /*
@@ -78,6 +78,10 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     return $this->role;
   }
+  public function getCharacter()
+  {
+    return $this->character;
+  }
   public function getCharName()
   {
     return $this->character_name;
@@ -116,14 +120,24 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     return Cards::getHand($this->id);
   }
+
   public function getCardsInPlay()
   {
     return Cards::getInPlay($this->id);
   }
+
+  public function getBlueCardsInPlay()
+  {
+    return $this->getCardsInPlay()->filter(function ($card) {
+      return $card->getColor() === BLUE;
+    });
+  }
+
   public function countHand()
   {
     return Cards::countHand($this->id);
   }
+
   public function isAutoPickGeneralStore()
   {
     return $this->generalStore == GENERAL_STORE_AUTO_PICK;
@@ -144,8 +158,8 @@ class Player extends \BANG\Helpers\DB_Manager
       'powers' => $this->text,
       'hp' => $this->hp,
       'bullets' => $this->bullets,
-      'hand' => $current ? $this->getHand($this->id)->toArray() : [],
-      'handCount' => $this->countHand($this->id),
+      'hand' => $current ? $this->getHand()->toArray() : [],
+      'handCount' => $this->countHand(),
       'role' => $current || $this->role == SHERIFF || $this->eliminated || Players::isEndOfGame() ? $this->role : null,
       'inPlay' => $this->getCardsInPlay()->toArray(),
 
@@ -182,9 +196,11 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function drawCards($amount)
   {
-    $cards = Cards::deal($this->id, $amount);
-    Notifications::drawCards($this, $cards);
-    $this->onChangeHand();
+    if ($amount > 0) {
+      $cards = Cards::deal($this->id, $amount);
+      Notifications::drawCards($this, $cards);
+      $this->onChangeHand();
+    }
   }
 
   /*
@@ -285,7 +301,13 @@ class Player extends \BANG\Helpers\DB_Manager
         ->count();
       $isKetchumAndCanUseAbility = $this->character == SID_KETCHUM && $this->getHand()->count() >= 2;
       $canDrinkBeerToLive = (!$isDuel && $beersInHand > 0) || $isKetchumAndCanUseAbility;
-      $nextState = $canDrinkBeerToLive ? ST_REACT_BEER : ST_PRE_ELIMINATE_CHECK;
+      if ($beersInHand > 0 && !Rules::isBeerAvailable() && !$isKetchumAndCanUseAbility) {
+        $canDrinkBeerToLive = false;
+        // Assuming The Reverend is the only reason of beer unavailability status for now. This might change in future
+        $msg = clienttranslate('Even though ${player_name} had beers while dying, they could not be played because of The Reverend event card');
+        Notifications::tell($msg, ['player' => $this]);
+      }
+      $nextState = $canDrinkBeerToLive ? ST_REACT_BEER : ST_PRE_ELIMINATE_DISCARD;
       $atomType = $canDrinkBeerToLive ? 'beer' : 'eliminate';
       $atom = Stack::newAtom($nextState, [
         'type' => $atomType,
@@ -293,7 +315,7 @@ class Player extends \BANG\Helpers\DB_Manager
         'attacker' => $ctx['attacker'] ?? null,
         'pId' => $this->id,
       ]);
-      Stack::insertAfterCardResolution($atom);
+      Stack::insertAfterCardResolution($atom, false);
     }
   }
 
@@ -305,8 +327,8 @@ class Player extends \BANG\Helpers\DB_Manager
     // If it's not enough, add a ELIMINATE node
     if ($this->getHp() <= 0) {
       $ctx = Stack::getCtx();
-      $atom = Stack::newAtom(ST_PRE_ELIMINATE, [
-        'type' => 'eliminate',
+      $atom = Stack::newAtom(ST_PRE_ELIMINATE_DISCARD, [
+        'type' => 'eliminateDiscard',
         'src' => $ctx['src'],
         'attacker' => $ctx['attacker'],
         'pId' => $this->getId(),
@@ -324,7 +346,7 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function getOrderedOtherPlayers()
   {
-    return Players::getLivingPlayersStartingWith($this, [$this->id]);
+    return Players::getLivingPlayerIdsStartingWith($this, [$this->id]);
   }
 
   /*
@@ -420,11 +442,6 @@ class Player extends \BANG\Helpers\DB_Manager
     return !is_null($weapon) && $weapon->getType() == CARD_VOLCANIC;
   }
 
-  public function hasPlayedBang()
-  {
-    return !is_null(Log::getLastAction('bangPlayed', $this->id));
-  }
-
   /*
    * return the list of bang cards (for indians and duel for instance)
    */
@@ -465,8 +482,9 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function getBeerOptions()
   {
+    $beerCards = Rules::isBeerAvailable() ? $this->getBeerCards()->toArray() : [];
     return [
-      'cards' => $this->getBeerCards()->toArray(),
+      'cards' => $beerCards,
     ];
   }
 
@@ -509,6 +527,15 @@ class Player extends \BANG\Helpers\DB_Manager
     ];
   }
 
+  public function getPhaseOneRules($defaultAmount)
+  {
+    return [
+      RULE_PHASE_ONE_CARDS_DRAW_BEGINNING => $defaultAmount,
+      RULE_PHASE_ONE_PLAYER_ABILITY_DRAW => false,
+      RULE_PHASE_ONE_CARDS_DRAW_END => 0
+    ];
+  }
+
   public function hasCardCopyInPlay($targetCard)
   {
     $equipment = $this->getCardsInPlay();
@@ -525,15 +552,6 @@ class Player extends \BANG\Helpers\DB_Manager
    **************** Actions ***************
    ****************************************
    ***************************************/
-
-  /*
-   * Draw cards at phase one of turn
-   *  -> will be overwriten by character abilities that happens at phase 1
-   */
-  public function drawCardsPhaseOne()
-  {
-    $this->drawCards(2);
-  }
 
   /**
    * startOfTurn: is called at the beginning of each turn (before the drawing phase)

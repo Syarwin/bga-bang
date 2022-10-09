@@ -27,7 +27,7 @@ class BrownCard extends AbstractCard
     $player_ids = [];
     switch ($this->effect['impacts']) {
       case ALL_OTHER:
-        $player_ids = Players::getLivingPlayersStartingWith($player->getId(), $player->getId());
+        $player_ids = Players::getLivingPlayerIdsStartingWith($player->getId(), $player->getId());
         break;
       case INRANGE:
         $player_ids = $player->getPlayersInRange();
@@ -56,7 +56,6 @@ class BrownCard extends AbstractCard
    */
   public function getPlayOptions($player)
   {
-    $targetType = -1;
     switch ($this->effect['type']) {
       case BASIC_ATTACK:
       case LIFE_POINT_MODIFIER:
@@ -75,7 +74,6 @@ class BrownCard extends AbstractCard
         return null;
       default:
         return ['target_type' => TARGET_NONE];
-        break;
     }
 
     return [
@@ -96,7 +94,6 @@ class BrownCard extends AbstractCard
       case BASIC_ATTACK:
         $ids = $this->effect['impacts'] == ALL_OTHER ? $player->getOrderedOtherPlayers() : [$args['player']];
         return $player->attack($this, $ids);
-        break;
 
       case DRAW:
       case DISCARD:
@@ -124,6 +121,7 @@ class BrownCard extends AbstractCard
         if ($this->effect['impacts'] == ALL) {
           $targets = Players::getLivingPlayers(null, true);
         } else {
+          // TODO: Players::getPlayer() does not exist however code works on production correctly. Investigate and delete this possibility if never used
           $targets[] =
             !isset($args['player']) || is_null($args['player']) ? $player : Players::getPlayer($args['player']);
         }

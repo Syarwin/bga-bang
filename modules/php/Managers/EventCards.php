@@ -105,7 +105,10 @@ class EventCards extends \BANG\Helpers\Pieces
 
   public static function next()
   {
-    self::insertOnTop(self::getNext()->getId(), LOCATION_EVENTS_DISCARD);
+    $next = self::getNext();
+    if ($next) {
+      self::insertOnTop($next->getId(), LOCATION_EVENTS_DISCARD);
+    }
     return self::getActive();
   }
 }

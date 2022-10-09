@@ -1,8 +1,7 @@
 <?php
 namespace BANG\Managers;
+use BANG\Helpers\Collection;
 use bang;
-use BANG\Core\Log;
-use BANG\Core\Globals;
 
 /*
  * Players manager : allows to easily access players ...
@@ -22,7 +21,7 @@ class Players extends \BANG\Helpers\DB_Manager
     return self::getCharacter($cId, $row);
   }
 
-  public function setupNewGame($players, $expansions, $options)
+  public static function setupNewGame($players, $expansions, $options)
   {
     // Create players
     $gameInfos = self::getGame()->getGameinfos();
@@ -88,7 +87,7 @@ class Players extends \BANG\Helpers\DB_Manager
         $sheriff = $pId;
       }
       $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, $bullets, $role, $cId, 0];
-      //      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, 1, $role, $cId, 0];
+//            $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, 1, $role, $cId, 0];
       Cards::deal($pId, $bullets);
       bang::get()->initStat('player', 'role', $role, $pId);
       $i++;
@@ -117,22 +116,22 @@ class Players extends \BANG\Helpers\DB_Manager
   /******************************
    ******* GENERIC GETTERS *******
    ******************************/
-  public function getActiveId()
+  public static function getActiveId()
   {
     return self::getGame()->getActivePlayerId();
   }
 
-  public function getCurrentId()
+  public static function getCurrentId()
   {
     return self::getGame()->getCurrentPId();
   }
 
-  public function getAll()
+  public static function getAll()
   {
     return self::DB()->get(false);
   }
 
-  public function get($pId = null)
+  public static function get($pId = null)
   {
     $pId = $pId ?: self::getActiveId();
     return self::DB()
@@ -140,19 +139,14 @@ class Players extends \BANG\Helpers\DB_Manager
       ->getSingle();
   }
 
-  public function getActive()
+  public static function getActive()
   {
     return self::get();
   }
 
-  public function getCurrent()
+  public static function getCurrent()
   {
     return self::get(self::getCurrentId());
-  }
-
-  public static function getCurrentTurn()
-  {
-    return self::get(Globals::getPIdTurn());
   }
 
   public static function count()
@@ -211,13 +205,13 @@ class Players extends \BANG\Helpers\DB_Manager
     return $result;
   }
 
-  public function getCharacter($cId, $row = null)
+  public static function getCharacter($cId, $row = null)
   {
     $className = 'BANG\Characters\\' . self::$classes[$cId];
     return new $className($row);
   }
 
-  public function getCharacterBullets($cId)
+  public static function getCharacterBullets($cId)
   {
     $char = self::getCharacter($cId, null);
     return $char->getBullets();
@@ -276,22 +270,33 @@ class Players extends \BANG\Helpers\DB_Manager
     return $query->get();
   }
 
-  public static function getLivingPlayersStartingWith($player, $except = null)
+  public static function getLivingPlayerIdsStartingWith($player, $except = null)
   {
     $and = '';
     if ($except != null) {
       $ids = is_array($except) ? $except : [$except];
       $and = " AND player_id NOT IN ('" . implode("','", $ids) . "')";
     }
-    return self::getObjectListFromDB(
+    $playerIds = self::getObjectListFromDB(
       "SELECT player_id FROM player WHERE player_eliminated = 0$and ORDER BY player_no < {$player->getNo()}, player_no",
       true
     );
+    return array_map(function ($pId) {
+      return (int) $pId;
+    }, $playerIds);
+  }
+
+  public static function getLivingPlayersStartingWith($player)
+  {
+    $playerIds = self::getLivingPlayerIdsStartingWith($player);
+    return new Collection(array_map(function ($pId) {
+      return self::get($pId);
+    }, $playerIds));
   }
 
   public static function getNext($player)
   {
-    $players = self::getLivingPlayersStartingWith($player);
+    $players = self::getLivingPlayerIdsStartingWith($player);
     return self::get($players[1]);
   }
 

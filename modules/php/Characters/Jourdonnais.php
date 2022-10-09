@@ -2,8 +2,8 @@
 namespace BANG\Characters;
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
-use BANG\Helpers\Utils;
 use BANG\Managers\Cards;
+use BANG\Managers\Rules;
 
 class Jourdonnais extends \BANG\Models\Player
 {
@@ -26,7 +26,7 @@ class Jourdonnais extends \BANG\Models\Player
   {
     $res = parent::getDefensiveOptions();
 
-    if (!$this->abilityHaveBeenUsed()) {
+    if (!$this->abilityHaveBeenUsed() && Rules::isAbilityAvailable()) {
       $res['character'] = $this->character;
     }
     return $res;

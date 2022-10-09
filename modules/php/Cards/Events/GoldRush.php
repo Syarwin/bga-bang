@@ -9,13 +9,13 @@ class GoldRush extends AbstractEventCard
     parent::__construct($id);
     $this->type = CARD_GOLD_RUSH;
     $this->name = clienttranslate('Gold Rush');
-    $this->text = clienttranslate('Turn order direction is reversed, i.e. counter-clockwise');
+    $this->text = clienttranslate('The game proceeds counter-clockwise for one whole round, always starting with the Sheriff. All card effects proceed clockwise');
     $this->effect = EFFECT_ENDOFTURN;
     $this->expansion = HIGH_NOON;
   }
 
-  public function resolveEffect()
+  public function nextPlayerClockwise()
   {
-
+    return false;
   }
 }

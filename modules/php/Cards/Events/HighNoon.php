@@ -9,9 +9,14 @@ class HighNoon extends AbstractEventCard
     parent::__construct($id);
     $this->type = CARD_HIGH_NOON;
     $this->name = clienttranslate('High Noon');
-    $this->text = clienttranslate('At the beginning of each player\'s turn, he loses 1 life point. This must be always the last card, and stays in play until the game ends');
+    $this->text = clienttranslate('Each player loses 1 life point at the start of his turn');
     $this->effect = EFFECT_STARTOFTURN;
     $this->lastCard = true;
     $this->expansion = HIGH_NOON;
+  }
+
+  public function resolveEffect($player = null)
+  {
+    $player->loseLife();
   }
 }

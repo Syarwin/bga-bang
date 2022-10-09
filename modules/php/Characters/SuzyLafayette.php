@@ -1,6 +1,7 @@
 <?php
 namespace BANG\Characters;
 use BANG\Core\Stack;
+use BANG\Managers\Rules;
 
 class SuzyLafayette extends \BANG\Models\Player
 {
@@ -15,11 +16,9 @@ class SuzyLafayette extends \BANG\Models\Player
 
   public function checkHand()
   {
-    if ($this->getHand()->count() == 0) {
+    if ($this->getHand()->count() == 0 && Rules::isAbilityAvailable()) {
       Stack::insertAfterCardResolution(
-        Stack::newAtom(ST_TRIGGER_ABILITY, [
-          'pId' => $this->id,
-        ]),
+        Stack::newSimpleAtom(ST_TRIGGER_ABILITY, $this),
         false
       );
     }

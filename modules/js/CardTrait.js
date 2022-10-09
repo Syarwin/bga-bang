@@ -332,5 +332,23 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
       return true;
     },
+
+    onClickCardToSelect(card, buttonName, buttonText, callback) {
+      if (!this.toggleCard(card)) return;
+
+      if (this._selectedCards.length < this._amount) {
+        this.removeActionButtons();
+        this.onUpdateActionButtons(this.gamedatas.gamestate.name, this.gamedatas.gamestate.args);
+      } else {
+        this.addActionButton(
+            buttonName,
+            buttonText,
+            callback,
+            null,
+            false,
+            'blue',
+        );
+      }
+    },
   });
 });

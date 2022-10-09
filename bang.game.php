@@ -37,6 +37,7 @@ use BANG\Managers\Cards;
 use BANG\Managers\EventCards;
 use BANG\Core\Globals;
 use BANG\Core\Stack;
+use BANG\Managers\Rules;
 
 class bang extends Table
 {
@@ -50,7 +51,9 @@ class bang extends Table
   use BANG\States\EndOfGameTrait;
   use BANG\States\TriggerAbilityTrait;
   use BANG\States\PreferencesTrait;
-  use BANG\States\NewEventTrait;
+  use BANG\States\PhaseOneTrait;
+  use BANG\States\EventTrait;
+  use BANG\States\DiscardBlueCardTrait;
 
   public static $instance = null;
   public function __construct()
@@ -103,7 +106,7 @@ class bang extends Table
       'eventsDeck' => EventCards::getDeckCount(),
       'eventActive' => EventCards::getActive(),
       'eventNext' => EventCards::getNext(),
-      'playerTurn' => Globals::getPIdTurn(),
+      'playerTurn' => Rules::getCurrentPlayerId(),
       'cards' => array_merge(Cards::getUIData(), EventCards::getUiData()),
       'distances' => Players::getDistances(),
     ];

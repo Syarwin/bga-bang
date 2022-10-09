@@ -31,6 +31,7 @@ define([
   g_gamethemeurl + 'modules/js/States/ReactTrait.js',
   g_gamethemeurl + 'modules/js/States/SelectCardTrait.js',
   g_gamethemeurl + 'modules/js/States/DiscardEndOfTurnTrait.js',
+  g_gamethemeurl + 'modules/js/States/DiscardBlueCardTrait.js',
 
   g_gamethemeurl + 'modules/js/EventTrait.js',
   g_gamethemeurl + 'modules/js/CardTrait.js',
@@ -46,6 +47,7 @@ define([
       bang.discardEndOfTurnTrait,
       bang.playerTrait,
       bang.cardTrait,
+      bang.discardBlueCardTrait,
       bang.eventTrait,
     ],
     {

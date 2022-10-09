@@ -8,9 +8,14 @@ class Sermon extends AbstractEventCard
   {
     parent::__construct($id);
     $this->type = CARD_SERMON;
-    $this->name = clienttranslate('Sermon');
-    $this->text = clienttranslate('Players cannot play "Bang!" on their turns');
+    $this->name = clienttranslate('The Sermon');
+    $this->text = clienttranslate('Each player cannot use BANG! cards during his turn');
     $this->effect = EFFECT_PERMANENT;
     $this->expansion = HIGH_NOON;
+  }
+
+  public function getBangsAmount()
+  {
+    return 0;
   }
 }
