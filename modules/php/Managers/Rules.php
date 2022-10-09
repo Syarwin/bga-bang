@@ -98,8 +98,6 @@ class Rules extends DB_Manager
     $oldAmount = self::getBangsAmountLeft();
     if ($oldAmount > 0) {
       Rules::amendRules([RULE_BANGS_AMOUNT_LEFT => --$oldAmount]);
-    } else {
-      throw new \BgaVisibleSystemException('Error: Bang played while no bangs were available. Please report this as a bug');
     }
   }
 }
