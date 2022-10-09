@@ -10,7 +10,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       this.gamedatas.eventActive = eventActiveCard;
 
       this.updateColorOverride(eventActiveCard.colorOverride);
-      this.addEventCard(n.args.eventNext, 'eventNext')
+      if (n.args.eventNext) this.addEventCard(n.args.eventNext, 'eventNext')
       this.updateEventCount(n.args.eventsDeck);
       this.slideEventCard(eventActiveCard);
     },

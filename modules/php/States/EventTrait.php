@@ -1,5 +1,6 @@
 <?php
 namespace BANG\States;
+use BANG\Core\Notifications;
 use BANG\Core\Stack;
 use BANG\Managers\EventCards;
 use BANG\Managers\Players;
@@ -15,6 +16,7 @@ trait EventTrait
     $ctx = Stack::getCtx();
     $player = Players::get($ctx['pId']);
     $eventCard = EventCards::next();
+    Notifications::newEvent($eventCard, EventCards::getNext());
     $effect = $eventCard->getEffect();
     if ($effect === EFFECT_INSTANT) {
       $eventCard->resolveEffect($player);
