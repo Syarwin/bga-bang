@@ -93,6 +93,11 @@ class AbstractEventCard implements \JsonSerializable
     return 1;
   }
 
+  public function isBangStrictlyForbidden()
+  {
+    return false;
+  }
+
   /*
    * jsonSerialize: used in frontend to manipulate cards
    */

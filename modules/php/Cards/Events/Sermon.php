@@ -18,4 +18,9 @@ class Sermon extends AbstractEventCard
   {
     return 0;
   }
+
+  public function isBangStrictlyForbidden()
+  {
+    return true;
+  }
 }
