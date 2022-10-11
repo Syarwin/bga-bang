@@ -39,8 +39,15 @@ class ElGringo extends \BANG\Models\Player
     $attacker = Players::getCurrentTurn();
     for ($i = 0; $i < $ctx['amount']; $i++) {
       $card = $attacker->getRandomCardInHand(false);
-      if ($card === null) {
-        return; // No more cards in hand of attacker
+      if ($card === null) { // No more cards in hand of attacker
+        if ($attacker->getCharacter() == SUZY_LAFAYETTE) {
+          // if attacker Suzy has no cards we need to wait until she draws a new one
+          Stack::insertAfter(Stack::newAtom(ST_TRIGGER_ABILITY, [
+            'pId' => $this->id,
+            'amount' => $ctx['amount'],
+          ]), 2);
+        }
+        return;
       }
       Cards::move($card->getId(), LOCATION_HAND, $this->getId());
       Notifications::stoleCard($this, $attacker, $card, false);

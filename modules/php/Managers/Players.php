@@ -132,6 +132,10 @@ class Players extends \BANG\Helpers\DB_Manager
     return self::DB()->get(false);
   }
 
+  /**
+   * @param $pId
+   * @return Player
+   */
   public function get($pId = null)
   {
     $pId = $pId ?: self::getActiveId();
