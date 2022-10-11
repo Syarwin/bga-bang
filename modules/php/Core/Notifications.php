@@ -5,6 +5,7 @@ use bang;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
 use BANG\Models\AbstractCard;
+use BANG\Models\AbstractEventCard;
 
 /*
  * Notifications
@@ -379,7 +380,7 @@ class Notifications
     }
 
     if (isset($data['event'])) {
-      $data['event_name'] = $eventName = $data['event']->getUIData()['name'];
+      $data['event_name'] = $eventName = $data['event']->getName();
       $data['flipEventMsg'] = " because of $eventName";
       $data['eventColorOverride'] = $data['event']->getColorOverride(null);
       $data['preserve'][] = 'eventColorOverride';
@@ -392,12 +393,16 @@ class Notifications
     }
   }
 
+  /**
+   * @param AbstractEventCard $eventCard
+   * @param AbstractEventCard $nextEventCard
+   */
   public static function newEvent($eventCard, $nextEventCard)
   {
     $msg = clienttranslate('${eventActiveName} is now active!');
     self::notifyAll('newEvent', $msg, [
       'eventActive' => $eventCard,
-      'eventActiveName' => $eventCard->getUIData()['name'],
+      'eventActiveName' => $eventCard->getName(),
       'eventNext' => $nextEventCard,
       'eventsDeck' => EventCards::getDeckCount(),
     ]);

@@ -1,6 +1,8 @@
 <?php
 namespace BANG\Managers;
 
+use BANG\Models\AbstractEventCard;
+
 /*
  * Cards: all utility functions concerning cards are here
  */
@@ -93,16 +95,25 @@ class EventCards extends \BANG\Helpers\Pieces
     return self::countInLocation(LOCATION_EVENTS_DECK);
   }
 
+  /**
+   * @return AbstractEventCard|null
+   */
   public static function getActive()
   {
     return self::getTopOf(LOCATION_EVENTS_DISCARD);
   }
 
+  /**
+   * @return AbstractEventCard|null
+   */
   public static function getNext()
   {
     return self::getTopOf(LOCATION_EVENTS_DECK);
   }
 
+  /**
+   * @return AbstractEventCard|null
+   */
   public static function next()
   {
     $next = self::getNext();

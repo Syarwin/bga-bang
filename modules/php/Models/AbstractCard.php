@@ -5,8 +5,18 @@ use BANG\Managers\Cards;
 use BANG\Core\Notifications;
 use BANG\Managers\EventCards;
 
-/*
+/**
  * AbstractCard: base class to handle actions cards
+ *
+ * @property-read $id
+ * @property-read $color
+ * @property-read int $value
+ * @property-read $type
+ * @property-read string $name
+ * @property-read string $text
+ * @property-read array $symbols
+ * @property-read array $effect array with type, impact and sometimes range
+ * @property-read array $copies
  */
 class AbstractCard implements \JsonSerializable
 {
@@ -36,8 +46,9 @@ class AbstractCard implements \JsonSerializable
   protected $effect; // array with type, impact and sometimes range
   protected $copies = [];
 
-  /*
+  /**
    * getUiData: used in frontend to display cards
+   * @return array
    */
   public function getUIData()
   {
