@@ -15,8 +15,8 @@
  *
  */
 
-//# sourceURL=bang.js
-//@ sourceURL=bang.js
+//# sourceURL=banghighnoon.js
+//@ sourceURL=banghighnoon.js
 var isDebug = window.location.host == 'studio.boardgamearena.com' || window.location.hash.indexOf('debug') > -1;
 var debug = isDebug ? console.info.bind(window.console) : function () {};
 define([
@@ -37,7 +37,7 @@ define([
   g_gamethemeurl + 'modules/js/PlayerTrait.js',
 ], function (dojo, declare) {
   return declare(
-    'bgagame.bang',
+    'bgagame.banghighnoon',
     [
       customgame.game,
       bang.playCardTrait,

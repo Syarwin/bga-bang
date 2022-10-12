@@ -1,7 +1,7 @@
 <?php
 namespace BANG\Managers;
 use BANG\Helpers\Collection;
-use bang;
+use banghighnoon;
 
 /*
  * Players manager : allows to easily access players ...
@@ -11,7 +11,7 @@ class Players extends \BANG\Helpers\DB_Manager
 {
   protected static function getGame()
   {
-    return bang::get();
+    return banghighnoon::get();
   }
   protected static $table = 'player';
   protected static $primary = 'player_id';
@@ -89,7 +89,7 @@ class Players extends \BANG\Helpers\DB_Manager
       $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, $bullets, $role, $cId, 0];
 //            $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, 1, $role, $cId, 0];
       Cards::deal($pId, $bullets);
-      bang::get()->initStat('player', 'role', $role, $pId);
+      banghighnoon::get()->initStat('player', 'role', $role, $pId);
       $i++;
     }
     $query->values($values);

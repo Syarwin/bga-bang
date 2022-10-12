@@ -1,7 +1,7 @@
 <?php
 namespace BANG\Core;
 use BANG\Managers\Rules;
-use bang;
+use banghighnoon;
 use BANG\Helpers\Utils;
 
 /*
@@ -11,7 +11,7 @@ class Stack
 {
   public static function getGame()
   {
-    return bang::get();
+    return banghighnoon::get();
   }
 
   public static function setup($flow)

@@ -1,6 +1,6 @@
 <?php
 namespace BANG\Core;
-use bang;
+use banghighnoon;
 
 /*
  * Log: a class that allows to log some actions
@@ -30,7 +30,7 @@ class Log extends \APP_GameClass
    */
   public static function insert($playerId, $cardId, $action, $args = [])
   {
-    $playerId = $playerId == -1 ? bang::get()->getActivePlayerId() : $playerId;
+    $playerId = $playerId == -1 ? banghighnoon::get()->getActivePlayerId() : $playerId;
     $turn = self::getCurrentTurn() + ($action == 'startTurn' ? 1 : 0);
     $actionArgs = json_encode($args);
 

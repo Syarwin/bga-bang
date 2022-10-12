@@ -6,7 +6,7 @@ use BANG\Core\Notifications;
 use BANG\Core\Log;
 use BANG\Core\Stack;
 use BANG\Managers\Rules;
-use bang;
+use banghighnoon;
 
 /*
  * Player: all utility functions concerning a player
@@ -721,13 +721,13 @@ class Player extends \BANG\Helpers\DB_Manager
     // Discard cards
     $this->discardAllCards();
     // Eliminate player
-    bang::get()->eliminatePlayer($this->id);
+    banghighnoon::get()->eliminatePlayer($this->id);
     $this->eliminated = true;
     $this->save();
 
     // Check if game should end
     if (Stack::isItLastElimination() && Players::isEndOfGame()) {
-      bang::get()->setWinners();
+      banghighnoon::get()->setWinners();
     }
 
     Notifications::playerEliminated($this);

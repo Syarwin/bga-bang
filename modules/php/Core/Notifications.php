@@ -1,6 +1,6 @@
 <?php
 namespace BANG\Core;
-use bang;
+use banghighnoon;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
 use BANG\Models\AbstractCard;
@@ -13,14 +13,14 @@ class Notifications
   protected static function notifyAll($name, $msg, $data)
   {
     self::updateArgs($data);
-    bang::get()->notifyAllPlayers($name, $msg, $data);
+      banghighnoon::get()->notifyAllPlayers($name, $msg, $data);
   }
 
   protected static function notify($pId, $name, $msg, $data)
   {
     self::updateArgs($data);
     $pId = is_int($pId) ? $pId : $pId->getId();
-    bang::get()->notifyPlayer($pId, $name, $msg, $data);
+      banghighnoon::get()->notifyPlayer($pId, $name, $msg, $data);
   }
 
   public static function updateHand($player)
