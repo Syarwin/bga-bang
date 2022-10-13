@@ -16,12 +16,15 @@ class SuzyLafayette extends \BANG\Models\Player
   public function checkHand()
   {
     if ($this->getHand()->count() == 0) {
-      Stack::insertAfterCardResolution(
-        Stack::newAtom(ST_TRIGGER_ABILITY, [
-          'pId' => $this->id,
-        ]),
-        false
-      );
+      $ctx = Stack::getCtx();
+      $newAtom = Stack::newAtom(ST_TRIGGER_ABILITY, [
+        'pId' => $this->id,
+      ]);
+      if ($ctx['state'] === ST_REACT && $ctx['missedNeeded'] > 1) {
+        Stack::insertOnTop($newAtom);
+      } else {
+        Stack::insertAfterCardResolution($newAtom, false);
+      }
     }
   }
 
