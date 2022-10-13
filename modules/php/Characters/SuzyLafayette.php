@@ -28,7 +28,7 @@ class SuzyLafayette extends \BANG\Models\Player
     }
   }
 
-  public function useAbility($ctx)
+  public function useAbility()
   {
     if ($this->getHand()->count() == 0) {
       $this->drawCards(1);
