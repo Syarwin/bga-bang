@@ -1,8 +1,7 @@
 <?php
 namespace BANG\Managers;
+use BANG\Models\Player;
 use bang;
-use BANG\Core\Log;
-use BANG\Core\Globals;
 
 /*
  * Players manager : allows to easily access players ...
@@ -18,8 +17,12 @@ class Players extends \BANG\Helpers\DB_Manager
   protected static $primary = 'player_id';
   protected static function cast($row)
   {
-    $cId = $row['player_character'];
-    return self::getCharacter($cId, $row);
+    if ((int) $row['player_character_chosen'] === 1) {
+      $cId = $row['player_character'];
+      return self::getCharacter($cId, $row);
+    } else {
+      return new Player($row);
+    }
   }
 
   public static function setupNewGame($players, $expansions, $options)
@@ -37,6 +40,8 @@ class Players extends \BANG\Helpers\DB_Manager
       'player_hp',
       'player_role',
       'player_character',
+      'player_alt_character',
+      'player_character_chosen',
       'player_autopick_general_store',
     ]);
 
@@ -59,14 +64,16 @@ class Players extends \BANG\Helpers\DB_Manager
     foreach ($optionIds as $oId) {
       $c = $options[$oId];
       if ($c != 100 && in_array($c, $characters) && !in_array($c, $forcedCharacters)) {
-        $forcedCharacters[] = $c;
+        $forcedCharacters[] = (int) $c;
       }
     }
 
+    // TODO: Link this variable to gameoption
+    $optionTwoChars = false;
     // Fill with random characters
     $characters = array_diff($characters, $forcedCharacters);
     shuffle($characters);
-    $needed = count($players) - count($forcedCharacters);
+    $needed = ($optionTwoChars ? count($players) * 2 : count($players)) - count($forcedCharacters);
     for ($i = 0; $i < $needed; $i++) {
       $forcedCharacters[] = array_pop($characters);
     }
@@ -77,19 +84,21 @@ class Players extends \BANG\Helpers\DB_Manager
     foreach ($players as $pId => $player) {
       $color = $gameInfos['player_colors'][$i];
       $canal = $player['player_canal'];
-      $name = $player['player_name'];
       $avatar = addslashes($player['player_avatar']);
       $name = addslashes($player['player_name']);
       $role = $roles[$i];
-      $cId = array_pop($forcedCharacters);
-      $bullets = self::getCharacterBullets($cId);
+      $characterId = array_pop($forcedCharacters);
+      $altCharacterId = $optionTwoChars ? array_pop($forcedCharacters) : -1;
+      $charChosen = !$optionTwoChars;
+      $bullets = $charChosen ? self::getCharacterBullets($characterId) : null;
       if ($role == SHERIFF) {
-        $bullets++;
         $sheriff = $pId;
       }
-      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, $bullets, $role, $cId, 0];
-//            $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, 1, $role, $cId, 0];
-      Cards::deal($pId, $bullets);
+      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, $bullets, $role, $characterId, $altCharacterId, $charChosen, 0];
+//            $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, 1, $role, $characterId, $altCharacterId, $charChosen, 0];
+      if ($charChosen) {
+        Cards::deal($pId, $bullets);
+      }
       bang::get()->initStat('player', 'role', $role, $pId);
       $i++;
     }
@@ -219,7 +228,7 @@ class Players extends \BANG\Helpers\DB_Manager
 
   public function getCharacterBullets($cId)
   {
-    $char = self::getCharacter($cId, null);
+    $char = self::getCharacter($cId);
     return $char->getBullets();
   }
 

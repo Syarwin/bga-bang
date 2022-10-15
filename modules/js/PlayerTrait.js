@@ -21,14 +21,13 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       this.forEachPlayer((player) => {
         let isCurrent = player.id == this.player_id;
 
-        player.powers = '<p>' + player.powers.map((t) => _(t)).join('</p><p>') + '</p>';
+        player.character = _(player.character);
         player.newNo = player.no;
         player.shortName = truncate(player.name, 11);
-        player.character = _(player.character);
 
         player.background = player.color_back ? '#' + player.color_back : 'transparent';
-        dojo.place(this.format_block('jstpl_player', player), 'board');
-        this.addTooltipHtml('player-character-' + player.id, this.format_block('jstpl_characterTooltip', player));
+        const tpl = player.character ? 'jstpl_player' : 'jstpl_player_no_character';
+        dojo.place(this.format_block(tpl, player), 'board');
         player.inPlay.forEach((card) => this.addCard(card, 'player-inplay-' + player.id));
         dojo.connect($('player-character-' + player.id), 'onclick', (evt) => {
           evt.preventDefault();
@@ -36,7 +35,9 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
           this.onClickPlayer(player.id);
         });
 
-        dojo.place(this.format_block('jstpl_player_board_data', player), 'overall_player_board_' + player.id);
+        if (player.character) {
+          this.setupCharacter(player);
+        }
 
         if (isCurrent) {
           let role = this.getRole(player.role);
@@ -57,12 +58,18 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       this._playerInitialized = true;
     },
 
+    setupCharacter(player) {
+      player.powers = '<p>' + player.powers.map((t) => _(t)).join('</p><p>') + '</p>';
+      this.addTooltipHtml('player-character-' + player.id, this.format_block('jstpl_characterTooltip', player));
+      dojo.place(this.format_block('jstpl_player_board_data', player), 'overall_player_board_' + player.id);
+    },
+
     /*
      * notification sent to all players when a player loses or gains hp
      */
     notif_updateHP(n) {
       debug('Notif: hp changed', n);
-      var currentHp = dojo.attr('bang-player-' + n.args.player_id, 'data-bullets');
+      var currentHp = dojo.attr('player-character-' + n.args.player_id, 'data-bullets');
       dojo.query('#bang-player-' + n.args.player_id + ' .bullet').forEach((bullet, id) => {
         if ((currentHp <= id && id < n.args.hp) || (n.args.hp <= id && id < currentHp)) {
           dojo.removeClass(bullet, 'pulse');
@@ -71,7 +78,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         }
       });
       this.gamedatas.players[n.args.player_id].hp = n.args.hp;
-      dojo.attr('bang-player-' + n.args.player_id, 'data-bullets', n.args.hp);
+      dojo.attr('player-character-' + n.args.player_id, 'data-bullets', n.args.hp);
       dojo.attr('bang-player-board-' + n.args.player_id, 'data-bullets', n.args.hp);
     },
 
@@ -263,7 +270,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         }
       });
 
-      this.forEachPlayer((player) => {
+      this.forEachPlayerWithCharacter((player) => {
         dojo.place(this.format_block('jstpl_helpDialogCharacter', player), 'dialog-players');
       });
     },

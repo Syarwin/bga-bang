@@ -53,6 +53,7 @@ class bang extends Table
   use BANG\States\EndOfGameTrait;
   use BANG\States\TriggerAbilityTrait;
   use BANG\States\PreferencesTrait;
+  use BANG\States\ChooseCharacterTrait;
 
   public static $instance = null;
   public function __construct()
@@ -115,10 +116,15 @@ class bang extends Table
    */
   public function getGameProgression()
   {
-    $bulletsSum = (int) self::getUniqueValueFromDb('SELECT SUM(player_bullets) FROM player');
-    $currentHpSum = (int) self::getUniqueValueFromDb('SELECT SUM(player_hp) FROM player');
-    $lostBullets = $bulletsSum - $currentHpSum;
-    return $lostBullets/$bulletsSum * 100;
+    $allCharsChosen = empty(self::getObjectListFromDb('SELECT `player_character_chosen` FROM `player` WHERE `player_character_chosen` = 0'));
+    if ($allCharsChosen) {
+      $bulletsSum = (int)self::getUniqueValueFromDb('SELECT SUM(player_bullets) FROM player');
+      $currentHpSum = (int)self::getUniqueValueFromDb('SELECT SUM(player_hp) FROM player');
+      $lostBullets = $bulletsSum - $currentHpSum;
+      return $lostBullets / $bulletsSum * 100;
+    } else {
+      return 0;
+    }
   }
 
 

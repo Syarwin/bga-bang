@@ -5,7 +5,6 @@ use BANG\Managers\Players;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
 use BANG\Core\Stack;
-use BANG\Core\Globals;
 use bang;
 
 /*
@@ -29,25 +28,30 @@ class Player extends \BANG\Helpers\DB_Manager
 
   // --character properties
   protected $character; //the int-constant
+  protected $altCharacter;
   protected $character_name;
   protected $text;
   protected $bullets;
   protected $expansion = BASE_GAME;
+  protected $characterChosen;
 
   public function __construct($row)
   {
     if ($row != null) {
+      $this->characterChosen = (int) $row['player_character_chosen'] === 1;
       $this->id = (int) $row['player_id'];
       $this->no = (int) $row['player_no'];
       $this->name = $row['player_name'];
       $this->color = $row['player_color'];
       $this->eliminated = $row['player_eliminated'] == 1;
-      $this->hp = (int) $row['player_hp'];
+      $this->hp = $this->characterChosen ? (int) $row['player_hp'] : null;
       $this->zombie = $row['player_zombie'] == 1;
       $this->role = $row['player_role'];
-      $this->bullets = (int) $row['player_bullets'];
+      $this->bullets = $this->characterChosen ? (int) $row['player_bullets'] : null;
       $this->score = (int) $row['player_score'];
       $this->generalStore = (int) $row['player_autopick_general_store'];
+      $this->character = (int) $row['player_character'];
+      $this->altCharacter = (int) $row['player_alt_character'];
     }
   }
 
@@ -132,14 +136,18 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     return $this->generalStore == GENERAL_STORE_AUTO_PICK;
   }
+  public function isCharacterChosen()
+  {
+    return $this->characterChosen;
+  }
 
   public function getUiData($currentPlayerId = null)
   {
     $current = $this->id == $currentPlayerId;
     return [
-      'id' => (int) $this->id,
+      'id' => $this->id,
       'eliminated' => (int) $this->eliminated,
-      'no' => (int) $this->no,
+      'no' => $this->no,
       'name' => $this->getName(),
       'color' => $this->color,
       'characterId' => $this->character,
@@ -148,8 +156,8 @@ class Player extends \BANG\Helpers\DB_Manager
       'powers' => $this->text,
       'hp' => $this->hp,
       'bullets' => $this->bullets,
-      'hand' => $current ? $this->getHand($this->id)->toArray() : [],
-      'handCount' => $this->countHand($this->id),
+      'hand' => $current ? $this->getHand()->toArray() : [],
+      'handCount' => $this->countHand(),
       'role' => $current || $this->role == SHERIFF || $this->eliminated || Players::isEndOfGame() ? $this->role : null,
       'inPlay' => $this->getCardsInPlay()->toArray(),
 
@@ -158,6 +166,21 @@ class Player extends \BANG\Helpers\DB_Manager
           OPTION_GENERAL_STORE_LAST_CARD => $this->generalStore,
         ]
         : [],
+    ];
+  }
+
+  /**
+   * Returns data specific to a character
+   * @return array
+   */
+  public function getUiCharacterSpecificData()
+  {
+    return [
+      'characterId' => $this->character,
+      'character' => $this->character_name,
+      'powers' => $this->text,
+      'bullets' => $this->bullets,
+      'hp' => $this->bullets,
     ];
   }
 
@@ -515,6 +538,15 @@ class Player extends \BANG\Helpers\DB_Manager
     return false;
   }
 
+  /**
+   * getBothCharacters: returns randomly chosen two characters to choose from
+   * @return array
+   */
+  public function getBothCharacters()
+  {
+    return [$this->character, $this->altCharacter];
+  }
+
   /***************************************
    ****************************************
    **************** Actions ***************
@@ -769,5 +801,31 @@ class Player extends \BANG\Helpers\DB_Manager
   public function setGeneralStorePref($value)
   {
     self::DB()->update(['player_autopick_general_store' => $value], $this->id);
+  }
+
+  /**
+   * setCharacter: sets correct character chosen by a player and sets a corresponding flag
+   * @param int $characterId
+   */
+  public function setCharacter($characterId)
+  {
+    if (!in_array($characterId, [$this->character, $this->altCharacter])) {
+      throw new \BgaVisibleSystemException("Character id ${characterId} is not in the list of possible characters to choose. Please report a bug.");
+    }
+    $newParams = [];
+    if ($this->altCharacter === $characterId) {
+      $newParams['player_character'] = $characterId;
+      $newParams['player_alt_character'] = $this->character;
+      $this->altCharacter = $this->character;
+      $this->character = $characterId;
+    }
+    $characterObject = Players::getCharacter($characterId);
+    $bullets = $characterObject->getBullets();
+    $newParams = array_merge($newParams, [
+      'player_character_chosen' => 1,
+      'player_hp' => $bullets,
+      'player_bullets' => $bullets,
+    ]);
+    self::DB()->update($newParams, $this->id);
   }
 }
