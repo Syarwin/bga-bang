@@ -94,6 +94,7 @@ class Players extends \BANG\Helpers\DB_Manager
       $charChosen = !$optionTwoChars;
       $bullets = $charChosen ? self::getCharacterBullets($characterId) : null;
       if ($role == SHERIFF) {
+        $bullets++;
         $sheriff = $pId;
       }
       $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, $bullets, $role, $characterId, $altCharacterId, $charChosen, 0];
