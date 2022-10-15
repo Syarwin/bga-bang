@@ -25,9 +25,7 @@ trait EndOfGameTrait
         Players::setWinners([OUTLAW]);
         Notifications::tell(clienttranslate('The sheriff has been killed and thus the outlaws win this game.'));
       }
-    }
-
-    if (Players::countRoles([OUTLAW, RENEGADE]) == 0) {
+    } elseif (Players::countRoles([OUTLAW, RENEGADE]) == 0) {
       Players::setWinners([SHERIFF, DEPUTY]);
       Notifications::tell(
         clienttranslate('All the renegades and outlaws have been killed and thus Sheriff and Deputies win this game.')
