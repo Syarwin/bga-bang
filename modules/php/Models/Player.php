@@ -464,8 +464,9 @@ class Player extends \BANG\Helpers\DB_Manager
     ];
   }
 
-  /*
-   * return defensive options
+  /**
+   * Returns defensive options
+   * @return array
    */
   public function getDefensiveOptions()
   {
