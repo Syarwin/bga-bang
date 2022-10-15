@@ -34,4 +34,17 @@ class SuzyLafayette extends \BANG\Models\Player
       $this->drawCards(1);
     }
   }
+
+  /**
+   * {{@inheritDoc}}
+   */
+  public function getDefensiveOptions()
+  {
+    $options = parent::getDefensiveOptions();
+    if ($this->getHand()->count() == 1 && isset($options['cards'][0]['amount'])) {
+      $options['cards'][0]['amount'] = 1;
+    }
+
+    return $options;
+  }
 }
