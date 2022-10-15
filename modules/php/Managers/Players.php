@@ -1,5 +1,6 @@
 <?php
 namespace BANG\Managers;
+use BANG\Core\Globals;
 use BANG\Models\Player;
 use bang;
 
@@ -17,11 +18,12 @@ class Players extends \BANG\Helpers\DB_Manager
   protected static $primary = 'player_id';
   protected static function cast($row)
   {
-    if ((int) $row['player_character_chosen'] === 1) {
+    // backward compatibilty from 15/10/2022
+    if (array_key_exists('player_character_chosen', $row) && (int) $row['player_character_chosen'] === 0) {
+      return new Player($row);
+    } else {
       $cId = $row['player_character'];
       return self::getCharacter($cId, $row);
-    } else {
-      return new Player($row);
     }
   }
 
