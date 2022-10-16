@@ -750,650 +750,6 @@ div.bang-character-tooltip div.bang-character-tooltip-sizing .player-character-p
   background-repeat: no-repeat;
   vertical-align: bottom;
 }
-.bang-player[data-hand="0"] .player-cards .player-handcount::before,
-.bang-player-board[data-hand="0"] .player-cards .player-handcount::before {
-  content: "x 0";
-}
-.bang-player[data-hand="1"] .player-cards .player-handcount::before,
-.bang-player-board[data-hand="1"] .player-cards .player-handcount::before {
-  content: "x 1";
-}
-.bang-player[data-hand="2"] .player-cards .player-handcount::before,
-.bang-player-board[data-hand="2"] .player-cards .player-handcount::before {
-  content: "x 2";
-}
-.bang-player[data-hand="3"] .player-cards .player-handcount::before,
-.bang-player-board[data-hand="3"] .player-cards .player-handcount::before {
-  content: "x 3";
-}
-.bang-player[data-hand="4"] .player-cards .player-handcount::before,
-.bang-player-board[data-hand="4"] .player-cards .player-handcount::before {
-  content: "x 4";
-}
-.bang-player[data-hand="5"] .player-cards .player-handcount::before,
-.bang-player-board[data-hand="5"] .player-cards .player-handcount::before {
-  content: "x 5";
-}
-.bang-player[data-hand="6"] .player-cards .player-handcount::before,
-.bang-player-board[data-hand="6"] .player-cards .player-handcount::before {
-  content: "x 6";
-}
-.bang-player[data-hand="7"] .player-cards .player-handcount::before,
-.bang-player-board[data-hand="7"] .player-cards .player-handcount::before {
-  content: "x 7";
-}
-.bang-player[data-hand="8"] .player-cards .player-handcount::before,
-.bang-player-board[data-hand="8"] .player-cards .player-handcount::before {
-  content: "x 8";
-}
-.bang-player[data-hand="9"] .player-cards .player-handcount::before,
-.bang-player-board[data-hand="9"] .player-cards .player-handcount::before {
-  content: "x 9";
-}
-.bang-player[data-hand="10"] .player-cards .player-handcount::before,
-.bang-player-board[data-hand="10"] .player-cards .player-handcount::before {
-  content: "x 10";
-}
-.bang-player[data-hand="11"] .player-cards .player-handcount::before,
-.bang-player-board[data-hand="11"] .player-cards .player-handcount::before {
-  content: "x 11";
-}
-.bang-player[data-hand="12"] .player-cards .player-handcount::before,
-.bang-player-board[data-hand="12"] .player-cards .player-handcount::before {
-  content: "x 12";
-}
-.bang-player[data-hand="13"] .player-cards .player-handcount::before,
-.bang-player-board[data-hand="13"] .player-cards .player-handcount::before {
-  content: "x 13";
-}
-.bang-player[data-hand="14"] .player-cards .player-handcount::before,
-.bang-player-board[data-hand="14"] .player-cards .player-handcount::before {
-  content: "x 14";
-}
-.bang-player[data-hand="15"] .player-cards .player-handcount::before,
-.bang-player-board[data-hand="15"] .player-cards .player-handcount::before {
-  content: "x 15";
-}
-.bang-player[data-hand="16"] .player-cards .player-handcount::before,
-.bang-player-board[data-hand="16"] .player-cards .player-handcount::before {
-  content: "x 16";
-}
-.bang-player[data-hand="17"] .player-cards .player-handcount::before,
-.bang-player-board[data-hand="17"] .player-cards .player-handcount::before {
-  content: "x 17";
-}
-.bang-player[data-hand="18"] .player-cards .player-handcount::before,
-.bang-player-board[data-hand="18"] .player-cards .player-handcount::before {
-  content: "x 18";
-}
-.bang-player[data-hand="19"] .player-cards .player-handcount::before,
-.bang-player-board[data-hand="19"] .player-cards .player-handcount::before {
-  content: "x 19";
-}
-.bang-player[data-hand="20"] .player-cards .player-handcount::before,
-.bang-player-board[data-hand="20"] .player-cards .player-handcount::before {
-  content: "x 20";
-}
-.bang-player[data-bullets="0"] .player-cards .player-maxhand::before,
-.bang-player-board[data-bullets="0"] .player-cards .player-maxhand::before {
-  content: "0";
-}
-.bang-player[data-bullets="1"] .player-cards .player-maxhand::before,
-.bang-player-board[data-bullets="1"] .player-cards .player-maxhand::before {
-  content: "1";
-}
-.bang-player[data-bullets="2"] .player-cards .player-maxhand::before,
-.bang-player-board[data-bullets="2"] .player-cards .player-maxhand::before {
-  content: "2";
-}
-.bang-player[data-bullets="3"] .player-cards .player-maxhand::before,
-.bang-player-board[data-bullets="3"] .player-cards .player-maxhand::before {
-  content: "3";
-}
-.bang-player[data-bullets="4"] .player-cards .player-maxhand::before,
-.bang-player-board[data-bullets="4"] .player-cards .player-maxhand::before {
-  content: "4";
-}
-.bang-player[data-bullets="5"] .player-cards .player-maxhand::before,
-.bang-player-board[data-bullets="5"] .player-cards .player-maxhand::before {
-  content: "5";
-}
-.bang-player[data-bullets="6"] .player-cards .player-maxhand::before,
-.bang-player-board[data-bullets="6"] .player-cards .player-maxhand::before {
-  content: "6";
-}
-.bang-player[data-bullets="7"] .player-cards .player-maxhand::before,
-.bang-player-board[data-bullets="7"] .player-cards .player-maxhand::before {
-  content: "7";
-}
-.bang-player[data-bullets="0"][data-hand="1"] .player-cards,
-.bang-player-board[data-bullets="0"][data-hand="1"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="0"][data-hand="2"] .player-cards,
-.bang-player-board[data-bullets="0"][data-hand="2"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="0"][data-hand="3"] .player-cards,
-.bang-player-board[data-bullets="0"][data-hand="3"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="0"][data-hand="4"] .player-cards,
-.bang-player-board[data-bullets="0"][data-hand="4"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="0"][data-hand="5"] .player-cards,
-.bang-player-board[data-bullets="0"][data-hand="5"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="0"][data-hand="6"] .player-cards,
-.bang-player-board[data-bullets="0"][data-hand="6"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="0"][data-hand="7"] .player-cards,
-.bang-player-board[data-bullets="0"][data-hand="7"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="0"][data-hand="8"] .player-cards,
-.bang-player-board[data-bullets="0"][data-hand="8"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="0"][data-hand="9"] .player-cards,
-.bang-player-board[data-bullets="0"][data-hand="9"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="0"][data-hand="10"] .player-cards,
-.bang-player-board[data-bullets="0"][data-hand="10"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="0"][data-hand="11"] .player-cards,
-.bang-player-board[data-bullets="0"][data-hand="11"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="0"][data-hand="12"] .player-cards,
-.bang-player-board[data-bullets="0"][data-hand="12"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="0"][data-hand="13"] .player-cards,
-.bang-player-board[data-bullets="0"][data-hand="13"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="0"][data-hand="14"] .player-cards,
-.bang-player-board[data-bullets="0"][data-hand="14"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="0"][data-hand="15"] .player-cards,
-.bang-player-board[data-bullets="0"][data-hand="15"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="0"][data-hand="16"] .player-cards,
-.bang-player-board[data-bullets="0"][data-hand="16"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="0"][data-hand="17"] .player-cards,
-.bang-player-board[data-bullets="0"][data-hand="17"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="0"][data-hand="18"] .player-cards,
-.bang-player-board[data-bullets="0"][data-hand="18"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="0"][data-hand="19"] .player-cards,
-.bang-player-board[data-bullets="0"][data-hand="19"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="0"][data-hand="20"] .player-cards,
-.bang-player-board[data-bullets="0"][data-hand="20"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="1"][data-hand="2"] .player-cards,
-.bang-player-board[data-bullets="1"][data-hand="2"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="1"][data-hand="3"] .player-cards,
-.bang-player-board[data-bullets="1"][data-hand="3"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="1"][data-hand="4"] .player-cards,
-.bang-player-board[data-bullets="1"][data-hand="4"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="1"][data-hand="5"] .player-cards,
-.bang-player-board[data-bullets="1"][data-hand="5"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="1"][data-hand="6"] .player-cards,
-.bang-player-board[data-bullets="1"][data-hand="6"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="1"][data-hand="7"] .player-cards,
-.bang-player-board[data-bullets="1"][data-hand="7"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="1"][data-hand="8"] .player-cards,
-.bang-player-board[data-bullets="1"][data-hand="8"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="1"][data-hand="9"] .player-cards,
-.bang-player-board[data-bullets="1"][data-hand="9"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="1"][data-hand="10"] .player-cards,
-.bang-player-board[data-bullets="1"][data-hand="10"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="1"][data-hand="11"] .player-cards,
-.bang-player-board[data-bullets="1"][data-hand="11"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="1"][data-hand="12"] .player-cards,
-.bang-player-board[data-bullets="1"][data-hand="12"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="1"][data-hand="13"] .player-cards,
-.bang-player-board[data-bullets="1"][data-hand="13"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="1"][data-hand="14"] .player-cards,
-.bang-player-board[data-bullets="1"][data-hand="14"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="1"][data-hand="15"] .player-cards,
-.bang-player-board[data-bullets="1"][data-hand="15"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="1"][data-hand="16"] .player-cards,
-.bang-player-board[data-bullets="1"][data-hand="16"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="1"][data-hand="17"] .player-cards,
-.bang-player-board[data-bullets="1"][data-hand="17"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="1"][data-hand="18"] .player-cards,
-.bang-player-board[data-bullets="1"][data-hand="18"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="1"][data-hand="19"] .player-cards,
-.bang-player-board[data-bullets="1"][data-hand="19"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="1"][data-hand="20"] .player-cards,
-.bang-player-board[data-bullets="1"][data-hand="20"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="2"][data-hand="3"] .player-cards,
-.bang-player-board[data-bullets="2"][data-hand="3"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="2"][data-hand="4"] .player-cards,
-.bang-player-board[data-bullets="2"][data-hand="4"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="2"][data-hand="5"] .player-cards,
-.bang-player-board[data-bullets="2"][data-hand="5"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="2"][data-hand="6"] .player-cards,
-.bang-player-board[data-bullets="2"][data-hand="6"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="2"][data-hand="7"] .player-cards,
-.bang-player-board[data-bullets="2"][data-hand="7"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="2"][data-hand="8"] .player-cards,
-.bang-player-board[data-bullets="2"][data-hand="8"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="2"][data-hand="9"] .player-cards,
-.bang-player-board[data-bullets="2"][data-hand="9"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="2"][data-hand="10"] .player-cards,
-.bang-player-board[data-bullets="2"][data-hand="10"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="2"][data-hand="11"] .player-cards,
-.bang-player-board[data-bullets="2"][data-hand="11"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="2"][data-hand="12"] .player-cards,
-.bang-player-board[data-bullets="2"][data-hand="12"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="2"][data-hand="13"] .player-cards,
-.bang-player-board[data-bullets="2"][data-hand="13"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="2"][data-hand="14"] .player-cards,
-.bang-player-board[data-bullets="2"][data-hand="14"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="2"][data-hand="15"] .player-cards,
-.bang-player-board[data-bullets="2"][data-hand="15"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="2"][data-hand="16"] .player-cards,
-.bang-player-board[data-bullets="2"][data-hand="16"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="2"][data-hand="17"] .player-cards,
-.bang-player-board[data-bullets="2"][data-hand="17"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="2"][data-hand="18"] .player-cards,
-.bang-player-board[data-bullets="2"][data-hand="18"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="2"][data-hand="19"] .player-cards,
-.bang-player-board[data-bullets="2"][data-hand="19"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="2"][data-hand="20"] .player-cards,
-.bang-player-board[data-bullets="2"][data-hand="20"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="3"][data-hand="4"] .player-cards,
-.bang-player-board[data-bullets="3"][data-hand="4"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="3"][data-hand="5"] .player-cards,
-.bang-player-board[data-bullets="3"][data-hand="5"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="3"][data-hand="6"] .player-cards,
-.bang-player-board[data-bullets="3"][data-hand="6"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="3"][data-hand="7"] .player-cards,
-.bang-player-board[data-bullets="3"][data-hand="7"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="3"][data-hand="8"] .player-cards,
-.bang-player-board[data-bullets="3"][data-hand="8"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="3"][data-hand="9"] .player-cards,
-.bang-player-board[data-bullets="3"][data-hand="9"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="3"][data-hand="10"] .player-cards,
-.bang-player-board[data-bullets="3"][data-hand="10"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="3"][data-hand="11"] .player-cards,
-.bang-player-board[data-bullets="3"][data-hand="11"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="3"][data-hand="12"] .player-cards,
-.bang-player-board[data-bullets="3"][data-hand="12"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="3"][data-hand="13"] .player-cards,
-.bang-player-board[data-bullets="3"][data-hand="13"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="3"][data-hand="14"] .player-cards,
-.bang-player-board[data-bullets="3"][data-hand="14"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="3"][data-hand="15"] .player-cards,
-.bang-player-board[data-bullets="3"][data-hand="15"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="3"][data-hand="16"] .player-cards,
-.bang-player-board[data-bullets="3"][data-hand="16"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="3"][data-hand="17"] .player-cards,
-.bang-player-board[data-bullets="3"][data-hand="17"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="3"][data-hand="18"] .player-cards,
-.bang-player-board[data-bullets="3"][data-hand="18"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="3"][data-hand="19"] .player-cards,
-.bang-player-board[data-bullets="3"][data-hand="19"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="3"][data-hand="20"] .player-cards,
-.bang-player-board[data-bullets="3"][data-hand="20"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="4"][data-hand="5"] .player-cards,
-.bang-player-board[data-bullets="4"][data-hand="5"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="4"][data-hand="6"] .player-cards,
-.bang-player-board[data-bullets="4"][data-hand="6"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="4"][data-hand="7"] .player-cards,
-.bang-player-board[data-bullets="4"][data-hand="7"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="4"][data-hand="8"] .player-cards,
-.bang-player-board[data-bullets="4"][data-hand="8"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="4"][data-hand="9"] .player-cards,
-.bang-player-board[data-bullets="4"][data-hand="9"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="4"][data-hand="10"] .player-cards,
-.bang-player-board[data-bullets="4"][data-hand="10"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="4"][data-hand="11"] .player-cards,
-.bang-player-board[data-bullets="4"][data-hand="11"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="4"][data-hand="12"] .player-cards,
-.bang-player-board[data-bullets="4"][data-hand="12"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="4"][data-hand="13"] .player-cards,
-.bang-player-board[data-bullets="4"][data-hand="13"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="4"][data-hand="14"] .player-cards,
-.bang-player-board[data-bullets="4"][data-hand="14"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="4"][data-hand="15"] .player-cards,
-.bang-player-board[data-bullets="4"][data-hand="15"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="4"][data-hand="16"] .player-cards,
-.bang-player-board[data-bullets="4"][data-hand="16"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="4"][data-hand="17"] .player-cards,
-.bang-player-board[data-bullets="4"][data-hand="17"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="4"][data-hand="18"] .player-cards,
-.bang-player-board[data-bullets="4"][data-hand="18"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="4"][data-hand="19"] .player-cards,
-.bang-player-board[data-bullets="4"][data-hand="19"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="4"][data-hand="20"] .player-cards,
-.bang-player-board[data-bullets="4"][data-hand="20"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="5"][data-hand="6"] .player-cards,
-.bang-player-board[data-bullets="5"][data-hand="6"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="5"][data-hand="7"] .player-cards,
-.bang-player-board[data-bullets="5"][data-hand="7"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="5"][data-hand="8"] .player-cards,
-.bang-player-board[data-bullets="5"][data-hand="8"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="5"][data-hand="9"] .player-cards,
-.bang-player-board[data-bullets="5"][data-hand="9"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="5"][data-hand="10"] .player-cards,
-.bang-player-board[data-bullets="5"][data-hand="10"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="5"][data-hand="11"] .player-cards,
-.bang-player-board[data-bullets="5"][data-hand="11"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="5"][data-hand="12"] .player-cards,
-.bang-player-board[data-bullets="5"][data-hand="12"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="5"][data-hand="13"] .player-cards,
-.bang-player-board[data-bullets="5"][data-hand="13"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="5"][data-hand="14"] .player-cards,
-.bang-player-board[data-bullets="5"][data-hand="14"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="5"][data-hand="15"] .player-cards,
-.bang-player-board[data-bullets="5"][data-hand="15"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="5"][data-hand="16"] .player-cards,
-.bang-player-board[data-bullets="5"][data-hand="16"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="5"][data-hand="17"] .player-cards,
-.bang-player-board[data-bullets="5"][data-hand="17"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="5"][data-hand="18"] .player-cards,
-.bang-player-board[data-bullets="5"][data-hand="18"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="5"][data-hand="19"] .player-cards,
-.bang-player-board[data-bullets="5"][data-hand="19"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="5"][data-hand="20"] .player-cards,
-.bang-player-board[data-bullets="5"][data-hand="20"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="6"][data-hand="7"] .player-cards,
-.bang-player-board[data-bullets="6"][data-hand="7"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="6"][data-hand="8"] .player-cards,
-.bang-player-board[data-bullets="6"][data-hand="8"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="6"][data-hand="9"] .player-cards,
-.bang-player-board[data-bullets="6"][data-hand="9"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="6"][data-hand="10"] .player-cards,
-.bang-player-board[data-bullets="6"][data-hand="10"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="6"][data-hand="11"] .player-cards,
-.bang-player-board[data-bullets="6"][data-hand="11"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="6"][data-hand="12"] .player-cards,
-.bang-player-board[data-bullets="6"][data-hand="12"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="6"][data-hand="13"] .player-cards,
-.bang-player-board[data-bullets="6"][data-hand="13"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="6"][data-hand="14"] .player-cards,
-.bang-player-board[data-bullets="6"][data-hand="14"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="6"][data-hand="15"] .player-cards,
-.bang-player-board[data-bullets="6"][data-hand="15"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="6"][data-hand="16"] .player-cards,
-.bang-player-board[data-bullets="6"][data-hand="16"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="6"][data-hand="17"] .player-cards,
-.bang-player-board[data-bullets="6"][data-hand="17"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="6"][data-hand="18"] .player-cards,
-.bang-player-board[data-bullets="6"][data-hand="18"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="6"][data-hand="19"] .player-cards,
-.bang-player-board[data-bullets="6"][data-hand="19"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="6"][data-hand="20"] .player-cards,
-.bang-player-board[data-bullets="6"][data-hand="20"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="7"][data-hand="8"] .player-cards,
-.bang-player-board[data-bullets="7"][data-hand="8"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="7"][data-hand="9"] .player-cards,
-.bang-player-board[data-bullets="7"][data-hand="9"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="7"][data-hand="10"] .player-cards,
-.bang-player-board[data-bullets="7"][data-hand="10"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="7"][data-hand="11"] .player-cards,
-.bang-player-board[data-bullets="7"][data-hand="11"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="7"][data-hand="12"] .player-cards,
-.bang-player-board[data-bullets="7"][data-hand="12"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="7"][data-hand="13"] .player-cards,
-.bang-player-board[data-bullets="7"][data-hand="13"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="7"][data-hand="14"] .player-cards,
-.bang-player-board[data-bullets="7"][data-hand="14"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="7"][data-hand="15"] .player-cards,
-.bang-player-board[data-bullets="7"][data-hand="15"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="7"][data-hand="16"] .player-cards,
-.bang-player-board[data-bullets="7"][data-hand="16"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="7"][data-hand="17"] .player-cards,
-.bang-player-board[data-bullets="7"][data-hand="17"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="7"][data-hand="18"] .player-cards,
-.bang-player-board[data-bullets="7"][data-hand="18"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="7"][data-hand="19"] .player-cards,
-.bang-player-board[data-bullets="7"][data-hand="19"] .player-cards {
-  color: red;
-}
-.bang-player[data-bullets="7"][data-hand="20"] .player-cards,
-.bang-player-board[data-bullets="7"][data-hand="20"] .player-cards {
-  color: red;
-}
 
 .player-info .bullet, .player-board .bang-player-board .bullet {
   width: 35px;
@@ -1543,6 +899,489 @@ div.bang-character-tooltip div.bang-character-tooltip-sizing .player-character-p
 }
 .player-info[data-bullets="6"] .bullet:nth-child(6), .player-board .bang-player-board[data-bullets="6"] .bullet:nth-child(6) {
   background-position: 0 0;
+}
+.player-info[data-hand="0"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="0"] .player-cards .player-handcount::before {
+  content: "x 0";
+}
+.player-info[data-hand="1"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="1"] .player-cards .player-handcount::before {
+  content: "x 1";
+}
+.player-info[data-hand="2"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="2"] .player-cards .player-handcount::before {
+  content: "x 2";
+}
+.player-info[data-hand="3"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="3"] .player-cards .player-handcount::before {
+  content: "x 3";
+}
+.player-info[data-hand="4"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="4"] .player-cards .player-handcount::before {
+  content: "x 4";
+}
+.player-info[data-hand="5"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="5"] .player-cards .player-handcount::before {
+  content: "x 5";
+}
+.player-info[data-hand="6"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="6"] .player-cards .player-handcount::before {
+  content: "x 6";
+}
+.player-info[data-hand="7"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="7"] .player-cards .player-handcount::before {
+  content: "x 7";
+}
+.player-info[data-hand="8"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="8"] .player-cards .player-handcount::before {
+  content: "x 8";
+}
+.player-info[data-hand="9"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="9"] .player-cards .player-handcount::before {
+  content: "x 9";
+}
+.player-info[data-hand="10"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="10"] .player-cards .player-handcount::before {
+  content: "x 10";
+}
+.player-info[data-hand="11"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="11"] .player-cards .player-handcount::before {
+  content: "x 11";
+}
+.player-info[data-hand="12"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="12"] .player-cards .player-handcount::before {
+  content: "x 12";
+}
+.player-info[data-hand="13"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="13"] .player-cards .player-handcount::before {
+  content: "x 13";
+}
+.player-info[data-hand="14"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="14"] .player-cards .player-handcount::before {
+  content: "x 14";
+}
+.player-info[data-hand="15"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="15"] .player-cards .player-handcount::before {
+  content: "x 15";
+}
+.player-info[data-hand="16"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="16"] .player-cards .player-handcount::before {
+  content: "x 16";
+}
+.player-info[data-hand="17"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="17"] .player-cards .player-handcount::before {
+  content: "x 17";
+}
+.player-info[data-hand="18"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="18"] .player-cards .player-handcount::before {
+  content: "x 18";
+}
+.player-info[data-hand="19"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="19"] .player-cards .player-handcount::before {
+  content: "x 19";
+}
+.player-info[data-hand="20"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="20"] .player-cards .player-handcount::before {
+  content: "x 20";
+}
+.player-info[data-bullets="0"] .player-cards .player-maxhand::before, .player-board .bang-player-board[data-bullets="0"] .player-cards .player-maxhand::before {
+  content: "0";
+}
+.player-info[data-bullets="1"] .player-cards .player-maxhand::before, .player-board .bang-player-board[data-bullets="1"] .player-cards .player-maxhand::before {
+  content: "1";
+}
+.player-info[data-bullets="2"] .player-cards .player-maxhand::before, .player-board .bang-player-board[data-bullets="2"] .player-cards .player-maxhand::before {
+  content: "2";
+}
+.player-info[data-bullets="3"] .player-cards .player-maxhand::before, .player-board .bang-player-board[data-bullets="3"] .player-cards .player-maxhand::before {
+  content: "3";
+}
+.player-info[data-bullets="4"] .player-cards .player-maxhand::before, .player-board .bang-player-board[data-bullets="4"] .player-cards .player-maxhand::before {
+  content: "4";
+}
+.player-info[data-bullets="5"] .player-cards .player-maxhand::before, .player-board .bang-player-board[data-bullets="5"] .player-cards .player-maxhand::before {
+  content: "5";
+}
+.player-info[data-bullets="6"] .player-cards .player-maxhand::before, .player-board .bang-player-board[data-bullets="6"] .player-cards .player-maxhand::before {
+  content: "6";
+}
+.player-info[data-bullets="7"] .player-cards .player-maxhand::before, .player-board .bang-player-board[data-bullets="7"] .player-cards .player-maxhand::before {
+  content: "7";
+}
+.player-info[data-bullets="0"][data-hand="1"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="1"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="2"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="2"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="3"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="3"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="4"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="4"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="5"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="5"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="6"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="6"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="7"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="7"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="8"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="8"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="9"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="9"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="10"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="10"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="11"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="11"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="12"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="12"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="13"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="13"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="14"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="14"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="15"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="15"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="16"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="16"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="17"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="17"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="18"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="18"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="19"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="19"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="20"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="20"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="2"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="2"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="3"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="3"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="4"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="4"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="5"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="5"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="6"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="6"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="7"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="7"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="8"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="8"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="9"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="9"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="10"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="10"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="11"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="11"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="12"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="12"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="13"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="13"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="14"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="14"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="15"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="15"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="16"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="16"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="17"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="17"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="18"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="18"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="19"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="19"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="20"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="20"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="3"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="3"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="4"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="4"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="5"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="5"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="6"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="6"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="7"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="7"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="8"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="8"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="9"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="9"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="10"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="10"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="11"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="11"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="12"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="12"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="13"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="13"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="14"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="14"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="15"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="15"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="16"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="16"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="17"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="17"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="18"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="18"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="19"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="19"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="20"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="20"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="4"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="4"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="5"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="5"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="6"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="6"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="7"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="7"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="8"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="8"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="9"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="9"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="10"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="10"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="11"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="11"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="12"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="12"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="13"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="13"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="14"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="14"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="15"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="15"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="16"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="16"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="17"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="17"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="18"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="18"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="19"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="19"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="20"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="20"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="5"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="5"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="6"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="6"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="7"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="7"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="8"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="8"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="9"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="9"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="10"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="10"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="11"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="11"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="12"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="12"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="13"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="13"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="14"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="14"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="15"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="15"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="16"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="16"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="17"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="17"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="18"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="18"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="19"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="19"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="20"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="20"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="6"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="6"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="7"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="7"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="8"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="8"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="9"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="9"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="10"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="10"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="11"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="11"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="12"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="12"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="13"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="13"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="14"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="14"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="15"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="15"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="16"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="16"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="17"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="17"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="18"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="18"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="19"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="19"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="20"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="20"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="7"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="7"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="8"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="8"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="9"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="9"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="10"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="10"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="11"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="11"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="12"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="12"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="13"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="13"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="14"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="14"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="15"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="15"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="16"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="16"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="17"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="17"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="18"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="18"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="19"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="19"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="20"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="20"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="8"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="8"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="9"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="9"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="10"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="10"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="11"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="11"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="12"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="12"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="13"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="13"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="14"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="14"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="15"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="15"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="16"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="16"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="17"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="17"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="18"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="18"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="19"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="19"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="20"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="20"] .player-cards {
+  color: red;
 }
 
 .player-info .player-name {

@@ -78,11 +78,11 @@ var jstpl_helpDialogCharacter = `
 
 var jstpl_player_board_role = `<div class='player-role' id="player-role-\${id}" data-role='\${role}'></div>`;
 
-var jstpl_player = `<div class='bang-player' id='bang-player-\${id}' data-role="\${role}" data-no="\${newNo}" data-hand="\${handCount}">
+var jstpl_player = `<div class='bang-player' id='bang-player-\${id}' data-role="\${role}" data-no="\${newNo}">
 	<div class='bang-player-container'>
 		<div class='player-inplay' id="player-inplay-\${id}">
 		</div>
-		<div id="player-character-\${id}" class='player-info' data-character='\${characterId}' data-max-bullets="\${bullets}" data-bullets="\${hp}">
+		<div id="player-character-\${id}" class='player-info' data-character='\${characterId}' data-max-bullets="\${bullets}" data-bullets="\${hp}" data-hand="\${handCount}">
 			<div class="player-character-name">\${character}</div>
 			<div class="player-character-background">
         <div class="player-character-hourglass"></div>
