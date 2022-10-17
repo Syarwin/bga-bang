@@ -1,6 +1,7 @@
 <?php
 namespace BANG\Managers;
 use BANG\Core\Globals;
+use BANG\Helpers\GameOptions;
 use BANG\Models\Player;
 use bang;
 
@@ -70,12 +71,10 @@ class Players extends \BANG\Helpers\DB_Manager
       }
     }
 
-    // TODO: Link this variable to gameoption
-    $optionTwoChars = false;
     // Fill with random characters
     $characters = array_diff($characters, $forcedCharacters);
     shuffle($characters);
-    $needed = ($optionTwoChars ? count($players) * 2 : count($players)) - count($forcedCharacters);
+    $needed = (GameOptions::chooseCharactersManually() ? count($players) * 2 : count($players)) - count($forcedCharacters);
     for ($i = 0; $i < $needed; $i++) {
       $forcedCharacters[] = array_pop($characters);
     }
@@ -90,11 +89,13 @@ class Players extends \BANG\Helpers\DB_Manager
       $name = addslashes($player['player_name']);
       $role = $roles[$i];
       $characterId = array_pop($forcedCharacters);
-      $altCharacterId = $optionTwoChars ? array_pop($forcedCharacters) : -1;
-      $charChosen = !$optionTwoChars;
+      $altCharacterId = GameOptions::chooseCharactersManually() ? array_pop($forcedCharacters) : -1;
+      $charChosen = !GameOptions::chooseCharactersManually();
       $bullets = $charChosen ? self::getCharacterBullets($characterId) : null;
       if ($role == SHERIFF) {
-        $bullets++;
+        if ($charChosen) {
+          $bullets++;
+        }
         $sheriff = $pId;
       }
       $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, $bullets, $role, $characterId, $altCharacterId, $charChosen, 0];

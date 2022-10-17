@@ -60,7 +60,9 @@ class bang extends Table
   {
     parent::__construct();
     self::$instance = $this;
-    self::initGameStateLabels([]);
+    self::initGameStateLabels([
+      'optionCharacters' => OPTION_CHOOSE_CHARACTERS,
+    ]);
   }
   public static function get()
   {
