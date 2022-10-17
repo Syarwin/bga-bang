@@ -8,7 +8,6 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       debug('Choosing character', args);
 
       if (!this.isCurrentPlayerActive()) return;
-      this.gamedatas.gamestate.args.cards = args.characters[this.player_id];
 
       this.dialogChooseCharacter();
     },
@@ -24,8 +23,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         openAnimationTarget: 'buttonShowCharacters',
         contentsTpl: jstpl_dialog,
       });
-      args.cards.forEach((card) => this.addCharacterCard(card));
-      this._selectableCards = args.cards;
+      args._private.characters.forEach((card) => this.addCharacterCard(card));
       $('dialog-title-container').innerHTML = $('pagemaintitletext').innerHTML;
     },
 

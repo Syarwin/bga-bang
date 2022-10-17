@@ -47,7 +47,7 @@ class Player extends \BANG\Helpers\DB_Manager
       $this->eliminated = $row['player_eliminated'] == 1;
       $this->hp = $this->characterChosen ? (int) $row['player_hp'] : null;
       $this->zombie = $row['player_zombie'] == 1;
-      $this->role = $row['player_role'];
+      $this->role = (int) $row['player_role'];
       $this->bullets = $this->characterChosen ? (int) $row['player_bullets'] : null;
       $this->score = (int) $row['player_score'];
       $this->generalStore = (int) $row['player_autopick_general_store'];
@@ -806,28 +806,41 @@ class Player extends \BANG\Helpers\DB_Manager
   }
 
   /**
-   * setCharacter: sets correct character chosen by a player and sets a corresponding flag
-   * @param int $characterId
+   * swapCharactersIfNeeded: sets correct character chosen by a player and sets a corresponding flag
+   * @param int $chosenCharacterId
    */
-  public function setCharacter($characterId)
+  public function swapCharactersIfNeeded($chosenCharacterId)
   {
-    if (!in_array($characterId, [$this->character, $this->altCharacter])) {
-      throw new \BgaVisibleSystemException("Character id ${characterId} is not in the list of possible characters to choose. Please report a bug.");
+    if (!in_array($chosenCharacterId, [$this->character, $this->altCharacter])) {
+      throw new \BgaVisibleSystemException("Character id ${chosenCharacterId} is not in the list of possible characters to choose. Please report a bug.");
     }
-    $newParams = [];
-    if ($this->altCharacter === $characterId) {
-      $newParams['player_character'] = $characterId;
+
+    if ($this->altCharacter === $chosenCharacterId) {
+      $newParams = [];
+      $newParams['player_character'] = $chosenCharacterId;
       $newParams['player_alt_character'] = $this->character;
       $this->altCharacter = $this->character;
-      $this->character = $characterId;
+      $this->character = $chosenCharacterId;
+      self::DB()->update($newParams, $this->id);
     }
-    $characterObject = Players::getCharacter($characterId);
+  }
+
+  /**
+   * setupChosenCharacter: finishes up everything related to character before game starts
+   */
+  public function setupChosenCharacter()
+  {
+
+    $characterObject = Players::getCharacter($this->character);
     $bullets = $characterObject->getBullets();
-    $newParams = array_merge($newParams, [
+    if ($this->role === SHERIFF) {
+      $bullets++;
+    }
+    $newParams = [
       'player_character_chosen' => 1,
       'player_hp' => $bullets,
       'player_bullets' => $bullets,
-    ]);
+    ];
     self::DB()->update($newParams, $this->id);
   }
 }

@@ -99,7 +99,7 @@ class Notifications
     ]);
   }
 
-  public static function drawCards($player, $cards, $public = false, $src = LOCATION_DECK, $closeDialog = true)
+  public static function drawCards($player, $cards, $public = false, $src = LOCATION_DECK)
   {
     $amount = $cards->count();
     $data = [
@@ -120,7 +120,6 @@ class Notifications
           ? clienttranslate('You draw ${card_name} from ${src_name}')
           : clienttranslate('You choose ${card_name} from ${src_name}');
       $data['card'] = $cards->first();
-      $data['closeDialog'] = $closeDialog;
     } else {
       $msg = clienttranslate('You draw ${amount} cards from ${src_name}');
     }
@@ -142,7 +141,7 @@ class Notifications
           : clienttranslate('${player_name} chooses ${card_name} from ${src_name}');
     }
     $data['ignore'] = [$player];
-    self::notifyAllCardsGained($msg, $data, $closeDialog);
+    Notifications::notifyAll('cardsGained', $msg, $data);
   }
 
   public static function drawCardFromDiscard($player, $cards)
@@ -154,7 +153,7 @@ class Notifications
   public static function chooseCard($player, $card)
   {
     $msg = clienttranslate('${player_name} chooses ${card_name}');
-    self::notifyAllCardsGained($msg, [
+    Notifications::notifyAll('cardsGained', $msg, [
       'msgYou' => clienttranslate('${You} choose ${card_name}'),
       'player' => $player,
       'card' => $card,
@@ -207,7 +206,6 @@ class Notifications
       'src' => $victim->getId(),
       'target' => LOCATION_HAND,
       'deckCount' => Cards::getDeckCount(),
-      'closeDialog' => true,
     ];
 
     // Notify receiver and victim
@@ -217,11 +215,11 @@ class Notifications
     // Notify everyone else
     $data['ignore'] = [$receiver, $victim];
     if ($equipped) {
-      self::notifyAllCardsGained(clienttranslate('${player_name} stole ${card_name} from ${player_name2}'), $data);
+      Notifications::notifyAll('cardsGained', clienttranslate('${player_name} stole ${card_name} from ${player_name2}'), $data);
     } else {
       unset($data['card_name']);
       unset($data['card']);
-      self::notifyAllCardsGained(clienttranslate('${player_name} stole a card from ${player_name2}'), $data);
+      Notifications::notifyAll('cardsGained', clienttranslate('${player_name} stole a card from ${player_name2}'), $data);
     }
 
     self::updateHand($receiver);
@@ -275,7 +273,7 @@ class Notifications
    */
   public static function moveCard($card, $player, $target)
   {
-    self::notifyAllCardsGained(clienttranslate('${card_name} moves to ${player_name}'), [
+    Notifications::notifyAll('cardsGained', clienttranslate('${card_name} moves to ${player_name}'), [
       'card' => $card,
       'player' => $target,
       'player2' => $player,
@@ -350,30 +348,15 @@ class Notifications
    * @param Player $player
    * @param Player $character
    */
-  public static function characterChosen($player, $character)
+  public static function characterChosen($player)
   {
-    $characterName = $character->getCharName();
-    $msg = '${player_name} chooses a character ${character_name}';
-    $updatedData = array_merge($character->getUiCharacterSpecificData(), [
-      'handCount' => $player->countHand(),
-    ]);
+    $characterName = $player->getCharName();
+    $msg = '${player_name} chose ${character_name} as a character';
     self::notifyAll('characterChosen', $msg, [
       'character_name' => $characterName,
-      'character' => $updatedData,
+      'character' => $player->getUiCharacterSpecificData(),
       'player' => $player,
     ]);
-  }
-
-  /**
-   * characterChosen: send all info about
-   * @param string $msg
-   * @param array $args
-   * @param boolean $closeDialog
-   */
-  private static function notifyAllCardsGained($msg, $args, $closeDialog = true)
-  {
-    $args['closeDialog'] = $closeDialog;
-    self::notifyAll('cardsGained', $msg, $args);
   }
 
   public static function updateArgs(&$data)

@@ -16,11 +16,15 @@ trait ChooseCharacterTrait
     $characters = [];
     foreach ($players as $player) {
       $charactersIds = $player->getBothCharacters();
-      $characters[$player->getId()] = array_map(function ($characterId) {
-        return Players::getCharacter($characterId)->getUiData();
-      }, $charactersIds);
+      $characters[$player->getId()] = [
+        'characters' => array_map(function ($characterId) {
+          return Players::getCharacter($characterId)->getUiData();
+        }, $charactersIds)
+      ];
     }
-    return ['characters' => $characters];
+    return [
+      '_private' => $characters,
+    ];
   }
 
   /*
@@ -46,7 +50,7 @@ trait ChooseCharacterTrait
     $playersIds = array_map(function ($player) {
       return $player->getId();
     }, Players::getLivingPlayers()->toArray());
-    $this->gamestate->setPlayersMultiactive($playersIds, ST_START_OF_TURN);
+    $this->gamestate->setPlayersMultiactive($playersIds, ST_CHARACTER_SETUP);
   }
 
   /**
@@ -56,12 +60,26 @@ trait ChooseCharacterTrait
   public function actChooseCharacter($characterId)
   {
     $currentPlayer = Players::getCurrent();
-    $currentPlayer->setCharacter($characterId);
-    $characterObj = Players::getCharacter($characterId);
-    $cards = Cards::deal($currentPlayer->getId(), $characterObj->getBullets());
-    Notifications::characterChosen($currentPlayer, $characterObj);
-    Notifications::drawCards($currentPlayer, $cards, false, LOCATION_DECK, false);
+    $currentPlayer->swapCharactersIfNeeded($characterId);
+    $this->gamestate->setPlayerNonMultiactive($currentPlayer->getId(), ST_CHARACTER_SETUP);
+  }
+
+  /*
+   * stChooseCharacter: pre-start state where we assign characters, show them to everyone and draw cards
+   */
+  public function stCharacterSetup()
+  {
+    foreach (Players::getLivingPlayers()->toArray() as $player) {
+      $player->setupChosenCharacter();
+    }
+    // After setup, we need to re-fetch them from DB to get the updated information
+    foreach (Players::getLivingPlayers()->toArray() as $player) {
+      Notifications::characterChosen($player);
+      $cards = Cards::deal($player->getId(), $player->getBullets());
+      Notifications::drawCards($player, $cards);
+      Notifications::updateHand($player);
+    }
     Notifications::updateDistances();
-    $this->gamestate->setPlayerNonMultiactive($currentPlayer->getId(), ST_START_OF_TURN);
+    $this->gamestate->nextState(ST_START_OF_TURN);
   }
 }

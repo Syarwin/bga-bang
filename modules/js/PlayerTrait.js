@@ -243,7 +243,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     setHandCount(playerId, newHandCount) {
       //      var currentHandCount = parseInt(dojo.attr('bang-player-' + playerId, 'data-hand')),
       //        newHandCount = currentHandCount + parseInt(amount);
-      dojo.attr('bang-player-' + playerId, 'data-hand', newHandCount);
+      dojo.attr('player-character-' + playerId, 'data-hand', newHandCount);
       dojo.attr('bang-player-board-' + playerId, 'data-hand', newHandCount);
       this.gamedatas.players[playerId].handCount = newHandCount;
     },

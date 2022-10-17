@@ -25,6 +25,7 @@ define('ST_VICE_PENALTY', 22);
 define('ST_PRE_ELIMINATE_DISCARD', 23);
 define('ST_PRE_CHOOSE_CHARACTER', 25);
 define('ST_CHOOSE_CHARACTER', 26);
+define('ST_CHARACTER_SETUP', 27);
 define('ST_PRE_GAME_END', 98);
 define('ST_GAME_END', 99);
 

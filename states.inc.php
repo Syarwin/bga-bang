@@ -35,6 +35,15 @@ $machinestates = [
     'action' => 'stChooseCharacter',
     'possibleactions' => ['actChooseCharacter'],
     'transitions' => [
+      ST_CHARACTER_SETUP => ST_CHARACTER_SETUP,
+    ],
+  ],
+
+  ST_CHARACTER_SETUP => [
+    'name' => 'characterSetup',
+    'type' => 'game',
+    'action' => 'stCharacterSetup',
+    'transitions' => [
       ST_START_OF_TURN => ST_START_OF_TURN,
     ],
   ],
