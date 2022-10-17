@@ -169,7 +169,6 @@ class Stack
   }
 
   public static function newAtom($state, $atom) {
-    Stack::makeStackBackwardCompatible();
     $atom['state'] = $state;
     $atom = ['uid' => uniqid()] + $atom;
     return $atom;
@@ -177,7 +176,6 @@ class Stack
 
   public static function finishState() {
     $ctx = Stack::getCtx();
-    Stack::makeStackBackwardCompatible();
     if (!Stack::isSuspended($ctx)) {
       $ctxIndex = Stack::getAtomIndexByUid($ctx['uid']);
       $currentStack = Stack::get();
@@ -323,23 +321,5 @@ class Stack
       array_splice($stack, $atomIndex, 0, [$atom]);
     }
     Stack::set($stack);
-  }
-
-  // TODO: Delete this when all turn-based Bang! games will be created after 13/05/2021
-  private static function makeStackBackwardCompatible() {
-    $stack = Stack::get();
-    $uids = array_map(function ($atom) {
-      return isset($atom['uid']) ? $atom['uid'] : null;
-    }, $stack);
-    $uniqueUids = array_unique($uids);
-    if (count($uniqueUids) == 1 && $uniqueUids[0] == null) { // If no uids set in Stack...
-      // ...this should be version before Stack update on 13/05/2021, let's put uids everywhere
-      $stackWithUids = array_map(function ($atom) {
-        $atom['uid'] = uniqid();
-        return $atom;
-      }, $stack);
-      Stack::setCtx($stackWithUids[0]);
-      Stack::set($stackWithUids);
-    }
   }
 }
