@@ -50,9 +50,9 @@ class PedroRamirez extends \BANG\Models\Player
     Rules::incrementPhaseOneDrawEndAmount($cardsToDraw);
   }
 
-  public function getPhaseOneRules($defaultAmount)
+  public function getPhaseOneRules($defaultAmount, $isAbilityAvailable = true)
   {
-    if (Rules::isAbilityAvailable()) {
+    if ($isAbilityAvailable) {
       return [
         RULE_PHASE_ONE_CARDS_DRAW_BEGINNING => 0,
         RULE_PHASE_ONE_PLAYER_ABILITY_DRAW => true,

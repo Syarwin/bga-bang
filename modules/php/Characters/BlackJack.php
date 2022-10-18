@@ -33,9 +33,9 @@ class BlackJack extends \BANG\Models\Player
     $this->onChangeHand();
   }
 
-  public function getPhaseOneRules($defaultAmount)
+  public function getPhaseOneRules($defaultAmount, $isAbilityAvailable = true)
   {
-    if ($defaultAmount === 1 || !Rules::isAbilityAvailable()) {
+    if ($defaultAmount === 1 || !$isAbilityAvailable) {
       return parent::getPhaseOneRules($defaultAmount);
     } else {
       return [

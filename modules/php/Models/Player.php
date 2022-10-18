@@ -527,7 +527,7 @@ class Player extends \BANG\Helpers\DB_Manager
     ];
   }
 
-  public function getPhaseOneRules($defaultAmount)
+  public function getPhaseOneRules($defaultAmount, $isAbilityAvailable = true)
   {
     return [
       RULE_PHASE_ONE_CARDS_DRAW_BEGINNING => $defaultAmount,
