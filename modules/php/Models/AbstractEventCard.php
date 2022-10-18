@@ -122,7 +122,7 @@ class AbstractEventCard implements \JsonSerializable
     return [
       'id' => $this->id,
       'type' => $this->type,
-      'colorOverride' => $this->getColorOverride(),
+      'colorOverride' => $this->getColorOverride(null),
     ];
   }
 }

@@ -15,10 +15,15 @@ class Rules extends DB_Manager
    */
   private static function getRule($rule)
   {
-    return self::DB()
+    $ruleRow = self::DB()
       ->orderBy(self::$primary, 'DESC')
       ->select($rule)
-      ->getSingle()[$rule];
+      ->getSingle();
+    if ($ruleRow === null) {
+      return null;
+    } else {
+      return $ruleRow[$rule];
+    }
   }
 
   private static function get()
