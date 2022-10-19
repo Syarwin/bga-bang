@@ -16,6 +16,6 @@ class PaulRegret extends \BANG\Models\Player
 
   public function getDistanceTo($enemy)
   {
-    return parent::getDistanceTo($enemy) + Rules::isAbilityAvailable() ? 1 : 0;
+    return parent::getDistanceTo($enemy) + (Rules::isAbilityAvailable() ? 1 : 0);
   }
 }
