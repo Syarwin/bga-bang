@@ -1,5 +1,6 @@
 <?php
 namespace BANG\Cards\Events;
+use BANG\Core\Notifications;
 use BANG\Models\AbstractEventCard;
 
 class Hangover extends AbstractEventCard
@@ -17,5 +18,10 @@ class Hangover extends AbstractEventCard
   public function isAbilityAvailable()
   {
     return false;
+  }
+
+  public function resolveEffect($player = null)
+  {
+    Notifications::updateDistances();
   }
 }

@@ -20,10 +20,12 @@ trait EventTrait
     if ($nextEventCard) {
       Notifications::newEvent($eventCard, $nextEventCard);
     }
-    if ($eventCard->getEffect() === EFFECT_INSTANT) {
+    Rules::setNewTurnRules($player, $eventCard);
+    // EFFECT_PERMANENT should not logically be here but in case of Hangover + Paul Regret we should notify about distances, so...
+    // Feel free to change this logic if at some point EFFECT_INSTANT will trigger anything
+    if ($eventCard->getEffect() === EFFECT_INSTANT || $eventCard->getEffect() === EFFECT_PERMANENT) {
       $eventCard->resolveEffect($player);
     }
-    Rules::setNewTurnRules($player, $eventCard);
     Stack::finishState();
   }
 
