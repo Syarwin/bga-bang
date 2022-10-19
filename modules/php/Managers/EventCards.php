@@ -47,7 +47,7 @@ class EventCards extends \BANG\Helpers\Pieces
     CARD_CURSE => 'Curse',
     CARD_DALTONS => 'Daltons',
     CARD_DOCTOR => 'Doctor',
-    CARD_GHOST_TOWN => 'GhostTown',
+//    CARD_GHOST_TOWN => 'GhostTown',
     CARD_GOLD_RUSH => 'GoldRush',
     CARD_HANGOVER => 'Hangover',
     CARD_REVEREND => 'Reverend',

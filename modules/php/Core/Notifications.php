@@ -382,7 +382,7 @@ class Notifications
     if (isset($data['event'])) {
       $data['event_name'] = $eventName = $data['event']->getName();
       $data['flipEventMsg'] = " because of $eventName";
-      $data['eventColorOverride'] = $data['event']->getColorOverride();
+      $data['eventColorOverride'] = $data['event']->getColorOverride(null);
       $data['preserve'][] = 'eventColorOverride';
     } else {
       $data['flipEventMsg'] = '';
