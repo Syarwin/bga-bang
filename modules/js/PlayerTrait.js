@@ -29,11 +29,6 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         const tpl = player.character ? 'jstpl_player' : 'jstpl_player_no_character';
         dojo.place(this.format_block(tpl, player), 'board');
         player.inPlay.forEach((card) => this.addCard(card, 'player-inplay-' + player.id));
-        dojo.connect($('player-character-' + player.id), 'onclick', (evt) => {
-          evt.preventDefault();
-          evt.stopPropagation();
-          this.onClickPlayer(player.id);
-        });
 
         if (player.character) {
           this.setupCharacter(player);
@@ -59,6 +54,11 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     },
 
     setupCharacter(player) {
+      dojo.connect($('player-character-' + player.id), 'onclick', (evt) => {
+        evt.preventDefault();
+        evt.stopPropagation();
+        this.onClickPlayer(player.id);
+      });
       player.powers = '<p>' + player.powers.map((t) => _(t)).join('</p><p>') + '</p>';
       this.addTooltipHtml('player-character-' + player.id, this.format_block('jstpl_characterTooltip', player));
       dojo.place(this.format_block('jstpl_player_board_data', player), 'overall_player_board_' + player.id);
@@ -310,6 +310,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
      * Triggered when a player click on a player's board or action button
      */
     onClickPlayer(playerId) {
+      debugger;
       if (!this._selectablePlayers.includes(playerId)) return;
 
       if (this._action == 'drawCard') {
