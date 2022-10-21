@@ -30,6 +30,7 @@ define([
   g_gamethemeurl + 'modules/js/States/PlayCardTrait.js',
   g_gamethemeurl + 'modules/js/States/ReactTrait.js',
   g_gamethemeurl + 'modules/js/States/SelectCardTrait.js',
+  g_gamethemeurl + 'modules/js/States/ChooseCharacterTrait.js',
   g_gamethemeurl + 'modules/js/States/DiscardEndOfTurnTrait.js',
 
   g_gamethemeurl + 'modules/js/CardTrait.js',
@@ -42,6 +43,7 @@ define([
       bang.playCardTrait,
       bang.reactTrait,
       bang.selectCardTrait,
+      bang.chooseCharacterTrait,
       bang.discardEndOfTurnTrait,
       bang.playerTrait,
       bang.cardTrait,
@@ -152,7 +154,9 @@ define([
         dojo.connect($('help-icon'), 'click', () => this.displayPlayersHelp());
 
         // Make the current player stand out
-        this.updateCurrentTurnPlayer(gamedatas.playerTurn);
+        if (gamedatas.gamestate.name !== 'chooseCharacter') {
+          this.updateCurrentTurnPlayer(gamedatas.playerTurn);
+        }
       },
 
       onLoadingComplete() {
@@ -175,6 +179,10 @@ define([
         if (!this.isCurrentPlayerActive())
           // Make sure the player is active
           return;
+
+        if (stateName == 'chooseCharacter') {
+          this.addActionButton('buttonShowCharacters', _('Show characters'), () => this.dialogChooseCharacter(), null, false, 'blue');
+        }
 
         if (stateName == 'playCard') {
           if (args._private && args._private.character != null && this._selectedCard == null)

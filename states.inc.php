@@ -12,7 +12,39 @@ $machinestates = [
     'type' => 'manager',
     'action' => 'stGameSetup',
     'transitions' => [
-      '' => ST_START_OF_TURN,
+      '' => ST_PRE_CHOOSE_CHARACTER,
+    ],
+  ],
+
+  ST_PRE_CHOOSE_CHARACTER => [
+    'name' => 'preChooseCharacter',
+    'type' => 'game',
+    'action' => 'stPreChooseCharacter',
+    'transitions' => [
+      ST_CHOOSE_CHARACTER => ST_CHOOSE_CHARACTER,
+      ST_START_OF_TURN => ST_START_OF_TURN,
+    ],
+  ],
+
+  ST_CHOOSE_CHARACTER => [
+    'name' => 'chooseCharacter',
+    'description' => clienttranslate('Some players must still choose a character'),
+    'descriptionmyturn' => clienttranslate('${you} must choose a character'),
+    'type' => 'multipleactiveplayer',
+    'args' => 'argChooseCharacter',
+    'action' => 'stChooseCharacter',
+    'possibleactions' => ['actChooseCharacter'],
+    'transitions' => [
+      ST_CHARACTER_SETUP => ST_CHARACTER_SETUP,
+    ],
+  ],
+
+  ST_CHARACTER_SETUP => [
+    'name' => 'characterSetup',
+    'type' => 'game',
+    'action' => 'stCharacterSetup',
+    'transitions' => [
+      ST_START_OF_TURN => ST_START_OF_TURN,
     ],
   ],
 

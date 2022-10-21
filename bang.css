@@ -23,27 +23,33 @@
 }
 */
 @font-face {
-  font-family: 'Perdido';
+  font-family: "Perdido";
   src: url("img/fonts/Rye-Regular.woff2") format("woff2"), url("img/fonts/Rye-Regular.woff") format("woff"), url("img/fonts/Rye-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
-  font-display: swap; }
+  font-display: swap;
+}
 @font-face {
-  font-family: 'Palatino Linotype';
+  font-family: "Palatino Linotype";
   src: url("img/fonts/PalatinoLinotype-Italic.woff2") format("woff2"), url("img/fonts/PalatinoLinotype-Italic.woff") format("woff"), url("img/fonts/PalatinoLinotype-Italic.ttf") format("truetype");
   font-weight: normal;
   font-style: italic;
-  font-display: swap; }
+  font-display: swap;
+}
 @keyframes pulsate {
   0% {
     transform: rotate(13deg) scale(1);
-    box-shadow: 0 0 0 2px red; }
+    box-shadow: 0 0 0 2px red;
+  }
   50% {
     transform: rotate(13deg) scale(1.1);
-    box-shadow: 0 0 0 10px transparent; } }
+    box-shadow: 0 0 0 10px transparent;
+  }
+}
 div#board-wrapper {
   display: flex;
-  flex-flow: column; }
+  flex-flow: column;
+}
 
 div#board {
   order: 2;
@@ -51,385 +57,479 @@ div#board {
   min-height: 800px;
   position: relative;
   display: grid;
-  grid-template-columns: repeat(12, 1fr); }
-  #ebd-body[data-hand='1'] div#board {
-    order: 1; }
-  div#board .bang-player,
-  div#board #table {
-    display: flex;
-    flex-flow: row;
-    align-items: center;
-    grid-row-end: span 2;
-    grid-column-end: span 4;
-    max-height: 190px;
-    min-height: 190px;
-    max-width: 100%; }
-  div#board[data-players='2'] #table {
-    grid-column-start: 5;
-    grid-row-start: 4; }
-  div#board[data-players='2'] .bang-player[data-no='0'] {
-    grid-column-start: 5;
+  grid-template-columns: repeat(12, 1fr);
+}
+#ebd-body[data-hand="1"] div#board {
+  order: 1;
+}
+div#board .bang-player,
+div#board #table {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  grid-row-end: span 2;
+  grid-column-end: span 4;
+  max-height: 190px;
+  min-height: 190px;
+  max-width: 100%;
+}
+div#board[data-players="2"] #table {
+  grid-column-start: 5;
+  grid-row-start: 4;
+}
+div#board[data-players="2"] .bang-player[data-no="0"] {
+  grid-column-start: 5;
+  grid-row-start: 2;
+  justify-content: center;
+}
+div#board[data-players="2"] .bang-player[data-no="1"] {
+  grid-column-start: 5;
+  grid-row-start: 6;
+  justify-content: center;
+}
+div#board[data-players="3"] #table {
+  grid-column-start: 5;
+  grid-row-start: 4;
+}
+div#board[data-players="3"] .bang-player[data-no="0"] {
+  grid-column-start: 5;
+  grid-row-start: 2;
+  justify-content: center;
+}
+div#board[data-players="3"] .bang-player[data-no="1"] {
+  grid-column-start: 9;
+  grid-row-start: 4;
+  justify-content: flex-start;
+}
+div#board[data-players="3"] .bang-player[data-no="2"] {
+  grid-column-start: 1;
+  grid-row-start: 4;
+  justify-content: flex-end;
+}
+div#board[data-players="4"] #table {
+  grid-column-start: 5;
+  grid-row-start: 4;
+}
+div#board[data-players="4"] .bang-player[data-no="0"] {
+  grid-column-start: 5;
+  grid-row-start: 2;
+  justify-content: center;
+}
+div#board[data-players="4"] .bang-player[data-no="1"] {
+  grid-column-start: 9;
+  grid-row-start: 4;
+  justify-content: flex-start;
+}
+div#board[data-players="4"] .bang-player[data-no="2"] {
+  grid-column-start: 5;
+  grid-row-start: 6;
+  justify-content: center;
+}
+div#board[data-players="4"] .bang-player[data-no="3"] {
+  grid-column-start: 1;
+  grid-row-start: 4;
+  justify-content: flex-end;
+}
+div#board[data-players="5"] #table {
+  grid-column-start: 5;
+  grid-row-start: 4;
+}
+div#board[data-players="5"] .bang-player[data-no="0"] {
+  grid-column-start: 5;
+  grid-row-start: 2;
+  justify-content: center;
+}
+div#board[data-players="5"] .bang-player[data-no="1"] {
+  grid-column-start: 9;
+  grid-row-start: 4;
+  justify-content: flex-start;
+}
+div#board[data-players="5"] .bang-player[data-no="2"] {
+  grid-column-start: 7;
+  grid-row-start: 6;
+  justify-content: center;
+}
+div#board[data-players="5"] .bang-player[data-no="3"] {
+  grid-column-start: 3;
+  grid-row-start: 6;
+  justify-content: center;
+}
+div#board[data-players="5"] .bang-player[data-no="4"] {
+  grid-column-start: 1;
+  grid-row-start: 4;
+  justify-content: flex-end;
+}
+div#board[data-players="6"] #table {
+  grid-column-start: 5;
+  grid-row-start: 5;
+}
+div#board[data-players="6"] .bang-player[data-no="0"] {
+  grid-column-start: 5;
+  grid-row-start: 2;
+  justify-content: center;
+}
+div#board[data-players="6"] .bang-player[data-no="1"] {
+  grid-column-start: 9;
+  grid-row-start: 4;
+  justify-content: flex-start;
+}
+div#board[data-players="6"] .bang-player[data-no="2"] {
+  grid-column-start: 9;
+  grid-row-start: 6;
+  justify-content: flex-start;
+}
+div#board[data-players="6"] .bang-player[data-no="3"] {
+  grid-column-start: 5;
+  grid-row-start: 8;
+  justify-content: center;
+}
+div#board[data-players="6"] .bang-player[data-no="4"] {
+  grid-column-start: 1;
+  grid-row-start: 6;
+  justify-content: flex-end;
+}
+div#board[data-players="6"] .bang-player[data-no="5"] {
+  grid-column-start: 1;
+  grid-row-start: 4;
+  justify-content: flex-end;
+}
+div#board[data-players="7"] #table {
+  grid-column-start: 5;
+  grid-row-start: 5;
+}
+div#board[data-players="7"] .bang-player[data-no="0"] {
+  grid-column-start: 5;
+  grid-row-start: 2;
+  justify-content: center;
+}
+div#board[data-players="7"] .bang-player[data-no="1"] {
+  grid-column-start: 9;
+  grid-row-start: 4;
+  justify-content: flex-start;
+}
+div#board[data-players="7"] .bang-player[data-no="2"] {
+  grid-column-start: 9;
+  grid-row-start: 6;
+  justify-content: flex-start;
+}
+div#board[data-players="7"] .bang-player[data-no="3"] {
+  grid-column-start: 7;
+  grid-row-start: 8;
+  justify-content: center;
+}
+div#board[data-players="7"] .bang-player[data-no="4"] {
+  grid-column-start: 3;
+  grid-row-start: 8;
+  justify-content: center;
+}
+div#board[data-players="7"] .bang-player[data-no="5"] {
+  grid-column-start: 1;
+  grid-row-start: 6;
+  justify-content: flex-end;
+}
+div#board[data-players="7"] .bang-player[data-no="6"] {
+  grid-column-start: 1;
+  grid-row-start: 4;
+  justify-content: flex-end;
+}
+@media (max-width: 1300px) {
+  div#board .bang-player {
+    grid-column-end: span 6;
+  }
+  div#board[data-players="2"] #table {
+    grid-column-start: 8;
     grid-row-start: 2;
-    justify-content: center; }
-  div#board[data-players='2'] .bang-player[data-no='1'] {
-    grid-column-start: 5;
-    grid-row-start: 6;
-    justify-content: center; }
-  div#board[data-players='3'] #table {
-    grid-column-start: 5;
-    grid-row-start: 4; }
-  div#board[data-players='3'] .bang-player[data-no='0'] {
-    grid-column-start: 5;
+  }
+  div#board[data-players="2"] .bang-player[data-no="0"] {
+    grid-column-start: 2;
     grid-row-start: 2;
-    justify-content: center; }
-  div#board[data-players='3'] .bang-player[data-no='1'] {
-    grid-column-start: 9;
+    justify-content: flex-start;
+  }
+  div#board[data-players="2"] .bang-player[data-no="1"] {
+    grid-column-start: 4;
     grid-row-start: 4;
-    justify-content: flex-start; }
-  div#board[data-players='3'] .bang-player[data-no='2'] {
+    justify-content: center;
+  }
+  div#board[data-players="3"] #table {
+    grid-column-start: 8;
+    grid-row-start: 2;
+  }
+  div#board[data-players="3"] .bang-player[data-no="0"] {
+    grid-column-start: 2;
+    grid-row-start: 2;
+    justify-content: flex-start;
+  }
+  div#board[data-players="3"] .bang-player[data-no="1"] {
+    grid-column-start: 7;
+    grid-row-start: 4;
+    justify-content: flex-end;
+  }
+  div#board[data-players="3"] .bang-player[data-no="2"] {
     grid-column-start: 1;
     grid-row-start: 4;
-    justify-content: flex-end; }
-  div#board[data-players='4'] #table {
-    grid-column-start: 5;
-    grid-row-start: 4; }
-  div#board[data-players='4'] .bang-player[data-no='0'] {
-    grid-column-start: 5;
+    justify-content: flex-start;
+  }
+  div#board[data-players="4"] #table {
+    grid-column-start: 8;
     grid-row-start: 2;
-    justify-content: center; }
-  div#board[data-players='4'] .bang-player[data-no='1'] {
-    grid-column-start: 9;
+  }
+  div#board[data-players="4"] .bang-player[data-no="0"] {
+    grid-column-start: 2;
+    grid-row-start: 2;
+    justify-content: flex-start;
+  }
+  div#board[data-players="4"] .bang-player[data-no="1"] {
+    grid-column-start: 7;
     grid-row-start: 4;
-    justify-content: flex-start; }
-  div#board[data-players='4'] .bang-player[data-no='2'] {
-    grid-column-start: 5;
+    justify-content: flex-end;
+  }
+  div#board[data-players="4"] .bang-player[data-no="2"] {
+    grid-column-start: 4;
     grid-row-start: 6;
-    justify-content: center; }
-  div#board[data-players='4'] .bang-player[data-no='3'] {
+    justify-content: center;
+  }
+  div#board[data-players="4"] .bang-player[data-no="3"] {
     grid-column-start: 1;
     grid-row-start: 4;
-    justify-content: flex-end; }
-  div#board[data-players='5'] #table {
-    grid-column-start: 5;
-    grid-row-start: 4; }
-  div#board[data-players='5'] .bang-player[data-no='0'] {
-    grid-column-start: 5;
+    justify-content: flex-start;
+  }
+  div#board[data-players="5"] #table {
+    grid-column-start: 8;
     grid-row-start: 2;
-    justify-content: center; }
-  div#board[data-players='5'] .bang-player[data-no='1'] {
-    grid-column-start: 9;
-    grid-row-start: 4;
-    justify-content: flex-start; }
-  div#board[data-players='5'] .bang-player[data-no='2'] {
+  }
+  div#board[data-players="5"] .bang-player[data-no="0"] {
+    grid-column-start: 2;
+    grid-row-start: 2;
+    justify-content: flex-start;
+  }
+  div#board[data-players="5"] .bang-player[data-no="1"] {
     grid-column-start: 7;
     grid-row-start: 6;
-    justify-content: center; }
-  div#board[data-players='5'] .bang-player[data-no='3'] {
-    grid-column-start: 3;
-    grid-row-start: 6;
-    justify-content: center; }
-  div#board[data-players='5'] .bang-player[data-no='4'] {
-    grid-column-start: 1;
-    grid-row-start: 4;
-    justify-content: flex-end; }
-  div#board[data-players='6'] #table {
-    grid-column-start: 5;
-    grid-row-start: 5; }
-  div#board[data-players='6'] .bang-player[data-no='0'] {
-    grid-column-start: 5;
-    grid-row-start: 2;
-    justify-content: center; }
-  div#board[data-players='6'] .bang-player[data-no='1'] {
-    grid-column-start: 9;
-    grid-row-start: 4;
-    justify-content: flex-start; }
-  div#board[data-players='6'] .bang-player[data-no='2'] {
-    grid-column-start: 9;
-    grid-row-start: 6;
-    justify-content: flex-start; }
-  div#board[data-players='6'] .bang-player[data-no='3'] {
-    grid-column-start: 5;
-    grid-row-start: 8;
-    justify-content: center; }
-  div#board[data-players='6'] .bang-player[data-no='4'] {
-    grid-column-start: 1;
-    grid-row-start: 6;
-    justify-content: flex-end; }
-  div#board[data-players='6'] .bang-player[data-no='5'] {
-    grid-column-start: 1;
-    grid-row-start: 4;
-    justify-content: flex-end; }
-  div#board[data-players='7'] #table {
-    grid-column-start: 5;
-    grid-row-start: 5; }
-  div#board[data-players='7'] .bang-player[data-no='0'] {
-    grid-column-start: 5;
-    grid-row-start: 2;
-    justify-content: center; }
-  div#board[data-players='7'] .bang-player[data-no='1'] {
-    grid-column-start: 9;
-    grid-row-start: 4;
-    justify-content: flex-start; }
-  div#board[data-players='7'] .bang-player[data-no='2'] {
-    grid-column-start: 9;
-    grid-row-start: 6;
-    justify-content: flex-start; }
-  div#board[data-players='7'] .bang-player[data-no='3'] {
+    justify-content: flex-end;
+  }
+  div#board[data-players="5"] .bang-player[data-no="2"] {
     grid-column-start: 7;
     grid-row-start: 8;
-    justify-content: center; }
-  div#board[data-players='7'] .bang-player[data-no='4'] {
-    grid-column-start: 3;
+    justify-content: center;
+  }
+  div#board[data-players="5"] .bang-player[data-no="3"] {
+    grid-column-start: 1;
     grid-row-start: 8;
-    justify-content: center; }
-  div#board[data-players='7'] .bang-player[data-no='5'] {
+    justify-content: center;
+  }
+  div#board[data-players="5"] .bang-player[data-no="4"] {
     grid-column-start: 1;
     grid-row-start: 6;
-    justify-content: flex-end; }
-  div#board[data-players='7'] .bang-player[data-no='6'] {
+    justify-content: flex-start;
+  }
+  div#board[data-players="6"] #table {
+    grid-column-start: 8;
+    grid-row-start: 2;
+  }
+  div#board[data-players="6"] .bang-player[data-no="0"] {
+    grid-column-start: 2;
+    grid-row-start: 2;
+    justify-content: flex-start;
+  }
+  div#board[data-players="6"] .bang-player[data-no="1"] {
+    grid-column-start: 7;
+    grid-row-start: 6;
+    justify-content: center;
+  }
+  div#board[data-players="6"] .bang-player[data-no="2"] {
+    grid-column-start: 7;
+    grid-row-start: 8;
+    justify-content: center;
+  }
+  div#board[data-players="6"] .bang-player[data-no="3"] {
+    grid-column-start: 4;
+    grid-row-start: 10;
+    justify-content: center;
+  }
+  div#board[data-players="6"] .bang-player[data-no="4"] {
     grid-column-start: 1;
-    grid-row-start: 4;
-    justify-content: flex-end; }
-  @media (max-width: 1300px) {
-    div#board .bang-player {
-      grid-column-end: span 6; }
-    div#board[data-players='2'] #table {
-      grid-column-start: 8;
-      grid-row-start: 2; }
-    div#board[data-players='2'] .bang-player[data-no='0'] {
-      grid-column-start: 2;
-      grid-row-start: 2;
-      justify-content: flex-start; }
-    div#board[data-players='2'] .bang-player[data-no='1'] {
-      grid-column-start: 4;
-      grid-row-start: 4;
-      justify-content: center; }
-    div#board[data-players='3'] #table {
-      grid-column-start: 8;
-      grid-row-start: 2; }
-    div#board[data-players='3'] .bang-player[data-no='0'] {
-      grid-column-start: 2;
-      grid-row-start: 2;
-      justify-content: flex-start; }
-    div#board[data-players='3'] .bang-player[data-no='1'] {
-      grid-column-start: 7;
-      grid-row-start: 4;
-      justify-content: flex-end; }
-    div#board[data-players='3'] .bang-player[data-no='2'] {
-      grid-column-start: 1;
-      grid-row-start: 4;
-      justify-content: flex-start; }
-    div#board[data-players='4'] #table {
-      grid-column-start: 8;
-      grid-row-start: 2; }
-    div#board[data-players='4'] .bang-player[data-no='0'] {
-      grid-column-start: 2;
-      grid-row-start: 2;
-      justify-content: flex-start; }
-    div#board[data-players='4'] .bang-player[data-no='1'] {
-      grid-column-start: 7;
-      grid-row-start: 4;
-      justify-content: flex-end; }
-    div#board[data-players='4'] .bang-player[data-no='2'] {
-      grid-column-start: 4;
-      grid-row-start: 6;
-      justify-content: center; }
-    div#board[data-players='4'] .bang-player[data-no='3'] {
-      grid-column-start: 1;
-      grid-row-start: 4;
-      justify-content: flex-start; }
-    div#board[data-players='5'] #table {
-      grid-column-start: 8;
-      grid-row-start: 2; }
-    div#board[data-players='5'] .bang-player[data-no='0'] {
-      grid-column-start: 2;
-      grid-row-start: 2;
-      justify-content: flex-start; }
-    div#board[data-players='5'] .bang-player[data-no='1'] {
-      grid-column-start: 7;
-      grid-row-start: 6;
-      justify-content: flex-end; }
-    div#board[data-players='5'] .bang-player[data-no='2'] {
-      grid-column-start: 7;
-      grid-row-start: 8;
-      justify-content: center; }
-    div#board[data-players='5'] .bang-player[data-no='3'] {
-      grid-column-start: 1;
-      grid-row-start: 8;
-      justify-content: center; }
-    div#board[data-players='5'] .bang-player[data-no='4'] {
-      grid-column-start: 1;
-      grid-row-start: 6;
-      justify-content: flex-start; }
-    div#board[data-players='6'] #table {
-      grid-column-start: 8;
-      grid-row-start: 2; }
-    div#board[data-players='6'] .bang-player[data-no='0'] {
-      grid-column-start: 2;
-      grid-row-start: 2;
-      justify-content: flex-start; }
-    div#board[data-players='6'] .bang-player[data-no='1'] {
-      grid-column-start: 7;
-      grid-row-start: 6;
-      justify-content: center; }
-    div#board[data-players='6'] .bang-player[data-no='2'] {
-      grid-column-start: 7;
-      grid-row-start: 8;
-      justify-content: center; }
-    div#board[data-players='6'] .bang-player[data-no='3'] {
-      grid-column-start: 4;
-      grid-row-start: 10;
-      justify-content: center; }
-    div#board[data-players='6'] .bang-player[data-no='4'] {
-      grid-column-start: 1;
-      grid-row-start: 8;
-      justify-content: center; }
-    div#board[data-players='6'] .bang-player[data-no='5'] {
-      grid-column-start: 1;
-      grid-row-start: 6;
-      justify-content: center; }
-    div#board[data-players='7'] #table {
-      grid-column-start: 8;
-      grid-row-start: 2; }
-    div#board[data-players='7'] .bang-player[data-no='0'] {
-      grid-column-start: 2;
-      grid-row-start: 2;
-      justify-content: flex-start; }
-    div#board[data-players='7'] .bang-player[data-no='1'] {
-      grid-column-start: 7;
-      grid-row-start: 6;
-      justify-content: flex-end; }
-    div#board[data-players='7'] .bang-player[data-no='2'] {
-      grid-column-start: 7;
-      grid-row-start: 8;
-      justify-content: flex-end; }
-    div#board[data-players='7'] .bang-player[data-no='3'] {
-      grid-column-start: 7;
-      grid-row-start: 10;
-      justify-content: center; }
-    div#board[data-players='7'] .bang-player[data-no='4'] {
-      grid-column-start: 1;
-      grid-row-start: 10;
-      justify-content: center; }
-    div#board[data-players='7'] .bang-player[data-no='5'] {
-      grid-column-start: 1;
-      grid-row-start: 8;
-      justify-content: flex-start; }
-    div#board[data-players='7'] .bang-player[data-no='6'] {
-      grid-column-start: 1;
-      grid-row-start: 6;
-      justify-content: flex-start; } }
+    grid-row-start: 8;
+    justify-content: center;
+  }
+  div#board[data-players="6"] .bang-player[data-no="5"] {
+    grid-column-start: 1;
+    grid-row-start: 6;
+    justify-content: center;
+  }
+  div#board[data-players="7"] #table {
+    grid-column-start: 8;
+    grid-row-start: 2;
+  }
+  div#board[data-players="7"] .bang-player[data-no="0"] {
+    grid-column-start: 2;
+    grid-row-start: 2;
+    justify-content: flex-start;
+  }
+  div#board[data-players="7"] .bang-player[data-no="1"] {
+    grid-column-start: 7;
+    grid-row-start: 6;
+    justify-content: flex-end;
+  }
+  div#board[data-players="7"] .bang-player[data-no="2"] {
+    grid-column-start: 7;
+    grid-row-start: 8;
+    justify-content: flex-end;
+  }
+  div#board[data-players="7"] .bang-player[data-no="3"] {
+    grid-column-start: 7;
+    grid-row-start: 10;
+    justify-content: center;
+  }
+  div#board[data-players="7"] .bang-player[data-no="4"] {
+    grid-column-start: 1;
+    grid-row-start: 10;
+    justify-content: center;
+  }
+  div#board[data-players="7"] .bang-player[data-no="5"] {
+    grid-column-start: 1;
+    grid-row-start: 8;
+    justify-content: flex-start;
+  }
+  div#board[data-players="7"] .bang-player[data-no="6"] {
+    grid-column-start: 1;
+    grid-row-start: 6;
+    justify-content: flex-start;
+  }
+}
 
 .dijitTooltip {
-  max-width: min-content; }
+  max-width: min-content;
+}
 
 div#hand {
   order: 1;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 5px;
   grid-row: 1;
-  grid-column: 1 / span 12;
+  grid-column: 1/span 12;
   height: 185px;
   display: flex;
   flex-flow: row;
-  width: 100%; }
-  #ebd-body[data-hand='1'] div#hand {
-    order: 2; }
-  div#hand div#role-container {
-    flex-grow: 0;
-    width: 121.25px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: white; }
-    div#hand div#role-container div#role-card {
-      height: 170px;
-      width: 105.25px;
-      background-image: url("img/roles.png");
-      background-size: cover; }
-      div#hand div#role-container div#role-card div#role-name {
-        width: 100%;
-        font-family: 'Perdido';
-        font-size: 23px;
-        text-align: center;
-        margin-top: 9px; }
-      div#hand div#role-container div#role-card div#role-text {
-        font-family: 'Palatino Linotype';
-        font-style: italic;
-        font-size: 9px;
-        margin-top: 98px;
-        text-align: center; }
-    div#hand div#role-container[data-role='0'] div#role-card {
-      background-position: 0% center; }
-    div#hand div#role-container[data-role='1'] div#role-card {
-      background-position: 33.3333333333% center; }
-    div#hand div#role-container[data-role='2'] div#role-card {
-      background-position: 66.6666666667% center; }
-    div#hand div#role-container[data-role='3'] div#role-card {
-      background-position: 100% center; }
-  div#hand div#hand-cards {
-    flex-grow: 1;
-    display: flex;
-    flex-flow: row;
-    align-items: center;
-    justify-content: flex-start;
-    overflow-x: auto; }
+  width: 100%;
+}
+#ebd-body[data-hand="1"] div#hand {
+  order: 2;
+}
+div#hand div#role-container {
+  flex-grow: 0;
+  width: 121.25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+div#hand div#role-container div#role-card {
+  height: 170px;
+  width: 105.25px;
+  background-image: url("img/roles.png");
+  background-size: cover;
+}
+div#hand div#role-container div#role-card div#role-name {
+  width: 100%;
+  font-family: "Perdido";
+  font-size: 23px;
+  text-align: center;
+  margin-top: 9px;
+}
+div#hand div#role-container div#role-card div#role-text {
+  font-family: "Palatino Linotype";
+  font-style: italic;
+  font-size: 9px;
+  margin-top: 98px;
+  text-align: center;
+}
+div#hand div#role-container[data-role="0"] div#role-card {
+  background-position: 0% center;
+}
+div#hand div#role-container[data-role="1"] div#role-card {
+  background-position: 33.3333333333% center;
+}
+div#hand div#role-container[data-role="2"] div#role-card {
+  background-position: 66.6666666667% center;
+}
+div#hand div#role-container[data-role="3"] div#role-card {
+  background-position: 100% center;
+}
+div#hand div#hand-cards {
+  flex-grow: 1;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: flex-start;
+  overflow-x: auto;
+}
 
 div#board #table {
-  justify-content: center; }
-  div#board #table #table-container {
-    width: 242.5px;
-    height: 185px;
-    background-color: rgba(255, 255, 255, 0.5);
-    border-radius: 5px;
-    border: 1px solid rgba(50, 50, 50, 0.8);
-    box-shadow: 1px 1px 5px rgba(50, 50, 50, 0.8);
-    display: flex;
-    flex-flow: row;
-    align-items: center;
-    justify-content: space-around; }
-    div#board #table #table-container #deck, div#board #table #table-container #discard {
-      width: 106.25px;
-      height: 170px;
-      position: relative; }
-      div#board #table #table-container #deck.selectable, div#board #table #table-container #discard.selectable {
-        cursor: pointer;
-        animation: borderBlink 0.9s infinite; }
-    div#board #table #table-container #deck {
-      background-image: url("img/cardback.jpg");
-      background-size: cover;
-      background-position: center center;
-      border-radius: 7px;
-      font-size: 30px;
-      text-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white;
-      display: flex;
-      align-items: center;
-      justify-content: center; }
-    div#board #table #table-container #discard div.bang-card {
-      margin: 0px;
-      opacity: 1 !important;
-      position: absolute;
-      top: 0;
-      left: 0;
-      transform-origin: -7% 50%; }
+  justify-content: center;
+}
+div#board #table #table-container {
+  width: 242.5px;
+  height: 185px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 5px;
+  border: 1px solid rgba(50, 50, 50, 0.8);
+  box-shadow: 1px 1px 5px rgba(50, 50, 50, 0.8);
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: space-around;
+}
+div#board #table #table-container #deck, div#board #table #table-container #discard {
+  width: 106.25px;
+  height: 170px;
+  position: relative;
+}
+div#board #table #table-container #deck.selectable, div#board #table #table-container #discard.selectable {
+  cursor: pointer;
+  animation: borderBlink 0.9s infinite;
+}
+div#board #table #table-container #deck {
+  background-image: url("img/cardback.jpg");
+  background-size: cover;
+  background-position: center center;
+  border-radius: 7px;
+  font-size: 30px;
+  text-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+div#board #table #table-container #discard div.bang-card {
+  margin: 0px;
+  opacity: 1 !important;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: -7% 50%;
+}
 
 div.bang-character-tooltip div.bang-character-tooltip-sizing {
   width: 226.5330188679px;
   height: 360px;
   display: flex;
   justify-content: center;
-  align-items: center; }
-  div.bang-character-tooltip div.bang-character-tooltip-sizing div.player-info {
-    transform: scale(2); }
-  div.bang-character-tooltip div.bang-character-tooltip-sizing .player-character-background {
-    margin-bottom: 0px; }
-  div.bang-character-tooltip div.bang-character-tooltip-sizing .player-character-powers {
-    padding: 0px 10px;
-    font-family: 'Palatino Linotype';
-    text-align: center;
-    font-size: 6px; }
-    div.bang-character-tooltip div.bang-character-tooltip-sizing .player-character-powers p {
-      margin: 0; }
+  align-items: center;
+}
+div.bang-character-tooltip div.bang-character-tooltip-sizing div.player-info {
+  transform: scale(2);
+}
+div.bang-character-tooltip div.bang-character-tooltip-sizing .player-character-background {
+  margin-bottom: 0px;
+}
+div.bang-character-tooltip div.bang-character-tooltip-sizing .player-character-powers {
+  padding: 0px 10px;
+  font-family: "Palatino Linotype";
+  text-align: center;
+  font-size: 6px;
+}
+div.bang-character-tooltip div.bang-character-tooltip-sizing .player-character-powers p {
+  margin: 0;
+}
 
 .player-info {
   position: relative;
@@ -440,100 +540,136 @@ div.bang-character-tooltip div.bang-character-tooltip-sizing {
   background-size: cover;
   border-left: 1px solid rgba(50, 50, 50, 0.8);
   border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px; }
-  .player-info .player-character-name {
-    font-family: 'Perdido';
-    width: 100%;
-    max-height: 22px;
-    margin-top: 11px;
-    text-align: center;
-    font-size: 13px;
-    letter-spacing: -1px;
-    text-transform: uppercase;
-    transform: scale(0.8, 1.3);
-    transform-origin: top center; }
-  .player-info .player-character-background {
-    width: 90.2122641509px;
-    height: 89.25px;
-    margin: 5px auto;
-    background-image: url("img/card_characters.jpg");
-    background-size: cover;
-    display: flex;
-    justify-content: center;
-    align-items: center; }
-    .player-info .player-character-background .player-character-hourglass {
-      width: 50%;
-      height: 50%;
-      background-image: url("img/hourglass.gif");
-      background-size: 75%;
-      background-color: rgba(255, 255, 255, 0.7);
-      background-position: center center;
-      border-radius: 10px;
-      background-repeat: no-repeat; }
-  .player-info[data-character='0'] .player-character-background {
-    background-position: 0% center; }
-  .player-info[data-character='1'] .player-character-background {
-    background-position: 6.6666666667% center; }
-  .player-info[data-character='2'] .player-character-background {
-    background-position: 13.3333333333% center; }
-  .player-info[data-character='3'] .player-character-background {
-    background-position: 20% center; }
-  .player-info[data-character='4'] .player-character-background {
-    background-position: 26.6666666667% center; }
-  .player-info[data-character='5'] .player-character-background {
-    background-position: 33.3333333333% center; }
-  .player-info[data-character='6'] .player-character-background {
-    background-position: 40% center; }
-  .player-info[data-character='7'] .player-character-background {
-    background-position: 46.6666666667% center; }
-  .player-info[data-character='8'] .player-character-background {
-    background-position: 53.3333333333% center; }
-  .player-info[data-character='9'] .player-character-background {
-    background-position: 60% center; }
-  .player-info[data-character='10'] .player-character-background {
-    background-position: 66.6666666667% center; }
-  .player-info[data-character='11'] .player-character-background {
-    background-position: 73.3333333333% center; }
-  .player-info[data-character='12'] .player-character-background {
-    background-position: 80% center; }
-  .player-info[data-character='13'] .player-character-background {
-    background-position: 86.6666666667% center; }
-  .player-info[data-character='14'] .player-character-background {
-    background-position: 93.3333333333% center; }
-  .player-info[data-character='15'] .player-character-background {
-    background-position: 100% center; }
+  border-bottom-right-radius: 5px;
+}
+.player-info .player-character-name {
+  font-family: "Perdido";
+  width: 100%;
+  max-height: 22px;
+  margin-top: 11px;
+  text-align: center;
+  font-size: 13px;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  transform: scale(0.8, 1.3);
+  transform-origin: top center;
+}
+.player-info .player-character-background {
+  width: 90.2122641509px;
+  height: 89.25px;
+  margin: 5px auto;
+  background-image: url("img/card_characters.jpg");
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.player-info .player-character-background .player-character-hourglass {
+  width: 50%;
+  height: 50%;
+  background-image: url("img/hourglass.gif");
+  background-size: 75%;
+  background-color: rgba(255, 255, 255, 0.7);
+  background-position: center center;
+  border-radius: 10px;
+  background-repeat: no-repeat;
+}
+.player-info[data-character="0"] .player-character-background {
+  background-position: 0% center;
+}
+.player-info[data-character="1"] .player-character-background {
+  background-position: 6.6666666667% center;
+}
+.player-info[data-character="2"] .player-character-background {
+  background-position: 13.3333333333% center;
+}
+.player-info[data-character="3"] .player-character-background {
+  background-position: 20% center;
+}
+.player-info[data-character="4"] .player-character-background {
+  background-position: 26.6666666667% center;
+}
+.player-info[data-character="5"] .player-character-background {
+  background-position: 33.3333333333% center;
+}
+.player-info[data-character="6"] .player-character-background {
+  background-position: 40% center;
+}
+.player-info[data-character="7"] .player-character-background {
+  background-position: 46.6666666667% center;
+}
+.player-info[data-character="8"] .player-character-background {
+  background-position: 53.3333333333% center;
+}
+.player-info[data-character="9"] .player-character-background {
+  background-position: 60% center;
+}
+.player-info[data-character="10"] .player-character-background {
+  background-position: 66.6666666667% center;
+}
+.player-info[data-character="11"] .player-character-background {
+  background-position: 73.3333333333% center;
+}
+.player-info[data-character="12"] .player-character-background {
+  background-position: 80% center;
+}
+.player-info[data-character="13"] .player-character-background {
+  background-position: 86.6666666667% center;
+}
+.player-info[data-character="14"] .player-character-background {
+  background-position: 93.3333333333% center;
+}
+.player-info[data-character="15"] .player-character-background {
+  background-position: 100% center;
+}
+.player-info.empty {
+  display: flex;
+}
 
 .bang-player.inactive .player-character-background .player-character-hourglass {
-  display: none; }
+  display: none;
+}
 
 .bang-player.inactive {
-  opacity: 0.6; }
+  opacity: 0.6;
+}
 .bang-player.selectable {
-  opacity: 1; }
-  .bang-player.selectable .player-info {
-    cursor: pointer;
-    animation: borderBlink 0.9s infinite; }
-    .bang-player.selectable .player-info:hover {
-      animation: none;
-      border: 1px solid red; }
+  opacity: 1;
+}
+.bang-player.selectable .player-info {
+  cursor: pointer;
+  animation: borderBlink 0.9s infinite;
+}
+.bang-player.selectable .player-info:hover {
+  animation: none;
+  border: 1px solid red;
+}
 @keyframes borderBlink {
   0% {
-    border: 1px dashed white; }
+    border: 1px dashed white;
+  }
   49% {
-    border: 1px dashed white; }
+    border: 1px dashed white;
+  }
   50% {
-    border: 1px dashed black; }
+    border: 1px dashed black;
+  }
   99% {
-    border: 1px dashed black; }
+    border: 1px dashed black;
+  }
   100% {
-    border: 1px dashed white; } }
+    border: 1px dashed white;
+  }
+}
 .bang-player.eliminated .bang-player-container {
-  width: 113.266509434px; }
-  .bang-player.eliminated .bang-player-container .player-character-background {
-    background-image: url("img/tombstone.svg");
-    background-size: 80%;
-    background-position: center center;
-    background-repeat: no-repeat; }
+  width: 113.266509434px;
+}
+.bang-player.eliminated .bang-player-container .player-character-background {
+  background-image: url("img/tombstone.svg");
+  background-size: 80%;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
 .bang-player .bang-player-container {
   width: 96%;
   height: 180px;
@@ -542,719 +678,743 @@ div.bang-character-tooltip div.bang-character-tooltip-sizing {
   border: 1px solid rgba(50, 50, 50, 0.8);
   box-shadow: 1px 1px 5px rgba(50, 50, 50, 0.8);
   display: flex;
-  transition: width 1s; }
-  .bang-player .bang-player-container .player-inplay {
-    width: calc(100% - 115.266509434px);
-    flex-grow: 1;
-    display: flex;
-    flex-flow: row;
-    overflow-x: auto;
-    overflow-y: hidden;
-    height: 107%;
-    position: relative;
-    z-index: 2; }
-  .bang-player .bang-player-container .player-info .player-name {
-    text-align: center;
-    width: 80%;
-    margin: auto; }
-  .bang-player .bang-player-container .player-info .player-bullets {
-    position: absolute;
-    width: 30px;
-    right: -8px;
-    top: 40px; }
-  .bang-player .bang-player-container .player-info .player-star {
-    display: none;
-    position: absolute;
-    top: -17px;
-    right: -18px;
-    width: 34px;
-    height: 34px;
-    background-image: url("img/role-icons.png");
-    background-size: cover;
-    background-position: 66.66% 0%; }
-  .bang-player .bang-player-container .player-info .player-distance {
-    position: absolute;
-    right: -8px;
-    bottom: -12px;
-    width: 28px;
-    height: 28px;
-    background: white;
-    border-radius: 50%;
-    border: 1px solid black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    font-size: 21px; }
-    .bang-player .bang-player-container .player-info .player-distance.current {
-      display: none; }
-    .bang-player .bang-player-container .player-info .player-distance::before {
-      content: '';
-      display: block;
-      position: absolute;
-      width: 34px;
-      height: 34px;
-      left: -3px;
-      top: -3px;
-      background-image: linear-gradient(#717171 1px, transparent 1px), linear-gradient(to right, #717171 1px, transparent 1px);
-      background-size: 40px 40px;
-      background-position: 17px 17px; }
-.bang-player[data-role='0'] .bang-player-container .player-info .player-star {
-  display: block; }
+  transition: width 1s;
+}
+.bang-player .bang-player-container .player-inplay {
+  width: calc(100% - 115.266509434px);
+  flex-grow: 1;
+  display: flex;
+  flex-flow: row;
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 107%;
+  position: relative;
+  z-index: 2;
+}
+.bang-player .bang-player-container .player-info .player-star {
+  display: none;
+  position: absolute;
+  top: -17px;
+  right: -18px;
+  width: 34px;
+  height: 34px;
+  background-image: url("img/role-icons.png");
+  background-size: cover;
+  background-position: 66.66% 0%;
+}
+.bang-player .bang-player-container .player-info .player-distance {
+  position: absolute;
+  right: -8px;
+  bottom: -12px;
+  width: 28px;
+  height: 28px;
+  background: white;
+  border-radius: 50%;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 21px;
+}
+.bang-player .bang-player-container .player-info .player-distance.current {
+  display: none;
+}
+.bang-player .bang-player-container .player-info .player-distance::before {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  left: -3px;
+  top: -3px;
+  background-image: linear-gradient(#717171 1px, transparent 1px), linear-gradient(to right, #717171 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: 17px 17px;
+}
+.bang-player[data-role="0"] .bang-player-container .player-info .player-star {
+  display: block;
+}
 
 .bang-player .player-cards,
 .bang-player-board .player-cards {
-  text-align: center; }
-  .bang-player .player-cards .player-hand-card,
-  .bang-player-board .player-cards .player-hand-card {
-    display: inline-block;
-    width: 22px;
-    height: 22px;
-    background-image: url("img/cards.svg");
-    background-size: contain;
-    background-repeat: no-repeat;
-    vertical-align: bottom; }
-.bang-player .bullet,
-.bang-player-board .bullet {
+  text-align: center;
+}
+.bang-player .player-cards .player-hand-card,
+.bang-player-board .player-cards .player-hand-card {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  background-image: url("img/cards.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  vertical-align: bottom;
+}
+
+.player-info .bullet, .player-board .bang-player-board .bullet {
   width: 35px;
   height: 13px;
   background-image: url("img/bullet.png");
   background-size: cover;
   margin: 1px 0px;
   transform: rotate(13deg);
-  background-position: 0% 100%; }
-  .bang-player .bullet.pulse,
-  .bang-player-board .bullet.pulse {
-    animation-duration: 1.8s;
-    animation-name: pulsate;
-    animation-iteration-count: 3; }
-.bang-player[data-max-bullets='1'] .player-bullets .bullet:nth-child(2),
-.bang-player-board[data-max-bullets='1'] .player-bullets .bullet:nth-child(2) {
-  display: none; }
-.bang-player[data-max-bullets='1'] .player-bullets .bullet:nth-child(3),
-.bang-player-board[data-max-bullets='1'] .player-bullets .bullet:nth-child(3) {
-  display: none; }
-.bang-player[data-max-bullets='1'] .player-bullets .bullet:nth-child(4),
-.bang-player-board[data-max-bullets='1'] .player-bullets .bullet:nth-child(4) {
-  display: none; }
-.bang-player[data-max-bullets='1'] .player-bullets .bullet:nth-child(5),
-.bang-player-board[data-max-bullets='1'] .player-bullets .bullet:nth-child(5) {
-  display: none; }
-.bang-player[data-max-bullets='1'] .player-bullets .bullet:nth-child(6),
-.bang-player-board[data-max-bullets='1'] .player-bullets .bullet:nth-child(6) {
-  display: none; }
-.bang-player[data-max-bullets='2'] .player-bullets .bullet:nth-child(3),
-.bang-player-board[data-max-bullets='2'] .player-bullets .bullet:nth-child(3) {
-  display: none; }
-.bang-player[data-max-bullets='2'] .player-bullets .bullet:nth-child(4),
-.bang-player-board[data-max-bullets='2'] .player-bullets .bullet:nth-child(4) {
-  display: none; }
-.bang-player[data-max-bullets='2'] .player-bullets .bullet:nth-child(5),
-.bang-player-board[data-max-bullets='2'] .player-bullets .bullet:nth-child(5) {
-  display: none; }
-.bang-player[data-max-bullets='2'] .player-bullets .bullet:nth-child(6),
-.bang-player-board[data-max-bullets='2'] .player-bullets .bullet:nth-child(6) {
-  display: none; }
-.bang-player[data-max-bullets='3'] .player-bullets .bullet:nth-child(4),
-.bang-player-board[data-max-bullets='3'] .player-bullets .bullet:nth-child(4) {
-  display: none; }
-.bang-player[data-max-bullets='3'] .player-bullets .bullet:nth-child(5),
-.bang-player-board[data-max-bullets='3'] .player-bullets .bullet:nth-child(5) {
-  display: none; }
-.bang-player[data-max-bullets='3'] .player-bullets .bullet:nth-child(6),
-.bang-player-board[data-max-bullets='3'] .player-bullets .bullet:nth-child(6) {
-  display: none; }
-.bang-player[data-max-bullets='4'] .player-bullets .bullet:nth-child(5),
-.bang-player-board[data-max-bullets='4'] .player-bullets .bullet:nth-child(5) {
-  display: none; }
-.bang-player[data-max-bullets='4'] .player-bullets .bullet:nth-child(6),
-.bang-player-board[data-max-bullets='4'] .player-bullets .bullet:nth-child(6) {
-  display: none; }
-.bang-player[data-max-bullets='5'] .player-bullets .bullet:nth-child(6),
-.bang-player-board[data-max-bullets='5'] .player-bullets .bullet:nth-child(6) {
-  display: none; }
-.bang-player[data-max-bullets='6'] .player-bullets .bullet:nth-child(7),
-.bang-player-board[data-max-bullets='6'] .player-bullets .bullet:nth-child(7) {
-  display: none; }
-.bang-player[data-max-bullets='6'] .player-bullets .bullet:nth-child(6),
-.bang-player-board[data-max-bullets='6'] .player-bullets .bullet:nth-child(6) {
-  display: none; }
-.bang-player[data-bullets='0'] .bullet:nth-child(0),
-.bang-player-board[data-bullets='0'] .bullet:nth-child(0) {
-  background-position: 0 0; }
-.bang-player[data-bullets='1'] .bullet:nth-child(0),
-.bang-player-board[data-bullets='1'] .bullet:nth-child(0) {
-  background-position: 0 0; }
-.bang-player[data-bullets='1'] .bullet:nth-child(1),
-.bang-player-board[data-bullets='1'] .bullet:nth-child(1) {
-  background-position: 0 0; }
-.bang-player[data-bullets='2'] .bullet:nth-child(0),
-.bang-player-board[data-bullets='2'] .bullet:nth-child(0) {
-  background-position: 0 0; }
-.bang-player[data-bullets='2'] .bullet:nth-child(1),
-.bang-player-board[data-bullets='2'] .bullet:nth-child(1) {
-  background-position: 0 0; }
-.bang-player[data-bullets='2'] .bullet:nth-child(2),
-.bang-player-board[data-bullets='2'] .bullet:nth-child(2) {
-  background-position: 0 0; }
-.bang-player[data-bullets='3'] .bullet:nth-child(0),
-.bang-player-board[data-bullets='3'] .bullet:nth-child(0) {
-  background-position: 0 0; }
-.bang-player[data-bullets='3'] .bullet:nth-child(1),
-.bang-player-board[data-bullets='3'] .bullet:nth-child(1) {
-  background-position: 0 0; }
-.bang-player[data-bullets='3'] .bullet:nth-child(2),
-.bang-player-board[data-bullets='3'] .bullet:nth-child(2) {
-  background-position: 0 0; }
-.bang-player[data-bullets='3'] .bullet:nth-child(3),
-.bang-player-board[data-bullets='3'] .bullet:nth-child(3) {
-  background-position: 0 0; }
-.bang-player[data-bullets='4'] .bullet:nth-child(0),
-.bang-player-board[data-bullets='4'] .bullet:nth-child(0) {
-  background-position: 0 0; }
-.bang-player[data-bullets='4'] .bullet:nth-child(1),
-.bang-player-board[data-bullets='4'] .bullet:nth-child(1) {
-  background-position: 0 0; }
-.bang-player[data-bullets='4'] .bullet:nth-child(2),
-.bang-player-board[data-bullets='4'] .bullet:nth-child(2) {
-  background-position: 0 0; }
-.bang-player[data-bullets='4'] .bullet:nth-child(3),
-.bang-player-board[data-bullets='4'] .bullet:nth-child(3) {
-  background-position: 0 0; }
-.bang-player[data-bullets='4'] .bullet:nth-child(4),
-.bang-player-board[data-bullets='4'] .bullet:nth-child(4) {
-  background-position: 0 0; }
-.bang-player[data-bullets='5'] .bullet:nth-child(0),
-.bang-player-board[data-bullets='5'] .bullet:nth-child(0) {
-  background-position: 0 0; }
-.bang-player[data-bullets='5'] .bullet:nth-child(1),
-.bang-player-board[data-bullets='5'] .bullet:nth-child(1) {
-  background-position: 0 0; }
-.bang-player[data-bullets='5'] .bullet:nth-child(2),
-.bang-player-board[data-bullets='5'] .bullet:nth-child(2) {
-  background-position: 0 0; }
-.bang-player[data-bullets='5'] .bullet:nth-child(3),
-.bang-player-board[data-bullets='5'] .bullet:nth-child(3) {
-  background-position: 0 0; }
-.bang-player[data-bullets='5'] .bullet:nth-child(4),
-.bang-player-board[data-bullets='5'] .bullet:nth-child(4) {
-  background-position: 0 0; }
-.bang-player[data-bullets='5'] .bullet:nth-child(5),
-.bang-player-board[data-bullets='5'] .bullet:nth-child(5) {
-  background-position: 0 0; }
-.bang-player[data-bullets='6'] .bullet:nth-child(0),
-.bang-player-board[data-bullets='6'] .bullet:nth-child(0) {
-  background-position: 0 0; }
-.bang-player[data-bullets='6'] .bullet:nth-child(1),
-.bang-player-board[data-bullets='6'] .bullet:nth-child(1) {
-  background-position: 0 0; }
-.bang-player[data-bullets='6'] .bullet:nth-child(2),
-.bang-player-board[data-bullets='6'] .bullet:nth-child(2) {
-  background-position: 0 0; }
-.bang-player[data-bullets='6'] .bullet:nth-child(3),
-.bang-player-board[data-bullets='6'] .bullet:nth-child(3) {
-  background-position: 0 0; }
-.bang-player[data-bullets='6'] .bullet:nth-child(4),
-.bang-player-board[data-bullets='6'] .bullet:nth-child(4) {
-  background-position: 0 0; }
-.bang-player[data-bullets='6'] .bullet:nth-child(5),
-.bang-player-board[data-bullets='6'] .bullet:nth-child(5) {
-  background-position: 0 0; }
-.bang-player[data-bullets='6'] .bullet:nth-child(6),
-.bang-player-board[data-bullets='6'] .bullet:nth-child(6) {
-  background-position: 0 0; }
-.bang-player[data-hand='0'] .player-cards .player-handcount::before,
-.bang-player-board[data-hand='0'] .player-cards .player-handcount::before {
-  content: "x 0"; }
-.bang-player[data-hand='1'] .player-cards .player-handcount::before,
-.bang-player-board[data-hand='1'] .player-cards .player-handcount::before {
-  content: "x 1"; }
-.bang-player[data-hand='2'] .player-cards .player-handcount::before,
-.bang-player-board[data-hand='2'] .player-cards .player-handcount::before {
-  content: "x 2"; }
-.bang-player[data-hand='3'] .player-cards .player-handcount::before,
-.bang-player-board[data-hand='3'] .player-cards .player-handcount::before {
-  content: "x 3"; }
-.bang-player[data-hand='4'] .player-cards .player-handcount::before,
-.bang-player-board[data-hand='4'] .player-cards .player-handcount::before {
-  content: "x 4"; }
-.bang-player[data-hand='5'] .player-cards .player-handcount::before,
-.bang-player-board[data-hand='5'] .player-cards .player-handcount::before {
-  content: "x 5"; }
-.bang-player[data-hand='6'] .player-cards .player-handcount::before,
-.bang-player-board[data-hand='6'] .player-cards .player-handcount::before {
-  content: "x 6"; }
-.bang-player[data-hand='7'] .player-cards .player-handcount::before,
-.bang-player-board[data-hand='7'] .player-cards .player-handcount::before {
-  content: "x 7"; }
-.bang-player[data-hand='8'] .player-cards .player-handcount::before,
-.bang-player-board[data-hand='8'] .player-cards .player-handcount::before {
-  content: "x 8"; }
-.bang-player[data-hand='9'] .player-cards .player-handcount::before,
-.bang-player-board[data-hand='9'] .player-cards .player-handcount::before {
-  content: "x 9"; }
-.bang-player[data-hand='10'] .player-cards .player-handcount::before,
-.bang-player-board[data-hand='10'] .player-cards .player-handcount::before {
-  content: "x 10"; }
-.bang-player[data-hand='11'] .player-cards .player-handcount::before,
-.bang-player-board[data-hand='11'] .player-cards .player-handcount::before {
-  content: "x 11"; }
-.bang-player[data-hand='12'] .player-cards .player-handcount::before,
-.bang-player-board[data-hand='12'] .player-cards .player-handcount::before {
-  content: "x 12"; }
-.bang-player[data-hand='13'] .player-cards .player-handcount::before,
-.bang-player-board[data-hand='13'] .player-cards .player-handcount::before {
-  content: "x 13"; }
-.bang-player[data-hand='14'] .player-cards .player-handcount::before,
-.bang-player-board[data-hand='14'] .player-cards .player-handcount::before {
-  content: "x 14"; }
-.bang-player[data-hand='15'] .player-cards .player-handcount::before,
-.bang-player-board[data-hand='15'] .player-cards .player-handcount::before {
-  content: "x 15"; }
-.bang-player[data-hand='16'] .player-cards .player-handcount::before,
-.bang-player-board[data-hand='16'] .player-cards .player-handcount::before {
-  content: "x 16"; }
-.bang-player[data-hand='17'] .player-cards .player-handcount::before,
-.bang-player-board[data-hand='17'] .player-cards .player-handcount::before {
-  content: "x 17"; }
-.bang-player[data-hand='18'] .player-cards .player-handcount::before,
-.bang-player-board[data-hand='18'] .player-cards .player-handcount::before {
-  content: "x 18"; }
-.bang-player[data-hand='19'] .player-cards .player-handcount::before,
-.bang-player-board[data-hand='19'] .player-cards .player-handcount::before {
-  content: "x 19"; }
-.bang-player[data-hand='20'] .player-cards .player-handcount::before,
-.bang-player-board[data-hand='20'] .player-cards .player-handcount::before {
-  content: "x 20"; }
-.bang-player[data-bullets='0'] .player-cards .player-maxhand::before,
-.bang-player-board[data-bullets='0'] .player-cards .player-maxhand::before {
-  content: "0"; }
-.bang-player[data-bullets='1'] .player-cards .player-maxhand::before,
-.bang-player-board[data-bullets='1'] .player-cards .player-maxhand::before {
-  content: "1"; }
-.bang-player[data-bullets='2'] .player-cards .player-maxhand::before,
-.bang-player-board[data-bullets='2'] .player-cards .player-maxhand::before {
-  content: "2"; }
-.bang-player[data-bullets='3'] .player-cards .player-maxhand::before,
-.bang-player-board[data-bullets='3'] .player-cards .player-maxhand::before {
-  content: "3"; }
-.bang-player[data-bullets='4'] .player-cards .player-maxhand::before,
-.bang-player-board[data-bullets='4'] .player-cards .player-maxhand::before {
-  content: "4"; }
-.bang-player[data-bullets='5'] .player-cards .player-maxhand::before,
-.bang-player-board[data-bullets='5'] .player-cards .player-maxhand::before {
-  content: "5"; }
-.bang-player[data-bullets='6'] .player-cards .player-maxhand::before,
-.bang-player-board[data-bullets='6'] .player-cards .player-maxhand::before {
-  content: "6"; }
-.bang-player[data-bullets='7'] .player-cards .player-maxhand::before,
-.bang-player-board[data-bullets='7'] .player-cards .player-maxhand::before {
-  content: "7"; }
-.bang-player[data-bullets='0'][data-hand='1'] .player-cards,
-.bang-player-board[data-bullets='0'][data-hand='1'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='0'][data-hand='2'] .player-cards,
-.bang-player-board[data-bullets='0'][data-hand='2'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='0'][data-hand='3'] .player-cards,
-.bang-player-board[data-bullets='0'][data-hand='3'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='0'][data-hand='4'] .player-cards,
-.bang-player-board[data-bullets='0'][data-hand='4'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='0'][data-hand='5'] .player-cards,
-.bang-player-board[data-bullets='0'][data-hand='5'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='0'][data-hand='6'] .player-cards,
-.bang-player-board[data-bullets='0'][data-hand='6'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='0'][data-hand='7'] .player-cards,
-.bang-player-board[data-bullets='0'][data-hand='7'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='0'][data-hand='8'] .player-cards,
-.bang-player-board[data-bullets='0'][data-hand='8'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='0'][data-hand='9'] .player-cards,
-.bang-player-board[data-bullets='0'][data-hand='9'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='0'][data-hand='10'] .player-cards,
-.bang-player-board[data-bullets='0'][data-hand='10'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='0'][data-hand='11'] .player-cards,
-.bang-player-board[data-bullets='0'][data-hand='11'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='0'][data-hand='12'] .player-cards,
-.bang-player-board[data-bullets='0'][data-hand='12'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='0'][data-hand='13'] .player-cards,
-.bang-player-board[data-bullets='0'][data-hand='13'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='0'][data-hand='14'] .player-cards,
-.bang-player-board[data-bullets='0'][data-hand='14'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='0'][data-hand='15'] .player-cards,
-.bang-player-board[data-bullets='0'][data-hand='15'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='0'][data-hand='16'] .player-cards,
-.bang-player-board[data-bullets='0'][data-hand='16'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='0'][data-hand='17'] .player-cards,
-.bang-player-board[data-bullets='0'][data-hand='17'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='0'][data-hand='18'] .player-cards,
-.bang-player-board[data-bullets='0'][data-hand='18'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='0'][data-hand='19'] .player-cards,
-.bang-player-board[data-bullets='0'][data-hand='19'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='0'][data-hand='20'] .player-cards,
-.bang-player-board[data-bullets='0'][data-hand='20'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='1'][data-hand='2'] .player-cards,
-.bang-player-board[data-bullets='1'][data-hand='2'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='1'][data-hand='3'] .player-cards,
-.bang-player-board[data-bullets='1'][data-hand='3'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='1'][data-hand='4'] .player-cards,
-.bang-player-board[data-bullets='1'][data-hand='4'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='1'][data-hand='5'] .player-cards,
-.bang-player-board[data-bullets='1'][data-hand='5'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='1'][data-hand='6'] .player-cards,
-.bang-player-board[data-bullets='1'][data-hand='6'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='1'][data-hand='7'] .player-cards,
-.bang-player-board[data-bullets='1'][data-hand='7'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='1'][data-hand='8'] .player-cards,
-.bang-player-board[data-bullets='1'][data-hand='8'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='1'][data-hand='9'] .player-cards,
-.bang-player-board[data-bullets='1'][data-hand='9'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='1'][data-hand='10'] .player-cards,
-.bang-player-board[data-bullets='1'][data-hand='10'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='1'][data-hand='11'] .player-cards,
-.bang-player-board[data-bullets='1'][data-hand='11'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='1'][data-hand='12'] .player-cards,
-.bang-player-board[data-bullets='1'][data-hand='12'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='1'][data-hand='13'] .player-cards,
-.bang-player-board[data-bullets='1'][data-hand='13'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='1'][data-hand='14'] .player-cards,
-.bang-player-board[data-bullets='1'][data-hand='14'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='1'][data-hand='15'] .player-cards,
-.bang-player-board[data-bullets='1'][data-hand='15'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='1'][data-hand='16'] .player-cards,
-.bang-player-board[data-bullets='1'][data-hand='16'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='1'][data-hand='17'] .player-cards,
-.bang-player-board[data-bullets='1'][data-hand='17'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='1'][data-hand='18'] .player-cards,
-.bang-player-board[data-bullets='1'][data-hand='18'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='1'][data-hand='19'] .player-cards,
-.bang-player-board[data-bullets='1'][data-hand='19'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='1'][data-hand='20'] .player-cards,
-.bang-player-board[data-bullets='1'][data-hand='20'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='2'][data-hand='3'] .player-cards,
-.bang-player-board[data-bullets='2'][data-hand='3'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='2'][data-hand='4'] .player-cards,
-.bang-player-board[data-bullets='2'][data-hand='4'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='2'][data-hand='5'] .player-cards,
-.bang-player-board[data-bullets='2'][data-hand='5'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='2'][data-hand='6'] .player-cards,
-.bang-player-board[data-bullets='2'][data-hand='6'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='2'][data-hand='7'] .player-cards,
-.bang-player-board[data-bullets='2'][data-hand='7'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='2'][data-hand='8'] .player-cards,
-.bang-player-board[data-bullets='2'][data-hand='8'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='2'][data-hand='9'] .player-cards,
-.bang-player-board[data-bullets='2'][data-hand='9'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='2'][data-hand='10'] .player-cards,
-.bang-player-board[data-bullets='2'][data-hand='10'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='2'][data-hand='11'] .player-cards,
-.bang-player-board[data-bullets='2'][data-hand='11'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='2'][data-hand='12'] .player-cards,
-.bang-player-board[data-bullets='2'][data-hand='12'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='2'][data-hand='13'] .player-cards,
-.bang-player-board[data-bullets='2'][data-hand='13'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='2'][data-hand='14'] .player-cards,
-.bang-player-board[data-bullets='2'][data-hand='14'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='2'][data-hand='15'] .player-cards,
-.bang-player-board[data-bullets='2'][data-hand='15'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='2'][data-hand='16'] .player-cards,
-.bang-player-board[data-bullets='2'][data-hand='16'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='2'][data-hand='17'] .player-cards,
-.bang-player-board[data-bullets='2'][data-hand='17'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='2'][data-hand='18'] .player-cards,
-.bang-player-board[data-bullets='2'][data-hand='18'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='2'][data-hand='19'] .player-cards,
-.bang-player-board[data-bullets='2'][data-hand='19'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='2'][data-hand='20'] .player-cards,
-.bang-player-board[data-bullets='2'][data-hand='20'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='3'][data-hand='4'] .player-cards,
-.bang-player-board[data-bullets='3'][data-hand='4'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='3'][data-hand='5'] .player-cards,
-.bang-player-board[data-bullets='3'][data-hand='5'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='3'][data-hand='6'] .player-cards,
-.bang-player-board[data-bullets='3'][data-hand='6'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='3'][data-hand='7'] .player-cards,
-.bang-player-board[data-bullets='3'][data-hand='7'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='3'][data-hand='8'] .player-cards,
-.bang-player-board[data-bullets='3'][data-hand='8'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='3'][data-hand='9'] .player-cards,
-.bang-player-board[data-bullets='3'][data-hand='9'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='3'][data-hand='10'] .player-cards,
-.bang-player-board[data-bullets='3'][data-hand='10'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='3'][data-hand='11'] .player-cards,
-.bang-player-board[data-bullets='3'][data-hand='11'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='3'][data-hand='12'] .player-cards,
-.bang-player-board[data-bullets='3'][data-hand='12'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='3'][data-hand='13'] .player-cards,
-.bang-player-board[data-bullets='3'][data-hand='13'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='3'][data-hand='14'] .player-cards,
-.bang-player-board[data-bullets='3'][data-hand='14'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='3'][data-hand='15'] .player-cards,
-.bang-player-board[data-bullets='3'][data-hand='15'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='3'][data-hand='16'] .player-cards,
-.bang-player-board[data-bullets='3'][data-hand='16'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='3'][data-hand='17'] .player-cards,
-.bang-player-board[data-bullets='3'][data-hand='17'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='3'][data-hand='18'] .player-cards,
-.bang-player-board[data-bullets='3'][data-hand='18'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='3'][data-hand='19'] .player-cards,
-.bang-player-board[data-bullets='3'][data-hand='19'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='3'][data-hand='20'] .player-cards,
-.bang-player-board[data-bullets='3'][data-hand='20'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='4'][data-hand='5'] .player-cards,
-.bang-player-board[data-bullets='4'][data-hand='5'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='4'][data-hand='6'] .player-cards,
-.bang-player-board[data-bullets='4'][data-hand='6'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='4'][data-hand='7'] .player-cards,
-.bang-player-board[data-bullets='4'][data-hand='7'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='4'][data-hand='8'] .player-cards,
-.bang-player-board[data-bullets='4'][data-hand='8'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='4'][data-hand='9'] .player-cards,
-.bang-player-board[data-bullets='4'][data-hand='9'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='4'][data-hand='10'] .player-cards,
-.bang-player-board[data-bullets='4'][data-hand='10'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='4'][data-hand='11'] .player-cards,
-.bang-player-board[data-bullets='4'][data-hand='11'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='4'][data-hand='12'] .player-cards,
-.bang-player-board[data-bullets='4'][data-hand='12'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='4'][data-hand='13'] .player-cards,
-.bang-player-board[data-bullets='4'][data-hand='13'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='4'][data-hand='14'] .player-cards,
-.bang-player-board[data-bullets='4'][data-hand='14'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='4'][data-hand='15'] .player-cards,
-.bang-player-board[data-bullets='4'][data-hand='15'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='4'][data-hand='16'] .player-cards,
-.bang-player-board[data-bullets='4'][data-hand='16'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='4'][data-hand='17'] .player-cards,
-.bang-player-board[data-bullets='4'][data-hand='17'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='4'][data-hand='18'] .player-cards,
-.bang-player-board[data-bullets='4'][data-hand='18'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='4'][data-hand='19'] .player-cards,
-.bang-player-board[data-bullets='4'][data-hand='19'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='4'][data-hand='20'] .player-cards,
-.bang-player-board[data-bullets='4'][data-hand='20'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='5'][data-hand='6'] .player-cards,
-.bang-player-board[data-bullets='5'][data-hand='6'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='5'][data-hand='7'] .player-cards,
-.bang-player-board[data-bullets='5'][data-hand='7'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='5'][data-hand='8'] .player-cards,
-.bang-player-board[data-bullets='5'][data-hand='8'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='5'][data-hand='9'] .player-cards,
-.bang-player-board[data-bullets='5'][data-hand='9'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='5'][data-hand='10'] .player-cards,
-.bang-player-board[data-bullets='5'][data-hand='10'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='5'][data-hand='11'] .player-cards,
-.bang-player-board[data-bullets='5'][data-hand='11'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='5'][data-hand='12'] .player-cards,
-.bang-player-board[data-bullets='5'][data-hand='12'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='5'][data-hand='13'] .player-cards,
-.bang-player-board[data-bullets='5'][data-hand='13'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='5'][data-hand='14'] .player-cards,
-.bang-player-board[data-bullets='5'][data-hand='14'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='5'][data-hand='15'] .player-cards,
-.bang-player-board[data-bullets='5'][data-hand='15'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='5'][data-hand='16'] .player-cards,
-.bang-player-board[data-bullets='5'][data-hand='16'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='5'][data-hand='17'] .player-cards,
-.bang-player-board[data-bullets='5'][data-hand='17'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='5'][data-hand='18'] .player-cards,
-.bang-player-board[data-bullets='5'][data-hand='18'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='5'][data-hand='19'] .player-cards,
-.bang-player-board[data-bullets='5'][data-hand='19'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='5'][data-hand='20'] .player-cards,
-.bang-player-board[data-bullets='5'][data-hand='20'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='6'][data-hand='7'] .player-cards,
-.bang-player-board[data-bullets='6'][data-hand='7'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='6'][data-hand='8'] .player-cards,
-.bang-player-board[data-bullets='6'][data-hand='8'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='6'][data-hand='9'] .player-cards,
-.bang-player-board[data-bullets='6'][data-hand='9'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='6'][data-hand='10'] .player-cards,
-.bang-player-board[data-bullets='6'][data-hand='10'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='6'][data-hand='11'] .player-cards,
-.bang-player-board[data-bullets='6'][data-hand='11'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='6'][data-hand='12'] .player-cards,
-.bang-player-board[data-bullets='6'][data-hand='12'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='6'][data-hand='13'] .player-cards,
-.bang-player-board[data-bullets='6'][data-hand='13'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='6'][data-hand='14'] .player-cards,
-.bang-player-board[data-bullets='6'][data-hand='14'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='6'][data-hand='15'] .player-cards,
-.bang-player-board[data-bullets='6'][data-hand='15'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='6'][data-hand='16'] .player-cards,
-.bang-player-board[data-bullets='6'][data-hand='16'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='6'][data-hand='17'] .player-cards,
-.bang-player-board[data-bullets='6'][data-hand='17'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='6'][data-hand='18'] .player-cards,
-.bang-player-board[data-bullets='6'][data-hand='18'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='6'][data-hand='19'] .player-cards,
-.bang-player-board[data-bullets='6'][data-hand='19'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='6'][data-hand='20'] .player-cards,
-.bang-player-board[data-bullets='6'][data-hand='20'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='7'][data-hand='8'] .player-cards,
-.bang-player-board[data-bullets='7'][data-hand='8'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='7'][data-hand='9'] .player-cards,
-.bang-player-board[data-bullets='7'][data-hand='9'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='7'][data-hand='10'] .player-cards,
-.bang-player-board[data-bullets='7'][data-hand='10'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='7'][data-hand='11'] .player-cards,
-.bang-player-board[data-bullets='7'][data-hand='11'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='7'][data-hand='12'] .player-cards,
-.bang-player-board[data-bullets='7'][data-hand='12'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='7'][data-hand='13'] .player-cards,
-.bang-player-board[data-bullets='7'][data-hand='13'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='7'][data-hand='14'] .player-cards,
-.bang-player-board[data-bullets='7'][data-hand='14'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='7'][data-hand='15'] .player-cards,
-.bang-player-board[data-bullets='7'][data-hand='15'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='7'][data-hand='16'] .player-cards,
-.bang-player-board[data-bullets='7'][data-hand='16'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='7'][data-hand='17'] .player-cards,
-.bang-player-board[data-bullets='7'][data-hand='17'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='7'][data-hand='18'] .player-cards,
-.bang-player-board[data-bullets='7'][data-hand='18'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='7'][data-hand='19'] .player-cards,
-.bang-player-board[data-bullets='7'][data-hand='19'] .player-cards {
-  color: red; }
-.bang-player[data-bullets='7'][data-hand='20'] .player-cards,
-.bang-player-board[data-bullets='7'][data-hand='20'] .player-cards {
-  color: red; }
+  background-position: 0% 100%;
+}
+.player-info .bullet.pulse, .player-board .bang-player-board .bullet.pulse {
+  animation-duration: 1.8s;
+  animation-name: pulsate;
+  animation-iteration-count: 3;
+}
+.player-info[data-max-bullets="1"] .player-bullets .bullet:nth-child(2), .player-board .bang-player-board[data-max-bullets="1"] .player-bullets .bullet:nth-child(2) {
+  display: none;
+}
+.player-info[data-max-bullets="1"] .player-bullets .bullet:nth-child(3), .player-board .bang-player-board[data-max-bullets="1"] .player-bullets .bullet:nth-child(3) {
+  display: none;
+}
+.player-info[data-max-bullets="1"] .player-bullets .bullet:nth-child(4), .player-board .bang-player-board[data-max-bullets="1"] .player-bullets .bullet:nth-child(4) {
+  display: none;
+}
+.player-info[data-max-bullets="1"] .player-bullets .bullet:nth-child(5), .player-board .bang-player-board[data-max-bullets="1"] .player-bullets .bullet:nth-child(5) {
+  display: none;
+}
+.player-info[data-max-bullets="1"] .player-bullets .bullet:nth-child(6), .player-board .bang-player-board[data-max-bullets="1"] .player-bullets .bullet:nth-child(6) {
+  display: none;
+}
+.player-info[data-max-bullets="2"] .player-bullets .bullet:nth-child(3), .player-board .bang-player-board[data-max-bullets="2"] .player-bullets .bullet:nth-child(3) {
+  display: none;
+}
+.player-info[data-max-bullets="2"] .player-bullets .bullet:nth-child(4), .player-board .bang-player-board[data-max-bullets="2"] .player-bullets .bullet:nth-child(4) {
+  display: none;
+}
+.player-info[data-max-bullets="2"] .player-bullets .bullet:nth-child(5), .player-board .bang-player-board[data-max-bullets="2"] .player-bullets .bullet:nth-child(5) {
+  display: none;
+}
+.player-info[data-max-bullets="2"] .player-bullets .bullet:nth-child(6), .player-board .bang-player-board[data-max-bullets="2"] .player-bullets .bullet:nth-child(6) {
+  display: none;
+}
+.player-info[data-max-bullets="3"] .player-bullets .bullet:nth-child(4), .player-board .bang-player-board[data-max-bullets="3"] .player-bullets .bullet:nth-child(4) {
+  display: none;
+}
+.player-info[data-max-bullets="3"] .player-bullets .bullet:nth-child(5), .player-board .bang-player-board[data-max-bullets="3"] .player-bullets .bullet:nth-child(5) {
+  display: none;
+}
+.player-info[data-max-bullets="3"] .player-bullets .bullet:nth-child(6), .player-board .bang-player-board[data-max-bullets="3"] .player-bullets .bullet:nth-child(6) {
+  display: none;
+}
+.player-info[data-max-bullets="4"] .player-bullets .bullet:nth-child(5), .player-board .bang-player-board[data-max-bullets="4"] .player-bullets .bullet:nth-child(5) {
+  display: none;
+}
+.player-info[data-max-bullets="4"] .player-bullets .bullet:nth-child(6), .player-board .bang-player-board[data-max-bullets="4"] .player-bullets .bullet:nth-child(6) {
+  display: none;
+}
+.player-info[data-max-bullets="5"] .player-bullets .bullet:nth-child(6), .player-board .bang-player-board[data-max-bullets="5"] .player-bullets .bullet:nth-child(6) {
+  display: none;
+}
+.player-info[data-max-bullets="6"] .player-bullets .bullet:nth-child(7), .player-board .bang-player-board[data-max-bullets="6"] .player-bullets .bullet:nth-child(7) {
+  display: none;
+}
+.player-info[data-max-bullets="6"] .player-bullets .bullet:nth-child(6), .player-board .bang-player-board[data-max-bullets="6"] .player-bullets .bullet:nth-child(6) {
+  display: none;
+}
+.player-info[data-bullets="0"] .bullet:nth-child(0), .player-board .bang-player-board[data-bullets="0"] .bullet:nth-child(0) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="1"] .bullet:nth-child(0), .player-board .bang-player-board[data-bullets="1"] .bullet:nth-child(0) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="1"] .bullet:nth-child(1), .player-board .bang-player-board[data-bullets="1"] .bullet:nth-child(1) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="2"] .bullet:nth-child(0), .player-board .bang-player-board[data-bullets="2"] .bullet:nth-child(0) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="2"] .bullet:nth-child(1), .player-board .bang-player-board[data-bullets="2"] .bullet:nth-child(1) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="2"] .bullet:nth-child(2), .player-board .bang-player-board[data-bullets="2"] .bullet:nth-child(2) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="3"] .bullet:nth-child(0), .player-board .bang-player-board[data-bullets="3"] .bullet:nth-child(0) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="3"] .bullet:nth-child(1), .player-board .bang-player-board[data-bullets="3"] .bullet:nth-child(1) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="3"] .bullet:nth-child(2), .player-board .bang-player-board[data-bullets="3"] .bullet:nth-child(2) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="3"] .bullet:nth-child(3), .player-board .bang-player-board[data-bullets="3"] .bullet:nth-child(3) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="4"] .bullet:nth-child(0), .player-board .bang-player-board[data-bullets="4"] .bullet:nth-child(0) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="4"] .bullet:nth-child(1), .player-board .bang-player-board[data-bullets="4"] .bullet:nth-child(1) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="4"] .bullet:nth-child(2), .player-board .bang-player-board[data-bullets="4"] .bullet:nth-child(2) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="4"] .bullet:nth-child(3), .player-board .bang-player-board[data-bullets="4"] .bullet:nth-child(3) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="4"] .bullet:nth-child(4), .player-board .bang-player-board[data-bullets="4"] .bullet:nth-child(4) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="5"] .bullet:nth-child(0), .player-board .bang-player-board[data-bullets="5"] .bullet:nth-child(0) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="5"] .bullet:nth-child(1), .player-board .bang-player-board[data-bullets="5"] .bullet:nth-child(1) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="5"] .bullet:nth-child(2), .player-board .bang-player-board[data-bullets="5"] .bullet:nth-child(2) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="5"] .bullet:nth-child(3), .player-board .bang-player-board[data-bullets="5"] .bullet:nth-child(3) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="5"] .bullet:nth-child(4), .player-board .bang-player-board[data-bullets="5"] .bullet:nth-child(4) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="5"] .bullet:nth-child(5), .player-board .bang-player-board[data-bullets="5"] .bullet:nth-child(5) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="6"] .bullet:nth-child(0), .player-board .bang-player-board[data-bullets="6"] .bullet:nth-child(0) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="6"] .bullet:nth-child(1), .player-board .bang-player-board[data-bullets="6"] .bullet:nth-child(1) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="6"] .bullet:nth-child(2), .player-board .bang-player-board[data-bullets="6"] .bullet:nth-child(2) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="6"] .bullet:nth-child(3), .player-board .bang-player-board[data-bullets="6"] .bullet:nth-child(3) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="6"] .bullet:nth-child(4), .player-board .bang-player-board[data-bullets="6"] .bullet:nth-child(4) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="6"] .bullet:nth-child(5), .player-board .bang-player-board[data-bullets="6"] .bullet:nth-child(5) {
+  background-position: 0 0;
+}
+.player-info[data-bullets="6"] .bullet:nth-child(6), .player-board .bang-player-board[data-bullets="6"] .bullet:nth-child(6) {
+  background-position: 0 0;
+}
+.player-info[data-hand="0"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="0"] .player-cards .player-handcount::before {
+  content: "x 0";
+}
+.player-info[data-hand="1"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="1"] .player-cards .player-handcount::before {
+  content: "x 1";
+}
+.player-info[data-hand="2"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="2"] .player-cards .player-handcount::before {
+  content: "x 2";
+}
+.player-info[data-hand="3"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="3"] .player-cards .player-handcount::before {
+  content: "x 3";
+}
+.player-info[data-hand="4"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="4"] .player-cards .player-handcount::before {
+  content: "x 4";
+}
+.player-info[data-hand="5"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="5"] .player-cards .player-handcount::before {
+  content: "x 5";
+}
+.player-info[data-hand="6"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="6"] .player-cards .player-handcount::before {
+  content: "x 6";
+}
+.player-info[data-hand="7"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="7"] .player-cards .player-handcount::before {
+  content: "x 7";
+}
+.player-info[data-hand="8"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="8"] .player-cards .player-handcount::before {
+  content: "x 8";
+}
+.player-info[data-hand="9"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="9"] .player-cards .player-handcount::before {
+  content: "x 9";
+}
+.player-info[data-hand="10"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="10"] .player-cards .player-handcount::before {
+  content: "x 10";
+}
+.player-info[data-hand="11"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="11"] .player-cards .player-handcount::before {
+  content: "x 11";
+}
+.player-info[data-hand="12"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="12"] .player-cards .player-handcount::before {
+  content: "x 12";
+}
+.player-info[data-hand="13"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="13"] .player-cards .player-handcount::before {
+  content: "x 13";
+}
+.player-info[data-hand="14"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="14"] .player-cards .player-handcount::before {
+  content: "x 14";
+}
+.player-info[data-hand="15"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="15"] .player-cards .player-handcount::before {
+  content: "x 15";
+}
+.player-info[data-hand="16"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="16"] .player-cards .player-handcount::before {
+  content: "x 16";
+}
+.player-info[data-hand="17"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="17"] .player-cards .player-handcount::before {
+  content: "x 17";
+}
+.player-info[data-hand="18"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="18"] .player-cards .player-handcount::before {
+  content: "x 18";
+}
+.player-info[data-hand="19"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="19"] .player-cards .player-handcount::before {
+  content: "x 19";
+}
+.player-info[data-hand="20"] .player-cards .player-handcount::before, .player-board .bang-player-board[data-hand="20"] .player-cards .player-handcount::before {
+  content: "x 20";
+}
+.player-info[data-bullets="0"] .player-cards .player-maxhand::before, .player-board .bang-player-board[data-bullets="0"] .player-cards .player-maxhand::before {
+  content: "0";
+}
+.player-info[data-bullets="1"] .player-cards .player-maxhand::before, .player-board .bang-player-board[data-bullets="1"] .player-cards .player-maxhand::before {
+  content: "1";
+}
+.player-info[data-bullets="2"] .player-cards .player-maxhand::before, .player-board .bang-player-board[data-bullets="2"] .player-cards .player-maxhand::before {
+  content: "2";
+}
+.player-info[data-bullets="3"] .player-cards .player-maxhand::before, .player-board .bang-player-board[data-bullets="3"] .player-cards .player-maxhand::before {
+  content: "3";
+}
+.player-info[data-bullets="4"] .player-cards .player-maxhand::before, .player-board .bang-player-board[data-bullets="4"] .player-cards .player-maxhand::before {
+  content: "4";
+}
+.player-info[data-bullets="5"] .player-cards .player-maxhand::before, .player-board .bang-player-board[data-bullets="5"] .player-cards .player-maxhand::before {
+  content: "5";
+}
+.player-info[data-bullets="6"] .player-cards .player-maxhand::before, .player-board .bang-player-board[data-bullets="6"] .player-cards .player-maxhand::before {
+  content: "6";
+}
+.player-info[data-bullets="7"] .player-cards .player-maxhand::before, .player-board .bang-player-board[data-bullets="7"] .player-cards .player-maxhand::before {
+  content: "7";
+}
+.player-info[data-bullets="0"][data-hand="1"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="1"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="2"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="2"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="3"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="3"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="4"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="4"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="5"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="5"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="6"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="6"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="7"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="7"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="8"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="8"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="9"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="9"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="10"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="10"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="11"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="11"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="12"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="12"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="13"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="13"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="14"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="14"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="15"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="15"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="16"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="16"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="17"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="17"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="18"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="18"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="19"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="19"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="0"][data-hand="20"] .player-cards, .player-board .bang-player-board[data-bullets="0"][data-hand="20"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="2"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="2"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="3"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="3"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="4"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="4"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="5"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="5"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="6"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="6"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="7"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="7"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="8"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="8"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="9"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="9"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="10"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="10"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="11"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="11"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="12"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="12"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="13"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="13"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="14"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="14"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="15"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="15"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="16"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="16"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="17"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="17"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="18"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="18"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="19"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="19"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="1"][data-hand="20"] .player-cards, .player-board .bang-player-board[data-bullets="1"][data-hand="20"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="3"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="3"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="4"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="4"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="5"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="5"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="6"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="6"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="7"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="7"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="8"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="8"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="9"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="9"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="10"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="10"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="11"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="11"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="12"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="12"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="13"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="13"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="14"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="14"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="15"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="15"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="16"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="16"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="17"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="17"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="18"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="18"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="19"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="19"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="2"][data-hand="20"] .player-cards, .player-board .bang-player-board[data-bullets="2"][data-hand="20"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="4"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="4"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="5"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="5"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="6"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="6"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="7"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="7"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="8"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="8"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="9"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="9"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="10"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="10"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="11"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="11"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="12"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="12"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="13"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="13"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="14"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="14"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="15"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="15"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="16"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="16"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="17"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="17"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="18"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="18"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="19"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="19"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="3"][data-hand="20"] .player-cards, .player-board .bang-player-board[data-bullets="3"][data-hand="20"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="5"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="5"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="6"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="6"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="7"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="7"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="8"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="8"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="9"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="9"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="10"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="10"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="11"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="11"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="12"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="12"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="13"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="13"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="14"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="14"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="15"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="15"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="16"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="16"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="17"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="17"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="18"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="18"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="19"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="19"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="4"][data-hand="20"] .player-cards, .player-board .bang-player-board[data-bullets="4"][data-hand="20"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="6"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="6"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="7"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="7"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="8"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="8"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="9"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="9"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="10"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="10"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="11"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="11"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="12"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="12"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="13"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="13"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="14"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="14"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="15"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="15"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="16"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="16"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="17"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="17"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="18"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="18"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="19"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="19"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="5"][data-hand="20"] .player-cards, .player-board .bang-player-board[data-bullets="5"][data-hand="20"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="7"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="7"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="8"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="8"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="9"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="9"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="10"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="10"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="11"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="11"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="12"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="12"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="13"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="13"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="14"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="14"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="15"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="15"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="16"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="16"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="17"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="17"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="18"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="18"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="19"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="19"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="6"][data-hand="20"] .player-cards, .player-board .bang-player-board[data-bullets="6"][data-hand="20"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="8"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="8"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="9"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="9"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="10"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="10"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="11"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="11"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="12"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="12"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="13"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="13"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="14"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="14"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="15"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="15"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="16"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="16"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="17"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="17"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="18"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="18"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="19"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="19"] .player-cards {
+  color: red;
+}
+.player-info[data-bullets="7"][data-hand="20"] .player-cards, .player-board .bang-player-board[data-bullets="7"][data-hand="20"] .player-cards {
+  color: red;
+}
+
+.player-info .player-name {
+  text-align: center;
+  width: 80%;
+  margin: auto;
+}
+.player-info .player-bullets {
+  position: absolute;
+  width: 30px;
+  right: -8px;
+  top: 40px;
+}
+.player-info .player-character-powers {
+  padding: 0px 10px;
+  font-family: "Palatino Linotype";
+  text-align: center;
+  font-size: 6px;
+}
+.player-info .player-character-powers p {
+  margin: 0;
+}
 
 div.bang-card-tooltip div.bang-card-tooltip-sizing {
   width: 212.5px;
   height: 340px;
   display: flex;
   justify-content: center;
-  align-items: center; }
-  div.bang-card-tooltip div.bang-card-tooltip-sizing div.bang-card {
-    transform: scale(2); }
+  align-items: center;
+}
+div.bang-card-tooltip div.bang-card-tooltip-sizing div.bang-card {
+  transform: scale(2);
+}
 
 div.bang-card {
   position: relative;
@@ -1262,215 +1422,283 @@ div.bang-card {
   height: 170px;
   flex-shrink: 0;
   margin: 5px;
-  transition: transform .5s ease-in-out;
+  transition: transform 0.5s ease-in-out;
   transform-origin: 50% 50%;
-  transform-style: preserve-3d; }
-  div.bang-card.flipped {
-    transform: rotateY(180deg); }
-  div.bang-card[data-type="back"] {
-    transform: rotateY(180deg); }
-  div.bang-card.slide {
-    z-index: 1000; }
-  div.bang-card[data-type="empty"] {
-    border: none !important;
-    background: none !important; }
-    div.bang-card[data-type="empty"] div {
-      display: none; }
-  div.bang-card.unselectable {
-    opacity: 0.5;
-    cursor: not-allowed; }
-  div.bang-card.selectable {
-    cursor: pointer; }
-    div.bang-card.selectable:hover .card-front {
-      transform: scale(1.05);
-      transform-origin: center center; }
-  div.bang-card.preselected .card-front, div.bang-card.selected .card-front {
-    border: 2px solid red;
-    margin-left: -2px;
-    margin-top: -2px;
-    border-radius: 10px;
-    background-color: red; }
-  div.bang-card.selected .card-front {
-    transform: scale(1.05);
-    transform-origin: center center; }
-  div.bang-card .card-back, div.bang-card .card-front {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden; }
-  div.bang-card .card-back {
-    background-image: url("img/cardback.jpg");
-    background-size: cover;
-    transform: rotateY(180deg);
-    border-radius: 10px;
-    z-index: 2; }
-  div.bang-card[data-type="5"] .card-front {
-    background-position: 33.3333333333% center; }
-  div.bang-card[data-type="6"] .card-front {
-    background-position: 33.3333333333% center; }
-  div.bang-card[data-type="7"] .card-front {
-    background-position: 33.3333333333% center; }
-  div.bang-card[data-type="8"] .card-front {
-    background-position: 33.3333333333% center; }
-  div.bang-card[data-type="9"] .card-front {
-    background-position: 33.3333333333% center; }
-  div.bang-card[data-type="10"] .card-front {
-    background-position: 33.3333333333% center; }
-  div.bang-card[data-type="11"] .card-front {
-    background-position: 33.3333333333% center; }
-  div.bang-card[data-type="12"] .card-front {
-    background-position: 33.3333333333% center; }
-  div.bang-card[data-type="13"] .card-front {
-    background-position: 33.3333333333% center; }
-  div.bang-card[data-type="14"] .card-front {
-    background-position: 33.3333333333% center; }
-  div.bang-card[data-type="15"] .card-front {
-    background-position: 33.3333333333% center; }
-  div.bang-card[data-type="16"] .card-front {
-    background-position: 33.3333333333% center; }
-  div.bang-card[data-type="17"] .card-front {
-    background-position: 66.6666666667% center; }
-  div.bang-card[data-type="18"] .card-front {
-    background-position: 66.6666666667% center; }
-  div.bang-card[data-type="19"] .card-front {
-    background-position: 66.6666666667% center; }
-  div.bang-card[data-type="20"] .card-front {
-    background-position: 66.6666666667% center; }
-  div.bang-card[data-type="21"] .card-front {
-    background-position: 66.6666666667% center; }
-  div.bang-card[data-type="0"] .card-front {
-    background-position: 100% center; }
-  div.bang-card[data-type="1"] .card-front {
-    background-position: 100% center; }
-  div.bang-card[data-type="2"] .card-front {
-    background-position: 100% center; }
-  div.bang-card[data-type="3"] .card-front {
-    background-position: 100% center; }
-  div.bang-card[data-type="4"] .card-front {
-    background-position: 100% center; }
-  div.bang-card[data-type="0"] .card-background {
-    background-position-x: 0%;
-    background-position-y: 0%; }
-  div.bang-card[data-type="1"] .card-background {
-    background-position-x: 20%;
-    background-position-y: 0%; }
-  div.bang-card[data-type="2"] .card-background {
-    background-position-x: 40%;
-    background-position-y: 0%; }
-  div.bang-card[data-type="3"] .card-background {
-    background-position-x: 60%;
-    background-position-y: 0%; }
-  div.bang-card[data-type="4"] .card-background {
-    background-position-x: 80%;
-    background-position-y: 0%; }
-  div.bang-card[data-type="5"] .card-background {
-    background-position-x: 100%;
-    background-position-y: 0%; }
-  div.bang-card[data-type="6"] .card-background {
-    background-position-x: 0%;
-    background-position-y: 33.3333333333%; }
-  div.bang-card[data-type="7"] .card-background {
-    background-position-x: 20%;
-    background-position-y: 33.3333333333%; }
-  div.bang-card[data-type="8"] .card-background {
-    background-position-x: 40%;
-    background-position-y: 33.3333333333%; }
-  div.bang-card[data-type="9"] .card-background {
-    background-position-x: 60%;
-    background-position-y: 33.3333333333%; }
-  div.bang-card[data-type="10"] .card-background {
-    background-position-x: 80%;
-    background-position-y: 33.3333333333%; }
-  div.bang-card[data-type="11"] .card-background {
-    background-position-x: 100%;
-    background-position-y: 33.3333333333%; }
-  div.bang-card[data-type="12"] .card-background {
-    background-position-x: 0%;
-    background-position-y: 66.6666666667%; }
-  div.bang-card[data-type="13"] .card-background {
-    background-position-x: 20%;
-    background-position-y: 66.6666666667%; }
-  div.bang-card[data-type="14"] .card-background {
-    background-position-x: 40%;
-    background-position-y: 66.6666666667%; }
-  div.bang-card[data-type="15"] .card-background {
-    background-position-x: 60%;
-    background-position-y: 66.6666666667%; }
-  div.bang-card[data-type="16"] .card-background {
-    background-position-x: 80%;
-    background-position-y: 66.6666666667%; }
-  div.bang-card[data-type="17"] .card-background {
-    background-position-x: 100%;
-    background-position-y: 66.6666666667%; }
-  div.bang-card[data-type="18"] .card-background {
-    background-position-x: 0%;
-    background-position-y: 100%; }
-  div.bang-card[data-type="19"] .card-background {
-    background-position-x: 20%;
-    background-position-y: 100%; }
-  div.bang-card[data-type="20"] .card-background {
-    background-position-x: 40%;
-    background-position-y: 100%; }
-  div.bang-card[data-type="21"] .card-background {
-    background-position-x: 60%;
-    background-position-y: 100%; }
-  div.bang-card .card-front {
-    background-image: url("img/card_borders.png");
-    background-size: cover; }
-    div.bang-card .card-front .card-name {
-      position: absolute;
-      top: 10.2px;
-      width: 100%;
-      height: 34px;
-      text-align: center;
-      font-family: "Perdido";
-      font-size: 14.45px;
-      letter-spacing: -1px;
-      transform: scale(0.8, 1.3);
-      transform-origin: top center;
-      text-transform: uppercase; }
-    div.bang-card .card-front .card-background {
-      position: absolute;
-      top: 35.7px;
-      left: 8.5px;
-      width: 89.25px;
-      height: 126.65px;
-      background-image: url("img/card_backgrounds.jpg");
-      background-size: 600% 400%; }
-    div.bang-card .card-front .card-copy {
-      position: absolute;
-      bottom: -3px;
-      left: 4px;
-      font-size: 17px;
-      text-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white; }
-      div.bang-card .card-front .card-copy .card-copy-color {
-        margin-left: -2px; }
+  transform-style: preserve-3d;
+}
+div.bang-card.flipped {
+  transform: rotateY(180deg);
+}
+div.bang-card[data-type=back] {
+  transform: rotateY(180deg);
+}
+div.bang-card.slide {
+  z-index: 900;
+}
+div.bang-card[data-type=empty] {
+  border: none !important;
+  background: none !important;
+}
+div.bang-card[data-type=empty] div {
+  display: none;
+}
+div.bang-card.unselectable {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+div.bang-card.selectable {
+  cursor: pointer;
+}
+div.bang-card.selectable:hover .card-front {
+  transform: scale(1.05);
+  transform-origin: center center;
+}
+div.bang-card.preselected .card-front, div.bang-card.selected .card-front {
+  border: 2px solid red;
+  margin-left: -2px;
+  margin-top: -2px;
+  border-radius: 10px;
+  background-color: red;
+}
+div.bang-card.selected .card-front {
+  transform: scale(1.05);
+  transform-origin: center center;
+}
+div.bang-card .card-back, div.bang-card .card-front {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+div.bang-card .card-back {
+  background-image: url("img/cardback.jpg");
+  background-size: cover;
+  transform: rotateY(180deg);
+  border-radius: 10px;
+  z-index: 2;
+}
+div.bang-card[data-type="5"] .card-front {
+  background-position: 33.3333333333% center;
+}
+div.bang-card[data-type="6"] .card-front {
+  background-position: 33.3333333333% center;
+}
+div.bang-card[data-type="7"] .card-front {
+  background-position: 33.3333333333% center;
+}
+div.bang-card[data-type="8"] .card-front {
+  background-position: 33.3333333333% center;
+}
+div.bang-card[data-type="9"] .card-front {
+  background-position: 33.3333333333% center;
+}
+div.bang-card[data-type="10"] .card-front {
+  background-position: 33.3333333333% center;
+}
+div.bang-card[data-type="11"] .card-front {
+  background-position: 33.3333333333% center;
+}
+div.bang-card[data-type="12"] .card-front {
+  background-position: 33.3333333333% center;
+}
+div.bang-card[data-type="13"] .card-front {
+  background-position: 33.3333333333% center;
+}
+div.bang-card[data-type="14"] .card-front {
+  background-position: 33.3333333333% center;
+}
+div.bang-card[data-type="15"] .card-front {
+  background-position: 33.3333333333% center;
+}
+div.bang-card[data-type="16"] .card-front {
+  background-position: 33.3333333333% center;
+}
+div.bang-card[data-type="17"] .card-front {
+  background-position: 66.6666666667% center;
+}
+div.bang-card[data-type="18"] .card-front {
+  background-position: 66.6666666667% center;
+}
+div.bang-card[data-type="19"] .card-front {
+  background-position: 66.6666666667% center;
+}
+div.bang-card[data-type="20"] .card-front {
+  background-position: 66.6666666667% center;
+}
+div.bang-card[data-type="21"] .card-front {
+  background-position: 66.6666666667% center;
+}
+div.bang-card[data-type="0"] .card-front {
+  background-position: 100% center;
+}
+div.bang-card[data-type="1"] .card-front {
+  background-position: 100% center;
+}
+div.bang-card[data-type="2"] .card-front {
+  background-position: 100% center;
+}
+div.bang-card[data-type="3"] .card-front {
+  background-position: 100% center;
+}
+div.bang-card[data-type="4"] .card-front {
+  background-position: 100% center;
+}
+div.bang-card[data-type="0"] .card-background {
+  background-position-x: 0%;
+  background-position-y: 0%;
+}
+div.bang-card[data-type="1"] .card-background {
+  background-position-x: 20%;
+  background-position-y: 0%;
+}
+div.bang-card[data-type="2"] .card-background {
+  background-position-x: 40%;
+  background-position-y: 0%;
+}
+div.bang-card[data-type="3"] .card-background {
+  background-position-x: 60%;
+  background-position-y: 0%;
+}
+div.bang-card[data-type="4"] .card-background {
+  background-position-x: 80%;
+  background-position-y: 0%;
+}
+div.bang-card[data-type="5"] .card-background {
+  background-position-x: 100%;
+  background-position-y: 0%;
+}
+div.bang-card[data-type="6"] .card-background {
+  background-position-x: 0%;
+  background-position-y: 33.3333333333%;
+}
+div.bang-card[data-type="7"] .card-background {
+  background-position-x: 20%;
+  background-position-y: 33.3333333333%;
+}
+div.bang-card[data-type="8"] .card-background {
+  background-position-x: 40%;
+  background-position-y: 33.3333333333%;
+}
+div.bang-card[data-type="9"] .card-background {
+  background-position-x: 60%;
+  background-position-y: 33.3333333333%;
+}
+div.bang-card[data-type="10"] .card-background {
+  background-position-x: 80%;
+  background-position-y: 33.3333333333%;
+}
+div.bang-card[data-type="11"] .card-background {
+  background-position-x: 100%;
+  background-position-y: 33.3333333333%;
+}
+div.bang-card[data-type="12"] .card-background {
+  background-position-x: 0%;
+  background-position-y: 66.6666666667%;
+}
+div.bang-card[data-type="13"] .card-background {
+  background-position-x: 20%;
+  background-position-y: 66.6666666667%;
+}
+div.bang-card[data-type="14"] .card-background {
+  background-position-x: 40%;
+  background-position-y: 66.6666666667%;
+}
+div.bang-card[data-type="15"] .card-background {
+  background-position-x: 60%;
+  background-position-y: 66.6666666667%;
+}
+div.bang-card[data-type="16"] .card-background {
+  background-position-x: 80%;
+  background-position-y: 66.6666666667%;
+}
+div.bang-card[data-type="17"] .card-background {
+  background-position-x: 100%;
+  background-position-y: 66.6666666667%;
+}
+div.bang-card[data-type="18"] .card-background {
+  background-position-x: 0%;
+  background-position-y: 100%;
+}
+div.bang-card[data-type="19"] .card-background {
+  background-position-x: 20%;
+  background-position-y: 100%;
+}
+div.bang-card[data-type="20"] .card-background {
+  background-position-x: 40%;
+  background-position-y: 100%;
+}
+div.bang-card[data-type="21"] .card-background {
+  background-position-x: 60%;
+  background-position-y: 100%;
+}
+div.bang-card .card-front {
+  background-image: url("img/card_borders.png");
+  background-size: cover;
+}
+div.bang-card .card-front .card-name {
+  position: absolute;
+  top: 10.2px;
+  width: 100%;
+  height: 34px;
+  text-align: center;
+  font-family: "Perdido";
+  font-size: 14.45px;
+  letter-spacing: -1px;
+  transform: scale(0.8, 1.3);
+  transform-origin: top center;
+  text-transform: uppercase;
+}
+div.bang-card .card-front .card-background {
+  position: absolute;
+  top: 35.7px;
+  left: 8.5px;
+  width: 89.25px;
+  height: 126.65px;
+  background-image: url("img/card_backgrounds.jpg");
+  background-size: 600% 400%;
+}
+div.bang-card .card-front .card-copy {
+  position: absolute;
+  bottom: -3px;
+  left: 4px;
+  font-size: 17px;
+  text-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white;
+}
+div.bang-card .card-front .card-copy .card-copy-color {
+  margin-left: -2px;
+}
 
 .card-copy-color::before {
-  font-size: 21.25px; }
+  font-size: 21.25px;
+}
 
 #logs_wrap .card-copy-color::before {
   font-size: 17px;
-  margin-left: 1px; }
+  margin-left: 1px;
+}
 
-.card-copy-color[data-color="D"]::before {
+.card-copy-color[data-color=D]::before {
   content: "♦";
-  color: red; }
+  color: red;
+}
 
-.card-copy-color[data-color="H"]::before {
+.card-copy-color[data-color=H]::before {
   content: "♥";
-  color: red; }
+  color: red;
+}
 
-.card-copy-color[data-color="S"]::before {
+.card-copy-color[data-color=S]::before {
   content: "♠";
-  color: black; }
+  color: black;
+}
 
-.card-copy-color[data-color="C"]::before {
+.card-copy-color[data-color=C]::before {
   content: "♣";
-  color: black; }
+  color: black;
+}
 
 .player-board .player-role {
   width: 40px;
@@ -1481,49 +1709,61 @@ div.bang-card {
   top: 0;
   right: 45px;
   background-image: url("img/role-icons.png");
-  background-size: cover; }
-  .player-board .player-role[data-role="0"] {
-    background-position: 66.66% 0%; }
-  .player-board .player-role[data-role="1"] {
-    background-position: 100% 0%; }
-  .player-board .player-role[data-role="2"] {
-    background-position: 33.33% 0%; }
-  .player-board .player-role[data-role="3"] {
-    background-position: 0% 0%; }
+  background-size: cover;
+}
+.player-board .player-role[data-role="0"] {
+  background-position: 66.66% 0%;
+}
+.player-board .player-role[data-role="1"] {
+  background-position: 100% 0%;
+}
+.player-board .player-role[data-role="2"] {
+  background-position: 33.33% 0%;
+}
+.player-board .player-role[data-role="3"] {
+  background-position: 0% 0%;
+}
 .player-board.eliminated {
-  background-color: #BBB !important; }
-  .player-board.eliminated .player_board_inner .player_table_status {
-    display: none !important; }
-  .player-board.eliminated .player_board_inner::before {
-    content: "";
-    display: block;
-    width: 35px;
-    height: 35px;
-    background-image: url("img/dead.svg");
-    position: absolute;
-    z-index: 3;
-    background-color: white;
-    border-radius: 50%;
-    background-size: 88%;
-    background-position: center center;
-    background-repeat: no-repeat;
-    top: 4px;
-    left: 1px; }
+  background-color: #BBB !important;
+}
+.player-board.eliminated .player_board_inner .player_table_status {
+  display: none !important;
+}
+.player-board.eliminated .player_board_inner::before {
+  content: "";
+  display: block;
+  width: 35px;
+  height: 35px;
+  background-image: url("img/dead.svg");
+  position: absolute;
+  z-index: 3;
+  background-color: white;
+  border-radius: 50%;
+  background-size: 88%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  top: 4px;
+  left: 1px;
+}
 
 .bang-player-board {
   display: flex;
   align-items: center;
-  padding: 0px 10px; }
-  .bang-player-board ul.player-bullets {
-    display: flex;
-    height: 35px; }
-    .bang-player-board ul.player-bullets li.bullet {
-      transform: scale(0.8) rotate(-90deg);
-      margin-top: 9px;
-      margin-right: -11px;
-      margin-left: -11px; }
-  .bang-player-board .player-cards {
-    margin-left: 15px; }
+  padding: 0px 10px;
+}
+.bang-player-board ul.player-bullets {
+  display: flex;
+  height: 35px;
+}
+.bang-player-board ul.player-bullets li.bullet {
+  transform: scale(0.8) rotate(-90deg);
+  margin-top: 9px;
+  margin-right: -11px;
+  margin-left: -11px;
+}
+.bang-player-board .player-cards {
+  margin-left: 15px;
+}
 
 .bang_popin {
   width: auto;
@@ -1533,198 +1773,258 @@ div.bang-card {
   padding: 10px 15px;
   border-radius: 8px;
   border: 3px solid #88481a;
-  box-shadow: 1px 1px 5px #444; }
-  .bang_popin h2 {
-    color: #444;
-    font-size: 30px;
-    padding: 3px 90px;
-    text-align: center;
-    font-family: "Perdido"; }
-  .bang_popin .bang_popin_closeicon {
-    background-color: #88481a;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    position: absolute;
-    top: -19px;
-    right: -19px;
-    font-size: 90%;
-    color: white !important;
-    display: flex;
-    justify-content: center;
-    align-items: center; }
-    .bang_popin .bang_popin_closeicon:hover {
-      text-decoration: none;
-      color: #CCC !important;
-      transform: scale(1.1); }
-    .bang_popin .bang_popin_closeicon i {
-      margin-top: -2px; }
-  .bang_popin #dialog-card-container {
-    display: flex;
-    justify-content: center;
-    align-items: center; }
-  .bang_popin #dialog-title-container {
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 5px 9px;
-    border-radius: 5px;
-    margin: 10px 2px 2px;
-    text-align: center; }
-  .bang_popin #dialog-button-container {
-    text-align: center; }
+  box-shadow: 1px 1px 5px #444;
+}
+.bang_popin h2 {
+  color: #444;
+  font-size: 30px;
+  padding: 3px 90px;
+  text-align: center;
+  font-family: "Perdido";
+}
+.bang_popin .bang_popin_closeicon {
+  background-color: #88481a;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: -19px;
+  right: -19px;
+  font-size: 90%;
+  color: white !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.bang_popin .bang_popin_closeicon:hover {
+  text-decoration: none;
+  color: #CCC !important;
+  transform: scale(1.1);
+}
+.bang_popin .bang_popin_closeicon i {
+  margin-top: -2px;
+}
+.bang_popin #dialog-card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.bang_popin #dialog-card-container .player-info {
+  margin-left: 20px;
+  margin-right: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.bang_popin #dialog-card-container .player-info:hover {
+  transform: scale(1.05);
+  transform-origin: center center;
+}
+.bang_popin #dialog-title-container {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 5px 9px;
+  border-radius: 5px;
+  margin: 10px 2px 2px;
+  text-align: center;
+}
+.bang_popin #dialog-button-container {
+  text-align: center;
+}
 
 #popin_playersHelp {
   margin-top: 90px;
-  max-width: 75%; }
-  #popin_playersHelp #dialog-roles {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-    flex-wrap: wrap; }
-    #popin_playersHelp #dialog-roles .dialog-role {
-      width: 150px;
-      display: flex;
-      flex-flow: column;
-      align-items: center;
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 7px;
-      border: 1px solid rgba(0, 0, 0, 0.4);
-      box-shadow: 2px 2px 5px #111; }
-      #popin_playersHelp #dialog-roles .dialog-role .dialog-role-count {
-        margin: 5px 0px;
-        font-family: "Perdido";
-        font-size: 18px; }
-        #popin_playersHelp #dialog-roles .dialog-role .dialog-role-count span {
-          font-size: 20px; }
-      #popin_playersHelp #dialog-roles .dialog-role .dialog-role-img {
-        height: 170px;
-        width: 105px;
-        background-image: url("img/roles.png");
-        background-size: cover; }
-      #popin_playersHelp #dialog-roles .dialog-role .dialog-role-desc {
-        padding: 5px 10px;
-        font-family: 'Palatino Linotype';
-        text-align: center;
-        font-size: 15px; }
-      #popin_playersHelp #dialog-roles .dialog-role[data-role="0"] .dialog-role-img {
-        background-position: 0% center; }
-      #popin_playersHelp #dialog-roles .dialog-role[data-role="1"] .dialog-role-img {
-        background-position: 33.3333333333% center; }
-      #popin_playersHelp #dialog-roles .dialog-role[data-role="2"] .dialog-role-img {
-        background-position: 66.6666666667% center; }
-      #popin_playersHelp #dialog-roles .dialog-role[data-role="3"] .dialog-role-img {
-        background-position: 100% center; }
-  #popin_playersHelp #dialog-players {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-    flex-wrap: wrap;
-    border-top: 1px solid #88481a; }
-    #popin_playersHelp #dialog-players .dialog-character {
-      width: 160px;
-      display: flex;
-      flex-flow: column;
-      align-items: center;
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 7px;
-      border: 1px solid rgba(0, 0, 0, 0.4);
-      margin: 20px 7px 0px;
-      box-shadow: 2px 2px 5px #111; }
-      #popin_playersHelp #dialog-players .dialog-character .dialog-player-name {
-        font-weight: bold;
-        padding: 5px 0px;
-        margin-bottom: 2px;
-        width: 100%;
-        text-align: center;
-        background: white;
-        border-top-left-radius: 7px;
-        border-top-right-radius: 7px;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.4); }
-      #popin_playersHelp #dialog-players .dialog-character .dialog-character-name {
-        font-family: "Perdido";
-        margin: 7px auto; }
-      #popin_playersHelp #dialog-players .dialog-character .dialog-character-background-container {
-        width: 100px;
-        height: 100px;
-        background: white;
-        border-radius: 5px;
-        border: 1px solid grey; }
-        #popin_playersHelp #dialog-players .dialog-character .dialog-character-background-container .dialog-character-background {
-          width: 90px;
-          height: 90px;
-          margin: 5px;
-          background-image: url("img/card_characters.jpg");
-          background-size: cover; }
-      #popin_playersHelp #dialog-players .dialog-character .dialog-character-desc {
-        padding: 5px 10px;
-        font-family: 'Palatino Linotype';
-        text-align: center;
-        font-size: 12px; }
-      #popin_playersHelp #dialog-players .dialog-character[data-character="0"] .dialog-character-background {
-        background-position: 0% center; }
-      #popin_playersHelp #dialog-players .dialog-character[data-character="1"] .dialog-character-background {
-        background-position: 6.6666666667% center; }
-      #popin_playersHelp #dialog-players .dialog-character[data-character="2"] .dialog-character-background {
-        background-position: 13.3333333333% center; }
-      #popin_playersHelp #dialog-players .dialog-character[data-character="3"] .dialog-character-background {
-        background-position: 20% center; }
-      #popin_playersHelp #dialog-players .dialog-character[data-character="4"] .dialog-character-background {
-        background-position: 26.6666666667% center; }
-      #popin_playersHelp #dialog-players .dialog-character[data-character="5"] .dialog-character-background {
-        background-position: 33.3333333333% center; }
-      #popin_playersHelp #dialog-players .dialog-character[data-character="6"] .dialog-character-background {
-        background-position: 40% center; }
-      #popin_playersHelp #dialog-players .dialog-character[data-character="7"] .dialog-character-background {
-        background-position: 46.6666666667% center; }
-      #popin_playersHelp #dialog-players .dialog-character[data-character="8"] .dialog-character-background {
-        background-position: 53.3333333333% center; }
-      #popin_playersHelp #dialog-players .dialog-character[data-character="9"] .dialog-character-background {
-        background-position: 60% center; }
-      #popin_playersHelp #dialog-players .dialog-character[data-character="10"] .dialog-character-background {
-        background-position: 66.6666666667% center; }
-      #popin_playersHelp #dialog-players .dialog-character[data-character="11"] .dialog-character-background {
-        background-position: 73.3333333333% center; }
-      #popin_playersHelp #dialog-players .dialog-character[data-character="12"] .dialog-character-background {
-        background-position: 80% center; }
-      #popin_playersHelp #dialog-players .dialog-character[data-character="13"] .dialog-character-background {
-        background-position: 86.6666666667% center; }
-      #popin_playersHelp #dialog-players .dialog-character[data-character="14"] .dialog-character-background {
-        background-position: 93.3333333333% center; }
-      #popin_playersHelp #dialog-players .dialog-character[data-character="15"] .dialog-character-background {
-        background-position: 100% center; }
+  max-width: 75%;
+}
+#popin_playersHelp #dialog-roles {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+#popin_playersHelp #dialog-roles .dialog-role {
+  width: 150px;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 7px;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  box-shadow: 2px 2px 5px #111;
+}
+#popin_playersHelp #dialog-roles .dialog-role .dialog-role-count {
+  margin: 5px 0px;
+  font-family: "Perdido";
+  font-size: 18px;
+}
+#popin_playersHelp #dialog-roles .dialog-role .dialog-role-count span {
+  font-size: 20px;
+}
+#popin_playersHelp #dialog-roles .dialog-role .dialog-role-img {
+  height: 170px;
+  width: 105px;
+  background-image: url("img/roles.png");
+  background-size: cover;
+}
+#popin_playersHelp #dialog-roles .dialog-role .dialog-role-desc {
+  padding: 5px 10px;
+  font-family: "Palatino Linotype";
+  text-align: center;
+  font-size: 15px;
+}
+#popin_playersHelp #dialog-roles .dialog-role[data-role="0"] .dialog-role-img {
+  background-position: 0% center;
+}
+#popin_playersHelp #dialog-roles .dialog-role[data-role="1"] .dialog-role-img {
+  background-position: 33.3333333333% center;
+}
+#popin_playersHelp #dialog-roles .dialog-role[data-role="2"] .dialog-role-img {
+  background-position: 66.6666666667% center;
+}
+#popin_playersHelp #dialog-roles .dialog-role[data-role="3"] .dialog-role-img {
+  background-position: 100% center;
+}
+#popin_playersHelp #dialog-players {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  border-top: 1px solid #88481a;
+}
+#popin_playersHelp #dialog-players .dialog-character {
+  width: 160px;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 7px;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  margin: 20px 7px 0px;
+  box-shadow: 2px 2px 5px #111;
+}
+#popin_playersHelp #dialog-players .dialog-character .dialog-player-name {
+  font-weight: bold;
+  padding: 5px 0px;
+  margin-bottom: 2px;
+  width: 100%;
+  text-align: center;
+  background: white;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+}
+#popin_playersHelp #dialog-players .dialog-character .dialog-character-name {
+  font-family: "Perdido";
+  margin: 7px auto;
+}
+#popin_playersHelp #dialog-players .dialog-character .dialog-character-background-container {
+  width: 100px;
+  height: 100px;
+  background: white;
+  border-radius: 5px;
+  border: 1px solid grey;
+}
+#popin_playersHelp #dialog-players .dialog-character .dialog-character-background-container .dialog-character-background {
+  width: 90px;
+  height: 90px;
+  margin: 5px;
+  background-image: url("img/card_characters.jpg");
+  background-size: cover;
+}
+#popin_playersHelp #dialog-players .dialog-character .dialog-character-desc {
+  padding: 5px 10px;
+  font-family: "Palatino Linotype";
+  text-align: center;
+  font-size: 12px;
+}
+#popin_playersHelp #dialog-players .dialog-character[data-character="0"] .dialog-character-background {
+  background-position: 0% center;
+}
+#popin_playersHelp #dialog-players .dialog-character[data-character="1"] .dialog-character-background {
+  background-position: 6.6666666667% center;
+}
+#popin_playersHelp #dialog-players .dialog-character[data-character="2"] .dialog-character-background {
+  background-position: 13.3333333333% center;
+}
+#popin_playersHelp #dialog-players .dialog-character[data-character="3"] .dialog-character-background {
+  background-position: 20% center;
+}
+#popin_playersHelp #dialog-players .dialog-character[data-character="4"] .dialog-character-background {
+  background-position: 26.6666666667% center;
+}
+#popin_playersHelp #dialog-players .dialog-character[data-character="5"] .dialog-character-background {
+  background-position: 33.3333333333% center;
+}
+#popin_playersHelp #dialog-players .dialog-character[data-character="6"] .dialog-character-background {
+  background-position: 40% center;
+}
+#popin_playersHelp #dialog-players .dialog-character[data-character="7"] .dialog-character-background {
+  background-position: 46.6666666667% center;
+}
+#popin_playersHelp #dialog-players .dialog-character[data-character="8"] .dialog-character-background {
+  background-position: 53.3333333333% center;
+}
+#popin_playersHelp #dialog-players .dialog-character[data-character="9"] .dialog-character-background {
+  background-position: 60% center;
+}
+#popin_playersHelp #dialog-players .dialog-character[data-character="10"] .dialog-character-background {
+  background-position: 66.6666666667% center;
+}
+#popin_playersHelp #dialog-players .dialog-character[data-character="11"] .dialog-character-background {
+  background-position: 73.3333333333% center;
+}
+#popin_playersHelp #dialog-players .dialog-character[data-character="12"] .dialog-character-background {
+  background-position: 80% center;
+}
+#popin_playersHelp #dialog-players .dialog-character[data-character="13"] .dialog-character-background {
+  background-position: 86.6666666667% center;
+}
+#popin_playersHelp #dialog-players .dialog-character[data-character="14"] .dialog-character-background {
+  background-position: 93.3333333333% center;
+}
+#popin_playersHelp #dialog-players .dialog-character[data-character="15"] .dialog-character-background {
+  background-position: 100% center;
+}
 
 #player_config {
-  margin: 10px 0px; }
-  #player_config #player_config_row {
-    display: flex;
-    justify-content: space-around; }
-  #player_config #player_info_row {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    margin-bottom: 10px; }
-  #player_config #show-help,
-  #player_config #show-settings,
-  #player_config #show-scores {
-    height: 40px;
-    width: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer; }
-    #player_config #show-help:hover,
-    #player_config #show-settings:hover,
-    #player_config #show-scores:hover {
-      color: grey; }
-    #player_config #show-help svg,
-    #player_config #show-settings svg,
-    #player_config #show-scores svg {
-      width: auto;
-      height: 40px; }
-  #player_config #show-settings .fa-primary {
-    transform-origin: 216px 255px;
-    transition: transform 1s; }
-  #player_config #show-settings:hover .fa-primary {
-    transform: rotate(180deg); }
+  margin: 10px 0px;
+}
+#player_config #player_config_row {
+  display: flex;
+  justify-content: space-around;
+}
+#player_config #player_info_row {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 10px;
+}
+#player_config #show-help,
+#player_config #show-settings,
+#player_config #show-scores {
+  height: 40px;
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+#player_config #show-help:hover,
+#player_config #show-settings:hover,
+#player_config #show-scores:hover {
+  color: grey;
+}
+#player_config #show-help svg,
+#player_config #show-settings svg,
+#player_config #show-scores svg {
+  width: auto;
+  height: 40px;
+}
+#player_config #show-settings .fa-primary {
+  transform-origin: 216px 255px;
+  transition: transform 1s;
+}
+#player_config #show-settings:hover .fa-primary {
+  transform: rotate(180deg);
+}
 
 /*
  * Controls in the top bar
@@ -1733,36 +2033,44 @@ div.bang-card {
   position: relative;
   text-align: center;
   border-top: 1px solid gray;
-  margin-top: 10px; }
-  #settings-controls-container.settingsControlsHidden {
-    display: none; }
-  #settings-controls-container .row-data {
-    border: none;
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
-    border-bottom: 1px solid gray; }
-    #settings-controls-container .row-data .row-label {
-      width: 100%;
-      float: none;
-      color: black;
-      padding-bottom: 0px;
-      text-overflow: initial;
-      white-space: normal;
-      padding: 2px 4px 0px; }
-    #settings-controls-container .row-data .row-value {
-      width: 85%;
-      margin: 0; }
+  margin-top: 10px;
+}
+#settings-controls-container.settingsControlsHidden {
+  display: none;
+}
+#settings-controls-container .row-data {
+  border: none;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid gray;
+}
+#settings-controls-container .row-data .row-label {
+  width: 100%;
+  float: none;
+  color: black;
+  padding-bottom: 0px;
+  text-overflow: initial;
+  white-space: normal;
+  padding: 2px 4px 0px;
+}
+#settings-controls-container .row-data .row-value {
+  width: 85%;
+  margin: 0;
+}
 
 #help-icon {
   height: 35px;
   width: 35px;
-  cursor: pointer; }
-  #help-icon:hover {
-    color: grey; }
-  #help-icon svg {
-    width: 100%;
-    height: 100%; }
+  cursor: pointer;
+}
+#help-icon:hover {
+  color: grey;
+}
+#help-icon svg {
+  width: 100%;
+  height: 100%;
+}
 
 /*# sourceMappingURL=bang.css.map */

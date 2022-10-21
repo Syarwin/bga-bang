@@ -78,11 +78,11 @@ var jstpl_helpDialogCharacter = `
 
 var jstpl_player_board_role = `<div class='player-role' id="player-role-\${id}" data-role='\${role}'></div>`;
 
-var jstpl_player = `<div class='bang-player' id='bang-player-\${id}' data-role="\${role}" data-no="\${newNo}" data-max-bullets="\${bullets}" data-bullets="\${hp}" data-hand="\${handCount}">
+var jstpl_player = `<div class='bang-player' id='bang-player-\${id}' data-role="\${role}" data-no="\${newNo}">
 	<div class='bang-player-container'>
 		<div class='player-inplay' id="player-inplay-\${id}">
 		</div>
-		<div id="player-character-\${id}" class='player-info' data-character='\${characterId}'>
+		<div id="player-character-\${id}" class='player-info' data-character='\${characterId}' data-max-bullets="\${bullets}" data-bullets="\${hp}" data-hand="\${handCount}">
 			<div class="player-character-name">\${character}</div>
 			<div class="player-character-background">
         <div class="player-character-hourglass"></div>
@@ -106,6 +106,33 @@ var jstpl_player = `<div class='bang-player' id='bang-player-\${id}' data-role="
 		</div>
 	</div>
 </div>`;
+
+var jstpl_player_no_character = `<div class='bang-player' id='bang-player-\${id}' data-role="\${role}" data-no="\${newNo}"">
+	<div class='bang-player-container'>
+		<div class='player-inplay' id="player-inplay-\${id}">
+		</div>
+		<div id="player-character-\${id}" class='player-info empty'>
+			<div class='player-name' style="color:#\${color};"><span style="background:\${background}">\${shortName}</span></div>
+			<div class="player-star"></div>
+      <div class='player-distance' id='player-distance-\${id}'>0</div>
+		</div>
+	</div>
+</div>`;
+
+var jstpl_character = `
+	<div id='character-\${characterId}' class='player-info' data-character='\${characterId}' data-max-bullets='\${bullets}' data-bullets='\${bullets}'>
+        <div class="player-character-name">\${character}</div>
+        <div class="player-character-background"></div>
+        <div class='player-character-powers'>\${powers}</div>
+        <ul class='player-bullets'>
+            <li class='bullet'></li>
+            <li class='bullet'></li>
+            <li class='bullet'></li>
+            <li class='bullet'></li>
+            <li class='bullet'></li>
+            <li class='bullet'></li>
+        </ul>
+    </div>`;
 
 var jstpl_characterTooltip = `<div class="bang-character-tooltip">
 	<div class="bang-character-tooltip-sizing">

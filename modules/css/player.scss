@@ -76,6 +76,10 @@ div.bang-character-tooltip {
       background-position: $i * 100% / $numberOfCharacters center;
     }
   }
+
+  &.empty {
+    display: flex;
+  }
 }
 
 .bang-player.inactive .player-character-background .player-character-hourglass {
@@ -157,19 +161,6 @@ div.bang-character-tooltip {
     }
 
     .player-info {
-      .player-name {
-        text-align: center;
-        width: 80%;
-        margin: auto;
-      }
-
-      .player-bullets {
-        position: absolute;
-        width: 30px;
-        right: -8px;
-        top: 40px;
-      }
-
       .player-star {
         display: none;
         position: absolute;
@@ -237,7 +228,9 @@ div.bang-character-tooltip {
       vertical-align: bottom;
     }
   }
+}
 
+.player-info, .player-board .bang-player-board {
   .bullet {
     width: 35px;
     height: 13px;
@@ -286,6 +279,31 @@ div.bang-character-tooltip {
       &[data-bullets='#{$i}'][data-hand='#{$j}'] .player-cards {
         color: red;
       }
+    }
+  }
+}
+
+.player-info {
+  .player-name {
+    text-align: center;
+    width: 80%;
+    margin: auto;
+  }
+
+  .player-bullets {
+    position: absolute;
+    width: 30px;
+    right: -8px;
+    top: 40px;
+  }
+
+  .player-character-powers {
+    padding: 0px 10px;
+    font-family: 'Palatino Linotype';
+    text-align: center;
+    font-size: 6px;
+    p {
+      margin: 0;
     }
   }
 }

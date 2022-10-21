@@ -2,6 +2,7 @@
 namespace BANG\Core;
 use bang;
 use BANG\Managers\Players;
+use BANG\Models\Player;
 use BANG\Managers\Cards;
 use BANG\Models\AbstractCard;
 
@@ -140,7 +141,7 @@ class Notifications
           : clienttranslate('${player_name} chooses ${card_name} from ${src_name}');
     }
     $data['ignore'] = [$player];
-    self::notifyAll('cardsGained', $msg, $data);
+    Notifications::notifyAll('cardsGained', $msg, $data);
   }
 
   public static function drawCardFromDiscard($player, $cards)
@@ -152,7 +153,7 @@ class Notifications
   public static function chooseCard($player, $card)
   {
     $msg = clienttranslate('${player_name} chooses ${card_name}');
-    self::notifyAll('cardsGained', $msg, [
+    Notifications::notifyAll('cardsGained', $msg, [
       'msgYou' => clienttranslate('${You} choose ${card_name}'),
       'player' => $player,
       'card' => $card,
@@ -214,11 +215,11 @@ class Notifications
     // Notify everyone else
     $data['ignore'] = [$receiver, $victim];
     if ($equipped) {
-      self::notifyAll('cardsGained', clienttranslate('${player_name} stole ${card_name} from ${player_name2}'), $data);
+      Notifications::notifyAll('cardsGained', clienttranslate('${player_name} stole ${card_name} from ${player_name2}'), $data);
     } else {
       unset($data['card_name']);
       unset($data['card']);
-      self::notifyAll('cardsGained', clienttranslate('${player_name} stole a card from ${player_name2}'), $data);
+      Notifications::notifyAll('cardsGained', clienttranslate('${player_name} stole a card from ${player_name2}'), $data);
     }
 
     self::updateHand($receiver);
@@ -272,7 +273,7 @@ class Notifications
    */
   public static function moveCard($card, $player, $target)
   {
-    self::notifyAll('cardsGained', clienttranslate('${card_name} moves to ${player_name}'), [
+    Notifications::notifyAll('cardsGained', clienttranslate('${card_name} moves to ${player_name}'), [
       'card' => $card,
       'player' => $target,
       'player2' => $player,
@@ -342,10 +343,19 @@ class Notifications
     ]);
   }
 
-  public static function preSelectCards($player, $ids)
+  /**
+   * characterChosen: send all info about
+   * @param Player $player
+   * @param Player $character
+   */
+  public static function characterChosen($player)
   {
-    self::notify($player->getId(), 'preselection', '', [
-      'cards' => $ids,
+    $characterName = $player->getCharName();
+    $msg = '${player_name} chose ${character_name} as a character';
+    self::notifyAll('characterChosen', $msg, [
+      'character_name' => $characterName,
+      'character' => $player->getUiCharacterSpecificData(),
+      'player' => $player,
     ]);
   }
 

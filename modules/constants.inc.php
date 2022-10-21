@@ -23,6 +23,9 @@ define('ST_TRIGGER_ABILITY', 20);
 define('ST_PRE_ELIMINATE', 21);
 define('ST_VICE_PENALTY', 22);
 define('ST_PRE_ELIMINATE_DISCARD', 23);
+define('ST_PRE_CHOOSE_CHARACTER', 25);
+define('ST_CHOOSE_CHARACTER', 26);
+define('ST_CHARACTER_SETUP', 27);
 define('ST_PRE_GAME_END', 98);
 define('ST_GAME_END', 99);
 
@@ -37,13 +40,13 @@ define('OPTION_CHAR_5', 105);
 define('OPTION_CHAR_6', 106);
 define('OPTION_CHAR_7', 107);
 define('OPTION_GENERAL_STORE_LAST_CARD', 108);
+define('OPTION_CHOOSE_CHARACTERS', 110);
 
 /*
- * Game States(see sql)
+ * Choose Characters options
  */
-define('PLAY_CARD', 0);
-define('CHOOSE_PLAYER', 1);
-define('WAIT_REACTION', 2);
+define('CHARACTERS_RANDOM', 1101);
+define('CHARACTERS_CHOOSE', 1102);
 
 /*
  * Options constants

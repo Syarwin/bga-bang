@@ -45,6 +45,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    .player-info {
+      margin-left: 20px;
+      margin-right: 20px;
+      border-radius: 5px;
+      cursor:pointer;
+
+      &:hover {
+        transform:scale(1.05);
+        transform-origin: center center;
+      }
+    }
   }
 
   #dialog-title-container {

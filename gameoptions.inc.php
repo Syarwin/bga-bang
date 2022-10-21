@@ -47,6 +47,21 @@ $characters = [
 ];
 
 $game_options = [
+  OPTION_CHOOSE_CHARACTERS => [
+    'name' => totranslate('Choose characters'),
+    'default' => CHARACTERS_RANDOM,
+    'values' => [
+      CHARACTERS_RANDOM => [
+        'name' => totranslate('Randomly'),
+        'description' => totranslate('Character will be chosen randomly for each player'),
+      ],
+      CHARACTERS_CHOOSE => [
+        'name' => totranslate('Manually'),
+        'description' => totranslate('Each player chooses one of two random characters on game start'),
+      ],
+    ],
+  ],
+
   OPTION_CHAR_1 => [
     'name' => totranslate('Character 1'),
     'values' => $characters,
