@@ -30,6 +30,7 @@ define([
   g_gamethemeurl + 'modules/js/States/PlayCardTrait.js',
   g_gamethemeurl + 'modules/js/States/ReactTrait.js',
   g_gamethemeurl + 'modules/js/States/SelectCardTrait.js',
+  g_gamethemeurl + 'modules/js/States/ChooseCharacterTrait.js',
   g_gamethemeurl + 'modules/js/States/DiscardEndOfTurnTrait.js',
   g_gamethemeurl + 'modules/js/States/DiscardBlueCardTrait.js',
   g_gamethemeurl + 'modules/js/States/EventTrait.js',
@@ -45,6 +46,7 @@ define([
       bang.playCardTrait,
       bang.reactTrait,
       bang.selectCardTrait,
+      bang.chooseCharacterTrait,
       bang.discardEndOfTurnTrait,
       bang.playerTrait,
       bang.cardTrait,
@@ -162,7 +164,9 @@ define([
         dojo.connect($('help-icon'), 'click', () => this.displayPlayersHelp());
 
         // Make the current player stand out
-        this.updateCurrentTurnPlayer(gamedatas.playerTurn);
+        if (gamedatas.gamestate.name !== 'chooseCharacter') {
+          this.updateCurrentTurnPlayer(gamedatas.playerTurn);
+        }
       },
 
       onLoadingComplete() {
@@ -185,6 +189,10 @@ define([
         if (!this.isCurrentPlayerActive())
           // Make sure the player is active
           return;
+
+        if (stateName == 'chooseCharacter') {
+          this.addActionButton('buttonShowCharacters', _('Show characters'), () => this.dialogChooseCharacter(), null, false, 'blue');
+        }
 
         if (stateName == 'playCard') {
           if (args._private && args._private.character != null && this._selectedCard == null)
@@ -278,7 +286,11 @@ define([
           this._amount = 2;
           this.makeCardSelectable(cards, 'useAbility');
 
-          $('pagemaintitletext').innerHTML = _('You must select two cards');
+          var oldStateDescription = this.gamedatas.gamestate.descriptionmyturn;
+          this.gamedatas.gamestate.descriptionmyturn = _('You must select two cards');
+          this.updatePageTitle();
+          this.gamedatas.gamestate.descriptionmyturn = oldStateDescription;
+
           this.removeActionButtons();
           this.addActionButton('buttonCancelUseAbility', _('Cancel'), () => this.restartState(), null, false, 'gray');
         }
@@ -287,17 +299,20 @@ define([
       onClickCardUseAbility: function (card) {
         this.toggleCard(card);
 
+        const buttonVisible = $('buttonConfirmUseAbility');
         if (this._selectedCards.length < this._amount) {
-          if ($('buttonConfirmUseAbility')) dojo.destroy('buttonConfirmUseAbility');
+          if (buttonVisible) dojo.destroy('buttonConfirmUseAbility');
         } else {
-          this.addActionButton(
-            'buttonConfirmUseAbility',
-            _('Confirm'),
-            'onClickConfirmUseAbility',
-            null,
-            false,
-            'blue',
-          );
+          if (!buttonVisible) {
+            this.addActionButton(
+                'buttonConfirmUseAbility',
+                _('Confirm'),
+                'onClickConfirmUseAbility',
+                null,
+                false,
+                'blue',
+            );
+          }
         }
       },
 
@@ -389,6 +404,7 @@ define([
         this.removeActionButtons();
         dojo.empty('customActions');
         this.onUpdateActionButtons(this.gamedatas.gamestate.name, this.gamedatas.gamestate.args);
+        this.updatePageTitle();
       },
 
       restartState: function () {

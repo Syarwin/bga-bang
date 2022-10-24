@@ -150,6 +150,14 @@ class action_banghighnoon extends APP_GameAction
     self::ajaxResponse();
   }
 
+  public function actChooseCharacter()
+  {
+    self::setAjaxMode();
+    $character = (int) self::getArg('character', AT_posint, false);
+    $this->game->actChooseCharacter($character);
+    self::ajaxResponse();
+  }
+
   public function actChangePref()
   {
     self::setAjaxMode();

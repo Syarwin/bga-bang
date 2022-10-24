@@ -34,7 +34,7 @@ trait EndOfLifeTrait
         $player->playCard($card, []);
       }
     }
-    $player->eliminateIfOutOfHp();
+    $player->addRevivalAtomOrEliminate();
   }
 
   public function argDiscardEliminate()

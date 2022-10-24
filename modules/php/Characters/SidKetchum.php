@@ -42,11 +42,9 @@ class SidKetchum extends \BANG\Models\Player
     );
 
     $cards = Cards::getMany($args);
-    foreach ($cards as $card) {
-      $card->discard();
-    }
-    Notifications::discardedCards($this, $cards, false, $cards->getIds());
+    Cards::discardMany($args);
+    Notifications::discardedCards($this, $cards, false, $args);
     $this->gainLife();
-    $this->eliminateIfOutOfHp();
+    $this->addRevivalAtomOrEliminate();
   }
 }

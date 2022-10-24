@@ -30,25 +30,32 @@ class Player extends \BANG\Helpers\DB_Manager
 
   // --character properties
   protected $character; //the int-constant
+  protected $altCharacter;
   protected $character_name;
   protected $text;
   protected $bullets;
   protected $expansion = BASE_GAME;
+  protected $characterChosen;
 
   public function __construct($row)
   {
     if ($row != null) {
+      // backward compatibilty from 15/10/2022
+      $this->characterChosen = !(array_key_exists('player_character_chosen', $row) && (int) $row['player_character_chosen'] === 0);
       $this->id = (int) $row['player_id'];
       $this->no = (int) $row['player_no'];
       $this->name = $row['player_name'];
       $this->color = $row['player_color'];
       $this->eliminated = $row['player_eliminated'] == 1;
-      $this->hp = (int) $row['player_hp'];
+      $this->hp = $this->characterChosen ? (int) $row['player_hp'] : null;
       $this->zombie = $row['player_zombie'] == 1;
       $this->role = (int) $row['player_role'];
-      $this->bullets = (int) $row['player_bullets'];
+      $this->bullets = $this->characterChosen ? (int) $row['player_bullets'] : null;
       $this->score = (int) $row['player_score'];
       $this->generalStore = (int) $row['player_autopick_general_store'];
+      $this->character = (int) $row['player_character'];
+      // backward compatibilty from 15/10/2022
+      $this->altCharacter = array_key_exists('player_alt_character', $row) ? (int) $row['player_alt_character'] : -1;
     }
   }
 
@@ -143,14 +150,18 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     return $this->generalStore == GENERAL_STORE_AUTO_PICK;
   }
+  public function isCharacterChosen()
+  {
+    return $this->characterChosen;
+  }
 
   public function getUiData($currentPlayerId = null)
   {
     $current = $this->id == $currentPlayerId;
     return [
-      'id' => (int) $this->id,
+      'id' => $this->id,
       'eliminated' => (int) $this->eliminated,
-      'no' => (int) $this->no,
+      'no' => $this->no,
       'name' => $this->getName(),
       'color' => $this->color,
       'characterId' => $this->character,
@@ -169,6 +180,21 @@ class Player extends \BANG\Helpers\DB_Manager
           OPTION_GENERAL_STORE_LAST_CARD => $this->generalStore,
         ]
         : [],
+    ];
+  }
+
+  /**
+   * Returns data specific to a character
+   * @return array
+   */
+  public function getUiCharacterSpecificData()
+  {
+    return [
+      'characterId' => $this->character,
+      'character' => $this->character_name,
+      'powers' => $this->text,
+      'bullets' => $this->bullets,
+      'hp' => $this->bullets,
     ];
   }
 
@@ -292,6 +318,14 @@ class Player extends \BANG\Helpers\DB_Manager
     $this->hp -= $amount;
     $this->save();
     Notifications::lostLife($this, $amount);
+    $this->addRevivalAtomOrEliminate();
+  }
+
+  /**
+   * used when player drinks a beer or Sid Ketchum uses his ability to gain life discarding 2 cards
+   */
+  public function addRevivalAtomOrEliminate()
+  {
     if ($this->hp <= 0) {
       $ctx = Stack::getCtx();
       $isDuel = Players::getLivingPlayers()->count() <= 2;
@@ -317,24 +351,6 @@ class Player extends \BANG\Helpers\DB_Manager
         'pId' => $this->id,
       ]);
       Stack::insertAfterCardResolution($atom, false);
-    }
-  }
-
-  /**
-   * used when player drinks a beer or Sid Ketchum uses his ability to gain life discarding 2 cards
-   */
-  public function eliminateIfOutOfHp()
-  {
-    // If it's not enough, add a ELIMINATE node
-    if ($this->getHp() <= 0) {
-      $ctx = Stack::getCtx();
-      $atom = Stack::newAtom(ST_PRE_ELIMINATE_DISCARD, [
-        'type' => 'eliminateDiscard',
-        'src' => $ctx['src'],
-        'attacker' => $ctx['attacker'],
-        'pId' => $this->getId(),
-      ]);
-      Stack::insertAfterCardResolution($atom);
     }
   }
 
@@ -489,8 +505,9 @@ class Player extends \BANG\Helpers\DB_Manager
     ];
   }
 
-  /*
-   * return defensive options
+  /**
+   * Returns defensive options
+   * @return array
    */
   public function getDefensiveOptions()
   {
@@ -546,6 +563,15 @@ class Player extends \BANG\Helpers\DB_Manager
       }
     }
     return false;
+  }
+
+  /**
+   * getBothCharacters: returns randomly chosen two characters to choose from
+   * @return array
+   */
+  public function getBothCharacters()
+  {
+    return [$this->character, $this->altCharacter];
   }
 
   /***************************************
@@ -793,5 +819,44 @@ class Player extends \BANG\Helpers\DB_Manager
   public function setGeneralStorePref($value)
   {
     self::DB()->update(['player_autopick_general_store' => $value], $this->id);
+  }
+
+  /**
+   * swapCharactersIfNeeded: sets correct character chosen by a player and sets a corresponding flag
+   * @param int $chosenCharacterId
+   */
+  public function swapCharactersIfNeeded($chosenCharacterId)
+  {
+    if (!in_array($chosenCharacterId, [$this->character, $this->altCharacter])) {
+      throw new \BgaVisibleSystemException("Character id ${chosenCharacterId} is not in the list of possible characters to choose. Please report a bug.");
+    }
+
+    if ($this->altCharacter === $chosenCharacterId) {
+      $newParams = [];
+      $newParams['player_character'] = $chosenCharacterId;
+      $newParams['player_alt_character'] = $this->character;
+      $this->altCharacter = $this->character;
+      $this->character = $chosenCharacterId;
+      self::DB()->update($newParams, $this->id);
+    }
+  }
+
+  /**
+   * setupChosenCharacter: finishes up everything related to character before game starts
+   */
+  public function setupChosenCharacter()
+  {
+
+    $characterObject = Players::getCharacter($this->character);
+    $bullets = $characterObject->getBullets();
+    if ($this->role === SHERIFF) {
+      $bullets++;
+    }
+    $newParams = [
+      'player_character_chosen' => 1,
+      'player_hp' => $bullets,
+      'player_bullets' => $bullets,
+    ];
+    self::DB()->update($newParams, $this->id);
   }
 }

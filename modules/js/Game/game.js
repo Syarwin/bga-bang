@@ -431,11 +431,22 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
     },
 
     forEachPlayer(callback) {
+      this.getPlayersWithHiddenRoles().forEach(callback);
+    },
+
+    forEachPlayerWithCharacter(callback) {
+      const playersWithCharacters = this.getPlayersWithHiddenRoles().filter((player) => {
+        return player.character !== null;
+      });
+      playersWithCharacters.forEach(callback);
+    },
+
+    getPlayersWithHiddenRoles() {
       var players = Object.values(this.gamedatas.players);
       players.forEach((player) => {
         if (player.role === null) player.role = 'hidden';
       });
-      players.forEach(callback);
+      return players;
     },
 
     /*
@@ -518,6 +529,11 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
       }
 
       return dojo.place(this[tplMethodName](object), container);
+    },
+
+    destroyDialog() {
+      this._dial.destroy();
+      this._dial = null;
     },
   });
 });

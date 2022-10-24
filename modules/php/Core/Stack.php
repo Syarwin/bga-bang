@@ -275,6 +275,28 @@ class Stack
     return Stack::findBy('suspended', true);
   }
 
+  /**
+   * Finds the first atom matching all $properties and returns its index
+   *
+   * @param array $properties
+   * @return int -1 if no atom matches $properties, atom position otherwise
+   */
+  public static function getFirstIndex($properties)
+  {
+    $stack = Stack::get();
+    foreach ($stack as $index => $atom) {
+      foreach ($properties as $key => $value) {
+        if (!isset($atom[$key]) || $atom[$key] !== $value) {
+          continue 2; //go to next atom
+        }
+      }
+      //current atom matches all properties
+      return $index;
+    }
+
+    return -1;
+  }
+
   private static function findBy($option, $value) {
     $ctxIndex = -1;
     $stack = Stack::get();

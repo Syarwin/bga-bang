@@ -26,12 +26,24 @@ class ElGringo extends \BANG\Models\Player
   {
     parent::loseLife($amount);
     if (Rules::isAbilityAvailable()) {
-      $attackerId = Rules::getCurrentPlayerId();
+      $attackerId = Players::getCurrentTurn()->getId();
       if ($attackerId != $this->id) {
-        Stack::insertAfterCardResolution(Stack::newAtom(ST_TRIGGER_ABILITY, [
-          'pId' => $this->id,
-          'amount' => $amount,
-        ]));
+        $attackerCharacter = Players::get($attackerId)->getCharacter();
+        $attackerIndex = Stack::getFirstIndex(['state' => ST_TRIGGER_ABILITY,
+          'pId' => $attackerId
+        ]);
+        // This is for a specific case when El Gringo loses the Duel and needs to get a card from Suzy AFTER she gets it
+        if ($attackerCharacter === SUZY_LAFAYETTE && $attackerIndex > -1) {
+          Stack::insertAfter(Stack::newAtom(ST_TRIGGER_ABILITY, [
+            'pId' => $this->id,
+            'amount' => $amount,
+          ]), $attackerIndex + 1);
+        } else {
+          Stack::insertAfterCardResolution(Stack::newAtom(ST_TRIGGER_ABILITY, [
+            'pId' => $this->id,
+            'amount' => $amount,
+          ]));
+        }
       }
     }
   }

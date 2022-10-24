@@ -23,11 +23,12 @@ CREATE TABLE IF NOT EXISTS `log` (
 -- see constants.inc.php --
 ALTER TABLE `player` ADD `player_role` INT(1) UNSIGNED NOT NULL;
 ALTER TABLE `player` ADD `player_character` INT(1) UNSIGNED NOT NULL;
-ALTER TABLE `player` ADD `player_bullets` INT(1) UNSIGNED NOT NULL;
+ALTER TABLE `player` ADD `player_alt_character` INT(1) NOT NULL;
+ALTER TABLE `player` ADD `player_character_chosen` TINYINT UNSIGNED NOT NULL;
+ALTER TABLE `player` ADD `player_bullets` INT(1) UNSIGNED NULL;
 ALTER TABLE `player` ADD `player_activate` TINYINT UNSIGNED NOT NULL;
-ALTER TABLE `player` ADD `player_hp` TINYINT NOT NULL;
+ALTER TABLE `player` ADD `player_hp` TINYINT;
 ALTER TABLE `player` ADD `player_autopick_general_store` TINYINT NOT NULL;
-
 
 CREATE TABLE IF NOT EXISTS `card` (
   `card_id` int(10) unsigned NOT NULL AUTO_INCREMENT,

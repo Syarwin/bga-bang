@@ -51,6 +51,7 @@ class banghighnoon extends Table
   use BANG\States\EndOfGameTrait;
   use BANG\States\TriggerAbilityTrait;
   use BANG\States\PreferencesTrait;
+  use BANG\States\ChooseCharacterTrait;
   use BANG\States\PhaseOneTrait;
   use BANG\States\EventTrait;
   use BANG\States\DiscardBlueCardTrait;
@@ -60,7 +61,9 @@ class banghighnoon extends Table
   {
     parent::__construct();
     self::$instance = $this;
-    self::initGameStateLabels([]);
+    self::initGameStateLabels([
+      'optionCharacters' => OPTION_CHOOSE_CHARACTERS,
+    ]);
   }
   public static function get()
   {
@@ -120,10 +123,17 @@ class banghighnoon extends Table
    */
   public function getGameProgression()
   {
-    $bulletsSum = (int) self::getUniqueValueFromDb('SELECT SUM(player_bullets) FROM player');
-    $currentHpSum = (int) self::getUniqueValueFromDb('SELECT SUM(player_hp) FROM player');
-    $lostBullets = $bulletsSum - $currentHpSum;
-    return $lostBullets/$bulletsSum * 100;
+    // backward compatibilty from 15/10/2022
+    $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_character_chosen\'')->num_rows === 1;
+    $someCharactersNeedToBeChosen = $newSchema && !empty(self::getObjectListFromDb('SELECT `player_character_chosen` FROM `player` WHERE `player_character_chosen` = 0'));
+    if ($someCharactersNeedToBeChosen) {
+      return 0;
+    } else {
+      $bulletsSum = (int)self::getUniqueValueFromDb('SELECT SUM(player_bullets) FROM player');
+      $currentHpSum = (int)self::getUniqueValueFromDb('SELECT SUM(player_hp) FROM player');
+      $lostBullets = $bulletsSum - $currentHpSum;
+      return $lostBullets / $bulletsSum * 100;
+    }
   }
 
 

@@ -17,17 +17,33 @@ class SuzyLafayette extends \BANG\Models\Player
   public function checkHand()
   {
     if ($this->getHand()->count() == 0 && Rules::isAbilityAvailable()) {
-      Stack::insertAfterCardResolution(
-        Stack::newSimpleAtom(ST_TRIGGER_ABILITY, $this),
-        false
-      );
+      $ctx = Stack::getCtx();
+      $newAtom = Stack::newSimpleAtom(ST_TRIGGER_ABILITY, $this);
+      if ($ctx['state'] === ST_REACT && $ctx['missedNeeded'] > 1) {
+        Stack::insertOnTop($newAtom);
+      } else {
+        Stack::insertAfterCardResolution($newAtom, false);
+      }
     }
   }
 
-  public function useAbility($ctx)
+  public function useAbility()
   {
     if ($this->getHand()->count() == 0) {
       $this->drawCards(1);
     }
+  }
+
+  /**
+   * {{@inheritDoc}}
+   */
+  public function getDefensiveOptions()
+  {
+    $options = parent::getDefensiveOptions();
+    if ($this->getHand()->count() == 1 && isset($options['cards'][0]['amount'])) {
+      $options['cards'][0]['amount'] = 1;
+    }
+
+    return $options;
   }
 }
