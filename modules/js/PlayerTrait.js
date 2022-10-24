@@ -310,7 +310,6 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
      * Triggered when a player click on a player's board or action button
      */
     onClickPlayer(playerId) {
-      debugger;
       if (!this._selectablePlayers.includes(playerId)) return;
 
       if (this._action == 'drawCard') {
