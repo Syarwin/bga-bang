@@ -1,12 +1,12 @@
 <?php
 namespace BANG\Helpers;
 
-use bang;
+use banghighnoon;
 
 class GameOptions
 {
   public static function chooseCharactersManually()
   {
-    return (int) bang::get()->getGameStateValue('optionCharacters') === CHARACTERS_CHOOSE;
+    return (int) banghighnoon::get()->getGameStateValue('optionCharacters') === CHARACTERS_CHOOSE;
   }
 }
