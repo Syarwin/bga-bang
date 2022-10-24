@@ -16,10 +16,7 @@ trait EventTrait
     $ctx = Stack::getCtx();
     $player = Players::get($ctx['pId']);
     $eventCard = EventCards::next();
-    $nextEventCard = EventCards::getNext();
-    if ($nextEventCard) {
-      Notifications::newEvent($eventCard, $nextEventCard);
-    }
+    Notifications::newEvent($eventCard, EventCards::getNext());
     Rules::setNewTurnRules($player, $eventCard);
     // EFFECT_PERMANENT should not logically be here but in case of Hangover + Paul Regret we should notify about distances, so...
     // Feel free to change this logic if at some point EFFECT_INSTANT will trigger anything
