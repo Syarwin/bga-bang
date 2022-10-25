@@ -81,7 +81,8 @@ class Rules extends DB_Manager
 
   public static function getCurrentPlayerId()
   {
-    return (int) self::get()['player_id'];
+    $current = self::get();
+    return $current ? (int) $current['player_id'] : null;
   }
 
   public static function isAbilityAvailable()

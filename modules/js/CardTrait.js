@@ -56,7 +56,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         flipped: ocard.flipped === undefined || !ocard.flipped ? '' : 'flipped',
         enforceTooltip: ocard.enforceTooltip === undefined ? false : ocard.enforceTooltip,
         extraClass: '',
-        colorOverride: this.gamedatas?.eventActive.colorOverride || '',
+        colorOverride: this.gamedatas?.eventActive?.colorOverride || '',
       };
 
       if (this._cards[ocard.type]) {
