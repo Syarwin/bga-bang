@@ -41,21 +41,21 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     if ($row != null) {
       // backward compatibilty from 15/10/2022
-      $this->characterChosen = !(array_key_exists('player_character_chosen', $row) && (int) $row['player_character_chosen'] === 0);
-      $this->id = (int) $row['player_id'];
-      $this->no = (int) $row['player_no'];
+      $this->characterChosen = !(array_key_exists('player_character_chosen', $row) && (int)$row['player_character_chosen'] === 0);
+      $this->id = (int)$row['player_id'];
+      $this->no = (int)$row['player_no'];
       $this->name = $row['player_name'];
       $this->color = $row['player_color'];
       $this->eliminated = $row['player_eliminated'] == 1;
-      $this->hp = $this->characterChosen ? (int) $row['player_hp'] : null;
+      $this->hp = $this->characterChosen ? (int)$row['player_hp'] : null;
       $this->zombie = $row['player_zombie'] == 1;
-      $this->role = (int) $row['player_role'];
-      $this->bullets = $this->characterChosen ? (int) $row['player_bullets'] : null;
-      $this->score = (int) $row['player_score'];
-      $this->generalStore = (int) $row['player_autopick_general_store'];
-      $this->character = (int) $row['player_character'];
+      $this->role = (int)$row['player_role'];
+      $this->bullets = $this->characterChosen ? (int)$row['player_bullets'] : null;
+      $this->score = (int)$row['player_score'];
+      $this->generalStore = (int)$row['player_autopick_general_store'];
+      $this->character = (int)$row['player_character'];
       // backward compatibilty from 15/10/2022
-      $this->altCharacter = array_key_exists('player_alt_character', $row) ? (int) $row['player_alt_character'] : -1;
+      $this->altCharacter = array_key_exists('player_alt_character', $row) ? (int)$row['player_alt_character'] : -1;
     }
   }
 
@@ -66,42 +66,52 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     return $this->id;
   }
+
   public function getNo()
   {
     return $this->no;
   }
+
   public function getName()
   {
     return $this->name;
   }
+
   public function getColor()
   {
     return $this->color;
   }
+
   public function getHp()
   {
     return $this->hp;
   }
+
   public function getRole()
   {
     return $this->role;
   }
+
   public function getCharacter()
   {
     return $this->character;
   }
+
   public function getCharName()
   {
     return $this->character_name;
   }
+
   public function isEliminated()
   {
     return $this->eliminated;
   }
+
   public function isZombie()
   {
     return $this->zombie;
   }
+
   public function isAvailable($expansions)
   {
     return in_array($this->expansion, $expansions);
@@ -111,14 +121,17 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     return Players::getPlayerPositions()[$this->id];
   }
+
   public function getText()
   {
     return $this->text;
   }
+
   public function getExpansion()
   {
     return $this->expansion;
   }
+
   public function getBullets()
   {
     return $this->bullets;
@@ -150,6 +163,7 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     return $this->generalStore == GENERAL_STORE_AUTO_PICK;
   }
+
   public function isCharacterChosen()
   {
     return $this->characterChosen;
@@ -160,7 +174,7 @@ class Player extends \BANG\Helpers\DB_Manager
     $current = $this->id == $currentPlayerId;
     return [
       'id' => $this->id,
-      'eliminated' => (int) $this->eliminated,
+      'eliminated' => (int)$this->eliminated,
       'no' => $this->no,
       'name' => $this->getName(),
       'color' => $this->color,
@@ -327,7 +341,6 @@ class Player extends \BANG\Helpers\DB_Manager
   public function addRevivalAtomOrEliminate()
   {
     if ($this->hp <= 0) {
-      $ctx = Stack::getCtx();
       $isDuel = Players::getLivingPlayers()->count() <= 2;
       $beersInHand = $this->getHand()
         ->filter(function ($card) {
@@ -344,14 +357,25 @@ class Player extends \BANG\Helpers\DB_Manager
       }
       $nextState = $canDrinkBeerToLive ? ST_REACT_BEER : ST_PRE_ELIMINATE_DISCARD;
       $atomType = $canDrinkBeerToLive ? 'beer' : 'eliminate';
-      $atom = Stack::newAtom($nextState, [
-        'type' => $atomType,
-        'src' => $ctx['src'] ?? null,
-        'attacker' => $ctx['attacker'] ?? null,
-        'pId' => $this->id,
-      ]);
-      Stack::insertAfterCardResolution($atom, false);
+      $this->addAtomAfterCardResolution($nextState, $atomType);
     }
+  }
+
+  /**
+   * @param int $nextState
+   * We expect $type to be either 'beer' or 'eliminate' so we probably need enum here
+   * @param string $type
+   */
+  public function addAtomAfterCardResolution($nextState, $type)
+  {
+    $ctx = Stack::getCtx();
+    $atom = Stack::newAtom($nextState, [
+      'type' => $type,
+      'src' => $ctx['src'] ?? null,
+      'attacker' => $ctx['attacker'] ?? null,
+      'pId' => $this->id,
+    ]);
+    Stack::insertAfterCardResolution($atom, false);
   }
 
   /************************************
