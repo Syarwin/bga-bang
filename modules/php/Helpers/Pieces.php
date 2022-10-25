@@ -380,7 +380,7 @@ class Pieces extends DB_Manager
    * Pick the first "$nbr" pieces on top of specified deck and place it in target location
    * Return pieces infos or void array if no card in the specified location
    */
-  public static function pickForLocation($nbr, $fromLocation, $toLocation, $state = 0, $deckReform = true)
+  public static function pickForLocation($nbr, $fromLocation, $toLocation, $state = null, $deckReform = true)
   {
     self::checkLocation($fromLocation);
     self::checkLocation($toLocation);
