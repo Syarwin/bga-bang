@@ -20,7 +20,7 @@ class SuzyLafayette extends \BANG\Models\Player
       $newAtom = Stack::newAtom(ST_TRIGGER_ABILITY, [
         'pId' => $this->id,
       ]);
-      if ($ctx['state'] === ST_REACT && $ctx['missedNeeded'] > 1) {
+      if ($ctx['state'] === ST_REACT && array_key_exists('missedNeeded', $ctx) && $ctx['missedNeeded'] > 1) {
         Stack::insertOnTop($newAtom);
       } else {
         Stack::insertAfterCardResolution($newAtom, false);
