@@ -1,5 +1,7 @@
 <?php
 
+require_once 'modules/constants.inc.php';
+
 // See Dokumentation.pptx for a flowchart about how the state-cycles
 
 $machinestates = [
