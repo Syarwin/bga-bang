@@ -33,7 +33,6 @@ define([
   g_gamethemeurl + 'modules/js/States/ChooseCharacterTrait.js',
   g_gamethemeurl + 'modules/js/States/DiscardEndOfTurnTrait.js',
   g_gamethemeurl + 'modules/js/States/DiscardBlueCardTrait.js',
-  g_gamethemeurl + 'modules/js/States/EventTrait.js',
 
   g_gamethemeurl + 'modules/js/EventTrait.js',
   g_gamethemeurl + 'modules/js/CardTrait.js',
