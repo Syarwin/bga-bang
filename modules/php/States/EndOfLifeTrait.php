@@ -29,12 +29,14 @@ trait EndOfLifeTrait
   {
     // Play the beer cards picked by player
     $player = Players::getActive();
-    if ($ids != null) {
+    if (empty($ids)) {
+      $player->addAtomAfterCardResolution(ST_PRE_ELIMINATE_DISCARD, 'eliminate');
+    } else {
       foreach (Cards::getMany($ids) as $card) {
         $player->playCard($card, []);
       }
+      $player->addRevivalAtomOrEliminate();
     }
-    $player->addRevivalAtomOrEliminate();
   }
 
   public function argDiscardEliminate()
