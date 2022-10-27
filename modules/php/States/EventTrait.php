@@ -32,7 +32,7 @@ trait EventTrait
   public function stResolveEventEffect()
   {
     $eventCard = EventCards::getActive();
-    if ($eventCard->getEffect() === EFFECT_STARTOFTURN) {
+    if ($eventCard && $eventCard->getEffect() === EFFECT_STARTOFTURN) {
       $ctx = Stack::getCtx();
       $player = Players::get($ctx['pId']);
       $eventCard->resolveEffect($player);

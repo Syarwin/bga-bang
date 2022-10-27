@@ -32,10 +32,10 @@ spl_autoload_register($swdNamespaceAutoload, true, true);
 
 require_once APP_GAMEMODULE_PATH . 'module/table/table.game.php';
 
+use BANG\Helpers\GameOptions;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
 use BANG\Managers\EventCards;
-use BANG\Core\Globals;
 use BANG\Core\Stack;
 use BANG\Managers\Rules;
 
@@ -63,6 +63,8 @@ class banghighnoon extends Table
     self::$instance = $this;
     self::initGameStateLabels([
       'optionCharacters' => OPTION_CHOOSE_CHARACTERS,
+      'optionExpansions' => OPTION_EXPANSIONS,
+      'optionHighNoon' => OPTION_HIGH_NOON_EXPANSION,
     ]);
   }
   public static function get()
@@ -85,9 +87,11 @@ class banghighnoon extends Table
   protected function setupNewGame($bplayers, $options = [])
   {
     // Initialize board and cards
-    $expansions = [BASE_GAME, HIGH_NOON]; // TODO: Parametrise and let players choose
+    $expansions = array_merge([BASE_GAME], GameOptions::getExpansions());
     Cards::setupNewGame($expansions);
-    EventCards::setupNewGame($expansions);
+    if (GameOptions::isEvents()) {
+      EventCards::setupNewGame($expansions);
+    }
 
     // Initialize players
     $sheriff = Players::setupNewGame($bplayers, $expansions, $options);
@@ -96,24 +100,30 @@ class banghighnoon extends Table
 
   /*
    * getAllDatas:
-   *  Gather all informations about current game situation (visible by the current player).
+   *  Gather all information about current game situation (visible by the current player).
    *  The method is called each time the game interface is displayed to a player, ie: when the game starts and when a player refreshes the game page (F5)
    */
   protected function getAllDatas()
   {
     $pId = self::getCurrentPlayerId();
-    $result = [
+    $result = [];
+    $cards = Cards::getUIData();
+    if (GameOptions::isEvents()) {
+      $result = array_merge($result, [
+        'eventsDeck' => EventCards::getDeckCount(),
+        'eventActive' => EventCards::getActive(),
+        'eventNext' => EventCards::getNext(),
+      ]);
+      $cards = array_merge($cards, EventCards::getUiData());
+    }
+    return array_merge($result,[
       'players' => Players::getUiData($pId),
       'deck' => Cards::getDeckCount(),
       'discard' => Cards::getLastDiscarded(),
-      'eventsDeck' => EventCards::getDeckCount(),
-      'eventActive' => EventCards::getActive(),
-      'eventNext' => EventCards::getNext(),
       'playerTurn' => Rules::getCurrentPlayerId(),
-      'cards' => array_merge(Cards::getUIData(), EventCards::getUiData()),
+      'cards' => $cards,
       'distances' => Players::getDistances(),
-    ];
-    return $result;
+    ]);
   }
 
   /*

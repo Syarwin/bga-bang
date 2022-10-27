@@ -456,7 +456,9 @@ class Player extends \BANG\Helpers\DB_Manager
   public function hasUnlimitedBangs()
   {
     $weapon = $this->getWeapon();
-    return !is_null($weapon) && $weapon->getType() == CARD_VOLCANIC && !EventCards::getActive()->isBangStrictlyForbidden();
+    $activeEvent = EventCards::getActive();
+    $bangStrictlyForbidden = $activeEvent ? $activeEvent->isBangStrictlyForbidden() : false;
+    return !is_null($weapon) && $weapon->getType() == CARD_VOLCANIC && !$bangStrictlyForbidden;
   }
 
   /*

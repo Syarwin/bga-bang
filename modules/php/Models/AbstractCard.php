@@ -133,7 +133,8 @@ class AbstractCard implements \JsonSerializable
   public function getCopyColor(&$event = null)
   {
     $eventCard = EventCards::getActive();
-    if (($colorOverride = $eventCard->getColorOverride($this->color)) !== $this->color) {
+    $colorOverride = $eventCard ? $eventCard->getColorOverride($this->color) : $this->color;
+    if ($eventCard && $colorOverride !== $this->color) {
       $event = $eventCard;
     }
     return $colorOverride;

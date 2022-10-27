@@ -69,7 +69,6 @@ div#board #table {
   align-items: center;
   grid-row-end: span 2;
   grid-column-end: span 4;
-  height: 370px;
   min-height: 190px;
   max-width: 100%;
 }
@@ -469,7 +468,6 @@ div#board #table {
 }
 div#board #table #table-container {
   width: 242.5px;
-  height: 355px;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 5px;
   border: 1px solid rgba(50, 50, 50, 0.8);
@@ -485,6 +483,8 @@ div#board #table #table-container .cards-row {
   flex-flow: row;
   align-items: center;
   justify-content: space-around;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 div#board #table #table-container #deck, div#board #table #table-container #discard, div#board #table #table-container #eventNext, div#board #table #table-container #eventActive {
   width: 106.25px;

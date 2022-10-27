@@ -3,7 +3,6 @@ namespace BANG\Characters;
 use BANG\Core\Notifications;
 use BANG\Managers\Cards;
 use BANG\Managers\EventCards;
-use BANG\Managers\Rules;
 
 class KitCarlson extends \BANG\Models\Player
 {
@@ -24,7 +23,8 @@ class KitCarlson extends \BANG\Models\Player
   {
     Cards::drawForLocation(LOCATION_SELECTION, 3);
     $eventCard = EventCards::getActive();
-    $this->prepareSelection($this, [$this->id], true, $eventCard->getPhaseOneAmountOfCardsToDraw());
+    $amountToDraw = $eventCard ? $eventCard->getPhaseOneAmountOfCardsToDraw() : 2;
+    $this->prepareSelection($this, [$this->id], true, $amountToDraw);
   }
 
   public function useAbility($args)

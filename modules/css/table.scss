@@ -4,7 +4,6 @@ div#board {
 
     #table-container {
       width:2*$cardW + 30px;
-      height:2*$cardH + 15px;
       background-color:$transparentWhite;
       border-radius:5px;
       border:1px solid $darkgray;
@@ -20,6 +19,8 @@ div#board {
         flex-flow:row;
         align-items: center;
         justify-content: space-around;
+        padding-top: 5px;
+        padding-bottom: 5px;
       }
 
       #deck, #discard, #eventNext, #eventActive {

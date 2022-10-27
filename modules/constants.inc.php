@@ -48,12 +48,27 @@ define('OPTION_CHAR_6', 106);
 define('OPTION_CHAR_7', 107);
 define('OPTION_GENERAL_STORE_LAST_CARD', 108);
 define('OPTION_CHOOSE_CHARACTERS', 110);
+define('OPTION_EXPANSIONS', 111);
+define('OPTION_HIGH_NOON_EXPANSION', 112);
 
 /*
  * Choose Characters options
  */
 define('CHARACTERS_RANDOM', 1101);
 define('CHARACTERS_CHOOSE', 1102);
+
+/*
+ * Expansions options
+ */
+define('OPTION_BASE_GAME', 1111);
+define('OPTION_HIGH_NOON_ONLY', 1112);
+
+/*
+ * High Noon options
+ */
+define('OPTION_HIGH_NOON_OFF', 1121);
+define('OPTION_HIGH_NOON_NO_GHOST_TOWN', 1122);
+define('OPTION_HIGH_NOON_WITH_GHOST_TOWN', 1123);
 
 /*
  * Options constants

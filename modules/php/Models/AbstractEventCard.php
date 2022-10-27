@@ -84,9 +84,9 @@ class AbstractEventCard implements \JsonSerializable
     return $currentColor;
   }
 
-  public function nextPlayerClockwise()
+  public function nextPlayerCounterClockwise()
   {
-    return true;
+    return false;
   }
 
   public function getPhaseOneAmountOfCardsToDraw()

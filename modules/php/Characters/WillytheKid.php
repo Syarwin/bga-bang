@@ -17,6 +17,8 @@ class WillytheKid extends \BANG\Models\Player
 
   public function hasUnlimitedBangs()
   {
-    return Rules::isAbilityAvailable() && !EventCards::getActive()->isBangStrictlyForbidden();
+    $activeEvent = EventCards::getActive();
+    $bangStrictlyForbidden = $activeEvent ? $activeEvent->isBangStrictlyForbidden() : false;
+    return Rules::isAbilityAvailable() && !$bangStrictlyForbidden;
   }
 }
