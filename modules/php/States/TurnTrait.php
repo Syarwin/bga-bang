@@ -1,5 +1,6 @@
 <?php
 namespace BANG\States;
+use BANG\Helpers\GameOptions;
 use BANG\Managers\EventCards;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
@@ -16,7 +17,8 @@ trait TurnTrait
    */
   public function stNextPlayer()
   {
-    $pId = EventCards::getActive()->nextPlayerClockwise() ? $this->activeNextPlayer() : $this->activePrevPlayer();
+    $activeEvent = EventCards::getActive();
+    $pId = $activeEvent && $activeEvent->nextPlayerCounterClockwise() ? $this->activePrevPlayer() : $this->activeNextPlayer();
 
     if (Players::get($pId)->isEliminated()) {
       $this->stNextPlayer();
@@ -43,10 +45,14 @@ trait TurnTrait
     $eventCard = EventCards::getActive();
     $nextEventCard = EventCards::getNext();
     Rules::setNewTurnRules($player, $eventCard);
-    Stack::setup([ST_RESOLVE_EVENT_EFFECT, ST_PRE_PHASE_ONE, ST_PHASE_ONE_SETUP, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN]);
-    if ($player->getRole() === SHERIFF && $nextEventCard) { // TODO: New event should be drawn on Sheriff's second turn. First turn is ok while developing though
-      Stack::insertOnTop(Stack::newSimpleAtom(ST_NEW_EVENT, $player));
+    $stack = [ST_PRE_PHASE_ONE, ST_PHASE_ONE_SETUP, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN];
+    if (GameOptions::isEvents()) {
+      array_unshift($stack, ST_RESOLVE_EVENT_EFFECT);
+      if ($player->getRole() === SHERIFF && $nextEventCard) { // TODO: New event should be drawn on Sheriff's second turn. First turn is ok while developing though
+        array_unshift($stack, ST_NEW_EVENT);
+      }
     }
+    Stack::setup($stack);
     Stack::finishState();
   }
 

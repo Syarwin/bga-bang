@@ -22,14 +22,8 @@ div#board {
     align-items: center;
     grid-row-end: span 2;
     grid-column-end: span 4;
-    height: $cardH + 20px;
     min-height: $cardH + 20px;
     max-width: 100%;
-  }
-
-  #table {
-    height: 2*$cardH + 30px;
-    min-height: 2*$cardH + 30px;
   }
 
   @each $nPlayers, $layout in $layoutBig {

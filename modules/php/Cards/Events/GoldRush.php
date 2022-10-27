@@ -14,8 +14,8 @@ class GoldRush extends AbstractEventCard
     $this->expansion = HIGH_NOON;
   }
 
-  public function nextPlayerClockwise()
+  public function nextPlayerCounterClockwise()
   {
-    return false;
+    return true;
   }
 }

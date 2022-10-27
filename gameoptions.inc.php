@@ -62,6 +62,36 @@ $game_options = [
     ],
   ],
 
+  OPTION_EXPANSIONS => [
+    'name' => totranslate('Expansions'),
+    'default' => OPTION_BASE_GAME,
+    'values' => [
+      OPTION_BASE_GAME =>
+        [ 'name' => totranslate('No'),
+          'tmdisplay' => totranslate('No'),
+          'description' => totranslate('Base game')],
+      OPTION_HIGH_NOON_ONLY =>
+        [ 'name' => totranslate('High Noon'),
+          'tmdisplay' => totranslate('High Noon expansion'),
+          'description' => totranslate('High Noon expansion')],
+    ],
+  ],
+
+//  OPTION_HIGH_NOON_EXPANSION => [
+//    'name' => totranslate('High Noon expansion'),
+//    'default' => OPTION_HIGH_NOON_NO_GHOST_TOWN,
+//    'values' => [
+//      OPTION_HIGH_NOON_NO_GHOST_TOWN =>
+//        [ 'name' => totranslate('Without Ghost Town'),
+//          'tmdisplay' => totranslate('Without Ghost Town'),
+//          'description' => totranslate('12 High Noon event cards without a Ghost Town one') ],
+//      OPTION_HIGH_NOON_WITH_GHOST_TOWN =>
+//        [ 'name' => totranslate('With Ghost Town'),
+//          'tmdisplay' => totranslate('With Ghost Town'),
+//          'description' => totranslate('13 High Noon event cards') ],
+//    ],
+//  ],
+
   OPTION_CHAR_1 => [
     'name' => totranslate('Character 1'),
     'values' => $characters,

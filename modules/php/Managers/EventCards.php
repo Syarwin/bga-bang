@@ -1,6 +1,7 @@
 <?php
 namespace BANG\Managers;
 
+use BANG\Helpers\GameOptions;
 use BANG\Models\AbstractEventCard;
 
 /*
@@ -100,7 +101,7 @@ class EventCards extends \BANG\Helpers\Pieces
    */
   public static function getActive()
   {
-    return self::getTopOf(LOCATION_EVENTS_DISCARD);
+    return GameOptions::isEvents() ? self::getTopOf(LOCATION_EVENTS_DISCARD) : null;
   }
 
   /**
@@ -108,7 +109,7 @@ class EventCards extends \BANG\Helpers\Pieces
    */
   public static function getNext()
   {
-    return self::getTopOf(LOCATION_EVENTS_DECK);
+    return GameOptions::isEvents() ? self::getTopOf(LOCATION_EVENTS_DECK) : null;
   }
 
   /**

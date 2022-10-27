@@ -22,15 +22,16 @@ var jstpl_table = `<div id="table">
             <div id="deck">\${deck}</div>
             <div id="discard"></div>
 	    </div>
-	    <div class="cards-row">
-	        <div id="eventNext">
-	            <span id="eventsDeck">\${eventsDeck}</span>
-	        </div>
-		    <div id="eventActive"></div>
-	    </div>
 	</div>
 </div>
 `;
+
+var jstpl_events_row = `<div class="cards-row">
+    <div id="eventNext">
+        <span id="eventsDeck">\${eventsDeck}</span>
+    </div>
+    <div id="eventActive"></div>
+</div>`
 
 var jstpl_player_board_data = `<div class='bang-player-board' id="bang-player-board-\${id}" data-max-bullets="\${bullets}" data-bullets="\${hp}" data-hand="\${handCount}">
   <ul class='player-bullets'>
