@@ -149,7 +149,7 @@ define([
         // Adding deck/discard
         dojo.place(this.format_block('jstpl_table', { deck: gamedatas.deck }), 'board');
         // Adding events cards
-        if (gamedatas.eventsDeck) {
+        if (gamedatas.eventsDeck !== null) {
           dojo.place(this.format_block('jstpl_events_row', { eventsDeck: gamedatas.eventsDeck }), 'table-container');
         }
         if (gamedatas.discard) {
