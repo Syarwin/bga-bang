@@ -33,7 +33,6 @@ class Players extends \BANG\Helpers\DB_Manager
   {
     // Create players
     $gameInfos = self::getGame()->getGameinfos();
-    $colors = $gameInfos['player_colors'];
     $query = self::DB()->multipleInsert([
       'player_id',
       'player_color',
@@ -237,7 +236,8 @@ class Players extends \BANG\Helpers\DB_Manager
    ****************************/
   protected static function qFilterLiving()
   {
-    return self::DB()->where('player_eliminated', 0);
+    $eliminatedField = self::getEliminatedField(false);
+    return self::DB()->where($eliminatedField, 0);
   }
 
   public static function countRoles($roles)
@@ -265,8 +265,9 @@ class Players extends \BANG\Helpers\DB_Manager
    */
   public static function getPlayerPositions()
   {
+    $eliminatedField = self::getEliminatedField(false);
     return array_flip(
-      self::getObjectListFromDB('SELECT player_id from player WHERE player_eliminated=0 ORDER BY player_no', true)
+      self::getObjectListFromDB("SELECT player_id from player WHERE $eliminatedField=0 ORDER BY player_no", true)
     );
   }
 
@@ -275,25 +276,24 @@ class Players extends \BANG\Helpers\DB_Manager
    */
   public static function getLivingPlayers($except = null)
   {
-    $query = self::DB()
-      ->where('player_eliminated', 0)
-      ->orderBy('player_no');
-    if ($except != null) {
-      $ids = is_array($except) ? $except : [$except];
-      $query = $query->whereNotIn('player_id', $ids);
-    }
-    return $query->get();
+    $playerIds = self::getLivingPlayerIdsStartingWith(null, false, $except);
+    return self::idsArrayToCollection($playerIds);
   }
 
-  public static function getLivingPlayerIdsStartingWith($player, $except = null)
+  /**
+   * @return array
+   */
+  public static function getLivingPlayerIdsStartingWith($player, $includeGhosts = false, $except = null)
   {
     $and = '';
     if ($except != null) {
       $ids = is_array($except) ? $except : [$except];
       $and = " AND player_id NOT IN ('" . implode("','", $ids) . "')";
     }
+    $eliminatedField = self::getEliminatedField($includeGhosts);
+    $orderByPlayer = $player ? "player_no < {$player->getNo()}, " : '';
     $playerIds = self::getObjectListFromDB(
-      "SELECT player_id FROM player WHERE player_eliminated = 0$and ORDER BY player_no < {$player->getNo()}, player_no",
+      "SELECT player_id FROM player WHERE {$eliminatedField} = 0$and ORDER BY {$orderByPlayer}player_no",
       true
     );
     return array_map(function ($pId) {
@@ -301,18 +301,75 @@ class Players extends \BANG\Helpers\DB_Manager
     }, $playerIds);
   }
 
+  /**
+   * @param Player $player
+   * @return Collection
+   */
   public static function getLivingPlayersStartingWith($player)
   {
     $playerIds = self::getLivingPlayerIdsStartingWith($player);
-    return new Collection(array_map(function ($pId) {
-      return self::get($pId);
-    }, $playerIds));
+    return self::idsArrayToCollection($playerIds);
   }
 
-  public static function getNext($player)
+  /**
+   * @param array $playerIds
+   * @return Collection
+   */
+  private static function idsArrayToCollection($playerIds)
   {
-    $players = self::getLivingPlayerIdsStartingWith($player);
-    return self::get($players[1]);
+    $playersAssoc = [];
+    foreach($playerIds as $playerId) {
+      $playersAssoc[$playerId] = self::get($playerId);
+    }
+    return new Collection($playersAssoc);
+  }
+
+  /**
+   * @param Player $player
+   * @param boolean $includeGhosts
+   * @return Player
+   */
+  public static function getNextId($player, $includeGhosts = false)
+  {
+    $players = self::getLivingPlayerIdsStartingWith($player, $includeGhosts);
+    // But current player might not be alive already... Let's find them
+    $currentIndex = array_search($player->getId(), $players);
+    if (!is_int($currentIndex)) {
+      $currentIndex = -1;
+    }
+    return $players[$currentIndex + 1];
+  }
+
+  /**
+   * @param Player $player
+   * @param boolean $includeGhosts
+   * @return Player
+   */
+  public static function getNext($player, $includeGhosts = false)
+  {
+    return self::get(self::getNextId($player, $includeGhosts));
+  }
+
+  /**
+   * @param Player $player
+   * @param boolean $includeGhosts
+   * @return Player
+   */
+  public static function getPreviousId($player, $includeGhosts = false)
+  {
+    $players = self::getLivingPlayerIdsStartingWith($player, $includeGhosts);
+    return $players[count($players)-1];
+  }
+
+  /**
+   * @param boolean $includeGhosts
+   * @return string
+   */
+  private static function getEliminatedField($includeGhosts)
+  {
+    // backward compatibility from XX/XX/2022
+    $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_unconscious\'')->num_rows === 1;
+    return $newSchema && !$includeGhosts ? 'player_unconscious' : 'player_eliminated';
   }
 
   /***********************

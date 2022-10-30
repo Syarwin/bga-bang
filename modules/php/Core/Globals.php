@@ -11,8 +11,8 @@ class Globals extends \BANG\Helpers\DB_Manager
     'stack' => 'obj', // DO NOT MODIFY, USED BY STACK ENGINE
     'stackCtx' => 'obj', // DO NOT MODIFY, USED BY STACK ENGINE
 
-    'pIdTurn' => 'int', // Player's id whose turn is
     'gameIsOver' => 'bool',
+    'resurrectionIsPossible' => 'bool'
   ];
 
   protected static $table = 'global_variables';

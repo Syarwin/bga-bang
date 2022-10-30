@@ -9,6 +9,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         ['updateHP', 200],
         ['updateHand', 200],
         ['playerEliminated', 1000],
+        ['playerUnconscious', 1000],
         ['updatePlayers', 100],
         ['updateDistances', 100],
         ['updatePlayersRoles', 1],
@@ -91,6 +92,12 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       dojo.addClass('bang-player-' + n.args.who_quits, 'eliminated');
     },
 
+    notif_playerUnconscious(n) {
+      debug('Notif: player unconscious', n);
+      dojo.addClass('bang-player-' + n.args.player_id, 'eliminated');
+      dojo.addClass('overall_player_board_' + n.args.player_id, 'eliminated');
+    },
+
     notif_updatePlayers(n) {
       debug('Notif: update players', n);
       this.gamedatas.players = n.args.players;
@@ -137,9 +144,12 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
       players.forEach((player) => {
         this.displayRoleIfPublic(player);
-        if (player.eliminated) {
+        if (player.eliminated || player.unconscious) {
+          dojo.addClass('bang-player-' + player.id, 'eliminated');
           dojo.addClass('overall_player_board_' + player.id, 'eliminated');
+        }
 
+        if (player.eliminated) {
           if ($('bang-player-' + player.id)) dojo.destroy('bang-player-' + player.id);
 
           if (player.id == this.player_id && $('hand')) dojo.destroy('hand');
@@ -196,7 +206,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       dojo.query('.bang-player').addClass('inactive');
       var activePlayers = args.type == 'activeplayer' ? [args.active_player] : [];
       if (args.type == 'multipleactiveplayer') activePlayers = args.multiactive;
-      activePlayers.forEach((playerId) => dojo.removeClass('bang-player-' + playerId, 'inactive'));
+      activePlayers.forEach((playerId) => dojo.removeClass('bang-player-' + playerId, 'inactive eliminated'));
       if (args.name == 'playCard') this.updateCurrentTurnPlayer(args.active_player);
     },
 

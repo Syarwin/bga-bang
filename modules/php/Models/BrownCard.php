@@ -27,7 +27,7 @@ class BrownCard extends AbstractCard
     $player_ids = [];
     switch ($this->effect['impacts']) {
       case ALL_OTHER:
-        $player_ids = Players::getLivingPlayerIdsStartingWith($player->getId(), $player->getId());
+        $player_ids = Players::getLivingPlayerIdsStartingWith($player->getId(), false, $player->getId());
         break;
       case INRANGE:
         $player_ids = $player->getPlayersInRange();

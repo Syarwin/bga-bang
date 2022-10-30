@@ -1,6 +1,7 @@
 <?php
 namespace BANG\Managers;
 
+use BANG\Core\Globals;
 use BANG\Helpers\GameOptions;
 use BANG\Models\AbstractEventCard;
 
@@ -21,13 +22,16 @@ class EventCards extends \BANG\Helpers\Pieces
   {
     $cards = [];
     foreach (self::$classes as $type => $name) {
-      $card = self::getCardByType($type);
-      if (in_array($card->getExpansion(), $expansions) && !$card->isLastCard()) {
-        $cards[] = [
-          'type' => $type,
-        ];
+      if ($type !== CARD_GHOST_TOWN || ($type === CARD_GHOST_TOWN && GameOptions::isResurrection())) {
+        $card = self::getCardByType($type);
+        if (in_array($card->getExpansion(), $expansions) && !$card->isLastCard()) {
+          $cards[] = [
+            'type' => $type,
+          ];
+        }
       }
     }
+    Globals::setResurrectionIsPossible(GameOptions::isResurrection());
 
     self::create($cards, LOCATION_EVENTS_DECK);
     self::shuffle(LOCATION_EVENTS_DECK);
@@ -48,7 +52,7 @@ class EventCards extends \BANG\Helpers\Pieces
     CARD_CURSE => 'Curse',
     CARD_DALTONS => 'Daltons',
     CARD_DOCTOR => 'Doctor',
-//    CARD_GHOST_TOWN => 'GhostTown',
+    CARD_GHOST_TOWN => 'GhostTown',
     CARD_GOLD_RUSH => 'GoldRush',
     CARD_HANGOVER => 'Hangover',
     CARD_REVEREND => 'Reverend',
@@ -122,5 +126,18 @@ class EventCards extends \BANG\Helpers\Pieces
       self::insertOnTop($next->getId(), LOCATION_EVENTS_DISCARD);
     }
     return self::getActive();
+  }
+
+  /**
+   * @return boolean
+   */
+  public static function isResurrectionPossible()
+  {
+    $cards = self::getInLocation(LOCATION_EVENTS_DECK);
+    $cards = $cards->push(self::getActive());
+    $resurrectionCards = $cards->filter(function ($card) {
+      return $card->isResurrectionEffect();
+    });
+    return count($resurrectionCards) > 0;
   }
 }

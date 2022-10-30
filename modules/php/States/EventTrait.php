@@ -1,5 +1,6 @@
 <?php
 namespace BANG\States;
+use BANG\Core\Globals;
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
 use BANG\Managers\EventCards;
@@ -23,6 +24,9 @@ trait EventTrait
     if ($eventCard->getEffect() === EFFECT_INSTANT || $eventCard->getEffect() === EFFECT_PERMANENT) {
       $eventCard->resolveEffect($player);
     }
+    if (!EventCards::isResurrectionPossible()) {
+      Globals::setResurrectionIsPossible(false);
+    }
     Stack::finishState();
   }
 
@@ -35,7 +39,11 @@ trait EventTrait
     if ($eventCard && $eventCard->getEffect() === EFFECT_STARTOFTURN) {
       $ctx = Stack::getCtx();
       $player = Players::get($ctx['pId']);
-      $eventCard->resolveEffect($player);
+      if ($eventCard->isResurrectionEffect() === $player->isUnconscious()) { // dead + resurrect or alive + normal effect
+        $eventCard->resolveEffect($player);
+      } elseif ($player->isUnconscious()) { // dead but this is not a resurrection
+        Stack::removePlayerAtoms($ctx['pId']);
+      } // do not resolve any effects when resurrection is combined with alive player
     }
     Stack::finishState();
   }

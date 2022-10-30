@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS `log` (
 
 
 -- see constants.inc.php --
+ALTER TABLE `player` ADD `player_unconscious` TINYINT NOT NULL;
 ALTER TABLE `player` ADD `player_role` INT(1) UNSIGNED NOT NULL;
 ALTER TABLE `player` ADD `player_character` INT(1) UNSIGNED NOT NULL;
 ALTER TABLE `player` ADD `player_alt_character` INT(1) NOT NULL;

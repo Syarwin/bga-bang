@@ -421,4 +421,14 @@ class Collection extends \ArrayObject
   {
     return count($this->getArrayCopy());
   }
+
+  /**
+   * @return Collection
+   */
+  public function push($element)
+  {
+    $current = $this->toAssoc();
+    $current[$element->getId()] = $element;
+    return new Collection($current);
+  }
 }
