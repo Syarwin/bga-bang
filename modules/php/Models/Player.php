@@ -778,7 +778,7 @@ class Player extends \BANG\Helpers\DB_Manager
 
     // get player who eliminated this player
     $byPlayer = null;
-    if (array_key_exists('attacker', $ctx) && $ctx['attacker'] != $this->id) {
+    if (array_key_exists('attacker', $ctx) && $ctx['attacker'] != null && $ctx['attacker'] != $this->id) {
       $byPlayer = Players::get($ctx['attacker']);
     }
 
