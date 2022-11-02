@@ -64,7 +64,8 @@ $game_options = [
 
   OPTION_EXPANSIONS => [
     'name' => totranslate('Expansions'),
-    'default' => OPTION_BASE_GAME,
+    // TODO: Change to OPTION_BASE_GAME before release
+    'default' => OPTION_HIGH_NOON_ONLY,
     'values' => [
       OPTION_BASE_GAME =>
         [ 'name' => totranslate('No'),
@@ -79,7 +80,8 @@ $game_options = [
 
   OPTION_HIGH_NOON_EXPANSION => [
     'name' => totranslate('High Noon expansion'),
-    'default' => OPTION_HIGH_NOON_NO_GHOST_TOWN,
+    // TODO: Change to OPTION_HIGH_NOON_NO_GHOST_TOWN before release
+    'default' => OPTION_HIGH_NOON_WITH_GHOST_TOWN,
     'values' => [
       OPTION_HIGH_NOON_NO_GHOST_TOWN =>
         [ 'name' => totranslate('Without Ghost Town'),
