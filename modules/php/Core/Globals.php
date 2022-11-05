@@ -12,7 +12,8 @@ class Globals extends \BANG\Helpers\DB_Manager
     'stackCtx' => 'obj', // DO NOT MODIFY, USED BY STACK ENGINE
 
     'gameIsOver' => 'bool',
-    'resurrectionIsPossible' => 'bool'
+    'resurrectionIsPossible' => 'bool',
+    'roundNumber' => 'int',
   ];
 
   protected static $table = 'global_variables';

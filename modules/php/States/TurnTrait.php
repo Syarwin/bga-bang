@@ -1,5 +1,6 @@
 <?php
 namespace BANG\States;
+use BANG\Core\Globals;
 use BANG\Helpers\GameOptions;
 use BANG\Managers\EventCards;
 use BANG\Managers\Players;
@@ -47,6 +48,13 @@ trait TurnTrait
   {
     Log::startTurn();
     $player = Players::getActive();
+    $isSheriff = $player->getRole() === SHERIFF;
+    $roundNumber = Globals::getRoundNumber();
+    if ($isSheriff) {
+      $roundNumber++;
+      Globals::setRoundNumber($roundNumber);
+    }
+
     $eventCard = EventCards::getActive();
     $nextEventCard = EventCards::getNext();
     // TODO: we call this method twice if it's Sheriff's 2+ turn, this should be fixed (check setNewTurnRules usages)
@@ -54,7 +62,7 @@ trait TurnTrait
     $stack = [ST_PRE_PHASE_ONE, ST_PHASE_ONE_SETUP, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN];
     if (GameOptions::isEvents()) {
       array_unshift($stack, ST_RESOLVE_EVENT_EFFECT);
-      if ($player->getRole() === SHERIFF && $nextEventCard) { // TODO: New event should be drawn on Sheriff's second turn. First turn is ok while developing though
+      if ($player->getRole() === SHERIFF && $nextEventCard && $roundNumber > 1) {
         array_unshift($stack, ST_NEW_EVENT);
       }
       if ($player->isUnconscious() && !$eventCard->isResurrectionEffect()) {

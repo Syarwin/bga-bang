@@ -32,6 +32,7 @@ spl_autoload_register($swdNamespaceAutoload, true, true);
 
 require_once APP_GAMEMODULE_PATH . 'module/table/table.game.php';
 
+use BANG\Core\Globals;
 use BANG\Helpers\GameOptions;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
@@ -95,6 +96,9 @@ class banghighnoon extends Table
 
     // Initialize players
     $sheriff = Players::setupNewGame($bplayers, $expansions, $options);
+
+    // Initialize round counter
+    Globals::setRoundNumber(0);
     $this->gamestate->changeActivePlayer($sheriff);
   }
 
@@ -123,6 +127,7 @@ class banghighnoon extends Table
       'playerTurn' => Rules::getCurrentPlayerId(),
       'cards' => $cards,
       'distances' => Players::getDistances(),
+      'roundNumber' => Globals::getRoundNumber()
     ]);
   }
 
