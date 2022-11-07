@@ -2,7 +2,7 @@
 namespace BANG\Characters;
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
-use BANG\Helpers\Utils;
+use BANG\Helpers\Sounds;
 use BANG\Managers\Cards;
 
 class Jourdonnais extends \BANG\Models\Player
@@ -36,6 +36,7 @@ class Jourdonnais extends \BANG\Models\Player
   {
     Cards::drawForLocation(LOCATION_FLIPPED, 1);
     Stack::suspendCtx();
+    Notifications::playSound(Sounds::getSoundForCharacterAbility());
     $this->addResolveFlippedAtom($this);
   }
 

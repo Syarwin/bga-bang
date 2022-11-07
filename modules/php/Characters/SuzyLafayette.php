@@ -1,6 +1,8 @@
 <?php
 namespace BANG\Characters;
+use BANG\Core\Notifications;
 use BANG\Core\Stack;
+use BANG\Helpers\Sounds;
 
 class SuzyLafayette extends \BANG\Models\Player
 {
@@ -32,6 +34,7 @@ class SuzyLafayette extends \BANG\Models\Player
   {
     if ($this->getHand()->count() == 0) {
       $this->drawCards(1);
+      Notifications::playSound(Sounds::getSoundForCharacterAbility());
     }
   }
 

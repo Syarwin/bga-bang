@@ -1,6 +1,7 @@
 <?php
 namespace BANG\States;
 use BANG\Core\Notifications;
+use BANG\Helpers\Sounds;
 use BANG\Managers\Cards;
 use BANG\Managers\Players;
 
@@ -80,6 +81,7 @@ trait ChooseCharacterTrait
       Notifications::updateHand($player);
     }
     Notifications::updateDistances();
+    Notifications::playSound(Sounds::getSoundForStartGame());
     $this->gamestate->nextState(ST_START_OF_TURN);
   }
 }

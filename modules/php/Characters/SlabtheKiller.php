@@ -1,6 +1,8 @@
 <?php
 namespace BANG\Characters;
-use BANG\Managers\Cards;
+
+use BANG\Core\Notifications;
+use BANG\Helpers\Sounds;
 
 class SlabtheKiller extends \BANG\Models\Player
 {
@@ -21,6 +23,7 @@ class SlabtheKiller extends \BANG\Models\Player
       $atom['missedNeeded'] = $missedNeeded;
       $atom['msgActive'] = clienttranslate('${you} may react to ${src_name} with ${missedNeeded} Missed!');
       $atom['msgInactive'] = clienttranslate('${actplayer} may react to ${src_name} with ${missedNeeded} Missed!');
+      Notifications::playSound(Sounds::getSoundForCharacterAbility());
     }
     return $atom;
   }

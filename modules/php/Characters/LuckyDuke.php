@@ -2,6 +2,7 @@
 namespace BANG\Characters;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
+use BANG\Helpers\Sounds;
 use BANG\Managers\Cards;
 
 class LuckyDuke extends \BANG\Models\Player
@@ -45,6 +46,7 @@ class LuckyDuke extends \BANG\Models\Player
       'player_name' => $this->name,
       'card_name' => $this->selectedCard->getNameAndValue(),
     ]);
+    Notifications::playSound(Sounds::getSoundForCharacterAbility());
     return Cards::getCurrentCard()->activate($this, []);
   }
 }

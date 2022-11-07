@@ -2,7 +2,7 @@
 namespace BANG\Characters;
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
-use BANG\Helpers\Utils;
+use BANG\Helpers\Sounds;
 use BANG\Managers\Cards;
 
 class PedroRamirez extends \BANG\Models\Player
@@ -47,6 +47,7 @@ class PedroRamirez extends \BANG\Models\Player
       Notifications::drawCardFromDiscard($this, $cards);
       // The second one from deck
       $this->drawCards(1);
+      Notifications::playSound(Sounds::getSoundForCharacterAbility());
     }
   }
 }

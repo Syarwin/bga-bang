@@ -1,6 +1,7 @@
 <?php
 namespace BANG\Characters;
 use BANG\Core\Notifications;
+use BANG\Helpers\Sounds;
 use BANG\Managers\Cards;
 
 class VultureSam extends \BANG\Models\Player
@@ -27,5 +28,6 @@ class VultureSam extends \BANG\Models\Player
       Cards::move($card->getId(), LOCATION_HAND, $this->id);
       Notifications::stoleCard($this, $player, $card, true);
     }
+    Notifications::playSound(Sounds::getSoundForCharacterAbility());
   }
 }

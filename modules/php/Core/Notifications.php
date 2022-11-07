@@ -1,10 +1,12 @@
 <?php
 namespace BANG\Core;
+
 use bang;
 use BANG\Managers\Players;
 use BANG\Models\Player;
 use BANG\Managers\Cards;
 use BANG\Models\AbstractCard;
+use BANG\Helpers\Sounds;
 
 /*
  * Notifications
@@ -39,15 +41,20 @@ class Notifications
 
   /**
    * cardPlayed: called once a card is played
+   * @param Player $player
+   * @param AbstractCard $card
+   * @param array $args
    */
   public static function cardPlayed($player, $card, $args = [])
   {
     $msg = clienttranslate('${player_name} plays ${card_name}');
+
     $data = [
       'msgYou' => clienttranslate('${You} play ${card_name}'),
       'player' => $player,
       'card' => $card,
       'target' => $card->isEquipment() ? LOCATION_INPLAY : LOCATION_DISCARD,
+      'snd' => Sounds::getSoundForPlayedCard($card->getType(), $player->getCharacter()),
     ];
 
     if (isset($args['player'])) {
@@ -79,6 +86,7 @@ class Notifications
       'hp' => $player->getHp(),
       'amount' => -$amount,
       'msgYou' => $msgYou,
+      'snd' => Sounds::getSoundForLostLife($player->getCharacter()),
     ]);
   }
 
@@ -302,7 +310,9 @@ class Notifications
       self::notifyAll(
         'updatePlayers',
         clienttranslate('${player_name} was a ${role_name}.'),
-        self::getDataToUpdatePlayer($player)
+        array_merge(
+          self::getDataToUpdatePlayer($player),
+          ['snd' => Sounds::getSoundForElimination()])
       );
       self::updateDistances();
     }
@@ -344,7 +354,7 @@ class Notifications
   }
 
   /**
-   * characterChosen: send all info about
+   * characterChosen: send all info about chosen character
    * @param Player $player
    * @param Player $character
    */
@@ -356,6 +366,18 @@ class Notifications
       'character_name' => $characterName,
       'character' => $player->getUiCharacterSpecificData(),
       'player' => $player,
+    ]);
+  }
+
+  /**
+   * playSound: send sound to be played on frontend
+   * @param string $soundName
+   */
+  public static function playSound($soundName, $delay = 0)
+  {
+    self::notifyAll('playSound', '', [
+      'snd' => $soundName,
+      'delay' => $delay,
     ]);
   }
 

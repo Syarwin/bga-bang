@@ -1,6 +1,8 @@
 <?php
 namespace BANG\Characters;
+use BANG\Core\Notifications;
 use BANG\Core\Stack;
+use BANG\Helpers\Sounds;
 
 class BartCassidy extends \BANG\Models\Player
 {
@@ -25,5 +27,6 @@ class BartCassidy extends \BANG\Models\Player
   public function useAbility($ctx)
   {
     $this->drawCards($ctx['amount']);
+    Notifications::playSound(Sounds::getSoundForCharacterAbility());
   }
 }

@@ -1,7 +1,7 @@
 <?php
 namespace BANG\Characters;
 use BANG\Core\Notifications;
-use BANG\Helpers\Utils;
+use BANG\Helpers\Sounds;
 use BANG\Managers\Cards;
 
 class BlackJack extends \BANG\Models\Player
@@ -33,6 +33,7 @@ class BlackJack extends \BANG\Models\Player
     if (in_array($card->getCopyColor(), ['H', 'D'])) {
       $cards = Cards::deal($this->id, 1);
       Notifications::drawCards($this, $cards);
+      Notifications::playSound(Sounds::getSoundForCharacterAbility());
     }
     $this->onChangeHand();
   }

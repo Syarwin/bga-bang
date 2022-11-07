@@ -4,6 +4,33 @@
   <div id="board"></div>
 </div>
 
+<audio id="audiosrc_o_bang_ability" src="{GAMETHEMEURL}img/sound/ability.ogg" preload="none" autobuffer></audio>
+<audio id="audiosrc_bang_ability" src="{GAMETHEMEURL}img/sound/ability.mp3" preload="none" autobuffer></audio>
+<audio id="audiosrc_o_bang_bang" src="{GAMETHEMEURL}img/sound/bang.ogg" preload="none" autobuffer></audio>
+<audio id="audiosrc_bang_bang" src="{GAMETHEMEURL}img/sound/bang.mp3" preload="none" autobuffer></audio>
+<audio id="audiosrc_o_bang_beer1" src="{GAMETHEMEURL}img/sound/beer1.ogg" preload="none" autobuffer></audio>
+<audio id="audiosrc_bang_beer1" src="{GAMETHEMEURL}img/sound/beer1.mp3" preload="none" autobuffer></audio>
+<audio id="audiosrc_o_bang_beer2" src="{GAMETHEMEURL}img/sound/beer2.ogg" preload="none" autobuffer></audio>
+<audio id="audiosrc_bang_beer2" src="{GAMETHEMEURL}img/sound/beer2.mp3" preload="none" autobuffer></audio>
+<audio id="audiosrc_o_bang_bluecomes" src="{GAMETHEMEURL}img/sound/bluecomes.ogg" preload="none" autobuffer></audio>
+<audio id="audiosrc_bang_bluecomes" src="{GAMETHEMEURL}img/sound/bluecomes.mp3" preload="none" autobuffer></audio>
+<audio id="audiosrc_o_bang_death" src="{GAMETHEMEURL}img/sound/death.ogg" preload="none" autobuffer></audio>
+<audio id="audiosrc_bang_death" src="{GAMETHEMEURL}img/sound/death.mp3" preload="none" autobuffer></audio>
+<audio id="audiosrc_o_bang_endgame" src="{GAMETHEMEURL}img/sound/endgame.ogg" preload="none" autobuffer></audio>
+<audio id="audiosrc_bang_endgame" src="{GAMETHEMEURL}img/sound/endgame.mp3" preload="none" autobuffer></audio>
+<audio id="audiosrc_o_bang_grunt1" src="{GAMETHEMEURL}img/sound/grunt1.ogg" preload="none" autobuffer></audio>
+<audio id="audiosrc_bang_grunt1" src="{GAMETHEMEURL}img/sound/grunt1.mp3" preload="none" autobuffer></audio>
+<audio id="audiosrc_o_bang_grunt2" src="{GAMETHEMEURL}img/sound/grunt2.ogg" preload="none" autobuffer></audio>
+<audio id="audiosrc_bang_grunt2" src="{GAMETHEMEURL}img/sound/grunt2.mp3" preload="none" autobuffer></audio>
+<audio id="audiosrc_o_bang_intro" src="{GAMETHEMEURL}img/sound/intro.ogg" preload="none" autobuffer></audio>
+<audio id="audiosrc_bang_intro" src="{GAMETHEMEURL}img/sound/intro.mp3" preload="none" autobuffer></audio>
+<audio id="audiosrc_o_bang_missed" src="{GAMETHEMEURL}img/sound/missed.ogg" preload="none" autobuffer></audio>
+<audio id="audiosrc_bang_missed" src="{GAMETHEMEURL}img/sound/missed.mp3" preload="none" autobuffer></audio>
+<audio id="audiosrc_o_bang_mustang" src="{GAMETHEMEURL}img/sound/mustang.ogg" preload="none" autobuffer></audio>
+<audio id="audiosrc_bang_mustang" src="{GAMETHEMEURL}img/sound/mustang.mp3" preload="none" autobuffer></audio>
+<audio id="audiosrc_o_bang_weapon" src="{GAMETHEMEURL}img/sound/weapon.ogg" preload="none" autobuffer></audio>
+<audio id="audiosrc_bang_weapon" src="{GAMETHEMEURL}img/sound/weapon.mp3" preload="none" autobuffer></audio>
+
 <script type="text/javascript">
 var jstpl_hand = `<div id="hand">
 	<div id="role-container" data-role="\${role}">
