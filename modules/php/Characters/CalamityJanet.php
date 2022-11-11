@@ -77,6 +77,7 @@ class CalamityJanet extends \BANG\Models\Player
       Log::addCardPlayed($this, $card, $args);
       $card = new Bang(['id' => $card->getId()]);
       $newstate = $card->play($this, $args);
+      $this->onChangeHand();
       return $newstate;
     }
     return parent::playCard($card, $args);
