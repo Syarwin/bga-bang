@@ -424,7 +424,7 @@ class Player extends \BANG\Helpers\DB_Manager
   }
 
   /**
-   * returns the current distance to an enmy from the view of the enemy
+   * returns the current distance to an enemy from the view of the enemy
    * should not be called on the player checking for targets but on the other players
    */
   public function getDistanceTo($enemy)

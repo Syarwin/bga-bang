@@ -65,7 +65,8 @@ trait TurnTrait
       if ($player->getRole() === SHERIFF && $nextEventCard && $roundNumber > 1) {
         array_unshift($stack, ST_NEW_EVENT);
       }
-      if ($player->isUnconscious() && !$eventCard->isResurrectionEffect()) {
+
+      if ($player->isUnconscious() && (!$eventCard || !$eventCard->isResurrectionEffect())) {
         $stack = [ST_END_OF_TURN];
       }
     }
@@ -90,9 +91,9 @@ trait TurnTrait
   {
     Stack::unsuspendNext(ST_DISCARD_EXCESS);
     $player = Players::getActive();
-    if ($player->countHand() <= $player->getHp()) {
+//    if ($player->countHand() <= $player->getHp()) {
       Stack::finishState();
-    }
+//    }
   }
 
   public function argDiscardExcess()

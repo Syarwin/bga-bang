@@ -144,13 +144,14 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
       players.forEach((player) => {
         this.displayRoleIfPublic(player);
+        const playerTable = $('bang-player-' + player.id);
         if (player.eliminated || player.unconscious) {
-          dojo.addClass('bang-player-' + player.id, 'eliminated');
+          if (playerTable) dojo.addClass('bang-player-' + player.id, 'eliminated');
           dojo.addClass('overall_player_board_' + player.id, 'eliminated');
         }
 
         if (player.eliminated) {
-          if ($('bang-player-' + player.id)) dojo.destroy('bang-player-' + player.id);
+          if (playerTable) dojo.destroy('bang-player-' + player.id);
 
           if (player.id == this.player_id && $('hand')) dojo.destroy('hand');
         } else {
