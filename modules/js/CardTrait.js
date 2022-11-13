@@ -148,6 +148,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       else {
         this.slideTemporaryToDiscard(n.args.card, sourceId, animationDuration);
       }
+      this.playSound(n.args.snd);
     },
 
     /*

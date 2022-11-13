@@ -13,6 +13,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         ['updateDistances', 100],
         ['updatePlayersRoles', 1],
         ['showMessage', 1],
+        ['playSound', 1],
       );
       this._playerInitialized = false;
     },
@@ -80,6 +81,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       this.gamedatas.players[n.args.player_id].hp = n.args.hp;
       dojo.attr('player-character-' + n.args.player_id, 'data-bullets', n.args.hp);
       dojo.attr('bang-player-board-' + n.args.player_id, 'data-bullets', n.args.hp);
+      this.playSound(n.args.snd);
     },
 
     /*
@@ -95,6 +97,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       debug('Notif: update players', n);
       this.gamedatas.players = n.args.players;
       this.updatePlayers();
+      this.playSound(n.args.snd, false);
     },
 
     notif_updateDistances(n) {
@@ -235,6 +238,11 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     notif_updateHand(n) {
       debug('Notif: update handcount of player', n);
       this.setHandCount(n.args.player_id, n.args.total);
+    },
+
+    notif_playSound(n) {
+      debug('Notif: play sound', n);
+      this.playSound(n.args.snd, true, n.args.delay);
     },
 
     /*

@@ -3,6 +3,7 @@ namespace BANG\Characters;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
 use BANG\Core\Stack;
+use BANG\Helpers\Sounds;
 use BANG\Managers\Cards;
 use BANG\Cards\Bang;
 
@@ -78,6 +79,7 @@ class CalamityJanet extends \BANG\Models\Player
       $card = new Bang(['id' => $card->getId()]);
       $newstate = $card->play($this, $args);
       $this->onChangeHand();
+      Notifications::playSound(Sounds::getSoundForCharacterAbility());
       return $newstate;
     }
     return parent::playCard($card, $args);

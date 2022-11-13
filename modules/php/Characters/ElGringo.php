@@ -1,8 +1,8 @@
 <?php
 namespace BANG\Characters;
 use BANG\Core\Notifications;
-use BANG\Core\Globals;
 use BANG\Core\Stack;
+use BANG\Helpers\Sounds;
 use BANG\Managers\Cards;
 use BANG\Managers\Players;
 
@@ -56,6 +56,7 @@ class ElGringo extends \BANG\Models\Player
       }
       Cards::move($card->getId(), LOCATION_HAND, $this->getId());
       Notifications::stoleCard($this, $attacker, $card, false);
+      Notifications::playSound(Sounds::getSoundForCharacterAbility());
       $attacker->onChangeHand();
     }
   }

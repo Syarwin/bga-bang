@@ -184,9 +184,15 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
     /*
      * Play a given sound that should be first added in the tpl file
      */
-    playSound(sound, playNextMoveSound = true) {
-      playSound(sound);
-      playNextMoveSound && this.disableNextMoveSound();
+    playSound(sound, disableNextMoveSound = true, delay = 0) {
+      if (sound) {
+        if (disableNextMoveSound) {
+          this.disableNextMoveSound();
+        }
+        setTimeout(() => {
+          playSound(this.game_name + '_' + sound);
+        }, delay);
+      }
     },
 
     /*

@@ -1,8 +1,7 @@
 <?php
 namespace BANG\Characters;
 use BANG\Core\Notifications;
-use BANG\Core\Log;
-use BANG\Helpers\Utils;
+use BANG\Helpers\Sounds;
 use BANG\Managers\Cards;
 
 class KitCarlson extends \BANG\Models\Player
@@ -37,6 +36,7 @@ class KitCarlson extends \BANG\Models\Player
 
     // Put remaining card on deck
     $rest = Cards::getSelection()->first();
+    Notifications::playSound(Sounds::getSoundForCharacterAbility());
     Cards::putOnDeck($rest->getId());
   }
 }

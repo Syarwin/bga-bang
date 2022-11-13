@@ -2,7 +2,7 @@
 namespace BANG\Characters;
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
-use BANG\Helpers\Utils;
+use BANG\Helpers\Sounds;
 use BANG\Managers\Cards;
 use BANG\Managers\Players;
 
@@ -52,6 +52,7 @@ class JesseJones extends \BANG\Models\Player
       $card = $victim->getRandomCardInHand();
       Cards::move($card->getId(), LOCATION_HAND, $this->id);
       Notifications::stoleCard($this, $victim, $card, false);
+      Notifications::playSound(Sounds::getSoundForCharacterAbility());
       $victim->onChangeHand();
 
       // Deal the second one

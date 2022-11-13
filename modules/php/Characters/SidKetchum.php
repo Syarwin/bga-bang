@@ -2,6 +2,7 @@
 namespace BANG\Characters;
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
+use BANG\Helpers\Sounds;
 use BANG\Managers\Cards;
 
 // TODO : make its ability available (almost) at any time
@@ -46,5 +47,6 @@ class SidKetchum extends \BANG\Models\Player
     Notifications::discardedCards($this, $cards, false, $args);
     $this->gainLife();
     $this->addRevivalAtomOrEliminate();
+    Notifications::playSound(Sounds::getSoundForCharacterAbility());
   }
 }

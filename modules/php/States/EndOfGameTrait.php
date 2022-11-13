@@ -1,5 +1,6 @@
 <?php
 namespace BANG\States;
+use BANG\Helpers\Sounds;
 use BANG\Managers\Players;
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
@@ -42,5 +43,6 @@ trait EndOfGameTrait
       Stack::setup([ST_GAME_END]);
     }
     Notifications::revealPlayersRolesEndOfGame();
+    Notifications::playSound(Sounds::getSoundForEndGame(), 2000);
   }
 }
