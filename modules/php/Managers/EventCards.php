@@ -49,17 +49,17 @@ class EventCards extends \BANG\Helpers\Pieces
    */
   public static $classes = [
     CARD_BLESSING => 'Blessing',
-//    CARD_CURSE => 'Curse',
-//    CARD_DALTONS => 'Daltons',
-//    CARD_DOCTOR => 'Doctor',
+    CARD_CURSE => 'Curse',
+    CARD_DALTONS => 'Daltons',
+    CARD_DOCTOR => 'Doctor',
     CARD_GHOST_TOWN => 'GhostTown',
-//    CARD_GOLD_RUSH => 'GoldRush',
-//    CARD_HANGOVER => 'Hangover',
-//    CARD_REVEREND => 'Reverend',
-//    CARD_SERMON => 'Sermon',
-//    CARD_SHOOTOUT => 'Shootout',
-//    CARD_THIRST => 'Thirst',
-//    CARD_TRAIN_ARRIVAL => 'TrainArrival',
+    CARD_GOLD_RUSH => 'GoldRush',
+    CARD_HANGOVER => 'Hangover',
+    CARD_REVEREND => 'Reverend',
+    CARD_SERMON => 'Sermon',
+    CARD_SHOOTOUT => 'Shootout',
+    CARD_THIRST => 'Thirst',
+    CARD_TRAIN_ARRIVAL => 'TrainArrival',
     CARD_HIGH_NOON => 'HighNoon',
   ];
 

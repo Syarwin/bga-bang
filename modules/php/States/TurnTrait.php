@@ -91,9 +91,9 @@ trait TurnTrait
   {
     Stack::unsuspendNext(ST_DISCARD_EXCESS);
     $player = Players::getActive();
-//    if ($player->countHand() <= $player->getHp()) {
+    if ($player->countHand() <= $player->getHp()) {
       Stack::finishState();
-//    }
+    }
   }
 
   public function argDiscardExcess()

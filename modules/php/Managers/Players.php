@@ -98,8 +98,8 @@ class Players extends \BANG\Helpers\DB_Manager
         }
         $sheriff = $pId;
       }
-//      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, $bullets, $role, $characterId, $altCharacterId, $charChosen, 0];
-            $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, 1, $role, $characterId, $altCharacterId, $charChosen, 0];
+      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, $bullets, $role, $characterId, $altCharacterId, $charChosen, 0];
+//      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, 1, $role, $characterId, $altCharacterId, $charChosen, 0];
       if ($charChosen) {
         Cards::deal($pId, $bullets);
       }
