@@ -19,6 +19,11 @@ trait EventTrait
     $eventCard = EventCards::next();
     Notifications::newEvent($eventCard, EventCards::getNext());
     Rules::setNewTurnRules($player, $eventCard);
+    // Maybe Suzy has no cards in hand?
+    Players::getLivingPlayers()->map(function ($player) {
+      $player->checkHand();
+    });
+
     // EFFECT_PERMANENT should not logically be here but in case of Hangover + Paul Regret we should notify about distances, so...
     // Feel free to change this logic if at some point EFFECT_INSTANT will trigger anything
     if ($eventCard->getEffect() === EFFECT_INSTANT || $eventCard->getEffect() === EFFECT_PERMANENT) {
