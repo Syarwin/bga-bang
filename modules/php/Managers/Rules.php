@@ -128,7 +128,8 @@ class Rules extends DB_Manager
     $flipSuccessful = in_array($suitOverride ?? $cardSuit, $flipSuccessSuit);
 
     $eventChangedResult = isset($suitOverride) && $cardSuit != $suitOverride
-      && (in_array($cardSuit, $flipSuccessSuit) || in_array($suitOverride, $flipSuccessSuit));
+      && (in_array($cardSuit, $flipSuccessSuit) xor in_array($suitOverride, $flipSuccessSuit));
+
     if ($eventChangedResult) {
       $eventChangedResult = [
         'eventName' => $event->getName(),
