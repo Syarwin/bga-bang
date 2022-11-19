@@ -27,7 +27,9 @@ class BlackJack extends \BANG\Models\Player
 
     // If heart or diamond => draw again a private one
     $card = $cards->first();
-    if (in_array($card->getCopyColor(), ['H', 'D'])) {
+    $suitOverrideInfo = Rules::getSuitOverrideInfo($card, ['H', 'D']);
+    //TODO: event may change the result, we might want a notification for this case (vgiac)
+    if ($suitOverrideInfo['flipSuccessful']) {
       Rules::incrementPhaseOneDrawEndAmount();
     }
     $this->onChangeHand();

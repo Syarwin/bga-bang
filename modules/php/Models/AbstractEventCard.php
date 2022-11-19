@@ -76,12 +76,12 @@ class AbstractEventCard implements \JsonSerializable
   }
 
   /**
-   * @param $currentColor
-   * @return string
+   * Returns the suit of all cards when this event is active or null if this event does not override suits.
+   * @return string|null
    */
-  public function getColorOverride($currentColor)
+  public function getSuitOverride()
   {
-    return $currentColor;
+    return null;
   }
 
   public function nextPlayerCounterClockwise()
@@ -130,7 +130,7 @@ class AbstractEventCard implements \JsonSerializable
     return [
       'id' => $this->id,
       'type' => $this->type,
-      'colorOverride' => $this->getColorOverride(null),
+      'colorOverride' => $this->getSuitOverride()
     ];
   }
 }
