@@ -5,6 +5,7 @@ use BANG\Core\Log;
 use BANG\Core\Stack;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
+use BANG\Managers\Rules;
 
 class Jail extends \BANG\Models\BlueCard
 {
@@ -56,13 +57,11 @@ class Jail extends \BANG\Models\BlueCard
     $player->discardCard($card, true); // Discard a flipped card
     $player->discardCard($this, true); // Discard Jail itself
 
-    $args = ['player' => $player, 'event' => null];
-    if ($card->getCopyColor($args['event']) == 'H') {
+    $suitOverrideInfo = Rules::getSuitOverrideInfo($card, 'H');
+    $args = array_merge($suitOverrideInfo, ['player' => $player]);
+    if ($suitOverrideInfo['flipSuccessful']) {
       Notifications::tell(clienttranslate('${player_name} can make his turn${flipEventMsg}'), $args);
     } else {
-      if ($card->getSuit() !== 'H') { //result changed because of event?
-        $args['event'] = null;
-      }
       Notifications::tell(clienttranslate('${player_name} is skipped${flipEventMsg}'), $args);
       Stack::clearAllLeaveLast();
     }

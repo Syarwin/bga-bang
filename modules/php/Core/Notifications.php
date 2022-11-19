@@ -416,10 +416,10 @@ class Notifications
       }, $data['ignore']);
     }
 
-    if (isset($data['event'])) {
-      $data['event_name'] = $eventName = $data['event']->getName();
+    if (isset($data['eventChangedResult']) && $data['eventChangedResult']) {
+      $eventName = $data['eventChangedResult']['eventName'];
       $data['flipEventMsg'] = " because of $eventName";
-      $data['eventColorOverride'] = $data['event']->getColorOverride(null);
+      $data['eventColorOverride'] = $data['eventChangedResult']['eventSuitOverride'];
       $data['preserve'][] = 'eventColorOverride';
     } else {
       $data['flipEventMsg'] = '';
