@@ -22,8 +22,8 @@ class EventCards extends \BANG\Helpers\Pieces
   {
     $cards = [];
     foreach (self::$classes as $type => $name) {
-      if ($type !== CARD_GHOST_TOWN || ($type === CARD_GHOST_TOWN && GameOptions::isResurrection())) {
-        $card = self::getCardByType($type);
+      $card = self::getCardByType($type);
+      if (!$card->isResurrectionEffect() || GameOptions::isResurrection()) {
         if (in_array($card->getExpansion(), $expansions) && !$card->isLastCard()) {
           $cards[] = [
             'type' => $type,
@@ -33,11 +33,14 @@ class EventCards extends \BANG\Helpers\Pieces
     }
     Globals::setResurrectionIsPossible(GameOptions::isResurrection());
 
+    shuffle($cards);
+    if (count(self::getCurrentExpansionsIntersesction($expansions)) === 2) {
+      $cards = array_slice($cards, 0, 12);
+    }
+
     self::create($cards, LOCATION_EVENTS_DECK);
-    self::shuffle(LOCATION_EVENTS_DECK);
-    // TODO: While implementing A Fistful Of Cards expansion, choose randomly (or make players choose) which of 2 cards would be the last
-    $highNoonCard = self::singleCreate(CARD_HIGH_NOON, LOCATION_EVENTS_DECK);
-    EventCards::insertAtBottom($highNoonCard, LOCATION_EVENTS_DECK);
+    $lastCard = self::singleCreate(self::getCurrentExpansionLastCardType($expansions), LOCATION_EVENTS_DECK);
+    EventCards::insertAtBottom($lastCard, LOCATION_EVENTS_DECK);
   }
 
   /***************************
@@ -48,6 +51,7 @@ class EventCards extends \BANG\Helpers\Pieces
    * cardClasses : for each card Id, the corresponding class name
    */
   public static $classes = [
+    // High Noon
     CARD_BLESSING => 'Blessing',
     CARD_CURSE => 'Curse',
     CARD_DALTONS => 'Daltons',
@@ -61,6 +65,23 @@ class EventCards extends \BANG\Helpers\Pieces
     CARD_THIRST => 'Thirst',
     CARD_TRAIN_ARRIVAL => 'TrainArrival',
     CARD_HIGH_NOON => 'HighNoon',
+
+    // A Fistful Of Cards
+    CARD_ABANDONED_MINE => 'AbandonedMine',
+    CARD_AMBUSH => 'Ambush',
+    CARD_BLOOD_BROTHERS => 'BloodBrothers',
+    CARD_DEAD_MAN => 'DeadMan',
+    CARD_HARD_LIQUOR => 'HardLiquor',
+    CARD_LASSO => 'Lasso',
+    CARD_LAW_OF_THE_WEST => 'LawOfTheWest',
+    CARD_RANCH => 'Ranch',
+    CARD_RICOCHET => 'Ricochet',
+    CARD_RUSSIAN_ROULETTE => 'RussianRoulette',
+    CARD_SNIPER => 'Sniper',
+    CARD_PEYOTE => 'Peyote',
+    CARD_JUDGE => 'Judge',
+    CARD_VENDETTA => 'Vendetta',
+    CARD_FISTFUL_OF_CARDS => 'FistfulOfCards',
   ];
 
   /*
@@ -139,5 +160,36 @@ class EventCards extends \BANG\Helpers\Pieces
       return $card->isResurrectionEffect();
     });
     return count($resurrectionCards) > 0;
+  }
+
+  /**
+   * @param array $expansions
+   * @return int
+   */
+  private static function getCurrentExpansionLastCardType($expansions)
+  {
+    $currentEventExpansions = self::getCurrentExpansionsIntersesction($expansions);
+    switch (count($currentEventExpansions)) {
+      case 2:
+        return [CARD_HIGH_NOON, CARD_FISTFUL_OF_CARDS][bga_rand(0, 1)];
+      case 1:
+        $currentExpansion = array_values($currentEventExpansions)[0];
+        return [
+          HIGH_NOON => CARD_HIGH_NOON,
+          FISTFUL_OF_CARDS => CARD_FISTFUL_OF_CARDS,
+          ][$currentExpansion];
+      default:
+        throw new \BgaVisibleSystemException('$currentEventExpansions does not intersect with $eventExpansions, please report as a bug');
+    }
+  }
+
+  /**
+   * @param array $expansions
+   * @return array
+   */
+  private static function getCurrentExpansionsIntersesction($expansions)
+  {
+    $eventExpansions = [HIGH_NOON, FISTFUL_OF_CARDS];
+    return array_intersect($expansions, $eventExpansions);
   }
 }

@@ -37,7 +37,7 @@ define('ST_PRE_GAME_END', 98);
 define('ST_GAME_END', 99);
 
 /*
- * Game options
+ * Game options keys
  */
 define('OPTION_CHAR_1', 101);
 define('OPTION_CHAR_2', 102);
@@ -50,25 +50,40 @@ define('OPTION_GENERAL_STORE_LAST_CARD', 108);
 define('OPTION_CHOOSE_CHARACTERS', 110);
 define('OPTION_EXPANSIONS', 111);
 define('OPTION_HIGH_NOON_EXPANSION', 112);
+define('OPTION_FISTFUL_OF_CARDS_EXPANSION', 113);
+define('OPTION_HIGH_NOON_AND_FOC_EXPANSION', 114);
 
 /*
- * Choose Characters options
+ * OPTION_CHOOSE_CHARACTERS values
  */
 define('CHARACTERS_RANDOM', 1101);
 define('CHARACTERS_CHOOSE', 1102);
 
 /*
- * Expansions options
+ * OPTION_EXPANSIONS values
  */
 define('OPTION_BASE_GAME', 1111);
 define('OPTION_HIGH_NOON_ONLY', 1112);
+define('OPTION_FISTFUL_OF_CARDS_ONLY', 1113);
+define('OPTION_HIGH_NOON_AND_FOC', 1114);
 
 /*
- * High Noon options
+ * OPTION_HIGH_NOON_ONLY/OPTION_HIGH_NOON_EXPANSION values
  */
-define('OPTION_HIGH_NOON_OFF', 1121);
 define('OPTION_HIGH_NOON_NO_GHOST_TOWN', 1122);
 define('OPTION_HIGH_NOON_WITH_GHOST_TOWN', 1123);
+
+/*
+ * OPTION_FISTFUL_OF_CARDS_ONLY/OPTION_FISTFUL_OF_CARDS_EXPANSION values
+ */
+define('OPTION_FISTFUL_OF_CARDS_NO_DEAD_MAN', 1131);
+define('OPTION_FISTFUL_OF_CARDS_WITH_DEAD_MAN', 1132);
+
+/*
+ * OPTION_HIGH_NOON_AND_FOC/OPTION_HIGH_NOON_AND_FOC_EXPANSION values
+ */
+define('OPTION_BOTH_EVENTS_NO_GHOSTS', 1141);
+define('OPTION_BOTH_EVENTS_WITH_GHOSTS', 1142);
 
 /*
  * Options constants
@@ -139,6 +154,21 @@ define('CARD_SHOOTOUT', 109);
 define('CARD_THIRST', 110);
 define('CARD_TRAIN_ARRIVAL', 111);
 define('CARD_HIGH_NOON', 112);
+define('CARD_ABANDONED_MINE', 113);
+define('CARD_AMBUSH', 114);
+define('CARD_BLOOD_BROTHERS', 115);
+define('CARD_DEAD_MAN', 116);
+define('CARD_HARD_LIQUOR', 117);
+define('CARD_LASSO', 118);
+define('CARD_LAW_OF_THE_WEST', 119);
+define('CARD_RANCH', 120);
+define('CARD_RICOCHET', 121);
+define('CARD_RUSSIAN_ROULETTE', 122);
+define('CARD_SNIPER', 123);
+define('CARD_PEYOTE', 124);
+define('CARD_JUDGE', 125);
+define('CARD_VENDETTA', 126);
+define('CARD_FISTFUL_OF_CARDS', 127);
 
 define('PASS', 999); //has to be bigger than the maximum number of cards in the game
 

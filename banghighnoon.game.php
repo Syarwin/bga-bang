@@ -66,6 +66,8 @@ class banghighnoon extends Table
       'optionCharacters' => OPTION_CHOOSE_CHARACTERS,
       'optionExpansions' => OPTION_EXPANSIONS,
       'optionHighNoon' => OPTION_HIGH_NOON_EXPANSION,
+      'optionFistful' => OPTION_FISTFUL_OF_CARDS_EXPANSION,
+      'optionHighNoonAndFistful' => OPTION_HIGH_NOON_AND_FOC_EXPANSION,
     ]);
   }
   public static function get()

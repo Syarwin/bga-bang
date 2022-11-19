@@ -28,15 +28,18 @@ class Cards extends \BANG\Helpers\Pieces
     foreach (self::$classes as $type => $name) {
       $card = self::getCardByType($type);
       foreach ($expansions as $exp) {
-        foreach ($card->getCopies()[$exp] as $copy) {
-          $value = Utils::getCopyValue($copy);
-          $color = Utils::getCopyColor($copy);
+        $copies = $card->getCopies();
+        if (array_key_exists($exp, $copies)) {
+          foreach ($copies[$exp] as $copy) {
+            $value = Utils::getCopyValue($copy);
+            $color = Utils::getCopyColor($copy);
 
-          $cards[] = [
-            'type' => $type,
-            'value' => $value,
-            'color' => $color,
-          ];
+            $cards[] = [
+              'type' => $type,
+              'value' => $value,
+              'color' => $color,
+            ];
+          }
         }
       }
     }
