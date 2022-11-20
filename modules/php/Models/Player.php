@@ -1,5 +1,6 @@
 <?php
 namespace BANG\Models;
+use BANG\Core\Globals;
 use BANG\Managers\Cards;
 use BANG\Managers\EventCards;
 use BANG\Managers\Players;
@@ -36,26 +37,29 @@ class Player extends \BANG\Helpers\DB_Manager
   protected $bullets;
   protected $expansion = BASE_GAME;
   protected $characterChosen;
+  protected $unconscious;
 
   public function __construct($row)
   {
     if ($row != null) {
       // backward compatibilty from 15/10/2022
-      $this->characterChosen = !(array_key_exists('player_character_chosen', $row) && (int) $row['player_character_chosen'] === 0);
-      $this->id = (int) $row['player_id'];
-      $this->no = (int) $row['player_no'];
+      $this->characterChosen = !(array_key_exists('player_character_chosen', $row) && (int)$row['player_character_chosen'] === 0);
+      $this->id = (int)$row['player_id'];
+      $this->no = (int)$row['player_no'];
       $this->name = $row['player_name'];
       $this->color = $row['player_color'];
       $this->eliminated = $row['player_eliminated'] == 1;
-      $this->hp = $this->characterChosen ? (int) $row['player_hp'] : null;
+      $this->hp = $this->characterChosen ? (int)$row['player_hp'] : null;
       $this->zombie = $row['player_zombie'] == 1;
-      $this->role = (int) $row['player_role'];
-      $this->bullets = $this->characterChosen ? (int) $row['player_bullets'] : null;
-      $this->score = (int) $row['player_score'];
-      $this->generalStore = (int) $row['player_autopick_general_store'];
-      $this->character = (int) $row['player_character'];
+      $this->role = (int)$row['player_role'];
+      $this->bullets = $this->characterChosen ? (int)$row['player_bullets'] : null;
+      $this->score = (int)$row['player_score'];
+      $this->generalStore = (int)$row['player_autopick_general_store'];
+      $this->character = (int)$row['player_character'];
       // backward compatibilty from 15/10/2022
-      $this->altCharacter = array_key_exists('player_alt_character', $row) ? (int) $row['player_alt_character'] : -1;
+      $this->altCharacter = array_key_exists('player_alt_character', $row) ? (int)$row['player_alt_character'] : -1;
+      // backward compatibility from XX/XX/2022
+      $this->unconscious = array_key_exists('player_unconscious', $row) ? (int) $row['player_unconscious'] === 1 : $this->eliminated;
     }
   }
 
@@ -66,42 +70,52 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     return $this->id;
   }
+
   public function getNo()
   {
     return $this->no;
   }
+
   public function getName()
   {
     return $this->name;
   }
+
   public function getColor()
   {
     return $this->color;
   }
+
   public function getHp()
   {
     return $this->hp;
   }
+
   public function getRole()
   {
     return $this->role;
   }
+
   public function getCharacter()
   {
     return $this->character;
   }
+
   public function getCharName()
   {
     return $this->character_name;
   }
+
   public function isEliminated()
   {
     return $this->eliminated;
   }
+
   public function isZombie()
   {
     return $this->zombie;
   }
+
   public function isAvailable($expansions)
   {
     return in_array($this->expansion, $expansions);
@@ -111,14 +125,17 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     return Players::getPlayerPositions()[$this->id];
   }
+
   public function getText()
   {
     return $this->text;
   }
+
   public function getExpansion()
   {
     return $this->expansion;
   }
+
   public function getBullets()
   {
     return $this->bullets;
@@ -150,9 +167,17 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     return $this->generalStore == GENERAL_STORE_AUTO_PICK;
   }
+
   public function isCharacterChosen()
   {
     return $this->characterChosen;
+  }
+  /**
+   * @return boolean
+   */
+  public function isUnconscious()
+  {
+    return $this->unconscious;
   }
 
   public function getUiData($currentPlayerId = null)
@@ -161,6 +186,7 @@ class Player extends \BANG\Helpers\DB_Manager
     return [
       'id' => $this->id,
       'eliminated' => (int) $this->eliminated,
+      'unconscious' => $this->unconscious,
       'no' => $this->no,
       'name' => $this->getName(),
       'color' => $this->color,
@@ -172,7 +198,7 @@ class Player extends \BANG\Helpers\DB_Manager
       'bullets' => $this->bullets,
       'hand' => $current ? $this->getHand()->toArray() : [],
       'handCount' => $this->countHand(),
-      'role' => $current || $this->role == SHERIFF || $this->eliminated || Players::isEndOfGame() ? $this->role : null,
+      'role' => $current || $this->role == SHERIFF || $this->eliminated || $this->unconscious || Players::isEndOfGame() ? $this->role : null,
       'inPlay' => $this->getCardsInPlay()->toArray(),
 
       'preferences' => $current
@@ -208,10 +234,14 @@ class Player extends \BANG\Helpers\DB_Manager
 
   /**
    * saves eliminated status and hp to the database
+   * @param bool $eliminate
    */
-  public function save()
+  public function save($eliminate = false)
   {
-    self::DbQuery("UPDATE player SET `player_hp` = {$this->hp} WHERE `player_id` = {$this->id}");
+    // backward compatibility from XX/XX/2022
+    $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_unconscious\'')->num_rows === 1;
+    $unconsciousStatus = $eliminate && $newSchema ? ', `player_unconscious` = 1' : '';
+    self::DbQuery("UPDATE player SET `player_hp` = {$this->hp}{$unconsciousStatus} WHERE `player_id` = {$this->id}");
   }
 
   /*************************
@@ -327,7 +357,6 @@ class Player extends \BANG\Helpers\DB_Manager
   public function addRevivalAtomOrEliminate()
   {
     if ($this->hp <= 0) {
-      $ctx = Stack::getCtx();
       $isDuel = Players::getLivingPlayers()->count() <= 2;
       $beersInHand = $this->getHand()
         ->filter(function ($card) {
@@ -344,14 +373,25 @@ class Player extends \BANG\Helpers\DB_Manager
       }
       $nextState = $canDrinkBeerToLive ? ST_REACT_BEER : ST_PRE_ELIMINATE_DISCARD;
       $atomType = $canDrinkBeerToLive ? 'beer' : 'eliminate';
-      $atom = Stack::newAtom($nextState, [
-        'type' => $atomType,
-        'src' => $ctx['src'] ?? null,
-        'attacker' => $ctx['attacker'] ?? null,
-        'pId' => $this->id,
-      ]);
-      Stack::insertAfterCardResolution($atom, false);
+      $this->addAtomAfterCardResolution($nextState, $atomType);
     }
+  }
+
+  /**
+   * @param int $nextState
+   * We expect $type to be either 'beer' or 'eliminate' so we probably need enum here
+   * @param string $type
+   */
+  public function addAtomAfterCardResolution($nextState, $type)
+  {
+    $ctx = Stack::getCtx();
+    $atom = Stack::newAtom($nextState, [
+      'type' => $type,
+      'src' => $ctx['src'] ?? null,
+      'attacker' => $ctx['attacker'] ?? null,
+      'pId' => $this->id,
+    ]);
+    Stack::insertAfterCardResolution($atom, false);
   }
 
   /************************************
@@ -363,7 +403,7 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function getOrderedOtherPlayers()
   {
-    return Players::getLivingPlayerIdsStartingWith($this, [$this->id]);
+    return Players::getLivingPlayerIdsStartingWith($this, false, [$this->id]);
   }
 
   /*
@@ -384,7 +424,7 @@ class Player extends \BANG\Helpers\DB_Manager
   }
 
   /**
-   * returns the current distance to an enmy from the view of the enemy
+   * returns the current distance to an enemy from the view of the enemy
    * should not be called on the player checking for targets but on the other players
    */
   public function getDistanceTo($enemy)
@@ -738,7 +778,7 @@ class Player extends \BANG\Helpers\DB_Manager
 
     // get player who eliminated this player
     $byPlayer = null;
-    if (array_key_exists('attacker', $ctx) && $ctx['attacker'] != $this->id) {
+    if (array_key_exists('attacker', $ctx) && $ctx['attacker'] != null && $ctx['attacker'] != $this->id) {
       $byPlayer = Players::get($ctx['attacker']);
     }
 
@@ -750,9 +790,14 @@ class Player extends \BANG\Helpers\DB_Manager
     // Discard cards
     $this->discardAllCards();
     // Eliminate player
-    banghighnoon::get()->eliminatePlayer($this->id);
-    $this->eliminated = true;
-    $this->save();
+    $forceEliminate = array_key_exists('forceEliminate', $ctx) && $ctx['forceEliminate'];
+    if (!Globals::getResurrectionIsPossible() || $forceEliminate) {
+      banghighnoon::get()->eliminatePlayer($this->id);
+      $this->eliminated = true;
+    } else {
+      Notifications::playerUnconscious($this);
+    }
+    $this->save(true);
 
     // Check if game should end
     if (Stack::isItLastElimination() && Players::isEndOfGame()) {
@@ -848,7 +893,6 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function setupChosenCharacter()
   {
-
     $characterObject = Players::getCharacter($this->character);
     $bullets = $characterObject->getBullets();
     if ($this->role === SHERIFF) {
@@ -860,5 +904,10 @@ class Player extends \BANG\Helpers\DB_Manager
       'player_bullets' => $bullets,
     ];
     self::DB()->update($newParams, $this->id);
+  }
+
+  public function resurrect()
+  {
+    self::DbQuery("UPDATE player SET `player_unconscious` = 0 WHERE `player_id` = {$this->id}");
   }
 }

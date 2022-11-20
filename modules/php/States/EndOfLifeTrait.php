@@ -1,6 +1,7 @@
 <?php
 namespace BANG\States;
 use BANG\Managers\Cards;
+use BANG\Managers\EventCards;
 use BANG\Managers\Players;
 use BANG\Core\Stack;
 use BANG\Core\Notifications;
@@ -29,12 +30,14 @@ trait EndOfLifeTrait
   {
     // Play the beer cards picked by player
     $player = Players::getActive();
-    if ($ids != null) {
+    if (empty($ids)) {
+      $player->addAtomAfterCardResolution(ST_PRE_ELIMINATE_DISCARD, 'eliminate');
+    } else {
       foreach (Cards::getMany($ids) as $card) {
         $player->playCard($card, []);
       }
+      $player->addRevivalAtomOrEliminate();
     }
-    $player->addRevivalAtomOrEliminate();
   }
 
   public function argDiscardEliminate()
@@ -72,7 +75,8 @@ trait EndOfLifeTrait
     }
 
     $cards = $player->getCardsInPlay()->merge($player->getHand());
-    $nextIsPedro = Players::getNext($player)->getCharacter() === PEDRO_RAMIREZ;
+    $currentEvent = EventCards::getActive();
+    $nextIsPedro = Players::getNext($player, $currentEvent && $currentEvent->isResurrectionEffect())->getCharacter() === PEDRO_RAMIREZ;
     if ($cards->count() > 1 && $nextIsPedro) {
       $this->gamestate->jumpToState(ST_PRE_ELIMINATE);
     } else {

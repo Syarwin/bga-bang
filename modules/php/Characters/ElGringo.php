@@ -26,7 +26,7 @@ class ElGringo extends \BANG\Models\Player
   {
     parent::loseLife($amount);
     if (Rules::isAbilityAvailable()) {
-      $attackerId = Players::getCurrentTurn()->getId();
+      $attackerId = Rules::getCurrentPlayerId();
       if ($attackerId != $this->id) {
         $attackerCharacter = Players::get($attackerId)->getCharacter();
         $attackerIndex = Stack::getFirstIndex(['state' => ST_TRIGGER_ABILITY,

@@ -405,13 +405,6 @@ class Collection extends \ArrayObject
     return new Collection(array_filter($this->toAssoc(), $func));
   }
 
-  public function ui()
-  {
-    return $this->map(function ($elem) {
-      return $elem->getUiData();
-    });
-  }
-
   public function contains($value)
   {
     return in_array($value, $this->toArray());
@@ -420,5 +413,15 @@ class Collection extends \ArrayObject
   public function count()
   {
     return count($this->getArrayCopy());
+  }
+
+  /**
+   * @return Collection
+   */
+  public function push($element)
+  {
+    $current = $this->toAssoc();
+    $current[$element->getId()] = $element;
+    return new Collection($current);
   }
 }

@@ -64,7 +64,8 @@ $game_options = [
 
   OPTION_EXPANSIONS => [
     'name' => totranslate('Expansions'),
-    'default' => OPTION_BASE_GAME,
+    // TODO: Change to OPTION_BASE_GAME before release
+    'default' => OPTION_HIGH_NOON_ONLY,
     'values' => [
       OPTION_BASE_GAME =>
         [ 'name' => totranslate('No'),
@@ -77,20 +78,28 @@ $game_options = [
     ],
   ],
 
-//  OPTION_HIGH_NOON_EXPANSION => [
-//    'name' => totranslate('High Noon expansion'),
-//    'default' => OPTION_HIGH_NOON_NO_GHOST_TOWN,
-//    'values' => [
-//      OPTION_HIGH_NOON_NO_GHOST_TOWN =>
-//        [ 'name' => totranslate('Without Ghost Town'),
-//          'tmdisplay' => totranslate('Without Ghost Town'),
-//          'description' => totranslate('12 High Noon event cards without a Ghost Town one') ],
-//      OPTION_HIGH_NOON_WITH_GHOST_TOWN =>
-//        [ 'name' => totranslate('With Ghost Town'),
-//          'tmdisplay' => totranslate('With Ghost Town'),
-//          'description' => totranslate('13 High Noon event cards') ],
-//    ],
-//  ],
+  OPTION_HIGH_NOON_EXPANSION => [
+    'name' => totranslate('High Noon expansion'),
+    // TODO: Change to OPTION_HIGH_NOON_NO_GHOST_TOWN before release
+    'default' => OPTION_HIGH_NOON_WITH_GHOST_TOWN,
+    'values' => [
+      OPTION_HIGH_NOON_NO_GHOST_TOWN =>
+        [ 'name' => totranslate('Without Ghost Town'),
+          'tmdisplay' => totranslate('Without Ghost Town'),
+          'description' => totranslate('12 High Noon event cards without a Ghost Town one') ],
+      OPTION_HIGH_NOON_WITH_GHOST_TOWN =>
+        [ 'name' => totranslate('With Ghost Town'),
+          'tmdisplay' => totranslate('With Ghost Town'),
+          'description' => totranslate('13 High Noon event cards') ],
+    ],
+    'displaycondition' => [
+        [
+          'type' => 'otheroption',
+          'id' => OPTION_EXPANSIONS,
+          'value' => [OPTION_HIGH_NOON_ONLY]
+        ]
+      ]
+  ],
 
   OPTION_CHAR_1 => [
     'name' => totranslate('Character 1'),

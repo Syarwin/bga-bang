@@ -22,6 +22,19 @@ class GameOptions
     }
   }
 
+  /**
+   * @return boolean
+   */
+  public static function isResurrection()
+  {
+    return in_array(HIGH_NOON, self::getExpansions()) &&
+      (int) banghighnoon::get()->getGameStateValue('optionHighNoon') === OPTION_HIGH_NOON_WITH_GHOST_TOWN;
+  }
+
+  /**
+   * isEvents: are events enabled for this game?
+   * @return string
+   */
   public static function isEvents()
   {
     return count(array_intersect([HIGH_NOON], self::getExpansions())) > 0; // ...or Fistful of Cards

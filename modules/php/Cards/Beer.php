@@ -34,9 +34,10 @@ class Beer extends \BANG\Models\BrownCard
     if (count(Players::getLivingPlayers()) <= 2) {
       Cards::discard($this);
       Notifications::tell(clienttranslate('Beer has no effect when only 2 players are alive'));
-    } elseif ($player->getBullets() == $player->getHp()) {
-      Notifications::tell(clienttranslate('Beer had no effect because ${player_name} had maximum amount of life points'), ['player' => $player]);
     } else {
+      if ($player->getBullets() == $player->getHp()) {
+        Notifications::tell(clienttranslate('Beer had no effect because ${player_name} has maximum amount of life points'), ['player' => $player]);
+      }
       parent::play($player, $args);
     }
   }

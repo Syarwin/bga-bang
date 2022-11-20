@@ -114,6 +114,14 @@ class AbstractEventCard implements \JsonSerializable
     return false;
   }
 
+  /**
+   * @return boolean
+   */
+  public function isResurrectionEffect()
+  {
+    return false;
+  }
+
   /*
    * jsonSerialize: used in frontend to manipulate cards
    */

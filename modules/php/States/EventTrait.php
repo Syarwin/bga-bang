@@ -1,5 +1,6 @@
 <?php
 namespace BANG\States;
+use BANG\Core\Globals;
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
 use BANG\Managers\EventCards;
@@ -18,10 +19,18 @@ trait EventTrait
     $eventCard = EventCards::next();
     Notifications::newEvent($eventCard, EventCards::getNext());
     Rules::setNewTurnRules($player, $eventCard);
+    // Maybe Suzy has no cards in hand?
+    Players::getLivingPlayers()->map(function ($player) {
+      $player->checkHand();
+    });
+
     // EFFECT_PERMANENT should not logically be here but in case of Hangover + Paul Regret we should notify about distances, so...
     // Feel free to change this logic if at some point EFFECT_INSTANT will trigger anything
     if ($eventCard->getEffect() === EFFECT_INSTANT || $eventCard->getEffect() === EFFECT_PERMANENT) {
       $eventCard->resolveEffect($player);
+    }
+    if (!EventCards::isResurrectionPossible()) {
+      Globals::setResurrectionIsPossible(false);
     }
     Stack::finishState();
   }
@@ -35,7 +44,11 @@ trait EventTrait
     if ($eventCard && $eventCard->getEffect() === EFFECT_STARTOFTURN) {
       $ctx = Stack::getCtx();
       $player = Players::get($ctx['pId']);
-      $eventCard->resolveEffect($player);
+      if ($eventCard->isResurrectionEffect() === $player->isUnconscious()) { // dead + resurrect or alive + normal effect
+        $eventCard->resolveEffect($player);
+      } elseif ($player->isUnconscious()) { // dead but this is not a resurrection
+        Stack::removePlayerAtoms($ctx['pId']);
+      } // do not resolve any effects when resurrection is combined with alive player
     }
     Stack::finishState();
   }

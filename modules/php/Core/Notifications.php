@@ -362,6 +362,33 @@ class Notifications
     ]);
   }
 
+  /**
+   * @param AbstractEventCard $eventCard
+   * @param AbstractEventCard $nextEventCard
+   */
+  public static function newEvent($eventCard, $nextEventCard)
+  {
+    $msg = clienttranslate('${eventActiveName} is now active!');
+    self::notifyAll('newEvent', $msg, [
+      'eventActive' => $eventCard,
+      'eventActiveName' => $eventCard->getName(),
+      'eventNext' => $nextEventCard,
+      'eventsDeck' => EventCards::getDeckCount(),
+    ]);
+  }
+
+  /**
+   * playerUnconscious: send when player died but might be resurrected
+   * @param Player $player
+   */
+  public static function playerUnconscious($player)
+  {
+    $msg = '${player_name} is eliminated but might be back at some point...';
+    self::notifyAll('playerUnconscious', $msg, [
+      'player' => $player,
+    ]);
+  }
+
   public static function updateArgs(&$data)
   {
     if (isset($data['player'])) {
@@ -401,20 +428,5 @@ class Notifications
     if (isset($data['msgYou'])) {
       $data['preserve'][4] = 'msgYou';
     }
-  }
-
-  /**
-   * @param AbstractEventCard $eventCard
-   * @param AbstractEventCard $nextEventCard
-   */
-  public static function newEvent($eventCard, $nextEventCard)
-  {
-    $msg = clienttranslate('${eventActiveName} is now active!');
-    self::notifyAll('newEvent', $msg, [
-      'eventActive' => $eventCard,
-      'eventActiveName' => $eventCard->getName(),
-      'eventNext' => $nextEventCard,
-      'eventsDeck' => EventCards::getDeckCount(),
-    ]);
   }
 }
