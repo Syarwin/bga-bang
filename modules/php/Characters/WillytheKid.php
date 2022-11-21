@@ -1,7 +1,6 @@
 <?php
 namespace BANG\Characters;
 
-use BANG\Managers\EventCards;
 use BANG\Managers\Rules;
 
 class WillytheKid extends \BANG\Models\Player
@@ -17,8 +16,6 @@ class WillytheKid extends \BANG\Models\Player
 
   public function hasUnlimitedBangs()
   {
-    $activeEvent = EventCards::getActive();
-    $bangStrictlyForbidden = $activeEvent ? $activeEvent->isBangStrictlyForbidden() : false;
-    return Rules::isAbilityAvailable() && !$bangStrictlyForbidden;
+    return Rules::isAbilityAvailable();
   }
 }

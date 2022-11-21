@@ -2,7 +2,6 @@
 namespace BANG\Models;
 use BANG\Core\Globals;
 use BANG\Managers\Cards;
-use BANG\Managers\EventCards;
 use BANG\Managers\Players;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
@@ -496,9 +495,7 @@ class Player extends \BANG\Helpers\DB_Manager
   public function hasUnlimitedBangs()
   {
     $weapon = $this->getWeapon();
-    $activeEvent = EventCards::getActive();
-    $bangStrictlyForbidden = $activeEvent ? $activeEvent->isBangStrictlyForbidden() : false;
-    return !is_null($weapon) && $weapon->getType() == CARD_VOLCANIC && !$bangStrictlyForbidden;
+    return !is_null($weapon) && $weapon->getType() == CARD_VOLCANIC;
   }
 
   /*

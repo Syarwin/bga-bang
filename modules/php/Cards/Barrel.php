@@ -1,8 +1,8 @@
 <?php
 namespace BANG\Cards;
 use BANG\Core\Stack;
-use BANG\Helpers\Utils;
 use BANG\Core\Notifications;
+use BANG\Managers\Rules;
 
 class Barrel extends \BANG\Models\BlueCard
 {
@@ -38,15 +38,12 @@ class Barrel extends \BANG\Models\BlueCard
   {
     $missedNeeded = Stack::top()['missedNeeded'] ?? 1;
 
-    // Draw an heart => success
-    $event = null;
-    if ($card->getCopyColor($event) == 'H') {
-      Notifications::tell(clienttranslate('Barrel was successful${flipEventMsg}'), ['event' => $event]);
+    $suitOverrideInfo = Rules::getSuitOverrideInfo($card, 'H');
+    if ($suitOverrideInfo['flipSuccessful']) {
+      Notifications::tell(clienttranslate('Barrel was successful${flipEventMsg}'), $suitOverrideInfo);
       $missedNeeded -= 1;
     } else {
-      Notifications::tell(clienttranslate('Barrel failed${flipEventMsg}'), [
-        'event' => ($card->getSuit() !== 'H') ? null : $event //result changed because of event?
-      ]);
+      Notifications::tell(clienttranslate('Barrel failed${flipEventMsg}'), $suitOverrideInfo);
     }
     Stack::updateAttackAtomAfterAction($missedNeeded, $this->type);
   }

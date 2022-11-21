@@ -14,7 +14,10 @@ class Blessing extends AbstractEventCard
     $this->expansion = HIGH_NOON;
   }
 
-  public function getColorOverride($currentColor)
+  /**
+   * {@inheritDoc}
+   */
+  public function getSuitOverride()
   {
     return 'H';
   }
