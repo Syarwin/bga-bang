@@ -1,5 +1,6 @@
 <?php
 namespace BANG\Cards;
+use BANG\Managers\EventCards;
 use BANG\Managers\Rules;
 use BANG\Models\BangActionCard;
 
@@ -30,8 +31,12 @@ class Bang extends BangActionCard
    */
   public function getPlayOptions($player)
   {
-    if ($player->hasUnlimitedBangs() || Rules::getBangsAmountLeft() > 0) {
+    $activeEvent = EventCards::getActive();
+    $bangStrictlyForbidden = $activeEvent && $activeEvent->isBangStrictlyForbidden();
+    if (!$bangStrictlyForbidden && ($player->hasUnlimitedBangs() || Rules::getBangsAmountLeft() > 0)) {
       return parent::getPlayOptions($player);
+    } else {
+      return null;
     }
   }
 
