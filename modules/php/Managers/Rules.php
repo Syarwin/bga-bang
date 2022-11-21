@@ -1,6 +1,7 @@
 <?php
 namespace BANG\Managers;
 use BANG\Helpers\DB_Manager;
+use BANG\Models\AbstractCard;
 
 /*
  * Rules: all turn rules and all changes to them according to player role and event and all other factors
@@ -106,5 +107,39 @@ class Rules extends DB_Manager
     if ($oldAmount > 0) {
       Rules::amendRules([RULE_BANGS_AMOUNT_LEFT => --$oldAmount]);
     }
+  }
+
+  /**
+   * This method returns info about the flip of a card for some effect (i.e. Barrel,Dynamite,BlackJack...) that can be
+   * modified by an active event (i.e. Curse,Blessing).
+   *
+   * @param AbstractCard $card The card flipped for the effect
+   * @param string|array $flipSuccessSuit The suit(s) that a specific effect requires to activate
+   * @return array Containing 'flipSuccessful' and 'eventChangedResult' keys. 'eventChangedResult' can be either false or
+   *               an array containing 'event' and 'eventSuitOverride'.
+   */
+  public static function getSuitOverrideInfo($card, $flipSuccessSuit)
+  {
+    if (!is_array($flipSuccessSuit)) $flipSuccessSuit = [$flipSuccessSuit];
+
+    $cardSuit = $card->getSuit();
+    $event = EventCards::getActive();
+    $suitOverride = isset($event) ? $event->getSuitOverride() : null;
+    $flipSuccessful = in_array($suitOverride ?? $cardSuit, $flipSuccessSuit);
+
+    $eventChangedResult = isset($suitOverride) && $cardSuit != $suitOverride
+      && (in_array($cardSuit, $flipSuccessSuit) xor in_array($suitOverride, $flipSuccessSuit));
+
+    if ($eventChangedResult) {
+      $eventChangedResult = [
+        'eventName' => $event->getName(),
+        'eventSuitOverride' => $suitOverride,
+      ];
+    }
+
+    return [
+      'flipSuccessful' => $flipSuccessful,
+      'eventChangedResult' => $eventChangedResult,
+    ];
   }
 }

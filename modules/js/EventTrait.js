@@ -43,7 +43,9 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     },
 
     updateColorOverride(col) {
-      dojo.query('.card-copy-color,.card-copy-color-override').forEach((n) => n.setAttribute('data-color-override', col || ''));
+      dojo.query('div.card-copy > .card-copy-color, div.card-copy > .card-copy-color-override').forEach(function(n) {
+        n.setAttribute('data-color-override', col || '')
+      });
     }
 
   });
