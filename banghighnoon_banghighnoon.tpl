@@ -19,7 +19,9 @@ var jstpl_hand = `<div id="hand">
 var jstpl_table = `<div id="table">
 	<div id="table-container">
 	    <div class="cards-row">
-            <div id="deck">\${deck}</div>
+            <div id="deck">
+              <span class="deckCount" id="mainDeckCount">\${deckCount}</span>
+            </div>
             <div id="discard"></div>
 	    </div>
 	</div>
@@ -28,7 +30,7 @@ var jstpl_table = `<div id="table">
 
 var jstpl_events_row = `<div class="cards-row">
     <div id="eventNext">
-        <span id="eventsDeck">\${eventsDeck}</span>
+        <span class="deckCount" id="eventsDeckCount">\${eventsDeckCount}</span>
     </div>
     <div id="eventActive"></div>
 </div>`
@@ -167,11 +169,10 @@ var jstpl_card = `<div class="bang-card \${flipped} \${extraClass}" id="bang-car
 	</div>
 </div>`;
 
-//TODO: replace card-description with graphics
-var jstpl_eventCard = `<div class="bang-card \${extraClass}" id="bang-card-\${uid}" data-id="\${id}" data-type="\${type}">
+var jstpl_eventCard = `<div class="bang-card \${extraClass} event" id="bang-card-\${uid}" data-id="\${id}" data-type="\${type}">
 	<div class="card-front">
 		<div class="card-name">\${name}</div>
-		<p class="card-description">\${text}</p>
+	    <div class="card-background"></div>
 	</div>
 </div>`;
 
@@ -197,7 +198,7 @@ var jstpl_cardTooltip = `<div class="bang-card-tooltip">
 
 var jstpl_eventCardTooltip = `<div class="bang-card-tooltip">
 	<div class="bang-card-tooltip-sizing">
-		<div class="bang-card" id="bang-card-tooltip-\${id}" data-type="\${type}">
+		<div class="bang-card event" id="bang-card-tooltip-\${id}" data-type="\${type}">
 			<div class="card-front">
 				<div class="card-name">\${name}</div>
 				<div class="card-background"></div>

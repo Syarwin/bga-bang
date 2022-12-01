@@ -127,18 +127,18 @@ define('CARD_RAG_TIME', 29);
 
 // Event cards
 define('CARD_BLESSING', 100);
-define('CARD_CURSE', 101);
-define('CARD_DALTONS', 102);
-define('CARD_DOCTOR', 103);
-define('CARD_GHOST_TOWN', 104);
-define('CARD_GOLD_RUSH', 105);
-define('CARD_HANGOVER', 106);
+define('CARD_HANGOVER', 101);
+define('CARD_GHOST_TOWN', 102);
+define('CARD_GOLD_RUSH', 103);
+define('CARD_DALTONS', 104);
+define('CARD_CURSE', 105);
+define('CARD_HIGH_NOON', 106);
 define('CARD_REVEREND', 107);
 define('CARD_SERMON', 108);
-define('CARD_SHOOTOUT', 109);
-define('CARD_THIRST', 110);
+define('CARD_DOCTOR', 109);
+define('CARD_SHOOTOUT', 110);
 define('CARD_TRAIN_ARRIVAL', 111);
-define('CARD_HIGH_NOON', 112);
+define('CARD_THIRST', 112);
 
 define('PASS', 999); //has to be bigger than the maximum number of cards in the game
 

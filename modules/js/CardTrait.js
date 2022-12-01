@@ -239,7 +239,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     },
 
     updateDeckCount(n) {
-      $('deck').innerHTML = n.args.deckCount;
+      $('mainDeckCount').innerHTML = n.args.deckCount;
     },
 
     /*

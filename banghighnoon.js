@@ -147,10 +147,10 @@ define([
         });
 
         // Adding deck/discard
-        dojo.place(this.format_block('jstpl_table', { deck: gamedatas.deck }), 'board');
+        dojo.place(this.format_block('jstpl_table', { deckCount: gamedatas.deckCount }), 'board');
         // Adding events cards
-        if (gamedatas.eventsDeck !== null) {
-          dojo.place(this.format_block('jstpl_events_row', { eventsDeck: gamedatas.eventsDeck }), 'table-container');
+        if (gamedatas.eventsDeckCount !== null) {
+          dojo.place(this.format_block('jstpl_events_row', { eventsDeckCount: gamedatas.eventsDeckCount }), 'table-container');
         }
         if (gamedatas.discard) {
           // gamedatas.discard.extraClass = ' '; //empty space is important
