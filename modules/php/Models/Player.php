@@ -372,7 +372,15 @@ class Player extends \BANG\Helpers\DB_Manager
       }
       $nextState = $canDrinkBeerToLive ? ST_REACT_BEER : ST_PRE_ELIMINATE_DISCARD;
       $atomType = $canDrinkBeerToLive ? 'beer' : 'eliminate';
-      $this->addAtomAfterCardResolution($nextState, $atomType);
+
+      $eliminationAlreadyInStack = Stack::getFirstIndex([
+        'type' => 'eliminate',
+        'pId' => $this->getId(),
+        'forceEliminate' => true,
+      ]) !== -1;
+      if (!$eliminationAlreadyInStack) { // This is when a ghost is dying during Ghost Town, no need to die twice
+        $this->addAtomAfterCardResolution($nextState, $atomType);
+      }
     }
   }
 

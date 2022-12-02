@@ -26,7 +26,7 @@ class GhostTown extends AbstractEventCard
       'src' => '',
       'pId' => Players::getActive()->getId(),
       'forceEliminate' => true,
-    ]);;
+    ]);
     Stack::insertAfter($atom, 4); // Between ST_PLAY_CARD and ST_END_OF_TURN to ensure death
     $player->resurrect();
     Notifications::updateDistances();
