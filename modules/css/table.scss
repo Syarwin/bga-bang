@@ -71,12 +71,14 @@ div#board {
         border-style: solid;
         height: max-content;
         padding: 2px;
-        margin-left: -7px;
+        margin-left: -6.5px;
         margin-top: -4px;
         font-size: 12px;
         text-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white;
         box-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white;
         z-index: 2;
+        min-width: 14px;
+        text-align: center;
       }
     }
   }
