@@ -12,7 +12,7 @@ class GhostTown extends AbstractEventCard
     parent::__construct($id);
     $this->type = CARD_GHOST_TOWN;
     $this->name = clienttranslate('Ghost Town');
-    $this->text = clienttranslate('During their turn, eliminated players return to the game as ghosts. They draw 3 cards instead of 2, and cannot die. At the end of their turn, they are eliminated again');
+    $this->text = clienttranslate('During their turn, eliminated players return to the game as ghosts. They draw 3 cards instead of 2, and they cannot die. At the end of their turn, they are eliminated again');
     $this->effect = EFFECT_STARTOFTURN;
     $this->expansion = HIGH_NOON;
   }
