@@ -255,9 +255,14 @@ class Players extends \BANG\Helpers\DB_Manager
     return self::countRoles([SHERIFF]) == 0 || self::countRoles([OUTLAW, RENEGADE]) == 0;
   }
 
-  public static function getSherrifId()
+  private static function getSheriffId()
   {
     return self::getUniqueValueFromDB('SELECT player_id FROM player WHERE player_role = ' . SHERIFF);
+  }
+
+  public static function getSheriff()
+  {
+    return self::get(self::getSheriffId());
   }
 
   /*

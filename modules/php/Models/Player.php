@@ -2,6 +2,7 @@
 namespace BANG\Models;
 use BANG\Core\Globals;
 use BANG\Managers\Cards;
+use BANG\Managers\EventCards;
 use BANG\Managers\Players;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
@@ -796,7 +797,12 @@ class Player extends \BANG\Helpers\DB_Manager
     $this->discardAllCards();
     // Eliminate player
     $forceEliminate = array_key_exists('forceEliminate', $ctx) && $ctx['forceEliminate'];
-    if (!Globals::getResurrectionIsPossible() || $forceEliminate) {
+    $isResurrectionEventActive = EventCards::getActive() && EventCards::getActive()->isResurrectionEffect();
+    // Needs to die for good if:
+    // 1. Ghost Town / Dead Man have been played before
+    // 2. GT is now and this is the end of a ghost's turn
+    // 3. Player has already had their turn during GT event which means it's over for this player but might be applied for others
+    if (!Globals::getResurrectionIsPossible() || $forceEliminate || ($isResurrectionEventActive && !$this->goingToPlayThisRound())) {
       banghighnoon::get()->eliminatePlayer($this->id);
       $this->eliminated = true;
     } else {
@@ -825,6 +831,16 @@ class Player extends \BANG\Helpers\DB_Manager
     // Remove all related nodes that could still be there (reactions/powers)
     Stack::removePlayerAtoms($this->id);
     return true;
+  }
+
+  /**
+   * Returns true if current player have not played this round yet
+   * @return boolean
+   */
+  private function goingToPlayThisRound() {
+    $currentPlayerId = Rules::getCurrentPlayerId();
+    $playersList = Players::getLivingPlayerIdsStartingWith(Players::getSheriff());
+    return array_search($currentPlayerId, $playersList) < array_search($this->id, $playersList);
   }
 
   /**
