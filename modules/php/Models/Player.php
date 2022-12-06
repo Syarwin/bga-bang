@@ -57,7 +57,7 @@ class Player extends \BANG\Helpers\DB_Manager
       $this->generalStore = (int)$row['player_autopick_general_store'];
       $this->character = (int)$row['player_character'];
       // backward compatibilty from 15/10/2022
-      $this->altCharacter = array_key_exists('player_alt_character', $row) ? (int)$row['player_alt_character'] : -1;
+      $this->altCharacter = array_key_exists('player_alt_character', $row) ? (int) $row['player_alt_character'] : -1;
       // backward compatibility from XX/XX/2022
       $this->unconscious = array_key_exists('player_unconscious', $row) ? (int) $row['player_unconscious'] === 1 : $this->eliminated;
     }
