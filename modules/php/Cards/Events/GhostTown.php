@@ -19,7 +19,7 @@ class GhostTown extends AbstractEventCard
 
   public function resolveEffect($player = null)
   {
-    $stack = [ST_PRE_PHASE_ONE, ST_PHASE_ONE_SETUP, ST_PLAY_CARD, ST_END_OF_TURN];
+    $stack = [ST_PRE_PHASE_ONE, ST_PHASE_ONE_SETUP, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN];
     Stack::setup($stack);
     $atom = Stack::newAtom(ST_PRE_ELIMINATE_DISCARD, [
       'type' => 'eliminate',
@@ -27,7 +27,8 @@ class GhostTown extends AbstractEventCard
       'pId' => Players::getActive()->getId(),
       'forceEliminate' => true,
     ]);
-    Stack::insertAfter($atom, 4); // Between ST_PLAY_CARD and ST_END_OF_TURN to ensure death
+    Stack::setup($stack);
+    Stack::insertAfter($atom, 5); // Between ST_DISCARD_EXCESS and ST_END_OF_TURN to ensure death
     $player->resurrect();
     Notifications::updateDistances();
   }
