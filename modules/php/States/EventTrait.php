@@ -52,4 +52,8 @@ trait EventTrait
     }
     Stack::finishState();
   }
+
+  public function actAgreedToDisclaimer() {
+    Players::getCurrent()->agreeToDisclaimer();
+  }
 }

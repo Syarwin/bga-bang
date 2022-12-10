@@ -278,6 +278,7 @@ class Players extends \BANG\Helpers\DB_Manager
 
   /**
    * returns an array of the ids of all living players
+   * @return Collection
    */
   public static function getLivingPlayers($except = null)
   {
@@ -375,6 +376,20 @@ class Players extends \BANG\Helpers\DB_Manager
     // backward compatibility from XX/XX/2022
     $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_unconscious\'')->num_rows === 1;
     return $newSchema && !$includeGhosts ? 'player_unconscious' : 'player_eliminated';
+  }
+
+  /**
+   * Returns a whole list of all players who agreed to Ghost Town/resurrection possibility disclaimer
+   * @return array
+   */
+  public static function getNotAgreedToDisclaimerList()
+  {
+    // backward compatibility from XX/XX/2022
+    $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_agreed_to_disclaimer\'')->num_rows === 1;
+    $notAgreedToDisclaimer = self::getLivingPlayers()->map(function ($player) {
+      return !$player->isAgreedToDisclaimer();
+    });
+    return $newSchema ? array_keys(array_filter($notAgreedToDisclaimer->toAssoc(), 'strlen')) : [];
   }
 
   /***********************

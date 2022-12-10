@@ -175,4 +175,11 @@ class action_banghighnoon extends APP_GameAction
     $this->game->actDiscardBlue($card);
     self::ajaxResponse();
   }
+
+  public function actAgreedToDisclaimer()
+  {
+    self::setAjaxMode();
+    $this->game->actAgreedToDisclaimer();
+    self::ajaxResponse();
+  }
 }

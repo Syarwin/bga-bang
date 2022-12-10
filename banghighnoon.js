@@ -26,6 +26,7 @@ define([
   'ebg/counter',
   g_gamethemeurl + 'modules/js/Game/game.js',
   g_gamethemeurl + 'modules/js/Game/modal.js',
+  g_gamethemeurl + 'modules/js/Game/infDialog.js',
 
   g_gamethemeurl + 'modules/js/States/PlayCardTrait.js',
   g_gamethemeurl + 'modules/js/States/ReactTrait.js',
@@ -42,6 +43,7 @@ define([
     'bgagame.banghighnoon',
     [
       customgame.game,
+      bang.informationdialog,
       bang.playCardTrait,
       bang.reactTrait,
       bang.selectCardTrait,
@@ -169,6 +171,10 @@ define([
         // Make the current player stand out
         if (gamedatas.gamestate.name !== 'chooseCharacter') {
           this.updateCurrentTurnPlayer(gamedatas.playerTurn);
+        }
+        if (gamedatas.notAgreedToDisclaimer && gamedatas.notAgreedToDisclaimer.includes(this.player_id)) {
+          const iAgreeButtonId = this.showGhostTownDisclaimer();
+          dojo.connect($(iAgreeButtonId), 'onclick', () => this.onClickAgreeToDisclaimer());
         }
       },
 
@@ -373,6 +379,11 @@ define([
 
       onClickDraw: function (arg) {
         this.takeAction('actDraw', { selected: arg });
+      },
+
+      onClickAgreeToDisclaimer() {
+        this.takeAction('actAgreedToDisclaimer', { lock: false }, false, false);
+        if (this._dial != null) this.destroyDialog();
       },
 
       setupInfoPanel() {

@@ -190,3 +190,27 @@
     }
   }
 }
+
+#popin_bang-information-dialog {
+  max-width: 750px;
+  left: 0 !important;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 951;
+
+  .popin_content {
+    display: grid;
+  }
+
+  #i_agree_button {
+    font-size: 23px;
+    width: 215px;
+    height: 80px;
+    white-space: pre-line;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-self: center;
+  }
+}

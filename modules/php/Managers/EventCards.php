@@ -134,7 +134,10 @@ class EventCards extends \BANG\Helpers\Pieces
   public static function isResurrectionPossible()
   {
     $cards = self::getInLocation(LOCATION_EVENTS_DECK);
-    $cards = $cards->push(self::getActive());
+    $active = self::getActive();
+    if (!is_null($active)) {
+      $cards = $cards->push($active);
+    }
     $resurrectionCards = $cards->filter(function ($card) {
       return $card->isResurrectionEffect();
     });

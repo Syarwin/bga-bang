@@ -117,6 +117,7 @@ class banghighnoon extends Table
         'eventsDeckCount' => EventCards::getDeckCount(),
         'eventActive' => EventCards::getActive(),
         'eventNext' => EventCards::getNext(),
+        'notAgreedToDisclaimer' => EventCards::isResurrectionPossible() ? Players::getNotAgreedToDisclaimerList() : null,
       ]);
       $cards = array_merge($cards, EventCards::getUiData());
     }
