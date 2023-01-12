@@ -384,7 +384,7 @@ define([
       },
 
       onClickAgreeToDisclaimer() {
-        // this.takeAction('actAgreedToDisclaimer', { lock: false }, false, false);
+        this.takeAction('actAgreedToDisclaimer', { lock: false }, false, false);
         this.removeDialog('ghostTown');
       },
 

@@ -1,5 +1,6 @@
 /*
- * Class to manage all dialog windows appearing and showing them in order
+ * Class to manage all dialog windows appearing and showing them in order.
+ * If there's just one dialog - it will be shown on showDialog(). Otherwise - the top priority one is appearing
  */
 define(['dojo', 'dojo/_base/declare'], function (dojo, declare) {
   return declare('bang.dialogManager', null, {
@@ -17,10 +18,10 @@ define(['dojo', 'dojo/_base/declare'], function (dojo, declare) {
         return null;
       }
       this._dial[id]['priority'] = priority;
-      console.log(this._dial);
       return this._dial[id].dialog;
     },
 
+    // Showing a dialog which is highest in priority
     showDialog() {
       const minPriority = Math.min(...Object.values(this._dial).map((modal) => {
         return modal.priority
@@ -45,7 +46,6 @@ define(['dojo', 'dojo/_base/declare'], function (dojo, declare) {
           this.showDialog();
         }
       }
-      console.log(this._dial);
     },
   })
 })

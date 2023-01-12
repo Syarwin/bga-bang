@@ -27,7 +27,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
     dialogSelectCard() {
       var args = this.gamedatas.gamestate.args;
-      this.addDialog('selectCard', 'modal', 40, {
+      this.addAndShowDialog('selectCard', 'modal', 40, {
         title: _('Pool of cards'),
         class: 'bang_popin',
         closeIcon: 'fa-times',

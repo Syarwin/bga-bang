@@ -14,7 +14,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
     dialogChooseCharacter() {
       var args = this.gamedatas.gamestate.args;
-      this.addDialog('chooseCharacter', 'modal', 20, {
+      this.addAndShowDialog('chooseCharacter', 'modal', 20, {
         title: _('Choose a character'),
         class: 'bang_popin',
         closeIcon: 'fa-times',
