@@ -105,3 +105,21 @@ div#noEvents {
 div#xIcon {
   width: 70%;
 }
+
+.grow {
+  animation-duration: 3s;
+  animation-name: grow;
+  animation-iteration-count: 1;
+}
+
+@keyframes grow {
+  0% {
+    transform: scale(1);
+  }
+  33% {
+    transform: scale(2) translateX(-25%) translateY(-25%);
+  }
+  66% {
+    transform: scale(2) translateX(-25%) translateY(-25%);
+  }
+}

@@ -22,10 +22,12 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       tempCard.uid = tempCard.id;
       tempCard.extraClass = 'slide';
 
-      dojo.destroy('bang-card-' + card.id +'event');
+      const cardId = 'bang-card-' + card.id +'event';
+      dojo.destroy(cardId);
       this.slideTemporary('jstpl_eventCard', tempCard, 'board', 'eventNext', 'eventActive', 700, 0).then(() => {
         dojo.query('#eventActive .bang-card').forEach((card) => dojo.destroy(card));
         this.addEventCard(card, 'eventActive');
+        dojo.addClass((cardId), 'grow');
       });
     },
 

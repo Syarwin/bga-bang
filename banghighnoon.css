@@ -559,6 +559,23 @@ div#xIcon {
   width: 70%;
 }
 
+.grow {
+  animation-duration: 3s;
+  animation-name: grow;
+  animation-iteration-count: 1;
+}
+
+@keyframes grow {
+  0% {
+    transform: scale(1);
+  }
+  33% {
+    transform: scale(2) translateX(-25%) translateY(-25%);
+  }
+  66% {
+    transform: scale(2) translateX(-25%) translateY(-25%);
+  }
+}
 div.bang-character-tooltip div.bang-character-tooltip-sizing {
   width: 226.5330188679px;
   height: 360px;
