@@ -495,6 +495,9 @@ div#board #table #table-container #deck.selectable, div#board #table #table-cont
   cursor: pointer;
   animation: borderBlink 0.9s infinite;
 }
+div#board #table #table-container #eventActive {
+  display: flex;
+}
 div#board #table #table-container #deck {
   background-image: url("img/cardback.jpg");
   background-size: cover;
@@ -541,6 +544,19 @@ div#board #table #table-container .deckCount {
 div#board[data-players="2"] #table #table-container {
   width: 485px;
   flex-flow: unset;
+}
+
+div#noEvents {
+  display: flex;
+  text-align: center;
+  font-family: Perdido, serif;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+div#xIcon {
+  width: 70%;
 }
 
 div.bang-character-tooltip div.bang-character-tooltip-sizing {

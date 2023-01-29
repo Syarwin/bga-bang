@@ -34,6 +34,10 @@ div#board {
         }
       }
 
+      #eventActive {
+        display: flex;
+      }
+
       #deck {
         background-image:url("img/cardback.jpg");
         background-size:cover;
@@ -87,4 +91,17 @@ div#board {
 div#board[data-players="2"] #table #table-container {
   width: 4*$cardW + 60px;
   flex-flow: unset;
+}
+
+div#noEvents {
+  display: flex;
+  text-align: center;
+  font-family: Perdido, serif;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+div#xIcon {
+  width: 70%;
 }

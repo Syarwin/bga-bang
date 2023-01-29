@@ -155,6 +155,7 @@ define([
         // Adding events cards
         if (gamedatas.eventsDeckCount !== null) {
           dojo.place(this.format_block('jstpl_events_row', { eventsDeckCount: gamedatas.eventsDeckCount }), 'table-container');
+          dojo.place(this.format_block('jstpl_noEvents', { noEventsLexeme: _('No active events') }), 'eventActive');
         }
         if (gamedatas.discard) {
           // gamedatas.discard.extraClass = ' '; //empty space is important
