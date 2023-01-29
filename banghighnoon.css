@@ -538,6 +538,11 @@ div#board #table #table-container .deckCount {
   text-align: center;
 }
 
+div#board[data-players="2"] #table #table-container {
+  width: 485px;
+  flex-flow: unset;
+}
+
 div.bang-character-tooltip div.bang-character-tooltip-sizing {
   width: 226.5330188679px;
   height: 360px;
