@@ -27,6 +27,7 @@ define([
   g_gamethemeurl + 'modules/js/Game/game.js',
   g_gamethemeurl + 'modules/js/Game/modal.js',
   g_gamethemeurl + 'modules/js/Game/infDialog.js',
+  g_gamethemeurl + 'modules/js/Game/dialogManager.js',
 
   g_gamethemeurl + 'modules/js/States/PlayCardTrait.js',
   g_gamethemeurl + 'modules/js/States/ReactTrait.js',
@@ -53,6 +54,7 @@ define([
       bang.cardTrait,
       bang.discardBlueCardTrait,
       bang.eventTrait,
+      bang.dialogManager,
     ],
     {
       /*
@@ -66,7 +68,7 @@ define([
         this._selectedPlayer = null;
         this._selectedOptionType = null;
         this._selectedOptionArg = null;
-        this._dial = null;
+        this._dial = {};
 
         // States that need the player to be active to be entered
         this._activeStates = [
@@ -383,7 +385,7 @@ define([
 
       onClickAgreeToDisclaimer() {
         this.takeAction('actAgreedToDisclaimer', { lock: false }, false, false);
-        if (this._dial != null) this.destroyDialog();
+        this.removeDialog('ghostTown');
       },
 
       setupInfoPanel() {

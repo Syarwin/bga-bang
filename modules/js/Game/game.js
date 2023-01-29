@@ -530,10 +530,5 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
 
       return dojo.place(this[tplMethodName](object), container);
     },
-
-    destroyDialog() {
-      this._dial.destroy();
-      this._dial = null;
-    },
   });
 });

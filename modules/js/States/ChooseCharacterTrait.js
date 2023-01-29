@@ -14,8 +14,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
     dialogChooseCharacter() {
       var args = this.gamedatas.gamestate.args;
-      this._dial = new customgame.modal('selectCard', {
-        autoShow: true,
+      this.addAndShowDialog('chooseCharacter', 'modal', 20, {
         title: _('Choose a character'),
         class: 'bang_popin',
         closeIcon: 'fa-times',
@@ -28,7 +27,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     },
 
     onClickConfirmCharacter(characterId) {
-      if (this._dial != null) this.destroyDialog();
+      this.removeDialog('chooseCharacter');
       this.clearActionButtons();
       this.takeAction('actChooseCharacter', {
         character: characterId,

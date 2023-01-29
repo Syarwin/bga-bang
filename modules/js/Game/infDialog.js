@@ -4,11 +4,11 @@
 
 define(['dojo', 'dojo/_base/declare', 'dojo/fx', 'dojox/fx/ext-dojo/complex'], function (dojo, declare) {
   return declare('bang.informationdialog', null, {
-    showInformationDialog(title, paragraphArray, params = {}) {
+    showInformationDialog(title, id, paragraphArray, params = {}) {
       const buttonId = 'i_agree_button';
-      this._dial = new ebg.popindialog();
-      this._dial.create('bang-information-dialog');
-      this._dial.setTitle(title);
+      let dialog = this.addDialog(id, 'popindialog', 10);
+      dialog.create('bang-information-dialog');
+      dialog.setTitle(title);
       let html = `<div class="popin_content">`;
 
       let nextIsHeader = false;
@@ -25,14 +25,14 @@ define(['dojo', 'dojo/_base/declare', 'dojo/fx', 'dojox/fx/ext-dojo/complex'], f
       }
       html += '</div>';
 
-      this._dial.setContent(html);
-      this._dial.show();
-      this._dial.hideCloseIcon();
+      dialog.setContent(html);
+      dialog.hideCloseIcon();
+      this.showDialog();
       return buttonId;
     },
 
     showGhostTownDisclaimer() {
-      return this.showInformationDialog(_('Welcome to BANG!'), [
+      return this.showInformationDialog(_('Welcome to BANG!'), 'ghostTown', [
         _('Please be aware that you are starting a game with a Ghost Town card. This is a special event card making eliminated players return to the game as ghosts for one turn.'),
         '',
         _('What Ghost Town means to you?'),

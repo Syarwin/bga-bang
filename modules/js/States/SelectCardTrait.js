@@ -27,25 +27,22 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
     dialogSelectCard() {
       var args = this.gamedatas.gamestate.args;
-      if (this._dial === null) {
-        this._dial = new customgame.modal('selectCard', {
-          autoShow: true,
-          title: _('Pool of cards'),
-          class: 'bang_popin',
-          closeIcon: 'fa-times',
-          openAnimation: true,
-          openAnimationTarget: 'buttonShowCards',
-          contentsTpl: jstpl_dialog,
-        });
+      this.addAndShowDialog('selectCard', 'modal', 40, {
+        title: _('Pool of cards'),
+        class: 'bang_popin',
+        closeIcon: 'fa-times',
+        openAnimation: true,
+        openAnimationTarget: 'buttonShowCards',
+        contentsTpl: jstpl_dialog,
+      });
 
-        args.cards.forEach((card) => this.addCard(card, 'dialog-card-container', 'dialog'));
-        $('dialog-title-container').innerHTML = $('pagemaintitletext').innerHTML;
+      args.cards.forEach((card) => this.addCard(card, 'dialog-card-container', 'dialog'));
+      $('dialog-title-container').innerHTML = $('pagemaintitletext').innerHTML;
 
-        if (!this.isCurrentPlayerActive()) return;
+      if (!this.isCurrentPlayerActive()) return;
 
-        this._amount = args.amountToPick;
-        this.makeCardSelectable(args.cards, 'selectDialog', 'dialog');
-      }
+      this._amount = args.amountToPick;
+      this.makeCardSelectable(args.cards, 'selectDialog', 'dialog');
     },
 
     onClickCardSelectDialog(card) {
@@ -64,7 +61,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     },
 
     onClickConfirmSelection: function () {
-      if (this._dial != null) this.destroyDialog();
+      this.removeDialog('selectCard');
       this.takeAction('actSelect', {
         cards: this._selectedCards.join(';'),
       });
