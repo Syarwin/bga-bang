@@ -27,7 +27,8 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       this.slideTemporary('jstpl_eventCard', tempCard, 'board', 'eventNext', 'eventActive', 700, 0).then(() => {
         dojo.query('#eventActive .bang-card').forEach((card) => dojo.destroy(card));
         this.addEventCard(card, 'eventActive');
-        dojo.addClass((cardId), 'grow');
+        dojo.addClass(cardId, 'grow');
+        dojo.style(cardId, 'z-index', 100);
       });
     },
 
