@@ -88,7 +88,7 @@ div#board {
   }
 }
 
-div#board[data-players="2"] #table #table-container {
+div#board[data-players="2"].events #table #table-container {
   width: 4*$cardW + 60px;
   flex-flow: unset;
 }

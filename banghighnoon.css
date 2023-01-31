@@ -541,7 +541,7 @@ div#board #table #table-container .deckCount {
   text-align: center;
 }
 
-div#board[data-players="2"] #table #table-container {
+div#board[data-players="2"].events #table #table-container {
   width: 485px;
   flex-flow: unset;
 }
