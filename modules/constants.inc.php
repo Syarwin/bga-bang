@@ -263,3 +263,10 @@ define('RULE_PHASE_ONE_CARDS_DRAW_END', 'phase_one_amount_to_draw_end');
 define('RULE_ABILITY_AVAILABLE', 'ability_available');
 define('RULE_BEER_AVAILABLE', 'beer_availability');
 define('RULE_BANGS_AMOUNT_LEFT', 'bangs_amount_left');
+
+/*
+ * Constants for player's living status
+ */
+define('FULLY_ALIVE', 0);
+define('DEAD_GHOST', 1);
+define('LIVING_DEAD', 2);

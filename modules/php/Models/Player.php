@@ -37,7 +37,8 @@ class Player extends \BANG\Helpers\DB_Manager
   protected $bullets;
   protected $expansion = BASE_GAME;
   protected $characterChosen;
-  protected $unconscious;
+  // see constants for player's living status from constants.inc.php
+  protected $livingStatus;
   protected $agreedToDisclaimer;
 
   public function __construct($row)
@@ -60,7 +61,7 @@ class Player extends \BANG\Helpers\DB_Manager
       // backward compatibilty from 15/10/2022
       $this->altCharacter = isset($row['player_alt_character']) ? (int) $row['player_alt_character'] : -1;
       // backward compatibility from XX/XX/2022
-      $this->unconscious = isset($row['player_unconscious']) ? (int) $row['player_unconscious'] === 1 : $this->eliminated;
+      $this->livingStatus = isset($row['player_unconscious']) ? (int) $row['player_unconscious'] : $this->eliminated;
       $this->agreedToDisclaimer = isset($row['player_agreed_to_disclaimer']) ? (int) $row['player_agreed_to_disclaimer'] === 1 : null;
     }
   }
@@ -179,7 +180,7 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function isUnconscious()
   {
-    return $this->unconscious;
+    return $this->livingStatus === DEAD_GHOST;
   }
 
   /**
@@ -196,7 +197,7 @@ class Player extends \BANG\Helpers\DB_Manager
     return [
       'id' => $this->id,
       'eliminated' => (int) $this->eliminated,
-      'unconscious' => $this->unconscious,
+      'unconscious' => $this->livingStatus === DEAD_GHOST,
       'no' => $this->no,
       'name' => $this->getName(),
       'color' => $this->color,
@@ -208,7 +209,7 @@ class Player extends \BANG\Helpers\DB_Manager
       'bullets' => $this->bullets,
       'hand' => $current ? $this->getHand()->toArray() : [],
       'handCount' => $this->countHand(),
-      'role' => $current || $this->role == SHERIFF || $this->eliminated || $this->unconscious || Players::isEndOfGame() ? $this->role : null,
+      'role' => $current || $this->role == SHERIFF || $this->eliminated || $this->livingStatus !== FULLY_ALIVE || Players::isEndOfGame() ? $this->role : null,
       'inPlay' => $this->getCardsInPlay()->toArray(),
 
       'preferences' => $current
@@ -812,7 +813,7 @@ class Player extends \BANG\Helpers\DB_Manager
     // 1. Ghost Town / Dead Man have been played before
     // 2. GT is now and this is the end of a ghost's turn
     // 3. Player has already had their turn during GT event which means it's over for this player but might be applied for others
-    if (!Globals::getResurrectionIsPossible() || $forceEliminate || ($isResurrectionEventActive && !$this->goingToPlayThisRound())) {
+    if (!Globals::getResurrectionIsPossible() || $forceEliminate || $this->livingStatus === LIVING_DEAD) {
       banghighnoon::get()->eliminatePlayer($this->id);
       $this->eliminated = true;
     } else {
@@ -841,16 +842,6 @@ class Player extends \BANG\Helpers\DB_Manager
     // Remove all related nodes that could still be there (reactions/powers)
     Stack::removePlayerAtoms($this->id);
     return true;
-  }
-
-  /**
-   * Returns true if current player have not played this round yet
-   * @return boolean
-   */
-  private function goingToPlayThisRound() {
-    $currentPlayerId = Rules::getCurrentPlayerId();
-    $playersList = Players::getLivingPlayerIdsStartingWith(Players::getSheriff());
-    return array_search($currentPlayerId, $playersList) < array_search($this->id, $playersList);
   }
 
   /**
@@ -939,7 +930,7 @@ class Player extends \BANG\Helpers\DB_Manager
 
   public function resurrect()
   {
-    self::DbQuery("UPDATE player SET `player_unconscious` = 0 WHERE `player_id` = {$this->id}");
+    self::DbQuery("UPDATE player SET `player_unconscious` = 2 WHERE `player_id` = {$this->id}");
   }
 
   public function agreeToDisclaimer()

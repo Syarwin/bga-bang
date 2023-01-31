@@ -236,7 +236,9 @@ class Players extends \BANG\Helpers\DB_Manager
    ****************************/
   protected static function qFilterLiving()
   {
-    $eliminatedField = self::getEliminatedField(false);
+    // backward compatibility from XX/XX/2022
+    $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_unconscious\'')->num_rows === 1;
+    $eliminatedField = $newSchema ? 'player_unconscious' : 'player_eliminated';
     return self::DB()->where($eliminatedField, 0);
   }
 
@@ -270,9 +272,8 @@ class Players extends \BANG\Helpers\DB_Manager
    */
   public static function getPlayerPositions()
   {
-    $eliminatedField = self::getEliminatedField(false);
     return array_flip(
-      self::getObjectListFromDB("SELECT player_id from player WHERE $eliminatedField=0 ORDER BY player_no", true)
+      self::getObjectListFromDB("SELECT player_id from player WHERE player_eliminated = 0 AND player_unconscious != 1 ORDER BY player_no", true)
     );
   }
 
@@ -296,10 +297,10 @@ class Players extends \BANG\Helpers\DB_Manager
       $ids = is_array($except) ? $except : [$except];
       $and = " AND player_id NOT IN ('" . implode("','", $ids) . "')";
     }
-    $eliminatedField = self::getEliminatedField($includeGhosts);
     $orderByPlayer = $player ? "player_no < {$player->getNo()}, " : '';
+    $includeGhostsSqlString = $includeGhosts ? '' : ' AND `player_unconscious` != 1';
     $playerIds = self::getObjectListFromDB(
-      "SELECT player_id FROM player WHERE {$eliminatedField} = 0$and ORDER BY {$orderByPlayer}player_no",
+      "SELECT player_id FROM player WHERE player_eliminated = 0{$includeGhostsSqlString}{$and} ORDER BY {$orderByPlayer}player_no",
       true
     );
     return array_map(function ($pId) {
@@ -365,17 +366,6 @@ class Players extends \BANG\Helpers\DB_Manager
   {
     $players = self::getLivingPlayerIdsStartingWith($player, $includeGhosts);
     return $players[count($players)-1];
-  }
-
-  /**
-   * @param boolean $includeGhosts
-   * @return string
-   */
-  private static function getEliminatedField($includeGhosts)
-  {
-    // backward compatibility from XX/XX/2022
-    $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_unconscious\'')->num_rows === 1;
-    return $newSchema && !$includeGhosts ? 'player_unconscious' : 'player_eliminated';
   }
 
   /**
