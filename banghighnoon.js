@@ -153,7 +153,7 @@ define([
         // Adding deck/discard
         dojo.place(this.format_block('jstpl_table', { deckCount: gamedatas.deckCount }), 'board');
         // Adding events cards
-        if (gamedatas.eventsDeckCount) {
+        if (gamedatas.eventsDeckCount !== undefined) {
           dojo.place(this.format_block('jstpl_events_row', { eventsDeckCount: gamedatas.eventsDeckCount }), 'table-container');
           dojo.place(this.format_block('jstpl_noEvents', { noEventsLexeme: _('No active events') }), 'eventActive');
           dojo.addClass('board', 'events');
