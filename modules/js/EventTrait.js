@@ -14,7 +14,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         this.addEventCard(n.args.eventNext, 'eventNext')
       }
       this.slideEventCard(eventActiveCard);
-      this.updateEventCount(n.args.eventsDeck);
+      this.updateEventCount(n.args.eventsDeckCount);
     },
 
     slideEventCard(card) {
@@ -22,10 +22,13 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       tempCard.uid = tempCard.id;
       tempCard.extraClass = 'slide';
 
-      dojo.destroy('bang-card-' + card.id +'event');
+      const cardId = 'bang-card-' + card.id +'event';
+      dojo.destroy(cardId);
       this.slideTemporary('jstpl_eventCard', tempCard, 'board', 'eventNext', 'eventActive', 700, 0).then(() => {
         dojo.query('#eventActive .bang-card').forEach((card) => dojo.destroy(card));
         this.addEventCard(card, 'eventActive');
+        dojo.addClass(cardId, 'grow');
+        dojo.style(cardId, 'z-index', 100);
       });
     },
 
@@ -39,7 +42,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     },
 
     updateEventCount(count) {
-      $('eventsDeck').innerHTML = count || '';
+      $('eventsDeckCount').innerHTML = count || '';
     },
 
     updateColorOverride(col) {

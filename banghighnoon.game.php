@@ -116,15 +116,16 @@ class banghighnoon extends Table
     $cards = Cards::getUIData();
     if (GameOptions::isEvents()) {
       $result = array_merge($result, [
-        'eventsDeck' => EventCards::getDeckCount(),
+        'eventsDeckCount' => EventCards::getDeckCount(),
         'eventActive' => EventCards::getActive(),
         'eventNext' => EventCards::getNext(),
+        'notAgreedToDisclaimer' => EventCards::isResurrectionPossible() ? Players::getNotAgreedToDisclaimerList() : null,
       ]);
       $cards = array_merge($cards, EventCards::getUiData());
     }
     return array_merge($result,[
       'players' => Players::getUiData($pId),
-      'deck' => Cards::getDeckCount(),
+      'deckCount' => Cards::getDeckCount(),
       'discard' => Cards::getLastDiscarded(),
       'playerTurn' => Rules::getCurrentPlayerId(),
       'cards' => $cards,

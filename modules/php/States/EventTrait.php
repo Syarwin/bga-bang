@@ -44,12 +44,16 @@ trait EventTrait
     if ($eventCard && $eventCard->getEffect() === EFFECT_STARTOFTURN) {
       $ctx = Stack::getCtx();
       $player = Players::get($ctx['pId']);
-      if ($eventCard->isResurrectionEffect() === $player->isUnconscious()) { // dead + resurrect or alive + normal effect
+      if ($eventCard->isResurrectionEffect() === $player->isUnconscious()) { // resurrect + dead or normal effect + alive
         $eventCard->resolveEffect($player);
       } elseif ($player->isUnconscious()) { // dead but this is not a resurrection
         Stack::removePlayerAtoms($ctx['pId']);
       } // do not resolve any effects when resurrection is combined with alive player
     }
     Stack::finishState();
+  }
+
+  public function actAgreedToDisclaimer() {
+    Players::getCurrent()->agreeToDisclaimer();
   }
 }

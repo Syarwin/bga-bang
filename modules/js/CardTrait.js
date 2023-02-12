@@ -156,7 +156,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
      * notification sent to all players when someone gained a card (from deck or from someone else hand/inplay)
      */
     notif_cardsGained(n) {
-      if (this._dial != null) this.destroyDialog();
+      this.removeDialog('selectCard');
 
       debug('Notif: cards gained', n);
       if (n.args.card) n.args.cards = [n.args.card];
@@ -239,7 +239,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     },
 
     updateDeckCount(n) {
-      $('deck').innerHTML = n.args.deckCount;
+      $('mainDeckCount').innerHTML = n.args.deckCount;
     },
 
     /*

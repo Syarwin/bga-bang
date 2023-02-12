@@ -373,7 +373,7 @@ class Notifications
       'eventActive' => $eventCard,
       'eventActiveName' => $eventCard->getName(),
       'eventNext' => $nextEventCard,
-      'eventsDeck' => EventCards::getDeckCount(),
+      'eventsDeckCount' => EventCards::getDeckCount(),
     ]);
   }
 

@@ -2,6 +2,7 @@
 namespace BANG\Models;
 use BANG\Core\Globals;
 use BANG\Managers\Cards;
+use BANG\Managers\EventCards;
 use BANG\Managers\Players;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
@@ -36,7 +37,9 @@ class Player extends \BANG\Helpers\DB_Manager
   protected $bullets;
   protected $expansion = BASE_GAME;
   protected $characterChosen;
-  protected $unconscious;
+  // see constants for player's living status from constants.inc.php
+  protected $livingStatus;
+  protected $agreedToDisclaimer;
 
   public function __construct($row)
   {
@@ -56,9 +59,10 @@ class Player extends \BANG\Helpers\DB_Manager
       $this->generalStore = (int)$row['player_autopick_general_store'];
       $this->character = (int)$row['player_character'];
       // backward compatibilty from 15/10/2022
-      $this->altCharacter = array_key_exists('player_alt_character', $row) ? (int)$row['player_alt_character'] : -1;
+      $this->altCharacter = isset($row['player_alt_character']) ? (int) $row['player_alt_character'] : -1;
       // backward compatibility from XX/XX/2022
-      $this->unconscious = array_key_exists('player_unconscious', $row) ? (int) $row['player_unconscious'] === 1 : $this->eliminated;
+      $this->livingStatus = isset($row['player_unconscious']) ? (int) $row['player_unconscious'] : $this->eliminated;
+      $this->agreedToDisclaimer = isset($row['player_agreed_to_disclaimer']) ? (int) $row['player_agreed_to_disclaimer'] === 1 : null;
     }
   }
 
@@ -176,7 +180,15 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function isUnconscious()
   {
-    return $this->unconscious;
+    return $this->livingStatus === DEAD_GHOST;
+  }
+
+  /**
+   * @return boolean|null
+   */
+  public function isAgreedToDisclaimer()
+  {
+    return $this->agreedToDisclaimer;
   }
 
   public function getUiData($currentPlayerId = null)
@@ -185,7 +197,7 @@ class Player extends \BANG\Helpers\DB_Manager
     return [
       'id' => $this->id,
       'eliminated' => (int) $this->eliminated,
-      'unconscious' => $this->unconscious,
+      'unconscious' => $this->livingStatus === DEAD_GHOST,
       'no' => $this->no,
       'name' => $this->getName(),
       'color' => $this->color,
@@ -197,7 +209,7 @@ class Player extends \BANG\Helpers\DB_Manager
       'bullets' => $this->bullets,
       'hand' => $current ? $this->getHand()->toArray() : [],
       'handCount' => $this->countHand(),
-      'role' => $current || $this->role == SHERIFF || $this->eliminated || $this->unconscious || Players::isEndOfGame() ? $this->role : null,
+      'role' => $current || $this->role == SHERIFF || $this->eliminated || $this->livingStatus !== FULLY_ALIVE || Players::isEndOfGame() ? $this->role : null,
       'inPlay' => $this->getCardsInPlay()->toArray(),
 
       'preferences' => $current
@@ -372,7 +384,15 @@ class Player extends \BANG\Helpers\DB_Manager
       }
       $nextState = $canDrinkBeerToLive ? ST_REACT_BEER : ST_PRE_ELIMINATE_DISCARD;
       $atomType = $canDrinkBeerToLive ? 'beer' : 'eliminate';
-      $this->addAtomAfterCardResolution($nextState, $atomType);
+
+      $eliminationAlreadyInStack = Stack::getFirstIndex([
+        'type' => 'eliminate',
+        'pId' => $this->getId(),
+        'forceEliminate' => true,
+      ]) !== -1;
+      if (!$eliminationAlreadyInStack) { // This is when a ghost is dying during Ghost Town, no need to die twice
+        $this->addAtomAfterCardResolution($nextState, $atomType);
+      }
     }
   }
 
@@ -788,7 +808,12 @@ class Player extends \BANG\Helpers\DB_Manager
     $this->discardAllCards();
     // Eliminate player
     $forceEliminate = array_key_exists('forceEliminate', $ctx) && $ctx['forceEliminate'];
-    if (!Globals::getResurrectionIsPossible() || $forceEliminate) {
+    $isResurrectionEventActive = EventCards::getActive() && EventCards::getActive()->isResurrectionEffect();
+    // Needs to die for good if:
+    // 1. Ghost Town / Dead Man have been played before
+    // 2. GT is now and this is the end of a ghost's turn
+    // 3. Player has already had their turn during GT event which means it's over for this player but might be applied for others
+    if (!Globals::getResurrectionIsPossible() || $forceEliminate || $this->livingStatus === LIVING_DEAD) {
       banghighnoon::get()->eliminatePlayer($this->id);
       $this->eliminated = true;
     } else {
@@ -905,6 +930,11 @@ class Player extends \BANG\Helpers\DB_Manager
 
   public function resurrect()
   {
-    self::DbQuery("UPDATE player SET `player_unconscious` = 0 WHERE `player_id` = {$this->id}");
+    self::DbQuery("UPDATE player SET `player_unconscious` = 2 WHERE `player_id` = {$this->id}");
+  }
+
+  public function agreeToDisclaimer()
+  {
+    self::DB()->update(['player_agreed_to_disclaimer' => true], $this->id);
   }
 }

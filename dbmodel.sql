@@ -30,6 +30,7 @@ ALTER TABLE `player` ADD `player_bullets` INT(1) UNSIGNED NULL;
 ALTER TABLE `player` ADD `player_activate` TINYINT UNSIGNED NOT NULL;
 ALTER TABLE `player` ADD `player_hp` TINYINT;
 ALTER TABLE `player` ADD `player_autopick_general_store` TINYINT NOT NULL;
+ALTER TABLE `player` ADD `player_agreed_to_disclaimer` TINYINT NOT NULL;
 
 CREATE TABLE IF NOT EXISTS `card` (
   `card_id` int(10) unsigned NOT NULL AUTO_INCREMENT,

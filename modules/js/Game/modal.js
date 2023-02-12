@@ -7,7 +7,6 @@ define(['dojo', 'dojo/_base/declare', 'dojo/fx', 'dojox/fx/ext-dojo/complex'], f
   const CONFIG = {
     container: 'ebd-body',
     class: 'custom_popin',
-    autoShow: false,
 
     modalTpl: `
       <div id='popin_\${id}_container' class="\${class}_container">
@@ -85,14 +84,13 @@ define(['dojo', 'dojo/_base/declare', 'dojo/fx', 'dojox/fx/ext-dojo/complex'], f
       }
 
       // Create the DOM elements
-      this.create();
-      if (this.autoShow) this.show();
+      this.create(config.destroyCallback);
     },
 
     /*
      * Create : create underlay and modal div, and contents
      */
-    create() {
+    create(destroyCallback) {
       dojo.destroy('popin_' + this.id + '_container');
       let titleTpl = this.title == null ? '' : dojo.string.substitute(this.titleTpl, this);
       let closeIconTpl = this.closeIcon == null ? '' : dojo.string.substitute(this.closeIconTpl, this);
@@ -151,7 +149,9 @@ define(['dojo', 'dojo/_base/declare', 'dojo/fx', 'dojox/fx/ext-dojo/complex'], f
 
       // Connect events
       if (this.closeIcon != null && $('popin_' + this.id + '_close')) {
-        dojo.connect($('popin_' + this.id + '_close'), 'click', () => this[this.closeAction]());
+        dojo.connect($('popin_' + this.id + '_close'), 'click', () => {
+          this[this.closeAction]();
+        });
       }
       if (this.closeWhenClickOnUnderlay) {
         dojo.connect($('popin_' + this.id + '_underlay'), 'click', () => this[this.closeAction]());

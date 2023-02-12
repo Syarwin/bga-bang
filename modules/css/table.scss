@@ -5,7 +5,7 @@ div#board {
     #table-container {
       width:2*$cardW + 30px;
       background-color:$transparentWhite;
-      border-radius:5px;
+      border-radius:10px;
       border:1px solid $darkgray;
       box-shadow: 1px 1px 5px $darkgray;
       display: flex;
@@ -34,16 +34,16 @@ div#board {
         }
       }
 
+      #eventActive {
+        display: flex;
+      }
+
       #deck {
         background-image:url("img/cardback.jpg");
         background-size:cover;
         background-position: center center;
         border-radius:7px;
-        font-size:30px;
-        text-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white;
         display:flex;
-        align-items: center;
-        justify-content: center;
       }
 
       #discard div.bang-card, #eventActive div.bang-card {
@@ -57,8 +57,6 @@ div#board {
 
       #eventNext {
         display:flex;
-        align-items: center;
-        justify-content: center;
       }
 
       #eventNext div.bang-card{
@@ -70,12 +68,58 @@ div#board {
         opacity: 0.5;
       }
 
-      #eventsDeck {
+      .deckCount {
         opacity:1 !important;
-        font-size:30px;
+        border-radius: 50%;
+        border-width: thin;
+        border-style: solid;
+        height: max-content;
+        padding: 2px;
+        margin-left: -6.5px;
+        margin-top: -4px;
+        font-size: 12px;
         text-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white;
+        box-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white;
         z-index: 2;
+        min-width: 14px;
+        text-align: center;
       }
     }
+  }
+}
+
+div#board[data-players="2"].events #table #table-container {
+  width: 4*$cardW + 60px;
+  flex-flow: unset;
+}
+
+div#noEvents {
+  display: flex;
+  text-align: center;
+  font-family: Perdido, serif;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+div#xIcon {
+  width: 70%;
+}
+
+.grow {
+  animation-duration: 3s;
+  animation-name: grow;
+  animation-iteration-count: 1;
+}
+
+@keyframes grow {
+  0% {
+    transform: scale(1);
+  }
+  33% {
+    transform: scale(2) translateX(-25%) translateY(-25%);
+  }
+  66% {
+    transform: scale(2) translateX(-25%) translateY(-25%);
   }
 }

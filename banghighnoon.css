@@ -469,7 +469,7 @@ div#board #table {
 div#board #table #table-container {
   width: 242.5px;
   background-color: rgba(255, 255, 255, 0.5);
-  border-radius: 5px;
+  border-radius: 10px;
   border: 1px solid rgba(50, 50, 50, 0.8);
   box-shadow: 1px 1px 5px rgba(50, 50, 50, 0.8);
   display: flex;
@@ -495,16 +495,15 @@ div#board #table #table-container #deck.selectable, div#board #table #table-cont
   cursor: pointer;
   animation: borderBlink 0.9s infinite;
 }
+div#board #table #table-container #eventActive {
+  display: flex;
+}
 div#board #table #table-container #deck {
   background-image: url("img/cardback.jpg");
   background-size: cover;
   background-position: center center;
   border-radius: 7px;
-  font-size: 30px;
-  text-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white;
   display: flex;
-  align-items: center;
-  justify-content: center;
 }
 div#board #table #table-container #discard div.bang-card, div#board #table #table-container #eventActive div.bang-card {
   margin: 0px;
@@ -516,8 +515,6 @@ div#board #table #table-container #discard div.bang-card, div#board #table #tabl
 }
 div#board #table #table-container #eventNext {
   display: flex;
-  align-items: center;
-  justify-content: center;
 }
 div#board #table #table-container #eventNext div.bang-card {
   margin: 0px;
@@ -527,13 +524,58 @@ div#board #table #table-container #eventNext div.bang-card {
   transform-origin: -7% 50%;
   opacity: 0.5;
 }
-div#board #table #table-container #eventsDeck {
+div#board #table #table-container .deckCount {
   opacity: 1 !important;
-  font-size: 30px;
+  border-radius: 50%;
+  border-width: thin;
+  border-style: solid;
+  height: max-content;
+  padding: 2px;
+  margin-left: -6.5px;
+  margin-top: -4px;
+  font-size: 12px;
   text-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white;
+  box-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white;
   z-index: 2;
+  min-width: 14px;
+  text-align: center;
 }
 
+div#board[data-players="2"].events #table #table-container {
+  width: 485px;
+  flex-flow: unset;
+}
+
+div#noEvents {
+  display: flex;
+  text-align: center;
+  font-family: Perdido, serif;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+div#xIcon {
+  width: 70%;
+}
+
+.grow {
+  animation-duration: 3s;
+  animation-name: grow;
+  animation-iteration-count: 1;
+}
+
+@keyframes grow {
+  0% {
+    transform: scale(1);
+  }
+  33% {
+    transform: scale(2) translateX(-25%) translateY(-25%);
+  }
+  66% {
+    transform: scale(2) translateX(-25%) translateY(-25%);
+  }
+}
 div.bang-character-tooltip div.bang-character-tooltip-sizing {
   width: 226.5330188679px;
   height: 360px;
@@ -1508,69 +1550,153 @@ div.bang-card .card-back {
   z-index: 2;
 }
 div.bang-card[data-type="5"] .card-front {
-  background-position: 33.3333333333% center;
+  background-position: 20% center;
 }
 div.bang-card[data-type="6"] .card-front {
-  background-position: 33.3333333333% center;
+  background-position: 20% center;
 }
 div.bang-card[data-type="7"] .card-front {
-  background-position: 33.3333333333% center;
+  background-position: 20% center;
 }
 div.bang-card[data-type="8"] .card-front {
-  background-position: 33.3333333333% center;
+  background-position: 20% center;
 }
 div.bang-card[data-type="9"] .card-front {
-  background-position: 33.3333333333% center;
+  background-position: 20% center;
 }
 div.bang-card[data-type="10"] .card-front {
-  background-position: 33.3333333333% center;
+  background-position: 20% center;
 }
 div.bang-card[data-type="11"] .card-front {
-  background-position: 33.3333333333% center;
+  background-position: 20% center;
 }
 div.bang-card[data-type="12"] .card-front {
-  background-position: 33.3333333333% center;
+  background-position: 20% center;
 }
 div.bang-card[data-type="13"] .card-front {
-  background-position: 33.3333333333% center;
+  background-position: 20% center;
 }
 div.bang-card[data-type="14"] .card-front {
-  background-position: 33.3333333333% center;
+  background-position: 20% center;
 }
 div.bang-card[data-type="15"] .card-front {
-  background-position: 33.3333333333% center;
+  background-position: 20% center;
 }
 div.bang-card[data-type="16"] .card-front {
-  background-position: 33.3333333333% center;
+  background-position: 20% center;
 }
 div.bang-card[data-type="17"] .card-front {
-  background-position: 66.6666666667% center;
+  background-position: 40% center;
 }
 div.bang-card[data-type="18"] .card-front {
-  background-position: 66.6666666667% center;
+  background-position: 40% center;
 }
 div.bang-card[data-type="19"] .card-front {
-  background-position: 66.6666666667% center;
+  background-position: 40% center;
 }
 div.bang-card[data-type="20"] .card-front {
-  background-position: 66.6666666667% center;
+  background-position: 40% center;
 }
 div.bang-card[data-type="21"] .card-front {
-  background-position: 66.6666666667% center;
+  background-position: 40% center;
 }
 div.bang-card[data-type="0"] .card-front {
-  background-position: 100% center;
+  background-position: 60% center;
 }
 div.bang-card[data-type="1"] .card-front {
-  background-position: 100% center;
+  background-position: 60% center;
 }
 div.bang-card[data-type="2"] .card-front {
-  background-position: 100% center;
+  background-position: 60% center;
 }
 div.bang-card[data-type="3"] .card-front {
-  background-position: 100% center;
+  background-position: 60% center;
 }
 div.bang-card[data-type="4"] .card-front {
+  background-position: 60% center;
+}
+div.bang-card[data-type="100"] .card-front {
+  background-position: 80% center;
+}
+div.bang-card[data-type="101"] .card-front {
+  background-position: 80% center;
+}
+div.bang-card[data-type="102"] .card-front {
+  background-position: 80% center;
+}
+div.bang-card[data-type="103"] .card-front {
+  background-position: 80% center;
+}
+div.bang-card[data-type="104"] .card-front {
+  background-position: 80% center;
+}
+div.bang-card[data-type="105"] .card-front {
+  background-position: 80% center;
+}
+div.bang-card[data-type="106"] .card-front {
+  background-position: 80% center;
+}
+div.bang-card[data-type="107"] .card-front {
+  background-position: 80% center;
+}
+div.bang-card[data-type="108"] .card-front {
+  background-position: 80% center;
+}
+div.bang-card[data-type="109"] .card-front {
+  background-position: 80% center;
+}
+div.bang-card[data-type="110"] .card-front {
+  background-position: 80% center;
+}
+div.bang-card[data-type="111"] .card-front {
+  background-position: 80% center;
+}
+div.bang-card[data-type="112"] .card-front {
+  background-position: 80% center;
+}
+div.bang-card[data-type="113"] .card-front {
+  background-position: 100% center;
+}
+div.bang-card[data-type="114"] .card-front {
+  background-position: 100% center;
+}
+div.bang-card[data-type="115"] .card-front {
+  background-position: 100% center;
+}
+div.bang-card[data-type="116"] .card-front {
+  background-position: 100% center;
+}
+div.bang-card[data-type="117"] .card-front {
+  background-position: 100% center;
+}
+div.bang-card[data-type="118"] .card-front {
+  background-position: 100% center;
+}
+div.bang-card[data-type="119"] .card-front {
+  background-position: 100% center;
+}
+div.bang-card[data-type="120"] .card-front {
+  background-position: 100% center;
+}
+div.bang-card[data-type="121"] .card-front {
+  background-position: 100% center;
+}
+div.bang-card[data-type="122"] .card-front {
+  background-position: 100% center;
+}
+div.bang-card[data-type="123"] .card-front {
+  background-position: 100% center;
+}
+div.bang-card[data-type="124"] .card-front {
+  background-position: 100% center;
+}
+div.bang-card[data-type="125"] .card-front {
+  background-position: 100% center;
+}
+div.bang-card[data-type="126"] .card-front {
+  background-position: 100% center;
+}
+div.bang-card[data-type="127"] .card-front {
   background-position: 100% center;
 }
 div.bang-card[data-type="0"] .card-background {
@@ -1599,71 +1725,124 @@ div.bang-card[data-type="5"] .card-background {
 }
 div.bang-card[data-type="6"] .card-background {
   background-position-x: 0%;
-  background-position-y: 33.3333333333%;
+  background-position-y: 16.6666666667%;
 }
 div.bang-card[data-type="7"] .card-background {
   background-position-x: 20%;
-  background-position-y: 33.3333333333%;
+  background-position-y: 16.6666666667%;
 }
 div.bang-card[data-type="8"] .card-background {
   background-position-x: 40%;
-  background-position-y: 33.3333333333%;
+  background-position-y: 16.6666666667%;
 }
 div.bang-card[data-type="9"] .card-background {
   background-position-x: 60%;
-  background-position-y: 33.3333333333%;
+  background-position-y: 16.6666666667%;
 }
 div.bang-card[data-type="10"] .card-background {
   background-position-x: 80%;
-  background-position-y: 33.3333333333%;
+  background-position-y: 16.6666666667%;
 }
 div.bang-card[data-type="11"] .card-background {
   background-position-x: 100%;
-  background-position-y: 33.3333333333%;
+  background-position-y: 16.6666666667%;
 }
 div.bang-card[data-type="12"] .card-background {
   background-position-x: 0%;
-  background-position-y: 66.6666666667%;
+  background-position-y: 33.3333333333%;
 }
 div.bang-card[data-type="13"] .card-background {
   background-position-x: 20%;
-  background-position-y: 66.6666666667%;
+  background-position-y: 33.3333333333%;
 }
 div.bang-card[data-type="14"] .card-background {
   background-position-x: 40%;
-  background-position-y: 66.6666666667%;
+  background-position-y: 33.3333333333%;
 }
 div.bang-card[data-type="15"] .card-background {
   background-position-x: 60%;
-  background-position-y: 66.6666666667%;
+  background-position-y: 33.3333333333%;
 }
 div.bang-card[data-type="16"] .card-background {
   background-position-x: 80%;
-  background-position-y: 66.6666666667%;
+  background-position-y: 33.3333333333%;
 }
 div.bang-card[data-type="17"] .card-background {
   background-position-x: 100%;
-  background-position-y: 66.6666666667%;
+  background-position-y: 33.3333333333%;
 }
 div.bang-card[data-type="18"] .card-background {
   background-position-x: 0%;
-  background-position-y: 100%;
+  background-position-y: 50%;
 }
 div.bang-card[data-type="19"] .card-background {
   background-position-x: 20%;
-  background-position-y: 100%;
+  background-position-y: 50%;
 }
 div.bang-card[data-type="20"] .card-background {
   background-position-x: 40%;
-  background-position-y: 100%;
+  background-position-y: 50%;
 }
 div.bang-card[data-type="21"] .card-background {
   background-position-x: 60%;
+  background-position-y: 50%;
+}
+div.bang-card[data-type="100"] .card-background {
+  background-position-x: 0%;
+  background-position-y: 66.6666666667%;
+}
+div.bang-card[data-type="101"] .card-background {
+  background-position-x: 20%;
+  background-position-y: 66.6666666667%;
+}
+div.bang-card[data-type="102"] .card-background {
+  background-position-x: 40%;
+  background-position-y: 66.6666666667%;
+}
+div.bang-card[data-type="103"] .card-background {
+  background-position-x: 60%;
+  background-position-y: 66.6666666667%;
+}
+div.bang-card[data-type="104"] .card-background {
+  background-position-x: 80%;
+  background-position-y: 66.6666666667%;
+}
+div.bang-card[data-type="105"] .card-background {
+  background-position-x: 0%;
+  background-position-y: 83.3333333333%;
+}
+div.bang-card[data-type="106"] .card-background {
+  background-position-x: 20%;
+  background-position-y: 83.3333333333%;
+}
+div.bang-card[data-type="107"] .card-background {
+  background-position-x: 40%;
+  background-position-y: 83.3333333333%;
+}
+div.bang-card[data-type="108"] .card-background {
+  background-position-x: 60%;
+  background-position-y: 83.3333333333%;
+}
+div.bang-card[data-type="109"] .card-background {
+  background-position-x: 80%;
+  background-position-y: 83.3333333333%;
+}
+div.bang-card[data-type="110"] .card-background {
+  background-position-x: 0%;
+  background-position-y: 100%;
+}
+div.bang-card[data-type="111"] .card-background {
+  background-position-x: 20%;
+  background-position-y: 100%;
+}
+div.bang-card[data-type="112"] .card-background {
+  background-position-x: 40%;
   background-position-y: 100%;
 }
 div.bang-card .card-front {
   background-image: url("img/card_borders.png");
   background-size: cover;
+  border-radius: 6px;
 }
 div.bang-card .card-front .card-name {
   position: absolute;
@@ -1672,7 +1851,7 @@ div.bang-card .card-front .card-name {
   height: 34px;
   text-align: center;
   font-family: "Perdido";
-  font-size: 14.45px;
+  font-size: 12.75px;
   letter-spacing: -1px;
   transform: scale(0.8, 1.3);
   transform-origin: top center;
@@ -1688,9 +1867,9 @@ div.bang-card .card-front .card-background {
   top: 35.7px;
   left: 8.5px;
   width: 89.25px;
-  height: 126.65px;
+  height: 123.25px;
   background-image: url("img/card_backgrounds.jpg");
-  background-size: 600% 400%;
+  background-size: 600% 700%;
 }
 div.bang-card .card-front .card-copy {
   position: absolute;
@@ -1701,6 +1880,16 @@ div.bang-card .card-front .card-copy {
 }
 div.bang-card .card-front .card-copy .card-copy-color {
   margin-left: -2px;
+}
+div.bang-card.event .card-name {
+  top: 15.3px;
+  z-index: 1;
+}
+div.bang-card.event .card-background {
+  top: 25.5px;
+  left: 11.05px;
+  width: 85px;
+  height: 123.25px;
 }
 
 .card-copy-color {
@@ -2072,6 +2261,28 @@ div.bang-card .card-front .card-copy .card-copy-color {
 }
 #popin_playersHelp #dialog-players .dialog-character[data-character="15"] .dialog-character-background {
   background-position: 100% center;
+}
+
+#popin_bang-information-dialog {
+  max-width: 750px;
+  left: 0 !important;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 951;
+}
+#popin_bang-information-dialog .popin_content {
+  display: grid;
+}
+#popin_bang-information-dialog #i_agree_button {
+  font-size: 23px;
+  width: 215px;
+  height: 80px;
+  white-space: pre-line;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-self: center;
 }
 
 #player_config {

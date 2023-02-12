@@ -260,8 +260,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     },
 
     displayPlayersHelp() {
-      new customgame.modal('playersHelp', {
-        autoShow: true,
+      this.addAndShowDialog('playersHelp', 'modal', 20, {
         title: _('Players information'),
         class: 'bang_popin',
         closeIcon: 'fa-times',
@@ -269,6 +268,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         openAnimationTarget: 'help-icon',
         contentsTpl: jstpl_helpDialog,
         verticalAlign: 'flex-start',
+        destroyCallback: this.removeDialog,
       });
 
       [0, 2, 2, 3, 1, 2, 1].forEach((roleId, i) => {

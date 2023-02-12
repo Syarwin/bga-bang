@@ -236,7 +236,9 @@ class Players extends \BANG\Helpers\DB_Manager
    ****************************/
   protected static function qFilterLiving()
   {
-    $eliminatedField = self::getEliminatedField(false);
+    // backward compatibility from XX/XX/2022
+    $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_unconscious\'')->num_rows === 1;
+    $eliminatedField = $newSchema ? 'player_unconscious' : 'player_eliminated';
     return self::DB()->where($eliminatedField, 0);
   }
 
@@ -255,9 +257,14 @@ class Players extends \BANG\Helpers\DB_Manager
     return self::countRoles([SHERIFF]) == 0 || self::countRoles([OUTLAW, RENEGADE]) == 0;
   }
 
-  public static function getSherrifId()
+  private static function getSheriffId()
   {
     return self::getUniqueValueFromDB('SELECT player_id FROM player WHERE player_role = ' . SHERIFF);
+  }
+
+  public static function getSheriff()
+  {
+    return self::get(self::getSheriffId());
   }
 
   /*
@@ -265,14 +272,14 @@ class Players extends \BANG\Helpers\DB_Manager
    */
   public static function getPlayerPositions()
   {
-    $eliminatedField = self::getEliminatedField(false);
     return array_flip(
-      self::getObjectListFromDB("SELECT player_id from player WHERE $eliminatedField=0 ORDER BY player_no", true)
+      self::getObjectListFromDB("SELECT player_id from player WHERE player_eliminated = 0 AND player_unconscious != 1 ORDER BY player_no", true)
     );
   }
 
   /**
    * returns an array of the ids of all living players
+   * @return Collection
    */
   public static function getLivingPlayers($except = null)
   {
@@ -290,10 +297,10 @@ class Players extends \BANG\Helpers\DB_Manager
       $ids = is_array($except) ? $except : [$except];
       $and = " AND player_id NOT IN ('" . implode("','", $ids) . "')";
     }
-    $eliminatedField = self::getEliminatedField($includeGhosts);
     $orderByPlayer = $player ? "player_no < {$player->getNo()}, " : '';
+    $includeGhostsSqlString = $includeGhosts ? '' : ' AND `player_unconscious` != 1';
     $playerIds = self::getObjectListFromDB(
-      "SELECT player_id FROM player WHERE {$eliminatedField} = 0$and ORDER BY {$orderByPlayer}player_no",
+      "SELECT player_id FROM player WHERE player_eliminated = 0{$includeGhostsSqlString}{$and} ORDER BY {$orderByPlayer}player_no",
       true
     );
     return array_map(function ($pId) {
@@ -362,14 +369,17 @@ class Players extends \BANG\Helpers\DB_Manager
   }
 
   /**
-   * @param boolean $includeGhosts
-   * @return string
+   * Returns a whole list of all players who agreed to Ghost Town/resurrection possibility disclaimer
+   * @return array
    */
-  private static function getEliminatedField($includeGhosts)
+  public static function getNotAgreedToDisclaimerList()
   {
     // backward compatibility from XX/XX/2022
-    $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_unconscious\'')->num_rows === 1;
-    return $newSchema && !$includeGhosts ? 'player_unconscious' : 'player_eliminated';
+    $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_agreed_to_disclaimer\'')->num_rows === 1;
+    $notAgreedToDisclaimer = self::getLivingPlayers()->map(function ($player) {
+      return !$player->isAgreedToDisclaimer();
+    });
+    return $newSchema ? array_keys(array_filter($notAgreedToDisclaimer->toAssoc(), 'strlen')) : [];
   }
 
   /***********************
