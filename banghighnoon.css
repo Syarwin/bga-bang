@@ -1654,12 +1654,6 @@ div.bang-card[data-type="111"] .card-front {
 div.bang-card[data-type="112"] .card-front {
   background-position: 80% center;
 }
-div.bang-card[data-type="113"] .card-front {
-  background-position: 100% center;
-}
-div.bang-card[data-type="114"] .card-front {
-  background-position: 100% center;
-}
 div.bang-card[data-type="115"] .card-front {
   background-position: 100% center;
 }
@@ -1699,6 +1693,12 @@ div.bang-card[data-type="126"] .card-front {
 div.bang-card[data-type="127"] .card-front {
   background-position: 100% center;
 }
+div.bang-card[data-type="128"] .card-front {
+  background-position: 100% center;
+}
+div.bang-card[data-type="129"] .card-front {
+  background-position: 100% center;
+}
 div.bang-card[data-type="0"] .card-background {
   background-position-x: 0%;
   background-position-y: 0%;
@@ -1725,118 +1725,186 @@ div.bang-card[data-type="5"] .card-background {
 }
 div.bang-card[data-type="6"] .card-background {
   background-position-x: 0%;
-  background-position-y: 16.6666666667%;
+  background-position-y: 11.1111111111%;
 }
 div.bang-card[data-type="7"] .card-background {
   background-position-x: 20%;
-  background-position-y: 16.6666666667%;
+  background-position-y: 11.1111111111%;
 }
 div.bang-card[data-type="8"] .card-background {
   background-position-x: 40%;
-  background-position-y: 16.6666666667%;
+  background-position-y: 11.1111111111%;
 }
 div.bang-card[data-type="9"] .card-background {
   background-position-x: 60%;
-  background-position-y: 16.6666666667%;
+  background-position-y: 11.1111111111%;
 }
 div.bang-card[data-type="10"] .card-background {
   background-position-x: 80%;
-  background-position-y: 16.6666666667%;
+  background-position-y: 11.1111111111%;
 }
 div.bang-card[data-type="11"] .card-background {
   background-position-x: 100%;
-  background-position-y: 16.6666666667%;
+  background-position-y: 11.1111111111%;
 }
 div.bang-card[data-type="12"] .card-background {
   background-position-x: 0%;
-  background-position-y: 33.3333333333%;
+  background-position-y: 22.2222222222%;
 }
 div.bang-card[data-type="13"] .card-background {
   background-position-x: 20%;
-  background-position-y: 33.3333333333%;
+  background-position-y: 22.2222222222%;
 }
 div.bang-card[data-type="14"] .card-background {
   background-position-x: 40%;
-  background-position-y: 33.3333333333%;
+  background-position-y: 22.2222222222%;
 }
 div.bang-card[data-type="15"] .card-background {
   background-position-x: 60%;
-  background-position-y: 33.3333333333%;
+  background-position-y: 22.2222222222%;
 }
 div.bang-card[data-type="16"] .card-background {
   background-position-x: 80%;
-  background-position-y: 33.3333333333%;
+  background-position-y: 22.2222222222%;
 }
 div.bang-card[data-type="17"] .card-background {
   background-position-x: 100%;
-  background-position-y: 33.3333333333%;
+  background-position-y: 22.2222222222%;
 }
 div.bang-card[data-type="18"] .card-background {
   background-position-x: 0%;
-  background-position-y: 50%;
+  background-position-y: 33.3333333333%;
 }
 div.bang-card[data-type="19"] .card-background {
   background-position-x: 20%;
-  background-position-y: 50%;
+  background-position-y: 33.3333333333%;
 }
 div.bang-card[data-type="20"] .card-background {
   background-position-x: 40%;
-  background-position-y: 50%;
+  background-position-y: 33.3333333333%;
 }
 div.bang-card[data-type="21"] .card-background {
   background-position-x: 60%;
-  background-position-y: 50%;
+  background-position-y: 33.3333333333%;
 }
 div.bang-card[data-type="100"] .card-background {
   background-position-x: 0%;
-  background-position-y: 66.6666666667%;
+  background-position-y: 44.4444444444%;
 }
 div.bang-card[data-type="101"] .card-background {
   background-position-x: 20%;
-  background-position-y: 66.6666666667%;
+  background-position-y: 44.4444444444%;
 }
 div.bang-card[data-type="102"] .card-background {
   background-position-x: 40%;
-  background-position-y: 66.6666666667%;
+  background-position-y: 44.4444444444%;
 }
 div.bang-card[data-type="103"] .card-background {
   background-position-x: 60%;
-  background-position-y: 66.6666666667%;
+  background-position-y: 44.4444444444%;
 }
 div.bang-card[data-type="104"] .card-background {
   background-position-x: 80%;
-  background-position-y: 66.6666666667%;
+  background-position-y: 44.4444444444%;
 }
 div.bang-card[data-type="105"] .card-background {
   background-position-x: 0%;
-  background-position-y: 83.3333333333%;
+  background-position-y: 55.5555555556%;
 }
 div.bang-card[data-type="106"] .card-background {
   background-position-x: 20%;
-  background-position-y: 83.3333333333%;
+  background-position-y: 55.5555555556%;
 }
 div.bang-card[data-type="107"] .card-background {
   background-position-x: 40%;
-  background-position-y: 83.3333333333%;
+  background-position-y: 55.5555555556%;
 }
 div.bang-card[data-type="108"] .card-background {
   background-position-x: 60%;
-  background-position-y: 83.3333333333%;
+  background-position-y: 55.5555555556%;
 }
 div.bang-card[data-type="109"] .card-background {
   background-position-x: 80%;
-  background-position-y: 83.3333333333%;
+  background-position-y: 55.5555555556%;
 }
 div.bang-card[data-type="110"] .card-background {
   background-position-x: 0%;
-  background-position-y: 100%;
+  background-position-y: 66.6666666667%;
 }
 div.bang-card[data-type="111"] .card-background {
   background-position-x: 20%;
-  background-position-y: 100%;
+  background-position-y: 66.6666666667%;
 }
 div.bang-card[data-type="112"] .card-background {
   background-position-x: 40%;
+  background-position-y: 66.6666666667%;
+}
+div.bang-card[data-type="113"] .card-background {
+  background-position-x: 60%;
+  background-position-y: 66.6666666667%;
+}
+div.bang-card[data-type="114"] .card-background {
+  background-position-x: 80%;
+  background-position-y: 66.6666666667%;
+}
+div.bang-card[data-type="115"] .card-background {
+  background-position-x: 0%;
+  background-position-y: 77.7777777778%;
+}
+div.bang-card[data-type="116"] .card-background {
+  background-position-x: 20%;
+  background-position-y: 77.7777777778%;
+}
+div.bang-card[data-type="117"] .card-background {
+  background-position-x: 40%;
+  background-position-y: 77.7777777778%;
+}
+div.bang-card[data-type="118"] .card-background {
+  background-position-x: 60%;
+  background-position-y: 77.7777777778%;
+}
+div.bang-card[data-type="119"] .card-background {
+  background-position-x: 80%;
+  background-position-y: 77.7777777778%;
+}
+div.bang-card[data-type="120"] .card-background {
+  background-position-x: 0%;
+  background-position-y: 88.8888888889%;
+}
+div.bang-card[data-type="121"] .card-background {
+  background-position-x: 20%;
+  background-position-y: 88.8888888889%;
+}
+div.bang-card[data-type="122"] .card-background {
+  background-position-x: 40%;
+  background-position-y: 88.8888888889%;
+}
+div.bang-card[data-type="123"] .card-background {
+  background-position-x: 60%;
+  background-position-y: 88.8888888889%;
+}
+div.bang-card[data-type="124"] .card-background {
+  background-position-x: 80%;
+  background-position-y: 88.8888888889%;
+}
+div.bang-card[data-type="125"] .card-background {
+  background-position-x: 0%;
+  background-position-y: 100%;
+}
+div.bang-card[data-type="126"] .card-background {
+  background-position-x: 20%;
+  background-position-y: 100%;
+}
+div.bang-card[data-type="127"] .card-background {
+  background-position-x: 40%;
+  background-position-y: 100%;
+}
+div.bang-card[data-type="128"] .card-background {
+  background-position-x: 60%;
+  background-position-y: 100%;
+}
+div.bang-card[data-type="129"] .card-background {
+  background-position-x: 80%;
   background-position-y: 100%;
 }
 div.bang-card .card-front {
@@ -1869,7 +1937,7 @@ div.bang-card .card-front .card-background {
   width: 89.25px;
   height: 123.25px;
   background-image: url("img/card_backgrounds.jpg");
-  background-size: 600% 700%;
+  background-size: 600% 1000%;
 }
 div.bang-card .card-front .card-copy {
   position: absolute;

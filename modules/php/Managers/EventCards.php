@@ -67,21 +67,21 @@ class EventCards extends \BANG\Helpers\Pieces
     CARD_HIGH_NOON => 'HighNoon',
 
     // A Fistful Of Cards
+    CARD_RANCH => 'Ranch',
     CARD_ABANDONED_MINE => 'AbandonedMine',
+    CARD_VENDETTA => 'Vendetta',
+    CARD_SNIPER => 'Sniper',
+    CARD_HARD_LIQUOR => 'HardLiquor',
+    CARD_PEYOTE => 'Peyote',
     CARD_AMBUSH => 'Ambush',
+    CARD_RICOCHET => 'Ricochet',
+    CARD_JUDGE => 'Judge',
+    CARD_LASSO => 'Lasso',
     CARD_BLOOD_BROTHERS => 'BloodBrothers',
     CARD_DEAD_MAN => 'DeadMan',
-    CARD_HARD_LIQUOR => 'HardLiquor',
-    CARD_LASSO => 'Lasso',
-    CARD_LAW_OF_THE_WEST => 'LawOfTheWest',
-    CARD_RANCH => 'Ranch',
-    CARD_RICOCHET => 'Ricochet',
-    CARD_RUSSIAN_ROULETTE => 'RussianRoulette',
-    CARD_SNIPER => 'Sniper',
-    CARD_PEYOTE => 'Peyote',
-    CARD_JUDGE => 'Judge',
-    CARD_VENDETTA => 'Vendetta',
     CARD_FISTFUL_OF_CARDS => 'FistfulOfCards',
+    CARD_LAW_OF_THE_WEST => 'LawOfTheWest',
+    CARD_RUSSIAN_ROULETTE => 'RussianRoulette',
   ];
 
   /*

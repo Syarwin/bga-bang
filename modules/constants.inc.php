@@ -154,21 +154,22 @@ define('CARD_DOCTOR', 109);
 define('CARD_SHOOTOUT', 110);
 define('CARD_TRAIN_ARRIVAL', 111);
 define('CARD_THIRST', 112);
-define('CARD_ABANDONED_MINE', 113);
-define('CARD_AMBUSH', 114);
-define('CARD_BLOOD_BROTHERS', 115);
-define('CARD_DEAD_MAN', 116);
-define('CARD_HARD_LIQUOR', 117);
-define('CARD_LASSO', 118);
-define('CARD_LAW_OF_THE_WEST', 119);
-define('CARD_RANCH', 120);
-define('CARD_RICOCHET', 121);
-define('CARD_RUSSIAN_ROULETTE', 122);
-define('CARD_SNIPER', 123);
-define('CARD_PEYOTE', 124);
-define('CARD_JUDGE', 125);
-define('CARD_VENDETTA', 126);
+
+define('CARD_RANCH', 115);
+define('CARD_ABANDONED_MINE', 116);
+define('CARD_VENDETTA', 117);
+define('CARD_SNIPER', 118);
+define('CARD_HARD_LIQUOR', 119);
+define('CARD_PEYOTE', 120);
+define('CARD_AMBUSH', 121);
+define('CARD_RICOCHET', 122);
+define('CARD_JUDGE', 123);
+define('CARD_LASSO', 124);
+define('CARD_BLOOD_BROTHERS', 125);
+define('CARD_DEAD_MAN', 126);
 define('CARD_FISTFUL_OF_CARDS', 127);
+define('CARD_LAW_OF_THE_WEST', 128);
+define('CARD_RUSSIAN_ROULETTE', 129);
 
 define('PASS', 999); //has to be bigger than the maximum number of cards in the game
 

@@ -95,14 +95,14 @@ div.bang-card {
   @for $i from 0 through $numberOfCards {
     &[data-type="#{$i}"] .card-background {
       background-position-x: ($i % 6) * 100% / 5;
-      background-position-y: (($i - ($i % 6)) / 6) * 100% / 6;
+      background-position-y: (($i - ($i % 6)) / 6) * 100% / 9;
     }
   }
 
   @for $k from 0 through $numberOfEvents {
     &[data-type="#{$k + 100}"] .card-background {
       background-position-x: ($k % 5) * 100% / 5;
-      background-position-y: ((($k - ($k % 5)) / 5) * 100% / 6) + 100% / 6 * 4;
+      background-position-y: ((($k - ($k % 5)) / 5) * 100% / 9) + 100% / 9 * 4;
     }
   }
 
@@ -139,7 +139,7 @@ div.bang-card {
     	width: $cardW * 105 / 125;
     	height: $cardH * 145 / 200;
     	background-image:url("img/card_backgrounds.jpg");
-    	background-size:600% 700%;
+    	background-size:600% 1000%;
     }
 
     .card-copy {
