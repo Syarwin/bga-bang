@@ -43,7 +43,7 @@ trait ReactTrait
     $ctx = Stack::getCtx();
     $player = Players::getActive();
     if ($ctx['state'] == ST_REACT) {
-      $card = Cards::get($ctx['src']['id']);
+      $card = Cards::getCardByType($ctx['src']['type']);
 
       $ctx['_private']['active'] = $card->getReactionOptions($player);
       return $ctx;

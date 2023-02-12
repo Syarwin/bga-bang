@@ -705,17 +705,17 @@ class Player extends \BANG\Helpers\DB_Manager
 
   public function getReactAtomForAttack($card)
   {
-    $src = $card->getName();
+    $srcName = $card->getName();
     if ($this->character == CALAMITY_JANET && $card->getType() == CARD_MISSED) {
-      $src = clienttranslate('Missed used as a BANG! by Calamity Janet');
+      $srcName = clienttranslate('Missed used as a BANG! by Calamity Janet');
     }
 
     return Stack::newAtom(ST_REACT, [
       'type' => 'attack',
       'msgActive' => clienttranslate('${you} may react to ${src_name}'),
-      'msgWaiting' => clienttranslate('${actplayer} has to react to ${src_name}. You may already select your reaction'),
+      'msgWaiting' => clienttranslate('${you} may react to ${src_name}. You may have already selected your reaction'),
       'msgInactive' => clienttranslate('${actplayer} may react to ${src_name}'),
-      'src_name' => $src,
+      'src_name' => $srcName,
       'src' => $card->jsonSerialize(),
       'attacker' => $this->id,
       'missedNeeded' => 1,
@@ -727,17 +727,17 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function react($ids)
   {
-    $ctx = Stack::getCtx();
+    $ctxSrc = Stack::getCtx()['src'];
     // If characterId is set, the player was reacting to its ability, not to a card (eg Kit Carlson)
-    if (isset($ctx['src']['characterId'])) {
+    if (isset($ctxSrc['characterId'])) {
       $this->useAbility($ids);
       return;
     }
 
-    $card = Cards::get($ctx['src']['id']);
+    $attackingCard = Cards::getCardByType($ctxSrc['type']);
     if (is_null($ids)) {
       // PASS
-      return $card->pass($this);
+      return $attackingCard->pass($this);
     } else {
       if (!is_array($ids)) {
         $ids = [$ids];
@@ -745,7 +745,7 @@ class Player extends \BANG\Helpers\DB_Manager
 
       foreach ($ids as $id) {
         $reactionCard = Cards::get($id);
-        $card->react($reactionCard, $this);
+        $attackingCard->react($reactionCard, $this);
         $this->onChangeHand();
         $this->notifyAboutAnotherMissed();
       }
