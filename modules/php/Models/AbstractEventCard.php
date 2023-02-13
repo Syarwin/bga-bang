@@ -122,6 +122,18 @@ class AbstractEventCard implements \JsonSerializable
     return false;
   }
 
+  /**
+   * @return array
+   */
+  public function getPhaseOneRules()
+  {
+    return [
+      RULE_ABILITY_AVAILABLE => $this->isAbilityAvailable(),
+      RULE_BEER_AVAILABLE => $this->isBeerAvailable(),
+      RULE_BANGS_AMOUNT_LEFT => $this->getBangsAmount(),
+    ];
+  }
+
   /*
    * jsonSerialize: used in frontend to manipulate cards
    */

@@ -2,6 +2,8 @@
 namespace BANG\Managers;
 use BANG\Helpers\DB_Manager;
 use BANG\Models\AbstractCard;
+use BANG\Models\AbstractEventCard;
+use BANG\Models\Player;
 
 /*
  * Rules: all turn rules and all changes to them according to player role and event and all other factors
@@ -51,14 +53,15 @@ class Rules extends DB_Manager
     }
   }
 
+  /**
+   * @param $player Player
+   * @param $eventCard AbstractEventCard
+   */
   public static function setNewTurnRules($player, $eventCard = null)
   {
     $amountOfCardsToDraw = $eventCard ? $eventCard->getPhaseOneAmountOfCardsToDraw() : 2;
-    $rules = [];
-    $rules[RULE_ABILITY_AVAILABLE] = $eventCard ? $eventCard->isAbilityAvailable() : true;
-    $rules[RULE_BEER_AVAILABLE] = $eventCard ? $eventCard->isBeerAvailable() : true;
-    $rules[RULE_BANGS_AMOUNT_LEFT] = $eventCard ? $eventCard->getBangsAmount() : 1;
-    $rules = array_merge($rules, $player->getPhaseOneRules($amountOfCardsToDraw, $rules[RULE_ABILITY_AVAILABLE]));
+    $rules = $eventCard ? $eventCard->getPhaseOneRules() : [];
+    $rules = array_merge($rules, $player->getPhaseOneRules($amountOfCardsToDraw, $rules[RULE_ABILITY_AVAILABLE] ?? true));
 
     $rules = array_merge(['player_id' => $player->getId()], $rules);
     $query = array_map(function ($value) {
