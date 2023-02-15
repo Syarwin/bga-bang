@@ -38,7 +38,7 @@ class AbstractCard implements \JsonSerializable
   protected $color;
   protected $value;
 
-  // Static informations about cards
+  // Static information about cards
   protected $type;
   protected $name;
   protected $text;

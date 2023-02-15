@@ -114,12 +114,13 @@ class Cards extends \BANG\Helpers\Pieces
    ****************************/
   public static function deal($pId, $amount, $fromLocation = LOCATION_DECK)
   {
-    return self::pickForLocation($amount, $fromLocation, [LOCATION_HAND, $pId]);
+    $lastCardState = self::getExtremePosition(true, [LOCATION_HAND, $pId]);
+    return self::pickForLocation($amount, $fromLocation, [LOCATION_HAND, $pId], $lastCardState + 1);
   }
 
   public static function getHand($pId)
   {
-    return self::getInLocation([LOCATION_HAND, $pId]);
+    return self::getInLocation([LOCATION_HAND, $pId], null, 'card_state');
   }
 
   public static function countHand($pId)

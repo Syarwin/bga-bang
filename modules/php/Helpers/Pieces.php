@@ -95,7 +95,7 @@ class Pieces extends DB_Manager
   /****
    * Return a select query with a where condition
    */
-  protected function addWhereClause(&$query, $id = null, $location = null, $state = null)
+  protected static function addWhereClause(&$query, $id = null, $location = null, $state = null)
   {
     if (!is_null($id)) {
       $whereOp = strpos($id, '%') !== false ? 'LIKE' : '=';
@@ -270,6 +270,7 @@ class Pieces extends DB_Manager
   public static function getExtremePosition($getMax, $location, $id = null)
   {
     $query = self::DB();
+    self::checkLocation($location);
     self::addWhereClause($query, $id, $location);
     return $query->func($getMax ? 'MAX' : 'MIN', static::$prefix . 'state') ?? 0;
   }
@@ -376,9 +377,15 @@ class Pieces extends DB_Manager
     return self::moveAllInLocation($fromLocation, $toLocation, null, null);
   }
 
-  /*
+  /**
    * Pick the first "$nbr" pieces on top of specified deck and place it in target location
    * Return pieces infos or void array if no card in the specified location
+   * @param int $nbr
+   * @param string $fromLocation
+   * @param string|array $toLocation
+   * @param null|int $state
+   * @param bool $deckReform
+   * @return Collection
    */
   public static function pickForLocation($nbr, $fromLocation, $toLocation, $state = null, $deckReform = true)
   {
@@ -386,7 +393,10 @@ class Pieces extends DB_Manager
     self::checkLocation($toLocation);
     $pieces = self::getTopOf($fromLocation, $nbr, false);
     $ids = $pieces->getIds();
-    self::getUpdateQuery($ids, $toLocation, $state)->run();
+    foreach ($ids as $id) {
+      self::getUpdateQuery($id, $toLocation, $state)->run();
+      $state = ++$state;
+    }
     $pieces = self::getMany($ids);
 
     // No more pieces in deck & reshuffle is active => form another deck
