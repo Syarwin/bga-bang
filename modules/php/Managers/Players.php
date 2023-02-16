@@ -153,6 +153,9 @@ class Players extends \BANG\Helpers\DB_Manager
       ->getSingle();
   }
 
+  /**
+   * @return Player
+   */
   public static function getActive()
   {
     return self::get();

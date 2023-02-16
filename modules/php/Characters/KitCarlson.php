@@ -19,7 +19,7 @@ class KitCarlson extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function drawCardsAbility()
+  public function drawCardsPhaseOne()
   {
     Cards::drawForLocation(LOCATION_SELECTION, 3);
     $eventCard = EventCards::getActive();

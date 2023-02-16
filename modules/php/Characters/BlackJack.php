@@ -19,7 +19,7 @@ class BlackJack extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function drawCardsAbility()
+  public function drawCardsPhaseOne()
   {
     // Draw one visible
     $cards = Cards::deal($this->id, 1);

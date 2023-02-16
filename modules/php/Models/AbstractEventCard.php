@@ -123,6 +123,21 @@ class AbstractEventCard implements \JsonSerializable
   }
 
   /**
+   * @return boolean
+   */
+  public function isPhaseOneSpecialDraw()
+  {
+    return false;
+  }
+
+  /**
+   * @param Player $player
+   * @return void
+   */
+  public function drawCardsPhaseOne($player)
+  {}
+
+  /**
    * @return array
    */
   public function getPhaseOneRules()
@@ -131,6 +146,7 @@ class AbstractEventCard implements \JsonSerializable
       RULE_ABILITY_AVAILABLE => $this->isAbilityAvailable(),
       RULE_BEER_AVAILABLE => $this->isBeerAvailable(),
       RULE_BANGS_AMOUNT_LEFT => $this->getBangsAmount(),
+      RULE_PHASE_ONE_EVENT_SPECIAL_DRAW => $this->isPhaseOneSpecialDraw(),
     ];
   }
 

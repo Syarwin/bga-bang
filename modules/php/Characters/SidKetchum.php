@@ -24,7 +24,7 @@ class SidKetchum extends \BANG\Models\Player
     return $t;
   }
 
-  public function getHandOptions()
+  public function getHandOptions($lastCardOnly = false)
   {
     return $this->addAbility(parent::getHandOptions());
   }

@@ -217,6 +217,12 @@ $machinestates = [
     'action' => 'stTriggerAbility',
   ],
 
+  ST_DISCARD_BLUE_CARD => [
+    'name' => 'discardBlueCard',
+    'type' => 'game',
+    'action' => 'stDiscardBlueCard',
+  ],
+
   ST_CHOOSE_AND_DISCARD_BLUE_CARD => [
     'name' => 'chooseAndDiscardBlueCard',
     'description' => clienttranslate('${actplayer} must discard one blue card in front of them'),
@@ -226,10 +232,19 @@ $machinestates = [
     'possibleactions' => ['actDiscardBlue'],
   ],
 
-  ST_DISCARD_BLUE_CARD => [
-    'name' => 'discardBlueCard',
+  ST_PLAY_LAST_CARD_AUTOMATICALLY => [
+    'name' => 'playLastCardAutomatically',
     'type' => 'game',
-    'action' => 'stDiscardBlueCard',
+    'action' => 'stPlayLastCardAutomatically',
+  ],
+
+  ST_PLAY_LAST_CARD_MANUALLY => [
+    'name' => 'playLastCardManually',
+    'description' => clienttranslate('${actplayer} must play second drawn card because of Law Of The West event'),
+    'descriptionmyturn' => clienttranslate('${you} must play second drawn card because of Law Of The West event'),
+    'type' => 'activeplayer',
+    'args' => 'argPlayLastCardManually',
+    'possibleactions' => ['actPlayCard'],
   ],
 
   ST_END_OF_TURN => [

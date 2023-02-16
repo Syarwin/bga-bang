@@ -54,8 +54,8 @@ class Rules extends DB_Manager
   }
 
   /**
-   * @param $player Player
-   * @param $eventCard AbstractEventCard
+   * @param Player $player
+   * @param AbstractEventCard $eventCard
    */
   public static function setNewTurnRules($player, $eventCard = null)
   {
@@ -81,6 +81,15 @@ class Rules extends DB_Manager
   public static function isPhaseOnePlayerSpecialDraw()
   {
     return self::getRule(RULE_PHASE_ONE_PLAYER_ABILITY_DRAW) === '1';
+  }
+
+  /**
+   * @return boolean
+   */
+  public static function isPhaseOneEventSpecialDraw()
+  {
+    $eventCard = EventCards::getActive();
+    return $eventCard ? $eventCard->isPhaseOneSpecialDraw() : false;
   }
 
   public static function getCurrentPlayerId()

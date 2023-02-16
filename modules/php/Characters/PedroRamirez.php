@@ -20,7 +20,7 @@ class PedroRamirez extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function drawCardsAbility()
+  public function drawCardsPhaseOne()
   {
     if (is_null(Cards::getLastDiscarded())) {
       Rules::incrementPhaseOneDrawEndAmount();

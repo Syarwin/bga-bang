@@ -62,7 +62,7 @@ trait TurnTrait
     $stack = [ST_PRE_PHASE_ONE, ST_PHASE_ONE_SETUP, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN];
     if (GameOptions::isEvents()) {
       array_unshift($stack, ST_RESOLVE_EVENT_EFFECT);
-      if ($player->getRole() === SHERIFF && $nextEventCard && $roundNumber > 1) {
+      if ($player->getRole() === SHERIFF && $nextEventCard && $roundNumber > 0) {
         array_unshift($stack, ST_NEW_EVENT);
       }
 

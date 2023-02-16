@@ -8,7 +8,11 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
      * Main state of game : active player can play cards from his hand
      */
     onEnteringStatePlayCard(args) {
-      // TODO : do it on server's side
+      var cards = args._private.cards.filter((card) => card.options != null);
+      this.makeCardSelectable(cards, 'playCard');
+    },
+
+    onEnteringStatePlayLastCardManually(args) {
       var cards = args._private.cards.filter((card) => card.options != null);
       this.makeCardSelectable(cards, 'playCard');
     },

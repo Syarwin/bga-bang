@@ -1,6 +1,7 @@
 <?php
 namespace BANG\Models;
 use BANG\Core\Globals;
+use BANG\Helpers\Collection;
 use BANG\Managers\Cards;
 use BANG\Managers\EventCards;
 use BANG\Managers\Players;
@@ -147,6 +148,14 @@ class Player extends \BANG\Helpers\DB_Manager
   public function getHand()
   {
     return Cards::getHand($this->id);
+  }
+
+  /**
+   * @return AbstractCard
+   */
+  public function getLastCardFromHand()
+  {
+    return $this->getHand()->last();
   }
 
   public function getCardsInPlay()
@@ -659,9 +668,10 @@ class Player extends \BANG\Helpers\DB_Manager
   /**
    * getHandOptions: give the list of playable cards in hand, along with their options
    */
-  public function getHandOptions()
+  public function getHandOptions($lastCardOnly = false)
   {
-    $options = $this->getHand()
+    $cards = $lastCardOnly ? new Collection([$this->getLastCardFromHand()]) : $this->getHand();
+    $options = $cards
       ->map(function ($card) {
         return [
           'id' => $card->getId(),
@@ -685,7 +695,6 @@ class Player extends \BANG\Helpers\DB_Manager
   public function playCard($card, $args)
   {
     Notifications::cardPlayed($this, $card, $args);
-    Log::addCardPlayed($this, $card, $args);
     $card->play($this, $args);
     Notifications::updateDistances();
     $this->onChangeHand();
@@ -771,7 +780,7 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function prepareSelection($source, $playerIds, $isPrivate, $amountToPick, $toResolveFlipped = false)
   {
-    $src = $source instanceof \BANG\Models\Player ? $source->getCharName() : $source->getName();
+    $src = $source instanceof Player ? $source->getCharName() : $source->getName();
     $atom = Stack::newAtom(ST_SELECT_CARD, [
       'src_name' => $src,
       'amountToPick' => $amountToPick,
@@ -936,5 +945,50 @@ class Player extends \BANG\Helpers\DB_Manager
   public function agreeToDisclaimer()
   {
     self::DB()->update(['player_agreed_to_disclaimer' => true], $this->id);
+  }
+
+  /**
+   * @param AbstractCard $card
+   * @return bool
+   */
+  public function isCardPlayable($card)
+  {
+    $handOptions = $this->getHandOptions()['cards'];
+    $playableCardsIds = array_map(function ($card) {
+      return $card['id'];
+    }, $handOptions);
+    if (!in_array($card->getId(), $playableCardsIds)) {
+      return false;
+    }
+
+    $cardOptions = array_values(array_filter($handOptions, function ($cardInHand) use ($card) {
+      return $cardInHand['id'] === $card->getId();
+    }));
+    if (count($cardOptions) === 0) {
+      return false;
+    }
+
+    if (in_array($card->getType(), [CARD_BANG, CARD_PANIC]) && count($cardOptions[0]['options']['targets']) === 0) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * We use this method when isCardPlayable() returned that this card is not playable, so we need a reason
+   * @param AbstractCard $lastCard
+   * @return string
+   */
+  public function getNonPlayabilityReason($lastCardType)
+  {
+    switch ($lastCardType) {
+      case CARD_MISSED:
+        return clienttranslate('Missed! cards could not be played on your turn');
+      case CARD_BANG:
+      case CARD_PANIC:
+        return clienttranslate('distance to all other players is too high');
+      default:
+        return clienttranslate('no reason actually, please report a bug if you see this message');
+    }
   }
 }

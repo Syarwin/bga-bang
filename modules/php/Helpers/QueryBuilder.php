@@ -375,6 +375,13 @@ class Collection extends \ArrayObject
     return isset($arr[0]) ? $arr[0] : null;
   }
 
+  public function last()
+  {
+    $arr = $this->toArray();
+    $amount = count($arr);
+    return $amount > 0 ? $arr[$amount-1] : null;
+  }
+
   public function toArray()
   {
     return array_values($this->getArrayCopy());

@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS `rules` (
     `player_id` int(11) NOT NULL,
     `phase_one_amount_to_draw_beginning` int(1) NOT NULL,
     `phase_one_player_ability_draw` int(1) NOT NULL,
+    `phase_one_event_draw` int(1) NOT NULL,
     `phase_one_amount_to_draw_end` int(1) NOT NULL,
     `ability_available` int(1) NOT NULL,
     `beer_availability` int(1) NOT NULL,

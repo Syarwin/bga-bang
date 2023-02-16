@@ -33,6 +33,8 @@ define('ST_RESOLVE_EVENT_EFFECT', 30);
 define('ST_PRE_PHASE_ONE', 31);
 define('ST_CHOOSE_AND_DISCARD_BLUE_CARD', 32);
 define('ST_DISCARD_BLUE_CARD', 33);
+define('ST_PLAY_LAST_CARD_AUTOMATICALLY', 34);
+define('ST_PLAY_LAST_CARD_MANUALLY', 35);
 define('ST_PRE_GAME_END', 98);
 define('ST_GAME_END', 99);
 
@@ -290,6 +292,7 @@ define('GENERAL_STORE_AUTO_PICK', 1);
  */
 define('RULE_PHASE_ONE_CARDS_DRAW_BEGINNING', 'phase_one_amount_to_draw_beginning');
 define('RULE_PHASE_ONE_PLAYER_ABILITY_DRAW', 'phase_one_player_ability_draw');
+define('RULE_PHASE_ONE_EVENT_SPECIAL_DRAW', 'phase_one_event_draw');
 define('RULE_PHASE_ONE_CARDS_DRAW_END', 'phase_one_amount_to_draw_end');
 define('RULE_ABILITY_AVAILABLE', 'ability_available');
 define('RULE_BEER_AVAILABLE', 'beer_availability');

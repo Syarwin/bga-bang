@@ -39,6 +39,11 @@ class Notifications
     self::notify($playerId, 'showMessage', $message, []);
   }
 
+  public static function showMessageToAll($message, $data = [])
+  {
+    self::notifyAll( 'showMessage', $message, $data);
+  }
+
   /**
    * cardPlayed: called once a card is played
    */

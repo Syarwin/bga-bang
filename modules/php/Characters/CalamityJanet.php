@@ -60,7 +60,8 @@ class CalamityJanet extends \BANG\Models\Player
     return $missed;
   }
 
-  public function getHandOptions()
+  // TODO: Properly support Law of the West event
+  public function getHandOptions($lastCardOnly = false)
   {
     $res = parent::getHandOptions();
     if (Rules::isAbilityAvailable()) {

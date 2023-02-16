@@ -98,7 +98,7 @@ class BrownCard extends AbstractCard
       case DRAW:
       case DISCARD:
         // Drawing from deck
-        if (is_null($args['type'])) {
+        if (!isset($args['type'])) {
           $player->drawCards($this->effect['amount']);
           return null;
         }
