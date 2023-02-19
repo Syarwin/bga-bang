@@ -21,7 +21,7 @@ trait PlayCardTrait
   {
     return [
       '_private' => [
-        'active' => Players::getActive()->getHandOptions(true),
+        'active' => Players::getActive()->getLastCardWithOptions(),
       ],
     ];
   }

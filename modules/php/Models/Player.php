@@ -158,16 +158,33 @@ class Player extends \BANG\Helpers\DB_Manager
     return $this->getHand()->last();
   }
 
+  /**
+   * @return Collection
+   */
   public function getCardsInPlay()
   {
     return Cards::getInPlay($this->id);
   }
 
+  /**
+   * @return Collection
+   */
   public function getBlueCardsInPlay()
   {
     return $this->getCardsInPlay()->filter(function ($card) {
       return $card->getColor() === BLUE;
     });
+  }
+
+  /**
+   * @return array
+   */
+  public function getMissedWithOptions()
+  {
+    $allMissed = $this->getHand()->filter(function ($card) {
+      return $card->getType() === CARD_MISSED;
+    });
+    return $this->addOptionsTo($allMissed, false);
   }
 
   public function countHand()
@@ -666,27 +683,49 @@ class Player extends \BANG\Helpers\DB_Manager
   }
 
   /**
+   * getLastCardWithOptions: give the list of playable cards in hand, along with their options
+   */
+  public function getLastCardWithOptions()
+  {
+    $card = new Collection([$this->getLastCardFromHand()]);
+    return [
+      'cards' => $this->addOptionsTo($card),
+      'character' => null,
+    ];
+  }
+
+  /**
    * getHandOptions: give the list of playable cards in hand, along with their options
    */
-  public function getHandOptions($lastCardOnly = false)
+  public function getHandOptions()
   {
-    $cards = $lastCardOnly ? new Collection([$this->getLastCardFromHand()]) : $this->getHand();
-    $options = $cards
+    return [
+      'cards' => $this->addOptionsTo($this->getHand()),
+      'character' => null,
+    ];
+  }
+
+  /**
+   * addOptionsTo: adds cards options in order to send them to frontend
+   * @param Collection $cards
+   * @return array
+   */
+  public function addOptionsTo($cards, $filterNullOptions = true)
+  {
+    $cards = $cards
       ->map(function ($card) {
         return [
           'id' => $card->getId(),
           'options' => $card->getPlayOptions($this),
           'type' => $card->getType(),
         ];
-      })
-      ->filter(function ($card) {
+      });
+    if ($filterNullOptions) {
+      $cards = $cards->filter(function ($card) {
         return !is_null($card['options']);
       });
-
-    return [
-      'cards' => $options->toArray(),
-      'character' => null,
-    ];
+    }
+    return $cards->toArray();
   }
 
   /**

@@ -153,6 +153,18 @@ class Stack
     Stack::set($stack);
   }
 
+  /**
+   * @param string $type
+   */
+  public static function removeAllAtomsWithState($state)
+  {
+    $stack = Stack::get();
+    Utils::filter($stack, function ($atom) use ($state) {
+      return $atom['state'] !== $state;
+    });
+    Stack::set($stack);
+  }
+
   private static function get() {
     return Globals::getStack();
   }
@@ -305,7 +317,6 @@ class Stack
       }
     }
     if ($ctxIndex == -1) {
-      debug_print_backtrace();
       throw new \BgaVisibleSystemException('Class Stack: ctxIndex == -1. Please report this to BGA bug tracker');
     }
     return $ctxIndex;

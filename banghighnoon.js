@@ -35,6 +35,7 @@ define([
   g_gamethemeurl + 'modules/js/States/ChooseCharacterTrait.js',
   g_gamethemeurl + 'modules/js/States/DiscardEndOfTurnTrait.js',
   g_gamethemeurl + 'modules/js/States/DiscardBlueCardTrait.js',
+  g_gamethemeurl + 'modules/js/States/RussianRouletteTrait.js',
 
   g_gamethemeurl + 'modules/js/EventTrait.js',
   g_gamethemeurl + 'modules/js/CardTrait.js',
@@ -55,6 +56,7 @@ define([
       bang.discardBlueCardTrait,
       bang.eventTrait,
       bang.dialogManager,
+      bang.russianRouletteTrait,
     ],
     {
       /*

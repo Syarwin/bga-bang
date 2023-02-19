@@ -182,4 +182,19 @@ class action_banghighnoon extends APP_GameAction
     $this->game->actAgreedToDisclaimer();
     self::ajaxResponse();
   }
+
+  public function actPassEndRussianRoulette()
+  {
+    self::setAjaxMode();
+    $this->game->actPassEndRussianRoulette();
+    self::ajaxResponse();
+  }
+
+  public function actReactRussianRoulette()
+  {
+    self::setAjaxMode();
+    $cardId = (int) self::getArg('cardId', AT_posint, false);
+    $this->game->actReactRussianRoulette($cardId);
+    self::ajaxResponse();
+  }
 }

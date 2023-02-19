@@ -56,6 +56,7 @@ class banghighnoon extends Table
   use BANG\States\PhaseOneTrait;
   use BANG\States\EventTrait;
   use BANG\States\DiscardBlueCardTrait;
+  use BANG\States\RussianRouletteTrait;
 
   public static $instance = null;
   public function __construct()

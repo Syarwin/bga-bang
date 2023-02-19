@@ -247,6 +247,15 @@ $machinestates = [
     'possibleactions' => ['actPlayCard'],
   ],
 
+  ST_RUSSIAN_ROULETTE => [
+    'name' => 'russianRoulette',
+    'description' => clienttranslate('${actplayer} must discard 1 Missed! or lose 2 life points'),
+    'descriptionmyturn' => clienttranslate('${you} must discard 1 Missed! or lose 2 life points'),
+    'type' => 'activeplayer',
+    'args' => 'argRussianRoulette',
+    'possibleactions' => ['actReactRussianRoulette', 'actPassEndRussianRoulette'],
+  ],
+
   ST_END_OF_TURN => [
     'name' => 'endOfTurn',
     'type' => 'game',
