@@ -145,6 +145,10 @@ class Players extends \BANG\Helpers\DB_Manager
     return self::DB()->get(false);
   }
 
+  /**
+   * @param int|null $pId
+   * @return Player
+   */
   public static function get($pId = null)
   {
     $pId = $pId ?: self::getActiveId();
@@ -282,23 +286,26 @@ class Players extends \BANG\Helpers\DB_Manager
 
   /**
    * returns an array of the ids of all living players
+   * @param int $exceptId
    * @return Collection
    */
-  public static function getLivingPlayers($except = null)
+  public static function getLivingPlayers($exceptId = null)
   {
-    $playerIds = self::getLivingPlayerIdsStartingWith(null, false, $except);
+    $playerIds = self::getLivingPlayerIdsStartingWith(null, false, $exceptId);
     return self::idsArrayToCollection($playerIds);
   }
 
   /**
+   * @param Player|null $player
+   * @param bool $includeGhosts
+   * @param int|null $exceptId
    * @return array
    */
-  public static function getLivingPlayerIdsStartingWith($player, $includeGhosts = false, $except = null)
+  public static function getLivingPlayerIdsStartingWith($player, $includeGhosts = false, $exceptId = null)
   {
     $and = '';
-    if ($except != null) {
-      $ids = is_array($except) ? $except : [$except];
-      $and = " AND player_id NOT IN ('" . implode("','", $ids) . "')";
+    if ($exceptId != null) {
+      $and = " AND player_id NOT IN ('" . implode("','", [$exceptId]) . "')";
     }
     $orderByPlayer = $player ? "player_no < {$player->getNo()}, " : '';
     $includeGhostsSqlString = $includeGhosts ? '' : ' AND `player_unconscious` != 1';
@@ -313,11 +320,13 @@ class Players extends \BANG\Helpers\DB_Manager
 
   /**
    * @param Player $player
+   * @param bool $includeGhosts
+   * @param int|null $exceptId
    * @return Collection
    */
-  public static function getLivingPlayersStartingWith($player)
+  public static function getLivingPlayersStartingWith($player, $includeGhosts = false, $exceptId = null)
   {
-    $playerIds = self::getLivingPlayerIdsStartingWith($player);
+    $playerIds = self::getLivingPlayerIdsStartingWith($player, $includeGhosts, $exceptId);
     return self::idsArrayToCollection($playerIds);
   }
 

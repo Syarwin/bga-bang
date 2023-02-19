@@ -197,4 +197,15 @@ class action_banghighnoon extends APP_GameAction
     $this->game->actReactRussianRoulette($cardId);
     self::ajaxResponse();
   }
+
+  public function actReactBloodBrothers()
+  {
+    self::setAjaxMode();
+    $playerId = self::getArg('playerId', AT_posint, false);
+    if ($playerId) {
+      $playerId = (int) $playerId;
+    }
+    $this->game->actReactBloodBrothers($playerId);
+    self::ajaxResponse();
+  }
 }

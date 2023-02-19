@@ -4,7 +4,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     },
 
     /*
-     * Main state of game : active player can play cards from his hand
+     * Russian Roulette event - player can discard a Missed! or lose 2 HP
      */
     onEnteringStateRussianRoulette(args) {
       if (args._private) {

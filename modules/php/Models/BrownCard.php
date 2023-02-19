@@ -119,7 +119,7 @@ class BrownCard extends AbstractCard
       case LIFE_POINT_MODIFIER:
         $targets = [];
         if ($this->effect['impacts'] == ALL) {
-          $targets = Players::getLivingPlayers(null, true);
+          $targets = Players::getLivingPlayers();
         } else {
           // TODO: Players::getPlayer() does not exist however code works on production correctly. Investigate and delete this possibility if never used
           $targets[] =

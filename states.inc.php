@@ -256,6 +256,16 @@ $machinestates = [
     'possibleactions' => ['actReactRussianRoulette', 'actPassEndRussianRoulette'],
   ],
 
+  ST_BLOOD_BROTHERS => [
+    'name' => 'bloodBrothers',
+    'description' => clienttranslate('${actplayer} may lose one life point to give to another player'),
+    'descriptionmyturn' => clienttranslate('${you} may lose one life point to give to another player'),
+    'type' => 'activeplayer',
+    'args' => 'argBloodBrothers',
+    'action' => 'stBloodBrothers',
+    'possibleactions' => ['actReactBloodBrothers'],
+  ],
+
   ST_END_OF_TURN => [
     'name' => 'endOfTurn',
     'type' => 'game',

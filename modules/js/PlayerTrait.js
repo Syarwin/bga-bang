@@ -325,6 +325,8 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
       if (this._action == 'drawCard') {
         this.onClickDraw(playerId);
+      } else if (this._action == 'bloodBrothers') {
+        this.onClickPlayerBloodBrothers(playerId)
       } else {
         this._selectedOptionType = 'player';
         this._selectedPlayer = playerId;
