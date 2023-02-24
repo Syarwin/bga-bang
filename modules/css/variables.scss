@@ -71,13 +71,13 @@ $layoutBig:(
 
 $layoutSmall:(
   2:(
-    "table":("col" : 8, "row" : 2, "align" : center),
-    0:("col" : 2, "row" : 2, "align": left),
-    1:("col" : 4, "row" : 4, "align": center),
+    "table":("col" : 5, "row" : 2, "align" : center),
+    0:("col" : 4, "row" : 1, "align": left),
+    1:("col" : 4, "row" : 3, "align": center),
   ),
   3:(
     "table":("col" : 8, "row" : 2, "align" : right),
-    0:("col" : 2, "row" : 2, "align": left),
+    0:("col" : 1, "row" : 2, "align": left),
     1:("col" : 7, "row" : 4, "align": right),
     2:("col" : 1, "row" : 4, "align": left),
   ),
