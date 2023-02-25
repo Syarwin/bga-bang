@@ -60,9 +60,9 @@ class Rules extends DB_Manager
   public static function setNewTurnRules($player, $eventCard = null)
   {
     $amountOfCardsToDraw = $eventCard ? $eventCard->getPhaseOneAmountOfCardsToDraw() : 2;
-    $rules = $eventCard ? $eventCard->getPhaseOneRules() : [];
+    $defaultRules = (new AbstractEventCard())->getPhaseOneRules();
+    $rules = $eventCard ? $eventCard->getPhaseOneRules() : $defaultRules;
     $rules = array_merge($rules, $player->getPhaseOneRules($amountOfCardsToDraw, $rules[RULE_ABILITY_AVAILABLE] ?? true));
-
     $rules = array_merge(['player_id' => $player->getId()], $rules);
     $query = array_map(function ($value) {
       return is_bool($value) ? (int) $value : $value;
