@@ -356,9 +356,11 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function loseLife($amount = 1)
   {
-    $this->hp -= $amount;
-    $this->save();
-    Notifications::lostLife($this, $amount);
+    if ($this->hp > 0) {
+      $this->hp -= $amount;
+      $this->save();
+      Notifications::lostLife($this, $amount);
+    }
     $this->addRevivalAtomOrEliminate();
   }
 
