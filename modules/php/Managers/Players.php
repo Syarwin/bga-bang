@@ -239,7 +239,7 @@ class Players extends \BANG\Helpers\DB_Manager
     // backward compatibility from XX/XX/2022
     $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_unconscious\'')->num_rows === 1;
     $eliminatedField = $newSchema ? 'player_unconscious' : 'player_eliminated';
-    return self::DB()->where($eliminatedField, 0);
+    return self::DB()->whereIn($eliminatedField, [0, 2]);
   }
 
   public static function countRoles($roles)
