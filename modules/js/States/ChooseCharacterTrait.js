@@ -21,6 +21,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         openAnimation: true,
         openAnimationTarget: 'buttonShowCharacters',
         contentsTpl: jstpl_dialog,
+        destroyCallback: this.removeDialog.bind(this),
       });
       args._private.characters.forEach((card) => this.addCharacterCard(card));
       $('dialog-title-container').innerHTML = $('pagemaintitletext').innerHTML;
