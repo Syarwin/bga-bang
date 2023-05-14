@@ -13,12 +13,10 @@ class GameOptions
   public static function getExpansions()
   {
     switch ((int) banghighnoon::get()->getGameStateValue('optionExpansions')) {
-      case OPTION_BASE_GAME:
-        return [];
       case OPTION_HIGH_NOON_ONLY:
         return [HIGH_NOON];
       default:
-        return null;
+        return [];
     }
   }
 

@@ -60,8 +60,7 @@ class Player extends \BANG\Helpers\DB_Manager
       $this->character = (int)$row['player_character'];
       // backward compatibilty from 15/10/2022
       $this->altCharacter = isset($row['player_alt_character']) ? (int) $row['player_alt_character'] : -1;
-      // backward compatibility from XX/XX/2022
-      $this->livingStatus = isset($row['player_unconscious']) ? (int) $row['player_unconscious'] : $this->eliminated;
+      $this->livingStatus = (int) $row['player_unconscious'];
       $this->agreedToDisclaimer = isset($row['player_agreed_to_disclaimer']) ? (int) $row['player_agreed_to_disclaimer'] === 1 : null;
     }
   }
@@ -249,9 +248,7 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function save($eliminate = false)
   {
-    // backward compatibility from XX/XX/2022
-    $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_unconscious\'')->num_rows === 1;
-    $unconsciousStatus = $eliminate && $newSchema ? ', `player_unconscious` = 1' : '';
+    $unconsciousStatus = $eliminate ? ', `player_unconscious` = 1' : '';
     self::DbQuery("UPDATE player SET `player_hp` = {$this->hp}{$unconsciousStatus} WHERE `player_id` = {$this->id}");
   }
 

@@ -33,6 +33,7 @@ spl_autoload_register($swdNamespaceAutoload, true, true);
 require_once APP_GAMEMODULE_PATH . 'module/table/table.game.php';
 
 use BANG\Core\Globals;
+use BANG\Core\Log;
 use BANG\Helpers\GameOptions;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
@@ -192,8 +193,44 @@ class banghighnoon extends Table
    *  - int $from_version : current version of this game database, in numerical form.
    *      For example, if the game was running with a release of your game named "140430-1345", $from_version is equal to 1404301345
    */
-  public function upgradeTableDb($from_version)
-  {
+    function upgradeTableDb($from_version)
+    {
+      if( $from_version <= 2303261108 ) {
+        $sql = 'CREATE TABLE IF NOT EXISTS DBPREFIX_rules (
+          `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+          `player_id` int(11) NOT NULL,
+          `phase_one_amount_to_draw_beginning` int(1) NOT NULL,
+          `phase_one_player_ability_draw` int(1) NOT NULL,
+          `phase_one_amount_to_draw_end` int(1) NOT NULL,
+          `ability_available` int(1) NOT NULL,
+          `beer_availability` int(1) NOT NULL,
+          `bangs_amount_left` int(1) NOT NULL,
+          PRIMARY KEY (`id`)
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
+        self::applyDbUpgradeToAllDB($sql);
+
+        $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_unconscious\'')->num_rows === 1;
+        if (!$newSchema) {
+          $sql = "ALTER TABLE `player` ADD `player_unconscious` TINYINT NOT NULL;";
+          self::applyDbUpgradeToAllDB($sql);
+          $sql = "UPDATE `player` SET `player_unconscious`=`player_eliminated`;";
+          self::applyDbUpgradeToAllDB($sql);
+        }
+
+        $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_agreed_to_disclaimer\'')->num_rows === 1;
+        if (!$newSchema) {
+          $sql = "ALTER TABLE `player` ADD `player_agreed_to_disclaimer` TINYINT NOT NULL;";
+          self::applyDbUpgradeToAllDB($sql);
+          $sql = "UPDATE `player` SET `player_agreed_to_disclaimer` = true;";
+          self::applyDbUpgradeToAllDB($sql);
+        }
+
+        $player = Players::getActive();
+        $playerId = $player->getId();
+        $bangsLeft = is_null(Log::getLastAction('bangPlayed', $playerId)) ? '1' : '0';
+        $sql = "INSERT INTO `rules` (`player_id`, `ability_available`, `beer_availability`, `bangs_amount_left`, `phase_one_amount_to_draw_beginning`, `phase_one_player_ability_draw`, `phase_one_amount_to_draw_end`) VALUES('". $playerId ."','1','1','". $bangsLeft ."','2','0','0');";
+        self::applyDbUpgradeToAllDB($sql);
+      }
   }
 
   /////////////////////////////////////////////////////////////

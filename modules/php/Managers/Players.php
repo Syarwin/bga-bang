@@ -236,10 +236,7 @@ class Players extends \BANG\Helpers\DB_Manager
    ****************************/
   protected static function qFilterLiving()
   {
-    // backward compatibility from XX/XX/2022
-    $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_unconscious\'')->num_rows === 1;
-    $eliminatedField = $newSchema ? 'player_unconscious' : 'player_eliminated';
-    return self::DB()->whereIn($eliminatedField, [0, 2]);
+    return self::DB()->whereIn('player_unconscious', [0, 2]);
   }
 
   public static function countRoles($roles)
@@ -374,12 +371,10 @@ class Players extends \BANG\Helpers\DB_Manager
    */
   public static function getNotAgreedToDisclaimerList()
   {
-    // backward compatibility from XX/XX/2022
-    $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_agreed_to_disclaimer\'')->num_rows === 1;
     $notAgreedToDisclaimer = self::getLivingPlayers()->map(function ($player) {
       return !$player->isAgreedToDisclaimer();
     });
-    return $newSchema ? array_keys(array_filter($notAgreedToDisclaimer->toAssoc(), 'strlen')) : [];
+    return array_keys(array_filter($notAgreedToDisclaimer->toAssoc(), 'strlen'));
   }
 
   /***********************
