@@ -18,11 +18,22 @@ var jstpl_hand = `<div id="hand">
 
 var jstpl_table = `<div id="table">
 	<div id="table-container">
-		<div id="deck">\${deck}</div>
-		<div id="discard"></div>
+	    <div class="cards-row">
+            <div id="deck">
+              <span class="deckCount" id="mainDeckCount">\${deckCount}</span>
+            </div>
+            <div id="discard"></div>
+	    </div>
 	</div>
 </div>
 `;
+
+var jstpl_events_row = `<div class="cards-row">
+    <div id="eventNext">
+        <span class="deckCount" id="eventsDeckCount">\${eventsDeckCount}</span>
+    </div>
+    <div id="eventActive"></div>
+</div>`
 
 var jstpl_player_board_data = `<div class='bang-player-board' id="bang-player-board-\${id}" data-max-bullets="\${bullets}" data-bullets="\${hp}" data-hand="\${handCount}">
   <ul class='player-bullets'>
@@ -152,8 +163,16 @@ var jstpl_card = `<div class="bang-card \${flipped} \${extraClass}" id="bang-car
 		<div class="card-background"></div>
 		<div class="card-copy">
 			<span class="card-copy-value">\${value}</span>
-			<span class="card-copy-color" data-color="\${color}"></span>
+			<span class="card-copy-color" data-color="\${color}" data-color-override="\${colorOverride}"></span>
+			<span class="card-copy-color-override" data-color="\${color}" data-color-override="\${colorOverride}"></span>
 		</div>
+	</div>
+</div>`;
+
+var jstpl_eventCard = `<div class="bang-card \${extraClass} event" id="bang-card-\${uid}" data-id="\${id}" data-type="\${type}">
+	<div class="card-front">
+		<div class="card-name">\${name}</div>
+	    <div class="card-background"></div>
 	</div>
 </div>`;
 
@@ -166,8 +185,23 @@ var jstpl_cardTooltip = `<div class="bang-card-tooltip">
 				<div class="card-background"></div>
 				<div class="card-copy">
 					<span class="card-copy-value">\${value}</span>
-					<span class="card-copy-color" data-color="\${color}"></span>
+                    <span class="card-copy-color" data-color="\${color}" data-color-override="\${colorOverride}"></span>
+                    <span class="card-copy-color-override" data-color="\${color}" data-color-override="\${colorOverride}"></span>
 				</div>
+			</div>
+		</div>
+	</div>
+	<p>
+	\${text}
+	</p>
+</div>`;
+
+var jstpl_eventCardTooltip = `<div class="bang-card-tooltip">
+	<div class="bang-card-tooltip-sizing">
+		<div class="bang-card event" id="bang-card-tooltip-\${id}" data-type="\${type}">
+			<div class="card-front">
+				<div class="card-name">\${name}</div>
+				<div class="card-background"></div>
 			</div>
 		</div>
 	</div>
@@ -213,6 +247,21 @@ var jstpl_configPlayerBoard = `
   </div>
 </div>
 `;
+
+var jstpl_noEvents = `
+<div id="noEvents">
+  <div id="xIcon">
+      <svg fill="#000000" id="xIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460.775 460.775" xml:space="preserve">
+          <path d="M285.08,230.397L456.218,59.27c6.076-6.077,6.076-15.911,0-21.986L423.511,4.565c-2.913-2.911-6.866-4.55-10.992-4.55
+  c-4.127,0-8.08,1.639-10.993,4.55l-171.138,171.14L59.25,4.565c-2.913-2.911-6.866-4.55-10.993-4.55
+  c-4.126,0-8.08,1.639-10.992,4.55L4.558,37.284c-6.077,6.075-6.077,15.909,0,21.986l171.138,171.128L4.575,401.505
+  c-6.074,6.077-6.074,15.911,0,21.986l32.709,32.719c2.911,2.911,6.865,4.55,10.992,4.55c4.127,0,8.08-1.639,10.994-4.55
+  l171.117-171.12l171.118,171.12c2.913,2.911,6.866,4.55,10.993,4.55c4.128,0,8.081-1.639,10.992-4.55l32.709-32.719
+  c6.074-6.075,6.074-15.909,0-21.986L285.08,230.397z"/>
+      </svg>
+  </div>
+  <div id="noEventsLexeme">\${noEventsLexeme}</div>
+</div>`;
 </script>
 
 {OVERALL_GAME_FOOTER}

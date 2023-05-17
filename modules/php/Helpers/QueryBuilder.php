@@ -130,14 +130,13 @@ class QueryBuilder extends \APP_DbObject
    */
   public function select($columns)
   {
+    if (!is_array($columns)) {
+      $columns = [$columns];
+    }
     $cols = ["{$this->primary} AS `result_associative_index`"];
 
-    if (!is_array($columns)) {
-      $cols = [$columns];
-    } else {
-      foreach ($columns as $alias => $col) {
-        $cols[] = is_numeric($alias) ? "$col" : "$col AS `$alias`";
-      }
+    foreach ($columns as $alias => $col) {
+      $cols[] = is_numeric($alias) ? "$col" : "$col AS `$alias`";
     }
 
     $this->columns = implode(' , ', $cols);
@@ -406,13 +405,6 @@ class Collection extends \ArrayObject
     return new Collection(array_filter($this->toAssoc(), $func));
   }
 
-  public function ui()
-  {
-    return $this->map(function ($elem) {
-      return $elem->getUiData();
-    });
-  }
-
   public function contains($value)
   {
     return in_array($value, $this->toArray());
@@ -421,5 +413,15 @@ class Collection extends \ArrayObject
   public function count()
   {
     return count($this->getArrayCopy());
+  }
+
+  /**
+   * @return Collection
+   */
+  public function push($element)
+  {
+    $current = $this->toAssoc();
+    $current[$element->getId()] = $element;
+    return new Collection($current);
   }
 }

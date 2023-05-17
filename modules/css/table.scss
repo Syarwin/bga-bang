@@ -4,17 +4,26 @@ div#board {
 
     #table-container {
       width:2*$cardW + 30px;
-      height:$cardH + 15px;
       background-color:$transparentWhite;
-      border-radius:5px;
+      border-radius:10px;
       border:1px solid $darkgray;
       box-shadow: 1px 1px 5px $darkgray;
-      display:flex;
-      flex-flow:row;
+      display: flex;
+      flex-flow: column;
       align-items: center;
       justify-content: space-around;
 
-      #deck, #discard {
+      .cards-row {
+        width: 100%;
+        display:flex;
+        flex-flow:row;
+        align-items: center;
+        justify-content: space-around;
+        padding-top: 5px;
+        padding-bottom: 5px;
+      }
+
+      #deck, #discard, #eventNext, #eventActive {
         width:$cardW;
         height:$cardH;
         position:relative;
@@ -25,19 +34,19 @@ div#board {
         }
       }
 
+      #eventActive {
+        display: flex;
+      }
+
       #deck {
         background-image:url("img/cardback.jpg");
         background-size:cover;
         background-position: center center;
         border-radius:7px;
-        font-size:30px;
-        text-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white;
         display:flex;
-        align-items: center;
-        justify-content: center;
       }
 
-      #discard div.bang-card {
+      #discard div.bang-card, #eventActive div.bang-card {
         margin:0px;
         opacity:1 !important;
         position:absolute;
@@ -45,6 +54,72 @@ div#board {
         left:0;
         transform-origin: -7% 50%;
       }
+
+      #eventNext {
+        display:flex;
+      }
+
+      #eventNext div.bang-card{
+        margin:0px;
+        position:absolute;
+        top:0;
+        left:0;
+        transform-origin: -7% 50%;
+        opacity: 0.5;
+      }
+
+      .deckCount {
+        opacity:1 !important;
+        border-radius: 50%;
+        border-width: thin;
+        border-style: solid;
+        height: max-content;
+        padding: 2px;
+        margin-left: -6.5px;
+        margin-top: -4px;
+        font-size: 12px;
+        text-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white;
+        box-shadow: 1px 1px 1px white, -1px -1px 1px white, -1px 1px 1px white, 1px -1px 1px white;
+        z-index: 2;
+        min-width: 14px;
+        text-align: center;
+      }
     }
+  }
+}
+
+div#board[data-players="2"].events #table #table-container {
+  width: 4*$cardW + 60px;
+  flex-flow: unset;
+}
+
+div#noEvents {
+  display: flex;
+  text-align: center;
+  font-family: Perdido, serif;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+div#xIcon {
+  width: 70%;
+}
+
+.grow {
+  animation-duration: 3s;
+  animation-name: grow;
+  animation-iteration-count: 1;
+}
+
+@keyframes grow {
+  0% {
+    transform: scale(1);
+  }
+  33% {
+    transform: scale(2) translateX(-25%) translateY(-25%);
+  }
+  66% {
+    transform: scale(2) translateX(-25%) translateY(-25%);
   }
 }

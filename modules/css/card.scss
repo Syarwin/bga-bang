@@ -30,6 +30,7 @@ div.bang-card {
 
   &.slide {
     z-index:900;
+    opacity: 1 !important;
   }
 
   &[data-type="empty"] {
@@ -85,20 +86,30 @@ div.bang-card {
     z-index:2;
   }
 
-  @each $card in $actions    { &[data-type="#{$card}"] .card-front { background-position:1 * 100% / 3 center; } }
-  @each $card in $equipments { &[data-type="#{$card}"] .card-front { background-position:2 * 100% / 3 center; } }
-  @each $card in $guns       { &[data-type="#{$card}"] .card-front { background-position:3 * 100% / 3 center; } }
+  @each $card in $actions        { &[data-type="#{$card}"] .card-front { background-position:1 * 100% / 5 center; } }
+  @each $card in $equipments     { &[data-type="#{$card}"] .card-front { background-position:2 * 100% / 5 center; } }
+  @each $card in $guns           { &[data-type="#{$card}"] .card-front { background-position:3 * 100% / 5 center; } }
+  @each $card in $highNoonEvents { &[data-type="#{$card}"] .card-front { background-position:4 * 100% / 5 center; } }
+  @each $card in $fistfulEvents  { &[data-type="#{$card}"] .card-front { background-position:5 * 100% / 5 center; } }
 
   @for $i from 0 through $numberOfCards {
     &[data-type="#{$i}"] .card-background {
       background-position-x: ($i % 6) * 100% / 5;
-      background-position-y: (($i - ($i % 6)) / 6) * 100% / 3;
+      background-position-y: (($i - ($i % 6)) / 6) * 100% / 6;
+    }
+  }
+
+  @for $k from 0 through $numberOfEvents {
+    &[data-type="#{$k + 100}"] .card-background {
+      background-position-x: ($k % 5) * 100% / 5;
+      background-position-y: ((($k - ($k % 5)) / 5) * 100% / 6) + 100% / 6 * 4;
     }
   }
 
   .card-front {
     background-image:url("img/card_borders.png");
     background-size:cover;
+    border-radius: 6px;
 
     .card-name {
     	position:absolute;
@@ -107,11 +118,18 @@ div.bang-card {
     	height: $cardH / 5;
     	text-align: center;
     	font-family: "Perdido";
-    	font-size: $cardH * 17 / 200;
+    	font-size: $cardH * 15 / 200;
       letter-spacing: -1px;
       transform: scale(0.8,1.3);
       transform-origin: top center;
       text-transform: uppercase;
+    }
+
+    //TODO: remove when event graphics are available
+    .card-description {
+      font-size: 12px;
+      text-align: center;
+      margin: 60px 5px;
     }
 
     .card-background {
@@ -119,9 +137,9 @@ div.bang-card {
     	top: $cardH * 42 / 200;
     	left: $cardW * 10 / 125;
     	width: $cardW * 105 / 125;
-    	height: $cardH * 149 / 200;
+    	height: $cardH * 145 / 200;
     	background-image:url("img/card_backgrounds.jpg");
-    	background-size:600% 400%;
+    	background-size:600% 700%;
     }
 
     .card-copy {
@@ -136,29 +154,68 @@ div.bang-card {
       }
     }
   }
+
+  &.event {
+    .card-name {
+      top: 18 * $cardH / 200;
+      z-index: 1;
+    }
+
+    .card-background {
+      top: $cardH * 30 / 200;
+      left: $cardW * 13 / 125;
+      width: $cardW * 100 / 125;
+      height: $cardH * 145 / 200;
+    }
+  }
 }
 
-.card-copy-color::before {
+.card-copy-color {
+  font-size:$cardH / 8;
+  display: inline-grid;
+}
+.card-copy-color-override {
   font-size:$cardH / 8;
 }
-#logs_wrap .card-copy-color::before {
-  font-size:17px;
-  margin-left:1px;
+
+#logs_wrap {
+  .card-copy-color,.card-color-override {
+    font-size: 17px;
+    margin-left: 1px;
+  }
+  .card-copy-color::after{
+    left: 1.5px;
+  }
 }
 
-.card-copy-color[data-color="D"]::before {
-  content:"♦";
-  color:red;
+.card-copy-color::after {
+  grid-row: 1;
+  grid-column: 1;
+  position: relative;
+  left: 2.5px;
+  color: black;
+  text-shadow: -1px -1px 2px white;
 }
-.card-copy-color[data-color="H"]::before {
-  content:"♥";
-  color:red;
+.card-copy-color::before {
+  grid-row: 1;
+  grid-column: 1;
 }
-.card-copy-color[data-color="S"]::before {
-  content:"♠";
-  color:black;
-}
-.card-copy-color[data-color="C"]::before {
-  content:"♣";
-  color:black;
+
+@each $suitChar, $suit in $suits {
+  $color: map-get($suit,'color');
+  $icon: map-get($suit,'icon');
+
+  .card-copy-color[data-color=#{$suitChar}]::before {
+    content:$icon;
+    color:$color;
+  }
+
+  .card-copy-color[data-color=#{$suitChar}]:not([data-color-override=#{$suitChar}]):not([data-color-override=""])::after {
+    content: "/";
+  }
+
+  .card-copy-color-override[data-color-override=#{$suitChar}]:not([data-color=#{$suitChar}])::before {
+    content:$icon;
+    color:$color;
+  }
 }

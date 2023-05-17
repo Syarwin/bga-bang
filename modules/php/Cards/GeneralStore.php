@@ -15,6 +15,7 @@ class GeneralStore extends \BANG\Models\BrownCard
     $this->symbols = [[clienttranslate('Reveal as many card as players. Each player draws one.')]];
     $this->copies = [
       BASE_GAME => ['9C', 'QS'],
+      HIGH_NOON => [],
       DODGE_CITY => [],
     ];
     $this->effect = ['type' => OTHER];
@@ -23,7 +24,7 @@ class GeneralStore extends \BANG\Models\BrownCard
   public function play($player, $args)
   {
     parent::play($player, $args);
-    $players = Players::getLivingPlayersStartingWith($player);
+    $players = Players::getLivingPlayerIdsStartingWith($player);
     Cards::drawForLocation(LOCATION_SELECTION, count($players));
     $player->prepareSelection($this, $players, false, 1);
   }

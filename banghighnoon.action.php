@@ -8,7 +8,7 @@
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
  * -----
  *
- * bang.action.php
+ * banghighnoon.action.php
  *
  * bang main action entry point
  *
@@ -21,7 +21,7 @@
  *
  */
 
-class action_bang extends APP_GameAction
+class action_banghighnoon extends APP_GameAction
 {
   // Constructor: please do not modify
   public function __default()
@@ -30,7 +30,7 @@ class action_bang extends APP_GameAction
       $this->view = 'common_notifwindow';
       $this->viewArgs['table'] = self::getArg('table', AT_posint, true);
     } else {
-      $this->view = 'bang_bang';
+      $this->view = 'banghighnoon_banghighnoon';
       self::trace('Complete reinitialization of board game');
     }
   }
@@ -165,6 +165,21 @@ class action_bang extends APP_GameAction
     $value = self::getArg('value', AT_posint, false);
     $silent = self::getArg('silent', AT_bool, false);
     $this->game->changePreference($pref, $value, $silent);
+    self::ajaxResponse();
+  }
+
+  public function actDiscardBlue()
+  {
+    self::setAjaxMode();
+    $card = (int) self::getArg('card', AT_posint, false);
+    $this->game->actDiscardBlue($card);
+    self::ajaxResponse();
+  }
+
+  public function actAgreedToDisclaimer()
+  {
+    self::setAjaxMode();
+    $this->game->actAgreedToDisclaimer();
     self::ajaxResponse();
   }
 }

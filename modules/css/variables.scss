@@ -4,12 +4,21 @@ $darkgray: rgba(50,50,50, 0.8);
 $numberOfSymbols:15;
 $numberOfCharacters:15;
 $numberOfCards:21;
+$numberOfEvents:12;
 $guns: 0,1,2,3,4;
 $actions: 5,6,7,8,9,10,11,12,13,14,15,16;
 $equipments: 17,18,19,20,21;
+$highNoonEvents: 100,101,102,103,104,105,106,107,108,109,110,111,112;
+$fistfulEvents: 113,114,115,116,117,118,119,120,121,122,123,124,125,126,127;
 $cardH: 170px;
 $cardW: $cardH / 200 * 125;
 
+$suits:(
+  'C':('icon':'♣','color':black),
+  'D':('icon':'♦','color':red),
+  'H':('icon':'♥','color':red),
+  'S':('icon':'♠','color':black)
+);
 
 $layoutBig:(
   2:(
@@ -62,13 +71,13 @@ $layoutBig:(
 
 $layoutSmall:(
   2:(
-    "table":("col" : 8, "row" : 2, "align" : center),
-    0:("col" : 2, "row" : 2, "align": left),
-    1:("col" : 4, "row" : 4, "align": center),
+    "table":("col" : 5, "row" : 2, "align" : center),
+    0:("col" : 4, "row" : 1, "align": left),
+    1:("col" : 4, "row" : 3, "align": center),
   ),
   3:(
     "table":("col" : 8, "row" : 2, "align" : right),
-    0:("col" : 2, "row" : 2, "align": left),
+    0:("col" : 1, "row" : 2, "align": left),
     1:("col" : 7, "row" : 4, "align": right),
     2:("col" : 1, "row" : 4, "align": left),
   ),

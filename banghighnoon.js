@@ -15,8 +15,8 @@
  *
  */
 
-//# sourceURL=bang.js
-//@ sourceURL=bang.js
+//# sourceURL=banghighnoon.js
+//@ sourceURL=banghighnoon.js
 var isDebug = window.location.host == 'studio.boardgamearena.com' || window.location.hash.indexOf('debug') > -1;
 var debug = isDebug ? console.info.bind(window.console) : function () {};
 define([
@@ -26,20 +26,25 @@ define([
   'ebg/counter',
   g_gamethemeurl + 'modules/js/Game/game.js',
   g_gamethemeurl + 'modules/js/Game/modal.js',
+  g_gamethemeurl + 'modules/js/Game/infDialog.js',
+  g_gamethemeurl + 'modules/js/Game/dialogManager.js',
 
   g_gamethemeurl + 'modules/js/States/PlayCardTrait.js',
   g_gamethemeurl + 'modules/js/States/ReactTrait.js',
   g_gamethemeurl + 'modules/js/States/SelectCardTrait.js',
   g_gamethemeurl + 'modules/js/States/ChooseCharacterTrait.js',
   g_gamethemeurl + 'modules/js/States/DiscardEndOfTurnTrait.js',
+  g_gamethemeurl + 'modules/js/States/DiscardBlueCardTrait.js',
 
+  g_gamethemeurl + 'modules/js/EventTrait.js',
   g_gamethemeurl + 'modules/js/CardTrait.js',
   g_gamethemeurl + 'modules/js/PlayerTrait.js',
 ], function (dojo, declare) {
   return declare(
-    'bgagame.bang',
+    'bgagame.banghighnoon',
     [
       customgame.game,
+      bang.informationdialog,
       bang.playCardTrait,
       bang.reactTrait,
       bang.selectCardTrait,
@@ -47,6 +52,9 @@ define([
       bang.discardEndOfTurnTrait,
       bang.playerTrait,
       bang.cardTrait,
+      bang.discardBlueCardTrait,
+      bang.eventTrait,
+      bang.dialogManager,
     ],
     {
       /*
@@ -60,7 +68,7 @@ define([
         this._selectedPlayer = null;
         this._selectedOptionType = null;
         this._selectedOptionArg = null;
-        this._dial = null;
+        this._dial = {};
 
         // States that need the player to be active to be entered
         this._activeStates = [
@@ -143,8 +151,19 @@ define([
         });
 
         // Adding deck/discard
-        dojo.place(this.format_block('jstpl_table', { deck: gamedatas.deck }), 'board');
-        if (gamedatas.discard) this.addCard(gamedatas.discard, 'discard');
+        dojo.place(this.format_block('jstpl_table', { deckCount: gamedatas.deckCount }), 'board');
+        // Adding events cards
+        if (gamedatas.eventsDeckCount !== undefined) {
+          dojo.place(this.format_block('jstpl_events_row', { eventsDeckCount: gamedatas.eventsDeckCount }), 'table-container');
+          dojo.place(this.format_block('jstpl_noEvents', { noEventsLexeme: _('No active events') }), 'eventActive');
+          dojo.addClass('board', 'events');
+        }
+        if (gamedatas.discard) {
+          // gamedatas.discard.extraClass = ' '; //empty space is important
+          this.addCard(gamedatas.discard, 'discard');
+        }
+        if (gamedatas.eventActive) this.addEventCard(gamedatas.eventActive, 'eventActive');
+        if (gamedatas.eventNext) this.addEventCard(gamedatas.eventNext, 'eventNext');
         dojo.connect($('deck'), 'onclick', () => this.onClickDeck());
         dojo.connect($('discard'), 'onclick', () => this.onClickDiscard());
 
@@ -156,6 +175,10 @@ define([
         // Make the current player stand out
         if (gamedatas.gamestate.name !== 'chooseCharacter') {
           this.updateCurrentTurnPlayer(gamedatas.playerTurn);
+        }
+        if (gamedatas.notAgreedToDisclaimer && gamedatas.notAgreedToDisclaimer.includes(this.player_id)) {
+          const iAgreeButtonId = this.showGhostTownDisclaimer();
+          dojo.connect($(iAgreeButtonId), 'onclick', () => this.onClickAgreeToDisclaimer());
         }
       },
 
@@ -360,6 +383,11 @@ define([
 
       onClickDraw: function (arg) {
         this.takeAction('actDraw', { selected: arg });
+      },
+
+      onClickAgreeToDisclaimer() {
+        this.takeAction('actAgreedToDisclaimer', { lock: false }, false, false);
+        this.removeDialog('ghostTown');
       },
 
       setupInfoPanel() {

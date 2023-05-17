@@ -5,6 +5,7 @@ use BANG\Core\Globals;
 use BANG\Core\Stack;
 use BANG\Managers\Cards;
 use BANG\Managers\Players;
+use BANG\Managers\Rules;
 
 class ElGringo extends \BANG\Models\Player
 {
@@ -24,31 +25,32 @@ class ElGringo extends \BANG\Models\Player
   public function loseLife($amount = 1)
   {
     parent::loseLife($amount);
-
-    $attackerId = Players::getCurrentTurn()->getId();
-    if ($attackerId != $this->id) {
-      $attackerCharacter = Players::get($attackerId)->getCharacter();
-      $attackerIndex = Stack::getFirstIndex(['state' => ST_TRIGGER_ABILITY,
-        'pId' => $attackerId
-      ]);
-      // This is for a specific case when El Gringo loses the Duel and needs to get a card from Suzy AFTER she gets it
-      if ($attackerCharacter === SUZY_LAFAYETTE && $attackerIndex > -1) {
-        Stack::insertAfter(Stack::newAtom(ST_TRIGGER_ABILITY, [
-          'pId' => $this->id,
-          'amount' => $amount,
-        ]), $attackerIndex + 1);
-      } else {
-        Stack::insertAfterCardResolution(Stack::newAtom(ST_TRIGGER_ABILITY, [
-          'pId' => $this->id,
-          'amount' => $amount,
-        ]));
+    if (Rules::isAbilityAvailable()) {
+      $attackerId = Rules::getCurrentPlayerId();
+      if ($attackerId != $this->id) {
+        $attackerCharacter = Players::get($attackerId)->getCharacter();
+        $attackerIndex = Stack::getFirstIndex(['state' => ST_TRIGGER_ABILITY,
+          'pId' => $attackerId
+        ]);
+        // This is for a specific case when El Gringo loses the Duel and needs to get a card from Suzy AFTER she gets it
+        if ($attackerCharacter === SUZY_LAFAYETTE && $attackerIndex > -1) {
+          Stack::insertAfter(Stack::newAtom(ST_TRIGGER_ABILITY, [
+            'pId' => $this->id,
+            'amount' => $amount,
+          ]), $attackerIndex + 1);
+        } else {
+          Stack::insertAfterCardResolution(Stack::newAtom(ST_TRIGGER_ABILITY, [
+            'pId' => $this->id,
+            'amount' => $amount,
+          ]));
+        }
       }
     }
   }
 
   public function useAbility($ctx)
   {
-    $attacker = Players::getCurrentTurn();
+    $attacker = Players::get(Rules::getCurrentPlayerId());
     for ($i = 0; $i < $ctx['amount']; $i++) {
       $card = $attacker->getRandomCardInHand(false);
       if ($card === null) {

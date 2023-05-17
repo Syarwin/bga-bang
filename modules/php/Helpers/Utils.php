@@ -1,6 +1,6 @@
 <?php
 namespace BANG\Helpers;
-use bang;
+use banghighnoon;
 
 abstract class Utils
 {
@@ -30,14 +30,14 @@ abstract class Utils
 
   public static function getStateName()
   {
-    return bang::get()->gamestate->state()['name'];
+    return banghighnoon::get()->gamestate->state()['name'];
   }
 
-  public function getCopyValue($copy)
+  public static function getCopyValue($copy)
   {
     return substr($copy, 0, -1);
   }
-  public function getCopyColor($copy)
+  public static function getCopyColor($copy)
   {
     return substr($copy, -1);
   }

@@ -12,6 +12,7 @@ class Remington extends \BANG\Models\WeaponCard
     $this->symbols = [[SYMBOL_RANGE3]];
     $this->copies = [
       BASE_GAME => ['KC'],
+      HIGH_NOON => [],
       DODGE_CITY => [],
     ];
     $this->effect = [

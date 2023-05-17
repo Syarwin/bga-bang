@@ -1,6 +1,7 @@
 <?php
 namespace BANG\Characters;
 use BANG\Core\Stack;
+use BANG\Managers\Rules;
 
 class BartCassidy extends \BANG\Models\Player
 {
@@ -16,10 +17,12 @@ class BartCassidy extends \BANG\Models\Player
   public function loseLife($amount = 1)
   {
     parent::loseLife($amount);
-    Stack::insertAfterCardResolution(Stack::newAtom(ST_TRIGGER_ABILITY, [
-      'pId' => $this->id,
-      'amount' => $amount,
-    ]));
+    if (Rules::isAbilityAvailable()) {
+      Stack::insertAfterCardResolution(Stack::newAtom(ST_TRIGGER_ABILITY, [
+        'pId' => $this->id,
+        'amount' => $amount,
+      ]), false);
+    }
   }
 
   public function useAbility($ctx)

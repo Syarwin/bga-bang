@@ -1,6 +1,8 @@
 <?php
 namespace BANG\Characters;
 
+use BANG\Managers\Rules;
+
 class RoseDoolan extends \BANG\Models\Player
 {
   public function __construct($row = null)
@@ -14,14 +16,20 @@ class RoseDoolan extends \BANG\Models\Player
 
   public function isInRange($enemy, $range)
   {
-    return parent::isInRange($enemy, $range + 1);
+    if (Rules::isAbilityAvailable()) {
+      return parent::isInRange($enemy, $range + 1);
+    } else {
+      return parent::isInRange($enemy, $range);
+    }
   }
 
   public function getDistances()
   {
     $dist = parent::getDistances();
-    foreach ($dist as $pId => &$d) {
-      $d--;
+    if (Rules::isAbilityAvailable()) {
+      foreach ($dist as $pId => &$d) {
+        $d--;
+      }
     }
     return $dist;
   }

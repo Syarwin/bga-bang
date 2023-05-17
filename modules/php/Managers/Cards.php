@@ -180,7 +180,7 @@ class Cards extends \BANG\Helpers\Pieces
 
   public static function getSelection()
   {
-    return self::getInLocation(LOCATION_SELECTION);
+    return self::getInLocation(LOCATION_SELECTION, null, 'state');
   }
 
   public static function putOnDeck($cId)

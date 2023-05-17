@@ -14,6 +14,7 @@ class Gatling extends BangActionCard
     $this->symbols = [[SYMBOL_BANG, SYMBOL_OTHER]];
     $this->copies = [
       BASE_GAME => ['10H'],
+      HIGH_NOON => [],
       DODGE_CITY => [],
     ];
     $this->effect = [

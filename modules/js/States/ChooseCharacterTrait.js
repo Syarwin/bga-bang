@@ -14,21 +14,21 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
     dialogChooseCharacter() {
       var args = this.gamedatas.gamestate.args;
-      this._dial = new customgame.modal('selectCard', {
-        autoShow: true,
+      this.addAndShowDialog('chooseCharacter', 'modal', 20, {
         title: _('Choose a character'),
         class: 'bang_popin',
         closeIcon: 'fa-times',
         openAnimation: true,
         openAnimationTarget: 'buttonShowCharacters',
         contentsTpl: jstpl_dialog,
+        destroyCallback: this.removeDialog.bind(this),
       });
       args._private.characters.forEach((card) => this.addCharacterCard(card));
       $('dialog-title-container').innerHTML = $('pagemaintitletext').innerHTML;
     },
 
     onClickConfirmCharacter(characterId) {
-      if (this._dial != null) this.destroyDialog();
+      this.removeDialog('chooseCharacter');
       this.clearActionButtons();
       this.takeAction('actChooseCharacter', {
         character: characterId,

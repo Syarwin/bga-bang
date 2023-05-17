@@ -55,7 +55,6 @@ $machinestates = [
    */
   ST_START_OF_TURN => [
     'name' => 'startOfTurn',
-    'description' => '',
     'type' => 'game',
     'action' => 'stStartOfTurn',
     'transitions' => [
@@ -68,29 +67,51 @@ $machinestates = [
    */
   ST_RESOLVE_STACK => [
     'name' => 'resolveStack',
-    'description' => '',
     'type' => 'game',
     'action' => 'stResolveStack',
     'transitions' => [],
   ],
 
-  ST_DRAW_CARDS => [
-    'name' => 'drawCards',
+  ST_PRE_PHASE_ONE => [
+    'name' => 'prePhaseOne',
+    'type' => 'game',
+    'action' => 'stPrePhaseOne',
+  ],
+
+  ST_PHASE_ONE_SETUP => [
+    'name' => 'phaseOneSetup',
+    'type' => 'game',
+    'action' => 'stPhaseOneSetup',
+  ],
+
+  ST_PHASE_ONE_DRAW_CARDS => [
+    'name' => 'phaseOneDrawCards',
+    'type' => 'game',
+    'action' => 'stPhaseOneDrawCards',
+  ],
+
+  ST_NEW_EVENT => [
+    'name' => 'newEvent',
     'description' => '',
     'type' => 'game',
-    'action' => 'stDrawCards',
+    'action' => 'stNewEvent',
+  ],
+
+  ST_RESOLVE_EVENT_EFFECT => [
+    'name' => 'resolveEventEffect',
+    'description' => '',
+    'type' => 'game',
+    'action' => 'stResolveEventEffect',
   ],
 
   ST_FLIP_CARD => [
     'name' => 'flipCard',
-    'description' => '',
     'type' => 'game',
     'action' => 'stFlipCard',
   ],
 
   ST_RESOLVE_FLIPPED => [
     'name' => 'resolveFlipped',
-    'description' => '',
     'type' => 'game',
     'action' => 'stResolveFlipped',
   ],
@@ -138,6 +159,7 @@ $machinestates = [
 
   ST_REACT_BEER => [
     'name' => 'reactBeer',
+    // TODO: Specify Sid Ketchum's ability here and in the case of The Reverend event it should reflect the options correctly
     'description' => clienttranslate('${actplayer} may play ${n} beer to survive'),
     'descriptionmyturn' => clienttranslate('${you} may play ${n} beer to survive'),
     'type' => 'activeplayer',
@@ -173,7 +195,6 @@ $machinestates = [
 
   ST_ELIMINATE => [
     'name' => 'eliminate',
-    'description' => '',
     'type' => 'game',
     'action' => 'stEliminate',
     'updateGameProgression' => true,
@@ -192,14 +213,27 @@ $machinestates = [
 
   ST_TRIGGER_ABILITY => [
     'name' => 'triggerAbility',
-    'description' => '',
     'type' => 'game',
     'action' => 'stTriggerAbility',
   ],
 
+  ST_CHOOSE_AND_DISCARD_BLUE_CARD => [
+    'name' => 'chooseAndDiscardBlueCard',
+    'description' => clienttranslate('${actplayer} must discard one blue card in front of them'),
+    'descriptionmyturn' => clienttranslate('${you} must discard one blue card in front of you'),
+    'type' => 'activeplayer',
+    'args' => 'argChooseAndDiscardBlueCard',
+    'possibleactions' => ['actDiscardBlue'],
+  ],
+
+  ST_DISCARD_BLUE_CARD => [
+    'name' => 'discardBlueCard',
+    'type' => 'game',
+    'action' => 'stDiscardBlueCard',
+  ],
+
   ST_END_OF_TURN => [
     'name' => 'endOfTurn',
-    'description' => '',
     'type' => 'game',
     'action' => 'stEndOfTurn',
     'transitions' => [
@@ -209,7 +243,6 @@ $machinestates = [
 
   ST_NEXT_PLAYER => [
     'name' => 'nextPlayer',
-    'description' => '',
     'type' => 'game',
     'action' => 'stNextPlayer',
     'transitions' => [

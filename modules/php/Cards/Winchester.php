@@ -12,6 +12,7 @@ class Winchester extends \BANG\Models\WeaponCard
     $this->symbols = [[SYMBOL_RANGE5]];
     $this->copies = [
       BASE_GAME => ['8S'],
+      HIGH_NOON => [],
       DODGE_CITY => [],
     ];
     $this->effect = [

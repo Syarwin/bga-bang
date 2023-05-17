@@ -13,7 +13,8 @@ define('ST_REACT', 8);
 define('ST_REACT_BEER', 9);
 define('ST_END_OF_TURN', 11);
 define('ST_DISCARD_EXCESS', 12);
-define('ST_DRAW_CARDS', 13);
+define('ST_DRAW_CARDS', 13); // Deprecated, used for backward compatibility
+define('ST_PHASE_ONE_SETUP', 13);
 define('ST_SELECT_CARD', 15);
 define('ST_ACTIVE_DRAW_CARD', 17);
 define('ST_ELIMINATE', 16);
@@ -26,6 +27,12 @@ define('ST_PRE_ELIMINATE_DISCARD', 23);
 define('ST_PRE_CHOOSE_CHARACTER', 25);
 define('ST_CHOOSE_CHARACTER', 26);
 define('ST_CHARACTER_SETUP', 27);
+define('ST_PHASE_ONE_DRAW_CARDS', 28);
+define('ST_NEW_EVENT', 29);
+define('ST_RESOLVE_EVENT_EFFECT', 30);
+define('ST_PRE_PHASE_ONE', 31);
+define('ST_CHOOSE_AND_DISCARD_BLUE_CARD', 32);
+define('ST_DISCARD_BLUE_CARD', 33);
 define('ST_PRE_GAME_END', 98);
 define('ST_GAME_END', 99);
 
@@ -41,12 +48,27 @@ define('OPTION_CHAR_6', 106);
 define('OPTION_CHAR_7', 107);
 define('OPTION_GENERAL_STORE_LAST_CARD', 108);
 define('OPTION_CHOOSE_CHARACTERS', 110);
+define('OPTION_EXPANSIONS', 111);
+define('OPTION_HIGH_NOON_EXPANSION', 112);
 
 /*
  * Choose Characters options
  */
 define('CHARACTERS_RANDOM', 1101);
 define('CHARACTERS_CHOOSE', 1102);
+
+/*
+ * Expansions options
+ */
+define('OPTION_BASE_GAME', 1111);
+define('OPTION_HIGH_NOON_ONLY', 1112);
+
+/*
+ * High Noon options
+ */
+define('OPTION_HIGH_NOON_OFF', 1121);
+define('OPTION_HIGH_NOON_NO_GHOST_TOWN', 1122);
+define('OPTION_HIGH_NOON_WITH_GHOST_TOWN', 1123);
 
 /*
  * Options constants
@@ -58,7 +80,7 @@ define('TARGET_CARDS', 3);
 //define('RANDOM', 1);
 
 /*
- * Extensions
+ * Expansions
  */
 define('BASE_GAME', 0);
 define('HIGH_NOON', 1);
@@ -102,6 +124,21 @@ define('CARD_WHISKY', 26);
 define('CARD_TEQUILA', 27);
 define('CARD_BRAWL', 28);
 define('CARD_RAG_TIME', 29);
+
+// Event cards
+define('CARD_BLESSING', 100);
+define('CARD_HANGOVER', 101);
+define('CARD_GHOST_TOWN', 102);
+define('CARD_GOLD_RUSH', 103);
+define('CARD_DALTONS', 104);
+define('CARD_CURSE', 105);
+define('CARD_HIGH_NOON', 106);
+define('CARD_REVEREND', 107);
+define('CARD_SERMON', 108);
+define('CARD_DOCTOR', 109);
+define('CARD_SHOOTOUT', 110);
+define('CARD_TRAIN_ARRIVAL', 111);
+define('CARD_THIRST', 112);
 
 define('PASS', 999); //has to be bigger than the maximum number of cards in the game
 
@@ -160,7 +197,12 @@ define('LIFE_POINT_MODIFIER', 4);
 define('RANGE_INCREASE', 5);
 define('RANGE_DECREASE', 6);
 define('DEFENSIVE', 7);
-define('STARTOFTURN', 9);
+
+define('EFFECT_STARTOFTURN', 100);
+define('EFFECT_INSTANT', 101);
+define('EFFECT_PERMANENT', 102);
+define('EFFECT_ENDOFTURN', 103);
+define('EFFECT_PHASE_ONE', 104);
 
 define('NONE', 0);
 define('INRANGE', 1);
@@ -203,9 +245,28 @@ define('LOCATION_INPLAY', 'inPlay');
 define('LOCATION_FLIPPED', 'flipped');
 define('LOCATION_DECK', 'deck');
 define('LOCATION_DISCARD', 'discard');
+define('LOCATION_EVENTS_DECK', 'eventDeck');
+define('LOCATION_EVENTS_DISCARD', 'eventDiscard');
 
 /*
  * Constants for General Store preference
  */
 define('GENERAL_STORE_MANUAL_CHOOSE', 0);
 define('GENERAL_STORE_AUTO_PICK', 1);
+
+/*
+ * Constants for rules
+ */
+define('RULE_PHASE_ONE_CARDS_DRAW_BEGINNING', 'phase_one_amount_to_draw_beginning');
+define('RULE_PHASE_ONE_PLAYER_ABILITY_DRAW', 'phase_one_player_ability_draw');
+define('RULE_PHASE_ONE_CARDS_DRAW_END', 'phase_one_amount_to_draw_end');
+define('RULE_ABILITY_AVAILABLE', 'ability_available');
+define('RULE_BEER_AVAILABLE', 'beer_availability');
+define('RULE_BANGS_AMOUNT_LEFT', 'bangs_amount_left');
+
+/*
+ * Constants for player's living status
+ */
+define('FULLY_ALIVE', 0);
+define('DEAD_GHOST', 1);
+define('LIVING_DEAD', 2);

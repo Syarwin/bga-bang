@@ -20,7 +20,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     slideTemporaryToDiscard(card, sourceId, duration) {
       var ocard = this.getCard(card, true);
       ocard.uid = ocard.id + 'discard';
-      ocard.extraClass = 'slide';
+      ocard.extraClass += ' slide';
       this.slideTemporary('jstpl_card', ocard, 'board', sourceId, 'discard', duration || 1000, 0).then(() => {
         var div = this.addCard(card, 'discard');
         dojo.style(div, 'zIndex', dojo.query('#discard .bang-card').length);
@@ -56,6 +56,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         flipped: ocard.flipped === undefined || !ocard.flipped ? '' : 'flipped',
         enforceTooltip: ocard.enforceTooltip === undefined ? false : ocard.enforceTooltip,
         extraClass: '',
+        colorOverride: this.gamedatas?.eventActive?.colorOverride || '',
       };
 
       if (this._cards[ocard.type]) {
@@ -79,6 +80,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         type: 'back',
         flipped: true,
         extraClass: '',
+        colorOverride: ''
       };
     },
 
@@ -132,7 +134,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
       var card = this.getCard(n.args.card, true);
       card.uid = card.id + 'slide';
-      card.extraClass = 'slide';
+      card.extraClass += ' slide';
       var sourceId = this.getCardAndDestroy(n.args.card, 'player-character-' + playerId);
       if (targetPlayer) {
         var duration = target == 'inPlay' ? animationDuration : animationDuration / 2;
@@ -154,7 +156,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
      * notification sent to all players when someone gained a card (from deck or from someone else hand/inplay)
      */
     notif_cardsGained(n) {
-      if (this._dial != null) this.destroyDialog();
+      this.removeDialog('selectCard');
 
       debug('Notif: cards gained', n);
       if (n.args.card) n.args.cards = [n.args.card];
@@ -166,7 +168,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
       cards.forEach((card, i) => {
         card.uid = card.id + 'slide';
-        card.extraClass = 'slide';
+        card.extraClass += ' slide';
         let sourceId =
           n.args.src == 'deck' ? 'deck' : this.getCardAndDestroy(card, 'player-character-' + n.args.player_id2);
         let targetId =
@@ -237,7 +239,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     },
 
     updateDeckCount(n) {
-      $('deck').innerHTML = n.args.deckCount;
+      $('mainDeckCount').innerHTML = n.args.deckCount;
     },
 
     /*
@@ -328,6 +330,24 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       }
 
       return true;
+    },
+
+    onClickCardToSelect(card, buttonName, buttonText, callback) {
+      if (!this.toggleCard(card)) return;
+
+      if (this._selectedCards.length < this._amount) {
+        this.removeActionButtons();
+        this.onUpdateActionButtons(this.gamedatas.gamestate.name, this.gamedatas.gamestate.args);
+      } else {
+        this.addActionButton(
+            buttonName,
+            buttonText,
+            callback,
+            null,
+            false,
+            'blue',
+        );
+      }
     },
   });
 });

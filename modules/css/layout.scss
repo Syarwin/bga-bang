@@ -22,7 +22,6 @@ div#board {
     align-items: center;
     grid-row-end: span 2;
     grid-column-end: span 4;
-    max-height: $cardH + 20px;
     min-height: $cardH + 20px;
     max-width: 100%;
   }

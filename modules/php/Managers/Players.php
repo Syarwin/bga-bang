@@ -3,7 +3,8 @@ namespace BANG\Managers;
 use BANG\Core\Globals;
 use BANG\Helpers\GameOptions;
 use BANG\Models\Player;
-use bang;
+use BANG\Helpers\Collection;
+use banghighnoon;
 
 /*
  * Players manager : allows to easily access players ...
@@ -13,7 +14,7 @@ class Players extends \BANG\Helpers\DB_Manager
 {
   protected static function getGame()
   {
-    return bang::get();
+    return banghighnoon::get();
   }
   protected static $table = 'player';
   protected static $primary = 'player_id';
@@ -32,7 +33,6 @@ class Players extends \BANG\Helpers\DB_Manager
   {
     // Create players
     $gameInfos = self::getGame()->getGameinfos();
-    $colors = $gameInfos['player_colors'];
     $query = self::DB()->multipleInsert([
       'player_id',
       'player_color',
@@ -99,11 +99,11 @@ class Players extends \BANG\Helpers\DB_Manager
         $sheriff = $pId;
       }
       $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, $bullets, $role, $characterId, $altCharacterId, $charChosen, 0];
-//            $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, 1, $role, $characterId, $altCharacterId, $charChosen, 0];
+//      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, 1, $role, $characterId, $altCharacterId, $charChosen, 0];
       if ($charChosen) {
         Cards::deal($pId, $bullets);
       }
-      bang::get()->initStat('player', 'role', $role, $pId);
+      banghighnoon::get()->initStat('player', 'role', $role, $pId);
       $i++;
     }
     $query->values($values);
@@ -130,22 +130,22 @@ class Players extends \BANG\Helpers\DB_Manager
   /******************************
    ******* GENERIC GETTERS *******
    ******************************/
-  public function getActiveId()
+  public static function getActiveId()
   {
     return self::getGame()->getActivePlayerId();
   }
 
-  public function getCurrentId()
+  public static function getCurrentId()
   {
     return self::getGame()->getCurrentPId();
   }
 
-  public function getAll()
+  public static function getAll()
   {
     return self::DB()->get(false);
   }
 
-  public function get($pId = null)
+  public static function get($pId = null)
   {
     $pId = $pId ?: self::getActiveId();
     return self::DB()
@@ -153,34 +153,29 @@ class Players extends \BANG\Helpers\DB_Manager
       ->getSingle();
   }
 
-  public function getActive()
+  public static function getActive()
   {
     return self::get();
   }
 
-  public function getCurrent()
+  public static function getCurrent()
   {
     return self::get(self::getCurrentId());
   }
 
-  public static function getCurrentTurn()
-  {
-    return self::get(Globals::getPIdTurn());
-  }
-
-  public function count()
+  public static function count()
   {
     return self::DB()->count();
   }
 
-  public function getUiData($pId)
+  public static function getUiData($pId)
   {
     return self::getAll()->map(function ($player) use ($pId) {
       return $player->getUiData($pId);
     });
   }
 
-  public function getDistances()
+  public static function getDistances()
   {
     return self::getLivingPlayers()->map(function ($player) {
       return $player->getDistances();
@@ -224,13 +219,13 @@ class Players extends \BANG\Helpers\DB_Manager
     return $result;
   }
 
-  public function getCharacter($cId, $row = null)
+  public static function getCharacter($cId, $row = null)
   {
     $className = 'BANG\Characters\\' . self::$classes[$cId];
     return new $className($row);
   }
 
-  public function getCharacterBullets($cId)
+  public static function getCharacterBullets($cId)
   {
     $char = self::getCharacter($cId);
     return $char->getBullets();
@@ -241,7 +236,7 @@ class Players extends \BANG\Helpers\DB_Manager
    ****************************/
   protected static function qFilterLiving()
   {
-    return self::DB()->where('player_eliminated', 0);
+    return self::DB()->whereIn('player_unconscious', [0, 2]);
   }
 
   public static function countRoles($roles)
@@ -259,9 +254,14 @@ class Players extends \BANG\Helpers\DB_Manager
     return self::countRoles([SHERIFF]) == 0 || self::countRoles([OUTLAW, RENEGADE]) == 0;
   }
 
-  public static function getSherrifId()
+  private static function getSheriffId()
   {
     return self::getUniqueValueFromDB('SELECT player_id FROM player WHERE player_role = ' . SHERIFF);
+  }
+
+  public static function getSheriff()
+  {
+    return self::get(self::getSheriffId());
   }
 
   /*
@@ -270,42 +270,111 @@ class Players extends \BANG\Helpers\DB_Manager
   public static function getPlayerPositions()
   {
     return array_flip(
-      self::getObjectListFromDB('SELECT player_id from player WHERE player_eliminated=0 ORDER BY player_no', true)
+      self::getObjectListFromDB("SELECT player_id from player WHERE player_eliminated = 0 AND player_unconscious != 1 ORDER BY player_no", true)
     );
   }
 
   /**
    * returns an array of the ids of all living players
+   * @return Collection
    */
   public static function getLivingPlayers($except = null)
   {
-    $query = self::DB()
-      ->where('player_eliminated', 0)
-      ->orderBy('player_no');
-    if ($except != null) {
-      $ids = is_array($except) ? $except : [$except];
-      $query = $query->whereNotIn('player_id', $ids);
-    }
-    return $query->get();
+    $playerIds = self::getLivingPlayerIdsStartingWith(null, false, $except);
+    return self::idsArrayToCollection($playerIds);
   }
 
-  public static function getLivingPlayersStartingWith($player, $except = null)
+  /**
+   * @return array
+   */
+  public static function getLivingPlayerIdsStartingWith($player, $includeGhosts = false, $except = null)
   {
     $and = '';
     if ($except != null) {
       $ids = is_array($except) ? $except : [$except];
       $and = " AND player_id NOT IN ('" . implode("','", $ids) . "')";
     }
-    return self::getObjectListFromDB(
-      "SELECT player_id FROM player WHERE player_eliminated = 0$and ORDER BY player_no < {$player->getNo()}, player_no",
+    $orderByPlayer = $player ? "player_no < {$player->getNo()}, " : '';
+    $includeGhostsSqlString = $includeGhosts ? '' : ' AND `player_unconscious` != 1';
+    $playerIds = self::getObjectListFromDB(
+      "SELECT player_id FROM player WHERE player_eliminated = 0{$includeGhostsSqlString}{$and} ORDER BY {$orderByPlayer}player_no",
       true
     );
+    return array_map(function ($pId) {
+      return (int) $pId;
+    }, $playerIds);
   }
 
-  public static function getNext($player)
+  /**
+   * @param Player $player
+   * @return Collection
+   */
+  public static function getLivingPlayersStartingWith($player)
   {
-    $players = self::getLivingPlayersStartingWith($player);
-    return self::get($players[1]);
+    $playerIds = self::getLivingPlayerIdsStartingWith($player);
+    return self::idsArrayToCollection($playerIds);
+  }
+
+  /**
+   * @param array $playerIds
+   * @return Collection
+   */
+  private static function idsArrayToCollection($playerIds)
+  {
+    $playersAssoc = [];
+    foreach($playerIds as $playerId) {
+      $playersAssoc[$playerId] = self::get($playerId);
+    }
+    return new Collection($playersAssoc);
+  }
+
+  /**
+   * @param Player $player
+   * @param boolean $includeGhosts
+   * @return Player
+   */
+  public static function getNextId($player, $includeGhosts = false)
+  {
+    $players = self::getLivingPlayerIdsStartingWith($player, $includeGhosts);
+    // But current player might not be alive already... Let's find them
+    $currentIndex = array_search($player->getId(), $players);
+    if (!is_int($currentIndex)) {
+      $currentIndex = -1;
+    }
+    return $players[$currentIndex + 1];
+  }
+
+  /**
+   * @param Player $player
+   * @param boolean $includeGhosts
+   * @return Player
+   */
+  public static function getNext($player, $includeGhosts = false)
+  {
+    return self::get(self::getNextId($player, $includeGhosts));
+  }
+
+  /**
+   * @param Player $player
+   * @param boolean $includeGhosts
+   * @return Player
+   */
+  public static function getPreviousId($player, $includeGhosts = false)
+  {
+    $players = self::getLivingPlayerIdsStartingWith($player, $includeGhosts);
+    return $players[count($players)-1];
+  }
+
+  /**
+   * Returns a whole list of all players who agreed to Ghost Town/resurrection possibility disclaimer
+   * @return array
+   */
+  public static function getNotAgreedToDisclaimerList()
+  {
+    $notAgreedToDisclaimer = self::getLivingPlayers()->map(function ($player) {
+      return !$player->isAgreedToDisclaimer();
+    });
+    return array_keys(array_filter($notAgreedToDisclaimer->toAssoc(), 'strlen'));
   }
 
   /***********************

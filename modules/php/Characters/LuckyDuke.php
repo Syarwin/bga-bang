@@ -3,10 +3,10 @@ namespace BANG\Characters;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
 use BANG\Managers\Cards;
+use BANG\Managers\Rules;
 
 class LuckyDuke extends \BANG\Models\Player
 {
-  private $selectedCard = null;
   public function __construct($row = null)
   {
     $this->character = LUCKY_DUKE;
@@ -25,26 +25,17 @@ class LuckyDuke extends \BANG\Models\Player
 
   public function flip($src, $missedNeeded = null)
   {
-    $cards = Cards::drawForLocation(LOCATION_SELECTION, 2);
-    foreach ($cards as $card) {
-      Notifications::flipCard($this, $card, $src);
+    if (Rules::isAbilityAvailable()) {
+      $cards = Cards::drawForLocation(LOCATION_SELECTION, 2);
+      foreach ($cards as $card) {
+        Notifications::flipCard($this, $card, $src);
+      }
+
+      Log::addAction('selection', ['players' => [$this->id], 'src' => $src->getName()]);
+      parent::addResolveFlippedAtom($src);
+      $this->prepareSelection($src, [$this->getId()], true, 1, true);
+    } else {
+      parent::flip($src);
     }
-
-    Log::addAction('selection', ['players' => [$this->id], 'src' => $src->getName()]);
-    parent::addResolveFlippedAtom($src);
-    $this->prepareSelection($src, [$this->getId()], true, 1, true);
-  }
-
-  public function useAbility($args)
-  {
-    $this->selectedCard = Cards::getCard($args['selected'][0]);
-
-    $this->discardCard(Cards::getCard($args['rest'][0]));
-    Notifications::tell(clienttranslate('${player_name} chooses ${card_name}'), [
-      'i18n' => ['card_name'],
-      'player_name' => $this->name,
-      'card_name' => $this->selectedCard->getNameAndValue(),
-    ]);
-    return Cards::getCurrentCard()->activate($this, []);
   }
 }

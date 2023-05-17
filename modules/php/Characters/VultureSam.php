@@ -2,6 +2,7 @@
 namespace BANG\Characters;
 use BANG\Core\Notifications;
 use BANG\Managers\Cards;
+use BANG\Managers\Rules;
 
 class VultureSam extends \BANG\Models\Player
 {
@@ -18,14 +19,16 @@ class VultureSam extends \BANG\Models\Player
 
   public function onPlayerPreEliminated($player)
   {
-    // TODO send a single notification?
-    foreach ($player->getHand() as $card) {
-      Cards::move($card->getId(), LOCATION_HAND, $this->id);
-      Notifications::stoleCard($this, $player, $card, false);
-    }
-    foreach ($player->getCardsInPlay() as $card) {
-      Cards::move($card->getId(), LOCATION_HAND, $this->id);
-      Notifications::stoleCard($this, $player, $card, true);
+    if (Rules::isAbilityAvailable()) {
+      // TODO send a single notification?
+      foreach ($player->getHand() as $card) {
+        Cards::move($card->getId(), LOCATION_HAND, $this->id);
+        Notifications::stoleCard($this, $player, $card, false);
+      }
+      foreach ($player->getCardsInPlay() as $card) {
+        Cards::move($card->getId(), LOCATION_HAND, $this->id);
+        Notifications::stoleCard($this, $player, $card, true);
+      }
     }
   }
 }

@@ -498,13 +498,16 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
           args.You = this.coloredYou();
 
           if (args.card_name && args.card) {
+            let colorOverride = args?.event?.colorOverride || '';
             args.card_name =
               _(args.card_name) +
               ' (' +
               args.card.value +
-              '<span class="card-copy-color" data-color="' +
-              args.card.color +
-              '"></span>)';
+              '<span class="card-copy-color" data-color="'+args.card.color+'" data-color-override="'+colorOverride+'"></span>';
+            if (colorOverride) {
+              args.card_name += '<span class="card-copy-color-override" data-color="'+args.card.color+'" data-color-override="'+colorOverride+'"></span>';
+            }
+            args.card_name += ')</span>';
           }
         }
       } catch (e) {
@@ -526,11 +529,6 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
       }
 
       return dojo.place(this[tplMethodName](object), container);
-    },
-
-    destroyDialog() {
-      this._dial.destroy();
-      this._dial = null;
     },
   });
 });

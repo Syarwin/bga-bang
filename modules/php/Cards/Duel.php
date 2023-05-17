@@ -16,6 +16,7 @@ class Duel extends \BANG\Models\BrownCard
     $this->symbols = [[$this->text]];
     $this->copies = [
       BASE_GAME => ['QD', 'JS', '8C'],
+      HIGH_NOON => [],
       DODGE_CITY => [],
     ];
     $this->effect = [

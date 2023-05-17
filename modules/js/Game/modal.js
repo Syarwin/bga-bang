@@ -7,7 +7,6 @@ define(['dojo', 'dojo/_base/declare', 'dojo/fx', 'dojox/fx/ext-dojo/complex'], f
   const CONFIG = {
     container: 'ebd-body',
     class: 'custom_popin',
-    autoShow: false,
 
     modalTpl: `
       <div id='popin_\${id}_container' class="\${class}_container">
@@ -85,14 +84,13 @@ define(['dojo', 'dojo/_base/declare', 'dojo/fx', 'dojox/fx/ext-dojo/complex'], f
       }
 
       // Create the DOM elements
-      this.create();
-      if (this.autoShow) this.show();
+      this.create(config.destroyCallback);
     },
 
     /*
      * Create : create underlay and modal div, and contents
      */
-    create() {
+    create(destroyCallback = null) {
       dojo.destroy('popin_' + this.id + '_container');
       let titleTpl = this.title == null ? '' : dojo.string.substitute(this.titleTpl, this);
       let closeIconTpl = this.closeIcon == null ? '' : dojo.string.substitute(this.closeIconTpl, this);
@@ -150,12 +148,15 @@ define(['dojo', 'dojo/_base/declare', 'dojo/fx', 'dojox/fx/ext-dojo/complex'], f
       this.resizeListener = dojo.connect(window, 'resize', () => this.adjustSize());
 
       // Connect events
+      const closeAction = () => {
+        destroyCallback ? destroyCallback(this.id) : this[this.closeAction]();
+      }
       if (this.closeIcon != null && $('popin_' + this.id + '_close')) {
-        dojo.connect($('popin_' + this.id + '_close'), 'click', () => this[this.closeAction]());
+        dojo.connect($('popin_' + this.id + '_close'), 'click', closeAction);
       }
       if (this.closeWhenClickOnUnderlay) {
-        dojo.connect($('popin_' + this.id + '_underlay'), 'click', () => this[this.closeAction]());
-        dojo.connect($('popin_' + this.id + '_wrapper'), 'click', () => this[this.closeAction]());
+        dojo.connect($('popin_' + this.id + '_underlay'), 'click', closeAction);
+        dojo.connect($('popin_' + this.id + '_wrapper'), 'click', closeAction);
         dojo.connect($('popin_' + this.id), 'click', (evt) => evt.stopPropagation());
       }
     },
@@ -318,32 +319,6 @@ define(['dojo', 'dojo/_base/declare', 'dojo/fx', 'dojox/fx/ext-dojo/complex'], f
         this._runningAnimation = dojo.fx.combine(animations);
         dojo.connect(this._runningAnimation, 'onEnd', () => resolve());
         this._runningAnimation.play();
-      });
-    },
-
-    /*
-     * Hide : hide the modal without destroying it
-     */
-    hide() {
-      if (this._isClosing) return;
-
-      this._isClosing = true;
-      this._isOpening = false;
-      this.fadeOutAnimation().then(() => {
-        if(!this._isClosing || this._isOpening)
-          return;
-        this._isClosing = false;
-        this._open = false;
-
-        dojo.style('popin_' + this.id + '_container', 'display', 'none');
-
-        if (this.onHide !== null) {
-          this.onHide();
-        }
-
-        if (this.statusElt !== null) {
-          dojo.removeClass(this.statusElt, 'opened');
-        }
       });
     },
 

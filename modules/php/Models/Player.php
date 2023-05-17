@@ -1,11 +1,14 @@
 <?php
 namespace BANG\Models;
+use BANG\Core\Globals;
 use BANG\Managers\Cards;
+use BANG\Managers\EventCards;
 use BANG\Managers\Players;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
 use BANG\Core\Stack;
-use bang;
+use BANG\Managers\Rules;
+use banghighnoon;
 
 /*
  * Player: all utility functions concerning a player
@@ -34,6 +37,9 @@ class Player extends \BANG\Helpers\DB_Manager
   protected $bullets;
   protected $expansion = BASE_GAME;
   protected $characterChosen;
+  // see constants for player's living status from constants.inc.php
+  protected $livingStatus;
+  protected $agreedToDisclaimer;
 
   public function __construct($row)
   {
@@ -53,7 +59,9 @@ class Player extends \BANG\Helpers\DB_Manager
       $this->generalStore = (int)$row['player_autopick_general_store'];
       $this->character = (int)$row['player_character'];
       // backward compatibilty from 15/10/2022
-      $this->altCharacter = array_key_exists('player_alt_character', $row) ? (int)$row['player_alt_character'] : -1;
+      $this->altCharacter = isset($row['player_alt_character']) ? (int) $row['player_alt_character'] : -1;
+      $this->livingStatus = (int) $row['player_unconscious'];
+      $this->agreedToDisclaimer = isset($row['player_agreed_to_disclaimer']) ? (int) $row['player_agreed_to_disclaimer'] === 1 : null;
     }
   }
 
@@ -145,6 +153,13 @@ class Player extends \BANG\Helpers\DB_Manager
     return Cards::getInPlay($this->id);
   }
 
+  public function getBlueCardsInPlay()
+  {
+    return $this->getCardsInPlay()->filter(function ($card) {
+      return $card->getColor() === BLUE;
+    });
+  }
+
   public function countHand()
   {
     return Cards::countHand($this->id);
@@ -159,13 +174,29 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     return $this->characterChosen;
   }
+  /**
+   * @return boolean
+   */
+  public function isUnconscious()
+  {
+    return $this->livingStatus === DEAD_GHOST;
+  }
+
+  /**
+   * @return boolean|null
+   */
+  public function isAgreedToDisclaimer()
+  {
+    return $this->agreedToDisclaimer;
+  }
 
   public function getUiData($currentPlayerId = null)
   {
     $current = $this->id == $currentPlayerId;
     return [
       'id' => $this->id,
-      'eliminated' => (int)$this->eliminated,
+      'eliminated' => (int) $this->eliminated,
+      'unconscious' => $this->livingStatus === DEAD_GHOST,
       'no' => $this->no,
       'name' => $this->getName(),
       'color' => $this->color,
@@ -177,7 +208,7 @@ class Player extends \BANG\Helpers\DB_Manager
       'bullets' => $this->bullets,
       'hand' => $current ? $this->getHand()->toArray() : [],
       'handCount' => $this->countHand(),
-      'role' => $current || $this->role == SHERIFF || $this->eliminated || Players::isEndOfGame() ? $this->role : null,
+      'role' => $current || $this->role == SHERIFF || $this->eliminated || $this->livingStatus !== FULLY_ALIVE || Players::isEndOfGame() ? $this->role : null,
       'inPlay' => $this->getCardsInPlay()->toArray(),
 
       'preferences' => $current
@@ -213,10 +244,12 @@ class Player extends \BANG\Helpers\DB_Manager
 
   /**
    * saves eliminated status and hp to the database
+   * @param bool $eliminate
    */
-  public function save()
+  public function save($eliminate = false)
   {
-    self::DbQuery("UPDATE player SET `player_hp` = {$this->hp} WHERE `player_id` = {$this->id}");
+    $unconsciousStatus = $eliminate ? ', `player_unconscious` = 1' : '';
+    self::DbQuery("UPDATE player SET `player_hp` = {$this->hp}{$unconsciousStatus} WHERE `player_id` = {$this->id}");
   }
 
   /*************************
@@ -228,9 +261,11 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function drawCards($amount)
   {
-    $cards = Cards::deal($this->id, $amount);
-    Notifications::drawCards($this, $cards);
-    $this->onChangeHand();
+    if ($amount > 0) {
+      $cards = Cards::deal($this->id, $amount);
+      Notifications::drawCards($this, $cards);
+      $this->onChangeHand();
+    }
   }
 
   /*
@@ -318,9 +353,11 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function loseLife($amount = 1)
   {
-    $this->hp -= $amount;
-    $this->save();
-    Notifications::lostLife($this, $amount);
+    if ($this->hp > 0) {
+      $this->hp -= $amount;
+      $this->save();
+      Notifications::lostLife($this, $amount);
+    }
     $this->addRevivalAtomOrEliminate();
   }
 
@@ -338,9 +375,23 @@ class Player extends \BANG\Helpers\DB_Manager
         ->count();
       $isKetchumAndCanUseAbility = $this->character == SID_KETCHUM && $this->getHand()->count() >= 2;
       $canDrinkBeerToLive = (!$isDuel && $beersInHand > 0) || $isKetchumAndCanUseAbility;
+      if ($beersInHand > 0 && !Rules::isBeerAvailable() && !$isKetchumAndCanUseAbility) {
+        $canDrinkBeerToLive = false;
+        // Assuming The Reverend is the only reason of beer unavailability status for now. This might change in future
+        $msg = clienttranslate('Even though ${player_name} had beers while dying, they could not be played because of The Reverend event card');
+        Notifications::tell($msg, ['player' => $this]);
+      }
       $nextState = $canDrinkBeerToLive ? ST_REACT_BEER : ST_PRE_ELIMINATE_DISCARD;
       $atomType = $canDrinkBeerToLive ? 'beer' : 'eliminate';
-      $this->addAtomAfterCardResolution($nextState, $atomType);
+
+      $eliminationAlreadyInStack = Stack::getFirstIndex([
+        'type' => 'eliminate',
+        'pId' => $this->getId(),
+        'forceEliminate' => true,
+      ]) !== -1;
+      if (!$eliminationAlreadyInStack) { // This is when a ghost is dying during Ghost Town, no need to die twice
+        $this->addAtomAfterCardResolution($nextState, $atomType);
+      }
     }
   }
 
@@ -358,7 +409,7 @@ class Player extends \BANG\Helpers\DB_Manager
       'attacker' => $ctx['attacker'] ?? null,
       'pId' => $this->id,
     ]);
-    Stack::insertAfterCardResolution($atom);
+    Stack::insertAfterCardResolution($atom, false);
   }
 
   /************************************
@@ -370,7 +421,7 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function getOrderedOtherPlayers()
   {
-    return Players::getLivingPlayersStartingWith($this, [$this->id]);
+    return Players::getLivingPlayerIdsStartingWith($this, false, [$this->id]);
   }
 
   /*
@@ -391,7 +442,7 @@ class Player extends \BANG\Helpers\DB_Manager
   }
 
   /**
-   * returns the current distance to an enmy from the view of the enemy
+   * returns the current distance to an enemy from the view of the enemy
    * should not be called on the player checking for targets but on the other players
    */
   public function getDistanceTo($enemy)
@@ -466,11 +517,6 @@ class Player extends \BANG\Helpers\DB_Manager
     return !is_null($weapon) && $weapon->getType() == CARD_VOLCANIC;
   }
 
-  public function hasPlayedBang()
-  {
-    return !is_null(Log::getLastAction('bangPlayed', $this->id));
-  }
-
   /*
    * return the list of bang cards (for indians and duel for instance)
    */
@@ -511,8 +557,9 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function getBeerOptions()
   {
+    $beerCards = Rules::isBeerAvailable() ? $this->getBeerCards()->toArray() : [];
     return [
-      'cards' => $this->getBeerCards()->toArray(),
+      'cards' => $beerCards,
     ];
   }
 
@@ -556,6 +603,15 @@ class Player extends \BANG\Helpers\DB_Manager
     ];
   }
 
+  public function getPhaseOneRules($defaultAmount, $isAbilityAvailable = true)
+  {
+    return [
+      RULE_PHASE_ONE_CARDS_DRAW_BEGINNING => $defaultAmount,
+      RULE_PHASE_ONE_PLAYER_ABILITY_DRAW => false,
+      RULE_PHASE_ONE_CARDS_DRAW_END => 0
+    ];
+  }
+
   public function hasCardCopyInPlay($targetCard)
   {
     $equipment = $this->getCardsInPlay();
@@ -581,15 +637,6 @@ class Player extends \BANG\Helpers\DB_Manager
    **************** Actions ***************
    ****************************************
    ***************************************/
-
-  /*
-   * Draw cards at phase one of turn
-   *  -> will be overwriten by character abilities that happens at phase 1
-   */
-  public function drawCardsPhaseOne()
-  {
-    $this->drawCards(2);
-  }
 
   /**
    * startOfTurn: is called at the beginning of each turn (before the drawing phase)
@@ -747,7 +794,7 @@ class Player extends \BANG\Helpers\DB_Manager
 
     // get player who eliminated this player
     $byPlayer = null;
-    if (array_key_exists('attacker', $ctx) && $ctx['attacker'] != $this->id) {
+    if (array_key_exists('attacker', $ctx) && $ctx['attacker'] != null && $ctx['attacker'] != $this->id) {
       $byPlayer = Players::get($ctx['attacker']);
     }
 
@@ -759,13 +806,23 @@ class Player extends \BANG\Helpers\DB_Manager
     // Discard cards
     $this->discardAllCards();
     // Eliminate player
-    bang::get()->eliminatePlayer($this->id);
-    $this->eliminated = true;
-    $this->save();
+    $forceEliminate = array_key_exists('forceEliminate', $ctx) && $ctx['forceEliminate'];
+    $isResurrectionEventActive = EventCards::getActive() && EventCards::getActive()->isResurrectionEffect();
+    // Needs to die for good if:
+    // 1. Ghost Town / Dead Man have been played before
+    // 2. GT is now and this is the end of a ghost's turn
+    // 3. Player has already had their turn during GT event which means it's over for this player but might be applied for others
+    if (!Globals::getResurrectionIsPossible() || $forceEliminate || $this->livingStatus === LIVING_DEAD) {
+      banghighnoon::get()->eliminatePlayer($this->id);
+      $this->eliminated = true;
+    } else {
+      Notifications::playerUnconscious($this);
+    }
+    $this->save(true);
 
     // Check if game should end
     if (Stack::isItLastElimination() && Players::isEndOfGame()) {
-      bang::get()->setWinners();
+      banghighnoon::get()->setWinners();
     }
 
     Notifications::playerEliminated($this);
@@ -857,7 +914,6 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function setupChosenCharacter()
   {
-
     $characterObject = Players::getCharacter($this->character);
     $bullets = $characterObject->getBullets();
     if ($this->role === SHERIFF) {
@@ -869,5 +925,15 @@ class Player extends \BANG\Helpers\DB_Manager
       'player_bullets' => $bullets,
     ];
     self::DB()->update($newParams, $this->id);
+  }
+
+  public function resurrect()
+  {
+    self::DbQuery("UPDATE player SET `player_unconscious` = 2 WHERE `player_id` = {$this->id}");
+  }
+
+  public function agreeToDisclaimer()
+  {
+    self::DB()->update(['player_agreed_to_disclaimer' => true], $this->id);
   }
 }

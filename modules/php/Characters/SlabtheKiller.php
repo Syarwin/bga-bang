@@ -1,6 +1,6 @@
 <?php
 namespace BANG\Characters;
-use BANG\Managers\Cards;
+use BANG\Managers\Rules;
 
 class SlabtheKiller extends \BANG\Models\Player
 {
@@ -16,7 +16,7 @@ class SlabtheKiller extends \BANG\Models\Player
   public function getReactAtomForAttack($card)
   {
     $atom = parent::getReactAtomForAttack($card);
-    if ($card->getType() == CARD_BANG) {
+    if ($card->getType() == CARD_BANG && Rules::isAbilityAvailable()) {
       $missedNeeded = 2; // Slab's ability
       $atom['missedNeeded'] = $missedNeeded;
       $atom['msgActive'] = clienttranslate('${you} may react to ${src_name} with ${missedNeeded} Missed!');

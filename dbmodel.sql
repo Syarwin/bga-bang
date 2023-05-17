@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS `log` (
 
 
 -- see constants.inc.php --
+ALTER TABLE `player` ADD `player_unconscious` TINYINT NOT NULL;
 ALTER TABLE `player` ADD `player_role` INT(1) UNSIGNED NOT NULL;
 ALTER TABLE `player` ADD `player_character` INT(1) UNSIGNED NOT NULL;
 ALTER TABLE `player` ADD `player_alt_character` INT(1) NOT NULL;
@@ -29,6 +30,7 @@ ALTER TABLE `player` ADD `player_bullets` INT(1) UNSIGNED NULL;
 ALTER TABLE `player` ADD `player_activate` TINYINT UNSIGNED NOT NULL;
 ALTER TABLE `player` ADD `player_hp` TINYINT;
 ALTER TABLE `player` ADD `player_autopick_general_store` TINYINT NOT NULL;
+ALTER TABLE `player` ADD `player_agreed_to_disclaimer` TINYINT NOT NULL;
 
 CREATE TABLE IF NOT EXISTS `card` (
   `card_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -40,7 +42,26 @@ CREATE TABLE IF NOT EXISTS `card` (
   PRIMARY KEY (`card_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Please make sure all fields correspond with constants for rules from constants.inc.php
+CREATE TABLE IF NOT EXISTS `rules` (
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `player_id` int(11) NOT NULL,
+    `phase_one_amount_to_draw_beginning` int(1) NOT NULL,
+    `phase_one_player_ability_draw` int(1) NOT NULL,
+    `phase_one_amount_to_draw_end` int(1) NOT NULL,
+    `ability_available` int(1) NOT NULL,
+    `beer_availability` int(1) NOT NULL,
+    `bangs_amount_left` int(1) NOT NULL,
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `events` (
+    `card_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `card_location` varchar(32) NOT NULL,
+    `card_state` int(10),
+    `type` int(10),
+    PRIMARY KEY (`card_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `global_variables` (
   `name` varchar(255) NOT NULL,

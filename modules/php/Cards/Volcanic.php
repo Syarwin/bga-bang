@@ -12,6 +12,7 @@ class Volcanic extends \BANG\Models\WeaponCard
     $this->symbols = [[clienttranslate('You can play any number of BANG!')], [SYMBOL_RANGE1]];
     $this->copies = [
       BASE_GAME => ['10S', '10C'],
+      HIGH_NOON => [],
       DODGE_CITY => [],
     ];
     $this->effect = [

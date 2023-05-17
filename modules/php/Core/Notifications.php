@@ -1,10 +1,12 @@
 <?php
 namespace BANG\Core;
-use bang;
+use BANG\Managers\EventCards;
+use banghighnoon;
 use BANG\Managers\Players;
 use BANG\Models\Player;
 use BANG\Managers\Cards;
 use BANG\Models\AbstractCard;
+use BANG\Models\AbstractEventCard;
 
 /*
  * Notifications
@@ -14,14 +16,14 @@ class Notifications
   protected static function notifyAll($name, $msg, $data)
   {
     self::updateArgs($data);
-    bang::get()->notifyAllPlayers($name, $msg, $data);
+      banghighnoon::get()->notifyAllPlayers($name, $msg, $data);
   }
 
   protected static function notify($pId, $name, $msg, $data)
   {
     self::updateArgs($data);
     $pId = is_int($pId) ? $pId : $pId->getId();
-    bang::get()->notifyPlayer($pId, $name, $msg, $data);
+      banghighnoon::get()->notifyPlayer($pId, $name, $msg, $data);
   }
 
   public static function updateHand($player)
@@ -249,13 +251,14 @@ class Notifications
   {
     $src_name = $src instanceof AbstractCard ? $src->getName() : $src->getCharName();
 
-    self::notifyAll('flipCard', clienttranslate('${player_name} draws ${card_name} for ${src_name}\'s effect.'), [
+    self::notifyAll('flipCard', clienttranslate('${player_name} draws ${card_name} for ${src_name}\'s effect'), [
       'i18n' => ['src_name'],
       'player' => $player,
       'card' => $card,
       'src_name' => $src_name,
       'src_id' => $src->getId(),
       'deckCount' => Cards::getDeckCount(),
+      'event' => EventCards::getActive(),
     ]);
   }
 
@@ -359,6 +362,33 @@ class Notifications
     ]);
   }
 
+  /**
+   * @param AbstractEventCard $eventCard
+   * @param AbstractEventCard $nextEventCard
+   */
+  public static function newEvent($eventCard, $nextEventCard)
+  {
+    $msg = clienttranslate('${eventActiveName} is now active!');
+    self::notifyAll('newEvent', $msg, [
+      'eventActive' => $eventCard,
+      'eventActiveName' => $eventCard->getName(),
+      'eventNext' => $nextEventCard,
+      'eventsDeckCount' => EventCards::getDeckCount(),
+    ]);
+  }
+
+  /**
+   * playerUnconscious: send when player died but might be resurrected
+   * @param Player $player
+   */
+  public static function playerUnconscious($player)
+  {
+    $msg = '${player_name} is eliminated but might be back at some point...';
+    self::notifyAll('playerUnconscious', $msg, [
+      'player' => $player,
+    ]);
+  }
+
   public static function updateArgs(&$data)
   {
     if (isset($data['player'])) {
@@ -384,6 +414,15 @@ class Notifications
       $data['ignore'] = array_map(function ($player) {
         return $player->getId();
       }, $data['ignore']);
+    }
+
+    if (isset($data['eventChangedResult']) && $data['eventChangedResult']) {
+      $eventName = $data['eventChangedResult']['eventName'];
+      $data['flipEventMsg'] = " because of $eventName";
+      $data['eventColorOverride'] = $data['eventChangedResult']['eventSuitOverride'];
+      $data['preserve'][] = 'eventColorOverride';
+    } else {
+      $data['flipEventMsg'] = '';
     }
 
     if (isset($data['msgYou'])) {
