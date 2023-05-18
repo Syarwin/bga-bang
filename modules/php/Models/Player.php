@@ -249,7 +249,8 @@ class Player extends \BANG\Helpers\DB_Manager
   public function save($eliminate = false)
   {
     $unconsciousStatus = $eliminate ? ', `player_unconscious` = 1' : '';
-    self::DbQuery("UPDATE player SET `player_hp` = {$this->hp}{$unconsciousStatus} WHERE `player_id` = {$this->id}");
+    $newHP = $eliminate && $this->hp < 0 ? 0 : $this->hp;
+    self::DbQuery("UPDATE player SET `player_hp` = {$newHP}{$unconsciousStatus} WHERE `player_id` = {$this->id}");
   }
 
   /*************************
