@@ -41,7 +41,7 @@ use BANG\Managers\EventCards;
 use BANG\Core\Stack;
 use BANG\Managers\Rules;
 
-class banghighnoon extends Table
+class bang extends Table
 {
   use BANG\States\TurnTrait;
   use BANG\States\DrawCardsTrait;
@@ -76,7 +76,7 @@ class banghighnoon extends Table
 
   protected function getGameName()
   {
-    return 'banghighnoon';
+    return 'bang';
   }
 
   /*
@@ -225,8 +225,7 @@ class banghighnoon extends Table
           self::applyDbUpgradeToAllDB($sql);
         }
 
-        $player = Players::getActive();
-        $playerId = $player->getId();
+        $playerId = Globals::getPIdTurn();
         $bangsLeft = is_null(Log::getLastAction('bangPlayed', $playerId)) ? '1' : '0';
         $sql = "INSERT INTO `rules` (`player_id`, `ability_available`, `beer_availability`, `bangs_amount_left`, `phase_one_amount_to_draw_beginning`, `phase_one_player_ability_draw`, `phase_one_amount_to_draw_end`) VALUES('". $playerId ."','1','1','". $bangsLeft ."','2','0','0');";
         self::applyDbUpgradeToAllDB($sql);

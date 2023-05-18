@@ -1,18 +1,18 @@
 <?php
 namespace BANG\Helpers;
 
-use banghighnoon;
+use bang;
 
 class GameOptions
 {
   public static function chooseCharactersManually()
   {
-    return (int) banghighnoon::get()->getGameStateValue('optionCharacters') === CHARACTERS_CHOOSE;
+    return (int) bang::get()->getGameStateValue('optionCharacters') === CHARACTERS_CHOOSE;
   }
 
   public static function getExpansions()
   {
-    switch ((int) banghighnoon::get()->getGameStateValue('optionExpansions')) {
+    switch ((int) bang::get()->getGameStateValue('optionExpansions')) {
       case OPTION_HIGH_NOON_ONLY:
         return [HIGH_NOON];
       default:
@@ -26,7 +26,7 @@ class GameOptions
   public static function isResurrection()
   {
     return in_array(HIGH_NOON, self::getExpansions()) &&
-      (int) banghighnoon::get()->getGameStateValue('optionHighNoon') === OPTION_HIGH_NOON_WITH_GHOST_TOWN;
+      (int) bang::get()->getGameStateValue('optionHighNoon') === OPTION_HIGH_NOON_WITH_GHOST_TOWN;
   }
 
   /**

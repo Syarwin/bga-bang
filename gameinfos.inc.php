@@ -6,7 +6,7 @@
   'publisher_website' => 'https://www.dvgiochi.com/',
   'publisher_bgg_id' => 917,
   'bgg_id' => 3955,
-  'players' => [2, 3, 4, 5, 6, 7],
+  'players' => [4, 5, 6, 7],
   'suggest_player_number' => 5,
   'not_recommend_player_number' => null,
   'estimated_duration' => 30,
