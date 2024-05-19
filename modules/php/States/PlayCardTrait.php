@@ -56,6 +56,7 @@ trait PlayCardTrait
     $card = Cards::get($cardId);
     $player = Players::getActive();
     $player->playCard($card, $args);
+    self::giveExtraTime($player->getId());
 
     // TODO : not sure what this function was doing before
     //  Players::handleRemainingEffects();
