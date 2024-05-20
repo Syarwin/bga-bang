@@ -8,7 +8,7 @@
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
  * -----
  *
- * banghighnoon.css
+ * bang.css
  *
  * bang stylesheet
  *
@@ -236,17 +236,17 @@ div#board[data-players="7"] .bang-player[data-no="6"] {
     grid-column-end: span 6;
   }
   div#board[data-players="2"] #table {
-    grid-column-start: 8;
+    grid-column-start: 5;
     grid-row-start: 2;
   }
   div#board[data-players="2"] .bang-player[data-no="0"] {
-    grid-column-start: 2;
-    grid-row-start: 2;
+    grid-column-start: 4;
+    grid-row-start: 1;
     justify-content: flex-start;
   }
   div#board[data-players="2"] .bang-player[data-no="1"] {
     grid-column-start: 4;
-    grid-row-start: 4;
+    grid-row-start: 3;
     justify-content: center;
   }
   div#board[data-players="3"] #table {
@@ -254,7 +254,7 @@ div#board[data-players="7"] .bang-player[data-no="6"] {
     grid-row-start: 2;
   }
   div#board[data-players="3"] .bang-player[data-no="0"] {
-    grid-column-start: 2;
+    grid-column-start: 1;
     grid-row-start: 2;
     justify-content: flex-start;
   }
@@ -2442,4 +2442,4 @@ div.bang-card.event .card-background {
   height: 100%;
 }
 
-/*# sourceMappingURL=banghighnoon.css.map */
+/*# sourceMappingURL=bang.css.map */

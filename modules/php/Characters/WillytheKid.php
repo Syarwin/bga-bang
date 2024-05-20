@@ -16,6 +16,6 @@ class WillytheKid extends \BANG\Models\Player
 
   public function hasUnlimitedBangs()
   {
-    return Rules::isAbilityAvailable();
+    return Rules::isAbilityAvailable() || parent::hasUnlimitedBangs();
   }
 }

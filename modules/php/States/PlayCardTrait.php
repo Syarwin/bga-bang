@@ -89,6 +89,7 @@ trait PlayCardTrait
     $card = Cards::get($cardId);
     $player = Players::getActive();
     $player->playCard($card, $args);
+    self::giveExtraTime($player->getId());
 
     Stack::finishState();
   }

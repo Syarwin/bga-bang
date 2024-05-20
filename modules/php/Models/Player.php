@@ -9,7 +9,7 @@ use BANG\Core\Notifications;
 use BANG\Core\Log;
 use BANG\Core\Stack;
 use BANG\Managers\Rules;
-use banghighnoon;
+use bang;
 
 /*
  * Player: all utility functions concerning a player
@@ -45,7 +45,6 @@ class Player extends \BANG\Helpers\DB_Manager
   public function __construct($row)
   {
     if ($row != null) {
-      // backward compatibilty from 15/10/2022
       $this->characterChosen = !(array_key_exists('player_character_chosen', $row) && (int)$row['player_character_chosen'] === 0);
       $this->id = (int)$row['player_id'];
       $this->no = (int)$row['player_no'];
@@ -59,10 +58,8 @@ class Player extends \BANG\Helpers\DB_Manager
       $this->score = (int)$row['player_score'];
       $this->generalStore = (int)$row['player_autopick_general_store'];
       $this->character = (int)$row['player_character'];
-      // backward compatibilty from 15/10/2022
-      $this->altCharacter = isset($row['player_alt_character']) ? (int) $row['player_alt_character'] : -1;
-      // backward compatibility from XX/XX/2022
-      $this->livingStatus = isset($row['player_unconscious']) ? (int) $row['player_unconscious'] : $this->eliminated;
+      $this->altCharacter = (int) $row['player_alt_character'];
+      $this->livingStatus = (int) $row['player_unconscious'];
       $this->agreedToDisclaimer = isset($row['player_agreed_to_disclaimer']) ? (int) $row['player_agreed_to_disclaimer'] === 1 : null;
     }
   }
@@ -275,10 +272,9 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function save($eliminate = false)
   {
-    // backward compatibility from XX/XX/2022
-    $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_unconscious\'')->num_rows === 1;
-    $unconsciousStatus = $eliminate && $newSchema ? ', `player_unconscious` = 1' : '';
-    self::DbQuery("UPDATE player SET `player_hp` = {$this->hp}{$unconsciousStatus} WHERE `player_id` = {$this->id}");
+    $unconsciousStatus = $eliminate ? ', `player_unconscious` = 1' : '';
+    $newHP = $eliminate && $this->hp < 0 ? 0 : $this->hp;
+    self::DbQuery("UPDATE player SET `player_hp` = {$newHP}{$unconsciousStatus} WHERE `player_id` = {$this->id}");
   }
 
   /*************************
@@ -382,9 +378,11 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function loseLife($amount = 1)
   {
-    $this->hp -= $amount;
-    $this->save();
-    Notifications::lostLife($this, $amount);
+    if ($this->hp > 0) {
+      $this->hp -= $amount;
+      $this->save();
+      Notifications::lostLife($this, $amount);
+    }
     $this->addRevivalAtomOrEliminate();
   }
 
@@ -862,7 +860,7 @@ class Player extends \BANG\Helpers\DB_Manager
     // 2. GT is now and this is the end of a ghost's turn
     // 3. Player has already had their turn during GT event which means it's over for this player but might be applied for others
     if (!Globals::getResurrectionIsPossible() || $forceEliminate || $this->livingStatus === LIVING_DEAD) {
-      banghighnoon::get()->eliminatePlayer($this->id);
+      bang::get()->eliminatePlayer($this->id);
       $this->eliminated = true;
     } else {
       Notifications::playerUnconscious($this);
@@ -871,7 +869,7 @@ class Player extends \BANG\Helpers\DB_Manager
 
     // Check if game should end
     if (Stack::isItLastElimination() && Players::isEndOfGame()) {
-      banghighnoon::get()->setWinners();
+      bang::get()->setWinners();
     }
 
     Notifications::playerEliminated($this);
@@ -899,11 +897,11 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     $hand = $this->getHand();
     $equipment = $this->getCardsInPlay();
-    $hand->merge($equipment)->map(function ($card) {
+    $allCards = $equipment->merge($hand);
+    $allCards->map(function ($card) {
       Cards::discard($card);
     });
-    Notifications::discardedCards($this, $equipment, true, $equipment->getIds());
-    Notifications::discardedCards($this, $hand, false, $hand->getIds());
+    Notifications::discardedCards($this, $allCards, false, $allCards->getIds());
     $this->onChangeHand();
   }
 

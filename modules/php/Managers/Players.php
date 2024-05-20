@@ -4,7 +4,7 @@ use BANG\Core\Globals;
 use BANG\Helpers\GameOptions;
 use BANG\Models\Player;
 use BANG\Helpers\Collection;
-use banghighnoon;
+use bang;
 
 /*
  * Players manager : allows to easily access players ...
@@ -14,14 +14,13 @@ class Players extends \BANG\Helpers\DB_Manager
 {
   protected static function getGame()
   {
-    return banghighnoon::get();
+    return bang::get();
   }
   protected static $table = 'player';
   protected static $primary = 'player_id';
   protected static function cast($row)
   {
-    // backward compatibilty from 15/10/2022
-    if (array_key_exists('player_character_chosen', $row) && (int) $row['player_character_chosen'] === 0) {
+    if ((int) $row['player_character_chosen'] === 0) {
       return new Player($row);
     } else {
       $cId = $row['player_character'];
@@ -103,7 +102,7 @@ class Players extends \BANG\Helpers\DB_Manager
       if ($charChosen) {
         Cards::deal($pId, $bullets);
       }
-      banghighnoon::get()->initStat('player', 'role', $role, $pId);
+      bang::get()->initStat('player', 'role', $role, $pId);
       $i++;
     }
     $query->values($values);
@@ -243,10 +242,7 @@ class Players extends \BANG\Helpers\DB_Manager
    ****************************/
   protected static function qFilterLiving()
   {
-    // backward compatibility from XX/XX/2022
-    $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_unconscious\'')->num_rows === 1;
-    $eliminatedField = $newSchema ? 'player_unconscious' : 'player_eliminated';
-    return self::DB()->where($eliminatedField, 0);
+    return self::DB()->whereIn('player_unconscious', [0, 2]);
   }
 
   public static function countRoles($roles)
@@ -386,12 +382,10 @@ class Players extends \BANG\Helpers\DB_Manager
    */
   public static function getNotAgreedToDisclaimerList()
   {
-    // backward compatibility from XX/XX/2022
-    $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_agreed_to_disclaimer\'')->num_rows === 1;
     $notAgreedToDisclaimer = self::getLivingPlayers()->map(function ($player) {
       return !$player->isAgreedToDisclaimer();
     });
-    return $newSchema ? array_keys(array_filter($notAgreedToDisclaimer->toAssoc(), 'strlen')) : [];
+    return array_keys(array_filter($notAgreedToDisclaimer->toAssoc(), 'strlen'));
   }
 
   /***********************

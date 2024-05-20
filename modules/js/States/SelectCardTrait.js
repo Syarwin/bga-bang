@@ -34,6 +34,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         openAnimation: true,
         openAnimationTarget: 'buttonShowCards',
         contentsTpl: jstpl_dialog,
+        destroyCallback: this.removeDialog.bind(this),
       });
 
       args.cards.forEach((card) => this.addCard(card, 'dialog-card-container', 'dialog'));

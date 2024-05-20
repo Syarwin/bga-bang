@@ -9,7 +9,7 @@ use BANG\Core\Log;
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
 use BANG\Managers\Rules;
-use banghighnoon;
+use bang;
 
 trait TurnTrait
 {
@@ -135,7 +135,7 @@ trait TurnTrait
     // We had a bug when Suzy Lafayette was drawing a card and "capturing" active player status while real active player was dying
     $ctx = Stack::getCtx();
     if ($ctx['pId']) {
-      banghighnoon::get()->gamestate->changeActivePlayer(Rules::getCurrentPlayerId());
+      bang::get()->gamestate->changeActivePlayer(Rules::getCurrentPlayerId());
     }
     $this->gamestate->nextState('next');
   }

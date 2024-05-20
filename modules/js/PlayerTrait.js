@@ -268,7 +268,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         openAnimationTarget: 'help-icon',
         contentsTpl: jstpl_helpDialog,
         verticalAlign: 'flex-start',
-        destroyCallback: this.removeDialog,
+        destroyCallback: this.removeDialog.bind(this),
       });
 
       [0, 2, 2, 3, 1, 2, 1].forEach((roleId, i) => {

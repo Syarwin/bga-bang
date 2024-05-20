@@ -106,6 +106,7 @@ trait EndOfLifeTrait
     Cards::discardMany($cardIds);
     $player = Players::getActive();
     Notifications::discardedCards($player, $cards, false, $cardIds);
+    $player->onChangeHand();
     Stack::finishState();
   }
 

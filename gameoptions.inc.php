@@ -18,7 +18,7 @@
  * Note: If your game has no variant, you don't have to modify this file.
  *
  * Note²: All options defined in this file should have a corresponding "game state labels"
- *        with the same ID (see "initGameStateLabels" in banghighnoon.game.php)
+ *        with the same ID (see "initGameStateLabels" in bang.game.php)
  *
  * !! It is not a good idea to modify this file when a game is running !!
  *
@@ -74,7 +74,8 @@ $game_options = [
       OPTION_HIGH_NOON_ONLY =>
         [ 'name' => totranslate('High Noon'),
           'tmdisplay' => totranslate('High Noon expansion'),
-          'description' => totranslate('High Noon expansion')],
+          'description' => totranslate('High Noon expansion'),
+          'premium' => true],
       OPTION_FISTFUL_OF_CARDS_ONLY =>
         [ 'name' => totranslate('A Fistful Of Cards'),
           'tmdisplay' => totranslate('A Fistful Of Cards expansion'),
@@ -88,8 +89,7 @@ $game_options = [
 
   OPTION_HIGH_NOON_EXPANSION => [
     'name' => totranslate('High Noon expansion'),
-    // TODO: Change to OPTION_HIGH_NOON_NO_GHOST_TOWN before release
-    'default' => OPTION_HIGH_NOON_WITH_GHOST_TOWN,
+    'default' => OPTION_HIGH_NOON_NO_GHOST_TOWN,
     'values' => [
       OPTION_HIGH_NOON_NO_GHOST_TOWN =>
         [ 'name' => totranslate('Without Ghost Town'),
