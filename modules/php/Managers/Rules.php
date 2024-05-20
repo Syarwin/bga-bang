@@ -5,7 +5,6 @@ use BANG\Helpers\DB_Manager;
 use BANG\Models\AbstractCard;
 use BANG\Models\AbstractEventCard;
 use BANG\Models\Player;
-use bang;
 
 /*
  * Rules: all turn rules and all changes to them according to player role and event and all other factors
