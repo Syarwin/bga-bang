@@ -140,9 +140,7 @@ class bang extends Table
    */
   public function getGameProgression()
   {
-    // backward compatibilty from 15/10/2022
-    $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_character_chosen\'')->num_rows === 1;
-    $someCharactersNeedToBeChosen = $newSchema && !empty(self::getObjectListFromDb('SELECT `player_character_chosen` FROM `player` WHERE `player_character_chosen` = 0'));
+    $someCharactersNeedToBeChosen = !empty(self::getObjectListFromDb('SELECT `player_character_chosen` FROM `player` WHERE `player_character_chosen` = 0'));
     if ($someCharactersNeedToBeChosen) {
       return 0;
     } else {

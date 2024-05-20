@@ -44,7 +44,6 @@ class Player extends \BANG\Helpers\DB_Manager
   public function __construct($row)
   {
     if ($row != null) {
-      // backward compatibilty from 15/10/2022
       $this->characterChosen = !(array_key_exists('player_character_chosen', $row) && (int)$row['player_character_chosen'] === 0);
       $this->id = (int)$row['player_id'];
       $this->no = (int)$row['player_no'];
@@ -58,8 +57,7 @@ class Player extends \BANG\Helpers\DB_Manager
       $this->score = (int)$row['player_score'];
       $this->generalStore = (int)$row['player_autopick_general_store'];
       $this->character = (int)$row['player_character'];
-      // backward compatibilty from 15/10/2022
-      $this->altCharacter = isset($row['player_alt_character']) ? (int) $row['player_alt_character'] : -1;
+      $this->altCharacter = (int) $row['player_alt_character'];
       $this->livingStatus = (int) $row['player_unconscious'];
       $this->agreedToDisclaimer = isset($row['player_agreed_to_disclaimer']) ? (int) $row['player_agreed_to_disclaimer'] === 1 : null;
     }
