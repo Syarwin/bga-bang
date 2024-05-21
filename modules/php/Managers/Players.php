@@ -124,6 +124,8 @@ class Players extends \BANG\Helpers\DB_Manager
     }
 
     self::getGame()->reloadPlayersBasicInfos();
+    // TODO: Remove next line, it's for debugging purposes
+    $sheriff = Players::getPreviousId(Players::get($sheriff));
     return $sheriff;
   }
 

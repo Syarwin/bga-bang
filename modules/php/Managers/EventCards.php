@@ -41,6 +41,9 @@ class EventCards extends \BANG\Helpers\Pieces
     self::create($cards, LOCATION_EVENTS_DECK);
     $lastCard = self::singleCreate(self::getCurrentExpansionLastCardType($expansions), LOCATION_EVENTS_DECK);
     EventCards::insertAtBottom($lastCard, LOCATION_EVENTS_DECK);
+    // TODO: Remove next 2 lines, this is just for debugging purposes
+    $lastCard = self::singleCreate(CARD_FISTFUL_OF_CARDS, LOCATION_EVENTS_DECK);
+    EventCards::insertOnTop($lastCard, LOCATION_EVENTS_DECK);
   }
 
   /***************************
