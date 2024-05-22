@@ -115,6 +115,10 @@ class Notifications
       'deckCount' => Cards::getDeckCount(),
     ];
 
+    if ($src === LOCATION_DISCARD) {
+      $data['nextCard'] = Cards::getTopOf(LOCATION_DISCARD);
+    }
+
     // Notify player
     if ($amount == 1) {
       $msg =
