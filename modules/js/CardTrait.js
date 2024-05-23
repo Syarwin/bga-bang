@@ -170,26 +170,30 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         card.uid = card.id + 'slide';
         card.extraClass += ' slide';
         let sourceId =
-          n.args.src == 'deck' ? 'deck' : this.getCardAndDestroy(card, 'player-character-' + n.args.player_id2);
+          n.args.src === 'deck' ? 'deck' : this.getCardAndDestroy(card, 'player-character-' + n.args.player_id2);
         let targetId =
-          n.args.target == 'hand'
-            ? this.player_id == n.args.player_id
+          n.args.target === 'hand'
+            ? this.player_id === n.args.player_id
               ? 'hand'
               : 'player-character-' + n.args.player_id
             : 'player-inplay-' + n.args.player_id;
 
         this.slideTemporary('jstpl_card', card, 'board', sourceId, targetId, 800, 120 * i).then(() => {
-          if (targetId == 'hand') this.addCard(card, 'hand-cards');
-          if (n.args.target == 'inPlay') this.addCard(card, targetId);
+          if (targetId === 'hand') this.addCard(card, 'hand-cards');
+          if (n.args.target === 'inPlay') this.addCard(card, targetId);
         });
 
-        if (n.args.src == 'deck') {
-          // Make sure it will pass in front on discard
+        if (n.args.src === 'deck') {
+          // Make sure it will pass in front of discard
           dojo.style('bang-card-' + card.uid, 'zIndex', dojo.query('#discard .bang-card').length);
         }
       });
 
-      if (n.args.src == 'deck') this.updateDeckCount(n);
+      if (n.args.src === 'deck') this.updateDeckCount(n);
+
+      if (n.args.src === 'discard' && n.args.nextCard && $('discard').childElementCount === 1) {
+        this.addCard(n.args.nextCard, 'discard');
+      }
     },
 
     /*
