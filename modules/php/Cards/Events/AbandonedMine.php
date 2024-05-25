@@ -13,4 +13,20 @@ class AbandonedMine extends AbstractEventCard
     $this->effect = EFFECT_PERMANENT;
     $this->expansion = FISTFUL_OF_CARDS;
   }
+
+  /**
+   * @param string $requestedLocation
+   * @return string
+   */
+  public function getDrawCardsLocation($requestedLocation)
+  {
+    switch ($requestedLocation) {
+      case LOCATION_DECK:
+        return LOCATION_DISCARD;
+      case LOCATION_DISCARD:
+        return LOCATION_DECK;
+      default:
+        throw new \BgaVisibleSystemException('Unexpected location to draw from: ' . $requestedLocation);
+    }
+  }
 }

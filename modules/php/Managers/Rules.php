@@ -61,8 +61,8 @@ class Rules extends DB_Manager
   public static function setNewTurnRules($player, $eventCard = null)
   {
     $amountOfCardsToDraw = $eventCard ? $eventCard->getPhaseOneAmountOfCardsToDraw() : 2;
-    $defaultRules = (new AbstractEventCard())->getPhaseOneRules();
-    $rules = $eventCard ? $eventCard->getPhaseOneRules() : $defaultRules;
+    $defaultRules = (new AbstractEventCard())->getRules();
+    $rules = $eventCard ? $eventCard->getRules() : $defaultRules;
     $rules = array_merge($rules, $player->getPhaseOneRules($amountOfCardsToDraw, $rules[RULE_ABILITY_AVAILABLE] ?? true));
     $rules = array_merge(['player_id' => $player->getId()], $rules);
     $query = array_map(function ($value) {
@@ -90,7 +90,7 @@ class Rules extends DB_Manager
   public static function isPhaseOneEventSpecialDraw()
   {
     $eventCard = EventCards::getActive();
-    return $eventCard ? $eventCard->isPhaseOneSpecialDraw() : false;
+    return $eventCard && $eventCard->isPhaseOneSpecialDraw();
   }
 
   public static function getCurrentPlayerId()
@@ -114,6 +114,16 @@ class Rules extends DB_Manager
   public static function getBangsAmountLeft()
   {
     return (int) self::getRule(RULE_BANGS_AMOUNT_LEFT);
+  }
+
+  /**
+   * @param string $requestedLocation
+   * @return string
+   */
+  public static function getDrawOrDiscardCardsLocation($requestedLocation)
+  {
+    $eventCard = EventCards::getActive();
+    return $eventCard ? $eventCard->getDrawCardsLocation($requestedLocation) : $requestedLocation;
   }
 
   public static function bangPlayed()

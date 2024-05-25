@@ -131,6 +131,15 @@ class AbstractEventCard implements \JsonSerializable
   }
 
   /**
+   * @param string $requestedLocation
+   * @return string
+   */
+  public function getDrawCardsLocation($requestedLocation)
+  {
+    return $requestedLocation;
+  }
+
+  /**
    * @param Player $player
    * @return void
    */
@@ -140,7 +149,7 @@ class AbstractEventCard implements \JsonSerializable
   /**
    * @return array
    */
-  public function getPhaseOneRules()
+  public function getRules()
   {
     return [
       RULE_ABILITY_AVAILABLE => $this->isAbilityAvailable(),

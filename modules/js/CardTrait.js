@@ -1,15 +1,13 @@
 define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
   return declare('bang.cardTrait', null, {
     constructor() {
+      const ignoreFunction = (n) => {
+        return n.args.ignore && n.args.ignore.includes(this.player_id);
+      };
       this._notifications.push(
         ['cardPlayed', null],
-        [
-          'cardsGained',
-          1200,
-          (n) => {
-            return n.args.ignore && n.args.ignore.includes(this.player_id);
-          },
-        ],
+        ['cardsGained', 1200, ignoreFunction],
+        ['cardLostToDeck', 1200, ignoreFunction],
         ['cardLost', null],
         ['flipCard', 800],
         ['reshuffle', 1500],
@@ -109,137 +107,6 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       });
       this.centerCardsIfFew();
       return div;
-    },
-
-    /*
-     * notification sent to all players when someone plays a card
-     */
-    notif_cardPlayed(n) {
-      debug('Notif: card played', n);
-      var playerId = n.args.player_id,
-        target = n.args.target,
-        targetPlayer = n.args.player_id2 || null;
-      var animationDuration = 1000;
-
-      if (!targetPlayer && target == 'inPlay') {
-        targetPlayer = playerId;
-        animationDuration = 700;
-      }
-      if (targetPlayer && target != 'inPlay') {
-        // Slide to player then to discard
-        animationDuration = 1600;
-      }
-
-      this.notifqueue.setSynchronousDuration(100 + animationDuration);
-
-      var card = this.getCard(n.args.card, true);
-      card.uid = card.id + 'slide';
-      card.extraClass += ' slide';
-      var sourceId = this.getCardAndDestroy(n.args.card, 'player-character-' + playerId);
-      if (targetPlayer) {
-        var duration = target == 'inPlay' ? animationDuration : animationDuration / 2;
-        var targetId = (target == 'inPlay' ? 'player-inplay-' : 'player-character-') + targetPlayer;
-        this.slideTemporary('jstpl_card', card, 'board', sourceId, targetId, duration, 0).then(() => {
-          // Add the card in front of player
-          if (target == 'inPlay') this.addCard(n.args.card, targetId);
-          // Put the card in the discard pile
-          else this.slideTemporaryToDiscard(n.args.card, targetId, animationDuration / 2);
-        });
-      }
-      // Directly to discard
-      else {
-        this.slideTemporaryToDiscard(n.args.card, sourceId, animationDuration);
-      }
-    },
-
-    /*
-     * notification sent to all players when someone gained a card (from deck or from someone else hand/inplay)
-     */
-    notif_cardsGained(n) {
-      this.removeDialog('selectCard');
-
-      debug('Notif: cards gained', n);
-      if (n.args.card) n.args.cards = [n.args.card];
-
-      var cards =
-        n.args.cards && n.args.cards.length > 0
-          ? n.args.cards.map((o) => this.getCard(o))
-          : this.getNBackCards(n.args.amount);
-
-      cards.forEach((card, i) => {
-        card.uid = card.id + 'slide';
-        card.extraClass += ' slide';
-        let sourceId =
-          n.args.src === 'deck' ? 'deck' : this.getCardAndDestroy(card, 'player-character-' + n.args.player_id2);
-        let targetId =
-          n.args.target === 'hand'
-            ? this.player_id === n.args.player_id
-              ? 'hand'
-              : 'player-character-' + n.args.player_id
-            : 'player-inplay-' + n.args.player_id;
-
-        this.slideTemporary('jstpl_card', card, 'board', sourceId, targetId, 800, 120 * i).then(() => {
-          if (targetId === 'hand') this.addCard(card, 'hand-cards');
-          if (n.args.target === 'inPlay') this.addCard(card, targetId);
-        });
-
-        if (n.args.src === 'deck') {
-          // Make sure it will pass in front of discard
-          dojo.style('bang-card-' + card.uid, 'zIndex', dojo.query('#discard .bang-card').length);
-        }
-      });
-
-      if (n.args.src === 'deck') this.updateDeckCount(n);
-
-      if (n.args.src === 'discard' && n.args.nextCard && $('discard').childElementCount === 1) {
-        this.addCard(n.args.nextCard, 'discard');
-      }
-    },
-
-    /*
-     * notification sent to all players when someone discard a card
-     */
-    notif_cardLost(n) {
-      debug('Notif: card lost', n);
-      var sourceId = this.getCardAndDestroy(n.args.card, 'player-character-' + n.args.player_id);
-      this.slideTemporaryToDiscard(n.args.card, sourceId);
-      this.notifqueue.setSynchronousDuration(n.args.player_id == this.player_id ? 800 : 1200);
-    },
-
-    /*
-     * Flip card
-     */
-    notif_flipCard(n) {
-      debug('Notif: card flipped', n);
-      var card = n.args.card;
-      card.flipped = true;
-      card.enforceTooltip = true;
-      var div = this.addCard(card, 'discard');
-      dojo.style(div, 'zIndex', dojo.query('#discard .bang-card').length);
-      setTimeout(() => dojo.removeClass('bang-card-' + card.id, 'flipped'), 100);
-      this.updateDeckCount(n);
-    },
-
-    /*
-     * Update playing/reacting option after playing a card
-     */
-    notif_updateOptions(n) {
-      debug('Notif: update options', n);
-      this.gamedatas.gamestate.args['_private'] = n.args;
-      this.clearPossible();
-      var action = this.gamedatas.gamestate.name == 'playCard' ? 'playCard' : 'selectReact';
-      this.makeCardSelectable(n.args.cards, action);
-    },
-
-    notif_reshuffle(n) {
-      debug('Notif: reshuffle', n);
-      dojo.query('#discard .bang-card').forEach((card, i) =>
-        setTimeout(() => {
-          dojo.addClass(card, 'flipped');
-          setTimeout(() => dojo.destroy(card), 500);
-        }, i * 10),
-      );
-      this.updateDeckCount(n);
     },
 
     updateDeckCount(n) {
@@ -352,6 +219,160 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
             'blue',
         );
       }
+    },
+
+    /*
+ * notification sent to all players when someone plays a card
+ */
+    notif_cardPlayed(n) {
+      debug('Notif: card played', n);
+      var playerId = n.args.player_id,
+          target = n.args.target,
+          targetPlayer = n.args.player_id2 || null;
+      var animationDuration = 1000;
+
+      if (!targetPlayer && target == 'inPlay') {
+        targetPlayer = playerId;
+        animationDuration = 700;
+      }
+      if (targetPlayer && target != 'inPlay') {
+        // Slide to player then to discard
+        animationDuration = 1600;
+      }
+
+      this.notifqueue.setSynchronousDuration(100 + animationDuration);
+
+      var card = this.getCard(n.args.card, true);
+      card.uid = card.id + 'slide';
+      card.extraClass += ' slide';
+      var sourceId = this.getCardAndDestroy(n.args.card, 'player-character-' + playerId);
+      if (targetPlayer) {
+        var duration = target == 'inPlay' ? animationDuration : animationDuration / 2;
+        var targetId = (target == 'inPlay' ? 'player-inplay-' : 'player-character-') + targetPlayer;
+        this.slideTemporary('jstpl_card', card, 'board', sourceId, targetId, duration, 0).then(() => {
+          // Add the card in front of player
+          if (target == 'inPlay') this.addCard(n.args.card, targetId);
+          // Put the card in the discard pile
+          else this.slideTemporaryToDiscard(n.args.card, targetId, animationDuration / 2, 'discard');
+        });
+      }
+      // Directly to discard
+      else {
+        this.slideTemporaryToDiscard(n.args.card, sourceId, animationDuration, 'discard');
+      }
+    },
+
+    /*
+     * notification sent to all players when someone gained a card (from deck or from someone else hand/inplay)
+     */
+    notif_cardsGained(n) {
+      this.removeDialog('selectCard');
+
+      debug('Notif: cards gained', n);
+      if (n.args.card) n.args.cards = [n.args.card];
+
+      var cards =
+          n.args.cards && n.args.cards.length > 0
+              ? n.args.cards.map((o) => this.getCard(o))
+              : this.getNBackCards(n.args.amount);
+
+      cards.forEach((card, i) => {
+        card.uid = card.id + 'slide';
+        card.extraClass += ' slide';
+        if (n.args.src === 'discard' && !$(`bang-card-${card.id}`)) {
+          // Looks like not all cards from discard are added on frontend, need to add it
+          this.addCard(card, 'discard');
+        }
+
+        let sourceId =
+            n.args.src === 'deck' ? 'deck' : this.getCardAndDestroy(card, 'player-character-' + n.args.player_id2);
+        let targetId =
+            n.args.target === 'hand'
+                ? this.player_id === n.args.player_id
+                    ? 'hand'
+                    : 'player-character-' + n.args.player_id
+                : 'player-inplay-' + n.args.player_id;
+        console.log('**** sourceId: ', sourceId);
+        console.log('**** targetId: ', targetId);
+        this.slideTemporary('jstpl_card', card, 'board', sourceId, targetId, 800, 120 * i).then(() => {
+          if (targetId === 'hand') this.addCard(card, 'hand-cards');
+          if (n.args.target === 'inPlay') this.addCard(card, targetId);
+        });
+
+        if (n.args.src === 'deck') {
+          // Make sure it will pass in front of discard
+          dojo.style('bang-card-' + card.uid, 'zIndex', dojo.query('#discard .bang-card').length);
+        }
+      });
+
+      if (n.args.src === 'deck') this.updateDeckCount(n);
+
+      // TODO: && no cards in discard
+      if (n.args.src === 'discard' && n.args.nextCard) {
+        this.addCard(n.args.nextCard, 'discard');
+      }
+    },
+
+    /*
+     * notification sent to all players when someone discard a card
+     */
+    notif_cardLost(n) {
+      debug('Notif: card lost', n);
+      var sourceId = this.getCardAndDestroy(n.args.card, 'player-character-' + n.args.player_id);
+      this.slideTemporaryToDiscard(n.args.card, sourceId);
+      this.notifqueue.setSynchronousDuration(n.args.player_id === this.player_id ? 800 : 1200);
+    },
+
+    notif_cardLostToDeck(n) {
+      debug('Notif: cardLostToDeck', n);
+      let card = this.getBackCard();
+      card.uid = card.id + 'slide';
+      card.extraClass += ' slide';
+      let sourceId;
+      if (n.args.card) {
+        sourceId = this.getCardAndDestroy(n.args.card, 'player-character-' + n.args.player_id);
+      } else {
+        sourceId = this.getCardAndDestroy(card, 'player-character-' + n.args.player_id);
+      }
+      this.slideTemporary('jstpl_card', card, 'board', sourceId, 'deck', 800, 120 * i)
+      this.notifqueue.setSynchronousDuration(n.args.player_id === this.player_id ? 800 : 1200);
+      this.updateDeckCount(n);
+    },
+
+    /*
+     * Flip card
+     */
+    notif_flipCard(n) {
+      debug('Notif: card flipped', n);
+      var card = n.args.card;
+      card.flipped = true;
+      card.enforceTooltip = true;
+      var div = this.addCard(card, 'discard');
+      dojo.style(div, 'zIndex', dojo.query('#discard .bang-card').length);
+      setTimeout(() => dojo.removeClass('bang-card-' + card.id, 'flipped'), 100);
+      this.updateDeckCount(n);
+    },
+
+    /*
+     * Update playing/reacting option after playing a card
+     */
+    notif_updateOptions(n) {
+      debug('Notif: update options', n);
+      this.gamedatas.gamestate.args['_private'] = n.args;
+      this.clearPossible();
+      var action = this.gamedatas.gamestate.name == 'playCard' ? 'playCard' : 'selectReact';
+      this.makeCardSelectable(n.args.cards, action);
+    },
+
+    notif_reshuffle(n) {
+      debug('Notif: reshuffle', n);
+      dojo.query('#discard .bang-card').forEach((card, i) =>
+        setTimeout(() => {
+          dojo.addClass(card, 'flipped');
+          setTimeout(() => dojo.destroy(card), 500);
+        }, i * 10),
+      );
+      this.updateDeckCount(n);
     },
   });
 });

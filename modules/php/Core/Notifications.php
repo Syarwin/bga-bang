@@ -39,8 +39,9 @@ class Notifications
     self::notify($playerId, 'showMessage', $message, []);
   }
 
-  public static function showMessageToAll($message, $data = [])
+  public static function showMessageToAll($message, $data = [], $showAsPopup = true)
   {
+    $data['showAsPopup'] = $showAsPopup;
     self::notifyAll( 'showMessage', $message, $data);
   }
 
@@ -111,7 +112,7 @@ class Notifications
     $amount = $cards->count();
     $data = [
       'i18n' => ['src_name'],
-      'src_name' => $src == LOCATION_DECK ? clienttranslate('the deck') : clienttranslate('the discard pile'),
+      'src_name' => $src === LOCATION_DECK ? clienttranslate('the deck') : clienttranslate('the discard pile'),
       'player' => $player,
       'amount' => $amount,
       'cards' => $cards->toArray(),
@@ -125,11 +126,8 @@ class Notifications
     }
 
     // Notify player
-    if ($amount == 1) {
-      $msg =
-        $src == LOCATION_DECK
-          ? clienttranslate('You draw ${card_name} from ${src_name}')
-          : clienttranslate('You choose ${card_name} from ${src_name}');
+    if ($amount === 1) {
+      $msg = clienttranslate('You draw ${card_name} from ${src_name}');
       $data['card'] = $cards->first();
     } else {
       $msg = clienttranslate('You draw ${amount} cards from ${src_name}');
@@ -142,14 +140,15 @@ class Notifications
       unset($data['card']);
       unset($data['cards']);
       $msg =
-        $amount == 1
+        $amount === 1
           ? clienttranslate('${player_name} draws a card from ${src_name}')
           : clienttranslate('${player_name} draws ${amount} cards from ${src_name}');
     } else {
-      $msg =
-        $src == LOCATION_DECK
-          ? clienttranslate('${player_name} draws ${card_name} from ${src_name}')
-          : clienttranslate('${player_name} chooses ${card_name} from ${src_name}');
+      if ($amount === 1) {
+        $msg = clienttranslate('${player_name} draws ${card_name} from ${src_name}');
+      } else {
+        $msg = clienttranslate('${player_name} draws ${amount} cards from ${src_name}');
+      }
     }
     $data['ignore'] = [$player];
     Notifications::notifyAll('cardsGained', $msg, $data);
@@ -193,7 +192,26 @@ class Notifications
     ]);
   }
 
-  public static function discardedCards($player, $cards, $silent = false, $cardIds = null)
+  /**
+   * @param Player $player
+   * @param array $card
+   * @return void
+   */
+  public static function discardedCardToDrawPile($player, $card)
+  {
+    $data = [
+      'player' => $player,
+      'card' => $card,
+      'deckCount' => Cards::getDeckCount(),
+    ];
+    self::notify($player, 'cardLostToDeck', '', $data);
+    self::notify($player, 'updateHand', clienttranslate('${You} discard ${card_name} face down on the deck'), $data);
+    $data['ignore'] = [$player];
+    unset($data['card']);
+    self::notifyAll('cardLostToDeck', '', $data);
+  }
+
+  public static function discardedCards($player, $cards, $silent = false, $cardIds = null, $destination = LOCATION_DISCARD)
   {
     $cardsIds = $cardsIds ?? $cards->getIds();
     if (!is_array($cardIds)) {
@@ -203,7 +221,20 @@ class Notifications
     for ($i = 0; $i < count($cardIds); $i++) {
       $cId = $cardIds[$i];
       $card = $cards[$cId];
-      self::discardedCard($player, $card, $silent);
+      if ($destination === LOCATION_DISCARD) {
+        self::discardedCard($player, $card, $silent);
+      } else {
+        self::discardedCardToDrawPile($player, $card);
+      }
+    }
+
+    if ($destination === LOCATION_DISCARD) {
+      self::notifyAll('updateHand', clienttranslate('${player_name} discards ${amount} card(s) face down on the deck'), [
+        'player' => $player,
+        'ignore' => [$player],
+        'amount' => count($cardIds),
+        'total' => $player->getHand()->count(),
+      ]);
     }
   }
 
@@ -242,15 +273,6 @@ class Notifications
   public static function tell($msg, $args = [])
   {
     self::notifyAll('debug', $msg, $args);
-  }
-
-  // todo implement and change parameter for notification name
-  /**
-   * updating reaction options with arguments formatted as usual
-   */
-  public static function updateOptions($player, $args)
-  {
-    self::notify($player->getId(), 'updateOptions', '', $args);
   }
 
   /**

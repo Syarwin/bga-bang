@@ -530,5 +530,25 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
 
       return dojo.place(this[tplMethodName](object), container);
     },
+
+    waitForDisappearance(locator, timeout = null) {
+      if (!timeout) {
+        timeout = 5000;
+      }
+      this.timeout = timeout;
+
+      return new Promise(
+          function (resolve, _) {
+            (function waitFor() {
+              if (dojo.query(locator).length === 0 || this.timeout < 0) {
+                resolve();
+              } else {
+                this.timeout = this.timeout - 100;
+                setTimeout(waitFor.bind(this, resolve), 100);
+              }
+            }.bind(this)());
+          }.bind(this)
+      );
+    },
   });
 });

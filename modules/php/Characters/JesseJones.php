@@ -36,13 +36,13 @@ class JesseJones extends \BANG\Models\Player
         return $player->getHand()->count() > 0;
       })
       ->getIds();
-    $options[] = LOCATION_DECK;
+    $options[] = Rules::getDrawOrDiscardCardsLocation(LOCATION_DECK);
     return ['options' => $options];
   }
 
   public function useAbility($args)
   {
-    if ($args['selected'] == LOCATION_DECK) {
+    if (in_array($args['selected'], [LOCATION_DECK, LOCATION_DISCARD])) {
       $cardsToDraw = 1;
     } else {
       // TODO : add sanity check

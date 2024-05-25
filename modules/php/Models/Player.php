@@ -287,8 +287,20 @@ class Player extends \BANG\Helpers\DB_Manager
   public function drawCards($amount)
   {
     if ($amount > 0) {
-      $cards = Cards::deal($this->id, $amount);
-      Notifications::drawCards($this, $cards);
+      $location = Rules::getDrawOrDiscardCardsLocation(LOCATION_DECK);
+      $cards = Cards::deal($this->id, $amount, $location);
+      if ($cards->count() > 0) {
+        Notifications::drawCards($this, $cards, $location === LOCATION_DISCARD, $location);
+      }
+      if ($location === LOCATION_DISCARD && $cards->count() !== $amount) {
+        Notifications::showMessageToAll(
+          clienttranslate('The discard was empty while drawing so ${player_name} drew remaining cards from the deck'),
+          [ 'player' => $this ],
+        false
+        );
+        $cards = Cards::deal($this->id, $amount - $cards->count());
+        Notifications::drawCards($this, $cards);
+      }
       $this->onChangeHand();
     }
   }

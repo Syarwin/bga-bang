@@ -120,9 +120,14 @@ trait TurnTrait
   public function actDiscardExcess($cardIds)
   {
     $cards = Cards::getMany($cardIds);
-    Cards::discardMany($cardIds);
     $player = Players::getActive();
-    Notifications::discardedCards($player, $cards, false, $cardIds);
+    $destination = Rules::getDrawOrDiscardCardsLocation(LOCATION_DISCARD);
+    if ($destination === LOCATION_DECK) {
+      Cards::putManyOnDeck($cardIds);
+    } else {
+      Cards::discardMany($cardIds);
+    }
+    Notifications::discardedCards($player, $cards, false, $cardIds, $destination);
     Stack::finishState();
   }
 

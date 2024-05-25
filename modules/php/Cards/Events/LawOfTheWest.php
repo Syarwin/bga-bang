@@ -26,9 +26,9 @@ class LawOfTheWest extends AbstractEventCard
   /**
    * @return array
    */
-  public function getPhaseOneRules()
+  public function getRules()
   {
-    return [RULE_PHASE_ONE_EVENT_SPECIAL_DRAW => true] + parent::getPhaseOneRules();
+    return [RULE_PHASE_ONE_EVENT_SPECIAL_DRAW => true] + parent::getRules();
   }
 
   /**

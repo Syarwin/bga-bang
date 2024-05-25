@@ -119,7 +119,9 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
     notif_showMessage(n) {
       debug('Notif: show message', n);
-      this.showMessage(n.log, 'info');
+      if (n.args.showAsPopup) {
+        this.showMessage(n.log, 'info');
+      }
     },
 
     /*

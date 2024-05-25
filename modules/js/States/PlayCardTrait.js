@@ -9,7 +9,9 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
      */
     onEnteringStatePlayCard(args) {
       var cards = args._private.cards.filter((card) => card.options != null);
-      this.makeCardSelectable(cards, 'playCard');
+      this.waitForDisappearance('.slide').then(() => {
+        this.makeCardSelectable(cards, 'playCard');
+      });
     },
 
     onEnteringStatePlayLastCardManually(args) {
