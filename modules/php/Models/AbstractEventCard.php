@@ -140,6 +140,14 @@ class AbstractEventCard implements \JsonSerializable
   }
 
   /**
+   * @return boolean
+   */
+  public function isDistanceForcedToOne()
+  {
+    return false;
+  }
+
+  /**
    * @param Player $player
    * @return void
    */

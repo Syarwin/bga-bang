@@ -34,7 +34,7 @@ class EventCards extends \BANG\Helpers\Pieces
     Globals::setResurrectionIsPossible(GameOptions::isResurrection());
 
     shuffle($cards);
-    if (count(self::getCurrentExpansionsIntersesction($expansions)) === 2) {
+    if (count(self::getCurrentExpansionsIntersection($expansions)) === 2) {
       $cards = array_slice($cards, 0, 12);
     }
 
@@ -42,7 +42,7 @@ class EventCards extends \BANG\Helpers\Pieces
     $lastCard = self::singleCreate(self::getCurrentExpansionLastCardType($expansions), LOCATION_EVENTS_DECK);
     EventCards::insertAtBottom($lastCard, LOCATION_EVENTS_DECK);
     // TODO: Remove next 2 lines, this is just for debugging purposes
-    $lastCard = self::singleCreate(CARD_ABANDONED_MINE, LOCATION_EVENTS_DECK);
+    $lastCard = self::singleCreate(CARD_AMBUSH, LOCATION_EVENTS_DECK);
     EventCards::insertOnTop($lastCard, LOCATION_EVENTS_DECK);
   }
 
@@ -174,7 +174,7 @@ class EventCards extends \BANG\Helpers\Pieces
    */
   private static function getCurrentExpansionLastCardType($expansions)
   {
-    $currentEventExpansions = self::getCurrentExpansionsIntersesction($expansions);
+    $currentEventExpansions = self::getCurrentExpansionsIntersection($expansions);
     switch (count($currentEventExpansions)) {
       case 2:
         return [CARD_HIGH_NOON, CARD_FISTFUL_OF_CARDS][bga_rand(0, 1)];
@@ -193,7 +193,7 @@ class EventCards extends \BANG\Helpers\Pieces
    * @param array $expansions
    * @return array
    */
-  private static function getCurrentExpansionsIntersesction($expansions)
+  private static function getCurrentExpansionsIntersection($expansions)
   {
     $eventExpansions = [HIGH_NOON, FISTFUL_OF_CARDS];
     return array_intersect($expansions, $eventExpansions);

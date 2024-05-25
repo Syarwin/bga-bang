@@ -186,7 +186,7 @@ class Players extends \BANG\Helpers\DB_Manager
 
   public static function getDistances()
   {
-    return self::getLivingPlayers()->map(function ($player) {
+    return self::getLivingPlayers()->map(function (Player $player) {
       return $player->getDistances();
     });
   }

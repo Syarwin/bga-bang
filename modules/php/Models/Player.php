@@ -484,11 +484,15 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function getDistanceTo($enemy)
   {
-    $positions = Players::getPlayerPositions();
-    $pos1 = $positions[$this->getId()];
-    $pos2 = $positions[$enemy->getId()];
-    $d = abs($pos2 - $pos1);
-    $dist = min($d, count($positions) - $d);
+    if (Rules::isDistanceForcedToOne()) {
+      $dist = 1;
+    } else {
+      $positions = Players::getPlayerPositions();
+      $pos1 = $positions[$this->getId()];
+      $pos2 = $positions[$enemy->getId()];
+      $d = abs($pos2 - $pos1);
+      $dist = min($d, count($positions) - $d);
+    }
     foreach ($enemy->getCardsInPlay() as $card) {
       if (($card->getEffect()['type'] ?? null) == RANGE_DECREASE) {
         $dist--;

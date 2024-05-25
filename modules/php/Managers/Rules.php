@@ -135,6 +135,15 @@ class Rules extends DB_Manager
   }
 
   /**
+   * @return boolean
+   */
+  public static function isDistanceForcedToOne()
+  {
+    $eventCard = EventCards::getActive();
+    return $eventCard && $eventCard->isDistanceForcedToOne();
+  }
+
+  /**
    * This method returns info about the flip of a card for some effect (i.e. Barrel,Dynamite,BlackJack...) that can be
    * modified by an active event (i.e. Curse,Blessing).
    *

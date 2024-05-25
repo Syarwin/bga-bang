@@ -19,8 +19,9 @@ class BrownCard extends AbstractCard
     return true;
   }
 
-  /*
+  /**
    * getTargetablePlayers: return the player's id that can be targeted by this card, depending on effect and range
+   * @param Player $player
    */
   public function getTargetablePlayers($player)
   {

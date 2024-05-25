@@ -1,5 +1,6 @@
 <?php
 namespace BANG\Cards\Events;
+use BANG\Core\Notifications;
 use BANG\Models\AbstractEventCard;
 
 class Ambush extends AbstractEventCard
@@ -12,5 +13,13 @@ class Ambush extends AbstractEventCard
     $this->text = clienttranslate('The distance between players is 1. This is only modified by cards in play.');
     $this->effect = EFFECT_PERMANENT;
     $this->expansion = FISTFUL_OF_CARDS;
+  }
+
+  /**
+   * @return boolean
+   */
+  public function isDistanceForcedToOne()
+  {
+    return true;
   }
 }
