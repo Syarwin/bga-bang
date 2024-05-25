@@ -1,8 +1,6 @@
 <?php
 namespace BANG\States;
 use BANG\Core\Stack;
-use BANG\Core\Globals;
-use BANG\Managers\Cards;
 use BANG\Managers\Players;
 
 trait TriggerAbilityTrait

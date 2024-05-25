@@ -37,6 +37,7 @@ define([
   g_gamethemeurl + 'modules/js/States/DiscardBlueCardTrait.js',
   g_gamethemeurl + 'modules/js/States/RussianRouletteTrait.js',
   g_gamethemeurl + 'modules/js/States/BloodBrothersTrait.js',
+  g_gamethemeurl + 'modules/js/States/HardLiquorTrait.js',
 
   g_gamethemeurl + 'modules/js/EventTrait.js',
   g_gamethemeurl + 'modules/js/CardTrait.js',
@@ -59,6 +60,7 @@ define([
       bang.dialogManager,
       bang.russianRouletteTrait,
       bang.bloodBrothersTrait,
+      bang.hardLiquorTrait,
     ],
     {
       /*

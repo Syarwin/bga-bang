@@ -208,4 +208,18 @@ class action_banghighnoon extends APP_GameAction
     $this->game->actReactBloodBrothers($playerId);
     self::ajaxResponse();
   }
+
+  public function actHardLiquorGainHP()
+  {
+    self::setAjaxMode();
+    $this->game->actHardLiquorGainHP();
+    self::ajaxResponse();
+  }
+
+  public function actDeclineHardLiquor()
+  {
+    self::setAjaxMode();
+    $this->game->actDeclineHardLiquor();
+    self::ajaxResponse();
+  }
 }

@@ -266,6 +266,15 @@ $machinestates = [
     'possibleactions' => ['actReactBloodBrothers'],
   ],
 
+  ST_HARD_LIQUOR => [
+    'name' => 'hardLiquor',
+    'description' => clienttranslate('${actplayer} may skip his drawing phase 1 to regain 1 life point'),
+    'descriptionmyturn' => clienttranslate('${you} may skip his drawing phase 1 to regain 1 life point'),
+    'type' => 'activeplayer',
+    'args' => 'argHardLiquor',
+    'possibleactions' => ['actHardLiquorGainHP', 'actDeclineHardLiquor'],
+  ],
+
   ST_END_OF_TURN => [
     'name' => 'endOfTurn',
     'type' => 'game',

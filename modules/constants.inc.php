@@ -37,6 +37,7 @@ define('ST_PLAY_LAST_CARD_AUTOMATICALLY', 34);
 define('ST_PLAY_LAST_CARD_MANUALLY', 35);
 define('ST_RUSSIAN_ROULETTE', 36);
 define('ST_BLOOD_BROTHERS', 37);
+define('ST_HARD_LIQUOR', 38);
 define('ST_PRE_GAME_END', 98);
 define('ST_GAME_END', 99);
 
