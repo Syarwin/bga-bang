@@ -493,14 +493,16 @@ class Player extends \BANG\Helpers\DB_Manager
       $d = abs($pos2 - $pos1);
       $dist = min($d, count($positions) - $d);
     }
-    foreach ($enemy->getCardsInPlay() as $card) {
-      if (($card->getEffect()['type'] ?? null) == RANGE_DECREASE) {
-        $dist--;
+    if (!Rules::isIgnoreCardsInPlay()) {
+      foreach ($enemy->getCardsInPlay() as $card) {
+        if (($card->getEffect()['type'] ?? null) == RANGE_DECREASE) {
+          $dist--;
+        }
       }
-    }
-    foreach ($this->getCardsInPlay() as $card) {
-      if (($card->getEffect()['type'] ?? null) == RANGE_INCREASE) {
-        $dist++;
+      foreach ($this->getCardsInPlay() as $card) {
+        if (($card->getEffect()['type'] ?? null) == RANGE_INCREASE) {
+          $dist++;
+        }
       }
     }
     return $dist;
@@ -549,13 +551,13 @@ class Player extends \BANG\Helpers\DB_Manager
   public function getRange()
   {
     $weapon = $this->getWeapon();
-    return is_null($weapon) ? 1 : $weapon->getEffect()['range'];
+    return is_null($weapon) || Rules::isIgnoreCardsInPlay() ? 1 : $weapon->getEffect()['range'];
   }
 
   public function hasUnlimitedBangs()
   {
     $weapon = $this->getWeapon();
-    return !is_null($weapon) && $weapon->getType() == CARD_VOLCANIC;
+    return !Rules::isIgnoreCardsInPlay() && !is_null($weapon) && $weapon->getType() === CARD_VOLCANIC;
   }
 
   /*
@@ -628,7 +630,7 @@ class Player extends \BANG\Helpers\DB_Manager
 
     // Defensive cards in play
     $card = $this->getCardsInPlay()->reduce(function ($barrel, $card) {
-      return $card->getType() == CARD_BARREL && !$card->wasPlayed() ? $card : $barrel;
+      return $card->getType() === CARD_BARREL && !$card->wasPlayed() && !Rules::isIgnoreCardsInPlay() ? $card : $barrel;
     }, null);
     if (!is_null($card)) {
       $res[] = [

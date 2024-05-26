@@ -13,4 +13,12 @@ class Lasso extends AbstractEventCard
     $this->effect = EFFECT_PERMANENT;
     $this->expansion = FISTFUL_OF_CARDS;
   }
+
+  /**
+   * @return boolean
+   */
+  public function isIgnoreCardsInPlay()
+  {
+    return true;
+  }
 }

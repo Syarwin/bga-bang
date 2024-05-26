@@ -176,4 +176,14 @@ class Rules extends DB_Manager
       'eventChangedResult' => $eventChangedResult,
     ];
   }
+
+  /**
+   * @param int | null $exceptId
+   * @return boolean
+   */
+  public static function isIgnoreCardsInPlay($exceptId = null) {
+    // $exceptId would be used for Belle Star later
+    $eventCard = EventCards::getActive();
+    return $eventCard && $eventCard->isIgnoreCardsInPlay();
+  }
 }

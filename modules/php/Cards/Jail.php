@@ -59,7 +59,7 @@ class Jail extends BlueCard
 
     $suitOverrideInfo = Rules::getSuitOverrideInfo($card, 'H');
     $args = array_merge($suitOverrideInfo, ['player' => $player]);
-    if ($suitOverrideInfo['flipSuccessful']) {
+    if ($suitOverrideInfo['flipSuccessful'] || Rules::isIgnoreCardsInPlay()) {
       Notifications::tell(clienttranslate('${player_name} can make his turn${flipEventMsg}'), $args);
     } else {
       Notifications::tell(clienttranslate('${player_name} is skipped${flipEventMsg}'), $args);

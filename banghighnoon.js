@@ -202,7 +202,7 @@ define([
         debug('Update action buttons: ' + stateName, args);
         this.updatePlayersStatus(); // Called when a player go inactive
 
-        if (stateName == 'selectCard' && (args.cards.length > 0 || args._private)) {
+        if (stateName === 'selectCard' && (args.cards.length > 0 || args._private)) {
           this.addActionButton('buttonShowCards', _('Show cards'), () => this.dialogSelectCard(), null, false, 'blue');
         }
 
@@ -210,22 +210,22 @@ define([
           // Make sure the player is active
           return;
 
-        if (stateName == 'chooseCharacter') {
+        if (stateName === 'chooseCharacter') {
           this.addActionButton('buttonShowCharacters', _('Show characters'), () => this.dialogChooseCharacter(), null, false, 'blue');
         }
 
-        if (stateName == 'playCard') {
+        if (stateName === 'playCard') {
           if (args._private && args._private.character != null && this._selectedCard == null)
             this.makeCharacterAbilityUsable(args._private.character);
 
           this.addActionButton('buttonEndTurn', _('End of turn'), 'onClickEndOfTurn', null, false, 'blue');
         }
 
-        if (stateName == 'discardExcess')
+        if (stateName === 'discardExcess')
           this.addActionButton('buttonCancelEnd', _('Cancel'), 'onClickCancelEndTurn', null, false, 'gray');
 
-        if (stateName == 'react') {
-          if (args.type == 'attack')
+        if (stateName === 'react') {
+          if (args.type === 'attack')
             this.addActionButton(
               'buttonSkip',
               _('Pass and lose life point'),
@@ -240,19 +240,19 @@ define([
             args._private &&
             args._private.character != null &&
             this._selectedCard == null &&
-            this._selectedCards.length == 0
+            this._selectedCards.length === 0
           )
             this.makeCharacterAbilityUsable(args._private.character);
 
           // Button for barrel
           args._private.cards.forEach((card) => {
-            if ($('bang-card-' + card.id).parentNode.id != 'hand-cards' && showBarrel) {
+            if ($('bang-card-' + card.id).parentNode.id !== 'hand-cards' && showBarrel) {
               this.addPrimaryActionButton('buttonUseBarrel', _('Use barrel'), () => this.onClickCardSelectReact(card));
             }
           });
         }
 
-        if (stateName == 'preEliminate') {
+        if (stateName === 'preEliminate') {
           this.addActionButton(
             'buttonDefaultDiscardExcess',
             _('Use default order'),
@@ -264,7 +264,7 @@ define([
         }
 
 
-        if (stateName == 'vicePenalty') {
+        if (stateName === 'vicePenalty') {
           this.addActionButton(
             'buttonDefaultDiscardVicePenalty',
             _('Use default order'),
@@ -295,9 +295,9 @@ define([
         let SID_KETCHUM = 9,
           JOURDONNAIS = 13;
         this._selectedCards = [];
-        if (this._useAbilityOption == JOURDONNAIS) {
+        if (this._useAbilityOption === JOURDONNAIS) {
           this.onClickConfirmUseAbility();
-        } else if (this._useAbilityOption == SID_KETCHUM) {
+        } else if (this._useAbilityOption === SID_KETCHUM) {
           // Sid Ketchum power
           var cards = dojo.query('#hand .bang-card').map((card) => {
             return { id: dojo.attr(card, 'data-id') };
