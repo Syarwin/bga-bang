@@ -292,8 +292,6 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
                     ? 'hand'
                     : 'player-character-' + n.args.player_id
                 : 'player-inplay-' + n.args.player_id;
-        console.log('**** sourceId: ', sourceId);
-        console.log('**** targetId: ', targetId);
         this.slideTemporary('jstpl_card', card, 'board', sourceId, targetId, 800, 120 * i).then(() => {
           if (targetId === 'hand') this.addCard(card, 'hand-cards');
           if (n.args.target === 'inPlay') this.addCard(card, targetId);
@@ -307,7 +305,6 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
       if (n.args.src === 'deck') this.updateDeckCount(n);
 
-      // TODO: && no cards in discard
       if (n.args.src === 'discard' && n.args.nextCard) {
         this.addCard(n.args.nextCard, 'discard');
       }
