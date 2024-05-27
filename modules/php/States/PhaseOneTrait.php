@@ -24,6 +24,10 @@ trait PhaseOneTrait
   {
     $player = Players::getActive();
 
+    $eventCard = EventCards::getActive();
+    if ($eventCard && $eventCard->getEffect() === EFFECT_ENDOFPHASEONE) {
+      $eventCard->resolveEffect($player);
+    }
     Stack::insertOnTop(self::phaseOneAtom($player, RULE_PHASE_ONE_CARDS_DRAW_END));
     if (Rules::isPhaseOnePlayerSpecialDraw()) {
       Stack::insertOnTop(self::phaseOneAtom($player, RULE_PHASE_ONE_PLAYER_ABILITY_DRAW));
@@ -43,8 +47,8 @@ trait PhaseOneTrait
   }
 
   /*
- * stPhaseOneSetup: called on the beginning of each player turn, if the turn was not skipped, to add 3 phase on sub-phases
- */
+   * stPhaseOneSetup: called on the beginning of each player turn, if the turn was not skipped, we add 3 phase on sub-phases
+   */
   public function stPhaseOneDrawCards()
   {
     $ctx = Stack::getCtx();

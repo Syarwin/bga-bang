@@ -120,11 +120,11 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       this._action = action;
 
       // Add unselectable class
-      if (this._action == 'selectCard' || this._action == 'discardExcess') {
+      if (action === 'selectCard' || action === 'discardExcess') {
         dojo.query('#hand .bang-card').addClass('unselectable');
         dojo.query('#bang-player-' + this.player_id + ' .bang-card').addClass('unselectable');
       } else {
-        if (action != 'selectDialog') dojo.query('.bang-card').addClass('unselectable');
+        if (action !== 'selectDialog') dojo.query('.bang-card').addClass('unselectable');
       }
 
       this._selectableCards = cards;
@@ -134,7 +134,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         dojo.addClass('bang-card-' + card.uid, 'selectable');
       });
 
-      if (this._action == 'playCard') {
+      if (action === 'playCard') {
         this.gamedatas.gamestate.descriptionmyturn = _('You can play a card');
         this.updatePageTitle();
       }
@@ -146,10 +146,10 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     onClickCard(ocard) {
       //if(!this.isCurrentPlayerActive()) return;
       // Is the card in the discard ?
-      if ($('bang-card-' + ocard.uid).parentNode.id == 'discard') return this.onClickDiscard();
+      if ($('bang-card-' + ocard.uid).parentNode.id === 'discard') return this.onClickDiscard();
 
       // Is the card selectable ?
-      var card = this._selectableCards.find((o) => o.id == ocard.id);
+      var card = this._selectableCards.find((o) => o.id === ocard.id);
       if (!card) return;
 
       var methodName = 'onClickCard' + this._action.charAt(0).toUpperCase() + this._action.slice(1);
@@ -173,7 +173,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       var domId = 'bang-card-' + card.uid;
       // Already selected, unselect it
       if (this._selectedCards.includes(card.id)) {
-        this._selectedCards = this._selectedCards.filter((id) => id != card.id);
+        this._selectedCards = this._selectedCards.filter((id) => id !== card.id);
         dojo.removeClass(domId, 'selected');
         this._selectableCards.forEach((c) => {
           let query = '#bang-card-' + c.uid;
@@ -206,18 +206,20 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     onClickCardToSelect(card, buttonName, buttonText, callback) {
       if (!this.toggleCard(card)) return;
 
-      if (this._selectedCards.length < this._amount) {
+      if (this._selectedCards.length < this._amount || this._selectedCards.length === 0) {
         this.removeActionButtons();
         this.onUpdateActionButtons(this.gamedatas.gamestate.name, this.gamedatas.gamestate.args);
       } else {
-        this.addActionButton(
-            buttonName,
-            buttonText,
-            callback,
-            null,
-            false,
-            'blue',
-        );
+        if (!$(buttonName)) {
+          this.addActionButton(
+              buttonName,
+              buttonText,
+              callback,
+              null,
+              false,
+              'blue',
+          );
+        }
       }
     },
 
@@ -231,11 +233,11 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
           targetPlayer = n.args.player_id2 || null;
       var animationDuration = 1000;
 
-      if (!targetPlayer && target == 'inPlay') {
+      if (!targetPlayer && target === 'inPlay') {
         targetPlayer = playerId;
         animationDuration = 700;
       }
-      if (targetPlayer && target != 'inPlay') {
+      if (targetPlayer && target !== 'inPlay') {
         // Slide to player then to discard
         animationDuration = 1600;
       }
@@ -247,11 +249,11 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       card.extraClass += ' slide';
       var sourceId = this.getCardAndDestroy(n.args.card, 'player-character-' + playerId);
       if (targetPlayer) {
-        var duration = target == 'inPlay' ? animationDuration : animationDuration / 2;
-        var targetId = (target == 'inPlay' ? 'player-inplay-' : 'player-character-') + targetPlayer;
+        var duration = target === 'inPlay' ? animationDuration : animationDuration / 2;
+        var targetId = (target === 'inPlay' ? 'player-inplay-' : 'player-character-') + targetPlayer;
         this.slideTemporary('jstpl_card', card, 'board', sourceId, targetId, duration, 0).then(() => {
           // Add the card in front of player
-          if (target == 'inPlay') this.addCard(n.args.card, targetId);
+          if (target === 'inPlay') this.addCard(n.args.card, targetId);
           // Put the card in the discard pile
           else this.slideTemporaryToDiscard(n.args.card, targetId, animationDuration / 2, 'discard');
         });
@@ -357,7 +359,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       debug('Notif: update options', n);
       this.gamedatas.gamestate.args['_private'] = n.args;
       this.clearPossible();
-      var action = this.gamedatas.gamestate.name == 'playCard' ? 'playCard' : 'selectReact';
+      var action = this.gamedatas.gamestate.name === 'playCard' ? 'playCard' : 'selectReact';
       this.makeCardSelectable(n.args.cards, action);
     },
 

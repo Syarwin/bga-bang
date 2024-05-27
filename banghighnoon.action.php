@@ -55,7 +55,6 @@ class action_banghighnoon extends APP_GameAction
   {
     self::setAjaxMode();
     $cards = explode(';', self::getArg('cards', AT_numberlist, false));
-    //		$id = self::getArg( "id", AT_posint, true );
     $this->game->actReact($cards);
     self::ajaxResponse();
   }
@@ -220,6 +219,24 @@ class action_banghighnoon extends APP_GameAction
   {
     self::setAjaxMode();
     $this->game->actDeclineHardLiquor();
+    self::ajaxResponse();
+  }
+
+  public function actDiscardCardsRanch()
+  {
+    self::setAjaxMode();
+    $cardIds = explode(';', self::getArg('cardIds', AT_numberlist, false));
+    $cardIds = array_map(function ($cardId) {
+      return (int) $cardId;
+    }, $cardIds);
+    $this->game->actDiscardCardsRanch($cardIds);
+    self::ajaxResponse();
+  }
+
+  public function actIgnoreRanch()
+  {
+    self::setAjaxMode();
+    $this->game->actIgnoreRanch();
     self::ajaxResponse();
   }
 }

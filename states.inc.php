@@ -275,6 +275,15 @@ $machinestates = [
     'possibleactions' => ['actHardLiquorGainHP', 'actDeclineHardLiquor'],
   ],
 
+  ST_RANCH => [
+    'name' => 'ranch',
+    'description' => clienttranslate('${actplayer} may discard any number of cards from his hand to draw the same number of cards from the deck'),
+    'descriptionmyturn' => clienttranslate('${you} may discard any number of cards from his hand to draw the same number of cards from the deck'),
+    'type' => 'activeplayer',
+    'args' => 'argRanch',
+    'possibleactions' => ['actDiscardCardsRanch', 'actIgnoreRanch'],
+  ],
+
   ST_END_OF_TURN => [
     'name' => 'endOfTurn',
     'type' => 'game',

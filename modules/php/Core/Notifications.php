@@ -211,13 +211,18 @@ class Notifications
     self::notifyAll('cardLostToDeck', '', $data);
   }
 
-  public static function discardedCards($player, $cards, $silent = false, $cardIds = null, $destination = LOCATION_DISCARD)
+  /**
+   * @param Player $player
+   * @param int[] $cardIds
+   * @param boolean $silent
+   * @param string $destination
+   * @return void
+   */
+  public static function discardedCards($player, $cardIds, $silent = false, $destination = LOCATION_DISCARD)
   {
-    $cardsIds = $cardsIds ?? $cards->getIds();
-    if (!is_array($cardIds)) {
-      return;
-    }
+    $cards = Cards::getMany($cardIds);
 
+    // We don't use foreach here because we care about the order of discarding
     for ($i = 0; $i < count($cardIds); $i++) {
       $cId = $cardIds[$i];
       $card = $cards[$cId];

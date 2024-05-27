@@ -41,9 +41,8 @@ class SidKetchum extends \BANG\Models\Player
       ['player_name' => $this->name]
     );
 
-    $cards = Cards::getMany($args);
     Cards::discardMany($args);
-    Notifications::discardedCards($this, $cards, false, $args);
+    Notifications::discardedCards($this, $args);
     $this->gainLife();
     $this->addRevivalAtomOrEliminate();
   }

@@ -67,7 +67,7 @@ define([
       var domId = 'bang-card-' + card.id;
       // Already selected, unselect it
       if (this.selectedCards.includes(card.id)) {
-        this.selectedCards = this.selectedCards.filter((id) => id != card.id);
+        this.selectedCards = this.selectedCards.filter((id) => id !== card.id);
         dojo.removeClass(domId, 'selected');
         this.selectableCards.forEach((c) =>
           dojo
@@ -83,7 +83,7 @@ define([
         this.selectedCards.push(card.id);
         dojo.addClass(domId, 'selected');
 
-        if (this.selectedCards.length == this.amount) {
+        if (this.selectedCards.length === this.amount) {
           dojo.query('.bang-card.selectable').removeClass('selectable').addClass('unselectable');
           dojo.query('.bang-card.selected').removeClass('unselectable').addClass('selectable');
         }
@@ -94,7 +94,7 @@ define([
 
     async onClickCard(ocard) {
       // Is the card selectable ?
-      var card = this.selectableCards.find((o) => o.id == ocard.id);
+      var card = this.selectableCards.find((o) => o.id === ocard.id);
       if (!card) return;
 
       if (this.location != null) {

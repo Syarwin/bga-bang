@@ -119,7 +119,6 @@ trait TurnTrait
 
   public function actDiscardExcess($cardIds)
   {
-    $cards = Cards::getMany($cardIds);
     $player = Players::getActive();
     $destination = Rules::getDrawOrDiscardCardsLocation(LOCATION_DISCARD);
     if ($destination === LOCATION_DECK) {
@@ -127,7 +126,7 @@ trait TurnTrait
     } else {
       Cards::discardMany($cardIds);
     }
-    Notifications::discardedCards($player, $cards, false, $cardIds, $destination);
+    Notifications::discardedCards($player, $cardIds, false, $destination);
     Stack::finishState();
   }
 

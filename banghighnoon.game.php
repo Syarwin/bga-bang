@@ -60,6 +60,7 @@ class banghighnoon extends Table
   use BANG\States\RussianRouletteTrait;
   use BANG\States\BloodBrothersTrait;
   use BANG\States\HardLiquorTrait;
+  use BANG\States\RanchTrait;
 
   public static $instance = null;
   public function __construct()

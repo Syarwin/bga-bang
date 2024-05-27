@@ -38,6 +38,7 @@ define([
   g_gamethemeurl + 'modules/js/States/RussianRouletteTrait.js',
   g_gamethemeurl + 'modules/js/States/BloodBrothersTrait.js',
   g_gamethemeurl + 'modules/js/States/HardLiquorTrait.js',
+  g_gamethemeurl + 'modules/js/States/RanchTrait.js',
 
   g_gamethemeurl + 'modules/js/EventTrait.js',
   g_gamethemeurl + 'modules/js/CardTrait.js',
@@ -61,6 +62,7 @@ define([
       bang.russianRouletteTrait,
       bang.bloodBrothersTrait,
       bang.hardLiquorTrait,
+      bang.ranchTrait,
     ],
     {
       /*
@@ -262,7 +264,6 @@ define([
             'gray',
           );
         }
-
 
         if (stateName === 'vicePenalty') {
           this.addActionButton(

@@ -916,10 +916,8 @@ class Player extends \BANG\Helpers\DB_Manager
     $hand = $this->getHand();
     $equipment = $this->getCardsInPlay();
     $allCards = $equipment->merge($hand);
-    $allCards->map(function ($card) {
-      Cards::discard($card);
-    });
-    Notifications::discardedCards($this, $allCards, false, $allCards->getIds());
+    Cards::discardMany($allCards);
+    Notifications::discardedCards($this, $allCards->getIds());
     $this->onChangeHand();
   }
 

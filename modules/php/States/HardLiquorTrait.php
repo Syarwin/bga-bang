@@ -15,10 +15,6 @@ trait HardLiquorTrait
     ];
   }
 
-  /**
-   * @param int|null $playerId
-   * @return void
-   */
   public function actHardLiquorGainHP()
   {
     self::checkAction('actHardLiquorGainHP');

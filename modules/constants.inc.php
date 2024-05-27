@@ -38,6 +38,7 @@ define('ST_PLAY_LAST_CARD_MANUALLY', 35);
 define('ST_RUSSIAN_ROULETTE', 36);
 define('ST_BLOOD_BROTHERS', 37);
 define('ST_HARD_LIQUOR', 38);
+define('ST_RANCH', 39);
 define('ST_PRE_GAME_END', 98);
 define('ST_GAME_END', 99);
 
@@ -239,6 +240,7 @@ define('EFFECT_INSTANT', 101);
 define('EFFECT_PERMANENT', 102);
 define('EFFECT_ENDOFTURN', 103);
 define('EFFECT_PHASE_ONE', 104);
+define('EFFECT_ENDOFPHASEONE', 105);
 
 define('NONE', 0);
 define('INRANGE', 1);

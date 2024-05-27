@@ -190,7 +190,7 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
     },
 
     /*
-     * Add a blue/grey button if it doesn't already exists
+     * Add a blue/grey button if it doesn't already exist
      */
     addPrimaryActionButton(id, text, callback) {
       if (!$(id)) this.addActionButton(id, text, callback, 'customActions', false, 'blue');
