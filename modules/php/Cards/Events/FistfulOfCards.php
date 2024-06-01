@@ -32,7 +32,7 @@ class FistfulOfCards extends AbstractEventCard
         clienttranslate('${actplayer} must react to a BANG! from A Fistful Of Cards event, ${bangsLeft} more to go');
       $atom = Stack::newAtom(ST_REACT, [
         'pId' => $player->getId(),
-        'type' => 'attack',
+        'type' => REACT_TYPE_ATTACK,
         'msgActive' => $msgActive,
         'msgWaiting' => clienttranslate('${you} must react to A Fistful Of Cards event. You may have already selected your reaction'),
         'msgInactive' => $msgInactive,

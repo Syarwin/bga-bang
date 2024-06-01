@@ -214,12 +214,18 @@ class AbstractCard implements \JsonSerializable
 
   /**
    * pass: default function to handle reaction by clicking "pass" button
+   * @param Player $player
    */
   public function pass($player)
   {
-    if ($this->effect['type'] == BASIC_ATTACK) {
+    if ($this->effect['type'] === BASIC_ATTACK) {
       Stack::unsuspendNext(ST_REACT);
-      $player->loseLife();
+      $targetId = Stack::getCtx()['targetId'];
+      if ($targetId) {
+        $player->discardCard(Cards::get($targetId));
+      } else {
+        $player->loseLife();
+      }
     }
   }
 

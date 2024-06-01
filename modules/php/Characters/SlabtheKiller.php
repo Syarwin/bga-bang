@@ -13,9 +13,9 @@ class SlabtheKiller extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function getReactAtomForAttack($card)
+  public function getReactAtomForAttack($card, $targetId)
   {
-    $atom = parent::getReactAtomForAttack($card);
+    $atom = parent::getReactAtomForAttack($card, $targetId);
     if ($card->getType() == CARD_BANG && Rules::isAbilityAvailable()) {
       $missedNeeded = 2; // Slab's ability
       $atom['missedNeeded'] = $missedNeeded;

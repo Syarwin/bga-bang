@@ -309,3 +309,9 @@ define('RULE_BANGS_AMOUNT_LEFT', 'bangs_amount_left');
 define('FULLY_ALIVE', 0);
 define('DEAD_GHOST', 1);
 define('LIVING_DEAD', 2);
+
+/*
+ * Constants for react types
+ */
+define('REACT_TYPE_ATTACK', 'attack');
+define('REACT_TYPE_DUEL', 'duel');

@@ -148,13 +148,20 @@ class AbstractEventCard implements \JsonSerializable
   }
 
   /**
-   * @param int | null $exceptPId
    * @return boolean
    */
   public function isIgnoreCardsInPlay()
   {
     return false;
   }
+
+    /**
+     * @return boolean
+     */
+    public function isAimingCards()
+    {
+        return false;
+    }
 
   /**
    * @param Player $player

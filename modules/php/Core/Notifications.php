@@ -65,6 +65,15 @@ class Notifications
         $msg = clienttranslate('${player_name} plays ${card_name} as BANG! and chooses ${player_name2} as target');
         $data['msgYou'] = clienttranslate('${You} play ${card_name} as BANG! and choose ${player_name2} as target');
       }
+      if ($args['type'] === LOCATION_INPLAY) {
+        $targetCard = Cards::get($args['arg']);
+        $msg = clienttranslate('${player_name} plays ${card_name} and chooses ${player_name2}\'s card ${target_card_name} as a target');
+        $data['msgYou'] = clienttranslate('${You} play ${card_name} and choose ${player_name2}\'s card ${target_card_name} as a target');
+        $data['target_card'] = $targetCard;
+        $data['target_card_name'] = $targetCard->getName();
+        $data['i18n'][] = 'target_card_name';
+        $data['preserve'][] = $targetCard;
+      }
 
       $data['player2'] = Players::get($args['player']);
     }

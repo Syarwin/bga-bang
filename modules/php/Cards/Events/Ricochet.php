@@ -13,4 +13,9 @@ class Ricochet extends AbstractEventCard
     $this->effect = EFFECT_PERMANENT;
     $this->expansion = FISTFUL_OF_CARDS;
   }
+
+  public function isAimingCards()
+  {
+      return true;
+  }
 }

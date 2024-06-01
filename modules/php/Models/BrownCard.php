@@ -3,7 +3,7 @@ namespace BANG\Models;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
 use BANG\Core\Notifications;
-use BANG\Helpers\Utils;
+use BANG\Managers\Rules;
 
 /*
  * BrownCard: class to handle brown card
@@ -64,11 +64,14 @@ class BrownCard extends AbstractCard
           return ['target_type' => TARGET_NONE];
         }
         $targetType = TARGET_PLAYER;
+        if (Rules::isAimingCards()) {
+            $targetType = TARGET_CARD;
+        }
         break;
 
       case DRAW:
       case DISCARD:
-        $targetType = $this->effect['impacts'] == NONE ? TARGET_NONE : TARGET_CARD;
+        $targetType = $this->effect['impacts'] === NONE ? TARGET_NONE : TARGET_CARD;
         break;
 
       case DEFENSIVE:
@@ -83,9 +86,12 @@ class BrownCard extends AbstractCard
     ];
   }
 
-  /*
-   * play
+  /**
+   * @param Player $player
+   * @param array $args
+   * @return void
    */
+
   public function play($player, $args)
   {
     // Played card always go to the discard
@@ -94,14 +100,15 @@ class BrownCard extends AbstractCard
     switch ($this->effect['type']) {
       case BASIC_ATTACK:
         $ids = $this->effect['impacts'] == ALL_OTHER ? $player->getOrderedOtherPlayers() : [$args['player']];
-        return $player->attack($this, $ids);
+        $targetId = $args['type'] === LOCATION_INPLAY ? (int) $args['arg'] : null;
+        $player->attack($this, $ids, $targetId);
+        break;
 
       case DRAW:
       case DISCARD:
         // Drawing from deck
         if (!isset($args['type'])) {
           $player->drawCards($this->effect['amount']);
-          return null;
         }
 
         // Drawing/discarding from someone's hand/inplay

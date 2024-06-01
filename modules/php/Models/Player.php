@@ -757,29 +757,52 @@ class Player extends \BANG\Helpers\DB_Manager
 
   /**
    * attack : performs an attack on all given players
+   * @param AbstractCard $card
+   * @param int[] $playerIds
+   * @param int | null $targetId
+   * @return void
    */
-  public function attack($card, $playerIds)
+  public function attack($card, $playerIds, $targetId = null)
   {
-    $atom = $this->getReactAtomForAttack($card);
+    $atom = $this->getReactAtomForAttack($card, $targetId);
     foreach (array_reverse($playerIds) as $pId) {
       $atom['pId'] = $pId;
       Stack::insertOnTop($atom);
     }
   }
 
-  public function getReactAtomForAttack($card)
+  /**
+   * @param AbstractCard $card
+   * @param int | null $targetId
+   * @return array
+   */
+  public function getReactAtomForAttack($card, $targetId)
   {
     $srcName = $card->getName();
     if ($this->character == CALAMITY_JANET && $card->getType() == CARD_MISSED) {
       $srcName = clienttranslate('Missed used as a BANG! by Calamity Janet');
     }
 
+    if (is_null($targetId)) {
+      $msgActive = clienttranslate('${you} may react to ${src_name}');
+      $msgWaiting = clienttranslate('${you} may react to ${src_name}. You may have already selected your reaction');
+      $msgInactive = clienttranslate('${actplayer} may react to ${src_name}');
+      $targetName = '';
+    } else {
+      $target = Cards::get($targetId);
+      $msgActive = clienttranslate('${you} may react to ${src_name} ricocheting to ${target_name}');
+      $msgWaiting = clienttranslate('${you} may react to ${src_name} ricocheting to ${target_name}. You may have already selected your reaction');
+      $msgInactive = clienttranslate('${actplayer} may react to ${src_name} ricocheting to ${target_name}');
+      $targetName = $target->getName();
+    }
+
     return Stack::newAtom(ST_REACT, [
-      'type' => 'attack',
-      'msgActive' => clienttranslate('${you} may react to ${src_name}'),
-      'msgWaiting' => clienttranslate('${you} may react to ${src_name}. You may have already selected your reaction'),
-      'msgInactive' => clienttranslate('${actplayer} may react to ${src_name}'),
+      'targetId' => $targetId,
+      'msgActive' => $msgActive,
+      'msgWaiting' => $msgWaiting,
+      'msgInactive' => $msgInactive,
       'src_name' => $srcName,
+      'target_name' => $targetName,
       'src' => $card->jsonSerialize(),
       'attacker' => $this->id,
       'missedNeeded' => 1,

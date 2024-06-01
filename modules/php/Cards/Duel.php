@@ -42,7 +42,7 @@ class Duel extends \BANG\Models\BrownCard
   {
     parent::play($player, $args);
     $atom = Stack::newAtom(ST_REACT, [
-      'type' => 'duel',
+      'type' => REACT_TYPE_DUEL,
       'msgActive' => clienttranslate('${you} may react to the duel by discarding a Bang!'),
       'msgInactive' => clienttranslate('${actplayer} may react to the duel by discarding a Bang!'),
       'src' => $this->jsonSerialize(),

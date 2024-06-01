@@ -241,7 +241,7 @@ class Pieces extends DB_Manager
 
     $result = self::getSelectQuery()
       ->whereIn(static::$prefix . 'id', $ids)
-      ->get(false);
+      ->get();
     if (count($result) != count($ids) && $raiseExceptionIfNotEnough) {
       throw new \feException('Class Pieces: getMany, some pieces have not been found !' . json_encode($ids));
     }
