@@ -172,6 +172,14 @@ class AbstractEventCard implements \JsonSerializable
   }
 
   /**
+   * @return boolean
+   */
+  public function isCanPlayBlueGreenCards()
+  {
+    return true;
+  }
+
+  /**
    * @param Player $player
    * @return void
    */

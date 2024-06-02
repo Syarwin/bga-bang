@@ -1,6 +1,7 @@
 <?php
 namespace BANG\Models;
 use BANG\Managers\Cards;
+use BANG\Managers\Rules;
 
 /*
  * BlueCard:  class to handle blue cards
@@ -24,7 +25,7 @@ class BlueCard extends AbstractCard
         return null;
       }
     }
-    return ['target_type' => TARGET_NONE];
+    return Rules::isCanPlayBlueGreenCards() ? ['target_type' => TARGET_NONE] : null;
   }
 
   public function play($player, $args)

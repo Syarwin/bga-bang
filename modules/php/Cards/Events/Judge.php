@@ -13,4 +13,12 @@ class Judge extends AbstractEventCard
     $this->effect = EFFECT_PERMANENT;
     $this->expansion = FISTFUL_OF_CARDS;
   }
+
+  /**
+   * @return boolean
+   */
+  public function isCanPlayBlueGreenCards()
+  {
+    return false;
+  }
 }
