@@ -39,6 +39,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       } else if (card.options.target_type == TARGET_CARD) {
         this.makePlayersCardsSelectable(card.options.targets);
       }
+      this._selectableCards = [];
     },
 
     /*

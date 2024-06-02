@@ -297,17 +297,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
      */
     makePlayersSelectable(players, append = false) {
       if (!append) {
-        this.gamedatas.gamestate.descriptionmyturn = _('You must choose a player');
-        this.updatePageTitle();
-        this.removeActionButtons();
-        this.addActionButton(
-          'buttonCancel',
-          _('Undo'),
-          () => this.onClickCancelCardSelected(this._selectableCards),
-          null,
-          false,
-          'gray',
-        );
+        this.doSomeCleanupAndAddUndo(_('You must choose a player'));
       }
 
       this._selectablePlayers = players;
@@ -350,18 +340,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
      * Make some players' cards selectable with sometimes the deck
      */
     makePlayersCardsSelectable(playersIds) {
-      this.removeActionButtons();
-      this.gamedatas.gamestate.descriptionmyturn = _("You must choose a card in play or a player's hand");
-      this.updatePageTitle();
-      var oldSelectableCards = this._selectableCards;
-      this.addActionButton(
-        'buttonCancel',
-        _('Undo'),
-        () => this.onClickCancelCardSelected(oldSelectableCards),
-        null,
-        false,
-        'gray',
-      );
+      this.doSomeCleanupAndAddUndo(_("You must choose a card in play or a player's hand"));
 
       var cards = [];
       this._selectablePlayers = playersIds.filter((playerId) => {
@@ -377,6 +356,22 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         });
       });
       this.makeCardSelectable(cards, 'selectOption');
+    },
+
+    doSomeCleanupAndAddUndo(descriptionText) {
+      this.gamedatas.gamestate.descriptionmyturn = descriptionText;
+      this.updatePageTitle();
+      this.removeActionButtons();
+      // Making a clone of this array so when this._selectableCards will be changed - we still work with old array
+      var oldSelectableCards = this._selectableCards;
+      this.addActionButton(
+          'buttonCancel',
+          _('Undo'),
+          () => this.onClickCancelCardSelected(oldSelectableCards),
+          null,
+          false,
+          'gray',
+      );
     },
 
     onClickCardSelectOption(card) {
