@@ -77,6 +77,8 @@ define([
         this._selectedOptionType = null;
         this._selectedOptionArg = null;
         this._dial = {};
+        this._isToSelectSecondCard = false;
+        this._selectedCardSecond = null;
 
         // States that need the player to be active to be entered
         this._activeStates = [
@@ -422,6 +424,8 @@ define([
         this._selectedOptionArg = null;
         this._isSelectableDeck = false;
         this._isSelectableDiscard = false;
+        this._isToSelectSecondCard = false;
+        this._selectedCardSecond = null;
         dojo.query('.bang-card').removeClass('unselectable selectable selected');
         dojo.query('.bang-player').removeClass('selectable');
         dojo.removeClass('deck', 'selectable');

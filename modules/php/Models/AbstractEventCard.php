@@ -155,13 +155,21 @@ class AbstractEventCard implements \JsonSerializable
     return false;
   }
 
-    /**
-     * @return boolean
-     */
-    public function isAimingCards()
-    {
-        return false;
-    }
+  /**
+   * @return boolean
+   */
+  public function isAimingCards()
+  {
+    return false;
+  }
+
+  /**
+   * @return boolean
+   */
+  public function isBangCouldBePlayedWithAnotherBang()
+  {
+    return false;
+  }
 
   /**
    * @param Player $player

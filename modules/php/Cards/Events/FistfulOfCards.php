@@ -34,7 +34,6 @@ class FistfulOfCards extends AbstractEventCard
         'pId' => $player->getId(),
         'type' => REACT_TYPE_ATTACK,
         'msgActive' => $msgActive,
-        'msgWaiting' => clienttranslate('${you} must react to A Fistful Of Cards event. You may have already selected your reaction'),
         'msgInactive' => $msgInactive,
         'bangsLeft' => $bangsLeft,
         'src_name' => $this->name,

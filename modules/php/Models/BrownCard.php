@@ -100,8 +100,13 @@ class BrownCard extends AbstractCard
     switch ($this->effect['type']) {
       case BASIC_ATTACK:
         $ids = $this->effect['impacts'] == ALL_OTHER ? $player->getOrderedOtherPlayers() : [$args['player']];
-        $targetId = $args['type'] === LOCATION_INPLAY ? (int) $args['arg'] : null;
-        $player->attack($this, $ids, $targetId);
+        $targetCardId = $args['type'] === LOCATION_INPLAY ? (int) $args['arg'] : null;
+        $player->attack($this, $ids, $targetCardId, !!$args['secondCardId']);
+        if ($args['secondCardId']) {
+          $card = Cards::get($args['secondCardId']);
+          $card->discard();
+          Notifications::discardedCard($player, $card);
+        }
         break;
 
       case DRAW:

@@ -18,9 +18,9 @@ class CalamityJanet extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function getReactAtomForAttack($card, $targetId)
+  public function getReactAtomForAttack($card, $targetCardId, $secondMissedNeeded)
   {
-    $atom = parent::getReactAtomForAttack($card, $targetId);
+    $atom = parent::getReactAtomForAttack($card, $targetCardId, $secondMissedNeeded);
     if ($card->getType() == CARD_MISSED) {
       $atom['src_name'] = clienttranslate('Missed used as a BANG! by Calamity Janet');
     }
@@ -84,10 +84,9 @@ class CalamityJanet extends \BANG\Models\Player
       Notifications::cardPlayed($this, $card, $args);
       Log::addCardPlayed($this, $card, $args);
       $card = new Bang(['id' => $card->getId()]);
-      $newstate = $card->play($this, $args);
+      $card->play($this, $args);
       $this->onChangeHand();
-      return $newstate;
     }
-    return parent::playCard($card, $args);
+    parent::playCard($card, $args);
   }
 }

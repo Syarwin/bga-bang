@@ -1,8 +1,8 @@
 <?php
 namespace BANG\Cards;
-use BANG\Managers\EventCards;
 use BANG\Managers\Rules;
 use BANG\Models\BangActionCard;
+use BANG\Models\Player;
 
 class Bang extends BangActionCard
 {
@@ -26,15 +26,23 @@ class Bang extends BangActionCard
     ];
   }
 
-  /*
+  /**
    * Only one bang per turn, unless unlimitedBangs granted by Volcanic or by character
+   * @param Player $player
    */
   public function getPlayOptions($player)
   {
-    $activeEvent = EventCards::getActive();
-    $bangStrictlyForbidden = $activeEvent && $activeEvent->isBangStrictlyForbidden();
-    if (!$bangStrictlyForbidden && ($player->hasUnlimitedBangs() || Rules::getBangsAmountLeft() > 0)) {
-      return parent::getPlayOptions($player);
+    if (!Rules::isBangStrictlyForbidden() && ($player->hasUnlimitedBangs() || Rules::getBangsAmountLeft() > 0)) {
+      $playOptions = parent::getPlayOptions($player);
+      if (Rules::isBangCouldBePlayedWithAnotherBang()) {
+        $bangsWithoutThisCard = array_values(array_filter($player->getBangCards()['cards'], function ($card) {
+          return $card['id'] !== $this->getId();
+        }));
+        if (count($bangsWithoutThisCard) > 0) {
+          $playOptions['with_another_card'] = ['strict' => false, 'targets' => $bangsWithoutThisCard];
+        }
+      }
+      return $playOptions;
     } else {
       return null;
     }
@@ -43,6 +51,6 @@ class Bang extends BangActionCard
   public function play($player, $args)
   {
     Rules::bangPlayed();
-    return parent::play($player, $args);
+    parent::play($player, $args);
   }
 }

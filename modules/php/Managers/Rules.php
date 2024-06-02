@@ -143,14 +143,32 @@ class Rules extends DB_Manager
     return $eventCard && $eventCard->isDistanceForcedToOne();
   }
 
-    /**
-     * @return boolean
-     */
-    public static function isAimingCards()
-    {
-        $eventCard = EventCards::getActive();
-        return $eventCard && $eventCard->isAimingCards();
-    }
+  /**
+   * @return boolean
+   */
+  public static function isAimingCards()
+  {
+    $eventCard = EventCards::getActive();
+    return $eventCard && $eventCard->isAimingCards();
+  }
+
+  /**
+   * @return boolean
+   */
+  public static function isBangStrictlyForbidden()
+  {
+    $activeEvent = EventCards::getActive();
+    return $activeEvent && $activeEvent->isBangStrictlyForbidden();
+  }
+
+  /**
+   * @return boolean
+   */
+  public static function isBangCouldBePlayedWithAnotherBang()
+  {
+    $activeEvent = EventCards::getActive();
+    return $activeEvent && $activeEvent->isBangCouldBePlayedWithAnotherBang();
+  }
 
   /**
    * This method returns info about the flip of a card for some effect (i.e. Barrel,Dynamite,BlackJack...) that can be

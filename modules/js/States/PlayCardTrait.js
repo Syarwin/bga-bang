@@ -26,20 +26,41 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       dojo.query('#hand .bang-card').removeClass('selectable').addClass('unselectable');
       dojo.removeClass('bang-card-' + card.id, 'unselectable');
       dojo.addClass('bang-card-' + card.id, 'selected');
-      this._selectedCard = card;
-
-      // What kind of target ?
-      let TARGET_NONE = 0,
-        TARGET_CARD = 1,
-        TARGET_PLAYER = 2;
-      if (card.options.target_type == TARGET_NONE) {
-        this.onSelectOption();
-      } else if (card.options.target_type == TARGET_PLAYER) {
-        this.makePlayersSelectable(card.options.targets);
-      } else if (card.options.target_type == TARGET_CARD) {
-        this.makePlayersCardsSelectable(card.options.targets);
+      if (this._selectedCard) {
+        dojo.removeClass('bang-card-' + this._selectedCard.id, 'unselectable');
+        dojo.addClass('bang-card-' + this._selectedCard.id, 'selected');
+      } else {
+        this._selectedCard = card;
       }
-      this._selectableCards = [];
+
+      if (!!card.options.with_another_card?.strict) {
+        this._selectableCards = card.options.with_another_card.targets;
+      } else {
+        // What kind of target ?
+        let TARGET_NONE = 0,
+            TARGET_CARD = 1,
+            TARGET_PLAYER = 2;
+        if (card.options.target_type === TARGET_NONE) {
+          this.onSelectOption();
+        } else if (card.options.target_type === TARGET_PLAYER) {
+          this.makePlayersSelectable(card.options.targets);
+          if (this._isToSelectSecondCard) {
+            this._selectableCards = [];
+            this._isToSelectSecondCard = false;
+            this._selectedCardSecond = card;
+          } else {
+            if (card.options.with_another_card) {
+              card.options.with_another_card.targets.forEach((card) => {
+                dojo.removeClass('bang-card-' + card.id, 'unselectable');
+                dojo.addClass('bang-card-' + card.id, 'selectable');
+              });
+              this._isToSelectSecondCard = true;
+            }
+          }
+        } else if (card.options.target_type === TARGET_CARD) {
+          this.makePlayersCardsSelectable(card.options.targets);
+        }
+      }
     },
 
     /*
@@ -60,6 +81,10 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         optionType: this._selectedOptionType,
         optionArg: this._selectedOptionArg,
       };
+      if (this._selectedCardSecond) {
+        data.secondCardId = this._selectedCardSecond.id;
+      }
+      this._selectedCard = null;
       this.takeAction('actPlayCard', data);
     },
   });

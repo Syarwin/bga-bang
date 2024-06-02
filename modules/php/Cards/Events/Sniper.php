@@ -13,4 +13,12 @@ class Sniper extends AbstractEventCard
     $this->effect = EFFECT_PERMANENT;
     $this->expansion = FISTFUL_OF_CARDS;
   }
+
+  /**
+   * @return boolean
+   */
+  public function isBangCouldBePlayedWithAnotherBang()
+  {
+    return true;
+  }
 }

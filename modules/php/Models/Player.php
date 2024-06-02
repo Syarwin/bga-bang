@@ -746,6 +746,8 @@ class Player extends \BANG\Helpers\DB_Manager
 
   /**
    * playCard: play a card given by id with args to specify the chosen option
+   * @param AbstractCard $card
+   * @param array $args
    */
   public function playCard($card, $args)
   {
@@ -759,12 +761,13 @@ class Player extends \BANG\Helpers\DB_Manager
    * attack : performs an attack on all given players
    * @param AbstractCard $card
    * @param int[] $playerIds
-   * @param int | null $targetId
+   * @param int | null $targetCardId
+   * @param boolean $secondMissedNeeded
    * @return void
    */
-  public function attack($card, $playerIds, $targetId = null)
+  public function attack($card, $playerIds, $targetCardId = null, $secondMissedNeeded = false)
   {
-    $atom = $this->getReactAtomForAttack($card, $targetId);
+    $atom = $this->getReactAtomForAttack($card, $targetCardId, $secondMissedNeeded);
     foreach (array_reverse($playerIds) as $pId) {
       $atom['pId'] = $pId;
       Stack::insertOnTop($atom);
@@ -773,40 +776,45 @@ class Player extends \BANG\Helpers\DB_Manager
 
   /**
    * @param AbstractCard $card
-   * @param int | null $targetId
+   * @param int | null $targetCardId
+   * @param boolean $secondMissedNeeded
    * @return array
    */
-  public function getReactAtomForAttack($card, $targetId)
+  public function getReactAtomForAttack($card, $targetCardId, $secondMissedNeeded)
   {
     $srcName = $card->getName();
     if ($this->character == CALAMITY_JANET && $card->getType() == CARD_MISSED) {
       $srcName = clienttranslate('Missed used as a BANG! by Calamity Janet');
     }
 
-    if (is_null($targetId)) {
+    if (is_null($targetCardId)) { // Standard shot to player themselves
       $msgActive = clienttranslate('${you} may react to ${src_name}');
-      $msgWaiting = clienttranslate('${you} may react to ${src_name}. You may have already selected your reaction');
       $msgInactive = clienttranslate('${actplayer} may react to ${src_name}');
-      $targetName = '';
-    } else {
-      $target = Cards::get($targetId);
-      $msgActive = clienttranslate('${you} may react to ${src_name} ricocheting to ${target_name}');
-      $msgWaiting = clienttranslate('${you} may react to ${src_name} ricocheting to ${target_name}. You may have already selected your reaction');
-      $msgInactive = clienttranslate('${actplayer} may react to ${src_name} ricocheting to ${target_name}');
-      $targetName = $target->getName();
+      $targetCardName = '';
+    } else { // Ricochet to some card in play
+      $targetCard = Cards::get($targetCardId);
+      $msgActive = clienttranslate('${you} may react to ${src_name} ricocheting to ${target_card_name}');
+      $msgInactive = clienttranslate('${actplayer} may react to ${src_name} ricocheting to ${target_card_name}');
+      $targetCardName = $targetCard->getName();
     }
 
-    return Stack::newAtom(ST_REACT, [
-      'targetId' => $targetId,
+    $data = [
+      'targetCardId' => $targetCardId,
       'msgActive' => $msgActive,
-      'msgWaiting' => $msgWaiting,
       'msgInactive' => $msgInactive,
       'src_name' => $srcName,
-      'target_name' => $targetName,
+      'target_card_name' => $targetCardName,
       'src' => $card->jsonSerialize(),
       'attacker' => $this->id,
       'missedNeeded' => 1,
-    ]);
+    ];
+    if ($secondMissedNeeded) {
+      $data['missedNeeded'] = 2;
+      $data['msgActive'] = clienttranslate('${you} may react to ${src_name} with ${missedNeeded} Missed!');
+      $data['msgInactive'] = clienttranslate('${actplayer} may react to ${src_name} with ${missedNeeded} Missed!');
+    }
+
+    return Stack::newAtom(ST_REACT, $data);
   }
 
   /**
