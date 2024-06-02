@@ -8,10 +8,9 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     onEnteringStateHardLiquor(args) {
       this._action = 'hardLiquor';
       if (this.isCurrentPlayerActive()) {
-        this.addPrimaryActionButton('buttonHardLiquorGainHP', args.options[0], () => this.onClickHardLiquorGainHP());
-        this.addPrimaryActionButton('buttonDeclineHardLiquor', args.options[1], () => this.onClickDeclineHardLiquor());
+        this.addPrimaryActionButton('buttonHardLiquorGainHP', _(args.options[0]), () => this.onClickHardLiquorGainHP());
+        this.addPrimaryActionButton('buttonDeclineHardLiquor', _(args.options[1]), () => this.onClickDeclineHardLiquor());
       }
-
     },
 
     onClickHardLiquorGainHP() {

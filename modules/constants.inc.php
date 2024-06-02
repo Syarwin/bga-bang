@@ -39,6 +39,7 @@ define('ST_RUSSIAN_ROULETTE', 36);
 define('ST_BLOOD_BROTHERS', 37);
 define('ST_HARD_LIQUOR', 38);
 define('ST_RANCH', 39);
+define('ST_PEYOTE', 40);
 define('ST_PRE_GAME_END', 98);
 define('ST_GAME_END', 99);
 

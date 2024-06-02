@@ -173,6 +173,12 @@ class Cards extends \BANG\Helpers\Pieces
     Cards::move($cId, [LOCATION_HAND, $player->getId()]);
   }
 
+  /**
+   * @param string $name
+   * @param int $nbr
+   * @param string $fromLocation
+   * @return \BANG\Helpers\Collection
+   */
   public static function drawForLocation($name, $nbr, $fromLocation = LOCATION_DECK)
   {
     $cards = Cards::getInLocation($name);

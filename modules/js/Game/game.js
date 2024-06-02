@@ -47,10 +47,9 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
     /*
      * Make an AJAX call with automatic lock
      */
-    takeAction(action, data, reEnterStateOnError, checkAction = true) {
+    takeAction(action, data = {}, reEnterStateOnError = false, checkAction = true) {
       if (checkAction && !this.checkAction(action)) return false;
 
-      data = data || {};
       if (data.lock === undefined) {
         data.lock = true;
       } else if (data.lock === false) {

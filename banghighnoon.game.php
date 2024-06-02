@@ -61,6 +61,7 @@ class banghighnoon extends Table
   use BANG\States\BloodBrothersTrait;
   use BANG\States\HardLiquorTrait;
   use BANG\States\RanchTrait;
+  use BANG\States\PeyoteTrait;
 
   public static $instance = null;
   public function __construct()

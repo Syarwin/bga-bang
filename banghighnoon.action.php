@@ -241,4 +241,14 @@ class action_banghighnoon extends APP_GameAction
     $this->game->actIgnoreRanch();
     self::ajaxResponse();
   }
+
+  public function actPeyoteGuess()
+  {
+    self::setAjaxMode();
+    $isRed = self::getArg('isRed', AT_bool, false);
+    $this->game->actPeyoteGuess($isRed);
+    self::ajaxResponse();
+  }
+
+
 }

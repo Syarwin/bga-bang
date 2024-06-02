@@ -25,7 +25,7 @@ trait ResolveFlippedTrait
   {
     $startingAtom = Stack::top();
     $player = Players::get($startingAtom['pId']);
-    $srcCard = $startingAtom['src']['id'] == $startingAtom['pId'] ? $player : Cards::get($startingAtom['src']['id']);
+    $srcCard = $startingAtom['src']['id'] === $startingAtom['pId'] ? $player : Cards::get($startingAtom['src']['id']);
     $flippedCards = Cards::getInLocation(LOCATION_FLIPPED);
     if ($flippedCards->count() == 1) {
       $srcCard->resolveFlipped($flippedCards->first(), $player);

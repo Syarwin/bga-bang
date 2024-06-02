@@ -284,6 +284,15 @@ $machinestates = [
     'possibleactions' => ['actDiscardCardsRanch', 'actIgnoreRanch'],
   ],
 
+  ST_PEYOTE => [
+    'name' => 'peyote',
+    'description' => clienttranslate('${actplayer} must guess the suit of the card they draw'),
+    'descriptionmyturn' => clienttranslate('${you} try to guess the suit of the card you draw'),
+    'type' => 'activeplayer',
+    'args' => 'argPeyote',
+    'possibleactions' => ['actPeyoteGuess'],
+  ],
+
   ST_END_OF_TURN => [
     'name' => 'endOfTurn',
     'type' => 'game',

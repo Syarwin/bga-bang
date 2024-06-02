@@ -1,5 +1,6 @@
 <?php
 namespace BANG\Core;
+use BANG\Helpers\Collection;
 use BANG\Managers\EventCards;
 use banghighnoon;
 use BANG\Managers\Players;
@@ -102,7 +103,7 @@ class Notifications
   public static function gainedLife($player, $amount)
   {
     $msg = clienttranslate('${player_name} gains ${amount} life points');
-    $sgYou = clienttranslate('${You} gain ${amount} life points');
+    $msgYou = clienttranslate('${You} gain ${amount} life points');
     if ($amount == 1) {
       $msg = clienttranslate('${player_name} gains a life point');
       $msgYou = clienttranslate('${You} gain a life point');
@@ -116,7 +117,7 @@ class Notifications
     ]);
   }
 
-  public static function drawCards($player, $cards, $public = false, $src = LOCATION_DECK)
+  public static function drawCards($player, $cards, $public = false, $src = LOCATION_DECK, $isMessage = true)
   {
     $amount = $cards->count();
     $data = [
@@ -136,7 +137,7 @@ class Notifications
 
     // Notify player
     if ($amount === 1) {
-      $msg = clienttranslate('You draw ${card_name} from ${src_name}');
+      $msg = $isMessage ? clienttranslate('You draw ${card_name} from ${src_name}') : '';
       $data['card'] = $cards->first();
     } else {
       $msg = clienttranslate('You draw ${amount} cards from ${src_name}');
@@ -154,7 +155,7 @@ class Notifications
           : clienttranslate('${player_name} draws ${amount} cards from ${src_name}');
     } else {
       if ($amount === 1) {
-        $msg = clienttranslate('${player_name} draws ${card_name} from ${src_name}');
+        $msg = $isMessage ? clienttranslate('${player_name} draws ${card_name} from ${src_name}') : '';
       } else {
         $msg = clienttranslate('${player_name} draws ${amount} cards from ${src_name}');
       }
@@ -163,9 +164,16 @@ class Notifications
     Notifications::notifyAll('cardsGained', $msg, $data);
   }
 
-  public static function drawCardFromDiscard($player, $cards)
+  /**
+   * @param Player $player
+   * @param Collection $cards
+   * @param string $isMessage
+   * @param string $msgOthersForced
+   * @return void
+   */
+  public static function drawCardFromDiscard($player, $cards, $isMessage = true)
   {
-    self::drawCards($player, $cards, true, LOCATION_DISCARD);
+    self::drawCards($player, $cards, true, LOCATION_DISCARD, $isMessage);
   }
 
   // For general store
@@ -292,11 +300,14 @@ class Notifications
   /**
    * drawing a card for cards like barrel, jail, etc.
    */
-  public static function flipCard($player, $card, $src)
+  public static function flipCard($player, $card, $src, $isMessage = true)
   {
-    $src_name = $src instanceof AbstractCard ? $src->getName() : $src->getCharName();
+    $src_name = $src instanceof AbstractCard || $src instanceof AbstractEventCard ? $src->getName() : $src->getCharName();
 
-    self::notifyAll('flipCard', clienttranslate('${player_name} draws ${card_name} for ${src_name}\'s effect'), [
+    $msgOthers = $isMessage ? clienttranslate('${player_name} draws ${card_name} for ${src_name}\'s effect') : '';
+    $msgYou = $isMessage ? clienttranslate('${You} draw ${card_name} for ${src_name}\'s effect') : '';
+    self::notifyAll('flipCard', $msgOthers, [
+      'msgYou' => $msgYou,
       'i18n' => ['src_name'],
       'player' => $player,
       'card' => $card,
@@ -430,6 +441,16 @@ class Notifications
   {
     $msg = '${player_name} is eliminated but might be back at some point...';
     self::notifyAll('playerUnconscious', $msg, [
+      'player' => $player,
+    ]);
+  }
+
+  public static function playerGuessedIncorrectly($player)
+  {
+    $msg = '${player_name} guessed a card color incorrectly thus ending Peyote\'s effect';
+    $msgYou = '${You} guessed a card color incorrectly thus ending Peyote\'s effect';
+    self::notifyAll('message', $msg, [
+      'msgYou' => $msgYou,
       'player' => $player,
     ]);
   }
