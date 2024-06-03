@@ -114,6 +114,7 @@ class BrownCard extends AbstractCard
         // Drawing from deck
         if (!isset($args['type'])) {
           $player->drawCards($this->effect['amount']);
+          return null;
         }
 
         // Drawing/discarding from someone's hand/inplay

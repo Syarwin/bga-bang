@@ -32,6 +32,9 @@ class Jail extends BlueCard
 
   public function getPlayOptions($player)
   {
+    if (!Rules::isCanPlayBlueGreenCards()) {
+      return null;
+    }
     // Can be played on anyone except the sheriff
     $players = Players::getLivingPlayers()->filter(function ($player) {
       return $player->getRole() != SHERIFF && !$player->hasCardCopyInPlay($this);

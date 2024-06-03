@@ -303,7 +303,7 @@ class Players extends \BANG\Helpers\DB_Manager
   public static function getLivingPlayerIdsStartingWith($player, $includeGhosts = false, $exceptId = null)
   {
     $and = '';
-    if ($exceptId != null) {
+    if ($exceptId !== null) {
       $and = " AND player_id NOT IN ('" . implode("','", [$exceptId]) . "')";
     }
     $orderByPlayer = $player ? "player_no < {$player->getNo()}, " : '';
