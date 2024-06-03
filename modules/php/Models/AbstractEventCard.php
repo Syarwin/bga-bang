@@ -1,6 +1,8 @@
 <?php
 namespace BANG\Models;
 
+use BANG\Managers\Players;
+
 /**
  * EventCard:  class to handle blue cards
  *
@@ -177,6 +179,14 @@ class AbstractEventCard implements \JsonSerializable
   public function isCanPlayBlueGreenCards()
   {
     return true;
+  }
+
+  /**
+   * @param Player $currentPlayer
+   * @return int
+   */
+  public function getNextPlayerId($currentPlayer) {
+    return Players::getNextId($currentPlayer, true);
   }
 
   /**

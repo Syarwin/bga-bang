@@ -16,6 +16,7 @@ class Globals extends \BANG\Helpers\DB_Manager
     'gameIsOver' => 'bool',
     'resurrectionIsPossible' => 'bool',
     'roundNumber' => 'int',
+    'vendettaWasUsed' => 'bool',
   ];
 
   protected static $table = 'global_variables';

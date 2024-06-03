@@ -345,7 +345,7 @@ class Players extends \BANG\Helpers\DB_Manager
   /**
    * @param Player $player
    * @param boolean $includeGhosts
-   * @return Player
+   * @return int
    */
   public static function getNextId($player, $includeGhosts = false)
   {

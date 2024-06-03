@@ -1,5 +1,6 @@
 <?php
 namespace BANG\States;
+use BANG\Cards\Events\Vendetta;
 use BANG\Core\Globals;
 use BANG\Helpers\GameOptions;
 use BANG\Managers\EventCards;
@@ -20,9 +21,14 @@ trait TurnTrait
   {
     $activeEvent = EventCards::getActive();
     $activePlayer = Players::getActive();
-    $pId = $activeEvent && $activeEvent->nextPlayerCounterClockwise() ?
-      Players::getPreviousId($activePlayer, true) :
-      Players::getNextId($activePlayer, true);
+
+    if ($activeEvent && $activeEvent->nextPlayerCounterClockwise()) {
+      $pId = Players::getPreviousId($activePlayer, true);
+    } else if ($activeEvent && $activeEvent->getEffect() === EFFECT_NEXTPLAYER) {
+      $pId = $activeEvent->getNextPlayerId($activePlayer);
+    } else {
+      $pId = Players::getNextId($activePlayer, true);
+    }
     $this->gamestate->changeActivePlayer($pId);
 
 
@@ -60,7 +66,8 @@ trait TurnTrait
     // TODO: we call this method twice if it's Sheriff's 2+ turn, this should be fixed (check setNewTurnRules usages)
     Rules::setNewTurnRules($player, $eventCard);
     $stack = [ST_PRE_PHASE_ONE, ST_PHASE_ONE_SETUP, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN];
-    if (GameOptions::isEvents()) {
+    $isAdditionalTurn = $eventCard && $eventCard instanceof Vendetta && Globals::getVendettaWasUsed();
+    if (GameOptions::isEvents() && !$isAdditionalTurn) {
       array_unshift($stack, ST_RESOLVE_EVENT_EFFECT);
       if ($player->getRole() === SHERIFF && $nextEventCard && $roundNumber > 0) {
         array_unshift($stack, ST_NEW_EVENT);

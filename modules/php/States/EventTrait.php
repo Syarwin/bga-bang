@@ -35,7 +35,7 @@ trait EventTrait
   }
 
   /*
-   * stResolveEventEffect: Resolves event effect
+   * stResolveEventEffect: Resolves start-of-turn event effect (not the best naming unfortunately)
    */
   public function stResolveEventEffect()
   {
