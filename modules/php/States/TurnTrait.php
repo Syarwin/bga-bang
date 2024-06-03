@@ -65,7 +65,7 @@ trait TurnTrait
     $nextEventCard = EventCards::getNext();
     // TODO: we call this method twice if it's Sheriff's 2+ turn, this should be fixed (check setNewTurnRules usages)
     Rules::setNewTurnRules($player, $eventCard);
-    $stack = [ST_PRE_PHASE_ONE, ST_PHASE_ONE_SETUP, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN];
+    $stack = [ST_PHASE_ONE_SETUP, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN];
     $isAdditionalTurn = $eventCard && $eventCard instanceof Vendetta && Globals::getVendettaWasUsed();
     if (GameOptions::isEvents() && !$isAdditionalTurn) {
       array_unshift($stack, ST_RESOLVE_EVENT_EFFECT);
@@ -77,6 +77,7 @@ trait TurnTrait
         $stack = [ST_END_OF_TURN];
       }
     }
+    array_unshift($stack, ST_PRE_PHASE_ONE);
     Stack::setup($stack);
     Stack::finishState();
   }
