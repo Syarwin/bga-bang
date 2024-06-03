@@ -50,7 +50,9 @@ class Bang extends BangActionCard
 
   public function play($player, $args)
   {
-    Rules::bangPlayed();
+    if (!$args['secondCardId']) { // FAQ, Q07. Sniper doesn't count as Bang!
+      Rules::bangPlayed();
+    }
     parent::play($player, $args);
   }
 }
