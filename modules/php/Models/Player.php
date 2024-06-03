@@ -458,7 +458,7 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function getOrderedOtherPlayers()
   {
-    return Players::getLivingPlayerIdsStartingWith($this, false, [$this->id]);
+    return Players::getLivingPlayerIdsStartingWith($this, false, $this->id);
   }
 
   /*
