@@ -699,18 +699,6 @@ class Player extends \BANG\Helpers\DB_Manager
   }
 
   /**
-   * getLastCardWithOptions: give the list of playable cards in hand, along with their options
-   */
-  public function getLastCardWithOptions()
-  {
-    $card = new Collection([$this->getLastCardFromHand()]);
-    return [
-      'cards' => $this->addOptionsTo($card),
-      'character' => null,
-    ];
-  }
-
-  /**
    * getHandOptions: give the list of playable cards in hand, along with their options
    */
   public function getHandOptions()

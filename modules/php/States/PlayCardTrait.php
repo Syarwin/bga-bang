@@ -1,5 +1,6 @@
 <?php
 namespace BANG\States;
+use BANG\Core\Globals;
 use BANG\Core\Notifications;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
@@ -13,15 +14,6 @@ trait PlayCardTrait
     return [
       '_private' => [
         'active' => Players::getActive()->getHandOptions(),
-      ],
-    ];
-  }
-
-  public function argPlayLastCardManually()
-  {
-    return [
-      '_private' => [
-        'active' => Players::getActive()->getLastCardWithOptions(),
       ],
     ];
   }
@@ -55,6 +47,7 @@ trait PlayCardTrait
           'player' => $activePlayer,
           'card' => $lastCard,
           'reason' => $reason,
+          'i18n' => ['reason', 'card_name'],
         ]);
       } else if ($lastCard->isWeapon()) {
         // Weapon should be just played without args if it's playable
@@ -67,8 +60,8 @@ trait PlayCardTrait
         ]);
       } else {
         // Player must choose the target manually
-        $atom = Stack::newSimpleAtom(ST_PLAY_LAST_CARD_MANUALLY, $activePlayer->getId());
-        Stack::insertOnTop($atom);
+//        $atom = Stack::newSimpleAtom(ST_PLAY_LAST_CARD_MANUALLY, $activePlayer->getId());
+//        Stack::insertOnTop($atom);
       }
     } else {
       $activePlayer->playCard($lastCard, []);

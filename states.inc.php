@@ -238,15 +238,6 @@ $machinestates = [
     'action' => 'stPlayLastCardAutomatically',
   ],
 
-  ST_PLAY_LAST_CARD_MANUALLY => [
-    'name' => 'playLastCardManually',
-    'description' => clienttranslate('${actplayer} must play second drawn card because of Law Of The West event'),
-    'descriptionmyturn' => clienttranslate('${you} must play second drawn card because of Law Of The West event'),
-    'type' => 'activeplayer',
-    'args' => 'argPlayLastCardManually',
-    'possibleactions' => ['actPlayCard'],
-  ],
-
   ST_RUSSIAN_ROULETTE => [
     'name' => 'russianRoulette',
     'description' => clienttranslate('${actplayer} must discard 1 Missed! or lose 2 life points'),
