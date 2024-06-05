@@ -167,7 +167,7 @@ class Pieces extends DB_Manager
     }
   }
 
-  final function checkIdArray($arr)
+  final static function checkIdArray($arr)
   {
     if (is_null($arr)) {
       throw new \BgaVisibleSystemException('Class Pieces: tokens cannot be null');
