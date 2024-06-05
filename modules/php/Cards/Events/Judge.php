@@ -9,7 +9,7 @@ class Judge extends AbstractEventCard
     parent::__construct($id);
     $this->type = CARD_JUDGE;
     $this->name = clienttranslate('The Judge');
-    $this->text = clienttranslate('Players cannot play cards in front of themselves (i.e. Green or Blue cards). Cards that are already placed in front of players will not be affected.');
+    $this->text = clienttranslate('You cannot play cards in front of you or any other player.');
     $this->effect = EFFECT_PERMANENT;
     $this->expansion = FISTFUL_OF_CARDS;
   }

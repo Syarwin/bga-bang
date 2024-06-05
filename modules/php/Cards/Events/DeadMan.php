@@ -9,7 +9,7 @@ class DeadMan extends AbstractEventCard
     parent::__construct($id);
     $this->type = CARD_DEAD_MAN;
     $this->name = clienttranslate('Dead Man');
-    $this->text = clienttranslate('The first eliminated player returns in play with 2 life points and 2 cards.');
+    $this->text = clienttranslate('During his turn, the player who has been eliminated first comes back in play with 2 life points and 2 cards.');
     $this->effect = EFFECT_STARTOFTURN;
     $this->expansion = FISTFUL_OF_CARDS;
   }

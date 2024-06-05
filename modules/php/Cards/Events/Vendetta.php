@@ -15,7 +15,7 @@ class Vendetta extends AbstractEventCard
     parent::__construct($id);
     $this->type = CARD_VENDETTA;
     $this->name = clienttranslate('Vendetta');
-    $this->text = clienttranslate('Players "Draw!" at the end of their turn; on a Heart, they play an additional turn (but does not "Draw!" again).');
+    $this->text = clienttranslate('At the end of his turn, each player "draws!": on a Heart, he plays another turn (but he does not "draw!" again).');
     $this->effect = EFFECT_NEXTPLAYER;
     $this->expansion = FISTFUL_OF_CARDS;
   }

@@ -9,7 +9,7 @@ class Lasso extends AbstractEventCard
     parent::__construct($id);
     $this->type = CARD_LASSO;
     $this->name = clienttranslate('Lasso');
-    $this->text = clienttranslate('Cards in play in front of all players have no effect. "Draw!" is still required for "Jail", but this "Jail" has no effect regardless the result of draw.');
+    $this->text = clienttranslate('Cards in play in front of players have no effect. "Draw!" is still required for "Jail", but this "Jail" has no effect regardless the result of draw.');
     $this->effect = EFFECT_PERMANENT;
     $this->expansion = FISTFUL_OF_CARDS;
   }

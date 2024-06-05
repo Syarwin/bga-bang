@@ -9,7 +9,7 @@ class Ricochet extends AbstractEventCard
     parent::__construct($id);
     $this->type = CARD_RICOCHET;
     $this->name = clienttranslate('Ricochet');
-    $this->text = clienttranslate('Players may play "Bang!" against cards in play; those cards are discarded unless the player controlling them plays a "Missed!".');
+    $this->text = clienttranslate('Each player may discard BANG! cards against cards in play in front of any player: each card is discarded if its owner does not play a Missed! for each one.');
     $this->effect = EFFECT_PERMANENT;
     $this->expansion = FISTFUL_OF_CARDS;
   }

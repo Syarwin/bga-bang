@@ -10,7 +10,7 @@ class Ambush extends AbstractEventCard
     parent::__construct($id);
     $this->type = CARD_AMBUSH;
     $this->name = clienttranslate('Ambush');
-    $this->text = clienttranslate('The distance between players is 1. This is only modified by cards in play.');
+    $this->text = clienttranslate('The distance between any two players is 1. This is modified only by cards in play.');
     $this->effect = EFFECT_PERMANENT;
     $this->expansion = FISTFUL_OF_CARDS;
   }

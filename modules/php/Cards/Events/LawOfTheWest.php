@@ -13,7 +13,7 @@ class LawOfTheWest extends AbstractEventCard
     parent::__construct($id);
     $this->type = CARD_LAW_OF_THE_WEST;
     $this->name = clienttranslate('Law Of The West');
-    $this->text = clienttranslate('Players must show and play (if possible) the second card they draw in their turn.');
+    $this->text = clienttranslate('During his phase 1, each player shows the second card he draws: if he can, he must play it during his phase 2.');
     $this->effect = EFFECT_PHASE_ONE;
     $this->expansion = FISTFUL_OF_CARDS;
   }
