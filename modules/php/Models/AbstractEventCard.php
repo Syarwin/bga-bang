@@ -119,7 +119,7 @@ class AbstractEventCard implements \JsonSerializable
   /**
    * @return boolean
    */
-  public function isResurrectionEffect()
+  public function isResurrectionEffect($player = null)
   {
     return false;
   }

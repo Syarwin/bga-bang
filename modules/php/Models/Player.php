@@ -6,7 +6,6 @@ use BANG\Managers\Cards;
 use BANG\Managers\EventCards;
 use BANG\Managers\Players;
 use BANG\Core\Notifications;
-use BANG\Core\Log;
 use BANG\Core\Stack;
 use BANG\Managers\Rules;
 use banghighnoon;
@@ -903,15 +902,17 @@ class Player extends \BANG\Helpers\DB_Manager
     $this->discardAllCards();
     // Eliminate player
     $forceEliminate = array_key_exists('forceEliminate', $ctx) && $ctx['forceEliminate'];
-    $isResurrectionEventActive = EventCards::getActive() && EventCards::getActive()->isResurrectionEffect();
     // Needs to die for good if:
     // 1. Ghost Town / Dead Man have been played before
     // 2. GT is now and this is the end of a ghost's turn
     // 3. Player has already had their turn during GT event which means it's over for this player but might be applied for others
-    if (!Globals::getResurrectionIsPossible() || $forceEliminate || $this->livingStatus === LIVING_DEAD) {
+    if (!EventCards::isResurrectionPossible($this) || $forceEliminate || $this->livingStatus === LIVING_DEAD) {
       banghighnoon::get()->eliminatePlayer($this->id);
       $this->eliminated = true;
     } else {
+      if (Globals::getEliminatedFirstPId() === 0) {
+        Globals::setEliminatedFirstPId($this->id);
+      }
       Notifications::playerUnconscious($this);
     }
     $this->save(true);
@@ -1021,9 +1022,19 @@ class Player extends \BANG\Helpers\DB_Manager
     self::DB()->update($newParams, $this->id);
   }
 
-  public function resurrect()
+  /**
+   * @param int $hpAmount
+   * @return void
+   */
+  public function resurrect($hpAmount = 0)
   {
-    self::DbQuery("UPDATE player SET `player_unconscious` = 2 WHERE `player_id` = {$this->id}");
+    if ($hpAmount === 0) {
+      $params = ['player_unconscious' => 2];
+    } else {
+      $params = ['player_unconscious' => 0, 'player_hp' => $hpAmount];
+    }
+    $this->hp = $hpAmount;
+    self::DB()->update($params, $this->id);
   }
 
   public function agreeToDisclaimer()

@@ -1,6 +1,10 @@
 <?php
 namespace BANG\Cards\Events;
+use BANG\Core\Globals;
+use BANG\Core\Notifications;
+use BANG\Core\Stack;
 use BANG\Models\AbstractEventCard;
+use BANG\Models\Player;
 
 class DeadMan extends AbstractEventCard
 {
@@ -15,10 +19,29 @@ class DeadMan extends AbstractEventCard
   }
 
   /**
+   * @param Player $player
+   * @return void
+   */
+  public function resolveEffect($player = null)
+  {
+    if ($player->getId() === Globals::getEliminatedFirstPId()) {
+      $stack = [ST_PRE_PHASE_ONE, ST_PHASE_ONE_SETUP, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN];
+      Stack::setup($stack);
+      $player->resurrect(2);
+      Notifications::gainedLife($player, 2);
+      Notifications::updateDistances();
+      $player->drawCards(2);
+    }
+  }
+
+  /**
+   * @param Player $player
    * @return boolean
    */
-  public function isResurrectionEffect()
+  public function isResurrectionEffect($player = null)
   {
-    return true;
+    if (is_null($player)) return true;
+    $eliminatedFirstPId = Globals::getEliminatedFirstPId();
+    return $eliminatedFirstPId === 0 || $player->getId() === $eliminatedFirstPId;
   }
 }

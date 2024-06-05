@@ -1,9 +1,9 @@
 <?php
 namespace BANG\Managers;
 
-use BANG\Core\Globals;
 use BANG\Helpers\GameOptions;
 use BANG\Models\AbstractEventCard;
+use BANG\Models\Player;
 
 /*
  * Cards: all utility functions concerning cards are here
@@ -31,7 +31,6 @@ class EventCards extends \BANG\Helpers\Pieces
         }
       }
     }
-    Globals::setResurrectionIsPossible(GameOptions::isResurrection());
 
     shuffle($cards);
     if (count(self::getCurrentExpansionsIntersection($expansions)) === 2) {
@@ -42,7 +41,7 @@ class EventCards extends \BANG\Helpers\Pieces
     $lastCard = self::singleCreate(self::getCurrentExpansionLastCardType($expansions), LOCATION_EVENTS_DECK);
     EventCards::insertAtBottom($lastCard, LOCATION_EVENTS_DECK);
     // TODO: Remove next 2 lines, this is just for debugging purposes
-    $lastCard = self::singleCreate(CARD_JUDGE, LOCATION_EVENTS_DECK);
+    $lastCard = self::singleCreate(CARD_DEAD_MAN, LOCATION_EVENTS_DECK);
     EventCards::insertOnTop($lastCard, LOCATION_EVENTS_DECK);
   }
 
@@ -153,17 +152,18 @@ class EventCards extends \BANG\Helpers\Pieces
   }
 
   /**
+   * @param Player $player
    * @return boolean
    */
-  public static function isResurrectionPossible()
+  public static function isResurrectionPossible($player = null)
   {
     $cards = self::getInLocation(LOCATION_EVENTS_DECK);
     $active = self::getActive();
     if (!is_null($active)) {
       $cards = $cards->push($active);
     }
-    $resurrectionCards = $cards->filter(function ($card) {
-      return $card->isResurrectionEffect();
+    $resurrectionCards = $cards->filter(function ($card) use ($player) {
+      return $card->isResurrectionEffect($player);
     });
     return count($resurrectionCards) > 0;
   }

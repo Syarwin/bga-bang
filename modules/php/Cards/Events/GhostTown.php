@@ -42,9 +42,10 @@ class GhostTown extends AbstractEventCard
   }
 
   /**
+   * @param null $player
    * @return boolean
    */
-  public function isResurrectionEffect()
+  public function isResurrectionEffect($player = null)
   {
     return true;
   }

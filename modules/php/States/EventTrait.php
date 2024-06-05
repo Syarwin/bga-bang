@@ -28,9 +28,6 @@ trait EventTrait
       $eventCard->resolveEffect($player);
     }
     Notifications::updateDistances();
-    if (!EventCards::isResurrectionPossible()) {
-      Globals::setResurrectionIsPossible(false);
-    }
     Stack::finishState();
   }
 

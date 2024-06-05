@@ -73,7 +73,7 @@ trait TurnTrait
         array_unshift($stack, ST_NEW_EVENT);
       }
 
-      if ($player->isUnconscious() && (!$eventCard || !$eventCard->isResurrectionEffect())) {
+      if ($player->isUnconscious() && (!$eventCard || !$eventCard->isResurrectionEffect($player))) {
         $stack = [ST_END_OF_TURN];
       }
     }
