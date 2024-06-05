@@ -33,15 +33,15 @@ define(['dojo', 'dojo/_base/declare', 'dojo/fx', 'dojox/fx/ext-dojo/complex'], f
 
     showGhostTownDisclaimer() {
       return this.showInformationDialog(_('Welcome to BANG!'), 'ghostTown', [
-        _('Please be aware that you are starting a game with a Ghost Town card. This is a special event card making eliminated players return to the game as ghosts for one turn.'),
+        _('Please be aware that you are starting a game with a Ghost Town and/or a Dead Man card. These are special event cards making some or all eliminated players return to the game after elimination.'),
         '',
-        _('What Ghost Town means to you?'),
-        _("Until this event is played no player can be fully eliminated from the game even if they are out of life points. You will be forced to stay at the table until Ghost Town effect is played. If you decide to leave the game before that - you will be penalised. If you do not agree with this - please propose to end this game now."),
+        _('What Ghost Town/Dead Man cards mean to you?'),
+        _("Until one or both events are played some players won't be fully eliminated from the game even if they are out of life points. You might be forced to stay at the table until Ghost Town/Dead Man effects are played. If you decide to leave the game before that - you will be penalised. If you do not agree with this - please propose to end this game now."),
         _('Hope you will have a great time!'),
       ], {
         startb: '<b>',
         endb: '</b>',
-        buttonText: _('I agree to play with the Ghost Town card'),
+        buttonText: _('I agree to play with the Ghost Town and/or Dead Man card'),
       });
     },
   })
