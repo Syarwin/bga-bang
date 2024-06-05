@@ -244,7 +244,7 @@ class banghighnoon extends Table
   // Exposing protected method getCurrentPlayerId
   public static function getCurrentPId()
   {
-    return self::getCurrentPlayerId();
+    return self::get()->getCurrentPlayerId();
   }
 
   // Exposing protected method translation
