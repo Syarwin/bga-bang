@@ -1960,6 +1960,26 @@ div.bang-card.event .card-background {
   height: 123.25px;
 }
 
+.bang-card[data-type="116"] .card-front .card-name {
+  font-size: 11.475px;
+}
+
+.bang-card[data-type="125"] .card-front .card-name {
+  font-size: 11.475px;
+}
+
+.bang-card[data-type="127"] .card-front .card-name {
+  font-size: 11.05px;
+}
+
+.bang-card[data-type="128"] .card-front .card-name {
+  font-size: 11.475px;
+}
+
+.bang-card[data-type="129"] .card-front .card-name {
+  font-size: 11.05px;
+}
+
 .card-copy-color {
   font-size: 21.25px;
   display: inline-grid;
@@ -2442,4 +2462,4 @@ div.bang-card.event .card-background {
   height: 100%;
 }
 
-/*# sourceMappingURL=bang.css.map */
+/*# sourceMappingURL=banghighnoon.css.map */

@@ -1,3 +1,5 @@
+@import "variables.scss";
+
 div.bang-card-tooltip {
   div.bang-card-tooltip-sizing {
     width:2*$cardW;
@@ -168,6 +170,31 @@ div.bang-card {
       height: $cardH * 145 / 200;
     }
   }
+}
+
+// Long name for "Abandoned Mine" should be on 1 line
+.bang-card[data-type="116"] .card-front .card-name {
+  font-size: $cardH * 13.5 / 200;
+}
+
+// Blood Brothers
+.bang-card[data-type="125"] .card-front .card-name {
+  font-size: $cardH * 13.5 / 200;
+}
+
+// A Fistful Of Cards
+.bang-card[data-type="127"] .card-front .card-name {
+  font-size: $cardH * 13 / 200;
+}
+
+// Law Of The West
+.bang-card[data-type="128"] .card-front .card-name {
+  font-size: $cardH * 13.5 / 200;
+}
+
+// Russian Roulette
+.bang-card[data-type="129"] .card-front .card-name {
+  font-size: $cardH * 13 / 200;
 }
 
 .card-copy-color {
