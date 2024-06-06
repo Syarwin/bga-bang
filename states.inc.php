@@ -97,11 +97,18 @@ $machinestates = [
     'action' => 'stNewEvent',
   ],
 
-  ST_RESOLVE_EVENT_EFFECT => [
-    'name' => 'resolveEventEffect',
+  ST_RESOLVE_START_OF_TURN_EVENT_EFFECT => [
+    'name' => 'resolveEventStartOfTurnEffect',
     'description' => '',
     'type' => 'game',
-    'action' => 'stResolveEventEffect',
+    'action' => 'stResolveEventStartOfTurnEffect',
+  ],
+
+  ST_RESOLVE_BEFORE_PHASE_ONE_EVENT_EFFECT => [
+    'name' => 'resolveEventBeforePhaseOneEffect',
+    'description' => '',
+    'type' => 'game',
+    'action' => 'stResolveEventBeforePhaseOneEffect',
   ],
 
   ST_FLIP_CARD => [

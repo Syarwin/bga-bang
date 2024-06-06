@@ -32,9 +32,10 @@ trait EventTrait
   }
 
   /*
-   * stResolveEventEffect: Resolves start-of-turn event effect (not the best naming unfortunately)
+   * stResolveEventEffect: Resolves start-of-turn event effect
+   * This applies to resurrection effects and all others which might happen before Jail/Dynamite
    */
-  public function stResolveEventEffect()
+  public function stResolveEventStartOfTurnEffect()
   {
     $eventCard = EventCards::getActive();
     if ($eventCard && $eventCard->getEffect() === EFFECT_STARTOFTURN) {
@@ -45,6 +46,20 @@ trait EventTrait
       } elseif ($player->isUnconscious()) { // dead but this is not a resurrection
         Stack::removePlayerAtoms($ctx['pId']);
       } // do not resolve any effects when resurrection is combined with alive player
+    }
+    Stack::finishState();
+  }
+
+  /*
+   * stResolveEventBeforePhaseOneEffect: Resolves start-of-turn event effect before phase one (after Jail/Dynamite)
+   */
+  public function stResolveEventBeforePhaseOneEffect()
+  {
+    $eventCard = EventCards::getActive();
+    if ($eventCard && $eventCard->getEffect() === EFFECT_BEFORE_PHASE_ONE) {
+      $ctx = Stack::getCtx();
+      $player = Players::get($ctx['pId']);
+      $eventCard->resolveEffect($player);
     }
     Stack::finishState();
   }

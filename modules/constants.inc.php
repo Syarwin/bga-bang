@@ -29,7 +29,7 @@ define('ST_CHOOSE_CHARACTER', 26);
 define('ST_CHARACTER_SETUP', 27);
 define('ST_PHASE_ONE_DRAW_CARDS', 28);
 define('ST_NEW_EVENT', 29);
-define('ST_RESOLVE_EVENT_EFFECT', 30);
+define('ST_RESOLVE_START_OF_TURN_EVENT_EFFECT', 30);
 define('ST_PRE_PHASE_ONE', 31);
 define('ST_CHOOSE_AND_DISCARD_BLUE_CARD', 32);
 define('ST_DISCARD_BLUE_CARD', 33);
@@ -40,6 +40,7 @@ define('ST_BLOOD_BROTHERS', 37);
 define('ST_HARD_LIQUOR', 38);
 define('ST_RANCH', 39);
 define('ST_PEYOTE', 40);
+define('ST_RESOLVE_BEFORE_PHASE_ONE_EVENT_EFFECT', 41);
 define('ST_PRE_GAME_END', 98);
 define('ST_GAME_END', 99);
 
@@ -242,6 +243,7 @@ define('EFFECT_PERMANENT', 102);
 define('EFFECT_NEXTPLAYER', 103);
 define('EFFECT_PHASE_ONE', 104);
 define('EFFECT_ENDOFPHASEONE', 105);
+define('EFFECT_BEFORE_PHASE_ONE', 106);
 
 define('NONE', 0);
 define('INRANGE', 1);
