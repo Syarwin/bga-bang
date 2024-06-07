@@ -95,7 +95,7 @@ class Pieces extends DB_Manager
   /****
    * Return a select query with a where condition
    */
-  protected function addWhereClause(&$query, $id = null, $location = null, $state = null)
+  protected static function addWhereClause(&$query, $id = null, $location = null, $state = null)
   {
     if (!is_null($id)) {
       $whereOp = strpos($id, '%') !== false ? 'LIKE' : '=';
@@ -554,7 +554,6 @@ class Pieces extends DB_Manager
    */
   static function singleCreate($type, $location)
   {
-//    self::checkState($state);
     return self::create([['type' => $type]], $location);
   }
 }
