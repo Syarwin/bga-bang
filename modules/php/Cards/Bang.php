@@ -32,8 +32,17 @@ class Bang extends BangActionCard
    */
   public function getPlayOptions($player)
   {
-    if (!Rules::isBangStrictlyForbidden() && ($player->hasUnlimitedBangs() || Rules::getBangsAmountLeft() > 0)) {
-      $playOptions = parent::getPlayOptions($player);
+    $aimingCards = Rules::isAimingCards();
+    $bangPossible = !Rules::isBangStrictlyForbidden() && ($player->hasUnlimitedBangs() || Rules::getBangsAmountLeft() > 0);
+    if (!$aimingCards && !$bangPossible) { return null; }
+
+    $playOptions = [];
+    $targetTypes = [];
+    if ($aimingCards) {
+      $targetTypes[] = TARGET_ALL_CARDS;
+    }
+    if ($bangPossible) {
+      $targetTypes[] = TARGET_PLAYER;
       if (Rules::isBangCouldBePlayedWithAnotherBang()) {
         $bangsWithoutThisCard = array_values(array_filter($player->getBangCards()['cards'], function ($card) {
           return $card['id'] !== $this->getId();
@@ -42,10 +51,13 @@ class Bang extends BangActionCard
           $playOptions['with_another_card'] = ['strict' => false, 'targets' => $bangsWithoutThisCard];
         }
       }
-      return $playOptions;
-    } else {
-      return null;
+      $playOptions['targets'] = $this->getTargetablePlayers($player);
     }
+
+    $playOptions = $playOptions + [
+      'target_types' => $targetTypes,
+    ];
+    return $playOptions;
   }
 
   public function play($player, $args)

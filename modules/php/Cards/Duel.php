@@ -33,7 +33,7 @@ class Duel extends \BANG\Models\BrownCard
   {
     $livings = Players::getLivingPlayers($player->getId());
     return [
-      'target_type' => TARGET_PLAYER,
+      'target_types' => [TARGET_PLAYER],
       'targets' => $livings->getIds(),
     ];
   }

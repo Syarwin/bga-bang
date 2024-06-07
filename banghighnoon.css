@@ -698,17 +698,15 @@ div.bang-character-tooltip div.bang-character-tooltip-sizing .player-character-p
   display: none;
 }
 
-.bang-player.inactive {
+.bang-player.inactive .player-info {
   opacity: 0.6;
 }
-.bang-player.selectable {
+.bang-player .player-info.selectable {
   opacity: 1;
-}
-.bang-player.selectable .player-info {
   cursor: pointer;
   animation: borderBlink 0.9s infinite;
 }
-.bang-player.selectable .player-info:hover {
+.bang-player .player-info.selectable:hover {
   animation: none;
   border: 1px solid red;
 }

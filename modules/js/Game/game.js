@@ -537,6 +537,10 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
       return dojo.place(this[tplMethodName](object), container);
     },
 
+    querySingle(locator) {
+      return dojo.query(locator)[0];
+    },
+
     waitForDisappearance(locator, timeout = null) {
       if (!timeout) {
         timeout = 5000;

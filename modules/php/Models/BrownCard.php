@@ -61,27 +61,23 @@ class BrownCard extends AbstractCard
       case BASIC_ATTACK:
       case LIFE_POINT_MODIFIER:
         if (in_array($this->effect['impacts'], [NONE, ALL, ALL_OTHER])) {
-          return ['target_type' => TARGET_NONE];
-        }
-        $targetType = TARGET_PLAYER;
-        if (Rules::isAimingCards()) {
-            $targetType = TARGET_CARD;
+          return ['target_types' => [TARGET_NONE]];
         }
         break;
 
       case DRAW:
       case DISCARD:
-        $targetType = $this->effect['impacts'] === NONE ? TARGET_NONE : TARGET_CARD;
+        $targetTypes = $this->effect['impacts'] === NONE ? [TARGET_NONE] : [TARGET_CARD];
         break;
 
       case DEFENSIVE:
         return null;
       default:
-        return ['target_type' => TARGET_NONE];
+        return ['target_types' => [TARGET_NONE]];
     }
 
     return [
-      'target_type' => $targetType,
+      'target_types' => $targetTypes,
       'targets' => $this->getTargetablePlayers($player),
     ];
   }

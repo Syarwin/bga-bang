@@ -99,7 +99,7 @@ define('OPTION_BOTH_EVENTS_WITH_GHOSTS', 1142);
 define('TARGET_NONE', 0);
 define('TARGET_CARD', 1);
 define('TARGET_PLAYER', 2);
-define('TARGET_CARDS', 3);
+define('TARGET_ALL_CARDS', 3);
 //define('RANDOM', 1);
 
 /*

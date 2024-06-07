@@ -36,13 +36,16 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       if (!!card.options.with_another_card?.strict) {
         this._selectableCards = card.options.with_another_card.targets;
       } else {
+        this._selectablePlayers = [];
         // What kind of target ?
         let TARGET_NONE = 0,
             TARGET_CARD = 1,
-            TARGET_PLAYER = 2;
-        if (card.options.target_type === TARGET_NONE) {
+            TARGET_PLAYER = 2,
+            TARGET_ALL_CARDS = 3;
+        if (card.options.target_types.includes(TARGET_NONE)) {
           this.onSelectOption();
-        } else if (card.options.target_type === TARGET_PLAYER) {
+        }
+        if (card.options.target_types.includes(TARGET_PLAYER)) {
           this.makePlayersSelectable(card.options.targets);
           if (this._isToSelectSecondCard) {
             this._selectableCards = [];
@@ -57,8 +60,12 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
               this._isToSelectSecondCard = true;
             }
           }
-        } else if (card.options.target_type === TARGET_CARD) {
+        }
+        if (card.options.target_types.includes(TARGET_CARD)) {
           this.makePlayersCardsSelectable(card.options.targets);
+        }
+        if (card.options.target_types.includes(TARGET_ALL_CARDS)) {
+          this.makePlayersCardsSelectable(Object.keys(this.gamedatas.players).map(Number), true);
         }
       }
     },

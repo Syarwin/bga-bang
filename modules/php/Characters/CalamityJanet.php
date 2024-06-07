@@ -37,7 +37,7 @@ class CalamityJanet extends \BANG\Models\Player
         if ($card->getType() == CARD_MISSED) {
           $res['cards'][] = [
             'id' => $card->getId(),
-            'options' => ['target_type' => TARGET_NONE],
+            'options' => ['target_types' => [TARGET_NONE]],
             'amount' => 1,
           ];
         }

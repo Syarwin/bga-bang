@@ -92,12 +92,15 @@ div.bang-character-tooltip {
   }
 
   &.inactive {
-    opacity: 0.6;
+    .player-info {
+      opacity: 0.6;
+    }
   }
 
-  &.selectable {
-    opacity: 1;
-    .player-info {
+  .player-info {
+    &.selectable {
+      opacity: 1;
+
       cursor: pointer;
       animation: borderBlink 0.9s infinite;
       &:hover {

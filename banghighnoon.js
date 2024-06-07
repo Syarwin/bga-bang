@@ -296,7 +296,6 @@ define([
       },
 
       onClickUseAbility() {
-        //let TARGET_NONE = 0, TARGET_CARDS = 3;
         let SID_KETCHUM = 9,
           JOURDONNAIS = 13;
         this._selectedCards = [];
@@ -429,7 +428,7 @@ define([
         this._isToSelectSecondCard = false;
         this._selectedCardSecond = null;
         dojo.query('.bang-card').removeClass('unselectable selectable selected');
-        dojo.query('.bang-player').removeClass('selectable');
+        dojo.query('.bang-player .player-info').removeClass('selectable');
         dojo.removeClass('deck', 'selectable');
         dojo.removeClass('discard', 'selectable');
 

@@ -305,7 +305,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         this.addActionButton('buttonSelectPlayer' + playerId, this.gamedatas.players[playerId].name, () =>
           this.onClickPlayer(playerId),
         );
-        dojo.addClass('bang-player-' + playerId, 'selectable');
+        dojo.addClass(this.querySingle(`#bang-player-${playerId} .player-info`), 'selectable');
       });
     },
 
@@ -323,7 +323,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         this._selectedOptionType = 'player';
         this._selectedPlayer = playerId;
         const CARD_JAIL = 17;
-        if (this._selectedCard.type === CARD_JAIL && playerId === this.player_id) {
+        if (this._selectedCard && this._selectedCard.type === CARD_JAIL && playerId === this.player_id) {
           this.confirmationDialog(_('Are you sure you want to put yourself to Jail?'), () => {
             this.onSelectOption();
           });
@@ -339,15 +339,19 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     /*
      * Make some players' cards selectable with sometimes the deck
      */
-    makePlayersCardsSelectable(playersIds) {
+    makePlayersCardsSelectable(playersIds, selectCardsOnly = false) {
       this.doSomeCleanupAndAddUndo(_("You must choose a card in play or a player's hand"));
 
       var cards = [];
-      this._selectablePlayers = playersIds.filter((playerId) => {
-        return this.gamedatas.players[playerId].handCount > 0;
-      });
+      if (this._selectablePlayers.length === 0 && !selectCardsOnly) {
+        this._selectablePlayers = playersIds.filter((playerId) => {
+          return this.gamedatas.players[playerId].handCount > 0;
+        });
+      }
       playersIds.forEach((playerId) => {
-        dojo.addClass('bang-player-' + playerId, 'selectable');
+        if (!selectCardsOnly) {
+          dojo.addClass(this.querySingle(`#bang-player-${playerId} .player-info`), 'selectable');
+        }
         dojo.query('#bang-player-' + playerId + ' .bang-card').forEach((div) => {
           cards.push({
             id: dojo.attr(div, 'data-id'),

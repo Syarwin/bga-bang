@@ -25,7 +25,7 @@ class BlueCard extends AbstractCard
         return null;
       }
     }
-    return Rules::isCanPlayBlueGreenCards() ? ['target_type' => TARGET_NONE] : null;
+    return Rules::isCanPlayBlueGreenCards() ? ['target_types' => [TARGET_NONE]] : null;
   }
 
   public function play($player, $args)
