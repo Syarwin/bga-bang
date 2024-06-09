@@ -1,5 +1,6 @@
 <?php
 namespace BANG\Cards;
+use BANG\Managers\Players;
 use BANG\Managers\Rules;
 use BANG\Models\BangActionCard;
 use BANG\Models\Player;
@@ -34,29 +35,34 @@ class Bang extends BangActionCard
   {
     $aimingCards = Rules::isAimingCards();
     $bangPossible = !Rules::isBangStrictlyForbidden() && ($player->hasUnlimitedBangs() || Rules::getBangsAmountLeft() > 0);
-    if (!$aimingCards && !$bangPossible) { return null; }
+    $canPlayWithAnotherBang = Rules::isBangCouldBePlayedWithAnotherBang();
+    if (!$aimingCards && !$bangPossible && !$canPlayWithAnotherBang) { return null; }
 
     $playOptions = [];
     $targetTypes = [];
     if ($aimingCards) {
       $targetTypes[] = TARGET_ALL_CARDS;
     }
-    if ($bangPossible) {
+    if ($bangPossible || $canPlayWithAnotherBang) {
       $targetTypes[] = TARGET_PLAYER;
-      if (Rules::isBangCouldBePlayedWithAnotherBang()) {
-        $bangsWithoutThisCard = array_values(array_filter($player->getBangCards()['cards'], function ($card) {
-          return $card['id'] !== $this->getId();
-        }));
-        if (count($bangsWithoutThisCard) > 0) {
-          $playOptions['with_another_card'] = ['strict' => false, 'targets' => $bangsWithoutThisCard];
-        }
+    }
+
+    $playOptions['target_types'] = $targetTypes;
+
+    if ($canPlayWithAnotherBang) {
+      $bangOptions = $playOptions + [ 'targets' => Players::getLivingPlayers($player->getId())->getIds() ];
+      $bangsWithoutThisCard = array_values(array_filter($player->getBangCards($bangOptions)['cards'], function ($card) {
+        return $card['id'] !== $this->getId();
+      }));
+      if (count($bangsWithoutThisCard) > 0) {
+        $playOptions['with_another_card'] = [
+          'strict' => !$bangPossible,
+          'cards' => $bangsWithoutThisCard,
+          'targets' => Players::getLivingPlayers($player->getId())->getIds()
+        ];
       }
       $playOptions['targets'] = $this->getTargetablePlayers($player);
     }
-
-    $playOptions = $playOptions + [
-      'target_types' => $targetTypes,
-    ];
     return $playOptions;
   }
 

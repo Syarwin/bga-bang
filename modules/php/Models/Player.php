@@ -562,16 +562,19 @@ class Player extends \BANG\Helpers\DB_Manager
   /*
    * return the list of bang cards (for indians and duel for instance)
    */
-  public function getBangCards()
+  public function getBangCards($options = [])
   {
+    if (empty($options)) {
+      $options = ['target_types' => [TARGET_NONE]];
+    }
     $cards = $this->getHand()
       ->filter(function ($card) {
         return $card->getType() == CARD_BANG;
       })
-      ->map(function ($card) {
+      ->map(function ($card) use ($options) {
         return [
           'id' => $card->getId(),
-          'options' => ['target_types' => [TARGET_NONE]],
+          'options' => $options,
           'amount' => 1,
         ];
       })

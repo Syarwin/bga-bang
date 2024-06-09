@@ -33,8 +33,10 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         this._selectedCard = card;
       }
 
-      if (!!card.options.with_another_card?.strict) {
-        this._selectableCards = card.options.with_another_card.targets;
+      if (!!card.options.with_another_card?.strict && !this._isToSelectSecondCard) {
+        this.makeCardsSelectable(card.options.with_another_card.cards);
+        this.doSomeCleanupAndAddUndo(_('You must choose a second card to play with'));
+        this._isToSelectSecondCard = true;
       } else {
         this._selectablePlayers = [];
         // What kind of target ?
@@ -46,17 +48,15 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
           this.onSelectOption();
         }
         if (card.options.target_types.includes(TARGET_PLAYER)) {
-          this.makePlayersSelectable(card.options.targets);
           if (this._isToSelectSecondCard) {
+            this.makePlayersSelectable(card.options.with_another_card?.targets ?? card.options.targets);
             this._selectableCards = [];
             this._isToSelectSecondCard = false;
             this._selectedCardSecond = card;
           } else {
+            this.makePlayersSelectable(card.options.targets);
             if (card.options.with_another_card) {
-              card.options.with_another_card.targets.forEach((card) => {
-                dojo.removeClass('bang-card-' + card.id, 'unselectable');
-                dojo.addClass('bang-card-' + card.id, 'selectable');
-              });
+              this.makeCardsSelectable(card.options.with_another_card.cards);
               this._isToSelectSecondCard = true;
             }
           }
@@ -68,6 +68,13 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
           this.makePlayersCardsSelectable(Object.keys(this.gamedatas.players).map(Number), true);
         }
       }
+    },
+
+    makeCardsSelectable(cards) {
+      cards.forEach((card) => {
+        dojo.removeClass('bang-card-' + card.id, 'unselectable');
+        dojo.addClass('bang-card-' + card.id, 'selectable');
+      });
     },
 
     /*

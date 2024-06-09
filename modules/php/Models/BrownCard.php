@@ -28,7 +28,7 @@ class BrownCard extends AbstractCard
     $player_ids = [];
     switch ($this->effect['impacts']) {
       case ALL_OTHER:
-        $player_ids = Players::getLivingPlayerIdsStartingWith($player->getId(), false, $player->getId());
+        $player_ids = Players::getLivingPlayerIdsStartingWith($player, false, $player->getId());
         break;
       case INRANGE:
         $player_ids = $player->getPlayersInRange();
@@ -100,6 +100,9 @@ class BrownCard extends AbstractCard
         $player->attack($this, $ids, $targetCardId, !!$args['secondCardId']);
         if ($args['secondCardId']) {
           $card = Cards::get($args['secondCardId']);
+          if ($card->getType() !== CARD_BANG) {
+            throw new \BgaVisibleSystemException('Incorrect card type to play with Bang: ' . $card->getType());
+          }
           $card->discard();
           Notifications::discardedCard($player, $card);
         }
