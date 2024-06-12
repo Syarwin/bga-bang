@@ -58,11 +58,11 @@ class Bang extends BangActionCard
         $playOptions['with_another_card'] = [
           'strict' => !$bangPossible,
           'cards' => $bangsWithoutThisCard,
-          'targets' => Players::getLivingPlayers($player->getId())->getIds()
+          'targets' => $this->getTargetablePlayers($player)
         ];
       }
-      $playOptions['targets'] = $this->getTargetablePlayers($player);
     }
+    $playOptions['targets'] = $this->getTargetablePlayers($player);
     return $playOptions;
   }
 
