@@ -35,7 +35,8 @@ class Bang extends BangActionCard
   {
     $aimingCards = Rules::isAimingCards();
     $bangPossible = !Rules::isBangStrictlyForbidden() && ($player->hasUnlimitedBangs() || Rules::getBangsAmountLeft() > 0);
-    $canPlayWithAnotherBang = Rules::isBangCouldBePlayedWithAnotherBang();
+    $bangsWithoutThis = $this->getBangsWithoutThisCard($player);
+    $canPlayWithAnotherBang = Rules::isBangCouldBePlayedWithAnotherBang() && $bangsWithoutThis;
     if (!$aimingCards && !$bangPossible && !$canPlayWithAnotherBang) { return null; }
 
     $playOptions = [];
@@ -50,20 +51,28 @@ class Bang extends BangActionCard
     $playOptions['target_types'] = $targetTypes;
 
     if ($canPlayWithAnotherBang) {
-      $bangOptions = $playOptions + [ 'targets' => Players::getLivingPlayers($player->getId())->getIds() ];
-      $bangsWithoutThisCard = array_values(array_filter($player->getBangCards($bangOptions)['cards'], function ($card) {
-        return $card['id'] !== $this->getId();
-      }));
-      if (count($bangsWithoutThisCard) > 0) {
+      if (count($bangsWithoutThis) > 0) {
         $playOptions['with_another_card'] = [
           'strict' => !$bangPossible,
-          'cards' => $bangsWithoutThisCard,
+          'cards' => $bangsWithoutThis,
           'targets' => $this->getTargetablePlayers($player)
         ];
       }
     }
     $playOptions['targets'] = $this->getTargetablePlayers($player);
     return $playOptions;
+  }
+
+  /**
+   * @param Player $player
+   * @return array
+   */
+  private function getBangsWithoutThisCard($player)
+  {
+    $bangOptions = [ 'targets' => Players::getLivingPlayers($player->getId())->getIds() ];
+    return array_values(array_filter($player->getBangCards($bangOptions)['cards'], function ($card) {
+      return $card['id'] !== $this->getId();
+    }));
   }
 
   public function play($player, $args)
