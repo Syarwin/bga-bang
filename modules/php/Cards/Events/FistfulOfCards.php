@@ -23,7 +23,7 @@ class FistfulOfCards extends AbstractEventCard
    */
   public function resolveEffect($player = null)
   {
-    for ($bangsLeft = 0; $bangsLeft <= $player->getHp() - 1; $bangsLeft++) {
+    for ($bangsLeft = 0; $bangsLeft < $player->getHand()->count(); $bangsLeft++) {
       $msgActive = $bangsLeft === 0 ?
         clienttranslate('${you} must react to a BANG! from A Fistful Of Cards event, this is the last one') :
         clienttranslate('${you} must react to a BANG! from A Fistful Of Cards event, ${bangsLeft} more to go');

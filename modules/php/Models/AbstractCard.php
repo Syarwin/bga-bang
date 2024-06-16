@@ -220,7 +220,7 @@ class AbstractCard implements \JsonSerializable
   {
     if ($this->effect['type'] === BASIC_ATTACK) {
       Stack::unsuspendNext(ST_REACT);
-      $targetCardId = Stack::getCtx()['targetCardId'];
+      $targetCardId = Stack::getCtx()['targetCardId'] ?? null;
       if ($targetCardId) {
         $player->discardCard(Cards::get($targetCardId));
       } else {
