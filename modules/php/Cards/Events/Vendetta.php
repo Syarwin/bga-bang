@@ -32,7 +32,7 @@ class Vendetta extends AbstractEventCard
     } else {
       $flipped = Cards::drawForLocation(LOCATION_FLIPPED, 1)->first();
       $src = EventCards::getActive();
-      $player = Players::getCurrent();
+      $player = Players::getActive();
       Notifications::flipCard($player, $flipped, $src);
       Cards::discard($flipped);
       if ($flipped->getSuit() === 'H') {
