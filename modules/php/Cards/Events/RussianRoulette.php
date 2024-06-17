@@ -21,20 +21,24 @@ class RussianRoulette extends AbstractEventCard
   {
     $players = Players::getLivingPlayersStartingWith($player);
 
-    foreach (array_reverse($players->toArray()) as $player) {
-      $msgActive = clienttranslate('${you} must react to a Russian Roulette event with a Missed! or lose 2 life points');
-      $msgInactive = clienttranslate('${actplayer} must react to a Russian Roulette event with a Missed! or lose 2 life points');
-      $atom = Stack::newAtom(ST_REACT, [
-        'pId' => $player->getId(),
-        'type' => REACT_TYPE_RUSSIAN_ROULETTE,
-        'msgActive' => $msgActive,
-        'msgInactive' => $msgInactive,
-        'src_name' => $this->name,
-        'src' => (new Bang())->jsonSerialize(),
-        'missedNeeded' => 1,
-        'suspended' => true,
-      ]);
-      Stack::insertOnTop($atom);
+    for ($i = 0; $i < 7; $i++) {
+      // Why 7? There's 12 Missed! in a game. Let's say we have 4 players, 2 of them are Jourdonnais and somebody with a Barrel
+      // If Jourdonnais and Barrel ALWAYS work and other 2 players have 6 Missed each, there will be maximum 6 rounds + 1 just in case
+      foreach (array_reverse($players->toArray()) as $player) {
+        $msgActive = clienttranslate('${you} must react to a Russian Roulette event with a Missed! or lose 2 life points');
+        $msgInactive = clienttranslate('${actplayer} must react to a Russian Roulette event with a Missed! or lose 2 life points');
+        $atom = Stack::newAtom(ST_REACT, [
+          'pId' => $player->getId(),
+          'type' => REACT_TYPE_RUSSIAN_ROULETTE,
+          'msgActive' => $msgActive,
+          'msgInactive' => $msgInactive,
+          'src_name' => $this->name,
+          'src' => (new Bang())->jsonSerialize(),
+          'missedNeeded' => 1,
+          'suspended' => true,
+        ]);
+        Stack::insertOnTop($atom);
+      }
     }
   }
 }
