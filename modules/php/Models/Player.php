@@ -852,7 +852,7 @@ class Player extends \BANG\Helpers\DB_Manager
   protected function notifyAboutAnotherMissed()
   {
     $nextAtom = Stack::getNextState();
-    $nextAtomIsAttack = isset($nextAtom['type']) && $nextAtom['type'] == 'attack';
+    $nextAtomIsAttack = isset($nextAtom['type']) && $nextAtom['type'] === 'attack';
     $nextAtomMissedNeeded = isset($nextAtom['missedNeeded']) ? $nextAtom['missedNeeded'] : -1;
     $topAtom = Stack::top();
     $topAtomMissedNeeded = isset($topAtom['missedNeeded']) ? $topAtom['missedNeeded'] : -1;

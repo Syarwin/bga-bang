@@ -57,7 +57,6 @@ class banghighnoon extends Table
   use BANG\States\PhaseOneTrait;
   use BANG\States\EventTrait;
   use BANG\States\DiscardBlueCardTrait;
-  use BANG\States\RussianRouletteTrait;
   use BANG\States\BloodBrothersTrait;
   use BANG\States\HardLiquorTrait;
   use BANG\States\RanchTrait;

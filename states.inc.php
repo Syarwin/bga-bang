@@ -149,7 +149,7 @@ $machinestates = [
     'type' => 'activeplayer',
     'args' => 'argReact',
     'action' => 'stReact',
-    'possibleactions' => ['actReact', 'actPass', 'actUseAbility'],
+    'possibleactions' => ['actReact', 'actPass', 'actUseAbility', 'actPassEndRussianRoulette'],
   ],
 
   ST_SELECT_CARD => [
@@ -254,6 +254,7 @@ $machinestates = [
     'possibleactions' => ['actPlayCard'],
   ],
 
+  // TODO: Delete before release
   ST_RUSSIAN_ROULETTE => [
     'name' => 'russianRoulette',
     'description' => clienttranslate('${actplayer} must discard 1 Missed! or lose 2 life points'),

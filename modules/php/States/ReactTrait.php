@@ -125,4 +125,13 @@ else {
     Players::getCurrent()->useAbility($args);
     Stack::finishState();
   }
+
+  public function actPassEndRussianRoulette()
+  {
+    self::checkAction('actPassEndRussianRoulette');
+    $player = Players::getActive();
+    $player->loseLife(2);
+    Stack::removeAllAtomsWithState(ST_REACT);
+    Stack::resolve();
+  }
 }

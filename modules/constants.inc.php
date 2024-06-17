@@ -35,7 +35,7 @@ define('ST_CHOOSE_AND_DISCARD_BLUE_CARD', 32);
 define('ST_DISCARD_BLUE_CARD', 33);
 define('ST_PLAY_LAST_CARD_AUTOMATICALLY', 34);
 define('ST_PLAY_LAST_CARD_MANUALLY', 35);
-define('ST_RUSSIAN_ROULETTE', 36);
+define('ST_RUSSIAN_ROULETTE', 36); // TODO: Remove before release
 define('ST_BLOOD_BROTHERS', 37);
 define('ST_HARD_LIQUOR', 38);
 define('ST_RANCH', 39);
@@ -318,3 +318,4 @@ define('LIVING_DEAD', 2);
  */
 define('REACT_TYPE_ATTACK', 'attack');
 define('REACT_TYPE_DUEL', 'duel');
+define('REACT_TYPE_RUSSIAN_ROULETTE', 'russian_roulette');

@@ -1,5 +1,6 @@
 <?php
 namespace BANG\Cards\Events;
+use BANG\Cards\Bang;
 use BANG\Core\Stack;
 use BANG\Managers\Players;
 use BANG\Models\AbstractEventCard;
@@ -21,7 +22,18 @@ class RussianRoulette extends AbstractEventCard
     $players = Players::getLivingPlayersStartingWith($player);
 
     foreach (array_reverse($players->toArray()) as $player) {
-      $atom = Stack::newSimpleAtom(ST_RUSSIAN_ROULETTE, $player->getId());
+      $msgActive = clienttranslate('${you} must react to a Russian Roulette event with a Missed! or lose 2 life points');
+      $msgInactive = clienttranslate('${actplayer} must react to a Russian Roulette event with a Missed! or lose 2 life points');
+      $atom = Stack::newAtom(ST_REACT, [
+        'pId' => $player->getId(),
+        'type' => REACT_TYPE_RUSSIAN_ROULETTE,
+        'msgActive' => $msgActive,
+        'msgInactive' => $msgInactive,
+        'src_name' => $this->name,
+        'src' => (new Bang())->jsonSerialize(),
+        'missedNeeded' => 1,
+        'suspended' => true,
+      ]);
       Stack::insertOnTop($atom);
     }
   }

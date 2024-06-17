@@ -98,6 +98,9 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       this.takeAction('actPass');
     },
 
+    onClickPassRussianRoulette() {
+      this.takeAction('actPassEndRussianRoulette');
+    },
     /*
      * React state : active player can play cards from his hand in reaction
      */

@@ -35,7 +35,6 @@ define([
   g_gamethemeurl + 'modules/js/States/ChooseCharacterTrait.js',
   g_gamethemeurl + 'modules/js/States/DiscardEndOfTurnTrait.js',
   g_gamethemeurl + 'modules/js/States/DiscardBlueCardTrait.js',
-  g_gamethemeurl + 'modules/js/States/RussianRouletteTrait.js',
   g_gamethemeurl + 'modules/js/States/BloodBrothersTrait.js',
   g_gamethemeurl + 'modules/js/States/HardLiquorTrait.js',
   g_gamethemeurl + 'modules/js/States/RanchTrait.js',
@@ -60,7 +59,6 @@ define([
       bang.discardBlueCardTrait,
       bang.eventTrait,
       bang.dialogManager,
-      bang.russianRouletteTrait,
       bang.bloodBrothersTrait,
       bang.hardLiquorTrait,
       bang.ranchTrait,
@@ -231,15 +229,18 @@ define([
           this.addActionButton('buttonCancelEnd', _('Cancel'), 'onClickCancelEndTurn', null, false, 'gray');
 
         if (stateName === 'react') {
-          if (args.type === 'attack')
+          if (args.type === 'attack' || args.type === 'russian_roulette') {
+            const buttonText = args.type === 'attack' ? _('Pass and lose life point') : _('Pass and lose 2 life points');
+            const callback = args.type === 'attack' ? this.onClickPass.bind(this) : this.onClickPassRussianRoulette.bind(this);
             this.addActionButton(
-              'buttonSkip',
-              _('Pass and lose life point'),
-              () => this.onClickPass(),
-              null,
-              false,
-              'red',
+                'buttonSkip',
+                buttonText,
+                () => callback(),
+                null,
+                false,
+                'red',
             );
+          }
           else this.addActionButton('buttonSkip', _('Pass'), () => this.onClickPass(), null, false, 'blue');
 
           if (
