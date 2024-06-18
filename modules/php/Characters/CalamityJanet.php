@@ -86,7 +86,8 @@ class CalamityJanet extends \BANG\Models\Player
       $card = new Bang(['id' => $card->getId()]);
       $card->play($this, $args);
       $this->onChangeHand();
+    } else {
+      parent::playCard($card, $args);
     }
-    parent::playCard($card, $args);
   }
 }
