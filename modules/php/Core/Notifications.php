@@ -220,6 +220,7 @@ class Notifications
       'player' => $player,
       'card' => $card,
       'deckCount' => Cards::getDeckCount(),
+      'preserve' => [$card],
     ];
     self::notify($player, 'cardLostToDeck', '', $data);
     self::notify($player, 'updateHand', clienttranslate('${You} discard ${card_name} face down on the deck'), $data);
