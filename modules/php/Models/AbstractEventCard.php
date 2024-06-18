@@ -182,6 +182,14 @@ class AbstractEventCard implements \JsonSerializable
   }
 
   /**
+   * @return boolean
+   */
+  public function isAllowPlayerPhaseOne()
+  {
+    return true;
+  }
+
+  /**
    * @param Player $currentPlayer
    * @return int
    */

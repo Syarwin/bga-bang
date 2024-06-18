@@ -32,4 +32,9 @@ class Peyote extends AbstractEventCard
   {
     return 0;
   }
+
+  public function isAllowPlayerPhaseOne()
+  {
+    return false;
+  }
 }

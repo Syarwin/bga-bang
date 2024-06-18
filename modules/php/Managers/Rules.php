@@ -63,7 +63,8 @@ class Rules extends DB_Manager
     $amountOfCardsToDraw = $eventCard ? $eventCard->getPhaseOneAmountOfCardsToDraw() : 2;
     $defaultRules = (new AbstractEventCard())->getRules();
     $rules = $eventCard ? $eventCard->getRules() : $defaultRules;
-    $rules = array_merge($rules, $player->getPhaseOneRules($amountOfCardsToDraw, $rules[RULE_ABILITY_AVAILABLE] ?? true));
+    $isAbilityAvailable = self::isAllowPlayerPhaseOne() && isset($rules[RULE_ABILITY_AVAILABLE]) && $rules[RULE_ABILITY_AVAILABLE];
+    $rules = array_merge($rules, $player->getPhaseOneRules($amountOfCardsToDraw, $isAbilityAvailable));
     $rules = array_merge(['player_id' => $player->getId()], $rules);
     $query = array_map(function ($value) {
       return is_bool($value) ? (int) $value : $value;
@@ -177,6 +178,15 @@ class Rules extends DB_Manager
   {
     $activeEvent = EventCards::getActive();
     return !$activeEvent || $activeEvent->isCanPlayBlueGreenCards();
+  }
+
+  /**
+   * @return boolean
+   */
+  public static function isAllowPlayerPhaseOne()
+  {
+    $activeEvent = EventCards::getActive();
+    return !$activeEvent || $activeEvent->isAllowPlayerPhaseOne();
   }
 
   /**
