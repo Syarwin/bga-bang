@@ -9,6 +9,19 @@ use BANG\Managers\EventCards;
 
 trait ReactTrait
 {
+
+  // TODO: Delete this method before release. Here just for backward compatibility
+  public function argRussianRoulette()
+  {
+    return [
+      '_private' => [
+        'active' => [
+          'cards' => Players::getActive()->getMissedWithOptions(),
+        ]
+      ],
+    ];
+  }
+
   public function stReact()
   {
     $player = Players::getActive();
