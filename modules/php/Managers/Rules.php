@@ -1,6 +1,7 @@
 <?php
 namespace BANG\Managers;
 use BANG\Core\Globals;
+use BANG\Core\Stack;
 use BANG\Helpers\DB_Manager;
 use BANG\Models\AbstractCard;
 use BANG\Models\AbstractEventCard;
@@ -124,7 +125,9 @@ class Rules extends DB_Manager
   public static function getDrawOrDiscardCardsLocation($requestedLocation)
   {
     $eventCard = EventCards::getActive();
-    return $eventCard ? $eventCard->getDrawCardsLocation($requestedLocation) : $requestedLocation;
+    $state = Stack::getCtx()['state'];
+    $isPhaseOneOrThree = in_array($state, [ST_PHASE_ONE_DRAW_CARDS, ST_DISCARD_EXCESS]);
+    return $eventCard && $isPhaseOneOrThree ? $eventCard->getDrawCardsLocation($requestedLocation) : $requestedLocation;
   }
 
   public static function bangPlayed()
