@@ -724,6 +724,15 @@ class Player extends \BANG\Helpers\DB_Manager
   }
 
   /**
+   * Calamity Janet returns Bang + Missed here
+   * @return int[]
+   */
+  public function getBangCardTypes()
+  {
+    return [CARD_BANG];
+  }
+
+  /**
    * addOptionsTo: adds cards options in order to send them to frontend
    * @param Collection $cards
    * @return array

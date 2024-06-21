@@ -77,6 +77,11 @@ class CalamityJanet extends \BANG\Models\Player
     return $res;
   }
 
+  public function getBangCardTypes()
+  {
+    return array_merge(parent::getBangCardTypes(), [CARD_MISSED]);
+  }
+
   public function playCard($card, $args)
   {
     if ($card->getType() == CARD_MISSED) {

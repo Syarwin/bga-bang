@@ -100,7 +100,7 @@ class BrownCard extends AbstractCard
         $player->attack($this, $ids, $targetCardId, !!$args['secondCardId']);
         if ($args['secondCardId']) {
           $card = Cards::get($args['secondCardId']);
-          if ($card->getType() !== CARD_BANG) {
+          if (!in_array($card->getType(), $player->getBangCardTypes())) {
             throw new \BgaVisibleSystemException('Incorrect card type to play with Bang: ' . $card->getType());
           }
           $card->discard();
