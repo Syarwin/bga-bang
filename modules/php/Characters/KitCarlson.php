@@ -40,7 +40,7 @@ class KitCarlson extends \BANG\Models\Player
     // TODO: Add ability to choose the order
     $rest = Cards::getSelection();
     if ($rest) {
-      foreach ($rest->toArray() as $card) {
+      foreach (array_reverse($rest->toArray()) as $card) {
         // TODO: Notify about returning card. We have a bug here, number of cards is incorrect
         if ($location === LOCATION_DECK) {
           Cards::putOnDeck($card->getId());

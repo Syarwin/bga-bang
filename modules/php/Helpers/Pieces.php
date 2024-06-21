@@ -387,7 +387,7 @@ class Pieces extends DB_Manager
    * @param bool $deckReform
    * @return Collection
    */
-  public static function pickForLocation($nbr, $fromLocation, $toLocation, $state = null, $deckReform = true)
+  public static function pickForLocation($nbr, $fromLocation, $toLocation, $state = 0, $deckReform = true)
   {
     self::checkLocation($fromLocation);
     self::checkLocation($toLocation);
