@@ -58,9 +58,13 @@ class QueryBuilder extends \APP_DbObject
   {
     $vals = [];
     foreach ($rows as $row) {
-      $vals[] = "('" . implode("','", array_map('mysql_escape_string', $row)) . "')";
+      $values = array_map(function ($value) {
+        // Sometimes 'false' is escaped as "" and if there's no default value - MySQL fails
+        $escapedValue = mysql_escape_string($value);
+        return empty($escapedValue) ? "0" : $escapedValue;
+      }, $row);
+      $vals[] = "('" . implode("','", $values) . "')";
     }
-
     $this->sql .= implode(',', $vals);
     self::DbQuery($this->sql);
     return self::DbGetLastId();

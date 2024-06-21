@@ -27,8 +27,8 @@ class HardLiquor extends AbstractEventCard
       Stack::insertOnTop($atom);
   }
 
-  public function getPhaseOneAmountOfCardsToDraw()
+  public function isAllowPlayerPhaseOne()
   {
-    return 0;
+    return false;
   }
 }

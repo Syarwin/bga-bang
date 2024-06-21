@@ -18,14 +18,15 @@ trait HardLiquorTrait
   public function actHardLiquorGainHP()
   {
     self::checkAction('actHardLiquorGainHP');
-    Players::getCurrent()->gainLife();
+    Players::getActive()->gainLife();
+    Rules::amendRules([RULE_PHASE_ONE_CARDS_DRAW_BEGINNING => 0]);
     Stack::finishState();
   }
 
   public function actDeclineHardLiquor()
   {
     self::checkAction('actDeclineHardLiquor');
-    Rules::amendRules([RULE_PHASE_ONE_CARDS_DRAW_BEGINNING => 2]);
+    Rules::amendRules(Players::getActive()->getPhaseOneRules(2));
     Stack::finishState();
   }
 
