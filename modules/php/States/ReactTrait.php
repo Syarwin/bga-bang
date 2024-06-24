@@ -20,6 +20,7 @@ trait ReactTrait
     // Auto pass
     if ($noBarrel && $noSpecialAbility && $noCardsInHand) {
       $this->actPass();
+      return;
     }
 
     $activeEvent = EventCards::getActive();
