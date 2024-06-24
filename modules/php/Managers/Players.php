@@ -334,13 +334,13 @@ class Players extends \BANG\Helpers\DB_Manager
    */
   public static function getNextId($player, $includeGhosts = false)
   {
-    $players = self::getLivingPlayerIdsStartingWith($player, $includeGhosts);
+    $playersIds = self::getLivingPlayerIdsStartingWith($player, $includeGhosts);
     // But current player might not be alive already... Let's find them
-    $currentIndex = array_search($player->getId(), $players);
+    $currentIndex = array_search($player->getId(), $playersIds);
     if (!is_int($currentIndex)) {
       $currentIndex = -1;
     }
-    return $players[$currentIndex + 1];
+    return $playersIds[$currentIndex + 1];
   }
 
   /**
