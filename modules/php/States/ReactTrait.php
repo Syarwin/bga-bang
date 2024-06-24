@@ -53,40 +53,6 @@ trait ReactTrait
     }
   }
 
-  function reactAux($player, $ids)
-  {
-//    $ctx = Stack::getCtx();
-//    $player->react($ids);
-//    if ($ctx['state'] == Stack::top()['state']) { // Dirty hack to support Lucky Duke situation. To be refactored
-//      Stack::finishState();
-//    }
-  }
-
-  /*
-TODO : handle with stack engine
-// Otherwise, reaction is over, proceed to next player if any
-else {
-  array_shift($argReact['order']);
-  unset($argReact['_private'][$pId]);
-  Log::addAction('react', $argReact);
-
-  // No more players need to react ? => we are over
-  if (empty($argReact['order'])) {
-    $this->gamestate->nextState('finishedReaction');
-  } else {
-    $pId = $argReact['order'][0];
-
-    // Next player already chose something to react ? => just react then
-    if (count($argReact['_private'][$pId]['selection']) > 0) {
-      self::reactAux($pId, $argReact['_private'][$pId]['selection']);
-    } else {
-      // Otherwise, go back to awaitReaction to make it active
-      $this->gamestate->nextState('react');
-    }
-  }
-}
-*/
-
   function actReact($ids)
   {
     $atom = Stack::top();
@@ -98,28 +64,6 @@ else {
     }
     Stack::finishState();
   }
-
-  /*
-  public function actCancelPreSelection()
-  {
-    $pId = self::getCurrentPlayerId();
-    $player = Players::getPlayer($pId);
-    $argReact = $this->argReact();
-    $argReact['_private'][$player->getId()]['selection'] = [];
-    Log::addAction('react', $argReact);
-    Notifications::preSelectCards($player, []);
-  }
-
-  public function updateOptions($player, $argReact)
-  {
-    $args = Cards::getCurrentCard()->getReactionOptions($player);
-    Notifications::updateOptions($player, $args);
-
-    $argReact['_private'][$player->getId()] = $args;
-    Log::addAction('react', $argReact);
-  }
-
-*/
 
   public function useAbility($args)
   {
