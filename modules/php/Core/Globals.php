@@ -11,8 +11,6 @@ class Globals extends \BANG\Helpers\DB_Manager
     'stack' => 'obj', // DO NOT MODIFY, USED BY STACK ENGINE
     'stackCtx' => 'obj', // DO NOT MODIFY, USED BY STACK ENGINE
 
-    // backward compatibility from 15/05/2023
-    'pIdTurn' => 'int', // Player's id whose turn is
     'gameIsOver' => 'bool',
     // backward compatibility from XX/06/2024
     'resurrectionIsPossible' => 'bool',

@@ -98,9 +98,7 @@ class Rules extends DB_Manager
   public static function getCurrentPlayerId()
   {
     $current = self::get();
-    // backward compatibility from 15/05/2023
-    // Change Globals::getPidTurn() to null
-    return $current ? (int) $current['player_id'] : Globals::getPIdTurn();
+    return $current ? (int) $current['player_id'] : 0;
   }
 
   public static function isAbilityAvailable()

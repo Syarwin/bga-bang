@@ -564,7 +564,6 @@ class Pieces extends DB_Manager
    */
   static function singleCreate($type, $location)
   {
-//    self::checkState($state);
     return self::create([['type' => $type]], $location);
   }
 }

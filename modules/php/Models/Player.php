@@ -409,7 +409,7 @@ class Player extends \BANG\Helpers\DB_Manager
           return $card->getType() == CARD_BEER;
         })
         ->count();
-      $isKetchumAndCanUseAbility = $this->character == SID_KETCHUM && $this->getHand()->count() >= 2;
+      $isKetchumAndCanUseAbility = $this->character == SID_KETCHUM && $this->getHand()->count() >= 2 && Rules::isAbilityAvailable();
       $canDrinkBeerToLive = (!$isDuel && $beersInHand > 0) || $isKetchumAndCanUseAbility;
       if ($beersInHand > 0 && !Rules::isBeerAvailable() && !$isKetchumAndCanUseAbility) {
         $canDrinkBeerToLive = false;
