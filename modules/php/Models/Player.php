@@ -2,6 +2,7 @@
 namespace BANG\Models;
 use BANG\Core\Globals;
 use BANG\Helpers\Collection;
+use BANG\Helpers\GameOptions;
 use BANG\Managers\Cards;
 use BANG\Managers\EventCards;
 use BANG\Managers\Players;
@@ -480,6 +481,7 @@ class Player extends \BANG\Helpers\DB_Manager
   /**
    * returns the current distance to an enemy from the view of the enemy
    * should not be called on the player checking for targets but on the other players
+   * @return int
    */
   public function getDistanceTo($enemy)
   {
@@ -512,6 +514,9 @@ class Player extends \BANG\Helpers\DB_Manager
     return $enemy->getDistanceTo($this) <= $range;
   }
 
+  /**
+   * @return int[]
+   */
   public function getDistances()
   {
     $dist = [];
@@ -739,12 +744,14 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function addOptionsTo($cards, $filterNullOptions = true)
   {
+    $mustPlayCardId = GameOptions::isEvents() ? Globals::getMustPlayCardId() : null;
     $cards = $cards
-      ->map(function ($card) {
+      ->map(function ($card) use ($mustPlayCardId) {
         return [
           'id' => $card->getId(),
           'options' => $card->getPlayOptions($this),
           'type' => $card->getType(),
+          'mustPlay' => $card->getId() === $mustPlayCardId,
         ];
       });
     if ($filterNullOptions) {

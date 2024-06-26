@@ -92,6 +92,10 @@ trait TurnTrait
    ****************************************/
   public function actEndTurn()
   {
+    $mustPlayCardId = Globals::getMustPlayCardId();
+    if (in_array($mustPlayCardId, Players::getActive()->getHand()->getIds())) {
+      throw new \BgaUserException(banghighnoon::get()->totranslate('You must play the highlighted card before ending your turn'));
+    }
     Stack::unsuspendNext(ST_PLAY_CARD);
     Stack::finishState();
   }

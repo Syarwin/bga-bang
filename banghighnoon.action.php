@@ -38,7 +38,7 @@ class action_banghighnoon extends APP_GameAction
   public function actPlayCard()
   {
     self::setAjaxMode();
-    $id = self::getArg('id', AT_posint, true);
+    $id = (int) self::getArg('id', AT_posint, true);
     $player = self::getArg('player', AT_posint, false);
     $optionType = self::getArg('optionType', AT_alphanum, false);
     $optionArg = self::getArg('optionArg', AT_posint, false);

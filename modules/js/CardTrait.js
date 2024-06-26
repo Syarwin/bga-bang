@@ -132,6 +132,9 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         card.uid = card.id + suffix;
         dojo.removeClass('bang-card-' + card.uid, 'unselectable');
         dojo.addClass('bang-card-' + card.uid, 'selectable');
+        if (card.mustPlay) {
+          dojo.addClass('bang-card-' + card.uid, 'mustplay');
+        }
       });
 
       if (action === 'playCard') {

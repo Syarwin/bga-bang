@@ -239,21 +239,6 @@ $machinestates = [
     'possibleactions' => ['actDiscardBlue'],
   ],
 
-  ST_PLAY_LAST_CARD_AUTOMATICALLY => [
-    'name' => 'playLastCardAutomatically',
-    'type' => 'game',
-    'action' => 'stPlayLastCardAutomatically',
-  ],
-
-  ST_PLAY_LAST_CARD_MANUALLY => [
-    'name' => 'playLastCardManually',
-    'description' => clienttranslate('${actplayer} must play second drawn card because of Law Of The West event'),
-    'descriptionmyturn' => clienttranslate('${you} must play second drawn card because of Law Of The West event'),
-    'type' => 'activeplayer',
-    'args' => 'argPlayLastCardManually',
-    'possibleactions' => ['actPlayCard'],
-  ],
-
   // TODO: Delete before release
   ST_RUSSIAN_ROULETTE => [
     'name' => 'russianRoulette',

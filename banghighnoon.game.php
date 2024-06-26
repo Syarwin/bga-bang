@@ -246,8 +246,8 @@ class banghighnoon extends Table
   }
 
   // Exposing protected method translation
-  public static function translate($text)
+  public static function totranslate($text)
   {
-    return self::_($text);
+    return self::get()->_($text);
   }
 }

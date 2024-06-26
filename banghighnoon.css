@@ -1957,6 +1957,11 @@ div.bang-card.event .card-background {
   width: 85px;
   height: 123.25px;
 }
+div.bang-card.mustplay {
+  box-shadow: 0 0 13px 5px #af5f10;
+  border-radius: 7%;
+  background-color: #9c7e4a;
+}
 
 .bang-card[data-type="116"] .card-front .card-name {
   font-size: 11.475px;

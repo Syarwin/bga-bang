@@ -170,6 +170,12 @@ div.bang-card {
       height: $cardH * 145 / 200;
     }
   }
+
+  &.mustplay {
+    box-shadow: 0 0 13px 5px #af5f10;
+    border-radius: 7%;
+    background-color: #9c7e4a;
+  }
 }
 
 // Long name for "Abandoned Mine" should be on 1 line
