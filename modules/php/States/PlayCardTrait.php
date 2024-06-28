@@ -19,15 +19,6 @@ trait PlayCardTrait
     ];
   }
 
-  public function argPlayLastCardManually()
-  {
-    return [
-      '_private' => [
-        'active' => Players::getActive()->getLastCardWithOptions(),
-      ],
-    ];
-  }
-
   public function stPlayCard()
   {
     $player = Players::getActive();
