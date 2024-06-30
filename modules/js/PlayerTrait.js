@@ -5,9 +5,12 @@ function truncate(str, n) {
 define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
   return declare('bang.playerTrait', null, {
     constructor() {
+      const ignoreFunction = (n) => {
+        return n.args.ignore && n.args.ignore.includes(this.player_id);
+      };
       this._notifications.push(
         ['updateHP', 200],
-        ['updateHand', 200],
+        ['updateHand', 200, ignoreFunction],
         ['playerEliminated', 1000],
         ['playerUnconscious', 1000],
         ['updatePlayers', 100],

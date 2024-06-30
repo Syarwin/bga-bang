@@ -283,7 +283,7 @@ class Player extends \BANG\Helpers\DB_Manager
   /**
    * Draw $amount card from deck and notify them
    * @param int $amount
-   * @return Collection | null
+   * @return void
    */
   public function drawCards($amount)
   {

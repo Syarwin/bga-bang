@@ -27,12 +27,27 @@ class Notifications
       banghighnoon::get()->notifyPlayer($pId, $name, $msg, $data);
   }
 
-  public static function updateHand($player)
+  /**
+   * @param Player $player
+   * @param string $msg
+   * @param string $msgYou
+   * @param AbstractCard $card
+   * @return void
+   */
+  public static function updateHand($player, $msg = '', $msgYou = '', $card = null, $ignorePlayer = null)
   {
-    self::notifyAll('updateHand', '', [
+    $data = [
       'player' => $player,
       'total' => $player->getHand()->count(),
-    ]);
+      'msgYou' => $msgYou,
+    ];
+    if ($card) {
+      $data['card'] = $card;
+    }
+    if ($ignorePlayer) {
+      $data['ignore'] = [$ignorePlayer];
+    }
+    self::notifyAll('updateHand', $msg, $data);
   }
 
   public static function showMessage($playerId, $message)
@@ -201,12 +216,9 @@ class Notifications
       return;
     }
 
-    self::notifyAll('updateHand', clienttranslate('${player_name} discards ${card_name}'), [
-      'msgYou' => clienttranslate('${You} discard ${card_name}'),
-      'player' => $player,
-      'card' => $card,
-      'total' => $player->getHand()->count(),
-    ]);
+    $msg = clienttranslate('${player_name} discards ${card_name}');
+    $msgYou = clienttranslate('${You} discard ${card_name}');
+    self::updateHand($player, $msg, $msgYou, $card);
   }
 
   /**
@@ -220,13 +232,15 @@ class Notifications
       'player' => $player,
       'card' => $card,
       'deckCount' => Cards::getDeckCount(),
-      'preserve' => [$card],
+      'total' => $player->getHand()->count(),
+      'msgYou' => clienttranslate('${You} discard ${card_name} face down on the deck'),
     ];
     self::notify($player, 'cardLostToDeck', '', $data);
-    self::notify($player, 'updateHand', clienttranslate('${You} discard ${card_name} face down on the deck'), $data);
+    self::notify($player, 'updateHand', 'If you see this message - please report a bug', $data);
     $data['ignore'] = [$player];
     unset($data['card']);
     self::notifyAll('cardLostToDeck', '', $data);
+    self::updateHand($player, clienttranslate('${player_name} discards a card face down on the deck'), '', null, $player);
   }
 
   /**
@@ -249,15 +263,6 @@ class Notifications
       } else {
         self::discardedCardToDrawPile($player, $card);
       }
-    }
-
-    if ($destination === LOCATION_DISCARD) {
-      self::notifyAll('updateHand', clienttranslate('${player_name} discards ${amount} card(s) face down on the deck'), [
-        'player' => $player,
-        'ignore' => [$player],
-        'amount' => count($cardIds),
-        'total' => $player->getHand()->count(),
-      ]);
     }
   }
 
