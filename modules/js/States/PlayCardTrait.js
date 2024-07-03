@@ -58,6 +58,8 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
             if (card.options.with_another_card) {
               this.makeCardsSelectable(card.options.with_another_card.cards);
               this._isToSelectSecondCard = true;
+            } else if (!card.options.target_types.includes(TARGET_ALL_CARDS)) {
+              this._selectableCards = [];
             }
           }
         }
