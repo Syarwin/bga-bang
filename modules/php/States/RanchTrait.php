@@ -27,8 +27,7 @@ trait RanchTrait
     $currentPlayer = Players::getCurrent();
     Cards::discardMany($cardIds);
     Notifications::discardedCards($currentPlayer, $cardIds);
-    $newCards = Cards::deal($currentPlayer->getId(), count($cardIds));
-    Notifications::drawCards($currentPlayer, $newCards);
+    $currentPlayer->drawCards(count($cardIds));
     Stack::finishState();
   }
 
