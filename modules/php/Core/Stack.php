@@ -326,7 +326,7 @@ class Stack
   {
     $stack = Stack::get();
     $atomIndex = Stack::getFirstAtomIndexByState(ST_REACT);
-    if ($missedNeeded == 0) {
+    if ($missedNeeded === 0) {
       Stack::unsuspendNext(ST_REACT);
       if (Stack::getCtx()['state'] != ST_REACT) {
         array_splice($stack, $atomIndex, 1);

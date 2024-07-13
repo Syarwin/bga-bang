@@ -190,14 +190,6 @@ class AbstractEventCard implements \JsonSerializable
   }
 
   /**
-   * @param Player $currentPlayer
-   * @return int
-   */
-  public function getNextPlayerId($currentPlayer) {
-    return Players::getNextId($currentPlayer, true);
-  }
-
-  /**
    * @param Player $player
    * @return void
    */

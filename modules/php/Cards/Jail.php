@@ -67,7 +67,6 @@ class Jail extends BlueCard
       Notifications::tell(clienttranslate('${player_name} can make his turn${flipEventMsg}'), $args);
     } else {
       Notifications::tell(clienttranslate('${player_name} is skipped${flipEventMsg}'), $args);
-      Globals::setVendettaWasUsed(true);
       Stack::clearAllLeaveLast();
     }
   }

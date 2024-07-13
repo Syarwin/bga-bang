@@ -1,10 +1,6 @@
 <?php
 namespace BANG\Cards\Events;
 use BANG\Core\Globals;
-use BANG\Core\Notifications;
-use BANG\Managers\Cards;
-use BANG\Managers\EventCards;
-use BANG\Managers\Players;
 use BANG\Models\AbstractEventCard;
 use BANG\Models\Player;
 
@@ -16,31 +12,28 @@ class Vendetta extends AbstractEventCard
     $this->type = CARD_VENDETTA;
     $this->name = clienttranslate('Vendetta');
     $this->text = clienttranslate('At the end of his turn, each player "draws!": on a Heart, he plays another turn (but he does not "draw!" again).');
-    $this->effect = EFFECT_NEXTPLAYER;
+    $this->effect = EFFECT_END_OF_TURN;
     $this->expansion = FISTFUL_OF_CARDS;
   }
 
   /**
-   * @param Player $currentPlayer
-   * @return int
+   * @param Player $player
+   * @return void
    */
-  public function getNextPlayerId($currentPlayer)
+  public function resolveEffect($player = null)
   {
     if (Globals::getVendettaWasUsed()) {
       Globals::setVendettaWasUsed(false);
-      return parent::getNextPlayerId($currentPlayer);
     } else {
-      $flipped = Cards::drawForLocation(LOCATION_FLIPPED, 1)->first();
-      $src = EventCards::getActive();
-      $player = Players::getActive();
-      Notifications::flipCard($player, $flipped, $src);
-      Cards::discard($flipped);
-      if ($flipped->getSuit() === 'H') {
-        Globals::setVendettaWasUsed(true);
-        return $currentPlayer->getId();
-      } else {
-        return parent::getNextPlayerId($currentPlayer);
-      }
+      $player->addFlipAtom($this);
+      Globals::setVendettaWasUsed(true);
+    }
+  }
+
+  public function resolveFlipped($card)
+  {
+    if ($card->getSuit() !== 'H') {
+      Globals::setVendettaWasUsed(false);
     }
   }
 }

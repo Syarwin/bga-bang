@@ -13,7 +13,6 @@ define('ST_REACT', 8);
 define('ST_REACT_BEER', 9);
 define('ST_END_OF_TURN', 11);
 define('ST_DISCARD_EXCESS', 12);
-define('ST_DRAW_CARDS', 13); // Deprecated, used for backward compatibility
 define('ST_PHASE_ONE_SETUP', 13);
 define('ST_SELECT_CARD', 15);
 define('ST_ACTIVE_DRAW_CARD', 17);
@@ -41,6 +40,8 @@ define('ST_HARD_LIQUOR', 38);
 define('ST_RANCH', 39);
 define('ST_PEYOTE', 40);
 define('ST_RESOLVE_BEFORE_PHASE_ONE_EVENT_EFFECT', 41);
+define('ST_RESOLVE_END_OF_TURN_EVENTS', 42);
+
 define('ST_PRE_GAME_END', 98);
 define('ST_GAME_END', 99);
 
@@ -240,7 +241,7 @@ define('DEFENSIVE', 7);
 define('EFFECT_STARTOFTURN', 100);
 define('EFFECT_INSTANT', 101);
 define('EFFECT_PERMANENT', 102);
-define('EFFECT_NEXTPLAYER', 103);
+define('EFFECT_END_OF_TURN', 103);
 define('EFFECT_PHASE_ONE', 104);
 define('EFFECT_ENDOFPHASEONE', 105);
 define('EFFECT_BEFORE_PHASE_ONE', 106);
@@ -251,11 +252,6 @@ define('SPECIFIC_RANGE', 2);
 define('ALL_OTHER', 3);
 define('ALL', 4);
 define('ANY', 5);
-
-define('CHECK_BARREL', true);
-define('NO_CHECK_BARREL', false);
-
-define('PUBLIC_SELECTION', -1);
 
 /*
  * Constants for card symbols

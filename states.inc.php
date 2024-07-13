@@ -301,6 +301,12 @@ $machinestates = [
     'possibleactions' => ['actPeyoteGuess'],
   ],
 
+  ST_RESOLVE_END_OF_TURN_EVENTS => [
+    'name' => 'resolveEndOfTurnEventEffects',
+    'type' => 'game',
+    'action' => 'stResolveEndOfTurnEventEffects',
+  ],
+
   ST_END_OF_TURN => [
     'name' => 'endOfTurn',
     'type' => 'game',
