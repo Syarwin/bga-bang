@@ -46,7 +46,8 @@ trait SelectCardTrait
         Cards::discard($card);
       }
     }
-    if ($stackCtx['src']['type'] < CARD_BLESSING) { // Not an event
+    $isEvent = isset($stackCtx['src']['type']) && $stackCtx['src']['type'] >= CARD_BLESSING;
+    if (!$isEvent) {
       Players::get($playerId)->react($ids);
     }
     Stack::finishState();

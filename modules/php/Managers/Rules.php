@@ -123,8 +123,11 @@ class Rules extends DB_Manager
   public static function getDrawOrDiscardCardsLocation($requestedLocation)
   {
     $eventCard = EventCards::getActive();
-    $state = Stack::getCtx()['state'];
-    $isPhaseOneOrThree = in_array($state, [ST_PHASE_ONE_DRAW_CARDS, ST_DISCARD_EXCESS]);
+    $ctx = Stack::getCtx();
+    $state = $ctx['state'];
+    $isKitCarlsonAbility = $state === ST_SELECT_CARD && isset($ctx['src']['characterId']) &&
+      $ctx['src']['characterId'] === KIT_CARLSON;
+    $isPhaseOneOrThree = in_array($state, [ST_PHASE_ONE_DRAW_CARDS, ST_DISCARD_EXCESS, ST_ACTIVE_DRAW_CARD]) || $isKitCarlsonAbility;
     return $eventCard && $isPhaseOneOrThree ? $eventCard->getDrawCardsLocation($requestedLocation) : $requestedLocation;
   }
 
