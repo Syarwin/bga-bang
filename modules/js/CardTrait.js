@@ -288,20 +288,24 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
         let sourceId =
             n.args.src === 'deck' ? 'deck' : this.getCardAndDestroy(card, 'player-character-' + n.args.player_id2);
-        let targetId =
-            n.args.target === 'hand'
-                ? this.player_id === n.args.player_id
-                    ? 'hand'
-                    : 'player-character-' + n.args.player_id
-                : 'player-inplay-' + n.args.player_id;
+        let targetId;
+        if (n.args.target === 'hand') {
+          if (this.player_id === n.args.player_id && !n.args.isSelection) {
+            targetId = 'hand';
+          } else {
+            targetId = 'player-character-' + n.args.player_id;
+          }
+        } else {
+          targetId = 'player-inplay-' + n.args.player_id;
+        }
         this.slideTemporary('jstpl_card', card, 'board', sourceId, targetId, 800, 120 * i).then(() => {
-          if (targetId === 'hand') this.addCard(card, 'hand-cards');
+          if (targetId === 'hand' && !n.args.isSelection) this.addCard(card, 'hand-cards');
           if (n.args.target === 'inPlay') this.addCard(card, targetId);
         });
 
-        if (n.args.src === 'deck') {
+        if (n.args.src === 'deck' || n.args.src === 'discard') {
           // Make sure it will pass in front of discard
-          dojo.style('bang-card-' + card.uid, 'zIndex', dojo.query('#discard .bang-card').length);
+          dojo.style('bang-card-' + card.uid, 'zIndex', dojo.query('#discard .bang-card').length + i);
         }
       });
 
