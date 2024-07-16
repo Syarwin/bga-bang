@@ -111,6 +111,13 @@ $machinestates = [
     'action' => 'stResolveEventBeforePhaseOneEffect',
   ],
 
+  ST_RESOLVE_BEFORE_PLAY_CARD_EFFECT => [
+    'name' => 'resolveBeforePlayCardEffect',
+    'description' => '',
+    'type' => 'game',
+    'action' => 'stResolveBeforePlayCardEffect',
+  ],
+
   ST_FLIP_CARD => [
     'name' => 'flipCard',
     'type' => 'game',

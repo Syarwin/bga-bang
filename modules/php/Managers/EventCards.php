@@ -183,7 +183,7 @@ class EventCards extends \BANG\Helpers\Pieces
         return [
           HIGH_NOON => CARD_HIGH_NOON,
           FISTFUL_OF_CARDS => CARD_FISTFUL_OF_CARDS,
-          ][$currentExpansion];
+        ][$currentExpansion];
       default:
         throw new \BgaVisibleSystemException('$currentEventExpansions does not intersect with $eventExpansions, please report as a bug');
     }

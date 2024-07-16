@@ -734,7 +734,7 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function addOptionsTo($cards, $filterNullOptions = true)
   {
-    $mustPlayCardId = GameOptions::isEvents() ? Globals::getMustPlayCardId() : null;
+    $mustPlayCardId = GameOptions::isEvents() && Globals::getIsMustPlayCard() ? Globals::getMustPlayCardId() : null;
     $cards = $cards
       ->map(function ($card) use ($mustPlayCardId) {
         return [

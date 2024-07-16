@@ -41,6 +41,7 @@ define('ST_RANCH', 39);
 define('ST_PEYOTE', 40);
 define('ST_RESOLVE_BEFORE_PHASE_ONE_EVENT_EFFECT', 41);
 define('ST_RESOLVE_END_OF_TURN_EVENTS', 42);
+define('ST_RESOLVE_BEFORE_PLAY_CARD_EFFECT', 43);
 
 define('ST_PRE_GAME_END', 98);
 define('ST_GAME_END', 99);
@@ -245,6 +246,7 @@ define('EFFECT_END_OF_TURN', 103);
 define('EFFECT_PHASE_ONE', 104);
 define('EFFECT_ENDOFPHASEONE', 105);
 define('EFFECT_BEFORE_PHASE_ONE', 106);
+define('EFFECT_BEFORE_EACH_PLAY_CARD', 107);
 
 define('NONE', 0);
 define('INRANGE', 1);

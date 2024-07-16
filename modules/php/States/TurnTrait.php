@@ -65,7 +65,14 @@ trait TurnTrait
     $nextEventCard = EventCards::getNext();
     // TODO: we call this method twice if it's Sheriff's 2+ turn, this should be fixed (check setNewTurnRules usages)
     Rules::setNewTurnRules($player, $eventCard);
-    $stack = [ST_PHASE_ONE_SETUP, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_RESOLVE_END_OF_TURN_EVENTS, ST_END_OF_TURN];
+    $stack = [
+      ST_PHASE_ONE_SETUP,
+      ST_RESOLVE_BEFORE_PLAY_CARD_EFFECT,
+      ST_PLAY_CARD,
+      ST_DISCARD_EXCESS,
+      ST_RESOLVE_END_OF_TURN_EVENTS,
+      ST_END_OF_TURN
+    ];
     $isAdditionalTurn = $eventCard && $eventCard instanceof Vendetta && Globals::getVendettaWasUsed();
     array_unshift($stack, ST_RESOLVE_BEFORE_PHASE_ONE_EVENT_EFFECT);
     array_unshift($stack, ST_PRE_PHASE_ONE);
@@ -92,8 +99,7 @@ trait TurnTrait
    ****************************************/
   public function actEndTurn()
   {
-    $mustPlayCardId = Globals::getMustPlayCardId();
-    if (in_array($mustPlayCardId, Players::getActive()->getHand()->getIds())) {
+    if (Globals::getIsMustPlayCard()) {
       throw new \BgaUserException(banghighnoon::get()->totranslate('You must play the highlighted card before ending your turn'));
     }
     Stack::unsuspendNext(ST_PLAY_CARD);

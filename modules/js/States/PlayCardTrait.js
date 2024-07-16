@@ -8,6 +8,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
      * Main state of game : active player can play cards from his hand
      */
     onEnteringStatePlayCard(args) {
+      dojo.query('#hand .bang-card').removeClass('selected');
       var cards = args._private.cards.filter((card) => card.options != null);
       this.waitForDisappearance('.slide').then(() => {
         this.makeCardSelectable(cards, 'playCard');
@@ -23,7 +24,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
      * Triggered whenever a player clicked on a selectable card to play
      */
     onClickCardPlayCard(card) {
-      dojo.query('#hand .bang-card').removeClass('selectable').addClass('unselectable');
+      dojo.query('#hand .bang-card').removeClass('selectable').removeClass('mustplay').addClass('unselectable');
       dojo.removeClass('bang-card-' + card.id, 'unselectable');
       dojo.addClass('bang-card-' + card.id, 'selected');
       if (this._selectedCard) {
@@ -101,7 +102,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         data.secondCardId = this._selectedCardSecond.id;
       }
       this._selectedCard = null;
-      this.takeAction('actPlayCard', data);
+      this.takeAction('actPlayCard', data, true);
     },
   });
 });

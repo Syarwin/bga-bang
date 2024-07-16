@@ -45,15 +45,28 @@ trait PlayCardTrait
     }
 
     $card = Cards::get($cardId);
+    $player = Players::getActive();
     $mustPlayCardId = Globals::getMustPlayCardId();
-    if ($mustPlayCardId !== 0 && $cardId !== $mustPlayCardId) {
-      $cardType = $card->getType();
-      $mustPlayCardType = Cards::get($mustPlayCardId)->getType();
-      if ($cardType === $mustPlayCardType) {
-        throw new \BgaUserException(banghighnoon::get()->totranslate('You must play the highlighted card first because of the Law Of The West event'));
+    if ($mustPlayCardId !== 0) {
+      if ($cardId === $mustPlayCardId) {
+        Globals::setMustPlayCardId(0);
+        Globals::setIsMustPlayCard(false);
+      } else {
+        $cardType = $card->getType();
+        $mustPlayCardType = Cards::get($mustPlayCardId)->getType();
+        if ($cardType === $mustPlayCardType) {
+          throw new \BgaUserException(
+            banghighnoon::get()->totranslate(
+              'You must play the highlighted card first because of the Law Of The West event'
+            )
+          );
+        }
+        // Technically this should be out of "if ($mustPlayCardId !== 0)". However, I really don't want to add an
+        // unused state each time any card played. Currently, is used for Law Of The West only. If any more
+        // EFFECT_BEFORE_EACH_PLAY_CARD will be added - consider to move it out of the if
+        Stack::insertOnTop(Stack::newSimpleAtom(ST_RESOLVE_BEFORE_PLAY_CARD_EFFECT, $player));
       }
     }
-    $player = Players::getActive();
     $player->playCard($card, $args);
     self::giveExtraTime($player->getId());
 

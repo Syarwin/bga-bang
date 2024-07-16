@@ -62,6 +62,7 @@ class banghighnoon extends Table
   use BANG\States\RanchTrait;
   use BANG\States\PeyoteTrait;
   use BANG\States\EndOfTurnEventEffectsTrait;
+  use BANG\States\BeforePlayCardTrait;
 
   public static $instance = null;
   public function __construct()

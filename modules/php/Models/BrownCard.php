@@ -119,7 +119,7 @@ class BrownCard extends AbstractCard
         // Drawing/discarding from someone's hand/inplay
         $victim = Players::get($args['player']);
         $card = $args['type'] == 'player' ? $victim->getRandomCardInHand() : Cards::get($args['arg']);
-
+        // TODO: Support Panic yourself more elegantly
         if ($this->effect['type'] == DRAW) {
           Cards::stole($card, $player);
           Notifications::stoleCard($player, $victim, $card, $args['type'] == LOCATION_INPLAY);
