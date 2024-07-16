@@ -31,6 +31,45 @@ trait PlayCardTrait
     }
   }
 
+  // TODO: Remove after all games will be started after 16/07/2024
+  public function stPlayLastCardAutomatically()
+  {
+    $activePlayer = Players::getActive();
+    $nonActivePlayers = Players::getLivingPlayers($activePlayer->getId());
+    $lastCard = Players::getActive()->getLastCardFromHand();
+    $lastCardType = $lastCard->getType();
+
+    // TODO: Think on how all those cards could be filtered rather than just listing them here (effect?)
+    $specialCardsTypes = [CARD_BANG, CARD_CAT_BALOU, CARD_DUEL, CARD_JAIL, CARD_PANIC, CARD_MISSED];
+    if (in_array($lastCardType, $specialCardsTypes) || $lastCard->isWeapon()) {
+      if (!$activePlayer->isCardPlayable($lastCard)) {
+        // Cannot be played (Missed, Bang with no possible distance)
+        $reason = $activePlayer->getNonPlayabilityReason($lastCardType);
+        Notifications::showMessageToAll(clienttranslate('${player_name} should have played ${card_name} but this is not possible - ${reason}'), [
+          'player' => $activePlayer,
+          'card' => $lastCard,
+          'reason' => $reason,
+        ]);
+      } else if ($lastCard->isWeapon()) {
+        // Weapon should be just played without args if it's playable
+        $activePlayer->playCard($lastCard, []);
+      } else if (count($nonActivePlayers) === 1 && in_array($lastCardType, [CARD_BANG, CARD_DUEL])) {
+        // It could be played only to a single player left alive, no choice here
+        $activePlayer->playCard($lastCard, [
+          'type' => 'player',
+          'player' => $nonActivePlayers->first()->getId(),
+        ]);
+      } else {
+        // Player must choose the target manually
+        $atom = Stack::newSimpleAtom(ST_PLAY_LAST_CARD_MANUALLY, $activePlayer->getId());
+        Stack::insertOnTop($atom);
+      }
+    } else {
+      $activePlayer->playCard($lastCard, []);
+    }
+    Stack::finishState();
+  }
+
   public function actPlayCard($cardId, $args)
   {
     self::checkAction('actPlayCard');

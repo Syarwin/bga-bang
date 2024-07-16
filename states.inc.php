@@ -318,6 +318,22 @@ $machinestates = [
     'updateGameProgression' => true,
   ],
 
+  // TODO: Next 2 states are to be removed. Released on 16/07/2024, please check if there's any games older than that
+  ST_PLAY_LAST_CARD_AUTOMATICALLY => [
+    'name' => 'playLastCardAutomatically',
+    'type' => 'game',
+    'action' => 'stPlayLastCardAutomatically',
+  ],
+
+  ST_PLAY_LAST_CARD_MANUALLY => [
+    'name' => 'playLastCardManually',
+    'description' => clienttranslate('${actplayer} must play second drawn card because of Law Of The West event'),
+    'descriptionmyturn' => clienttranslate('${you} must play second drawn card because of Law Of The West event'),
+    'type' => 'activeplayer',
+    'args' => 'argPlayLastCardManually',
+    'possibleactions' => ['actPlayCard'],
+  ],
+
   /*
    * BGA framework final state. Do not modify.
    */
