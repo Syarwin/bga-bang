@@ -132,7 +132,23 @@ class Notifications
     ]);
   }
 
-  public static function drawCards($player, $cards, $public = false, $src = LOCATION_DECK, $isMessage = true)
+  /**
+   * @param Player $player
+   * @param Collection $cards
+   * @param boolean $public
+   * @param string $src
+   * @param boolean $silent
+   * @param boolean $isSelection
+   * @return void
+   */
+  public static function drawCards($player,
+    $cards,
+    $public = false,
+    $src = LOCATION_DECK,
+    $silent = false,
+    $isSelection = false,
+    $notifyTargetOnly = false
+  )
   {
     $amount = $cards->count();
     $data = [
@@ -144,6 +160,7 @@ class Notifications
       'src' => $src,
       'target' => LOCATION_HAND,
       'deckCount' => Cards::getDeckCount(),
+      'isSelection' => $isSelection,
     ];
 
     if ($src === LOCATION_DISCARD) {
@@ -152,43 +169,50 @@ class Notifications
 
     // Notify player
     if ($amount === 1) {
-      $msg = $isMessage ? clienttranslate('You draw ${card_name} from ${src_name}') : '';
+      $msg = $silent ? '' : clienttranslate('You draw ${card_name} from ${src_name}');
       $data['card'] = $cards->first();
     } else {
-      $msg = clienttranslate('You draw ${amount} cards from ${src_name}');
+      $msg = $silent ? '' : clienttranslate('You draw ${amount} cards from ${src_name}');
     }
     self::notify($player, 'cardsGained', $msg, $data);
 
     // Notify everyone else
-    if (!$public) {
-      unset($data['card_name']);
-      unset($data['card']);
-      unset($data['cards']);
-      $msg =
-        $amount === 1
-          ? clienttranslate('${player_name} draws a card from ${src_name}')
-          : clienttranslate('${player_name} draws ${amount} cards from ${src_name}');
-    } else {
-      if ($amount === 1) {
-        $msg = $isMessage ? clienttranslate('${player_name} draws ${card_name} from ${src_name}') : '';
+    if (!$notifyTargetOnly) {
+      if (!$public) {
+        unset($data['card_name']);
+        unset($data['card']);
+        unset($data['cards']);
+        $msg =
+          $amount === 1
+            ?
+            clienttranslate('${player_name} draws a card from ${src_name}')
+            :
+            clienttranslate('${player_name} draws ${amount} cards from ${src_name}');
       } else {
-        $msg = clienttranslate('${player_name} draws ${amount} cards from ${src_name}');
+        if ($amount === 1) {
+          $msg = clienttranslate('${player_name} draws ${card_name} from ${src_name}');
+        } else {
+          $msg = clienttranslate('${player_name} draws ${amount} cards from ${src_name}');
+        }
       }
+      $data['ignore'] = [$player];
+      if ($silent) {
+        $msg = '';
+      }
+      Notifications::notifyAll('cardsGained', $msg, $data);
     }
-    $data['ignore'] = [$player];
-    Notifications::notifyAll('cardsGained', $msg, $data);
   }
 
   /**
    * @param Player $player
    * @param Collection $cards
-   * @param string $isMessage
+   * @param string $silent
    * @param string $msgOthersForced
    * @return void
    */
-  public static function drawCardFromDiscard($player, $cards, $isMessage = true)
+  public static function drawCardFromDiscard($player, $cards, $silent = false)
   {
-    self::drawCards($player, $cards, true, LOCATION_DISCARD, $isMessage);
+    self::drawCards($player, $cards, true, LOCATION_DISCARD, $silent);
   }
 
   // For general store
@@ -224,23 +248,28 @@ class Notifications
   /**
    * @param Player $player
    * @param array $card
+   * @param boolean $silent
+   * @param boolean $notifyTargetOnly
    * @return void
    */
-  public static function discardedCardToDrawPile($player, $card)
+  public static function discardedCardToDeck($player, $card, $silent = false, $notifyTargetOnly = false)
   {
     $data = [
       'player' => $player,
       'card' => $card,
       'deckCount' => Cards::getDeckCount(),
       'total' => $player->getHand()->count(),
-      'msgYou' => clienttranslate('${You} discard ${card_name} face down on the deck'),
+      'msgYou' => $silent ? '' : clienttranslate('${You} discard ${card_name} face down on the deck'),
     ];
     self::notify($player, 'cardLostToDeck', '', $data);
-    self::notify($player, 'updateHand', 'If you see this message - please report a bug', $data);
-    $data['ignore'] = [$player];
-    unset($data['card']);
-    self::notifyAll('cardLostToDeck', '', $data);
-    self::updateHand($player, clienttranslate('${player_name} discards a card face down on the deck'), '', null, $player);
+    self::notify($player, 'updateHand', '', $data);
+    if (!$notifyTargetOnly) {
+      $data['ignore'] = [$player];
+      unset($data['card']);
+      self::notifyAll('cardLostToDeck', '', $data);
+    }
+    $msg = $silent ? '' : clienttranslate('${player_name} discards a card face down on the deck');
+    self::updateHand($player, $msg, '', null, $player);
   }
 
   /**
@@ -261,7 +290,7 @@ class Notifications
       if ($destination === LOCATION_DISCARD) {
         self::discardedCard($player, $card, $silent);
       } else {
-        self::discardedCardToDrawPile($player, $card);
+        self::discardedCardToDeck($player, $card);
       }
     }
   }

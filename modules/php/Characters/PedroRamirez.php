@@ -22,7 +22,7 @@ class PedroRamirez extends \BANG\Models\Player
 
   public function drawCardsPhaseOne()
   {
-    if (is_null(Cards::getLastDiscarded()) || Rules::getDrawOrDiscardCardsLocation(LOCATION_DECK) !== LOCATION_DECK) {
+    if (is_null(Cards::getLastDiscarded())) {
       Rules::incrementPhaseOneDrawEndAmount();
     } else {
       Stack::insertOnTop(Stack::newSimpleAtom(ST_ACTIVE_DRAW_CARD, $this));
@@ -37,8 +37,15 @@ class PedroRamirez extends \BANG\Models\Player
 
   public function useAbility($args)
   {
+    $isDeckDiscardReverted = Rules::getDrawOrDiscardCardsLocation(LOCATION_DECK) !== LOCATION_DECK;
     if ($args['selected'] === LOCATION_DECK) {
-      $cardsToDraw = 1;
+      if ($isDeckDiscardReverted) {
+        $cards = Cards::deal($this->id, 1);
+        Notifications::drawCards($this, $cards);
+        $cardsToDraw = 0;
+      } else {
+        $cardsToDraw = 1;
+      }
     } else {
       // Draw the first one from discard
       $cards = Cards::dealFromDiscard($this->id, 1);

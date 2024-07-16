@@ -32,7 +32,7 @@ trait PeyoteTrait
     $actualRed = in_array($flipped->getSuit(), ['H', 'D']);
     if ($actualRed === $guessedRed) {
       $cards = Cards::dealFromDiscard($player->getId(), 1);
-      Notifications::drawCardFromDiscard($player, $cards, false);
+      Notifications::drawCardFromDiscard($player, $cards, true);
     } else {
       Notifications::playerGuessedIncorrectly($player);
       Notifications::discardedCard($player, $flipped);

@@ -22,10 +22,12 @@ class KitCarlson extends \BANG\Models\Player
 
   public function drawCardsPhaseOne()
   {
-    Cards::drawForLocation(LOCATION_SELECTION, 3, Rules::getDrawOrDiscardCardsLocation(LOCATION_DECK));
+    $location = Rules::getDrawOrDiscardCardsLocation(LOCATION_DECK);
+    $cards = Cards::drawForLocation(LOCATION_SELECTION, 3, $location);
     $eventCard = EventCards::getActive();
     $amountToDraw = $eventCard ? $eventCard->getPhaseOneAmountOfCardsToDraw() : 2;
     $this->prepareSelection($this, [$this->id], true, $amountToDraw);
+    Notifications::drawCards($this, $cards, $location === LOCATION_DISCARD, $location, true, true);
   }
 
   public function useAbility($args)
@@ -39,17 +41,18 @@ class KitCarlson extends \BANG\Models\Player
     // Put remaining cards on deck
     // TODO: Add ability to choose the order
     $rest = Cards::getSelection();
+    Notifications::drawCards($this, Cards::getMany($args), $location === LOCATION_DISCARD, $location, false, false, true);
     if ($rest) {
       foreach (array_reverse($rest->toArray()) as $card) {
-        // TODO: Notify about returning card. We have a bug here, number of cards is incorrect
         if ($location === LOCATION_DECK) {
           Cards::putOnDeck($card->getId());
+          Notifications::discardedCardToDeck($this, $card, true);
         } else {
           Cards::play($card->getId());
+          Notifications::discardedCard($this, $card, true);
         }
       }
     }
-    Notifications::drawCards($this, Cards::getMany($args), $location === LOCATION_DISCARD, $location);
     $this->onChangeHand();
   }
 

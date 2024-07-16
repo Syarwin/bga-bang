@@ -24,8 +24,8 @@ trait TurnTrait
 
     if ($activeEvent && $activeEvent->nextPlayerCounterClockwise()) {
       $pId = Players::getPreviousId($activePlayer, true);
-    } else if ($activeEvent && $activeEvent->getEffect() === EFFECT_NEXTPLAYER) {
-      $pId = $activeEvent->getNextPlayerId($activePlayer);
+    } else if (Globals::getVendettaWasUsed()) {
+      $pId = $activePlayer->getId();
     } else {
       $pId = Players::getNextId($activePlayer, true);
     }
@@ -65,7 +65,7 @@ trait TurnTrait
     $nextEventCard = EventCards::getNext();
     // TODO: we call this method twice if it's Sheriff's 2+ turn, this should be fixed (check setNewTurnRules usages)
     Rules::setNewTurnRules($player, $eventCard);
-    $stack = [ST_PHASE_ONE_SETUP, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN];
+    $stack = [ST_PHASE_ONE_SETUP, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_RESOLVE_END_OF_TURN_EVENTS, ST_END_OF_TURN];
     $isAdditionalTurn = $eventCard && $eventCard instanceof Vendetta && Globals::getVendettaWasUsed();
     array_unshift($stack, ST_RESOLVE_BEFORE_PHASE_ONE_EVENT_EFFECT);
     array_unshift($stack, ST_PRE_PHASE_ONE);
