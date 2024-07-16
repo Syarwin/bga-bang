@@ -17,6 +17,8 @@ class Globals extends \BANG\Helpers\DB_Manager
     'roundNumber' => 'int',
     'vendettaWasUsed' => 'bool',
     'eliminatedFirstPId' => 'int',
+    'isMustPlayCard' => 'bool',
+    'mustPlayCardId' => 'int',
   ];
 
   protected static $table = 'global_variables';

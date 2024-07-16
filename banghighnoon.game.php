@@ -62,6 +62,7 @@ class banghighnoon extends Table
   use BANG\States\RanchTrait;
   use BANG\States\PeyoteTrait;
   use BANG\States\EndOfTurnEventEffectsTrait;
+  use BANG\States\BeforePlayCardTrait;
 
   public static $instance = null;
   public function __construct()
@@ -247,7 +248,7 @@ class banghighnoon extends Table
   }
 
   // Exposing protected method translation
-  public static function translate($text)
+  public static function totranslate($text)
   {
     return self::get()->_($text);
   }

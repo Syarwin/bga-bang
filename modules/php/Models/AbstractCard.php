@@ -23,7 +23,7 @@ class AbstractCard implements \JsonSerializable
   public function __construct($params = null)
   {
     if ($params != null) {
-      $this->id = $params['id'];
+      $this->id = (int) $params['id'];
       if (array_key_exists('value', $params) && array_key_exists('color', $params)) {
         $this->value = $params['value'];
         $this->color = $params['color'];

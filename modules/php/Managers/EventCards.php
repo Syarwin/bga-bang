@@ -41,7 +41,7 @@ class EventCards extends \BANG\Helpers\Pieces
     $lastCard = self::singleCreate(self::getCurrentExpansionLastCardType($expansions), LOCATION_EVENTS_DECK);
     EventCards::insertAtBottom($lastCard, LOCATION_EVENTS_DECK);
     // TODO: Remove next 2 lines, this is just for debugging purposes
-    $lastCard = self::singleCreate(CARD_VENDETTA, LOCATION_EVENTS_DECK);
+    $lastCard = self::singleCreate(CARD_LAW_OF_THE_WEST, LOCATION_EVENTS_DECK);
     EventCards::insertOnTop($lastCard, LOCATION_EVENTS_DECK);
   }
 
@@ -183,7 +183,7 @@ class EventCards extends \BANG\Helpers\Pieces
         return [
           HIGH_NOON => CARD_HIGH_NOON,
           FISTFUL_OF_CARDS => CARD_FISTFUL_OF_CARDS,
-          ][$currentExpansion];
+        ][$currentExpansion];
       default:
         throw new \BgaVisibleSystemException('$currentEventExpansions does not intersect with $eventExpansions, please report as a bug');
     }

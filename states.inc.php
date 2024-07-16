@@ -111,6 +111,13 @@ $machinestates = [
     'action' => 'stResolveEventBeforePhaseOneEffect',
   ],
 
+  ST_RESOLVE_BEFORE_PLAY_CARD_EFFECT => [
+    'name' => 'resolveBeforePlayCardEffect',
+    'description' => '',
+    'type' => 'game',
+    'action' => 'stResolveBeforePlayCardEffect',
+  ],
+
   ST_FLIP_CARD => [
     'name' => 'flipCard',
     'type' => 'game',
@@ -237,21 +244,6 @@ $machinestates = [
     'type' => 'activeplayer',
     'args' => 'argChooseAndDiscardBlueCard',
     'possibleactions' => ['actDiscardBlue'],
-  ],
-
-  ST_PLAY_LAST_CARD_AUTOMATICALLY => [
-    'name' => 'playLastCardAutomatically',
-    'type' => 'game',
-    'action' => 'stPlayLastCardAutomatically',
-  ],
-
-  ST_PLAY_LAST_CARD_MANUALLY => [
-    'name' => 'playLastCardManually',
-    'description' => clienttranslate('${actplayer} must play second drawn card because of Law Of The West event'),
-    'descriptionmyturn' => clienttranslate('${you} must play second drawn card because of Law Of The West event'),
-    'type' => 'activeplayer',
-    'args' => 'argPlayLastCardManually',
-    'possibleactions' => ['actPlayCard'],
   ],
 
   // TODO: Delete before release
