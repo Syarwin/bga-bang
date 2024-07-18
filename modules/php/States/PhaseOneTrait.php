@@ -29,21 +29,23 @@ trait PhaseOneTrait
       $eventCard->resolveEffect($player);
     }
     Stack::insertOnTop(self::phaseOneAtom($player, RULE_PHASE_ONE_CARDS_DRAW_END));
-    if (Rules::isPhaseOnePlayerSpecialDraw()) {
-      Stack::insertOnTop(self::phaseOneAtom($player, RULE_PHASE_ONE_PLAYER_ABILITY_DRAW));
-    } else if (Rules::isPhaseOneEventSpecialDraw()) {
+    if (Rules::isPhaseOneEventSpecialDraw()) {
       Stack::insertOnTop(self::phaseOneAtom($player, RULE_PHASE_ONE_EVENT_SPECIAL_DRAW));
+    }
+    if (Rules::isPhaseOnePlayerSpecialDraw()) {
+      Stack::insertOnTop(self::phaseOneAtom($player, RULE_PHASE_ONE_PLAYER_ABILITY_DRAW,
+        ['storeResult' => Rules::isPhaseOneEventSpecialDraw()]));
     }
     Stack::insertOnTop(self::phaseOneAtom($player, RULE_PHASE_ONE_CARDS_DRAW_BEGINNING));
     Stack::finishState();
   }
 
-  private function phaseOneAtom($player, $drawCards)
+  private function phaseOneAtom($player, $drawCards, $additionalData = [])
   {
-    return Stack::newAtom(ST_PHASE_ONE_DRAW_CARDS, [
+    return Stack::newAtom(ST_PHASE_ONE_DRAW_CARDS, array_merge($additionalData, [
       'pId' => $player->getId(),
       'subPhase' => $drawCards
-    ]);
+    ]));
   }
 
   /*

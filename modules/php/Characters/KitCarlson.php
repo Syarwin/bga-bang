@@ -1,6 +1,7 @@
 <?php
 namespace BANG\Characters;
 use BANG\Core\Notifications;
+use BANG\Core\Stack;
 use BANG\Managers\Cards;
 use BANG\Managers\EventCards;
 use BANG\Managers\Rules;
@@ -33,27 +34,33 @@ class KitCarlson extends \BANG\Models\Player
   public function useAbility($args)
   {
     $location = Rules::getDrawOrDiscardCardsLocation(LOCATION_DECK);
-    // Move selected cards and notify
-    foreach ($args as $cardId) {
-      Cards::move($cardId, LOCATION_HAND, $this->id);
-    }
 
     // Put remaining cards on deck
-    // TODO: Add ability to choose the order
-    $rest = Cards::getSelection();
-    Notifications::drawCards($this, Cards::getMany($args), $location === LOCATION_DISCARD, $location, false, false, true);
+    $rest = Cards::getSelection()->filter(function ($card) use ($args) {
+      return !in_array($card->getId(), $args);
+    });
     if ($rest) {
-      foreach (array_reverse($rest->toArray()) as $card) {
-        if ($location === LOCATION_DECK) {
-          Cards::putOnDeck($card->getId());
-          Notifications::discardedCardToDeck($this, $card, true);
-        } else {
-          Cards::play($card->getId());
-          Notifications::discardedCard($this, $card, true);
-        }
+      $this->putCardsBack(array_reverse($rest->toArray()), $location);
+    }
+    $this->putCardsBack(Cards::getMany($args)->toArray(), $location);
+
+    $ctx = Stack::getCtx();
+    if (isset($ctx['storeResult']) && $ctx['storeResult']) {
+      Stack::updatePhaseOneAtomAfterAction([]);
+    }
+  }
+
+  private function putCardsBack($cards, $location)
+  {
+    foreach ($cards as $card) {
+      if ($location === LOCATION_DECK) {
+        Cards::putOnDeck($card->getId());
+        Notifications::discardedCardToDeck($this, $card, true);
+      } else {
+        Cards::play($card->getId());
+        Notifications::discardedCard($this, $card, true);
       }
     }
-    $this->onChangeHand();
   }
 
   public function getPhaseOneRules($defaultAmount, $isAbilityAvailable = true)
@@ -62,7 +69,7 @@ class KitCarlson extends \BANG\Models\Player
       return [
         RULE_PHASE_ONE_CARDS_DRAW_BEGINNING => 0,
         RULE_PHASE_ONE_PLAYER_ABILITY_DRAW => true,
-        RULE_PHASE_ONE_CARDS_DRAW_END => 0
+        RULE_PHASE_ONE_CARDS_DRAW_END => $defaultAmount
       ];
     } else {
       return parent::getPhaseOneRules($defaultAmount);

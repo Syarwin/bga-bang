@@ -341,4 +341,15 @@ class Stack
     }
     Stack::set($stack);
   }
+
+  // TODO: Think about refactoring methods below and above.
+  // Maybe it's worth to create a common storage instead to share info between states?
+  public static function updatePhaseOneAtomAfterAction($cardsDrawnIds)
+  {
+    $stack = Stack::get();
+    $atom = array_splice($stack, 1, 1)[0];
+    $atom['cardsDrawnIds'] = $cardsDrawnIds;
+    array_splice($stack, 1, 0, [$atom]);
+    Stack::set($stack);
+  }
 }

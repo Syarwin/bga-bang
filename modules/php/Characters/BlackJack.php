@@ -1,6 +1,7 @@
 <?php
 namespace BANG\Characters;
 use BANG\Core\Notifications;
+use BANG\Core\Stack;
 use BANG\Managers\Cards;
 use BANG\Managers\Rules;
 
@@ -38,6 +39,13 @@ class BlackJack extends \BANG\Models\Player
       Rules::incrementPhaseOneDrawEndAmount();
     }
     $this->onChangeHand();
+
+    $ctx = Stack::getCtx();
+    if (isset($ctx['storeResult']) && $ctx['storeResult']) {
+      // We put 0 as a first id because we know the only card which needs this is Law Of The West,
+      // and it won't care about the first one but just a second. If this ever changes - we need a real first card id
+      Stack::updatePhaseOneAtomAfterAction([0, $card->getId()]);
+    }
   }
 
   public function getPhaseOneRules($defaultAmount, $isAbilityAvailable = true)

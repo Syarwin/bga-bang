@@ -25,7 +25,11 @@ class PedroRamirez extends \BANG\Models\Player
     if (is_null(Cards::getLastDiscarded())) {
       Rules::incrementPhaseOneDrawEndAmount();
     } else {
-      Stack::insertOnTop(Stack::newSimpleAtom(ST_ACTIVE_DRAW_CARD, $this));
+      $ctx = Stack::getCtx();
+      Stack::insertOnTop(Stack::newAtom(ST_ACTIVE_DRAW_CARD, [
+        'pId' => $this->getId(),
+        'storeResult' => isset($ctx['storeResult']) && $ctx['storeResult'],
+      ]));
     }
   }
 
@@ -37,24 +41,18 @@ class PedroRamirez extends \BANG\Models\Player
 
   public function useAbility($args)
   {
-    $isDeckDiscardReverted = Rules::getDrawOrDiscardCardsLocation(LOCATION_DECK) !== LOCATION_DECK;
     if ($args['selected'] === LOCATION_DECK) {
-      if ($isDeckDiscardReverted) {
-        $cards = Cards::deal($this->id, 1);
-        Notifications::drawCards($this, $cards);
-        $cardsToDraw = 0;
-      } else {
-        $cardsToDraw = 1;
-      }
+      $cards = Cards::deal($this->id, 1);
+      Notifications::drawCards($this, $cards);
     } else {
-      // Draw the first one from discard
       $cards = Cards::dealFromDiscard($this->id, 1);
       Notifications::drawCardFromDiscard($this, $cards);
-
-      // Second one is already implied in Rules
-      $cardsToDraw = 0;
     }
-    Rules::incrementPhaseOneDrawEndAmount($cardsToDraw);
+
+    $ctx = Stack::getCtx();
+    if (isset($ctx['storeResult']) && $ctx['storeResult']) {
+      Stack::updatePhaseOneAtomAfterAction($cards->getIds());
+    }
   }
 
   public function getPhaseOneRules($defaultAmount, $isAbilityAvailable = true)

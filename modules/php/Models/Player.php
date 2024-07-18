@@ -875,12 +875,14 @@ class Player extends \BANG\Helpers\DB_Manager
   public function prepareSelection($source, $playerIds, $isPrivate, $amountToPick, $toResolveFlipped = false)
   {
     $src = $source instanceof Player ? $source->getCharName() : $source->getName();
+    $ctx = Stack::getCtx();
     $atom = Stack::newAtom(ST_SELECT_CARD, [
       'src_name' => $src,
       'amountToPick' => $amountToPick,
       'isPrivate' => $isPrivate,
       'toResolveFlipped' => $toResolveFlipped,
       'src' => $source->jsonSerialize(),
+      'storeResult' => isset($ctx['storeResult']) && $ctx['storeResult'],
     ]);
 
     foreach (array_reverse($playerIds) as $pId) {

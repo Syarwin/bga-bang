@@ -65,7 +65,13 @@ class Rules extends DB_Manager
     $defaultRules = (new AbstractEventCard())->getRules();
     $rules = $eventCard ? $eventCard->getRules() : $defaultRules;
     $isAbilityAvailable = self::isAllowPlayerPhaseOne() && isset($rules[RULE_ABILITY_AVAILABLE]) && $rules[RULE_ABILITY_AVAILABLE];
-    $rules = array_merge($rules, $player->getPhaseOneRules($amountOfCardsToDraw, $isAbilityAvailable));
+    $playerRules = $player->getPhaseOneRules($amountOfCardsToDraw, $isAbilityAvailable);
+    if (isset($playerRules[RULE_PHASE_ONE_PLAYER_ABILITY_DRAW]) && $playerRules[RULE_PHASE_ONE_PLAYER_ABILITY_DRAW]) {
+      // $playerRules are in priority because this is probably Pedro or Kit - they know what they are doing
+      $rules = array_merge($rules, $playerRules);
+    } else {
+      $rules = array_merge($playerRules, $rules);
+    }
     $rules = array_merge(['player_id' => $player->getId()], $rules);
     $query = array_map(function ($value) {
       return is_bool($value) ? (int) $value : $value;
