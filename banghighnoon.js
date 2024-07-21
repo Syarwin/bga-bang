@@ -305,7 +305,7 @@ define([
         } else if (this._useAbilityOption === SID_KETCHUM) {
           // Sid Ketchum power
           var cards = dojo.query('#hand .bang-card').map((card) => {
-            return { id: dojo.attr(card, 'data-id') };
+            return { id: parseInt(dojo.attr(card, 'data-id')) };
           });
 
           this._amount = 2;
