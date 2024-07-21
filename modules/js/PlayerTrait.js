@@ -357,7 +357,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         }
         dojo.query('#bang-player-' + playerId + ' .bang-card').forEach((div) => {
           cards.push({
-            id: dojo.attr(div, 'data-id'),
+            id: parseInt(dojo.attr(div, 'data-id')),
             playerId: playerId,
           });
         });
