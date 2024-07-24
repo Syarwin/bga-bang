@@ -1,5 +1,6 @@
 <?php
 namespace BANG\Characters;
+use BANG\Core\Globals;
 use BANG\Core\Notifications;
 use BANG\Managers\Cards;
 use BANG\Managers\Rules;
@@ -42,6 +43,10 @@ class SidKetchum extends \BANG\Models\Player
     );
 
     Cards::discardMany($args);
+    if (Globals::getIsMustPlayCard() && in_array(Globals::getMustPlayCardId(), $args)) {
+      Globals::setIsMustPlayCard(false);
+      Globals::setMustPlayCardId(0);
+    }
     Notifications::discardedCards($this, $args);
     $this->gainLife();
     $this->addRevivalAtomOrEliminate();
