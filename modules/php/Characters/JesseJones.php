@@ -45,8 +45,9 @@ class JesseJones extends \BANG\Models\Player
   public function useAbility($args)
   {
     if (in_array($args['selected'], [LOCATION_DECK, LOCATION_DISCARD])) {
-      $cards = Cards::deal($this->id, 1);
-      Notifications::drawCards($this, $cards);
+      $location = Rules::getDrawOrDiscardCardsLocation(LOCATION_DECK);
+      $cards = Cards::deal($this->id, 1, $location);
+      Notifications::drawCards($this, $cards, $location === LOCATION_DISCARD, $location);
       $card = $cards->first();
     } else {
       // TODO : add sanity check
