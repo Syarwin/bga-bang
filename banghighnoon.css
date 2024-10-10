@@ -454,6 +454,12 @@ div#hand div#role-container[data-role="2"] div#role-card {
 div#hand div#role-container[data-role="3"] div#role-card {
   background-position: 100% center;
 }
+div#hand div#role-container[data-role="3"] div#role-card div#role-name {
+  font-size: 19px;
+}
+div#hand div#role-container[data-role="1"] div#role-card div#role-text {
+  font-size: 8px;
+}
 div#hand div#hand-cards {
   flex-grow: 1;
   display: flex;
