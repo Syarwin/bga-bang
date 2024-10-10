@@ -486,7 +486,8 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
      */
     format_string_recursive(log, args) {
       try {
-        if (log && args) {
+        if (log && args && !args.processed) {
+          args.processed = true;
           if (args.msgYou && args.player_id === this.player_id) log = args.msgYou;
 
           let player_keys = Object.keys(args).filter((key) => key.substr(0, 11) == 'player_name');
