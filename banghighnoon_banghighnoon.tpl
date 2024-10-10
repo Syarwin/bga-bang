@@ -30,7 +30,7 @@ var jstpl_table = `<div id="table">
 
 var jstpl_events_row = `<div class="cards-row">
     <div id="eventNext">
-        <span class="deckCount" id="eventsDeckCount">\${eventsDeckCount}</span>
+        <span class="deckCount" id="eventsDeckCount"></span>
     </div>
     <div id="eventActive"></div>
 </div>`
