@@ -65,10 +65,12 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
           }
         }
         if (card.options.target_types.includes(TARGET_CARD)) {
-          this.makePlayersCardsSelectable(card.options.targets);
+          this.makePlayersCardsSelectable(card.options.targets, false, card.options.status_bar_message);
         }
         if (card.options.target_types.includes(TARGET_ALL_CARDS)) {
-          this.makePlayersCardsSelectable(Object.keys(this.gamedatas.players).map(Number), true);
+          const playerIds = Object.keys(this.gamedatas.players).map(Number);
+          const otherPlayerIds = playerIds.filter((id) => id !== this.player_id);
+          this.makePlayersCardsSelectable(otherPlayerIds, true, card.options.status_bar_message);
         }
       }
     },

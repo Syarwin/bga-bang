@@ -43,6 +43,8 @@ class Bang extends BangActionCard
     $targetTypes = [];
     if ($aimingCards) {
       $targetTypes[] = TARGET_ALL_CARDS;
+      // Rules::isAimingCards() is true currently for Ricochet only. Move this to card itself if this logic changes
+      $playOptions['status_bar_message'] = clienttranslate('You must choose a card in play (Ricochet effect) or a player to use BANG! normally');
     }
     if ($bangPossible || $canPlayWithAnotherBang) {
       $targetTypes[] = TARGET_PLAYER;

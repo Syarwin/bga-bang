@@ -57,6 +57,7 @@ class BrownCard extends AbstractCard
    */
   public function getPlayOptions($player)
   {
+    $playOptions = ['targets' => $this->getTargetablePlayers($player)];
     switch ($this->effect['type']) {
       case BASIC_ATTACK:
       case LIFE_POINT_MODIFIER:
@@ -67,7 +68,12 @@ class BrownCard extends AbstractCard
 
       case DRAW:
       case DISCARD:
-        $targetTypes = $this->effect['impacts'] === NONE ? [TARGET_NONE] : [TARGET_CARD];
+        if ($this->effect['impacts'] === NONE) {
+          $playOptions['target_types'] = [TARGET_NONE];
+        } else {
+          $playOptions['target_types'] = [TARGET_CARD];
+          $playOptions['status_bar_message'] = clienttranslate('You must choose a card in play or a player\'s hand');
+        }
         break;
 
       case DEFENSIVE:
@@ -76,10 +82,7 @@ class BrownCard extends AbstractCard
         return ['target_types' => [TARGET_NONE]];
     }
 
-    return [
-      'target_types' => $targetTypes,
-      'targets' => $this->getTargetablePlayers($player),
-    ];
+    return $playOptions;
   }
 
   /**

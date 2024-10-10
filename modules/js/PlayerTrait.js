@@ -342,8 +342,8 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     /*
      * Make some players' cards selectable with sometimes the deck
      */
-    makePlayersCardsSelectable(playersIds, selectCardsOnly = false) {
-      this.doSomeCleanupAndAddUndo(_("You must choose a card in play or a player's hand"));
+    makePlayersCardsSelectable(playersIds, selectCardsOnly = false, statusBarMessage = null) {
+      this.doSomeCleanupAndAddUndo(_(statusBarMessage));
 
       var cards = [];
       if (this._selectablePlayers.length === 0 && !selectCardsOnly) {
@@ -366,7 +366,9 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     },
 
     doSomeCleanupAndAddUndo(descriptionText) {
-      this.gamedatas.gamestate.descriptionmyturn = descriptionText;
+      if (descriptionText !== null) {
+        this.gamedatas.gamestate.descriptionmyturn = descriptionText;
+      }
       this.updatePageTitle();
       this.removeActionButtons();
       // Making a clone of this array so when this._selectableCards will be changed - we still work with old array
