@@ -47,7 +47,7 @@ trait PlayCardTrait
     $card = Cards::get($cardId);
     $player = Players::getActive();
     $mustPlayCardId = Globals::getMustPlayCardId();
-    if ($mustPlayCardId !== 0) {
+    if (Globals::getIsMustPlayCard() &&$mustPlayCardId !== 0) {
       if ($cardId === $mustPlayCardId) {
         Globals::setMustPlayCardId(0);
         Globals::setIsMustPlayCard(false);
