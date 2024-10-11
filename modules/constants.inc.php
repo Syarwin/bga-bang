@@ -32,9 +32,6 @@ define('ST_RESOLVE_START_OF_TURN_EVENT_EFFECT', 30);
 define('ST_PRE_PHASE_ONE', 31);
 define('ST_CHOOSE_AND_DISCARD_BLUE_CARD', 32);
 define('ST_DISCARD_BLUE_CARD', 33);
-define('ST_PLAY_LAST_CARD_AUTOMATICALLY', 34);
-define('ST_PLAY_LAST_CARD_MANUALLY', 35);
-define('ST_RUSSIAN_ROULETTE', 36); // TODO: Remove before release
 define('ST_BLOOD_BROTHERS', 37);
 define('ST_HARD_LIQUOR', 38);
 define('ST_RANCH', 39);
