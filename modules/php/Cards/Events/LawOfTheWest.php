@@ -50,8 +50,7 @@ class LawOfTheWest extends AbstractEventCard
     if (isset($ctx['cardsDrawnIds'])) {
       if (count($ctx['cardsDrawnIds']) <= 1) {
         if (count($ctx['cardsDrawnIds']) === 0) {
-          $cards = Cards::deal($player->getId(), 1);
-          Notifications::drawCards($player, $cards);
+          $player->drawCards(1);
         }
         Globals::setMustPlayCardId($this->drawACardPublicly($player));
         Rules::amendRules([RULE_PHASE_ONE_CARDS_DRAW_END => 0]);
@@ -71,8 +70,7 @@ class LawOfTheWest extends AbstractEventCard
    */
   private function drawACardPublicly($player)
   {
-    $cards = Cards::deal($player->getId(), 1);
-    Notifications::drawCards($player, $cards, true);
+    $cards = $player->drawCards(1, true);
     return $cards->first()->getId();
   }
 

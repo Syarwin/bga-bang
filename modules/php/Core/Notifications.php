@@ -262,7 +262,6 @@ class Notifications
       'msgYou' => $silent ? '' : clienttranslate('${You} discard ${card_name} face down on the deck'),
     ];
     self::notify($player, 'cardLostToDeck', '', $data);
-    self::notify($player, 'updateHand', '', $data);
     if (!$notifyTargetOnly) {
       $data['ignore'] = [$player];
       unset($data['card']);

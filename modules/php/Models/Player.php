@@ -284,15 +284,15 @@ class Player extends \BANG\Helpers\DB_Manager
   /**
    * Draw $amount card from deck and notify them
    * @param int $amount
-   * @return void
+   * @return Collection|null
    */
-  public function drawCards($amount)
+  public function drawCards($amount, $publicly = false)
   {
     if ($amount > 0) {
       $location = Rules::getDrawOrDiscardCardsLocation(LOCATION_DECK);
       $cards = Cards::deal($this->id, $amount, $location);
       if ($cards->count() > 0) {
-        Notifications::drawCards($this, $cards, $location === LOCATION_DISCARD, $location);
+        Notifications::drawCards($this, $cards, $location === LOCATION_DISCARD || $publicly, $location);
       }
       if ($location === LOCATION_DISCARD && $cards->count() !== $amount) {
         Notifications::showMessageToAll(
@@ -305,6 +305,7 @@ class Player extends \BANG\Helpers\DB_Manager
       }
       $this->onChangeHand();
     }
+    return $cards ?? null;
   }
 
   /*
