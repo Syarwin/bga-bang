@@ -201,39 +201,12 @@ class bang extends Table
    */
     function upgradeTableDb($from_version)
     {
-      if( $from_version <= 2303261108 ) {
-        $sql = 'CREATE TABLE IF NOT EXISTS DBPREFIX_rules (
-          `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-          `player_id` int(11) NOT NULL,
-          `phase_one_amount_to_draw_beginning` int(1) NOT NULL,
-          `phase_one_player_ability_draw` int(1) NOT NULL,
-          `phase_one_amount_to_draw_end` int(1) NOT NULL,
-          `ability_available` int(1) NOT NULL,
-          `beer_availability` int(1) NOT NULL,
-          `bangs_amount_left` int(1) NOT NULL,
-          PRIMARY KEY (`id`)
-          ) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
-        self::applyDbUpgradeToAllDB($sql);
-
-        $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_unconscious\'')->num_rows === 1;
+      if( $from_version <= 2406250036 ) {
+        $newSchema = self::DbQuery('SHOW COLUMNS FROM `rules` LIKE \'phase_one_event_draw\'')->num_rows === 1;
         if (!$newSchema) {
-          $sql = "ALTER TABLE `player` ADD `player_unconscious` TINYINT NOT NULL;";
-          self::applyDbUpgradeToAllDB($sql);
-          $sql = "UPDATE `player` SET `player_unconscious`=`player_eliminated`;";
+          $sql = "ALTER TABLE `rules` ADD `phase_one_event_draw` int(1) NOT NULL DEFAULT 0;";
           self::applyDbUpgradeToAllDB($sql);
         }
-
-        $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_agreed_to_disclaimer\'')->num_rows === 1;
-        if (!$newSchema) {
-          $sql = "ALTER TABLE `player` ADD `player_agreed_to_disclaimer` TINYINT NOT NULL;";
-          self::applyDbUpgradeToAllDB($sql);
-          $sql = "UPDATE `player` SET `player_agreed_to_disclaimer` = true;";
-          self::applyDbUpgradeToAllDB($sql);
-        }
-
-        $bangsLeft = is_null(Log::getLastAction('bangPlayed', $playerId)) ? '1' : '0';
-        $sql = "INSERT INTO `rules` (`player_id`, `ability_available`, `beer_availability`, `bangs_amount_left`, `phase_one_amount_to_draw_beginning`, `phase_one_player_ability_draw`, `phase_one_amount_to_draw_end`) VALUES('". $playerId ."','1','1','". $bangsLeft ."','2','0','0');";
-        self::applyDbUpgradeToAllDB($sql);
       }
   }
 
