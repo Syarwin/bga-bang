@@ -64,8 +64,7 @@ $game_options = [
 
   OPTION_EXPANSIONS => [
     'name' => totranslate('Expansions'),
-    // TODO: Change to OPTION_BASE_GAME before release
-    'default' => OPTION_FISTFUL_OF_CARDS_ONLY,
+    'default' => OPTION_BASE_GAME,
     'values' => [
       OPTION_BASE_GAME =>
         [ 'name' => totranslate('No'),

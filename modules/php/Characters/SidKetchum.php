@@ -5,7 +5,6 @@ use BANG\Core\Notifications;
 use BANG\Managers\Cards;
 use BANG\Managers\Rules;
 
-// TODO : make its ability available (almost) at any time
 class SidKetchum extends \BANG\Models\Player
 {
   public function __construct($row = null)
