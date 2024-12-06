@@ -15,7 +15,7 @@
   'slow_additional_time' => 50,
   'tie_breaker_description' => '',
   'losers_not_ranked' => true,
-  'is_beta' => 1,
+  'is_beta' => 0,
   'is_coop' => 0,
   'complexity' => 3,
   'luck' => 3,
