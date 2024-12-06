@@ -78,7 +78,8 @@ trait TurnTrait
     array_unshift($stack, ST_PRE_PHASE_ONE);
     if (GameOptions::isEvents() && !$isAdditionalTurn) {
       array_unshift($stack, ST_RESOLVE_START_OF_TURN_EVENT_EFFECT);
-      if ($player->getRole() === SHERIFF && $nextEventCard && $roundNumber > 0) {
+      // BangDebug: First event card would be drawn on Sheriff's first turn, not second if you change 1 to 0
+      if ($player->getRole() === SHERIFF && $nextEventCard && $roundNumber > 1) {
         array_unshift($stack, ST_NEW_EVENT);
       }
 

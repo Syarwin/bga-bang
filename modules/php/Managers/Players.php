@@ -99,6 +99,7 @@ class Players extends \BANG\Helpers\DB_Manager
         $sheriff = $pId;
       }
       $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, $bullets, $role, $characterId, $altCharacterId, $charChosen, 0];
+      // BangDebug: leave 1 HP on game start
 //      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, 1, $role, $characterId, $altCharacterId, $charChosen, 0];
       if ($charChosen) {
         Cards::deal($pId, $bullets);
@@ -110,22 +111,9 @@ class Players extends \BANG\Helpers\DB_Manager
     self::getGame()->reattributeColorsBasedOnPreferences($players, $gameInfos['player_colors']);
     self::getGame()->reloadPlayersBasicInfos();
 
-    // TODO : remove
-    if (false) {
-      /*
-      Cards::dealCard($sheriff, CARD_GATLING);
-      Cards::dealCard($sheriff, CARD_BARREL);
-      Cards::dealCard($sheriff, CARD_INDIANS, 1);
-       Cards::dealCard($sheriff, CARD_INDIANS);
-       Cards::dealCard($sheriff, CARD_REMINGTON);
-       Cards::dealCard($sheriff, CARD_DYNAMITE);
-     	//Cards::dealCard($sheriff, CARD_JAIL, 1);
-       */
-    }
-
     self::getGame()->reloadPlayersBasicInfos();
-    // TODO: Remove next line, it's for debugging purposes
-    $sheriff = Players::getPreviousId(Players::get($sheriff));
+    // BangDebug: on game start Sheriff would be the second player
+    // $sheriff = Players::getPreviousId(Players::get($sheriff));
     return $sheriff;
   }
 
