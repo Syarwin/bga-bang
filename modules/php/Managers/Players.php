@@ -1,11 +1,10 @@
 <?php
 namespace BANG\Managers;
-use banghighnoon;
-use BANG\Core\Log;
 use BANG\Core\Globals;
 use BANG\Helpers\GameOptions;
 use BANG\Models\Player;
 use BANG\Helpers\Collection;
+use bang;
 
 /*
  * Players manager : allows to easily access players ...
@@ -15,7 +14,7 @@ class Players extends \BANG\Helpers\DB_Manager
 {
   protected static function getGame()
   {
-    return banghighnoon::get();
+    return bang::get();
   }
   protected static $table = 'player';
   protected static $primary = 'player_id';
@@ -104,7 +103,7 @@ class Players extends \BANG\Helpers\DB_Manager
       if ($charChosen) {
         Cards::deal($pId, $bullets);
       }
-      banghighnoon::get()->initStat('player', 'role', $role, $pId);
+      bang::get()->initStat('player', 'role', $role, $pId);
       $i++;
     }
     $query->values($values);

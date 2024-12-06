@@ -45,7 +45,7 @@ define([
   g_gamethemeurl + 'modules/js/PlayerTrait.js',
 ], function (dojo, declare) {
   return declare(
-    'bgagame.banghighnoon',
+    'bgagame.bang',
     [
       customgame.game,
       bang.informationdialog,

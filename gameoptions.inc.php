@@ -18,7 +18,7 @@
  * Note: If your game has no variant, you don't have to modify this file.
  *
  * Note²: All options defined in this file should have a corresponding "game state labels"
- *        with the same ID (see "initGameStateLabels" in banghighnoon.game.php)
+ *        with the same ID (see "initGameStateLabels" in bang.game.php)
  *
  * !! It is not a good idea to modify this file when a game is running !!
  *

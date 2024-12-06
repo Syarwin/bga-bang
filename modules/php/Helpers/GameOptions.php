@@ -1,18 +1,18 @@
 <?php
 namespace BANG\Helpers;
 
-use banghighnoon;
+use bang;
 
 class GameOptions
 {
   public static function chooseCharactersManually()
   {
-    return (int) banghighnoon::get()->getGameStateValue('optionCharacters') === CHARACTERS_CHOOSE;
+    return (int) bang::get()->getGameStateValue('optionCharacters') === CHARACTERS_CHOOSE;
   }
 
   public static function getExpansions()
   {
-    switch ((int) banghighnoon::get()->getGameStateValue('optionExpansions')) {
+    switch ((int) bang::get()->getGameStateValue('optionExpansions')) {
       case OPTION_HIGH_NOON_ONLY:
         return [HIGH_NOON];
       case OPTION_FISTFUL_OF_CARDS_ONLY:
@@ -41,7 +41,7 @@ class GameOptions
 
   private static function getOption($optionName)
   {
-    return (int) banghighnoon::get()->getGameStateValue($optionName);
+    return (int) bang::get()->getGameStateValue($optionName);
   }
 
   /**

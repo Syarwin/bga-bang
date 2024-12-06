@@ -41,7 +41,7 @@ use BANG\Managers\EventCards;
 use BANG\Core\Stack;
 use BANG\Managers\Rules;
 
-class banghighnoon extends Table
+class bang extends Table
 {
   use BANG\States\TurnTrait;
   use BANG\States\DrawCardsTrait;
@@ -84,7 +84,7 @@ class banghighnoon extends Table
 
   protected function getGameName()
   {
-    return 'banghighnoon';
+    return 'bang';
   }
 
   /*

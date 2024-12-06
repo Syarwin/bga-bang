@@ -9,7 +9,7 @@ use BANG\Managers\Players;
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
 use BANG\Managers\Rules;
-use banghighnoon;
+use bang;
 
 /*
  * Player: all utility functions concerning a player
@@ -919,7 +919,7 @@ class Player extends \BANG\Helpers\DB_Manager
     // 2. GT is now and this is the end of a ghost's turn
     // 3. Player has already had their turn during GT event which means it's over for this player but might be applied for others
     if (!EventCards::isResurrectionPossible($this) || $forceEliminate || $this->livingStatus === LIVING_DEAD) {
-      banghighnoon::get()->eliminatePlayer($this->id);
+      bang::get()->eliminatePlayer($this->id);
       $this->eliminated = true;
     } else {
       if (Globals::getEliminatedFirstPId() === 0) {
@@ -931,7 +931,7 @@ class Player extends \BANG\Helpers\DB_Manager
 
     // Check if game should end
     if (Stack::isItLastElimination() && Players::isEndOfGame()) {
-      banghighnoon::get()->setWinners();
+      bang::get()->setWinners();
     }
 
     Notifications::playerEliminated($this);
