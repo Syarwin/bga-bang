@@ -15,11 +15,6 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       });
     },
 
-    onEnteringStatePlayLastCardManually(args) {
-      var cards = args._private.cards.filter((card) => card.options != null);
-      this.makeCardSelectable(cards, 'playCard');
-    },
-
     /*
      * Triggered whenever a player clicked on a selectable card to play
      */

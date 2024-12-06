@@ -89,7 +89,6 @@ define([
           'discardExcess',
           'preEliminate',
           'vicePenalty',
-          'playLastCardManually',
         ];
 
         this.default_viewport = 'width=840';
