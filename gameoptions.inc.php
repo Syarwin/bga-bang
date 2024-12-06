@@ -117,7 +117,7 @@ $game_options = [
 
   OPTION_FISTFUL_OF_CARDS_EXPANSION => [
     'name' => totranslate('A Fistful Of Cards expansion'),
-    'default' => OPTION_FISTFUL_OF_CARDS_WITH_DEAD_MAN,
+    'default' => OPTION_FISTFUL_OF_CARDS_NO_DEAD_MAN,
     'values' => [
       OPTION_FISTFUL_OF_CARDS_NO_DEAD_MAN =>
         [ 'name' => totranslate('Without Dead Man'),
@@ -139,7 +139,7 @@ $game_options = [
 
   OPTION_HIGH_NOON_AND_FOC_EXPANSION => [
     'name' => totranslate('High Noon + A Fistful Of Cards expansions'),
-    'default' => OPTION_BOTH_EVENTS_WITH_GHOSTS,
+    'default' => OPTION_BOTH_EVENTS_NO_GHOSTS,
     'values' => [
       OPTION_BOTH_EVENTS_NO_GHOSTS =>
         [ 'name' => totranslate('No Dead Man, no Ghost Town'),
