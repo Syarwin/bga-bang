@@ -69,6 +69,7 @@ class bang extends Table
   {
     parent::__construct();
     self::$instance = $this;
+    $this->bSelectGlobalsForUpdate = true;
     self::initGameStateLabels([
       'optionCharacters' => OPTION_CHOOSE_CHARACTERS,
       'optionExpansions' => OPTION_EXPANSIONS,
@@ -130,6 +131,7 @@ class bang extends Table
       ]);
       $cards = array_merge($cards, EventCards::getUiData());
     }
+    $this->updateDBTableCustom();
     return array_merge($result,[
       'players' => Players::getUiData($pId),
       'deckCount' => Cards::getDeckCount(),
@@ -199,15 +201,20 @@ class bang extends Table
    *  - int $from_version : current version of this game database, in numerical form.
    *      For example, if the game was running with a release of your game named "140430-1345", $from_version is equal to 1404301345
    */
-    function upgradeTableDb($from_version)
-    {
-      if( $from_version <= 2406250036 ) {
-        $newSchema = self::DbQuery('SHOW COLUMNS FROM `rules` LIKE \'phase_one_event_draw\'')->num_rows === 1;
-        if (!$newSchema) {
-          $sql = "ALTER TABLE `rules` ADD `phase_one_event_draw` int(1) NOT NULL DEFAULT 0;";
-          self::applyDbUpgradeToAllDB($sql);
-        }
-      }
+  function upgradeTableDb($from_version)
+  {
+    if( $from_version <= 2406250036 ) {
+      $this->updateDBTableCustom();
+    }
+  }
+
+  function updateDBTableCustom()
+  {
+    $newSchema = self::DbQuery('SHOW COLUMNS FROM `rules` LIKE \'phase_one_event_draw\'')->num_rows === 1;
+    if (!$newSchema) {
+      $sql = "ALTER TABLE `rules` ADD `phase_one_event_draw` int(1) NOT NULL DEFAULT 0;";
+      self::applyDbUpgradeToAllDB($sql);
+    }
   }
 
   /////////////////////////////////////////////////////////////
