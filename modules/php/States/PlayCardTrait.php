@@ -6,7 +6,7 @@ use BANG\Managers\Players;
 use BANG\Managers\Cards;
 use BANG\Core\Stack;
 use BANG\Managers\Rules;
-use banghighnoon;
+use bang;
 
 trait PlayCardTrait
 {
@@ -56,7 +56,7 @@ trait PlayCardTrait
         $mustPlayCardType = Cards::get($mustPlayCardId)->getType();
         if ($cardType === $mustPlayCardType) {
           throw new \BgaUserException(
-            banghighnoon::get()->totranslate(
+            bang::get()->totranslate(
               'You must play the highlighted card first because of the Law Of The West event'
             )
           );

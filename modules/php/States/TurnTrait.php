@@ -101,7 +101,7 @@ trait TurnTrait
   public function actEndTurn()
   {
     if (Globals::getIsMustPlayCard()) {
-      throw new \BgaUserException(banghighnoon::get()->totranslate('You must play the highlighted card before ending your turn'));
+      throw new \BgaUserException(bang::get()->totranslate('You must play the highlighted card before ending your turn'));
     }
     Stack::unsuspendNext(ST_PLAY_CARD);
     Stack::finishState();
