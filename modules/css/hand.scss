@@ -49,6 +49,14 @@ div#hand {
         background-position: $i * 100%/3 center;
       }
     }
+
+    &[data-role="3"] div#role-card div#role-name {
+      font-size: 19px;
+    }
+
+    &[data-role="1"] div#role-card div#role-text {
+      font-size: 8px;
+    }
   }
 
   div#hand-cards {

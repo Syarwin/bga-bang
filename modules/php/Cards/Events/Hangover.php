@@ -19,9 +19,4 @@ class Hangover extends AbstractEventCard
   {
     return false;
   }
-
-  public function resolveEffect($player = null)
-  {
-    Notifications::updateDistances();
-  }
 }

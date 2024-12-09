@@ -57,16 +57,25 @@ class bang extends Table
   use BANG\States\PhaseOneTrait;
   use BANG\States\EventTrait;
   use BANG\States\DiscardBlueCardTrait;
+  use BANG\States\BloodBrothersTrait;
+  use BANG\States\HardLiquorTrait;
+  use BANG\States\RanchTrait;
+  use BANG\States\PeyoteTrait;
+  use BANG\States\EndOfTurnEventEffectsTrait;
+  use BANG\States\BeforePlayCardTrait;
 
   public static $instance = null;
   public function __construct()
   {
     parent::__construct();
     self::$instance = $this;
+    $this->bSelectGlobalsForUpdate = true;
     self::initGameStateLabels([
       'optionCharacters' => OPTION_CHOOSE_CHARACTERS,
       'optionExpansions' => OPTION_EXPANSIONS,
       'optionHighNoon' => OPTION_HIGH_NOON_EXPANSION,
+      'optionFistful' => OPTION_FISTFUL_OF_CARDS_EXPANSION,
+      'optionHighNoonAndFistful' => OPTION_HIGH_NOON_AND_FOC_EXPANSION,
     ]);
   }
   public static function get()
@@ -122,6 +131,7 @@ class bang extends Table
       ]);
       $cards = array_merge($cards, EventCards::getUiData());
     }
+    $this->updateDBTableCustom();
     return array_merge($result,[
       'players' => Players::getUiData($pId),
       'deckCount' => Cards::getDeckCount(),
@@ -191,42 +201,20 @@ class bang extends Table
    *  - int $from_version : current version of this game database, in numerical form.
    *      For example, if the game was running with a release of your game named "140430-1345", $from_version is equal to 1404301345
    */
-    function upgradeTableDb($from_version)
-    {
-      if( $from_version <= 2303261108 ) {
-        $sql = 'CREATE TABLE IF NOT EXISTS DBPREFIX_rules (
-          `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-          `player_id` int(11) NOT NULL,
-          `phase_one_amount_to_draw_beginning` int(1) NOT NULL,
-          `phase_one_player_ability_draw` int(1) NOT NULL,
-          `phase_one_amount_to_draw_end` int(1) NOT NULL,
-          `ability_available` int(1) NOT NULL,
-          `beer_availability` int(1) NOT NULL,
-          `bangs_amount_left` int(1) NOT NULL,
-          PRIMARY KEY (`id`)
-          ) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
-        self::applyDbUpgradeToAllDB($sql);
+  function upgradeTableDb($from_version)
+  {
+    if( $from_version <= 2406250036 ) {
+      $this->updateDBTableCustom();
+    }
+  }
 
-        $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_unconscious\'')->num_rows === 1;
-        if (!$newSchema) {
-          $sql = "ALTER TABLE `player` ADD `player_unconscious` TINYINT NOT NULL;";
-          self::applyDbUpgradeToAllDB($sql);
-          $sql = "UPDATE `player` SET `player_unconscious`=`player_eliminated`;";
-          self::applyDbUpgradeToAllDB($sql);
-        }
-
-        $newSchema = self::DbQuery('SHOW COLUMNS FROM `player` LIKE \'player_agreed_to_disclaimer\'')->num_rows === 1;
-        if (!$newSchema) {
-          $sql = "ALTER TABLE `player` ADD `player_agreed_to_disclaimer` TINYINT NOT NULL;";
-          self::applyDbUpgradeToAllDB($sql);
-          $sql = "UPDATE `player` SET `player_agreed_to_disclaimer` = true;";
-          self::applyDbUpgradeToAllDB($sql);
-        }
-
-        $bangsLeft = is_null(Log::getLastAction('bangPlayed', $playerId)) ? '1' : '0';
-        $sql = "INSERT INTO `rules` (`player_id`, `ability_available`, `beer_availability`, `bangs_amount_left`, `phase_one_amount_to_draw_beginning`, `phase_one_player_ability_draw`, `phase_one_amount_to_draw_end`) VALUES('". $playerId ."','1','1','". $bangsLeft ."','2','0','0');";
-        self::applyDbUpgradeToAllDB($sql);
-      }
+  function updateDBTableCustom()
+  {
+    $newSchema = self::DbQuery('SHOW COLUMNS FROM `rules` LIKE \'phase_one_event_draw\'')->num_rows === 1;
+    if (!$newSchema) {
+      $sql = "ALTER TABLE `rules` ADD `phase_one_event_draw` int(1) NOT NULL DEFAULT 0;";
+      self::applyDbUpgradeToAllDB($sql);
+    }
   }
 
   /////////////////////////////////////////////////////////////
@@ -240,8 +228,8 @@ class bang extends Table
   }
 
   // Exposing protected method translation
-  public static function translate($text)
+  public static function totranslate($text)
   {
-    return self::_($text);
+    return self::get()->_($text);
   }
 }

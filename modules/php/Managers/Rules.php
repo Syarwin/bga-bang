@@ -1,6 +1,7 @@
 <?php
 namespace BANG\Managers;
 use BANG\Core\Globals;
+use BANG\Core\Stack;
 use BANG\Helpers\DB_Manager;
 use BANG\Models\AbstractCard;
 use BANG\Models\AbstractEventCard;
@@ -56,15 +57,22 @@ class Rules extends DB_Manager
   }
 
   /**
-   * @param $player Player
-   * @param $eventCard AbstractEventCard
+   * @param Player $player
+   * @param AbstractEventCard $eventCard
    */
   public static function setNewTurnRules($player, $eventCard = null)
   {
     $amountOfCardsToDraw = $eventCard ? $eventCard->getPhaseOneAmountOfCardsToDraw() : 2;
-    $defaultRules = (new AbstractEventCard())->getPhaseOneRules();
-    $rules = $eventCard ? $eventCard->getPhaseOneRules() : $defaultRules;
-    $rules = array_merge($rules, $player->getPhaseOneRules($amountOfCardsToDraw, $rules[RULE_ABILITY_AVAILABLE] ?? true));
+    $defaultRules = (new AbstractEventCard())->getRules();
+    $rules = $eventCard ? $eventCard->getRules() : $defaultRules;
+    $isAbilityAvailable = self::isAllowPlayerPhaseOne() && isset($rules[RULE_ABILITY_AVAILABLE]) && $rules[RULE_ABILITY_AVAILABLE];
+    $playerRules = $player->getPhaseOneRules($amountOfCardsToDraw, $isAbilityAvailable);
+    if (isset($playerRules[RULE_PHASE_ONE_PLAYER_ABILITY_DRAW]) && $playerRules[RULE_PHASE_ONE_PLAYER_ABILITY_DRAW]) {
+      // $playerRules are in priority because this is probably Pedro or Kit - they know what they are doing
+      $rules = array_merge($rules, $playerRules);
+    } else {
+      $rules = array_merge($playerRules, $rules);
+    }
     $rules = array_merge(['player_id' => $player->getId()], $rules);
     $query = array_map(function ($value) {
       return is_bool($value) ? (int) $value : $value;
@@ -83,6 +91,15 @@ class Rules extends DB_Manager
   public static function isPhaseOnePlayerSpecialDraw()
   {
     return self::getRule(RULE_PHASE_ONE_PLAYER_ABILITY_DRAW) === '1';
+  }
+
+  /**
+   * @return boolean
+   */
+  public static function isPhaseOneEventSpecialDraw()
+  {
+    $eventCard = EventCards::getActive();
+    return $eventCard && $eventCard->isPhaseOneSpecialDraw();
   }
 
   public static function getCurrentPlayerId()
@@ -106,12 +123,81 @@ class Rules extends DB_Manager
     return (int) self::getRule(RULE_BANGS_AMOUNT_LEFT);
   }
 
+  /**
+   * @param string $requestedLocation
+   * @return string
+   */
+  public static function getDrawOrDiscardCardsLocation($requestedLocation)
+  {
+    $eventCard = EventCards::getActive();
+    $ctx = Stack::getCtx();
+    $state = $ctx['state'];
+    $isKitCarlsonAbility = $state === ST_SELECT_CARD && isset($ctx['src']['characterId']) &&
+      $ctx['src']['characterId'] === KIT_CARLSON;
+    $isPhaseOneOrThree = in_array($state, [ST_PHASE_ONE_DRAW_CARDS, ST_DISCARD_EXCESS, ST_ACTIVE_DRAW_CARD]) || $isKitCarlsonAbility;
+    return $eventCard && $isPhaseOneOrThree ? $eventCard->getDrawCardsLocation($requestedLocation) : $requestedLocation;
+  }
+
   public static function bangPlayed()
   {
     $oldAmount = self::getBangsAmountLeft();
     if ($oldAmount > 0) {
       Rules::amendRules([RULE_BANGS_AMOUNT_LEFT => --$oldAmount]);
     }
+  }
+
+  /**
+   * @return boolean
+   */
+  public static function isDistanceForcedToOne()
+  {
+    $eventCard = EventCards::getActive();
+    return $eventCard && $eventCard->isDistanceForcedToOne();
+  }
+
+  /**
+   * @return boolean
+   */
+  public static function isAimingCards()
+  {
+    $eventCard = EventCards::getActive();
+    return $eventCard && $eventCard->isAimingCards();
+  }
+
+  /**
+   * @return boolean
+   */
+  public static function isBangStrictlyForbidden()
+  {
+    $activeEvent = EventCards::getActive();
+    return $activeEvent && $activeEvent->isBangStrictlyForbidden();
+  }
+
+  /**
+   * @return boolean
+   */
+  public static function isBangCouldBePlayedWithAnotherBang()
+  {
+    $activeEvent = EventCards::getActive();
+    return $activeEvent && $activeEvent->isBangCouldBePlayedWithAnotherBang();
+  }
+
+  /**
+   * @return boolean
+   */
+  public static function isCanPlayBlueGreenCards()
+  {
+    $activeEvent = EventCards::getActive();
+    return !$activeEvent || $activeEvent->isCanPlayBlueGreenCards();
+  }
+
+  /**
+   * @return boolean
+   */
+  public static function isAllowPlayerPhaseOne()
+  {
+    $activeEvent = EventCards::getActive();
+    return !$activeEvent || $activeEvent->isAllowPlayerPhaseOne();
   }
 
   /**
@@ -146,5 +232,15 @@ class Rules extends DB_Manager
       'flipSuccessful' => $flipSuccessful,
       'eventChangedResult' => $eventChangedResult,
     ];
+  }
+
+  /**
+   * @param int | null $exceptId
+   * @return boolean
+   */
+  public static function isIgnoreCardsInPlay($exceptId = null) {
+    // $exceptId would be used for Belle Star later
+    $eventCard = EventCards::getActive();
+    return $eventCard && $eventCard->isIgnoreCardsInPlay();
   }
 }

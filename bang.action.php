@@ -38,14 +38,16 @@ class action_bang extends APP_GameAction
   public function actPlayCard()
   {
     self::setAjaxMode();
-    $id = self::getArg('id', AT_posint, true);
+    $id = (int) self::getArg('id', AT_posint, true);
     $player = self::getArg('player', AT_posint, false);
     $optionType = self::getArg('optionType', AT_alphanum, false);
     $optionArg = self::getArg('optionArg', AT_posint, false);
+    $secondCardId = self::getArg('secondCardId', AT_posint, false);
     $args = [
       'type' => $optionType,
       'player' => $player,
       'arg' => $optionArg,
+      'secondCardId' => $secondCardId,
     ];
     $this->game->actPlayCard($id, $args);
     self::ajaxResponse();
@@ -55,7 +57,6 @@ class action_bang extends APP_GameAction
   {
     self::setAjaxMode();
     $cards = explode(';', self::getArg('cards', AT_numberlist, false));
-    //		$id = self::getArg( "id", AT_posint, true );
     $this->game->actReact($cards);
     self::ajaxResponse();
   }
@@ -182,4 +183,64 @@ class action_bang extends APP_GameAction
     $this->game->actAgreedToDisclaimer();
     self::ajaxResponse();
   }
+
+  public function actPassEndRussianRoulette()
+  {
+    self::setAjaxMode();
+    $this->game->actPassEndRussianRoulette();
+    self::ajaxResponse();
+  }
+
+  public function actReactBloodBrothers()
+  {
+    self::setAjaxMode();
+    $playerId = self::getArg('playerId', AT_posint, false);
+    if ($playerId) {
+      $playerId = (int) $playerId;
+    }
+    $this->game->actReactBloodBrothers($playerId);
+    self::ajaxResponse();
+  }
+
+  public function actHardLiquorGainHP()
+  {
+    self::setAjaxMode();
+    $this->game->actHardLiquorGainHP();
+    self::ajaxResponse();
+  }
+
+  public function actDeclineHardLiquor()
+  {
+    self::setAjaxMode();
+    $this->game->actDeclineHardLiquor();
+    self::ajaxResponse();
+  }
+
+  public function actDiscardCardsRanch()
+  {
+    self::setAjaxMode();
+    $cardIds = explode(';', self::getArg('cardIds', AT_numberlist, false));
+    $cardIds = array_map(function ($cardId) {
+      return (int) $cardId;
+    }, $cardIds);
+    $this->game->actDiscardCardsRanch($cardIds);
+    self::ajaxResponse();
+  }
+
+  public function actIgnoreRanch()
+  {
+    self::setAjaxMode();
+    $this->game->actIgnoreRanch();
+    self::ajaxResponse();
+  }
+
+  public function actPeyoteGuess()
+  {
+    self::setAjaxMode();
+    $isRed = self::getArg('isRed', AT_bool, false);
+    $this->game->actPeyoteGuess($isRed);
+    self::ajaxResponse();
+  }
+
+
 }

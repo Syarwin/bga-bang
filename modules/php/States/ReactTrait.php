@@ -9,6 +9,7 @@ use BANG\Managers\EventCards;
 
 trait ReactTrait
 {
+
   public function stReact()
   {
     $player = Players::getActive();
@@ -44,7 +45,7 @@ trait ReactTrait
     $ctx = Stack::getCtx();
     $player = Players::getActive();
     if ($ctx['state'] == ST_REACT) {
-      $card = Cards::get($ctx['src']['id']);
+      $card = Cards::getCardByType($ctx['src']['type']);
 
       $ctx['_private']['active'] = $card->getReactionOptions($player);
       return $ctx;
@@ -69,5 +70,14 @@ trait ReactTrait
   {
     Players::getCurrent()->useAbility($args);
     Stack::finishState();
+  }
+
+  public function actPassEndRussianRoulette()
+  {
+    self::checkAction('actPassEndRussianRoulette');
+    $player = Players::getActive();
+    $player->loseLife(2);
+    Stack::removeAllAtomsWithState(ST_REACT);
+    Stack::resolve();
   }
 }

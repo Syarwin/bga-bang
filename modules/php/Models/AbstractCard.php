@@ -23,7 +23,7 @@ class AbstractCard implements \JsonSerializable
   public function __construct($params = null)
   {
     if ($params != null) {
-      $this->id = $params['id'];
+      $this->id = (int) $params['id'];
       if (array_key_exists('value', $params) && array_key_exists('color', $params)) {
         $this->value = $params['value'];
         $this->color = $params['color'];
@@ -38,7 +38,7 @@ class AbstractCard implements \JsonSerializable
   protected $color;
   protected $value;
 
-  // Static informations about cards
+  // Static information about cards
   protected $type;
   protected $name;
   protected $text;
@@ -214,12 +214,18 @@ class AbstractCard implements \JsonSerializable
 
   /**
    * pass: default function to handle reaction by clicking "pass" button
+   * @param Player $player
    */
   public function pass($player)
   {
-    if ($this->effect['type'] == BASIC_ATTACK) {
+    if ($this->effect['type'] === BASIC_ATTACK) {
       Stack::unsuspendNext(ST_REACT);
-      $player->loseLife();
+      $targetCardId = Stack::getCtx()['targetCardId'] ?? null;
+      if ($targetCardId) {
+        $player->discardCard(Cards::get($targetCardId));
+      } else {
+        $player->loseLife();
+      }
     }
   }
 

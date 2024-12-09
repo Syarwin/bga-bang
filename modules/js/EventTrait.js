@@ -42,7 +42,11 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     },
 
     updateEventCount(count) {
-      $('eventsDeckCount').innerHTML = count || '';
+      if (count) {
+        $('eventsDeckCount').innerHTML = count;
+      } else {
+        dojo.destroy('eventsDeckCount');
+      }
     },
 
     updateColorOverride(col) {

@@ -28,15 +28,18 @@ class Cards extends \BANG\Helpers\Pieces
     foreach (self::$classes as $type => $name) {
       $card = self::getCardByType($type);
       foreach ($expansions as $exp) {
-        foreach ($card->getCopies()[$exp] as $copy) {
-          $value = Utils::getCopyValue($copy);
-          $color = Utils::getCopyColor($copy);
+        $copies = $card->getCopies();
+        if (array_key_exists($exp, $copies)) {
+          foreach ($copies[$exp] as $copy) {
+            $value = Utils::getCopyValue($copy);
+            $color = Utils::getCopyColor($copy);
 
-          $cards[] = [
-            'type' => $type,
-            'value' => $value,
-            'color' => $color,
-          ];
+            $cards[] = [
+              'type' => $type,
+              'value' => $value,
+              'color' => $color,
+            ];
+          }
         }
       }
     }
@@ -111,12 +114,13 @@ class Cards extends \BANG\Helpers\Pieces
    ****************************/
   public static function deal($pId, $amount, $fromLocation = LOCATION_DECK)
   {
-    return self::pickForLocation($amount, $fromLocation, [LOCATION_HAND, $pId]);
+    $lastCardState = self::getExtremePosition(true, [LOCATION_HAND, $pId]);
+    return self::pickForLocation($amount, $fromLocation, [LOCATION_HAND, $pId], $lastCardState + 1);
   }
 
   public static function getHand($pId)
   {
-    return self::getInLocation([LOCATION_HAND, $pId]);
+    return self::getInLocation([LOCATION_HAND, $pId], null, 'card_state');
   }
 
   public static function countHand($pId)
@@ -169,13 +173,19 @@ class Cards extends \BANG\Helpers\Pieces
     Cards::move($cId, [LOCATION_HAND, $player->getId()]);
   }
 
-  public static function drawForLocation($name, $nbr)
+  /**
+   * @param string $name
+   * @param int $nbr
+   * @param string $fromLocation
+   * @return \BANG\Helpers\Collection
+   */
+  public static function drawForLocation($name, $nbr, $fromLocation = LOCATION_DECK)
   {
     $cards = Cards::getInLocation($name);
     foreach ($cards as $card) {
       Cards::discard($card);
     }
-    return self::pickForLocation($nbr, LOCATION_DECK, $name);
+    return self::pickForLocation($nbr, $fromLocation, $name);
   }
 
   public static function getSelection()
@@ -186,6 +196,17 @@ class Cards extends \BANG\Helpers\Pieces
   public static function putOnDeck($cId)
   {
     self::insertOnTop($cId, LOCATION_DECK);
+  }
+
+  /**
+   * @param int[] $cardsIds
+   * @return void
+   */
+  public static function putManyOnDeck($cardsIds)
+  {
+    foreach ($cardsIds as $cardId) {
+      self::insertOnTop($cardId, LOCATION_DECK);
+    }
   }
 
   public static function dealFromDiscard($pId, $amount)

@@ -2,6 +2,7 @@
 namespace BANG\States;
 use BANG\Core\Stack;
 use BANG\Managers\Cards;
+use BANG\Managers\EventCards;
 use BANG\Managers\Players;
 
 trait ResolveFlippedTrait
@@ -13,7 +14,7 @@ trait ResolveFlippedTrait
   {
     $atom = Stack::top();
     $player = Players::get($atom['pId']);
-    $src = Cards::get($atom['src']['id']);
+    $src = $this->getSrcCard($atom['src']);
     $player->flip($src);
     Stack::finishState();
   }
@@ -25,7 +26,7 @@ trait ResolveFlippedTrait
   {
     $startingAtom = Stack::top();
     $player = Players::get($startingAtom['pId']);
-    $srcCard = $startingAtom['src']['id'] == $startingAtom['pId'] ? $player : Cards::get($startingAtom['src']['id']);
+    $srcCard = $startingAtom['src']['id'] === $startingAtom['pId'] ? $player : $this->getSrcCard($startingAtom['src']);
     $flippedCards = Cards::getInLocation(LOCATION_FLIPPED);
     if ($flippedCards->count() == 1) {
       $srcCard->resolveFlipped($flippedCards->first(), $player);
@@ -39,5 +40,11 @@ trait ResolveFlippedTrait
       Cards::discard($card);
     }
     Stack::finishState();
+  }
+
+  private function getSrcCard($src)
+  {
+    $srcCardIsEvent = $src['type'] >= CARD_BLESSING;
+    return $srcCardIsEvent ? EventCards::get($src['id']) : Cards::get($src['id']);
   }
 }

@@ -18,9 +18,9 @@ class CalamityJanet extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function getReactAtomForAttack($card)
+  public function getReactAtomForAttack($card, $targetCardId, $secondMissedNeeded)
   {
-    $atom = parent::getReactAtomForAttack($card);
+    $atom = parent::getReactAtomForAttack($card, $targetCardId, $secondMissedNeeded);
     if ($card->getType() == CARD_MISSED) {
       $atom['src_name'] = clienttranslate('Missed used as a BANG! by Calamity Janet');
     }
@@ -28,7 +28,7 @@ class CalamityJanet extends \BANG\Models\Player
     return $atom;
   }
 
-  public function getBangCards()
+  public function getBangCards($targetType = TARGET_NONE)
   {
     $res = parent::getBangCards();
     if (Rules::isAbilityAvailable()) {
@@ -37,7 +37,7 @@ class CalamityJanet extends \BANG\Models\Player
         if ($card->getType() == CARD_MISSED) {
           $res['cards'][] = [
             'id' => $card->getId(),
-            'options' => ['target_type' => TARGET_NONE],
+            'options' => ['target_types' => [TARGET_NONE]],
             'amount' => 1,
           ];
         }
@@ -60,7 +60,7 @@ class CalamityJanet extends \BANG\Models\Player
     return $missed;
   }
 
-  public function getHandOptions()
+  public function getHandOptions($lastCardOnly = false)
   {
     $res = parent::getHandOptions();
     if (Rules::isAbilityAvailable()) {
@@ -76,6 +76,11 @@ class CalamityJanet extends \BANG\Models\Player
     return $res;
   }
 
+  public function getBangCardTypes()
+  {
+    return array_merge(parent::getBangCardTypes(), [CARD_MISSED]);
+  }
+
   public function playCard($card, $args)
   {
     if ($card->getType() == CARD_MISSED) {
@@ -83,10 +88,10 @@ class CalamityJanet extends \BANG\Models\Player
       Notifications::cardPlayed($this, $card, $args);
       Log::addCardPlayed($this, $card, $args);
       $card = new Bang(['id' => $card->getId()]);
-      $newstate = $card->play($this, $args);
+      $card->play($this, $args);
       $this->onChangeHand();
-      return $newstate;
+    } else {
+      parent::playCard($card, $args);
     }
-    return parent::playCard($card, $args);
   }
 }

@@ -54,10 +54,9 @@ trait EndOfLifeTrait
 
   public function actDiscardEliminate($cardIds)
   {
-    $cards = Cards::getMany($cardIds);
     Cards::discardMany($cardIds);
     $player = Players::getActive();
-    Notifications::discardedCards($player, $cards, false, $cardIds);
+    Notifications::discardedCards($player, $cardIds);
     $this->gamestate->jumpToState(ST_ELIMINATE);
   }
 
@@ -102,10 +101,9 @@ trait EndOfLifeTrait
 
   public function actDiscardVicePenalty($cardIds)
   {
-    $cards = Cards::getMany($cardIds);
     Cards::discardMany($cardIds);
     $player = Players::getActive();
-    Notifications::discardedCards($player, $cards, false, $cardIds);
+    Notifications::discardedCards($player, $cardIds);
     $player->onChangeHand();
     Stack::finishState();
   }

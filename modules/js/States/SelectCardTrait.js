@@ -15,7 +15,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       this.gamedatas.gamestate.args.cards = cards;
 
       // Update message when only 1 card to pick
-      if (args.amountToPick == 1) {
+      if (args.amountToPick === 1) {
         this.gamedatas.gamestate.descriptionmyturn = this.gamedatas.gamestate.descriptionsinglemyturn;
         this.gamedatas.gamestate.description = this.gamedatas.gamestate.descriptionsingle;
         this.updatePageTitle();
@@ -50,7 +50,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       if (!this.toggleCard(card)) return;
 
       dojo.empty('dialog-button-container');
-      if (this._selectedCards.length == this._amount)
+      if (this._selectedCards.length === this._amount)
         this.addActionButton(
           'buttonConfirmSelectCard',
           _('Confirm selection'),

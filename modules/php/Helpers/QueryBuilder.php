@@ -58,9 +58,13 @@ class QueryBuilder extends \APP_DbObject
   {
     $vals = [];
     foreach ($rows as $row) {
-      $vals[] = "('" . implode("','", array_map('mysql_escape_string', $row)) . "')";
+      $values = array_map(function ($value) {
+        // Sometimes 'false' is escaped as "" and if there's no default value - MySQL fails
+        $escapedValue = mysql_escape_string($value);
+        return empty($escapedValue) ? "0" : $escapedValue;
+      }, $row);
+      $vals[] = "('" . implode("','", $values) . "')";
     }
-
     $this->sql .= implode(',', $vals);
     self::DbQuery($this->sql);
     return self::DbGetLastId();
@@ -375,6 +379,13 @@ class Collection extends \ArrayObject
     return isset($arr[0]) ? $arr[0] : null;
   }
 
+  public function last()
+  {
+    $arr = $this->toArray();
+    $amount = count($arr);
+    return $amount > 0 ? $arr[$amount-1] : null;
+  }
+
   public function toArray()
   {
     return array_values($this->getArrayCopy());
@@ -392,7 +403,7 @@ class Collection extends \ArrayObject
 
   public function merge($arr)
   {
-    return new Collection(array_merge($this->toAssoc(), $arr->toAssoc()));
+    return new Collection($this->toAssoc() + $arr->toAssoc());
   }
 
   public function reduce($func, $init)

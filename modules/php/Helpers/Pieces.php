@@ -47,10 +47,6 @@ class Pieces extends DB_Manager
     return parent::DB(static::$table);
   }
 
-  // TODO : putDeckOnTop
-  // TODO : pickRandomFor
-  // TODO : collection filter
-
   /************************************
    *************************************
    ********* QUERY BUILDER *************
@@ -241,7 +237,7 @@ class Pieces extends DB_Manager
 
     $result = self::getSelectQuery()
       ->whereIn(static::$prefix . 'id', $ids)
-      ->get(false);
+      ->get();
     if (count($result) != count($ids) && $raiseExceptionIfNotEnough) {
       throw new \feException('Class Pieces: getMany, some pieces have not been found !' . json_encode($ids));
     }
@@ -270,6 +266,7 @@ class Pieces extends DB_Manager
   public static function getExtremePosition($getMax, $location, $id = null)
   {
     $query = self::DB();
+    self::checkLocation($location);
     self::addWhereClause($query, $id, $location);
     return $query->func($getMax ? 'MAX' : 'MIN', static::$prefix . 'state') ?? 0;
   }
@@ -376,17 +373,26 @@ class Pieces extends DB_Manager
     return self::moveAllInLocation($fromLocation, $toLocation, null, null);
   }
 
-  /*
+  /**
    * Pick the first "$nbr" pieces on top of specified deck and place it in target location
    * Return pieces infos or void array if no card in the specified location
+   * @param int $nbr
+   * @param string $fromLocation
+   * @param string|array $toLocation
+   * @param null|int $state
+   * @param bool $deckReform
+   * @return Collection
    */
-  public static function pickForLocation($nbr, $fromLocation, $toLocation, $state = null, $deckReform = true)
+  public static function pickForLocation($nbr, $fromLocation, $toLocation, $state = 0, $deckReform = true)
   {
     self::checkLocation($fromLocation);
     self::checkLocation($toLocation);
     $pieces = self::getTopOf($fromLocation, $nbr, false);
     $ids = $pieces->getIds();
-    self::getUpdateQuery($ids, $toLocation, $state)->run();
+    foreach ($ids as $id) {
+      self::getUpdateQuery($id, $toLocation, $state)->run();
+      $state = ++$state;
+    }
     $pieces = self::getMany($ids);
 
     // No more pieces in deck & reshuffle is active => form another deck

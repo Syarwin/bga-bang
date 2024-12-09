@@ -29,7 +29,9 @@ class Dynamite extends \BANG\Models\BlueCard
    */
   public function startOfTurn($player)
   {
-    $player->addFlipAtom($this);
+    if (!Rules::isIgnoreCardsInPlay()) {
+      $player->addFlipAtom($this);
+    }
   }
 
   public function resolveFlipped($card, $player)

@@ -10,7 +10,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     onEnteringStateReact(args) {
       this._amount = null;
       this._selectedCards = [];
-      if (args._private != undefined) {
+      if (args._private !== undefined) {
         this.makeCardSelectable(args._private.cards, 'selectReact');
 
         if (args._private.selection) this.preSelectCards(args._private.selection);
@@ -39,7 +39,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
     onClickCardSelectReact(card) {
       // React with single card
-      if (card.amount == 1 && this._amount == null) {
+      if (card.amount === 1 && this._amount == null) {
         this._selectedCards = [card.id];
         this.onClickConfirmReact();
       }
@@ -56,7 +56,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
           this.onUpdateActionButtons(
             this.gamedatas.gamestate.name,
             this.gamedatas.gamestate.args,
-            this._selectedCards.length == 0,
+            this._selectedCards.length === 0,
           );
           if (this._selectedCards.length === 1) {
             this.addPrimaryActionButton('buttonPlayerOneCard', _('Play single card'), () => this.onClickConfirmReact());
@@ -66,7 +66,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
           this.onUpdateActionButtons(
             this.gamedatas.gamestate.name,
             this.gamedatas.gamestate.args,
-            this._selectedCards.length == 0,
+            this._selectedCards.length === 0,
           );
           this.addPrimaryActionButton('buttonConfirmReact', _('Confirm react'), () => this.onClickConfirmReact());
         }
@@ -77,7 +77,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       if (!isBeer && this._amount > 1 && this._selectedCards.length === 1) {
         this.confirmationDialog(
           _(
-            'Attention: a BANG! by Slab the Killer requires 2 Missed! to be cancelled. Are you sure you want to play just a single one?',
+            'Attention: this BANG! requires 2 Missed! to be cancelled. Are you sure you want to play just a single one?',
           ),
           () => {
             this.takeActReactAction();
@@ -98,6 +98,9 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
       this.takeAction('actPass');
     },
 
+    onClickPassRussianRoulette() {
+      this.takeAction('actPassEndRussianRoulette');
+    },
     /*
      * React state : active player can play cards from his hand in reaction
      */

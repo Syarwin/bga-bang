@@ -1,8 +1,9 @@
 <?php
 namespace BANG\Cards;
-use BANG\Managers\EventCards;
+use BANG\Managers\Players;
 use BANG\Managers\Rules;
 use BANG\Models\BangActionCard;
+use BANG\Models\Player;
 
 class Bang extends BangActionCard
 {
@@ -26,23 +27,63 @@ class Bang extends BangActionCard
     ];
   }
 
-  /*
+  /**
    * Only one bang per turn, unless unlimitedBangs granted by Volcanic or by character
+   * @param Player $player
    */
   public function getPlayOptions($player)
   {
-    $activeEvent = EventCards::getActive();
-    $bangStrictlyForbidden = $activeEvent && $activeEvent->isBangStrictlyForbidden();
-    if (!$bangStrictlyForbidden && ($player->hasUnlimitedBangs() || Rules::getBangsAmountLeft() > 0)) {
-      return parent::getPlayOptions($player);
-    } else {
-      return null;
+    $aimingCards = Rules::isAimingCards();
+    $bangPossible = !Rules::isBangStrictlyForbidden() && ($player->hasUnlimitedBangs() || Rules::getBangsAmountLeft() > 0);
+    $bangsWithoutThis = $this->getBangsWithoutThisCard($player);
+    $canPlayWithAnotherBang = Rules::isBangCouldBePlayedWithAnotherBang() && $bangsWithoutThis;
+    if (!$aimingCards && !$bangPossible && !$canPlayWithAnotherBang) { return null; }
+
+    $playOptions = [];
+    $targetTypes = [];
+    if ($aimingCards) {
+      $targetTypes[] = TARGET_ALL_CARDS;
+      // Rules::isAimingCards() is true currently for Ricochet only. Move this to card itself if this logic changes
+      $playOptions['status_bar_message'] = clienttranslate('You must choose a card in play (Ricochet effect) or a player to use BANG! normally');
     }
+    if ($bangPossible || $canPlayWithAnotherBang) {
+      $targetTypes[] = TARGET_PLAYER;
+    }
+
+    $playOptions['target_types'] = $targetTypes;
+
+    if ($canPlayWithAnotherBang) {
+      if (count($bangsWithoutThis) > 0) {
+        $playOptions['with_another_card'] = [
+          'strict' => !$bangPossible,
+          'cards' => $bangsWithoutThis,
+          'targets' => $this->getTargetablePlayers($player)
+        ];
+      }
+    }
+    $playOptions['targets'] = $this->getTargetablePlayers($player);
+    return $playOptions;
+  }
+
+  /**
+   * @param Player $player
+   * @return array
+   */
+  private function getBangsWithoutThisCard($player)
+  {
+    $bangOptions = [ 'targets' => Players::getLivingPlayers($player->getId())->getIds() ];
+    return array_values(array_filter($player->getBangCards($bangOptions)['cards'], function ($card) {
+      return $card['id'] !== $this->getId();
+    }));
   }
 
   public function play($player, $args)
   {
-    Rules::bangPlayed();
-    return parent::play($player, $args);
+    // FAQ, Q07. Sniper doesn't count as Bang! (secondCardId is set)
+    // FAQ, Q09, Ricochet doesn't count as Bang! ($args['type'] should be 'player', not 'inPlay')
+    if (!$args['secondCardId'] && $args['type'] !== 'inPlay') {
+      Rules::bangPlayed();
+    }
+    parent::play($player, $args);
   }
 }

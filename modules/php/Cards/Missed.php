@@ -7,7 +7,7 @@ class Missed extends \BANG\Models\BrownCard
   {
     parent::__construct($id, $copy);
     $this->type = CARD_MISSED;
-    $this->name = clienttranslate('Missed');
+    $this->name = clienttranslate('Missed!');
     $this->text = clienttranslate('Discard to avoid an attack');
     $this->symbols = [[SYMBOL_MISSED]];
     $this->copies = [

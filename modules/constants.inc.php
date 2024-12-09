@@ -13,7 +13,6 @@ define('ST_REACT', 8);
 define('ST_REACT_BEER', 9);
 define('ST_END_OF_TURN', 11);
 define('ST_DISCARD_EXCESS', 12);
-define('ST_DRAW_CARDS', 13); // Deprecated, used for backward compatibility
 define('ST_PHASE_ONE_SETUP', 13);
 define('ST_SELECT_CARD', 15);
 define('ST_ACTIVE_DRAW_CARD', 17);
@@ -29,15 +28,23 @@ define('ST_CHOOSE_CHARACTER', 26);
 define('ST_CHARACTER_SETUP', 27);
 define('ST_PHASE_ONE_DRAW_CARDS', 28);
 define('ST_NEW_EVENT', 29);
-define('ST_RESOLVE_EVENT_EFFECT', 30);
+define('ST_RESOLVE_START_OF_TURN_EVENT_EFFECT', 30);
 define('ST_PRE_PHASE_ONE', 31);
 define('ST_CHOOSE_AND_DISCARD_BLUE_CARD', 32);
 define('ST_DISCARD_BLUE_CARD', 33);
+define('ST_BLOOD_BROTHERS', 37);
+define('ST_HARD_LIQUOR', 38);
+define('ST_RANCH', 39);
+define('ST_PEYOTE', 40);
+define('ST_RESOLVE_BEFORE_PHASE_ONE_EVENT_EFFECT', 41);
+define('ST_RESOLVE_END_OF_TURN_EVENTS', 42);
+define('ST_RESOLVE_BEFORE_PLAY_CARD_EFFECT', 43);
+
 define('ST_PRE_GAME_END', 98);
 define('ST_GAME_END', 99);
 
 /*
- * Game options
+ * Game options keys
  */
 define('OPTION_CHAR_1', 101);
 define('OPTION_CHAR_2', 102);
@@ -50,25 +57,40 @@ define('OPTION_GENERAL_STORE_LAST_CARD', 108);
 define('OPTION_CHOOSE_CHARACTERS', 110);
 define('OPTION_EXPANSIONS', 111);
 define('OPTION_HIGH_NOON_EXPANSION', 112);
+define('OPTION_FISTFUL_OF_CARDS_EXPANSION', 113);
+define('OPTION_HIGH_NOON_AND_FOC_EXPANSION', 114);
 
 /*
- * Choose Characters options
+ * OPTION_CHOOSE_CHARACTERS values
  */
 define('CHARACTERS_RANDOM', 1101);
 define('CHARACTERS_CHOOSE', 1102);
 
 /*
- * Expansions options
+ * OPTION_EXPANSIONS values
  */
 define('OPTION_BASE_GAME', 1111);
 define('OPTION_HIGH_NOON_ONLY', 1112);
+define('OPTION_FISTFUL_OF_CARDS_ONLY', 1113);
+define('OPTION_HIGH_NOON_AND_FOC', 1114);
 
 /*
- * High Noon options
+ * OPTION_HIGH_NOON_ONLY/OPTION_HIGH_NOON_EXPANSION values
  */
-define('OPTION_HIGH_NOON_OFF', 1121);
 define('OPTION_HIGH_NOON_NO_GHOST_TOWN', 1122);
 define('OPTION_HIGH_NOON_WITH_GHOST_TOWN', 1123);
+
+/*
+ * OPTION_FISTFUL_OF_CARDS_ONLY/OPTION_FISTFUL_OF_CARDS_EXPANSION values
+ */
+define('OPTION_FISTFUL_OF_CARDS_NO_DEAD_MAN', 1131);
+define('OPTION_FISTFUL_OF_CARDS_WITH_DEAD_MAN', 1132);
+
+/*
+ * OPTION_HIGH_NOON_AND_FOC/OPTION_HIGH_NOON_AND_FOC_EXPANSION values
+ */
+define('OPTION_BOTH_EVENTS_NO_GHOSTS', 1141);
+define('OPTION_BOTH_EVENTS_WITH_GHOSTS', 1142);
 
 /*
  * Options constants
@@ -76,7 +98,7 @@ define('OPTION_HIGH_NOON_WITH_GHOST_TOWN', 1123);
 define('TARGET_NONE', 0);
 define('TARGET_CARD', 1);
 define('TARGET_PLAYER', 2);
-define('TARGET_CARDS', 3);
+define('TARGET_ALL_CARDS', 3);
 //define('RANDOM', 1);
 
 /*
@@ -140,6 +162,22 @@ define('CARD_SHOOTOUT', 110);
 define('CARD_TRAIN_ARRIVAL', 111);
 define('CARD_THIRST', 112);
 
+define('CARD_RANCH', 115);
+define('CARD_ABANDONED_MINE', 116);
+define('CARD_VENDETTA', 117);
+define('CARD_SNIPER', 118);
+define('CARD_HARD_LIQUOR', 119);
+define('CARD_PEYOTE', 120);
+define('CARD_AMBUSH', 121);
+define('CARD_RICOCHET', 122);
+define('CARD_JUDGE', 123);
+define('CARD_LASSO', 124);
+define('CARD_BLOOD_BROTHERS', 125);
+define('CARD_DEAD_MAN', 126);
+define('CARD_FISTFUL_OF_CARDS', 127);
+define('CARD_LAW_OF_THE_WEST', 128);
+define('CARD_RUSSIAN_ROULETTE', 129);
+
 define('PASS', 999); //has to be bigger than the maximum number of cards in the game
 
 /*
@@ -201,8 +239,11 @@ define('DEFENSIVE', 7);
 define('EFFECT_STARTOFTURN', 100);
 define('EFFECT_INSTANT', 101);
 define('EFFECT_PERMANENT', 102);
-define('EFFECT_ENDOFTURN', 103);
+define('EFFECT_END_OF_TURN', 103);
 define('EFFECT_PHASE_ONE', 104);
+define('EFFECT_ENDOFPHASEONE', 105);
+define('EFFECT_BEFORE_PHASE_ONE', 106);
+define('EFFECT_BEFORE_EACH_PLAY_CARD', 107);
 
 define('NONE', 0);
 define('INRANGE', 1);
@@ -210,11 +251,6 @@ define('SPECIFIC_RANGE', 2);
 define('ALL_OTHER', 3);
 define('ALL', 4);
 define('ANY', 5);
-
-define('CHECK_BARREL', true);
-define('NO_CHECK_BARREL', false);
-
-define('PUBLIC_SELECTION', -1);
 
 /*
  * Constants for card symbols
@@ -259,6 +295,7 @@ define('GENERAL_STORE_AUTO_PICK', 1);
  */
 define('RULE_PHASE_ONE_CARDS_DRAW_BEGINNING', 'phase_one_amount_to_draw_beginning');
 define('RULE_PHASE_ONE_PLAYER_ABILITY_DRAW', 'phase_one_player_ability_draw');
+define('RULE_PHASE_ONE_EVENT_SPECIAL_DRAW', 'phase_one_event_draw');
 define('RULE_PHASE_ONE_CARDS_DRAW_END', 'phase_one_amount_to_draw_end');
 define('RULE_ABILITY_AVAILABLE', 'ability_available');
 define('RULE_BEER_AVAILABLE', 'beer_availability');
@@ -270,3 +307,10 @@ define('RULE_BANGS_AMOUNT_LEFT', 'bangs_amount_left');
 define('FULLY_ALIVE', 0);
 define('DEAD_GHOST', 1);
 define('LIVING_DEAD', 2);
+
+/*
+ * Constants for react types
+ */
+define('REACT_TYPE_ATTACK', 'attack');
+define('REACT_TYPE_DUEL', 'duel');
+define('REACT_TYPE_RUSSIAN_ROULETTE', 'russian_roulette');

@@ -1,5 +1,6 @@
 <?php
 namespace BANG\States;
+use BANG\Cards\Events\Vendetta;
 use BANG\Core\Globals;
 use BANG\Helpers\GameOptions;
 use BANG\Managers\EventCards;
@@ -20,9 +21,14 @@ trait TurnTrait
   {
     $activeEvent = EventCards::getActive();
     $activePlayer = Players::getActive();
-    $pId = $activeEvent && $activeEvent->nextPlayerCounterClockwise() ?
-      Players::getPreviousId($activePlayer, true) :
-      Players::getNextId($activePlayer, true);
+
+    if ($activeEvent && $activeEvent->nextPlayerCounterClockwise()) {
+      $pId = Players::getPreviousId($activePlayer, true);
+    } else if (Globals::getVendettaWasUsed()) {
+      $pId = $activePlayer->getId();
+    } else {
+      $pId = Players::getNextId($activePlayer, true);
+    }
     $this->gamestate->changeActivePlayer($pId);
 
 
@@ -59,14 +65,25 @@ trait TurnTrait
     $nextEventCard = EventCards::getNext();
     // TODO: we call this method twice if it's Sheriff's 2+ turn, this should be fixed (check setNewTurnRules usages)
     Rules::setNewTurnRules($player, $eventCard);
-    $stack = [ST_PRE_PHASE_ONE, ST_PHASE_ONE_SETUP, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN];
-    if (GameOptions::isEvents()) {
-      array_unshift($stack, ST_RESOLVE_EVENT_EFFECT);
+    $stack = [
+      ST_PHASE_ONE_SETUP,
+      ST_RESOLVE_BEFORE_PLAY_CARD_EFFECT,
+      ST_PLAY_CARD,
+      ST_DISCARD_EXCESS,
+      ST_RESOLVE_END_OF_TURN_EVENTS,
+      ST_END_OF_TURN
+    ];
+    $isAdditionalTurn = $eventCard && $eventCard instanceof Vendetta && Globals::getVendettaWasUsed();
+    array_unshift($stack, ST_RESOLVE_BEFORE_PHASE_ONE_EVENT_EFFECT);
+    array_unshift($stack, ST_PRE_PHASE_ONE);
+    if (GameOptions::isEvents() && !$isAdditionalTurn) {
+      array_unshift($stack, ST_RESOLVE_START_OF_TURN_EVENT_EFFECT);
+      // BangDebug: First event card would be drawn on Sheriff's first turn, not second if you change 1 to 0
       if ($player->getRole() === SHERIFF && $nextEventCard && $roundNumber > 1) {
         array_unshift($stack, ST_NEW_EVENT);
       }
 
-      if ($player->isUnconscious() && (!$eventCard || !$eventCard->isResurrectionEffect())) {
+      if ($player->isUnconscious() && (!$eventCard || !$eventCard->isResurrectionEffect($player))) {
         $stack = [ST_END_OF_TURN];
       }
     }
@@ -83,6 +100,9 @@ trait TurnTrait
    ****************************************/
   public function actEndTurn()
   {
+    if (Globals::getIsMustPlayCard()) {
+      throw new \BgaUserException(bang::get()->totranslate('You must play the highlighted card before ending your turn'));
+    }
     Stack::unsuspendNext(ST_PLAY_CARD);
     Stack::finishState();
   }
@@ -119,10 +139,14 @@ trait TurnTrait
 
   public function actDiscardExcess($cardIds)
   {
-    $cards = Cards::getMany($cardIds);
-    Cards::discardMany($cardIds);
     $player = Players::getActive();
-    Notifications::discardedCards($player, $cards, false, $cardIds);
+    $destination = Rules::getDrawOrDiscardCardsLocation(LOCATION_DISCARD);
+    if ($destination === LOCATION_DECK) {
+      Cards::putManyOnDeck($cardIds);
+    } else {
+      Cards::discardMany($cardIds);
+    }
+    Notifications::discardedCards($player, $cardIds, false, $destination);
     Stack::finishState();
   }
 

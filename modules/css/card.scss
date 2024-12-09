@@ -1,3 +1,5 @@
+@import "variables.scss";
+
 div.bang-card-tooltip {
   div.bang-card-tooltip-sizing {
     width:2*$cardW;
@@ -95,14 +97,14 @@ div.bang-card {
   @for $i from 0 through $numberOfCards {
     &[data-type="#{$i}"] .card-background {
       background-position-x: ($i % 6) * 100% / 5;
-      background-position-y: (($i - ($i % 6)) / 6) * 100% / 6;
+      background-position-y: (($i - ($i % 6)) / 6) * 100% / 9;
     }
   }
 
   @for $k from 0 through $numberOfEvents {
     &[data-type="#{$k + 100}"] .card-background {
       background-position-x: ($k % 5) * 100% / 5;
-      background-position-y: ((($k - ($k % 5)) / 5) * 100% / 6) + 100% / 6 * 4;
+      background-position-y: ((($k - ($k % 5)) / 5) * 100% / 9) + 100% / 9 * 4;
     }
   }
 
@@ -125,13 +127,6 @@ div.bang-card {
       text-transform: uppercase;
     }
 
-    //TODO: remove when event graphics are available
-    .card-description {
-      font-size: 12px;
-      text-align: center;
-      margin: 60px 5px;
-    }
-
     .card-background {
     	position:absolute;
     	top: $cardH * 42 / 200;
@@ -139,7 +134,7 @@ div.bang-card {
     	width: $cardW * 105 / 125;
     	height: $cardH * 145 / 200;
     	background-image:url("img/card_backgrounds.jpg");
-    	background-size:600% 700%;
+    	background-size:600% 1000%;
     }
 
     .card-copy {
@@ -168,6 +163,37 @@ div.bang-card {
       height: $cardH * 145 / 200;
     }
   }
+
+  &.mustplay {
+    box-shadow: 0 0 13px 5px #af5f10;
+    border-radius: 7%;
+    background-color: #9c7e4a;
+  }
+}
+
+// Long name for "Abandoned Mine" should be on 1 line
+.bang-card[data-type="116"] .card-front .card-name {
+  font-size: $cardH * 13.5 / 200;
+}
+
+// Blood Brothers
+.bang-card[data-type="125"] .card-front .card-name {
+  font-size: $cardH * 13.5 / 200;
+}
+
+// A Fistful Of Cards
+.bang-card[data-type="127"] .card-front .card-name {
+  font-size: $cardH * 13 / 200;
+}
+
+// Law Of The West
+.bang-card[data-type="128"] .card-front .card-name {
+  font-size: $cardH * 13.5 / 200;
+}
+
+// Russian Roulette
+.bang-card[data-type="129"] .card-front .card-name {
+  font-size: $cardH * 13 / 200;
 }
 
 .card-copy-color {

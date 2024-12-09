@@ -1,15 +1,16 @@
 <?php
 namespace BANG\Cards;
+use BANG\Core\Globals;
 use BANG\Core\Notifications;
-use BANG\Core\Log;
 use BANG\Core\Stack;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
 use BANG\Managers\Rules;
+use BANG\Models\BlueCard;
 
-class Jail extends \BANG\Models\BlueCard
+class Jail extends BlueCard
 {
-  public function __construct($id = null, $copy = '')
+  public function __construct($id = null)
   {
     parent::__construct($id);
     $this->type = CARD_JAIL;
@@ -32,12 +33,15 @@ class Jail extends \BANG\Models\BlueCard
 
   public function getPlayOptions($player)
   {
+    if (!Rules::isCanPlayBlueGreenCards()) {
+      return null;
+    }
     // Can be played on anyone except the sheriff
     $players = Players::getLivingPlayers()->filter(function ($player) {
       return $player->getRole() != SHERIFF && !$player->hasCardCopyInPlay($this);
     });
     return [
-      'target_type' => TARGET_PLAYER,
+      'target_types' => [TARGET_PLAYER],
       'targets' => $players->getIds(),
     ];
   }
@@ -59,7 +63,7 @@ class Jail extends \BANG\Models\BlueCard
 
     $suitOverrideInfo = Rules::getSuitOverrideInfo($card, 'H');
     $args = array_merge($suitOverrideInfo, ['player' => $player]);
-    if ($suitOverrideInfo['flipSuccessful']) {
+    if ($suitOverrideInfo['flipSuccessful'] || Rules::isIgnoreCardsInPlay()) {
       Notifications::tell(clienttranslate('${player_name} can make his turn${flipEventMsg}'), $args);
     } else {
       Notifications::tell(clienttranslate('${player_name} is skipped${flipEventMsg}'), $args);

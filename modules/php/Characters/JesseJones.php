@@ -21,11 +21,13 @@ class JesseJones extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function drawCardsAbility()
+  public function drawCardsPhaseOne()
   {
     // TODO : auto skip if argDrawCard only has 'deck' inside
+    $ctx = Stack::getCtx();
     Stack::insertOnTop(Stack::newAtom(ST_ACTIVE_DRAW_CARD, [
-      'pId' => $this->id,
+      'pId' => $this->getId(),
+      'storeResult' => isset($ctx['storeResult']) && $ctx['storeResult'],
     ]));
   }
 
@@ -36,14 +38,17 @@ class JesseJones extends \BANG\Models\Player
         return $player->getHand()->count() > 0;
       })
       ->getIds();
-    $options[] = LOCATION_DECK;
+    $options[] = Rules::getDrawOrDiscardCardsLocation(LOCATION_DECK);
     return ['options' => $options];
   }
 
   public function useAbility($args)
   {
-    if ($args['selected'] == LOCATION_DECK) {
-      $cardsToDraw = 1;
+    if (in_array($args['selected'], [LOCATION_DECK, LOCATION_DISCARD])) {
+      $location = Rules::getDrawOrDiscardCardsLocation(LOCATION_DECK);
+      $cards = Cards::deal($this->id, 1, $location);
+      Notifications::drawCards($this, $cards, $location === LOCATION_DISCARD, $location);
+      $card = $cards->first();
     } else {
       // TODO : add sanity check
 
@@ -53,11 +58,12 @@ class JesseJones extends \BANG\Models\Player
       Cards::move($card->getId(), LOCATION_HAND, $this->id);
       Notifications::stoleCard($this, $victim, $card, false);
       $victim->onChangeHand();
-
-      // Second one is already implied in Rules
-      $cardsToDraw = 0;
     }
-    Rules::incrementPhaseOneDrawEndAmount($cardsToDraw);
+
+    $ctx = Stack::getCtx();
+    if (isset($ctx['storeResult']) && $ctx['storeResult']) {
+      Stack::updatePhaseOneAtomAfterAction([$card->getId()]);
+    }
   }
 
   public function getPhaseOneRules($defaultAmount, $isAbilityAvailable = true)

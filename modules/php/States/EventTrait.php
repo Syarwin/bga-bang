@@ -24,21 +24,18 @@ trait EventTrait
       $player->checkHand();
     });
 
-    // EFFECT_PERMANENT should not logically be here but in case of Hangover + Paul Regret we should notify about distances, so...
-    // Feel free to change this logic if at some point EFFECT_INSTANT will trigger anything
-    if ($eventCard->getEffect() === EFFECT_INSTANT || $eventCard->getEffect() === EFFECT_PERMANENT) {
+    if ($eventCard->getEffect() === EFFECT_INSTANT) {
       $eventCard->resolveEffect($player);
     }
-    if (!EventCards::isResurrectionPossible()) {
-      Globals::setResurrectionIsPossible(false);
-    }
+    Notifications::updateDistances();
     Stack::finishState();
   }
 
   /*
-   * stResolveEventEffect: Resolves event effect
+   * stResolveEventEffect: Resolves start-of-turn event effect
+   * This applies to resurrection effects and all others which might happen before Jail/Dynamite
    */
-  public function stResolveEventEffect()
+  public function stResolveEventStartOfTurnEffect()
   {
     $eventCard = EventCards::getActive();
     if ($eventCard && $eventCard->getEffect() === EFFECT_STARTOFTURN) {
@@ -49,6 +46,20 @@ trait EventTrait
       } elseif ($player->isUnconscious()) { // dead but this is not a resurrection
         Stack::removePlayerAtoms($ctx['pId']);
       } // do not resolve any effects when resurrection is combined with alive player
+    }
+    Stack::finishState();
+  }
+
+  /*
+   * stResolveEventBeforePhaseOneEffect: Resolves start-of-turn event effect before phase one (after Jail/Dynamite)
+   */
+  public function stResolveEventBeforePhaseOneEffect()
+  {
+    $eventCard = EventCards::getActive();
+    if ($eventCard && $eventCard->getEffect() === EFFECT_BEFORE_PHASE_ONE) {
+      $ctx = Stack::getCtx();
+      $player = Players::get($ctx['pId']);
+      $eventCard->resolveEffect($player);
     }
     Stack::finishState();
   }

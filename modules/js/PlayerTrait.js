@@ -5,9 +5,12 @@ function truncate(str, n) {
 define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
   return declare('bang.playerTrait', null, {
     constructor() {
+      const ignoreFunction = (n) => {
+        return n.args.ignore && n.args.ignore.includes(this.player_id);
+      };
       this._notifications.push(
         ['updateHP', 200],
-        ['updateHand', 200],
+        ['updateHand', 200, ignoreFunction],
         ['playerEliminated', 1000],
         ['playerUnconscious', 1000],
         ['updatePlayers', 100],
@@ -119,7 +122,9 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
     notif_showMessage(n) {
       debug('Notif: show message', n);
-      this.showMessage(n.log, 'info');
+      if (n.args.showAsPopup) {
+        this.showMessage(n.log, 'info');
+      }
     },
 
     /*
@@ -295,17 +300,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
      */
     makePlayersSelectable(players, append = false) {
       if (!append) {
-        this.gamedatas.gamestate.descriptionmyturn = _('You must choose a player');
-        this.updatePageTitle();
-        this.removeActionButtons();
-        this.addActionButton(
-          'buttonCancel',
-          _('Undo'),
-          () => this.onClickCancelCardSelected(this._selectableCards),
-          null,
-          false,
-          'gray',
-        );
+        this.doSomeCleanupAndAddUndo(_('You must choose a player'));
       }
 
       this._selectablePlayers = players;
@@ -313,7 +308,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         this.addActionButton('buttonSelectPlayer' + playerId, this.gamedatas.players[playerId].name, () =>
           this.onClickPlayer(playerId),
         );
-        dojo.addClass('bang-player-' + playerId, 'selectable');
+        dojo.addClass(this.querySingle(`#bang-player-${playerId} .player-info`), 'selectable');
       });
     },
 
@@ -325,11 +320,13 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
       if (this._action == 'drawCard') {
         this.onClickDraw(playerId);
+      } else if (this._action == 'bloodBrothers') {
+        this.onClickPlayerBloodBrothers(playerId)
       } else {
         this._selectedOptionType = 'player';
         this._selectedPlayer = playerId;
         const CARD_JAIL = 17;
-        if (this._selectedCard.type === CARD_JAIL && playerId === this.player_id) {
+        if (this._selectedCard && this._selectedCard.type === CARD_JAIL && playerId === this.player_id) {
           this.confirmationDialog(_('Are you sure you want to put yourself to Jail?'), () => {
             this.onSelectOption();
           });
@@ -345,34 +342,45 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     /*
      * Make some players' cards selectable with sometimes the deck
      */
-    makePlayersCardsSelectable(playersIds) {
-      this.removeActionButtons();
-      this.gamedatas.gamestate.descriptionmyturn = _("You must choose a card in play or a player's hand");
-      this.updatePageTitle();
-      var oldSelectableCards = this._selectableCards;
-      this.addActionButton(
-        'buttonCancel',
-        _('Undo'),
-        () => this.onClickCancelCardSelected(oldSelectableCards),
-        null,
-        false,
-        'gray',
-      );
+    makePlayersCardsSelectable(playersIds, selectCardsOnly = false, statusBarMessage = null) {
+      this.doSomeCleanupAndAddUndo(_(statusBarMessage));
 
       var cards = [];
-      this._selectablePlayers = playersIds.filter((playerId) => {
-        return this.gamedatas.players[playerId].handCount > 0;
-      });
+      if (this._selectablePlayers.length === 0 && !selectCardsOnly) {
+        this._selectablePlayers = playersIds.filter((playerId) => {
+          return this.gamedatas.players[playerId].handCount > 0;
+        });
+      }
       playersIds.forEach((playerId) => {
-        dojo.addClass('bang-player-' + playerId, 'selectable');
+        if (!selectCardsOnly) {
+          dojo.addClass(this.querySingle(`#bang-player-${playerId} .player-info`), 'selectable');
+        }
         dojo.query('#bang-player-' + playerId + ' .bang-card').forEach((div) => {
           cards.push({
-            id: dojo.attr(div, 'data-id'),
+            id: parseInt(dojo.attr(div, 'data-id')),
             playerId: playerId,
           });
         });
       });
       this.makeCardSelectable(cards, 'selectOption');
+    },
+
+    doSomeCleanupAndAddUndo(descriptionText) {
+      if (descriptionText !== null) {
+        this.gamedatas.gamestate.descriptionmyturn = descriptionText;
+      }
+      this.updatePageTitle();
+      this.removeActionButtons();
+      // Making a clone of this array so when this._selectableCards will be changed - we still work with old array
+      var oldSelectableCards = this._selectableCards;
+      this.addActionButton(
+          'buttonCancel',
+          _('Undo'),
+          () => this.onClickCancelCardSelected(oldSelectableCards),
+          null,
+          false,
+          'gray',
+      );
     },
 
     onClickCardSelectOption(card) {

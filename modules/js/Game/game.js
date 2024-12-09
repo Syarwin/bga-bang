@@ -47,10 +47,9 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
     /*
      * Make an AJAX call with automatic lock
      */
-    takeAction(action, data, reEnterStateOnError, checkAction = true) {
+    takeAction(action, data = {}, reEnterStateOnError = false, checkAction = true) {
       if (checkAction && !this.checkAction(action)) return false;
 
-      data = data || {};
       if (data.lock === undefined) {
         data.lock = true;
       } else if (data.lock === false) {
@@ -190,7 +189,7 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
     },
 
     /*
-     * Add a blue/grey button if it doesn't already exists
+     * Add a blue/grey button if it doesn't already exist
      */
     addPrimaryActionButton(id, text, callback) {
       if (!$(id)) this.addActionButton(id, text, callback, 'customActions', false, 'blue');
@@ -487,8 +486,9 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
      */
     format_string_recursive(log, args) {
       try {
-        if (log && args) {
-          if (args.msgYou && args.player_id == this.player_id) log = args.msgYou;
+        if (log && args && !args.processed) {
+          args.processed = true;
+          if (args.msgYou && args.player_id === this.player_id) log = args.msgYou;
 
           let player_keys = Object.keys(args).filter((key) => key.substr(0, 11) == 'player_name');
           player_keys.forEach((key) => {
@@ -497,17 +497,12 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
 
           args.You = this.coloredYou();
 
+          let colorOverride = args?.event?.colorOverride || '';
           if (args.card_name && args.card) {
-            let colorOverride = args?.event?.colorOverride || '';
-            args.card_name =
-              _(args.card_name) +
-              ' (' +
-              args.card.value +
-              '<span class="card-copy-color" data-color="'+args.card.color+'" data-color-override="'+colorOverride+'"></span>';
-            if (colorOverride) {
-              args.card_name += '<span class="card-copy-color-override" data-color="'+args.card.color+'" data-color-override="'+colorOverride+'"></span>';
-            }
-            args.card_name += ')</span>';
+            args.card_name = this.addCardSuitToLogMessage(args.card_name, args.card, colorOverride);
+          }
+          if (args.target_card_name && args.target_card) {
+            args.target_card_name = this.addCardSuitToLogMessage(args.target_card_name, args.target_card, colorOverride);
           }
         }
       } catch (e) {
@@ -515,6 +510,18 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
       }
 
       return this.inherited(arguments);
+    },
+
+    addCardSuitToLogMessage(cardName, card, colorOverride) {
+      let result = _(cardName) +
+      ' (' +
+      card.value +
+      '<span class="card-copy-color" data-color="'+card.color+'" data-color-override="'+colorOverride+'"></span>';
+      if (colorOverride) {
+        result += '<span class="card-copy-color-override" data-color="'+card.color+'" data-color-override="'+colorOverride+'"></span>';
+      }
+      result += ')</span>';
+      return result;
     },
 
     place(tplMethodName, object, container) {
@@ -529,6 +536,30 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
       }
 
       return dojo.place(this[tplMethodName](object), container);
+    },
+
+    querySingle(locator) {
+      return dojo.query(locator)[0];
+    },
+
+    waitForDisappearance(locator, timeout = null) {
+      if (!timeout) {
+        timeout = 5000;
+      }
+      this.timeout = timeout;
+
+      return new Promise(
+          function (resolve, _) {
+            (function waitFor() {
+              if (dojo.query(locator).length === 0 || this.timeout < 0) {
+                resolve();
+              } else {
+                this.timeout = this.timeout - 100;
+                setTimeout(waitFor.bind(this, resolve), 100);
+              }
+            }.bind(this)());
+          }.bind(this)
+      );
     },
   });
 });

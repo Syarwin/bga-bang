@@ -1,6 +1,8 @@
 <?php
 namespace BANG\Models;
 
+use BANG\Managers\Players;
+
 /**
  * EventCard:  class to handle blue cards
  *
@@ -117,20 +119,93 @@ class AbstractEventCard implements \JsonSerializable
   /**
    * @return boolean
    */
-  public function isResurrectionEffect()
+  public function isResurrectionEffect($player = null)
   {
     return false;
   }
 
   /**
+   * @return boolean
+   */
+  public function isPhaseOneSpecialDraw()
+  {
+    return false;
+  }
+
+  /**
+   * @param string $requestedLocation
+   * @return string
+   */
+  public function getDrawCardsLocation($requestedLocation)
+  {
+    return $requestedLocation;
+  }
+
+  /**
+   * @return boolean
+   */
+  public function isDistanceForcedToOne()
+  {
+    return false;
+  }
+
+  /**
+   * @return boolean
+   */
+  public function isIgnoreCardsInPlay()
+  {
+    return false;
+  }
+
+  /**
+   * @return boolean
+   */
+  public function isAimingCards()
+  {
+    return false;
+  }
+
+  /**
+   * @return boolean
+   */
+  public function isBangCouldBePlayedWithAnotherBang()
+  {
+    return false;
+  }
+
+  /**
+   * @return boolean
+   */
+  public function isCanPlayBlueGreenCards()
+  {
+    return true;
+  }
+
+  /**
+   * @return boolean
+   */
+  public function isAllowPlayerPhaseOne()
+  {
+    return true;
+  }
+
+  /**
+   * @param Player $player
+   * @return void
+   */
+  public function drawCardsPhaseOne($player)
+  {}
+
+  /**
    * @return array
    */
-  public function getPhaseOneRules()
+  public function getRules()
   {
     return [
       RULE_ABILITY_AVAILABLE => $this->isAbilityAvailable(),
       RULE_BEER_AVAILABLE => $this->isBeerAvailable(),
       RULE_BANGS_AMOUNT_LEFT => $this->getBangsAmount(),
+      RULE_PHASE_ONE_EVENT_SPECIAL_DRAW => $this->isPhaseOneSpecialDraw(),
     ];
   }
 

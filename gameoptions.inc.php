@@ -74,7 +74,22 @@ $game_options = [
         [ 'name' => totranslate('High Noon'),
           'tmdisplay' => totranslate('High Noon expansion'),
           'description' => totranslate('High Noon expansion'),
-          'premium' => true],
+          'premium' => true,
+        ],
+      OPTION_FISTFUL_OF_CARDS_ONLY =>
+        [ 'name' => totranslate('A Fistful Of Cards'),
+          'tmdisplay' => totranslate('A Fistful Of Cards expansion'),
+          'description' => totranslate('A Fistful Of Cards expansion'),
+          'premium' => true,
+          'beta' => true,
+        ],
+      OPTION_HIGH_NOON_AND_FOC =>
+        [ 'name' => totranslate('High Noon + A Fistful Of Cards'),
+          'tmdisplay' => totranslate('High Noon + A Fistful Of Cards'),
+          'description' => totranslate('Both High Noon and A Fistful Of Cards expansions. 13 random event cards will be used'),
+          'premium' => true,
+          'beta' => true,
+        ],
     ],
   ],
 
@@ -98,6 +113,50 @@ $game_options = [
           'value' => [OPTION_HIGH_NOON_ONLY]
         ]
       ]
+  ],
+
+  OPTION_FISTFUL_OF_CARDS_EXPANSION => [
+    'name' => totranslate('A Fistful Of Cards expansion'),
+    'default' => OPTION_FISTFUL_OF_CARDS_NO_DEAD_MAN,
+    'values' => [
+      OPTION_FISTFUL_OF_CARDS_NO_DEAD_MAN =>
+        [ 'name' => totranslate('Without Dead Man'),
+          'tmdisplay' => totranslate('Without Dead Man'),
+          'description' => totranslate('14 A Fistful Of Cards event cards without a Dead Man one') ],
+      OPTION_FISTFUL_OF_CARDS_WITH_DEAD_MAN =>
+        [ 'name' => totranslate('With Dead Man'),
+          'tmdisplay' => totranslate('With Dead Man'),
+          'description' => totranslate('15 A Fistful Of Cards event cards') ],
+    ],
+    'displaycondition' => [
+      [
+        'type' => 'otheroption',
+        'id' => OPTION_EXPANSIONS,
+        'value' => [OPTION_FISTFUL_OF_CARDS_ONLY]
+      ]
+    ]
+  ],
+
+  OPTION_HIGH_NOON_AND_FOC_EXPANSION => [
+    'name' => totranslate('High Noon + A Fistful Of Cards expansions'),
+    'default' => OPTION_BOTH_EVENTS_NO_GHOSTS,
+    'values' => [
+      OPTION_BOTH_EVENTS_NO_GHOSTS =>
+        [ 'name' => totranslate('No Dead Man, no Ghost Town'),
+          'tmdisplay' => totranslate('No Dead Man, no Ghost Town'),
+          'description' => totranslate('13 random event cards, excluding either Dead Man or Ghost Town') ],
+      OPTION_BOTH_EVENTS_WITH_GHOSTS =>
+        [ 'name' => totranslate('Include Dead Man and Ghost Town'),
+          'tmdisplay' => totranslate('Include Dead Man and Ghost Town'),
+          'description' => totranslate('13 event cards from both expansions') ],
+    ],
+    'displaycondition' => [
+      [
+        'type' => 'otheroption',
+        'id' => OPTION_EXPANSIONS,
+        'value' => [OPTION_HIGH_NOON_AND_FOC]
+      ]
+    ]
   ],
 
   OPTION_CHAR_1 => [

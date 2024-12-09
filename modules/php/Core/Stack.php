@@ -153,6 +153,18 @@ class Stack
     Stack::set($stack);
   }
 
+  /**
+   * @param string $type
+   */
+  public static function removeAllAtomsWithState($state)
+  {
+    $stack = Stack::get();
+    Utils::filter($stack, function ($atom) use ($state) {
+      return $atom['state'] !== $state;
+    });
+    Stack::set($stack);
+  }
+
   private static function get() {
     return Globals::getStack();
   }
@@ -305,7 +317,6 @@ class Stack
       }
     }
     if ($ctxIndex == -1) {
-      debug_print_backtrace();
       throw new \BgaVisibleSystemException('Class Stack: ctxIndex == -1. Please report this to BGA bug tracker');
     }
     return $ctxIndex;
@@ -315,7 +326,7 @@ class Stack
   {
     $stack = Stack::get();
     $atomIndex = Stack::getFirstAtomIndexByState(ST_REACT);
-    if ($missedNeeded == 0) {
+    if ($missedNeeded === 0) {
       Stack::unsuspendNext(ST_REACT);
       if (Stack::getCtx()['state'] != ST_REACT) {
         array_splice($stack, $atomIndex, 1);
@@ -328,6 +339,17 @@ class Stack
       $atom['used'] = $used;
       array_splice($stack, $atomIndex, 0, [$atom]);
     }
+    Stack::set($stack);
+  }
+
+  // TODO: Think about refactoring methods below and above.
+  // Maybe it's worth to create a common storage instead to share info between states?
+  public static function updatePhaseOneAtomAfterAction($cardsDrawnIds)
+  {
+    $stack = Stack::get();
+    $atom = array_splice($stack, 1, 1)[0];
+    $atom['cardsDrawnIds'] = $cardsDrawnIds;
+    array_splice($stack, 1, 0, [$atom]);
     Stack::set($stack);
   }
 }

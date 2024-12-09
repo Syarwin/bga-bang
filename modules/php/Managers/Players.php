@@ -98,6 +98,7 @@ class Players extends \BANG\Helpers\DB_Manager
         $sheriff = $pId;
       }
       $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, $bullets, $role, $characterId, $altCharacterId, $charChosen, 0];
+      // BangDebug: leave 1 HP on game start
 //      $values[] = [$pId, $color, $canal, $name, $avatar, $bullets, 1, $role, $characterId, $altCharacterId, $charChosen, 0];
       if ($charChosen) {
         Cards::deal($pId, $bullets);
@@ -109,20 +110,9 @@ class Players extends \BANG\Helpers\DB_Manager
     self::getGame()->reattributeColorsBasedOnPreferences($players, $gameInfos['player_colors']);
     self::getGame()->reloadPlayersBasicInfos();
 
-    // TODO : remove
-    if (false) {
-      /*
-      Cards::dealCard($sheriff, CARD_GATLING);
-      Cards::dealCard($sheriff, CARD_BARREL);
-      Cards::dealCard($sheriff, CARD_INDIANS, 1);
-       Cards::dealCard($sheriff, CARD_INDIANS);
-       Cards::dealCard($sheriff, CARD_REMINGTON);
-       Cards::dealCard($sheriff, CARD_DYNAMITE);
-     	//Cards::dealCard($sheriff, CARD_JAIL, 1);
-       */
-    }
-
     self::getGame()->reloadPlayersBasicInfos();
+    // BangDebug: on game start Sheriff would be the second player
+    // $sheriff = Players::getPreviousId(Players::get($sheriff));
     return $sheriff;
   }
 
@@ -144,6 +134,10 @@ class Players extends \BANG\Helpers\DB_Manager
     return self::DB()->get(false);
   }
 
+  /**
+   * @param int|null $pId
+   * @return Player
+   */
   public static function get($pId = null)
   {
     $pId = $pId ?: self::getActiveId();
@@ -152,6 +146,9 @@ class Players extends \BANG\Helpers\DB_Manager
       ->getSingle();
   }
 
+  /**
+   * @return Player
+   */
   public static function getActive()
   {
     return self::get();
@@ -176,7 +173,7 @@ class Players extends \BANG\Helpers\DB_Manager
 
   public static function getDistances()
   {
-    return self::getLivingPlayers()->map(function ($player) {
+    return self::getLivingPlayers()->map(function (Player $player) {
       return $player->getDistances();
     });
   }
@@ -275,23 +272,26 @@ class Players extends \BANG\Helpers\DB_Manager
 
   /**
    * returns an array of the ids of all living players
+   * @param int $exceptId
    * @return Collection
    */
-  public static function getLivingPlayers($except = null)
+  public static function getLivingPlayers($exceptId = null)
   {
-    $playerIds = self::getLivingPlayerIdsStartingWith(null, false, $except);
+    $playerIds = self::getLivingPlayerIdsStartingWith(null, false, $exceptId);
     return self::idsArrayToCollection($playerIds);
   }
 
   /**
+   * @param Player|null $player
+   * @param bool $includeGhosts
+   * @param int|null $exceptId
    * @return array
    */
-  public static function getLivingPlayerIdsStartingWith($player, $includeGhosts = false, $except = null)
+  public static function getLivingPlayerIdsStartingWith($player, $includeGhosts = false, $exceptId = null)
   {
     $and = '';
-    if ($except != null) {
-      $ids = is_array($except) ? $except : [$except];
-      $and = " AND player_id NOT IN ('" . implode("','", $ids) . "')";
+    if ($exceptId !== null) {
+      $and = " AND player_id NOT IN ('" . implode("','", [$exceptId]) . "')";
     }
     $orderByPlayer = $player ? "player_no < {$player->getNo()}, " : '';
     $includeGhostsSqlString = $includeGhosts ? '' : ' AND `player_unconscious` != 1';
@@ -306,11 +306,13 @@ class Players extends \BANG\Helpers\DB_Manager
 
   /**
    * @param Player $player
+   * @param bool $includeGhosts
+   * @param int|null $exceptId
    * @return Collection
    */
-  public static function getLivingPlayersStartingWith($player)
+  public static function getLivingPlayersStartingWith($player, $includeGhosts = false, $exceptId = null)
   {
-    $playerIds = self::getLivingPlayerIdsStartingWith($player);
+    $playerIds = self::getLivingPlayerIdsStartingWith($player, $includeGhosts, $exceptId);
     return self::idsArrayToCollection($playerIds);
   }
 
@@ -330,7 +332,7 @@ class Players extends \BANG\Helpers\DB_Manager
   /**
    * @param Player $player
    * @param boolean $includeGhosts
-   * @return Player
+   * @return int
    */
   public static function getNextId($player, $includeGhosts = false)
   {

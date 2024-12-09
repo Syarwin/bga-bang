@@ -8,31 +8,73 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
      * Main state of game : active player can play cards from his hand
      */
     onEnteringStatePlayCard(args) {
-      // TODO : do it on server's side
+      dojo.query('#hand .bang-card').removeClass('selected');
       var cards = args._private.cards.filter((card) => card.options != null);
-      this.makeCardSelectable(cards, 'playCard');
+      this.waitForDisappearance('.slide').then(() => {
+        this.makeCardSelectable(cards, 'playCard');
+      });
     },
 
     /*
      * Triggered whenever a player clicked on a selectable card to play
      */
     onClickCardPlayCard(card) {
-      dojo.query('#hand .bang-card').removeClass('selectable').addClass('unselectable');
+      dojo.query('#hand .bang-card').removeClass('selectable').removeClass('mustplay').addClass('unselectable');
       dojo.removeClass('bang-card-' + card.id, 'unselectable');
       dojo.addClass('bang-card-' + card.id, 'selected');
-      this._selectedCard = card;
-
-      // What kind of target ?
-      let TARGET_NONE = 0,
-        TARGET_CARD = 1,
-        TARGET_PLAYER = 2;
-      if (card.options.target_type == TARGET_NONE) {
-        this.onSelectOption();
-      } else if (card.options.target_type == TARGET_PLAYER) {
-        this.makePlayersSelectable(card.options.targets);
-      } else if (card.options.target_type == TARGET_CARD) {
-        this.makePlayersCardsSelectable(card.options.targets);
+      if (this._selectedCard) {
+        dojo.removeClass('bang-card-' + this._selectedCard.id, 'unselectable');
+        dojo.addClass('bang-card-' + this._selectedCard.id, 'selected');
+      } else {
+        this._selectedCard = card;
       }
+
+      if (!!card.options.with_another_card?.strict && !this._isToSelectSecondCard) {
+        this.makeCardsSelectable(card.options.with_another_card.cards);
+        this.doSomeCleanupAndAddUndo(_('You must choose a second card to play with'));
+        this._isToSelectSecondCard = true;
+      } else {
+        this._selectablePlayers = [];
+        // What kind of target ?
+        let TARGET_NONE = 0,
+            TARGET_CARD = 1,
+            TARGET_PLAYER = 2,
+            TARGET_ALL_CARDS = 3;
+        if (card.options.target_types.includes(TARGET_NONE)) {
+          this.onSelectOption();
+        }
+        if (card.options.target_types.includes(TARGET_PLAYER)) {
+          if (this._isToSelectSecondCard) {
+            this.makePlayersSelectable(card.options.with_another_card?.targets ?? card.options.targets);
+            this._selectableCards = [];
+            this._isToSelectSecondCard = false;
+            this._selectedCardSecond = card;
+          } else {
+            this.makePlayersSelectable(card.options.targets);
+            if (card.options.with_another_card) {
+              this.makeCardsSelectable(card.options.with_another_card.cards);
+              this._isToSelectSecondCard = true;
+            } else if (!card.options.target_types.includes(TARGET_ALL_CARDS)) {
+              this._selectableCards = [];
+            }
+          }
+        }
+        if (card.options.target_types.includes(TARGET_CARD)) {
+          this.makePlayersCardsSelectable(card.options.targets, false, card.options.status_bar_message);
+        }
+        if (card.options.target_types.includes(TARGET_ALL_CARDS)) {
+          const playerIds = Object.keys(this.gamedatas.players).map(Number);
+          const otherPlayerIds = playerIds.filter((id) => id !== this.player_id);
+          this.makePlayersCardsSelectable(otherPlayerIds, true, card.options.status_bar_message);
+        }
+      }
+    },
+
+    makeCardsSelectable(cards) {
+      cards.forEach((card) => {
+        dojo.removeClass('bang-card-' + card.id, 'unselectable');
+        dojo.addClass('bang-card-' + card.id, 'selectable');
+      });
     },
 
     /*
@@ -53,7 +95,11 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
         optionType: this._selectedOptionType,
         optionArg: this._selectedOptionArg,
       };
-      this.takeAction('actPlayCard', data);
+      if (this._selectedCardSecond) {
+        data.secondCardId = this._selectedCardSecond.id;
+      }
+      this._selectedCard = null;
+      this.takeAction('actPlayCard', data, true);
     },
   });
 });

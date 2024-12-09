@@ -12,8 +12,13 @@ class Globals extends \BANG\Helpers\DB_Manager
     'stackCtx' => 'obj', // DO NOT MODIFY, USED BY STACK ENGINE
 
     'gameIsOver' => 'bool',
+    // backward compatibility from XX/06/2024
     'resurrectionIsPossible' => 'bool',
     'roundNumber' => 'int',
+    'vendettaWasUsed' => 'bool',
+    'eliminatedFirstPId' => 'int',
+    'isMustPlayCard' => 'bool',
+    'mustPlayCardId' => 'int',
   ];
 
   protected static $table = 'global_variables';

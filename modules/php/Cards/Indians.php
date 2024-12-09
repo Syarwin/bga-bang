@@ -1,6 +1,6 @@
 <?php
 namespace BANG\Cards;
-use BANG\Managers\Players;
+use BANG\Models\Player;
 
 class Indians extends \BANG\Models\BrownCard
 {
@@ -23,7 +23,11 @@ class Indians extends \BANG\Models\BrownCard
     ];
   }
 
-  /* */
+  /**
+   * @param Player $player
+   * @param array $args
+   * @return void
+   */
 
   public function play($player, $args)
   {

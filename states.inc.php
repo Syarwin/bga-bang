@@ -97,11 +97,25 @@ $machinestates = [
     'action' => 'stNewEvent',
   ],
 
-  ST_RESOLVE_EVENT_EFFECT => [
-    'name' => 'resolveEventEffect',
+  ST_RESOLVE_START_OF_TURN_EVENT_EFFECT => [
+    'name' => 'resolveEventStartOfTurnEffect',
     'description' => '',
     'type' => 'game',
-    'action' => 'stResolveEventEffect',
+    'action' => 'stResolveEventStartOfTurnEffect',
+  ],
+
+  ST_RESOLVE_BEFORE_PHASE_ONE_EVENT_EFFECT => [
+    'name' => 'resolveEventBeforePhaseOneEffect',
+    'description' => '',
+    'type' => 'game',
+    'action' => 'stResolveEventBeforePhaseOneEffect',
+  ],
+
+  ST_RESOLVE_BEFORE_PLAY_CARD_EFFECT => [
+    'name' => 'resolveBeforePlayCardEffect',
+    'description' => '',
+    'type' => 'game',
+    'action' => 'stResolveBeforePlayCardEffect',
   ],
 
   ST_FLIP_CARD => [
@@ -142,7 +156,7 @@ $machinestates = [
     'type' => 'activeplayer',
     'args' => 'argReact',
     'action' => 'stReact',
-    'possibleactions' => ['actReact', 'actPass', 'actUseAbility'],
+    'possibleactions' => ['actReact', 'actPass', 'actUseAbility', 'actPassEndRussianRoulette'],
   ],
 
   ST_SELECT_CARD => [
@@ -217,6 +231,12 @@ $machinestates = [
     'action' => 'stTriggerAbility',
   ],
 
+  ST_DISCARD_BLUE_CARD => [
+    'name' => 'discardBlueCard',
+    'type' => 'game',
+    'action' => 'stDiscardBlueCard',
+  ],
+
   ST_CHOOSE_AND_DISCARD_BLUE_CARD => [
     'name' => 'chooseAndDiscardBlueCard',
     'description' => clienttranslate('${actplayer} must discard one blue card in front of them'),
@@ -226,10 +246,47 @@ $machinestates = [
     'possibleactions' => ['actDiscardBlue'],
   ],
 
-  ST_DISCARD_BLUE_CARD => [
-    'name' => 'discardBlueCard',
+  ST_BLOOD_BROTHERS => [
+    'name' => 'bloodBrothers',
+    'description' => clienttranslate('${actplayer} may lose one life point to give to another player'),
+    'descriptionmyturn' => clienttranslate('${you} may lose one life point to give to another player'),
+    'type' => 'activeplayer',
+    'args' => 'argBloodBrothers',
+    'action' => 'stBloodBrothers',
+    'possibleactions' => ['actReactBloodBrothers'],
+  ],
+
+  ST_HARD_LIQUOR => [
+    'name' => 'hardLiquor',
+    'description' => clienttranslate('${actplayer} may skip his drawing phase 1 to regain 1 life point'),
+    'descriptionmyturn' => clienttranslate('${you} may skip his drawing phase 1 to regain 1 life point'),
+    'type' => 'activeplayer',
+    'args' => 'argHardLiquor',
+    'possibleactions' => ['actHardLiquorGainHP', 'actDeclineHardLiquor'],
+  ],
+
+  ST_RANCH => [
+    'name' => 'ranch',
+    'description' => clienttranslate('${actplayer} may discard any number of cards from his hand to draw the same number of cards from the deck'),
+    'descriptionmyturn' => clienttranslate('${you} may discard any number of cards from his hand to draw the same number of cards from the deck'),
+    'type' => 'activeplayer',
+    'args' => 'argRanch',
+    'possibleactions' => ['actDiscardCardsRanch', 'actIgnoreRanch'],
+  ],
+
+  ST_PEYOTE => [
+    'name' => 'peyote',
+    'description' => clienttranslate('${actplayer} must guess the suit of the card they draw'),
+    'descriptionmyturn' => clienttranslate('${you} try to guess the suit of the card you draw'),
+    'type' => 'activeplayer',
+    'args' => 'argPeyote',
+    'possibleactions' => ['actPeyoteGuess'],
+  ],
+
+  ST_RESOLVE_END_OF_TURN_EVENTS => [
+    'name' => 'resolveEndOfTurnEventEffects',
     'type' => 'game',
-    'action' => 'stDiscardBlueCard',
+    'action' => 'stResolveEndOfTurnEventEffects',
   ],
 
   ST_END_OF_TURN => [

@@ -1,10 +1,10 @@
 <?php
 namespace BANG\Characters;
+use BANG\Core\Globals;
 use BANG\Core\Notifications;
 use BANG\Managers\Cards;
 use BANG\Managers\Rules;
 
-// TODO : make its ability available (almost) at any time
 class SidKetchum extends \BANG\Models\Player
 {
   public function __construct($row = null)
@@ -24,7 +24,7 @@ class SidKetchum extends \BANG\Models\Player
     return $t;
   }
 
-  public function getHandOptions()
+  public function getHandOptions($lastCardOnly = false)
   {
     return $this->addAbility(parent::getHandOptions());
   }
@@ -41,9 +41,12 @@ class SidKetchum extends \BANG\Models\Player
       ['player_name' => $this->name]
     );
 
-    $cards = Cards::getMany($args);
     Cards::discardMany($args);
-    Notifications::discardedCards($this, $cards, false, $args);
+    if (Globals::getIsMustPlayCard() && in_array(Globals::getMustPlayCardId(), $args)) {
+      Globals::setIsMustPlayCard(false);
+      Globals::setMustPlayCardId(0);
+    }
+    Notifications::discardedCards($this, $args);
     $this->gainLife();
     $this->addRevivalAtomOrEliminate();
   }

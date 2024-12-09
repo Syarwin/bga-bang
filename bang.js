@@ -35,6 +35,10 @@ define([
   g_gamethemeurl + 'modules/js/States/ChooseCharacterTrait.js',
   g_gamethemeurl + 'modules/js/States/DiscardEndOfTurnTrait.js',
   g_gamethemeurl + 'modules/js/States/DiscardBlueCardTrait.js',
+  g_gamethemeurl + 'modules/js/States/BloodBrothersTrait.js',
+  g_gamethemeurl + 'modules/js/States/HardLiquorTrait.js',
+  g_gamethemeurl + 'modules/js/States/RanchTrait.js',
+  g_gamethemeurl + 'modules/js/States/PeyoteTrait.js',
 
   g_gamethemeurl + 'modules/js/EventTrait.js',
   g_gamethemeurl + 'modules/js/CardTrait.js',
@@ -55,6 +59,10 @@ define([
       bang.discardBlueCardTrait,
       bang.eventTrait,
       bang.dialogManager,
+      bang.bloodBrothersTrait,
+      bang.hardLiquorTrait,
+      bang.ranchTrait,
+      bang.peyoteTrait,
     ],
     {
       /*
@@ -69,6 +77,8 @@ define([
         this._selectedOptionType = null;
         this._selectedOptionArg = null;
         this._dial = {};
+        this._isToSelectSecondCard = false;
+        this._selectedCardSecond = null;
 
         // States that need the player to be active to be entered
         this._activeStates = [
@@ -154,9 +164,10 @@ define([
         dojo.place(this.format_block('jstpl_table', { deckCount: gamedatas.deckCount }), 'board');
         // Adding events cards
         if (gamedatas.eventsDeckCount !== undefined) {
-          dojo.place(this.format_block('jstpl_events_row', { eventsDeckCount: gamedatas.eventsDeckCount }), 'table-container');
+          dojo.place(this.format_block('jstpl_events_row', {}), 'table-container');
           dojo.place(this.format_block('jstpl_noEvents', { noEventsLexeme: _('No active events') }), 'eventActive');
           dojo.addClass('board', 'events');
+          this.updateEventCount(gamedatas.eventsDeckCount);
         }
         if (gamedatas.discard) {
           // gamedatas.discard.extraClass = ' '; //empty space is important
@@ -195,7 +206,7 @@ define([
         debug('Update action buttons: ' + stateName, args);
         this.updatePlayersStatus(); // Called when a player go inactive
 
-        if (stateName == 'selectCard' && (args.cards.length > 0 || args._private)) {
+        if (stateName === 'selectCard' && (args.cards.length > 0 || args._private)) {
           this.addActionButton('buttonShowCards', _('Show cards'), () => this.dialogSelectCard(), null, false, 'blue');
         }
 
@@ -203,49 +214,52 @@ define([
           // Make sure the player is active
           return;
 
-        if (stateName == 'chooseCharacter') {
+        if (stateName === 'chooseCharacter') {
           this.addActionButton('buttonShowCharacters', _('Show characters'), () => this.dialogChooseCharacter(), null, false, 'blue');
         }
 
-        if (stateName == 'playCard') {
+        if (stateName === 'playCard') {
           if (args._private && args._private.character != null && this._selectedCard == null)
             this.makeCharacterAbilityUsable(args._private.character);
 
           this.addActionButton('buttonEndTurn', _('End of turn'), 'onClickEndOfTurn', null, false, 'blue');
         }
 
-        if (stateName == 'discardExcess')
+        if (stateName === 'discardExcess')
           this.addActionButton('buttonCancelEnd', _('Cancel'), 'onClickCancelEndTurn', null, false, 'gray');
 
-        if (stateName == 'react') {
-          if (args.type == 'attack')
+        if (stateName === 'react') {
+          if (args.type === 'attack' || args.type === 'russian_roulette') {
+            const buttonText = args.type === 'attack' ? _('Pass and lose life point') : _('Pass and lose 2 life points');
+            const callback = args.type === 'attack' ? this.onClickPass.bind(this) : this.onClickPassRussianRoulette.bind(this);
             this.addActionButton(
-              'buttonSkip',
-              _('Pass and lose life point'),
-              () => this.onClickPass(),
-              null,
-              false,
-              'red',
+                'buttonSkip',
+                buttonText,
+                () => callback(),
+                null,
+                false,
+                'red',
             );
+          }
           else this.addActionButton('buttonSkip', _('Pass'), () => this.onClickPass(), null, false, 'blue');
 
           if (
             args._private &&
             args._private.character != null &&
             this._selectedCard == null &&
-            this._selectedCards.length == 0
+            this._selectedCards.length === 0
           )
             this.makeCharacterAbilityUsable(args._private.character);
 
           // Button for barrel
           args._private.cards.forEach((card) => {
-            if ($('bang-card-' + card.id).parentNode.id != 'hand-cards' && showBarrel) {
+            if ($('bang-card-' + card.id).parentNode.id !== 'hand-cards' && showBarrel) {
               this.addPrimaryActionButton('buttonUseBarrel', _('Use barrel'), () => this.onClickCardSelectReact(card));
             }
           });
         }
 
-        if (stateName == 'preEliminate') {
+        if (stateName === 'preEliminate') {
           this.addActionButton(
             'buttonDefaultDiscardExcess',
             _('Use default order'),
@@ -256,8 +270,7 @@ define([
           );
         }
 
-
-        if (stateName == 'vicePenalty') {
+        if (stateName === 'vicePenalty') {
           this.addActionButton(
             'buttonDefaultDiscardVicePenalty',
             _('Use default order'),
@@ -284,16 +297,15 @@ define([
       },
 
       onClickUseAbility() {
-        //let TARGET_NONE = 0, TARGET_CARDS = 3;
         let SID_KETCHUM = 9,
           JOURDONNAIS = 13;
         this._selectedCards = [];
-        if (this._useAbilityOption == JOURDONNAIS) {
+        if (this._useAbilityOption === JOURDONNAIS) {
           this.onClickConfirmUseAbility();
-        } else if (this._useAbilityOption == SID_KETCHUM) {
+        } else if (this._useAbilityOption === SID_KETCHUM) {
           // Sid Ketchum power
           var cards = dojo.query('#hand .bang-card').map((card) => {
-            return { id: dojo.attr(card, 'data-id') };
+            return { id: parseInt(dojo.attr(card, 'data-id')) };
           });
 
           this._amount = 2;
@@ -414,8 +426,10 @@ define([
         this._selectedOptionArg = null;
         this._isSelectableDeck = false;
         this._isSelectableDiscard = false;
+        this._isToSelectSecondCard = false;
+        this._selectedCardSecond = null;
         dojo.query('.bang-card').removeClass('unselectable selectable selected');
-        dojo.query('.bang-player').removeClass('selectable');
+        dojo.query('.bang-player .player-info').removeClass('selectable');
         dojo.removeClass('deck', 'selectable');
         dojo.removeClass('discard', 'selectable');
 

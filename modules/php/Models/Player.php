@@ -1,11 +1,12 @@
 <?php
 namespace BANG\Models;
 use BANG\Core\Globals;
+use BANG\Helpers\Collection;
+use BANG\Helpers\GameOptions;
 use BANG\Managers\Cards;
 use BANG\Managers\EventCards;
 use BANG\Managers\Players;
 use BANG\Core\Notifications;
-use BANG\Core\Log;
 use BANG\Core\Stack;
 use BANG\Managers\Rules;
 use bang;
@@ -146,16 +147,41 @@ class Player extends \BANG\Helpers\DB_Manager
     return Cards::getHand($this->id);
   }
 
+  /**
+   * @return AbstractCard
+   */
+  public function getLastCardFromHand()
+  {
+    return $this->getHand()->last();
+  }
+
+  /**
+   * @return Collection
+   */
   public function getCardsInPlay()
   {
     return Cards::getInPlay($this->id);
   }
 
+  /**
+   * @return Collection
+   */
   public function getBlueCardsInPlay()
   {
     return $this->getCardsInPlay()->filter(function ($card) {
       return $card->getColor() === BLUE;
     });
+  }
+
+  /**
+   * @return array
+   */
+  public function getMissedWithOptions()
+  {
+    $allMissed = $this->getHand()->filter(function ($card) {
+      return $card->getType() === CARD_MISSED;
+    });
+    return $this->addOptionsTo($allMissed, false);
   }
 
   public function countHand()
@@ -255,16 +281,31 @@ class Player extends \BANG\Helpers\DB_Manager
    ********** Utils *********
    *************************/
 
-  /*
+  /**
    * Draw $amount card from deck and notify them
+   * @param int $amount
+   * @return Collection|null
    */
-  public function drawCards($amount)
+  public function drawCards($amount, $publicly = false)
   {
     if ($amount > 0) {
-      $cards = Cards::deal($this->id, $amount);
-      Notifications::drawCards($this, $cards);
+      $location = Rules::getDrawOrDiscardCardsLocation(LOCATION_DECK);
+      $cards = Cards::deal($this->id, $amount, $location);
+      if ($cards->count() > 0) {
+        Notifications::drawCards($this, $cards, $location === LOCATION_DISCARD || $publicly, $location);
+      }
+      if ($location === LOCATION_DISCARD && $cards->count() !== $amount) {
+        Notifications::showMessageToAll(
+          clienttranslate('The discard was empty while drawing so ${player_name} drew remaining cards from the deck'),
+          [ 'player' => $this ],
+        false
+        );
+        $cards = Cards::deal($this->id, $amount - $cards->count());
+        Notifications::drawCards($this, $cards);
+      }
       $this->onChangeHand();
     }
+    return $cards ?? null;
   }
 
   /*
@@ -420,7 +461,7 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function getOrderedOtherPlayers()
   {
-    return Players::getLivingPlayerIdsStartingWith($this, false, [$this->id]);
+    return Players::getLivingPlayerIdsStartingWith($this, false, $this->id);
   }
 
   /*
@@ -443,22 +484,29 @@ class Player extends \BANG\Helpers\DB_Manager
   /**
    * returns the current distance to an enemy from the view of the enemy
    * should not be called on the player checking for targets but on the other players
+   * @return int
    */
   public function getDistanceTo($enemy)
   {
-    $positions = Players::getPlayerPositions();
-    $pos1 = $positions[$this->getId()];
-    $pos2 = $positions[$enemy->getId()];
-    $d = abs($pos2 - $pos1);
-    $dist = min($d, count($positions) - $d);
-    foreach ($enemy->getCardsInPlay() as $card) {
-      if (($card->getEffect()['type'] ?? null) == RANGE_DECREASE) {
-        $dist--;
-      }
+    if (Rules::isDistanceForcedToOne()) {
+      $dist = 1;
+    } else {
+      $positions = Players::getPlayerPositions();
+      $pos1 = $positions[$this->getId()];
+      $pos2 = $positions[$enemy->getId()];
+      $d = abs($pos2 - $pos1);
+      $dist = min($d, count($positions) - $d);
     }
-    foreach ($this->getCardsInPlay() as $card) {
-      if (($card->getEffect()['type'] ?? null) == RANGE_INCREASE) {
-        $dist++;
+    if (!Rules::isIgnoreCardsInPlay()) {
+      foreach ($enemy->getCardsInPlay() as $card) {
+        if (($card->getEffect()['type'] ?? null) == RANGE_DECREASE) {
+          $dist--;
+        }
+      }
+      foreach ($this->getCardsInPlay() as $card) {
+        if (($card->getEffect()['type'] ?? null) == RANGE_INCREASE) {
+          $dist++;
+        }
       }
     }
     return $dist;
@@ -469,6 +517,9 @@ class Player extends \BANG\Helpers\DB_Manager
     return $enemy->getDistanceTo($this) <= $range;
   }
 
+  /**
+   * @return int[]
+   */
   public function getDistances()
   {
     $dist = [];
@@ -507,28 +558,31 @@ class Player extends \BANG\Helpers\DB_Manager
   public function getRange()
   {
     $weapon = $this->getWeapon();
-    return is_null($weapon) ? 1 : $weapon->getEffect()['range'];
+    return is_null($weapon) || Rules::isIgnoreCardsInPlay() ? 1 : $weapon->getEffect()['range'];
   }
 
   public function hasUnlimitedBangs()
   {
     $weapon = $this->getWeapon();
-    return !is_null($weapon) && $weapon->getType() == CARD_VOLCANIC;
+    return !Rules::isIgnoreCardsInPlay() && !is_null($weapon) && $weapon->getType() === CARD_VOLCANIC;
   }
 
   /*
    * return the list of bang cards (for indians and duel for instance)
    */
-  public function getBangCards()
+  public function getBangCards($options = [])
   {
+    if (empty($options)) {
+      $options = ['target_types' => [TARGET_NONE]];
+    }
     $cards = $this->getHand()
       ->filter(function ($card) {
         return $card->getType() == CARD_BANG;
       })
-      ->map(function ($card) {
+      ->map(function ($card) use ($options) {
         return [
           'id' => $card->getId(),
-          'options' => ['target_type' => TARGET_NONE],
+          'options' => $options,
           'amount' => 1,
         ];
       })
@@ -579,20 +633,20 @@ class Player extends \BANG\Helpers\DB_Manager
         return [
           'id' => $card->getId(),
           'amount' => $missedNeeded,
-          'options' => ['target_type' => TARGET_NONE],
+          'options' => ['target_types' => [TARGET_NONE]],
         ];
       })
       ->toArray();
 
     // Defensive cards in play
     $card = $this->getCardsInPlay()->reduce(function ($barrel, $card) {
-      return $card->getType() == CARD_BARREL && !$card->wasPlayed() ? $card : $barrel;
+      return $card->getType() === CARD_BARREL && !$card->wasPlayed() && !Rules::isIgnoreCardsInPlay() ? $card : $barrel;
     }, null);
     if (!is_null($card)) {
       $res[] = [
         'id' => $card->getId(),
         'amount' => 1,
-        'options' => ['target_type' => TARGET_NONE],
+        'options' => ['target_types' => [TARGET_NONE]],
       ];
     }
 
@@ -659,31 +713,54 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function getHandOptions()
   {
-    $options = $this->getHand()
-      ->map(function ($card) {
-        return [
-          'id' => $card->getId(),
-          'options' => $card->getPlayOptions($this),
-          'type' => $card->getType(),
-        ];
-      })
-      ->filter(function ($card) {
-        return !is_null($card['options']);
-      });
-
     return [
-      'cards' => $options->toArray(),
+      'cards' => $this->addOptionsTo($this->getHand()),
       'character' => null,
     ];
   }
 
   /**
+   * Calamity Janet returns Bang + Missed here
+   * @return int[]
+   */
+  public function getBangCardTypes()
+  {
+    return [CARD_BANG];
+  }
+
+  /**
+   * addOptionsTo: adds cards options in order to send them to frontend
+   * @param Collection $cards
+   * @return array
+   */
+  public function addOptionsTo($cards, $filterNullOptions = true)
+  {
+    $mustPlayCardId = GameOptions::isEvents() && Globals::getIsMustPlayCard() ? Globals::getMustPlayCardId() : null;
+    $cards = $cards
+      ->map(function ($card) use ($mustPlayCardId) {
+        return [
+          'id' => $card->getId(),
+          'options' => $card->getPlayOptions($this),
+          'type' => $card->getType(),
+          'mustPlay' => $card->getId() === $mustPlayCardId,
+        ];
+      });
+    if ($filterNullOptions) {
+      $cards = $cards->filter(function ($card) {
+        return !is_null($card['options']);
+      });
+    }
+    return $cards->toArray();
+  }
+
+  /**
    * playCard: play a card given by id with args to specify the chosen option
+   * @param AbstractCard $card
+   * @param array $args
    */
   public function playCard($card, $args)
   {
     Notifications::cardPlayed($this, $card, $args);
-    Log::addCardPlayed($this, $card, $args);
     $card->play($this, $args);
     Notifications::updateDistances();
     $this->onChangeHand();
@@ -691,33 +768,62 @@ class Player extends \BANG\Helpers\DB_Manager
 
   /**
    * attack : performs an attack on all given players
+   * @param AbstractCard $card
+   * @param int[] $playerIds
+   * @param int | null $targetCardId
+   * @param boolean $secondMissedNeeded
+   * @return void
    */
-  public function attack($card, $playerIds)
+  public function attack($card, $playerIds, $targetCardId = null, $secondMissedNeeded = false)
   {
-    $atom = $this->getReactAtomForAttack($card);
+    $atom = $this->getReactAtomForAttack($card, $targetCardId, $secondMissedNeeded);
     foreach (array_reverse($playerIds) as $pId) {
       $atom['pId'] = $pId;
       Stack::insertOnTop($atom);
     }
   }
 
-  public function getReactAtomForAttack($card)
+  /**
+   * @param AbstractCard $card
+   * @param int | null $targetCardId
+   * @param boolean $secondMissedNeeded
+   * @return array
+   */
+  public function getReactAtomForAttack($card, $targetCardId, $secondMissedNeeded)
   {
-    $src = $card->getName();
+    $srcName = $card->getName();
     if ($this->character == CALAMITY_JANET && $card->getType() == CARD_MISSED) {
-      $src = clienttranslate('Missed used as a BANG! by Calamity Janet');
+      $srcName = clienttranslate('Missed used as a BANG! by Calamity Janet');
     }
 
-    return Stack::newAtom(ST_REACT, [
-      'type' => 'attack',
-      'msgActive' => clienttranslate('${you} may react to ${src_name}'),
-      'msgWaiting' => clienttranslate('${actplayer} has to react to ${src_name}. You may already select your reaction'),
-      'msgInactive' => clienttranslate('${actplayer} may react to ${src_name}'),
-      'src_name' => $src,
+    if (is_null($targetCardId)) { // Standard shot to player themselves
+      $msgActive = clienttranslate('${you} may react to ${src_name}');
+      $msgInactive = clienttranslate('${actplayer} may react to ${src_name}');
+      $targetCardName = '';
+    } else { // Ricochet to some card in play
+      $targetCard = Cards::get($targetCardId);
+      $msgActive = clienttranslate('${you} may react to ${src_name} ricocheting to ${target_card_name}');
+      $msgInactive = clienttranslate('${actplayer} may react to ${src_name} ricocheting to ${target_card_name}');
+      $targetCardName = $targetCard->getName();
+    }
+
+    $data = [
+      'targetCardId' => $targetCardId,
+      'msgActive' => $msgActive,
+      'msgInactive' => $msgInactive,
+      'src_name' => $srcName,
+      'target_card_name' => $targetCardName,
       'src' => $card->jsonSerialize(),
       'attacker' => $this->id,
       'missedNeeded' => 1,
-    ]);
+    ];
+    if ($secondMissedNeeded) {
+      $data['missedNeeded'] = 2;
+      $data['msgActive'] = clienttranslate('${you} may react to ${src_name} with ${missedNeeded} Missed!');
+      $data['msgInactive'] = clienttranslate('${actplayer} may react to ${src_name} with ${missedNeeded} Missed!');
+    }
+
+    return Stack::newAtom(ST_REACT, $data);
   }
 
   /**
@@ -725,17 +831,17 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function react($ids)
   {
-    $ctx = Stack::getCtx();
+    $ctxSrc = Stack::getCtx()['src'];
     // If characterId is set, the player was reacting to its ability, not to a card (eg Kit Carlson)
-    if (isset($ctx['src']['characterId'])) {
+    if (isset($ctxSrc['characterId'])) {
       $this->useAbility($ids);
       return;
     }
 
-    $card = Cards::get($ctx['src']['id']);
+    $attackingCard = Cards::getCardByType($ctxSrc['type']);
     if (is_null($ids)) {
       // PASS
-      return $card->pass($this);
+      return $attackingCard->pass($this);
     } else {
       if (!is_array($ids)) {
         $ids = [$ids];
@@ -743,7 +849,7 @@ class Player extends \BANG\Helpers\DB_Manager
 
       foreach ($ids as $id) {
         $reactionCard = Cards::get($id);
-        $card->react($reactionCard, $this);
+        $attackingCard->react($reactionCard, $this);
         $this->onChangeHand();
         $this->notifyAboutAnotherMissed();
       }
@@ -753,7 +859,7 @@ class Player extends \BANG\Helpers\DB_Manager
   protected function notifyAboutAnotherMissed()
   {
     $nextAtom = Stack::getNextState();
-    $nextAtomIsAttack = isset($nextAtom['type']) && $nextAtom['type'] == 'attack';
+    $nextAtomIsAttack = isset($nextAtom['type']) && $nextAtom['type'] === 'attack';
     $nextAtomMissedNeeded = isset($nextAtom['missedNeeded']) ? $nextAtom['missedNeeded'] : -1;
     $topAtom = Stack::top();
     $topAtomMissedNeeded = isset($topAtom['missedNeeded']) ? $topAtom['missedNeeded'] : -1;
@@ -769,13 +875,15 @@ class Player extends \BANG\Helpers\DB_Manager
    */
   public function prepareSelection($source, $playerIds, $isPrivate, $amountToPick, $toResolveFlipped = false)
   {
-    $src = $source instanceof \BANG\Models\Player ? $source->getCharName() : $source->getName();
+    $src = $source instanceof Player ? $source->getCharName() : $source->getName();
+    $ctx = Stack::getCtx();
     $atom = Stack::newAtom(ST_SELECT_CARD, [
       'src_name' => $src,
       'amountToPick' => $amountToPick,
       'isPrivate' => $isPrivate,
       'toResolveFlipped' => $toResolveFlipped,
       'src' => $source->jsonSerialize(),
+      'storeResult' => isset($ctx['storeResult']) && $ctx['storeResult'],
     ]);
 
     foreach (array_reverse($playerIds) as $pId) {
@@ -806,15 +914,17 @@ class Player extends \BANG\Helpers\DB_Manager
     $this->discardAllCards();
     // Eliminate player
     $forceEliminate = array_key_exists('forceEliminate', $ctx) && $ctx['forceEliminate'];
-    $isResurrectionEventActive = EventCards::getActive() && EventCards::getActive()->isResurrectionEffect();
     // Needs to die for good if:
     // 1. Ghost Town / Dead Man have been played before
     // 2. GT is now and this is the end of a ghost's turn
     // 3. Player has already had their turn during GT event which means it's over for this player but might be applied for others
-    if (!Globals::getResurrectionIsPossible() || $forceEliminate || $this->livingStatus === LIVING_DEAD) {
+    if (!EventCards::isResurrectionPossible($this) || $forceEliminate || $this->livingStatus === LIVING_DEAD) {
       bang::get()->eliminatePlayer($this->id);
       $this->eliminated = true;
     } else {
+      if (Globals::getEliminatedFirstPId() === 0) {
+        Globals::setEliminatedFirstPId($this->id);
+      }
       Notifications::playerUnconscious($this);
     }
     $this->save(true);
@@ -850,10 +960,8 @@ class Player extends \BANG\Helpers\DB_Manager
     $hand = $this->getHand();
     $equipment = $this->getCardsInPlay();
     $allCards = $equipment->merge($hand);
-    $allCards->map(function ($card) {
-      Cards::discard($card);
-    });
-    Notifications::discardedCards($this, $allCards, false, $allCards->getIds());
+    Cards::discardMany($allCards);
+    Notifications::discardedCards($this, $allCards->getIds());
     $this->onChangeHand();
   }
 
@@ -926,13 +1034,68 @@ class Player extends \BANG\Helpers\DB_Manager
     self::DB()->update($newParams, $this->id);
   }
 
-  public function resurrect()
+  /**
+   * @param int $hpAmount
+   * @return void
+   */
+  public function resurrect($hpAmount = 0)
   {
-    self::DbQuery("UPDATE player SET `player_unconscious` = 2 WHERE `player_id` = {$this->id}");
+    if ($hpAmount === 0) {
+      $params = ['player_unconscious' => 2];
+    } else {
+      $params = ['player_unconscious' => 0, 'player_hp' => $hpAmount];
+    }
+    $this->hp = $hpAmount;
+    self::DB()->update($params, $this->id);
   }
 
   public function agreeToDisclaimer()
   {
     self::DB()->update(['player_agreed_to_disclaimer' => true], $this->id);
+  }
+
+  /**
+   * @param AbstractCard $card
+   * @return bool
+   */
+  public function isCardPlayable($card)
+  {
+    $handOptions = $this->getHandOptions()['cards'];
+    $playableCardsIds = array_map(function ($card) {
+      return $card['id'];
+    }, $handOptions);
+    if (!in_array($card->getId(), $playableCardsIds)) {
+      return false;
+    }
+
+    $cardOptions = array_values(array_filter($handOptions, function ($cardInHand) use ($card) {
+      return $cardInHand['id'] === $card->getId();
+    }));
+    if (count($cardOptions) === 0) {
+      return false;
+    }
+
+    if (in_array($card->getType(), [CARD_BANG, CARD_PANIC]) && count($cardOptions[0]['options']['targets']) === 0) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * We use this method when isCardPlayable() returned that this card is not playable, so we need a reason
+   * @param AbstractCard $lastCard
+   * @return string
+   */
+  public function getNonPlayabilityReason($lastCardType)
+  {
+    switch ($lastCardType) {
+      case CARD_MISSED:
+        return clienttranslate('Missed! cards could not be played on your turn');
+      case CARD_BANG:
+      case CARD_PANIC:
+        return clienttranslate('distance to all other players is too high');
+      default:
+        return clienttranslate('no reason actually, please report a bug if you see this message');
+    }
   }
 }

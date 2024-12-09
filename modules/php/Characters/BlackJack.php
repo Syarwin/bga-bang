@@ -1,6 +1,7 @@
 <?php
 namespace BANG\Characters;
 use BANG\Core\Notifications;
+use BANG\Core\Stack;
 use BANG\Managers\Cards;
 use BANG\Managers\Rules;
 
@@ -19,11 +20,12 @@ class BlackJack extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function drawCardsAbility()
+  public function drawCardsPhaseOne()
   {
     // Draw one visible
-    $cards = Cards::deal($this->id, 1);
-    Notifications::drawCards($this, $cards, true);
+    $location = Rules::getDrawOrDiscardCardsLocation(LOCATION_DECK);
+    $cards = Cards::deal($this->id, 1, $location);
+    Notifications::drawCards($this, $cards, true, $location);
 
     // If heart or diamond => draw again a private one
     $card = $cards->first();
@@ -37,6 +39,13 @@ class BlackJack extends \BANG\Models\Player
       Rules::incrementPhaseOneDrawEndAmount();
     }
     $this->onChangeHand();
+
+    $ctx = Stack::getCtx();
+    if (isset($ctx['storeResult']) && $ctx['storeResult']) {
+      // We put 0 as a first id because we know the only card which needs this is Law Of The West,
+      // and it won't care about the first one but just a second. If this ever changes - we need a real first card id
+      Stack::updatePhaseOneAtomAfterAction([0, $card->getId()]);
+    }
   }
 
   public function getPhaseOneRules($defaultAmount, $isAbilityAvailable = true)
