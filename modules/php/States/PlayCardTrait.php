@@ -47,13 +47,21 @@ trait PlayCardTrait
     $card = Cards::get($cardId);
     $player = Players::getActive();
     $mustPlayCardId = Globals::getMustPlayCardId();
-    if (Globals::getIsMustPlayCard() &&$mustPlayCardId !== 0) {
+    if (Globals::getIsMustPlayCard() && $mustPlayCardId !== 0) {
       if ($cardId === $mustPlayCardId) {
         Globals::setMustPlayCardId(0);
         Globals::setIsMustPlayCard(false);
       } else {
         $cardType = $card->getType();
         $mustPlayCardType = Cards::get($mustPlayCardId)->getType();
+        if ($player->getCharacter() === CALAMITY_JANET) {
+          if ($cardType === CARD_MISSED) {
+            $cardType = CARD_BANG;
+          }
+          if ($mustPlayCardType === CARD_MISSED) {
+            $mustPlayCardType = CARD_BANG;
+          }
+        }
         if ($cardType === $mustPlayCardType) {
           throw new \BgaUserException(
             bang::get()->totranslate(

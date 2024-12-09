@@ -1,5 +1,6 @@
 <?php
 namespace BANG\Characters;
+use BANG\Core\Globals;
 use BANG\Core\Notifications;
 use BANG\Core\Log;
 use BANG\Core\Stack;
@@ -69,7 +70,13 @@ class CalamityJanet extends \BANG\Models\Player
       $options = $bang->getPlayOptions($this);
       foreach ($hand as $card) {
         if ($card->getType() == CARD_MISSED) {
-          $res['cards'][] = ['id' => $card->getID(), 'options' => $options];
+          $mustPlayCardId = Globals::getMustPlayCardId();
+          $cardId = $card->getId();
+          $cardOptions = ['id' => $cardId, 'options' => $options];
+          if (Globals::getIsMustPlayCard() && $mustPlayCardId !== 0) {
+            $cardOptions['mustPlay'] = $cardId === $mustPlayCardId;
+          }
+          $res['cards'][] = $cardOptions;
         }
       }
     }

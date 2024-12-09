@@ -92,9 +92,14 @@ class LawOfTheWest extends AbstractEventCard
         $player->getPlayersInRange($card->getEffect()['range']) :
         [];
       $cardImpacts = $card->getEffect()['impacts'] ?? null;
+      $cardType = $card->getType();
+      if ($player->getCharacter() === CALAMITY_JANET && $cardType === CARD_MISSED) {
+        $cardType = CARD_BANG;
+        $cardImpacts = INRANGE;
+      }
       Globals::setIsMustPlayCard(
-        $card->getType() !== CARD_MISSED
-        && !$cardsInPlayTypes->contains($card->getType())
+        $cardType !== CARD_MISSED
+        && !$cardsInPlayTypes->contains($cardType)
         && !($cardImpacts === INRANGE && empty($inRangeOfWeapon))
         && !($cardImpacts === SPECIFIC_RANGE && empty($inSpecificRange))
       );
