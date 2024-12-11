@@ -20,7 +20,11 @@ trait ReactTrait
     $noCardsInHand = $player->getHand()->empty();
     // Auto pass
     if ($noBarrel && $noSpecialAbility && $noCardsInHand) {
-      $this->actPass();
+      if ($args['type'] === REACT_TYPE_RUSSIAN_ROULETTE) {
+        $this->actPassEndRussianRoulette();
+      } else {
+        $this->actPass();
+      }
       return;
     }
 
@@ -74,7 +78,6 @@ trait ReactTrait
 
   public function actPassEndRussianRoulette()
   {
-    self::checkAction('actPassEndRussianRoulette');
     $player = Players::getActive();
     $player->loseLife(2);
     Stack::removeAllAtomsWithState(ST_REACT);

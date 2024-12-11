@@ -184,13 +184,6 @@ class action_bang extends APP_GameAction
     self::ajaxResponse();
   }
 
-  public function actPassEndRussianRoulette()
-  {
-    self::setAjaxMode();
-    $this->game->actPassEndRussianRoulette();
-    self::ajaxResponse();
-  }
-
   public function actReactBloodBrothers()
   {
     self::setAjaxMode();
