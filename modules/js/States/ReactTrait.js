@@ -76,9 +76,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     onClickConfirmReact(isBeer = false) {
       if (!isBeer && this._amount > 1 && this._selectedCards.length === 1) {
         this.confirmationDialog(
-          _(
-            'Attention: this BANG! requires 2 Missed! to be cancelled. Are you sure you want to play just a single one?',
-          ),
+          _('Attention: this BANG! requires 2 Missed! to be cancelled. Are you sure you want to play just a single one?'),
           () => {
             this.takeActReactAction();
           },
