@@ -58,6 +58,10 @@ class ElGringo extends \BANG\Models\Player
       }
       Cards::move($card->getId(), LOCATION_HAND, $this->getId());
       Notifications::stoleCard($this, $attacker, $card, false);
+      if ($card->getId() === Globals::getMustPlayCardId()) {
+        Globals::setMustPlayCardId(0);
+        Globals::setIsMustPlayCard(false);
+      }
       $attacker->onChangeHand();
     }
   }
