@@ -25,7 +25,10 @@ class ElGringo extends \BANG\Models\Player
   public function loseLife($amount = 1)
   {
     parent::loseLife($amount);
-    if (Rules::isAbilityAvailable()) {
+    // There is no need to steal cards if Russian Roulette is active
+    $ctx = Stack::getCtx();
+    $isRussianRouletteActive = isset($ctx['type']) && $ctx['type'] === REACT_TYPE_RUSSIAN_ROULETTE;
+    if (Rules::isAbilityAvailable() && !$isRussianRouletteActive) {
       $attackerId = Rules::getCurrentPlayerId();
       if ($attackerId != $this->id) {
         $attackerCharacter = Players::get($attackerId)->getCharacter();
