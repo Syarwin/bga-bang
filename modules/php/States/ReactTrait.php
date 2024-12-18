@@ -20,7 +20,7 @@ trait ReactTrait
     $noCardsInHand = $player->getHand()->empty();
     // Auto pass
     if ($noBarrel && $noSpecialAbility && $noCardsInHand) {
-      if ($args['type'] === REACT_TYPE_RUSSIAN_ROULETTE) {
+      if (isset($args['type']) && $args['type'] === REACT_TYPE_RUSSIAN_ROULETTE) {
         $this->actPassEndRussianRoulette();
       } else {
         $this->actPass();
