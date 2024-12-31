@@ -6,6 +6,7 @@ use BANG\Managers\Cards;
 use BANG\Core\Stack;
 use BANG\Managers\Rules;
 use BANG\Managers\EventCards;
+use BANG\Models\AbstractCard;
 
 trait ReactTrait
 {
@@ -48,9 +49,10 @@ trait ReactTrait
   {
     $ctx = Stack::getCtx();
     $player = Players::getActive();
-    if ($ctx['state'] == ST_REACT) {
+    if ($ctx['state'] === ST_REACT) {
       $card = Cards::getCardByType($ctx['src']['type']);
 
+      /** @var AbstractCard $card */
       $ctx['_private']['active'] = $card->getReactionOptions($player);
       return $ctx;
     } else {

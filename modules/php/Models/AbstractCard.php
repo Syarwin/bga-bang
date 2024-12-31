@@ -190,10 +190,9 @@ class AbstractCard implements \JsonSerializable
    * getReactionOptions: default function to handle possible reaction (attack => defense)
    * return: list of options (cards/abilities) that can be used
    */
-  public function getReactionOptions($player)
+  public function getReactionOptions(Player $player)
   {
-    $options = $player->getDefensiveOptions();
-    return $options;
+    return $player->getDefensiveOptions();
   }
 
   /**

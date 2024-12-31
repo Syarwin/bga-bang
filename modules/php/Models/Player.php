@@ -1,5 +1,6 @@
 <?php
 namespace BANG\Models;
+use BANG\Core\Game;
 use BANG\Core\Globals;
 use BANG\Helpers\Collection;
 use BANG\Helpers\GameOptions;
@@ -575,15 +576,17 @@ class Player extends \BANG\Helpers\DB_Manager
     if (empty($options)) {
       $options = ['target_types' => [TARGET_NONE]];
     }
+    $mustPlayCardId = GameOptions::isEvents() && Globals::getIsMustPlayCard() ? Globals::getMustPlayCardId() : null;
     $cards = $this->getHand()
       ->filter(function ($card) {
         return $card->getType() == CARD_BANG;
       })
-      ->map(function ($card) use ($options) {
+      ->map(function ($card) use ($mustPlayCardId, $options) {
         return [
           'id' => $card->getId(),
           'options' => $options,
           'amount' => 1,
+          'mustPlay' => $card->getId() === $mustPlayCardId,
         ];
       })
       ->toArray();
@@ -850,6 +853,9 @@ class Player extends \BANG\Helpers\DB_Manager
       foreach ($ids as $id) {
         $reactionCard = Cards::get($id);
         $attackingCard->react($reactionCard, $this);
+        if ($this->getId() === Rules::getCurrentPlayerId()) {
+          Game::get()->checkForMustPlayCard($reactionCard, $this);
+        }
         $this->onChangeHand();
         $this->notifyAboutAnotherMissed();
       }

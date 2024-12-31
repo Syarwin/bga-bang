@@ -7,6 +7,8 @@ use BANG\Managers\Cards;
 use BANG\Core\Stack;
 use BANG\Managers\Rules;
 use bang;
+use BANG\Models\AbstractCard;
+use BANG\Models\Player;
 
 trait PlayCardTrait
 {
@@ -46,9 +48,18 @@ trait PlayCardTrait
 
     $card = Cards::get($cardId);
     $player = Players::getActive();
+    $this->checkForMustPlayCard($card, $player);
+    $player->playCard($card, $args);
+    self::giveExtraTime($player->getId());
+
+    Stack::finishState();
+  }
+
+  public function checkForMustPlayCard(AbstractCard $card, Player $player)
+  {
     $mustPlayCardId = Globals::getMustPlayCardId();
     if (Globals::getIsMustPlayCard() && $mustPlayCardId !== 0) {
-      if ($cardId === $mustPlayCardId) {
+      if ($card->getId() === $mustPlayCardId) {
         Globals::setMustPlayCardId(0);
         Globals::setIsMustPlayCard(false);
       } else {
@@ -75,9 +86,5 @@ trait PlayCardTrait
         Stack::insertOnTop(Stack::newSimpleAtom(ST_RESOLVE_BEFORE_PLAY_CARD_EFFECT, $player));
       }
     }
-    $player->playCard($card, $args);
-    self::giveExtraTime($player->getId());
-
-    Stack::finishState();
   }
 }
