@@ -58,8 +58,9 @@ class Jail extends BlueCard
 
   public function resolveFlipped($card, $player)
   {
+    $isIgnoreCardsInPlay = Rules::isIgnoreCardsInPlay();
     $player->discardCard($card, true); // Discard a flipped card
-    $player->discardCard($this, true); // Discard Jail itself
+    if (!$isIgnoreCardsInPlay) $player->discardCard($this, true); // Discard Jail itself
 
     $suitOverrideInfo = Rules::getSuitOverrideInfo($card, 'H');
     $args = array_merge($suitOverrideInfo, ['player' => $player]);
