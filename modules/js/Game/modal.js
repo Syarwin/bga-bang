@@ -181,7 +181,7 @@ define(['dojo', 'dojo/_base/declare', 'dojo/fx', 'dojox/fx/ext-dojo/complex'], f
 
     getOpeningTargetCenter() {
       var startTop, startLeft;
-      if (this.openAnimationTarget == null) {
+      if (this.openAnimationTarget === null || dojo.query(this.openAnimationTarget).length === 0) {
         startLeft = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0) / 2;
         startTop = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0) / 2;
       } else {
