@@ -37,6 +37,7 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
 
     addCharacterCard(card) {
       var div = dojo.place(this.format_block('jstpl_character', card), 'dialog-card-container');
+      card.powers = '<p>' + card.powers.map((t) => _(t)).join('</p><p>') + '</p>';
       this.addTooltipHtml(div.id, this.format_block('jstpl_characterTooltip', card));
       dojo.connect(div, 'onclick', (evt) => {
         evt.preventDefault();
