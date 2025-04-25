@@ -444,7 +444,7 @@ class Notifications
   public static function characterChosen($player)
   {
     $characterName = $player->getCharName();
-    $msg = '${player_name} chose ${character_name} as a character';
+    $msg = clienttranslate('${player_name} chose ${character_name} as a character');
     self::notifyAll('characterChosen', $msg, [
       'character_name' => $characterName,
       'character' => $player->getUiCharacterSpecificData(),
@@ -473,7 +473,7 @@ class Notifications
    */
   public static function playerUnconscious($player)
   {
-    $msg = '${player_name} is eliminated but might be back at some point...';
+    $msg = clienttranslate('${player_name} is eliminated but might be back at some point...');
     self::notifyAll('playerUnconscious', $msg, [
       'player' => $player,
     ]);
@@ -481,8 +481,8 @@ class Notifications
 
   public static function playerGuessedIncorrectly($player)
   {
-    $msg = '${player_name} guessed a card color incorrectly thus ending Peyote\'s effect';
-    $msgYou = '${You} guessed a card color incorrectly thus ending Peyote\'s effect';
+    $msg = clienttranslate('${player_name} guessed a card color incorrectly thus ending Peyote\'s effect');
+    $msgYou = clienttranslate('${You} guessed a card color incorrectly thus ending Peyote\'s effect');
     self::notifyAll('message', $msg, [
       'msgYou' => $msgYou,
       'player' => $player,
