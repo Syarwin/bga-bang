@@ -123,7 +123,10 @@ define(['dojo', 'dojo/_base/declare'], (dojo, declare) => {
     notif_showMessage(n) {
       debug('Notif: show message', n);
       if (n.args.showAsPopup) {
-        this.showMessage(n.log, 'info');
+        const inlinedArgsMessage = n.log.replace(/\$\{(\w+)}/g, (_, varName) => {
+          return n.args[varName] ?? '';
+        });
+        this.showMessage(inlinedArgsMessage, 'info');
       }
     },
 
