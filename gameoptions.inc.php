@@ -88,6 +88,12 @@ $game_options = [
           'description' => totranslate('Both High Noon and A Fistful Of Cards expansions. 13 random event cards will be used'),
           'premium' => true,
         ],
+      OPTION_HIGH_NOON_OR_FOC =>
+        [ 'name' => totranslate('High Noon/A Fistful Of Cards'),
+          'tmdisplay' => totranslate('Either High Noon or A Fistful Of Cards'),
+          'description' => totranslate('Random expansion will be chosen and only this expansion will be used in full'),
+          'premium' => true,
+        ],
     ],
   ],
 
@@ -142,17 +148,17 @@ $game_options = [
       OPTION_BOTH_EVENTS_NO_GHOSTS =>
         [ 'name' => totranslate('No Dead Man, no Ghost Town'),
           'tmdisplay' => totranslate('No Dead Man, no Ghost Town'),
-          'description' => totranslate('13 random event cards, excluding either Dead Man or Ghost Town') ],
+          'description' => totranslate('Exclude both Dead Man and/or Ghost Town') ],
       OPTION_BOTH_EVENTS_WITH_GHOSTS =>
         [ 'name' => totranslate('Include Dead Man and Ghost Town'),
           'tmdisplay' => totranslate('Include Dead Man and Ghost Town'),
-          'description' => totranslate('13 event cards from both expansions') ],
+          'description' => totranslate('Use all cards from one/both expansions') ],
     ],
     'displaycondition' => [
       [
         'type' => 'otheroption',
         'id' => OPTION_EXPANSIONS,
-        'value' => [OPTION_HIGH_NOON_AND_FOC]
+        'value' => [OPTION_HIGH_NOON_AND_FOC, OPTION_HIGH_NOON_OR_FOC]
       ]
     ]
   ],

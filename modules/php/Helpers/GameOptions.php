@@ -19,6 +19,10 @@ class GameOptions
         return [FISTFUL_OF_CARDS];
       case OPTION_HIGH_NOON_AND_FOC:
         return [HIGH_NOON, FISTFUL_OF_CARDS];
+      case OPTION_HIGH_NOON_OR_FOC:
+        $expansionIndex = bga_rand(0, 1);
+        $chosenExpansion = [HIGH_NOON, FISTFUL_OF_CARDS][$expansionIndex];
+        return [$chosenExpansion];
       default:
         return [];
     }
@@ -36,7 +40,9 @@ class GameOptions
       self::getOption('optionFistful') === OPTION_FISTFUL_OF_CARDS_WITH_DEAD_MAN;
     $bothWithGhosts = self::getOption('optionExpansions') === OPTION_HIGH_NOON_AND_FOC &&
       self::getOption('optionHighNoonAndFistful') === OPTION_BOTH_EVENTS_WITH_GHOSTS;
-    return $highNoonWithGhosts || $fistfulWithGhosts || $bothWithGhosts;
+    $singleWithGhosts = self::getOption('optionExpansions') === OPTION_HIGH_NOON_OR_FOC &&
+      self::getOption('optionHighNoonAndFistful') === OPTION_BOTH_EVENTS_WITH_GHOSTS;
+    return $highNoonWithGhosts || $fistfulWithGhosts || $bothWithGhosts || $singleWithGhosts;
   }
 
   private static function getOption($optionName)
