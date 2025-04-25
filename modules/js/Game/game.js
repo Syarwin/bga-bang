@@ -561,5 +561,14 @@ define(['dojo', 'dojo/_base/declare', 'ebg/core/gamegui'], (dojo, declare) => {
           }.bind(this)
       );
     },
+
+    addClass(element, clazz, removeAfter = false, delay = 1000) {
+      dojo.addClass(element, clazz);
+      if (removeAfter) {
+        setTimeout(() => {
+          dojo.removeClass(element, clazz);
+        }, delay);
+      }
+    },
   });
 });

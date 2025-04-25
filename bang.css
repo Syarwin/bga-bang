@@ -569,6 +569,7 @@ div#xIcon {
   animation-duration: 3s;
   animation-name: grow;
   animation-iteration-count: 1;
+  z-index: 100;
 }
 
 @keyframes grow {
