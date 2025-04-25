@@ -33,7 +33,8 @@ class RussianRoulette extends AbstractEventCard
           'msgActive' => $msgActive,
           'msgInactive' => $msgInactive,
           'src_name' => $this->name,
-          'src' => (new Bang())->jsonSerialize(),
+          // We need this fake id to insert Bart Cassidy (maybe other) effects after RR resolution
+          'src' => (new Bang(['id' => 999]))->jsonSerialize(),
           'missedNeeded' => 1,
           'suspended' => true,
         ]);
