@@ -179,12 +179,15 @@ class Cards extends \BANG\Helpers\Pieces
    * @param string $fromLocation
    * @return \BANG\Helpers\Collection
    */
-  public static function drawForLocation($name, $nbr, $fromLocation = LOCATION_DECK)
+  public static function drawForLocation($name, $nbr, $fromLocation = LOCATION_DECK, $discardBeforeDraw = true)
   {
-    $cards = Cards::getInLocation($name);
-    foreach ($cards as $card) {
-      Cards::discard($card);
+    if ($discardBeforeDraw) {
+      $cards = Cards::getInLocation($name);
+      foreach ($cards as $card) {
+        Cards::discard($card);
+      }
     }
+
     return self::pickForLocation($nbr, $fromLocation, $name);
   }
 

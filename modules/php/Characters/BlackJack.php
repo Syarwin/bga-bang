@@ -23,9 +23,7 @@ class BlackJack extends \BANG\Models\Player
   public function drawCardsPhaseOne()
   {
     // Draw one visible
-    $location = Rules::getDrawOrDiscardCardsLocation(LOCATION_DECK);
-    $cards = Cards::deal($this->id, 1, $location);
-    Notifications::drawCards($this, $cards, true, $location);
+    $cards = $this->drawCards(1, true);
 
     // If heart or diamond => draw again a private one
     $card = $cards->first();

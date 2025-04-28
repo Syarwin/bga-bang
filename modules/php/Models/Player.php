@@ -304,13 +304,14 @@ class Player extends \BANG\Helpers\DB_Manager
         Notifications::drawCards($this, $cards, $location === LOCATION_DISCARD || $publicly, $location);
       }
       if ($location === LOCATION_DISCARD && $cards->count() !== $amount) {
-        Notifications::showMessageToAll(
-          clienttranslate('The discard was empty while drawing so ${player_name} drew remaining cards from the deck'),
-          [ 'player' => $this ],
-        false
-        );
-        $cards = Cards::deal($this->id, $amount - $cards->count());
-        Notifications::drawCards($this, $cards);
+        $remaining = $amount - $cards->count();
+        $msg = $remaining > 1 ?
+          clienttranslate('The discard pile was empty so ${player_name} draws remaining cards from the deck') :
+          clienttranslate('The discard pile was empty so ${player_name} draws a card from the deck');
+        Notifications::showMessageToAll($msg, [ 'player' => $this ], false);
+        $remainingCards = Cards::deal($this->id, $amount - $cards->count());
+        Notifications::drawCards($this, $remainingCards, $publicly);
+        $cards = $remainingCards->merge($cards);
       }
       $this->onChangeHand();
     }

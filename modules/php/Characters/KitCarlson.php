@@ -25,10 +25,15 @@ class KitCarlson extends \BANG\Models\Player
   {
     $location = Rules::getDrawOrDiscardCardsLocation(LOCATION_DECK);
     $cards = Cards::drawForLocation(LOCATION_SELECTION, 3, $location);
+    Notifications::drawCards($this, $cards, $location === LOCATION_DISCARD, $location, true, true);
+    if ($location === LOCATION_DISCARD && $cards->count() < 3) {
+      // No more cards in discard, draw others from the deck
+      $deckCards = Cards::drawForLocation(LOCATION_SELECTION, 3 - $cards->count(), LOCATION_DECK, false);
+      Notifications::drawCards($this, $deckCards, false, LOCATION_DECK, true, true);
+    }
     $eventCard = EventCards::getActive();
     $amountToDraw = $eventCard ? $eventCard->getPhaseOneAmountOfCardsToDraw($this) : $this->defaultCardsToDraw();
     $this->prepareSelection($this, [$this->id], true, $amountToDraw);
-    Notifications::drawCards($this, $cards, $location === LOCATION_DISCARD, $location, true, true);
   }
 
   public function useAbility($args)
