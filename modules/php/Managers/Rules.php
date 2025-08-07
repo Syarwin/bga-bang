@@ -62,7 +62,7 @@ class Rules extends DB_Manager
    */
   public static function setNewTurnRules($player, $eventCard = null)
   {
-    $amountOfCardsToDraw = $eventCard ? $eventCard->getPhaseOneAmountOfCardsToDraw() : 2;
+    $amountOfCardsToDraw = $eventCard ? $eventCard->getPhaseOneAmountOfCardsToDraw($player) : $player->defaultCardsToDraw();
     $defaultRules = (new AbstractEventCard())->getRules();
     $rules = $eventCard ? $eventCard->getRules() : $defaultRules;
     $isAbilityAvailable = self::isAllowPlayerPhaseOne() && isset($rules[RULE_ABILITY_AVAILABLE]) && $rules[RULE_ABILITY_AVAILABLE];

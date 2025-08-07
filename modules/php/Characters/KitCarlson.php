@@ -26,7 +26,7 @@ class KitCarlson extends \BANG\Models\Player
     $location = Rules::getDrawOrDiscardCardsLocation(LOCATION_DECK);
     $cards = Cards::drawForLocation(LOCATION_SELECTION, 3, $location);
     $eventCard = EventCards::getActive();
-    $amountToDraw = $eventCard ? $eventCard->getPhaseOneAmountOfCardsToDraw() : 2;
+    $amountToDraw = $eventCard ? $eventCard->getPhaseOneAmountOfCardsToDraw($this) : $this->defaultCardsToDraw();
     $this->prepareSelection($this, [$this->id], true, $amountToDraw);
     Notifications::drawCards($this, $cards, $location === LOCATION_DISCARD, $location, true, true);
   }

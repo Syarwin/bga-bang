@@ -283,6 +283,14 @@ class Player extends \BANG\Helpers\DB_Manager
    *************************/
 
   /**
+   * @return int
+   */
+  public function defaultCardsToDraw()
+  {
+    return 2;
+  }
+
+  /**
    * Draw $amount card from deck and notify them
    * @param int $amount
    * @return Collection|null
