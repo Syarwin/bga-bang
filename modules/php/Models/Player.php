@@ -275,6 +275,7 @@ class Player extends \BANG\Helpers\DB_Manager
   {
     $unconsciousStatus = $eliminate ? ', `player_unconscious` = 1' : '';
     $newHP = $eliminate && $this->hp < 0 ? 0 : $this->hp;
+    $newHP = is_null($newHP) ? 0 : $newHP; // Sometimes when $this->hp is null, it was causing an infinite loop
     self::DbQuery("UPDATE player SET `player_hp` = {$newHP}{$unconsciousStatus} WHERE `player_id` = {$this->id}");
   }
 

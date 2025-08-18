@@ -119,7 +119,6 @@ class Players extends \BANG\Helpers\DB_Manager
     self::getGame()->reattributeColorsBasedOnPreferences($players, $gameInfos['player_colors']);
     self::getGame()->reloadPlayersBasicInfos();
 
-    self::getGame()->reloadPlayersBasicInfos();
     // BangDebug: on game start Sheriff would be the second player
     // $sheriff = Players::getPreviousId(Players::get($sheriff));
     return $sheriff;
