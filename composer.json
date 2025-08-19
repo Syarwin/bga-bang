@@ -1,7 +1,7 @@
 {
     "config": {
         "platform": {
-            "php": "7.1.33"
+            "php": "7.4.33"
         }
     },
     "autoload-dev": {
@@ -10,13 +10,15 @@
         ],
         "files": [
             "modules/constants.inc.php",
+            "modules/tests/constants.php",
             "bga-sharedcode/misc/module/table/table.game.php",
             "bga-sharedcode/misc/module/common/deck.game.php",
-            "bga-sharedcode/misc/view/common/game.view.php"
+            "bga-sharedcode/misc/view/common/game.view.php",
+            "bang.game.php"
         ]
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.5",
-        "phpstan/phpstan": "^1.4"
+        "phpunit/phpunit": "^9.5",
+        "phpstan/phpstan": "^2.0"
     }
 }
