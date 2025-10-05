@@ -35,7 +35,8 @@ var jstpl_events_row = `<div class="cards-row">
     <div id="eventActive"></div>
 </div>`
 
-var jstpl_player_board_data = `<div class='bang-player-board' id="bang-player-board-\${id}" data-max-bullets="\${bullets}" data-bullets="\${hp}" data-hand="\${handCount}">
+var jstpl_player_board_data = `<div class="bang-player-board dialog-character-name">\${character}</div>
+<div class='bang-player-board' id="bang-player-board-\${id}" data-max-bullets="\${bullets}" data-bullets="\${hp}" data-hand="\${handCount}">
   <ul class='player-bullets'>
     <li class='bullet'></li>
     <li class='bullet'></li>
