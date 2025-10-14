@@ -10,7 +10,15 @@ class BillNoface  extends \BANG\Models\Player{
 
     ];
     $this->bullets = 4;
-    $this->expansion = DODGE_CITY;  
+    $this->expansion = DODGE_CITY;
     parent::__construct($row);
+  }
+
+  /**
+   * @return int
+   */
+  public function defaultCardsToDraw()
+  {
+      return $this->bullets - $this->hp + 1;
   }
 }

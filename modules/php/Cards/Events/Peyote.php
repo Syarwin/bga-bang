@@ -28,7 +28,11 @@ class Peyote extends AbstractEventCard
     Stack::insertOnTop($atom);
   }
 
-  public function getPhaseOneAmountOfCardsToDraw()
+  /**
+   * @param Player $player
+   * @return int
+   */
+  public function getPhaseOneAmountOfCardsToDraw($player)
   {
     return 0;
   }
