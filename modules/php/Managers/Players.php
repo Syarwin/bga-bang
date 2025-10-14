@@ -53,7 +53,7 @@ class Players extends \BANG\Helpers\DB_Manager
 
     // Handle forced characters
     $characters = self::getAvailableCharacters($expansions);
-    $forcedCharacters = [];
+    $charactersToChoice = [];
     $optionIds = [
       OPTION_CHAR_1,
       OPTION_CHAR_2,
@@ -65,19 +65,28 @@ class Players extends \BANG\Helpers\DB_Manager
     ];
     foreach ($optionIds as $oId) {
       $c = $options[$oId];
-      if ($c != 100 && in_array($c, $characters) && !in_array($c, $forcedCharacters)) {
-        $forcedCharacters[] = (int) $c;
+      if ($c != 100 && in_array($c, $characters) && !in_array($c, $charactersToChoice)) {
+        $charactersToChoice[] = (int) $c;
       }
     }
 
     // Fill with random characters
-    $characters = array_diff($characters, $forcedCharacters);
+    $characters = array_diff($characters, $charactersToChoice);
     shuffle($characters);
-    $needed = (GameOptions::chooseCharactersManually() ? count($players) * 2 : count($players)) - count($forcedCharacters);
+
+    $playersCount = count($players);
+    $needed = $playersCount * 2 - count($charactersToChoice);
     for ($i = 0; $i < $needed; $i++) {
-      $forcedCharacters[] = array_pop($characters);
+      $charactersToChoice[] = array_pop($characters);
     }
-    shuffle($forcedCharacters);
+    // slice extra characters
+    $charactersToChoice = array_slice($charactersToChoice, 0, $playersCount * 2);
+    // slice first choices
+    $firstChoices = array_slice($charactersToChoice, 0, $playersCount);
+    shuffle($firstChoices);
+    // slice alternative choices
+    $secondChoices = array_slice($charactersToChoice, $playersCount);
+    shuffle($secondChoices);
 
     $values = [];
     $i = 0;
@@ -87,8 +96,8 @@ class Players extends \BANG\Helpers\DB_Manager
       $avatar = addslashes($player['player_avatar']);
       $name = addslashes($player['player_name']);
       $role = $roles[$i];
-      $characterId = array_pop($forcedCharacters);
-      $altCharacterId = GameOptions::chooseCharactersManually() ? array_pop($forcedCharacters) : -1;
+      $characterId = array_pop($firstChoices);
+      $altCharacterId = array_pop($secondChoices);
       $charChosen = !GameOptions::chooseCharactersManually();
       $bullets = $charChosen ? self::getCharacterBullets($characterId) : null;
       if ($role == SHERIFF) {
