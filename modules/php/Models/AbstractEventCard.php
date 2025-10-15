@@ -91,9 +91,13 @@ class AbstractEventCard implements \JsonSerializable
     return false;
   }
 
-  public function getPhaseOneAmountOfCardsToDraw()
+  /**
+   * @param Player $player
+   * @return int
+   */
+  public function getPhaseOneAmountOfCardsToDraw($player)
   {
-    return 2;
+    return $player->defaultCardsToDraw();
   }
 
   public function isAbilityAvailable()

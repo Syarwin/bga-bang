@@ -10,7 +10,15 @@ class PixiePete  extends \BANG\Models\Player{
 
     ];
     $this->bullets = 3;
-    $this->expansion = DODGE_CITY;  
+    $this->expansion = DODGE_CITY;
     parent::__construct($row);
+  }
+
+  /**
+   * @return int
+   */
+  public function defaultCardsToDraw()
+  {
+      return 3;
   }
 }

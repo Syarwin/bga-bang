@@ -4,6 +4,7 @@ use BANG\Core\Notifications;
 use BANG\Core\Stack;
 use BANG\Managers\Players;
 use BANG\Models\AbstractEventCard;
+use BANG\Models\Player;
 
 class GhostTown extends AbstractEventCard
 {
@@ -34,11 +35,12 @@ class GhostTown extends AbstractEventCard
   }
 
   /**
+   * @param Player $player
    * @return int
    */
-  public function getPhaseOneAmountOfCardsToDraw()
+  public function getPhaseOneAmountOfCardsToDraw($player)
   {
-    return Players::getActive()->getHp() <= 0 ? 3 : 2;
+    return Players::getActive()->getHp() <= 0 ? 3 : $player->defaultCardsToDraw();
   }
 
   /**
