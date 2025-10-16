@@ -1,0 +1,9 @@
+parameters:
+    level: 0
+    paths:
+        - bang.action.php
+        - misc
+        - modules
+
+includes:
+    - phpstan-baseline.neon

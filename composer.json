@@ -6,16 +6,20 @@
   },
   "autoload-dev": {
     "classmap": [
-      "modules/php"
+      "modules/php",
+      "misc/expansions"
     ],
     "files": [
       "modules/constants.inc.php",
-      "modules/tests/constants.php",
+      "tests/constants.php",
       "bga-sharedcode/misc/module/table/table.game.php",
       "bga-sharedcode/misc/module/common/deck.game.php",
       "bga-sharedcode/misc/view/common/game.view.php",
       "bang.game.php"
-    ]
+    ],
+    "psr-4": {
+      "Bang\\Tests\\": "tests"
+    }
   },
   "require-dev": {
     "phpunit/phpunit": "^9.5",

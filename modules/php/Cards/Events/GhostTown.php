@@ -40,7 +40,7 @@ class GhostTown extends AbstractEventCard
    */
   public function getPhaseOneAmountOfCardsToDraw($player)
   {
-    return Players::getActive()->getHp() <= 0 ? 3 : $player->defaultCardsToDraw();
+    return $player->getHp() <= 0 ? 3 : $player->defaultCardsToDraw();
   }
 
   /**
