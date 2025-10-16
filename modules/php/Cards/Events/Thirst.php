@@ -1,6 +1,7 @@
 <?php
 namespace BANG\Cards\Events;
 use BANG\Models\AbstractEventCard;
+use BANG\Models\Player;
 
 class Thirst extends AbstractEventCard
 {
@@ -14,7 +15,11 @@ class Thirst extends AbstractEventCard
     $this->expansion = HIGH_NOON;
   }
 
-  public function getPhaseOneAmountOfCardsToDraw()
+  /**
+   * @param Player $player
+   * @return int
+   */
+  public function getPhaseOneAmountOfCardsToDraw($player)
   {
     return 1;
   }
