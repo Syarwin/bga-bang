@@ -1,6 +1,6 @@
 <?php
 namespace BANG\Managers;
-use BANG\Core\Globals;
+
 use BANG\Helpers\GameOptions;
 use BANG\Models\Player;
 use BANG\Helpers\Collection;
@@ -210,6 +210,9 @@ class Players extends \BANG\Helpers\DB_Manager
     SLAB_THE_KILLER => 'SlabtheKiller',
     WILLY_THE_KID => 'WillytheKid',
     ROSE_DOOLAN => 'RoseDoolan',
+
+    PIXIE_PETE => 'PixiePete',
+    BILL_NOFACE => 'BillNoface',
   ];
 
   public static function getAvailableCharacters($expansions)
@@ -282,7 +285,7 @@ class Players extends \BANG\Helpers\DB_Manager
   /**
    * returns an array of the ids of all living players
    * @param int $exceptId
-   * @return Collection
+   * @return Collection<Player>
    */
   public static function getLivingPlayers($exceptId = null)
   {
