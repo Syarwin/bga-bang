@@ -7,7 +7,7 @@ namespace Bang\Tests\PhaseOneDrawCards;
 use BANG\Cards\Events\GhostTown;
 use BANG\Cards\Events\Thirst;
 use BANG\Cards\Events\TrainArrival;
-use BillNoface;
+use BANG\Characters\BillNoface;
 
 final class BillNofacePhaseOneDrawCardsTest extends AbstractPhaseOneDrawCardsTest
 {
