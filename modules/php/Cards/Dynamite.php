@@ -1,16 +1,18 @@
 <?php
+
 namespace BANG\Cards;
+
 use BANG\Core\Notifications;
-use BANG\Core\Stack;
 use BANG\Managers\Cards;
 use BANG\Managers\Players;
 use BANG\Managers\Rules;
+use BANG\Models\BlueCard;
 
-class Dynamite extends \BANG\Models\BlueCard
+class Dynamite extends BlueCard
 {
-  public function __construct($id = null, $copy = '')
+  public function __construct(?array $params = null)
   {
-    parent::__construct($id, $copy);
+    parent::__construct($params);
     $this->type = CARD_DYNAMITE;
     $this->name = clienttranslate('Dynamite');
     $this->text = clienttranslate(

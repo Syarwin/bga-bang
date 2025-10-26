@@ -1,11 +1,14 @@
 <?php
+
 namespace BANG\Cards;
 
-class Scope extends \BANG\Models\BlueCard
+use BANG\Models\BlueCard;
+
+class Scope extends BlueCard
 {
-  public function __construct($id = null, $copy = '')
+  public function __construct(?array $params = null)
   {
-    parent::__construct($id, $copy);
+    parent::__construct($params);
     $this->type = CARD_SCOPE;
     $this->name = clienttranslate('Scope');
     $this->text = clienttranslate('You view others at distance -1');

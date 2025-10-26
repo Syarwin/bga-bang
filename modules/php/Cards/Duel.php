@@ -1,13 +1,16 @@
 <?php
+
 namespace BANG\Cards;
+
 use BANG\Managers\Players;
 use BANG\Core\Stack;
+use BANG\Models\BrownCard;
 
-class Duel extends \BANG\Models\BrownCard
+class Duel extends BrownCard
 {
-  public function __construct($id = null, $copy = '')
+  public function __construct(?array $params = null)
   {
-    parent::__construct($id, $copy);
+    parent::__construct($params);
     $this->type = CARD_DUEL;
     $this->name = clienttranslate('Duel');
     $this->text = clienttranslate(

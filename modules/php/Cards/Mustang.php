@@ -1,11 +1,14 @@
 <?php
+
 namespace BANG\Cards;
 
-class Mustang extends \BANG\Models\BlueCard
+use BANG\Models\BlueCard;
+
+class Mustang extends BlueCard
 {
-  public function __construct($id = null, $copy = '')
+  public function __construct(?array $params = null)
   {
-    parent::__construct($id, $copy);
+    parent::__construct($params);
     $this->type = CARD_MUSTANG;
     $this->name = clienttranslate('Mustang');
     $this->text = clienttranslate('Others view you at distance +1');

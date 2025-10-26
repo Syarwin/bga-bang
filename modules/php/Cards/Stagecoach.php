@@ -1,11 +1,14 @@
 <?php
+
 namespace BANG\Cards;
 
-class Stagecoach extends \BANG\Models\BrownCard
+use BANG\Models\BrownCard;
+
+class Stagecoach extends BrownCard
 {
-  public function __construct($id = null, $copy = '')
+  public function __construct(?array $params = null)
   {
-    parent::__construct($id, $copy);
+    parent::__construct($params);
     $this->type = CARD_STAGECOACH;
     $this->name = clienttranslate('Stagecoach!');
     $this->text = clienttranslate('Draw 2 cards.');
