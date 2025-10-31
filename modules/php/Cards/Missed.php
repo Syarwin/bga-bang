@@ -1,11 +1,14 @@
 <?php
+
 namespace BANG\Cards;
 
-class Missed extends \BANG\Models\BrownCard
+use BANG\Models\BrownCard;
+
+class Missed extends BrownCard
 {
-  public function __construct($id = null, $copy = '')
+  public function __construct(?array $params = null)
   {
-    parent::__construct($id, $copy);
+    parent::__construct($params);
     $this->type = CARD_MISSED;
     $this->name = clienttranslate('Missed!');
     $this->text = clienttranslate('Discard to avoid an attack');

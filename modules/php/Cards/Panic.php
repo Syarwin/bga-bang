@@ -1,11 +1,14 @@
 <?php
+
 namespace BANG\Cards;
 
-class Panic extends \BANG\Models\BrownCard
+use BANG\Models\BrownCard;
+
+class Panic extends BrownCard
 {
-  public function __construct($id = null, $copy = '')
+  public function __construct(?array $params = null)
   {
-    parent::__construct($id, $copy);
+    parent::__construct($params);
     $this->type = CARD_PANIC;
     $this->name = clienttranslate('Panic!');
     $this->text = clienttranslate('Draw 1 card from a player within range 1.');

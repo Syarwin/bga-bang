@@ -1,12 +1,15 @@
 <?php
+
 namespace BANG\Cards;
+
+use BANG\Models\BrownCard;
 use BANG\Models\Player;
 
-class Indians extends \BANG\Models\BrownCard
+class Indians extends BrownCard
 {
-  public function __construct($id = null, $copy = '')
+  public function __construct(?array $params = null)
   {
-    parent::__construct($id, $copy);
+    parent::__construct($params);
     $this->type = CARD_INDIANS;
     $this->name = clienttranslate('Indians!');
     $this->text = clienttranslate('All other players discard a BANG! or lose 1 life point.');

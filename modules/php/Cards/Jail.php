@@ -1,6 +1,7 @@
 <?php
+
 namespace BANG\Cards;
-use BANG\Core\Globals;
+
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
 use BANG\Managers\Players;
@@ -10,9 +11,9 @@ use BANG\Models\BlueCard;
 
 class Jail extends BlueCard
 {
-  public function __construct($id = null)
+  public function __construct(?array $params = null)
   {
-    parent::__construct($id);
+    parent::__construct($params);
     $this->type = CARD_JAIL;
     $this->name = clienttranslate('Jail');
     $this->text = clienttranslate(

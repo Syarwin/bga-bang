@@ -1,12 +1,17 @@
 <?php
+
 namespace BANG\Managers;
-use BANG\Helpers\Utils;
+
 use BANG\Core\Notifications;
+use BANG\Helpers\Pieces;
+use BANG\Helpers\Utils;
+use BANG\Models\AbstractCard;
+use BgaVisibleSystemException;
 
 /*
  * Cards: all utility functions concerning cards are here
  */
-class Cards extends \BANG\Helpers\Pieces
+class Cards extends Pieces
 {
   protected static $table = 'card';
   protected static $prefix = 'card_';
@@ -55,7 +60,7 @@ class Cards extends \BANG\Helpers\Pieces
   /*
    * cardClasses : for each card Id, the corresponding class name
    */
-  public static $classes = [
+  public static array $classes = [
     CARD_SCHOFIELD => 'Schofield',
     CARD_VOLCANIC => 'Volcanic',
     CARD_REMINGTON => 'Remington',
@@ -80,13 +85,16 @@ class Cards extends \BANG\Helpers\Pieces
     CARD_MUSTANG => 'Mustang',
   ];
 
-  /*
+  /**
    * getCardByType: factory function to create a card given its type
+   * @param int $cardType one of existing card types
+   * @param array|null $data data for specific copy of the card
+   * @throws BgaVisibleSystemException
    */
-  public static function getCardByType($cardType, $data = null)
+  public static function getCardByType(int $cardType, ?array $data = null): AbstractCard
   {
     if (!isset(self::$classes[$cardType])) {
-      throw new \BgaVisibleSystemException("getCardByType: Unknown card $cardType");
+      throw new BgaVisibleSystemException("getCardByType: Unknown card $cardType");
     }
     $name = 'BANG\Cards\\' . self::$classes[$cardType];
     return new $name($data);

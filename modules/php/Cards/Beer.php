@@ -1,15 +1,18 @@
 <?php
+
 namespace BANG\Cards;
+
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
 use BANG\Core\Notifications;
 use BANG\Managers\Rules;
+use BANG\Models\BrownCard;
 
-class Beer extends \BANG\Models\BrownCard
+class Beer extends BrownCard
 {
-  public function __construct($id = null)
+  public function __construct(?array $params = null)
   {
-    parent::__construct($id);
+    parent::__construct($params);
     $this->type = CARD_BEER;
     $this->name = clienttranslate('Beer');
     $this->text = clienttranslate('Regain one life point.');

@@ -1,5 +1,7 @@
 <?php
+
 namespace BANG\Cards;
+
 use BANG\Managers\Players;
 use BANG\Managers\Rules;
 use BANG\Models\BangActionCard;
@@ -7,7 +9,7 @@ use BANG\Models\Player;
 
 class Bang extends BangActionCard
 {
-  public function __construct($params = null)
+  public function __construct(?array $params = null)
   {
     parent::__construct($params);
     $this->type = CARD_BANG;

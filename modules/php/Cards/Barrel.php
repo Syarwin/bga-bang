@@ -1,14 +1,17 @@
 <?php
+
 namespace BANG\Cards;
+
 use BANG\Core\Stack;
 use BANG\Core\Notifications;
 use BANG\Managers\Rules;
+use BANG\Models\BlueCard;
 
-class Barrel extends \BANG\Models\BlueCard
+class Barrel extends BlueCard
 {
-  public function __construct($id = null)
+  public function __construct(?array $params = null)
   {
-    parent::__construct($id);
+    parent::__construct($params);
     $this->type = CARD_BARREL;
     $this->name = clienttranslate('Barrel');
     $this->text = clienttranslate("Reveal top card from the deck when you're attacked. If it's a heart it's a miss.");

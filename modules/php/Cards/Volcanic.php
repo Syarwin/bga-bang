@@ -1,11 +1,14 @@
 <?php
+
 namespace BANG\Cards;
 
-class Volcanic extends \BANG\Models\WeaponCard
+use BANG\Models\WeaponCard;
+
+class Volcanic extends WeaponCard
 {
-  public function __construct($id = null, $copy = '')
+  public function __construct(?array $params = null)
   {
-    parent::__construct($id, $copy);
+    parent::__construct($params);
     $this->type = CARD_VOLCANIC;
     $this->name = clienttranslate('Volcanic');
     $this->text = clienttranslate('Range: 1. You can play any number of BANG!');

@@ -1,14 +1,17 @@
 <?php
+
 namespace BANG\Cards;
+
 use BANG\Core\Notifications;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
+use BANG\Models\BrownCard;
 
-class GeneralStore extends \BANG\Models\BrownCard
+class GeneralStore extends BrownCard
 {
-  public function __construct($id = null, $copy = '')
+  public function __construct(?array $params = null)
   {
-    parent::__construct($id, $copy);
+    parent::__construct($params);
     $this->type = CARD_GENERAL_STORE;
     $this->name = clienttranslate('General Store');
     $this->text = clienttranslate('Reveal as many cards as players left. Each player chooses one, starting with you');

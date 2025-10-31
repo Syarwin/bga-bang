@@ -1,11 +1,14 @@
 <?php
+
 namespace BANG\Cards;
 
-class Saloon extends \BANG\Models\BrownCard
+use BANG\Models\BrownCard;
+
+class Saloon extends BrownCard
 {
-  public function __construct($id = null, $copy = '')
+  public function __construct(?array $params = null)
   {
-    parent::__construct($id, $copy);
+    parent::__construct($params);
     $this->type = CARD_SALOON;
     $this->name = clienttranslate('Saloon');
     $this->text = clienttranslate('All players regain 1 life point.');

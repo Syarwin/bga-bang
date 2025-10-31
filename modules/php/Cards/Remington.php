@@ -1,11 +1,14 @@
 <?php
+
 namespace BANG\Cards;
 
-class Remington extends \BANG\Models\WeaponCard
+use BANG\Models\WeaponCard;
+
+class Remington extends WeaponCard
 {
-  public function __construct($id = null, $copy = '')
+  public function __construct(?array $params = null)
   {
-    parent::__construct($id, $copy);
+    parent::__construct($params);
     $this->type = CARD_REMINGTON;
     $this->name = clienttranslate('Remington');
     $this->text = clienttranslate('Range: 3');
