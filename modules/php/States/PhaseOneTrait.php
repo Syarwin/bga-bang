@@ -56,7 +56,7 @@ trait PhaseOneTrait
     $ctx = Stack::getCtx();
     $player = Players::get($ctx['pId']);
     $subPhase = $ctx['subPhase'];
-    if ($subPhase === RULE_PHASE_ONE_PLAYER_ABILITY_DRAW) {
+    if ($subPhase === RULE_PHASE_ONE_PLAYER_ABILITY_DRAW && method_exists($player, 'drawCardsPhaseOne')) {
       $player->drawCardsPhaseOne();
     } else if ($subPhase === RULE_PHASE_ONE_EVENT_SPECIAL_DRAW) {
       EventCards::getActive()->drawCardsPhaseOne($player);

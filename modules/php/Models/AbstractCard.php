@@ -1,9 +1,10 @@
 <?php
+
 namespace BANG\Models;
+
 use BANG\Core\Stack;
 use BANG\Managers\Cards;
 use BANG\Core\Notifications;
-use BANG\Managers\EventCards;
 use JsonSerializable;
 
 /**
@@ -175,9 +176,9 @@ class AbstractCard implements JsonSerializable
 
   /**
    * getPlayOption : default function to know which card can be played by $player
-   * return: type of option and targets if any
+   * @return array{target_types?: int[], targets?: int[], status_bar_message?: string, confirmationMsg?: string, with_another_card?: array{strict: bool, cards: array, targets: int[]}}|null type of option and targets if any
    */
-  public function getPlayOptions($player)
+  public function getPlayOptions(Player $player): ?array
   {
     return [];
   }
@@ -186,7 +187,7 @@ class AbstractCard implements JsonSerializable
    * play : default function to play a card that. Can be used for cards that have only symbols
    * return: null if the game should continue the play loop, "stateName" if another state need to be called
    */
-  public function play($player, $args)
+  public function play(Player $player, array $args): void
   {
   }
 

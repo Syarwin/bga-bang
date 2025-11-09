@@ -52,9 +52,8 @@ class GameOptions
 
   /**
    * isEvents: are events enabled for this game?
-   * @return string
    */
-  public static function isEvents()
+  public static function isEvents(): bool
   {
     return count(array_intersect([HIGH_NOON, FISTFUL_OF_CARDS], self::getExpansions())) > 0;
   }

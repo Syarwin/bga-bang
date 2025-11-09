@@ -33,13 +33,15 @@ class Bang extends BangActionCard
    * Only one bang per turn, unless unlimitedBangs granted by Volcanic or by character
    * @param Player $player
    */
-  public function getPlayOptions($player)
+  public function getPlayOptions(Player $player): ?array
   {
     $aimingCards = Rules::isAimingCards();
     $bangPossible = !Rules::isBangStrictlyForbidden() && ($player->hasUnlimitedBangs() || Rules::getBangsAmountLeft() > 0);
     $bangsWithoutThis = $this->getBangsWithoutThisCard($player);
     $canPlayWithAnotherBang = Rules::isBangCouldBePlayedWithAnotherBang() && $bangsWithoutThis;
-    if (!$aimingCards && !$bangPossible && !$canPlayWithAnotherBang) { return null; }
+    if (!$aimingCards && !$bangPossible && !$canPlayWithAnotherBang) {
+      return null;
+    }
 
     $playOptions = [];
     $targetTypes = [];
@@ -79,7 +81,7 @@ class Bang extends BangActionCard
     }));
   }
 
-  public function play($player, $args)
+  public function play(Player $player, array $args): void
   {
     // FAQ, Q07. Sniper doesn't count as Bang! (secondCardId is set)
     // FAQ, Q09, Ricochet doesn't count as Bang! ($args['type'] should be 'player', not 'inPlay')

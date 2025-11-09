@@ -1,5 +1,7 @@
 <?php
+
 namespace BANG\States;
+
 use BANG\Core\Stack;
 use BANG\Managers\Players;
 
@@ -12,7 +14,9 @@ trait TriggerAbilityTrait
   {
     $atom = Stack::top();
     $player = Players::get($atom['pId']);
-    $player->useAbility($atom);
+    if (method_exists($player, 'useAbility')) {
+      $player->useAbility($atom);
+    }
     Stack::finishState();
   }
 }

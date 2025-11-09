@@ -1,9 +1,11 @@
 <?php
+
 namespace BANG\Managers;
 
 use BANG\Helpers\GameOptions;
 use BANG\Models\AbstractEventCard;
 use BANG\Models\Player;
+use BgaVisibleSystemException;
 
 /*
  * Cards: all utility functions concerning cards are here
@@ -92,7 +94,7 @@ class EventCards extends \BANG\Helpers\Pieces
   public static function getCardByType($cardType, $data = null)
   {
     if (!isset(self::$classes[$cardType])) {
-      throw new \BgaVisibleSystemException("getCardByType: Unknown card $cardType");
+      throw new BgaVisibleSystemException("getCardByType: Unknown card $cardType");
     }
     $name = 'BANG\Cards\Events\\' . self::$classes[$cardType];
     return new $name($data);
@@ -185,7 +187,7 @@ class EventCards extends \BANG\Helpers\Pieces
           FISTFUL_OF_CARDS => CARD_FISTFUL_OF_CARDS,
         ][$currentExpansion];
       default:
-        throw new \BgaVisibleSystemException('$currentEventExpansions does not intersect with $eventExpansions, please report as a bug');
+        throw new BgaVisibleSystemException('$currentEventExpansions does not intersect with $eventExpansions, please report as a bug');
     }
   }
 

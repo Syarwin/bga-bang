@@ -8,6 +8,7 @@ use BANG\Managers\Players;
 use BANG\Managers\Cards;
 use BANG\Managers\Rules;
 use BANG\Models\BlueCard;
+use BANG\Models\Player;
 
 class Jail extends BlueCard
 {
@@ -32,7 +33,7 @@ class Jail extends BlueCard
     ];
   }
 
-  public function getPlayOptions($player)
+  public function getPlayOptions(Player $player): ?array
   {
     if (!Rules::isCanPlayBlueGreenCards()) {
       return null;
@@ -47,7 +48,7 @@ class Jail extends BlueCard
     ];
   }
 
-  public function play($player, $args)
+  public function play(Player $player, array $args): void
   {
     Cards::equip($this->id, $args['player']);
   }

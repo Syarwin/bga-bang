@@ -1,4 +1,5 @@
 <?php
+
 namespace BANG\Models;
 
 use ReturnTypeWillChange;
@@ -6,12 +7,12 @@ use ReturnTypeWillChange;
 /**
  * EventCard:  class to handle blue cards
  *
- * @property-read $type
+ * @property-read int $type
  * @property-read string $name
  * @property-read string $text
- * @property-read $effect
- * @property-read $lastCard
- * @property-read $expansion
+ * @property-read int $effect
+ * @property-read bool $lastCard
+ * @property-read int $expansion
  */
 class AbstractEventCard implements \JsonSerializable
 {
@@ -23,20 +24,20 @@ class AbstractEventCard implements \JsonSerializable
     }
   }
 
-  protected $id;
+  protected int $id;
 
   // Static information about cards
-  protected $type;
-  protected $name;
-  protected $text;
-  protected $effect;
-  protected $lastCard;
-  protected $expansion;
+  protected int $type;
+  protected string  $name;
+  protected string $text;
+  protected int $effect;
+  protected bool $lastCard;
+  protected int $expansion;
 
   /*
    * getUiData: used in frontend to display cards
    */
-  public function getUIData()
+  public function getUIData(): array
   {
     return [
       'type' => $this->type,
@@ -48,17 +49,17 @@ class AbstractEventCard implements \JsonSerializable
   /*
    * Getters
    */
-  public function getId()
+  public function getId(): int
   {
     return $this->id;
   }
 
-  public function getName()
+  public function getName(): string
   {
     return $this->name;
   }
 
-  public function getExpansion()
+  public function getExpansion(): int
   {
     return $this->expansion;
   }
@@ -79,9 +80,8 @@ class AbstractEventCard implements \JsonSerializable
 
   /**
    * Returns the suit of all cards when this event is active or null if this event does not override suits.
-   * @return string|null
    */
-  public function getSuitOverride()
+  public function getSuitOverride(): ?string
   {
     return null;
   }
@@ -198,7 +198,9 @@ class AbstractEventCard implements \JsonSerializable
    * @return void
    */
   public function drawCardsPhaseOne($player)
-  {}
+  {
+
+  }
 
   /**
    * @return array

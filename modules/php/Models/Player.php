@@ -1097,10 +1097,8 @@ class Player extends \BANG\Helpers\DB_Manager
 
   /**
    * We use this method when isCardPlayable() returned that this card is not playable, so we need a reason
-   * @param AbstractCard $lastCard
-   * @return string
    */
-  public function getNonPlayabilityReason($lastCardType)
+  public function getNonPlayabilityReason(int $lastCardType): string
   {
     switch ($lastCardType) {
       case CARD_MISSED:

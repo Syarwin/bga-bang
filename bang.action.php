@@ -21,6 +21,9 @@
  *
  */
 
+/**
+ * @property bang $game
+ */
 class action_bang extends APP_GameAction
 {
   // Constructor: please do not modify
@@ -68,9 +71,13 @@ class action_bang extends APP_GameAction
     self::ajaxResponse();
   }
 
-  public function actCancelPreselection()
+  /**
+   * is this method even called?
+   */
+  public function actCancelPreselection(): void
   {
     self::setAjaxMode();
+    // method actCancelPreSelection probably doesn't exist
     $this->game->actCancelPreSelection();
     self::ajaxResponse();
   }

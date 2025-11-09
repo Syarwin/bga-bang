@@ -5,6 +5,7 @@ namespace BANG\Cards;
 use BANG\Managers\Players;
 use BANG\Core\Stack;
 use BANG\Models\BrownCard;
+use BANG\Models\Player;
 
 class Duel extends BrownCard
 {
@@ -32,7 +33,7 @@ class Duel extends BrownCard
   /*
    *
    */
-  public function getPlayOptions($player)
+  public function getPlayOptions(Player $player): ?array
   {
     $livings = Players::getLivingPlayers($player->getId());
     return [
@@ -41,7 +42,7 @@ class Duel extends BrownCard
     ];
   }
 
-  public function play($player, $args)
+  public function play(Player $player, array $args): void
   {
     parent::play($player, $args);
     $atom = Stack::newAtom(ST_REACT, [

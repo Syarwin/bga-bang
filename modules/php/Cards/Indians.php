@@ -26,13 +26,7 @@ class Indians extends BrownCard
     ];
   }
 
-  /**
-   * @param Player $player
-   * @param array $args
-   * @return void
-   */
-
-  public function play($player, $args)
+  public function play(Player $player, array $args): void
   {
     parent::play($player, $args);
     $ids = $player->getOrderedOtherPlayers();
