@@ -7,6 +7,8 @@ use BANG\Managers\Cards;
 use BANG\Core\Notifications;
 use BANG\Managers\Rules;
 use BANG\Models\BrownCard;
+use BANG\Models\Player;
+use BgaVisibleSystemException;
 
 class Beer extends BrownCard
 {
@@ -29,10 +31,10 @@ class Beer extends BrownCard
     ];
   }
 
-  public function play($player, $args)
+  public function play(Player $player, array $args): void
   {
     if (!Rules::isBeerAvailable()) {
-      throw new \BgaVisibleSystemException('Error: Beer was playable but not available at the same time. Please report this to BGA bug tracker');
+      throw new BgaVisibleSystemException('Error: Beer was playable but not available at the same time. Please report this to BGA bug tracker');
     }
     if (count(Players::getLivingPlayers()) <= 2) {
       Cards::discard($this);
@@ -45,7 +47,7 @@ class Beer extends BrownCard
     }
   }
 
-  public function getPlayOptions($player)
+  public function getPlayOptions(Player $player): ?array
   {
     if (!Rules::isBeerAvailable()) {
       return null;

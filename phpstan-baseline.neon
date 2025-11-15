@@ -1,6 +1,12 @@
 parameters:
   ignoreErrors:
     -
+      message: '#^Call to an undefined method bang\:\:actCancelPreSelection\(\)\.$#'
+      identifier: method.notFound
+      count: 1
+      path: bang.action.php
+
+    -
       message: '#^Access to an undefined property bang\:\:\$bSelectGlobalsForUpdate\.$#'
       identifier: property.notFound
       count: 1
@@ -35,18 +41,6 @@ parameters:
       identifier: unset.offset
       count: 1
       path: modules/php/Core/Notifications.php
-
-    -
-      message: '#^Class BANG\\Player not found\.$#'
-      identifier: class.notFound
-      count: 1
-      path: modules/php/Core/Stats.php
-
-    -
-      message: '#^Class WTO\\Player not found\.$#'
-      identifier: class.notFound
-      count: 1
-      path: modules/php/Core/Stats.php
 
     -
       message: '#^Function mysql_escape_string not found\.$#'

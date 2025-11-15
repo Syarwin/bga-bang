@@ -1,16 +1,19 @@
 <?php
+
 namespace BANG\Managers;
-use BANG\Core\Globals;
+
+use BANG\Helpers\DB_Manager;
 use BANG\Helpers\GameOptions;
 use BANG\Models\Player;
 use BANG\Helpers\Collection;
 use bang;
+use feException;
 
 /*
  * Players manager : allows to easily access players ...
  *  a player is an instance of Player class
  */
-class Players extends \BANG\Helpers\DB_Manager
+class Players extends DB_Manager
 {
   protected static function getGame()
   {
@@ -28,7 +31,14 @@ class Players extends \BANG\Helpers\DB_Manager
     }
   }
 
-  public static function setupNewGame($players, $expansions, $options)
+  /**
+   * @param non-empty-array<int, array{player_canal: string, player_name: string, player_avatar: string}> $players
+   * @param array $expansions
+   * @param array $options
+   * @return int|string
+   * @throws feException
+   */
+  public static function setupNewGame(array $players, array $expansions, array $options)
   {
     // Create players
     $gameInfos = self::getGame()->getGameinfos();
@@ -47,8 +57,10 @@ class Players extends \BANG\Helpers\DB_Manager
       'player_autopick_general_store',
     ]);
 
+    $playersCount = count($players);
+
     // Compute roles and shuffle them
-    $roles = array_slice([SHERIFF, OUTLAW, OUTLAW, RENEGADE, DEPUTY, OUTLAW, DEPUTY], 0, count($players));
+    $roles = array_slice([SHERIFF, RENEGADE, OUTLAW, OUTLAW, DEPUTY, OUTLAW, DEPUTY], 0, $playersCount);
     shuffle($roles);
 
     // Handle forced characters
@@ -73,8 +85,6 @@ class Players extends \BANG\Helpers\DB_Manager
     // Fill with random characters
     $characters = array_diff($characters, $charactersToChoice);
     shuffle($characters);
-
-    $playersCount = count($players);
     $needed = $playersCount * 2 - count($charactersToChoice);
     for ($i = 0; $i < $needed; $i++) {
       $charactersToChoice[] = array_pop($characters);
@@ -90,6 +100,7 @@ class Players extends \BANG\Helpers\DB_Manager
 
     $values = [];
     $i = 0;
+    $sheriff = 0;
     foreach ($players as $pId => $player) {
       $color = $gameInfos['player_colors'][$i];
       $canal = $player['player_canal'];
@@ -100,7 +111,7 @@ class Players extends \BANG\Helpers\DB_Manager
       $altCharacterId = array_pop($secondChoices);
       $charChosen = !GameOptions::chooseCharactersManually();
       $bullets = $charChosen ? self::getCharacterBullets($characterId) : null;
-      if ($role == SHERIFF) {
+      if ($role === SHERIFF) {
         if ($charChosen) {
           $bullets++;
         }
@@ -212,7 +223,11 @@ class Players extends \BANG\Helpers\DB_Manager
     ROSE_DOOLAN => 'RoseDoolan',
   ];
 
-  public static function getAvailableCharacters($expansions)
+  /**
+   * @param (BASE_GAME|HIGH_NOON|DODGE_CITY|FISTFUL_OF_CARDS)[] $expansions
+   * @return int[]
+   */
+  public static function getAvailableCharacters(array $expansions): array
   {
     $result = [];
     foreach (self::$classes as $cId => $className) {

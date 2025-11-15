@@ -75,7 +75,6 @@ class LawOfTheWest extends AbstractEventCard
   }
 
   /**
-   * @param AbstractCard $card
    * @param Player $player
    * @return void
    */

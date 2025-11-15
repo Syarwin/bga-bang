@@ -6,6 +6,7 @@ use BANG\Core\Notifications;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
 use BANG\Models\BrownCard;
+use BANG\Models\Player;
 
 class GeneralStore extends BrownCard
 {
@@ -24,7 +25,7 @@ class GeneralStore extends BrownCard
     $this->effect = ['type' => OTHER];
   }
 
-  public function play($player, $args)
+  public function play(Player $player, array $args): void
   {
     parent::play($player, $args);
     $players = Players::getLivingPlayerIdsStartingWith($player);

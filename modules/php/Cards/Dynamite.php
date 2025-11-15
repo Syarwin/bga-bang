@@ -7,6 +7,7 @@ use BANG\Managers\Cards;
 use BANG\Managers\Players;
 use BANG\Managers\Rules;
 use BANG\Models\BlueCard;
+use BANG\Models\Player;
 
 class Dynamite extends BlueCard
 {
@@ -55,7 +56,7 @@ class Dynamite extends BlueCard
     }
   }
 
-  public function play($player, $args)
+  public function play(Player $player, array $args): void
   {
     Cards::equip($this->id, $player->getId());
   }
