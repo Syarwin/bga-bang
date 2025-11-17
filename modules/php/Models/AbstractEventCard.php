@@ -2,8 +2,6 @@
 
 namespace BANG\Models;
 
-use ReturnTypeWillChange;
-
 /**
  * EventCard:  class to handle blue cards
  *
@@ -218,8 +216,7 @@ class AbstractEventCard implements \JsonSerializable
   /*
    * jsonSerialize: used in frontend to manipulate cards
    */
-  #[ReturnTypeWillChange]
-  public function jsonSerialize()
+  public function jsonSerialize(): array
   {
     return [
       'id' => $this->id,

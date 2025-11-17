@@ -15,6 +15,13 @@ class EventCards extends \BANG\Helpers\Pieces
   protected static $table = 'events';
   protected static $prefix = 'card_';
   protected static $customFields = ['type'];
+
+  /** @var bool use for tests only together with $testActiveCard */
+  protected static bool $isTest = false;
+
+  /** @var AbstractEventCard|null used for tests only */
+  protected static ?AbstractEventCard $testActiveCard = null;
+
   protected static function cast($card)
   {
     return self::getCardByType((int) $card['type'], $card);
@@ -125,11 +132,20 @@ class EventCards extends \BANG\Helpers\Pieces
     return self::countInLocation(LOCATION_EVENTS_DECK);
   }
 
+  public static function setActiveForTest(?AbstractEventCard $eventCard = null): void
+  {
+    self::$isTest = true;
+    self::$testActiveCard = $eventCard;
+  }
+
   /**
    * @return AbstractEventCard|null
    */
   public static function getActive()
   {
+    if (self::$isTest) {
+      return self::$testActiveCard;
+    }
     return GameOptions::isEvents() ? self::getTopOf(LOCATION_EVENTS_DISCARD) : null;
   }
 

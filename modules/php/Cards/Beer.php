@@ -54,11 +54,11 @@ class Beer extends BrownCard
     }
 
     $options = parent::getPlayOptions($player);
-    if ($options != null && $player->getBullets() == $player->getHp()) {
+    if ($options !== null && $player->getBullets() === $player->getHp()) {
       $msg = clienttranslate('You have maximum amount of life points. Drinking a beer would currently have no effect. Do you still want to drink it?');
       $options['confirmationMsg'] = $msg;
     }
-    if ($options != null && Players::count() == 2) {
+    if ($options !== null && count(Players::getLivingPlayers()) <= 2) {
       $msg = clienttranslate('Drinking a beer when only 2 players are left have no effect. Do you still want to drink it?');
       $options['confirmationMsg'] = $msg;
     }

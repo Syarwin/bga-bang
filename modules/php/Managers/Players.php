@@ -15,12 +15,29 @@ use feException;
  */
 class Players extends DB_Manager
 {
+  protected static $table = 'player';
+  protected static $primary = 'player_id';
+
+  /** @var bool use for tests only together with $testActiveCard */
+  protected static bool $isTest = false;
+
+  /** @var Collection used for tests only */
+  protected static Collection $players;
+
+  /**
+   * @param Player[] $players
+   */
+  public static function setPlayersForTest(array $players): void
+  {
+    self::$isTest = true;
+    self::$players = new Collection($players);
+  }
+
   protected static function getGame()
   {
     return bang::get();
   }
-  protected static $table = 'player';
-  protected static $primary = 'player_id';
+
   protected static function cast($row)
   {
     if ((int) $row['player_character_chosen'] === 0) {
@@ -295,12 +312,16 @@ class Players extends DB_Manager
   }
 
   /**
-   * returns an array of the ids of all living players
-   * @param int $exceptId
-   * @return Collection
+   * returns Collection of all living players
    */
-  public static function getLivingPlayers($exceptId = null)
+  public static function getLivingPlayers(?int $exceptId = null): Collection
   {
+    if (self::$isTest) {
+      return self::$players->filter(function(Player $player) use ($exceptId) {
+        return $player->getId() !== $exceptId && !$player->isEliminated() && !$player->isUnconscious();
+      });
+    }
+
     $playerIds = self::getLivingPlayerIdsStartingWith(null, false, $exceptId);
     return self::idsArrayToCollection($playerIds);
   }

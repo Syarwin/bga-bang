@@ -1,9 +1,4 @@
 {
-  "config": {
-    "platform": {
-      "php": "7.4.33"
-    }
-  },
   "autoload-dev": {
     "classmap": [
       "modules/php",

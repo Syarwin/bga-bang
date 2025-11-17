@@ -1,12 +1,12 @@
 <?php
+
 namespace BANG\Managers;
-use BANG\Core\Globals;
+
 use BANG\Core\Stack;
 use BANG\Helpers\DB_Manager;
 use BANG\Models\AbstractCard;
 use BANG\Models\AbstractEventCard;
 use BANG\Models\Player;
-use bang;
 
 /*
  * Rules: all turn rules and all changes to them according to player role and event and all other factors
@@ -16,11 +16,30 @@ class Rules extends DB_Manager
   protected static $table = 'rules';
   protected static $primary = 'id';
 
+  /** @var bool use for tests only together with $testActiveCard */
+  protected static bool $isTest = false;
+
+  /** @var array<string, bool> used for tests only */
+  protected static array $availableRules = [];
+
+  public static function setAvailableRulesForTest(array $availableRules): void
+  {
+    self::$isTest = true;
+    self::$availableRules = []; // reset
+    foreach ($availableRules as $rule) {
+      self::$availableRules[$rule] = true;
+    }
+  }
+
   /*
    * get: common method for getting a specific rule from the list
    */
   private static function getRule($rule)
   {
+    if (self::$isTest) {
+      return self::$availableRules[$rule] ?? false;
+    }
+
     $ruleRow = self::DB()
       ->orderBy(self::$primary, 'DESC')
       ->select($rule)
