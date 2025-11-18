@@ -25,28 +25,28 @@ class Player extends DB_Manager
   protected static $table = 'player';
   protected static $primary = 'player_id';
 
-  protected int $id;
-  protected int $no; // natural order
-  protected string $name; // player name
-  protected string $color;
+  protected ?int $id = null;
+  protected ?int $no = null; // natural order
+  protected ?string $name = null; // player name
+  protected ?string $color = null;
   protected bool $eliminated = false;
-  protected int $hp;
+  protected ?int $hp = null;
   protected bool $zombie = false;
-  protected int $role;
-  protected int $score;
-  protected int $generalStore;
+  protected ?int $role = null;
+  protected ?int $score = null;
+  protected ?int $generalStore = null;
 
   // --character properties
   protected int $character; //the int-constant
-  protected int $altCharacter;
-  protected string $character_name;
-  protected array $text;
-  protected int $bullets;
+  protected ?int $altCharacter = null;
+  protected string $character_name = '';
+  protected array $text = [];
+  protected ?int $bullets = null;
   protected int $expansion = BASE_GAME;
   protected bool $characterChosen;
   // see constants for player's living status from constants.inc.php
-  protected int $livingStatus;
-  protected ?bool $agreedToDisclaimer;
+  protected ?int $livingStatus = null;
+  protected ?bool $agreedToDisclaimer = null;
 
   public function __construct(?array $row = null)
   {
@@ -73,17 +73,17 @@ class Player extends DB_Manager
   /*
    * Getters
    */
-  public function getId(): int
+  public function getId(): ?int
   {
     return $this->id;
   }
 
-  public function getNo(): int
+  public function getNo(): ?int
   {
     return $this->no;
   }
 
-  public function getName(): string
+  public function getName(): ?string
   {
     return $this->name;
   }
@@ -93,12 +93,12 @@ class Player extends DB_Manager
     return $this->color;
   }
 
-  public function getHp(): int
+  public function getHp(): ?int
   {
     return $this->hp;
   }
 
-  public function getRole(): int
+  public function getRole(): ?int
   {
     return $this->role;
   }
