@@ -14,10 +14,7 @@ class BillNoface  extends \BANG\Models\Player{
     parent::__construct($row);
   }
 
-  /**
-   * @return int
-   */
-  public function defaultCardsToDraw()
+  public function defaultCardsToDraw(): int
   {
       return $this->bullets - $this->hp + 1;
   }

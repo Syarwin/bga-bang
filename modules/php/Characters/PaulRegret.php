@@ -1,11 +1,15 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Characters;
 
 use BANG\Managers\Rules;
+use BANG\Models\Player;
 
-class PaulRegret extends \BANG\Models\Player
+class PaulRegret extends Player
 {
-  public function __construct($row = null)
+  public function __construct(?array $row = null)
   {
     $this->character = PAUL_REGRET;
     $this->character_name = clienttranslate('Paul Regret');
@@ -14,7 +18,7 @@ class PaulRegret extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function getDistanceTo($enemy)
+  public function getDistanceTo(Player $enemy): int
   {
     return parent::getDistanceTo($enemy) + (Rules::isAbilityAvailable() ? 1 : 0);
   }

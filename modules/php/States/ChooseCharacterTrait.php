@@ -3,6 +3,7 @@ namespace BANG\States;
 use BANG\Core\Notifications;
 use BANG\Managers\Cards;
 use BANG\Managers\Players;
+use BANG\Models\Player;
 
 trait ChooseCharacterTrait
 {
@@ -14,12 +15,13 @@ trait ChooseCharacterTrait
   {
     $players = Players::getAll();
     $characters = [];
+    /** @var Player $player */
     foreach ($players as $player) {
       $charactersIds = $player->getBothCharacters();
       $characters[$player->getId()] = [
-        'characters' => array_map(function ($characterId) {
+        'characters' => array_map(function (int $characterId) {
           return Players::getCharacter($characterId)->getUiData();
-        }, $charactersIds)
+        }, $charactersIds),
       ];
     }
     return [

@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BANG\Cards;
 
 use BANG\Core\Notifications;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
+use BANG\Models\AbstractCard;
 use BANG\Models\BrownCard;
 use BANG\Models\Player;
 
@@ -33,7 +36,7 @@ class GeneralStore extends BrownCard
     $player->prepareSelection($this, $players, false, 1);
   }
 
-  public function react($card, $player)
+  public function react(AbstractCard $card, Player $player): void
   {
     Cards::move($card->getId(), LOCATION_HAND, $player->getId());
     Notifications::chooseCard($player, $card);

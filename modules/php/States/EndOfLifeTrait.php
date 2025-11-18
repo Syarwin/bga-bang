@@ -86,12 +86,12 @@ trait EndOfLifeTrait
   /**
    * Eliminate a player
    */
-  public function stEliminate()
+  public function stEliminate(): void
   {
     $ctx = Stack::getCtx();
     $player = Players::get($ctx['pId']);
     $pId = $player->eliminate();
-    if ($pId === true) {
+    if ($pId === null) {
       Stack::finishState();
     } else {
       $this->gamestate->changeActivePlayer($pId);

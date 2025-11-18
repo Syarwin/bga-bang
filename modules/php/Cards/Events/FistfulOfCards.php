@@ -1,5 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards\Events;
+
 use BANG\Cards\Bang;
 use BANG\Core\Stack;
 use BANG\Models\AbstractEventCard;
@@ -18,10 +22,7 @@ class FistfulOfCards extends AbstractEventCard
     $this->expansion = FISTFUL_OF_CARDS;
   }
 
-  /**
-   * @param Player $player
-   */
-  public function resolveEffect($player = null)
+  public function resolveEffect(Player $player): void
   {
     for ($bangsLeft = 0; $bangsLeft < $player->getHand()->count(); $bangsLeft++) {
       $msgActive = $bangsLeft === 0 ?

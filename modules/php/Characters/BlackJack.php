@@ -1,13 +1,18 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Characters;
+
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
 use BANG\Managers\Cards;
 use BANG\Managers\Rules;
+use BANG\Models\Player;
 
-class BlackJack extends \BANG\Models\Player
+class BlackJack extends Player
 {
-  public function __construct($row = null)
+  public function __construct(?array $row = null)
   {
     $this->character = BLACK_JACK;
     $this->character_name = clienttranslate('Black Jack');
@@ -20,7 +25,7 @@ class BlackJack extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function drawCardsPhaseOne()
+  public function drawCardsPhaseOne(): void
   {
     // Draw one visible
     $location = Rules::getDrawOrDiscardCardsLocation(LOCATION_DECK);
@@ -48,16 +53,16 @@ class BlackJack extends \BANG\Models\Player
     }
   }
 
-  public function getPhaseOneRules($defaultAmount, $isAbilityAvailable = true)
+  public function getPhaseOneRules(int $defaultAmount, bool $isAbilityAvailable = true): array
   {
     if ($defaultAmount === 1 || !$isAbilityAvailable) {
       return parent::getPhaseOneRules($defaultAmount);
-    } else {
-      return [
-        RULE_PHASE_ONE_CARDS_DRAW_BEGINNING => 1,
-        RULE_PHASE_ONE_PLAYER_ABILITY_DRAW => true,
-        RULE_PHASE_ONE_CARDS_DRAW_END => $defaultAmount - 2
-      ];
     }
+
+    return [
+      RULE_PHASE_ONE_CARDS_DRAW_BEGINNING => 1,
+      RULE_PHASE_ONE_PLAYER_ABILITY_DRAW => true,
+      RULE_PHASE_ONE_CARDS_DRAW_END => $defaultAmount - 2
+    ];
   }
 }

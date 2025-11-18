@@ -1,15 +1,20 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Characters;
+
 use BANG\Core\Notifications;
 use BANG\Core\Globals;
 use BANG\Core\Stack;
 use BANG\Managers\Cards;
 use BANG\Managers\Players;
 use BANG\Managers\Rules;
+use BANG\Models\Player;
 
-class ElGringo extends \BANG\Models\Player
+class ElGringo extends Player
 {
-  public function __construct($row = null)
+  public function __construct(?array $row = null)
   {
     $this->character = EL_GRINGO;
     $this->character_name = clienttranslate('El Gringo');
@@ -22,7 +27,7 @@ class ElGringo extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function loseLife($amount = 1)
+  public function loseLife(int $amount = 1): void
   {
     parent::loseLife($amount);
     // There is no need to steal cards if Russian Roulette is active
@@ -51,7 +56,7 @@ class ElGringo extends \BANG\Models\Player
     }
   }
 
-  public function useAbility($ctx)
+  public function useAbility(array $ctx): void
   {
     $attacker = Players::get(Rules::getCurrentPlayerId());
     for ($i = 0; $i < $ctx['amount']; $i++) {

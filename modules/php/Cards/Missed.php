@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BANG\Cards;
 
+use BANG\Models\AbstractCard;
 use BANG\Models\BrownCard;
+use BANG\Models\Player;
 
 class Missed extends BrownCard
 {
@@ -22,13 +26,13 @@ class Missed extends BrownCard
   }
 
   // react and pass can only happen when played as BANG by Calamity Janet
-  public function react($card, $player)
+  public function react(AbstractCard $card, Player $player): void
   {
     $bang = new Bang();
     $bang->react($card, $player);
   }
 
-  public function pass($player)
+  public function pass(Player $player): void
   {
     $bang = new Bang();
     $bang->pass($player);

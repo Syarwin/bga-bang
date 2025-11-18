@@ -72,7 +72,7 @@ class AbstractEventCard implements \JsonSerializable
     return $this->effect;
   }
 
-  public function resolveEffect($player = null)
+  public function resolveEffect(Player $player): void
   {
   }
 
@@ -84,126 +84,87 @@ class AbstractEventCard implements \JsonSerializable
     return null;
   }
 
-  public function nextPlayerCounterClockwise()
+  public function nextPlayerCounterClockwise(): bool
   {
     return false;
   }
 
-  /**
-   * @param Player $player
-   * @return int
-   */
-  public function getPhaseOneAmountOfCardsToDraw($player)
+  public function getPhaseOneAmountOfCardsToDraw(Player $player): int
   {
     return $player->defaultCardsToDraw();
   }
 
-  public function isAbilityAvailable()
+  public function isAbilityAvailable(): bool
   {
     return true;
   }
 
-  public function isBeerAvailable()
+  public function isBeerAvailable(): bool
   {
     return true;
   }
 
-  public function getBangsAmount()
+  public function getBangsAmount(): int
   {
     return 1;
   }
 
-  public function isBangStrictlyForbidden()
+  public function isBangStrictlyForbidden(): bool
   {
     return false;
   }
 
-  /**
-   * @return boolean
-   */
-  public function isResurrectionEffect($player = null)
+  public function isResurrectionEffect(?Player $player = null): bool
   {
     return false;
   }
 
-  /**
-   * @return boolean
-   */
-  public function isPhaseOneSpecialDraw()
+  public function isPhaseOneSpecialDraw(): bool
   {
     return false;
   }
 
-  /**
-   * @param string $requestedLocation
-   * @return string
-   */
-  public function getDrawCardsLocation($requestedLocation)
+  public function getDrawCardsLocation(string $requestedLocation): string
   {
     return $requestedLocation;
   }
 
-  /**
-   * @return boolean
-   */
-  public function isDistanceForcedToOne()
+  public function isDistanceForcedToOne(): bool
   {
     return false;
   }
 
-  /**
-   * @return boolean
-   */
-  public function isIgnoreCardsInPlay()
+  public function isIgnoreCardsInPlay(): bool
   {
     return false;
   }
 
-  /**
-   * @return boolean
-   */
-  public function isAimingCards()
+  public function isAimingCards(): bool
   {
     return false;
   }
 
-  /**
-   * @return boolean
-   */
-  public function isBangCouldBePlayedWithAnotherBang()
+  public function isBangCouldBePlayedWithAnotherBang(): bool
   {
     return false;
   }
 
-  /**
-   * @return boolean
-   */
-  public function isCanPlayBlueGreenCards()
+  public function isCanPlayBlueGreenCards(): bool
   {
     return true;
   }
 
-  /**
-   * @return boolean
-   */
-  public function isAllowPlayerPhaseOne()
+  public function isAllowPlayerPhaseOne(): bool
   {
     return true;
   }
 
-  /**
-   * @param Player $player
-   * @return void
-   */
-  public function drawCardsPhaseOne($player)
+  public function drawCardsPhaseOne(Player $player): void
   {
 
   }
 
-  /**
-   * @return array
-   */
-  public function getRules()
+  public function getRules(): array
   {
     return [
       RULE_ABILITY_AVAILABLE => $this->isAbilityAvailable(),

@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BANG\Cards;
 
 use BANG\Core\Stack;
 use BANG\Core\Notifications;
 use BANG\Managers\Rules;
+use BANG\Models\AbstractCard;
 use BANG\Models\BlueCard;
+use BANG\Models\Player;
 
 class Barrel extends BlueCard
 {
@@ -24,20 +28,20 @@ class Barrel extends BlueCard
     $this->effect = ['type' => DEFENSIVE];
   }
 
-  public function wasPlayed()
+  public function wasPlayed(): bool
   {
     $atom = Stack::top();
     return isset($atom['used']) && in_array($this->type, $atom['used']);
   }
 
-  public function activate($player, $args = [])
+  public function activate(Player $player, array $args = []): void
   {
     Notifications::useCard($player, $this);
     Stack::suspendCtx();
     $player->addFlipAtom($this);
   }
 
-  public function resolveFlipped($card, $player)
+  public function resolveFlipped(AbstractCard $card, Player $player): void
   {
     $missedNeeded = Stack::top()['missedNeeded'] ?? 1;
 

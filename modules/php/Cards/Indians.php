@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BANG\Cards;
 
+use BANG\Models\AbstractCard;
 use BANG\Models\BrownCard;
 use BANG\Models\Player;
 
@@ -33,17 +36,17 @@ class Indians extends BrownCard
     $player->attack($this, $ids);
   }
 
-  public function getReactionOptions($player)
+  public function getReactionOptions(Player $player): array
   {
     return $player->getBangCards();
   }
 
-  public function pass($player)
+  public function pass(Player $player): void
   {
     $player->loseLife();
   }
 
-  public function react($card, $player)
+  public function react(AbstractCard $card, Player $player): void
   {
     $player->discardCard($card);
   }

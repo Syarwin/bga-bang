@@ -169,18 +169,14 @@ class EventCards extends \BANG\Helpers\Pieces
     return self::getActive();
   }
 
-  /**
-   * @param Player $player
-   * @return boolean
-   */
-  public static function isResurrectionPossible($player = null)
+  public static function isResurrectionPossible(?Player $player = null): bool
   {
     $cards = self::getInLocation(LOCATION_EVENTS_DECK);
     $active = self::getActive();
     if (!is_null($active)) {
       $cards = $cards->push($active);
     }
-    $resurrectionCards = $cards->filter(function ($card) use ($player) {
+    $resurrectionCards = $cards->filter(function (AbstractEventCard $card) use ($player) {
       return $card->isResurrectionEffect($player);
     });
     return count($resurrectionCards) > 0;

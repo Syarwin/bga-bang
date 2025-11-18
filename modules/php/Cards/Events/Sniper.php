@@ -1,5 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards\Events;
+
 use BANG\Models\AbstractEventCard;
 
 class Sniper extends AbstractEventCard
@@ -14,10 +18,7 @@ class Sniper extends AbstractEventCard
     $this->expansion = FISTFUL_OF_CARDS;
   }
 
-  /**
-   * @return boolean
-   */
-  public function isBangCouldBePlayedWithAnotherBang()
+  public function isBangCouldBePlayedWithAnotherBang(): bool
   {
     return true;
   }

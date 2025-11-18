@@ -1,6 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards\Events;
+
 use BANG\Models\AbstractEventCard;
+use BANG\Models\Player;
 
 class HighNoon extends AbstractEventCard
 {
@@ -15,7 +20,7 @@ class HighNoon extends AbstractEventCard
     $this->expansion = HIGH_NOON;
   }
 
-  public function resolveEffect($player = null)
+  public function resolveEffect(Player $player): void
   {
     $player->loseLife();
   }

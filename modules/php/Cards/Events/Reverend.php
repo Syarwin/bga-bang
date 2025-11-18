@@ -1,5 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards\Events;
+
 use BANG\Models\AbstractEventCard;
 
 class Reverend extends AbstractEventCard
@@ -14,7 +18,7 @@ class Reverend extends AbstractEventCard
     $this->expansion = HIGH_NOON;
   }
 
-  public function isBeerAvailable()
+  public function isBeerAvailable(): bool
   {
     return false;
   }

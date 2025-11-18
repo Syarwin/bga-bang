@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BANG\Cards;
 
 use BANG\Core\Notifications;
 use BANG\Managers\Cards;
 use BANG\Managers\Players;
 use BANG\Managers\Rules;
+use BANG\Models\AbstractCard;
 use BANG\Models\BlueCard;
 use BANG\Models\Player;
 
@@ -30,14 +33,14 @@ class Dynamite extends BlueCard
   /*
    * When activated at the start of turn, flip a card and resolve effect
    */
-  public function startOfTurn($player)
+  public function startOfTurn(Player $player): void
   {
     if (!Rules::isIgnoreCardsInPlay()) {
       $player->addFlipAtom($this);
     }
   }
 
-  public function resolveFlipped($card, $player)
+  public function resolveFlipped(AbstractCard $card, Player $player): void
   {
     $player->discardCard($card, true); // Discard a flipped card
 

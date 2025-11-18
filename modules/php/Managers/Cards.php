@@ -163,7 +163,7 @@ class Cards extends Pieces
     self::play($id);
   }
 
-  public static function discardMany($arr)
+  public static function discardMany(array $arr): void
   {
     foreach ($arr as $card) {
       self::discard($card);

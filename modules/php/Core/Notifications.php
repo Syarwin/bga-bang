@@ -135,10 +135,10 @@ class Notifications
   /**
    * @param Player $player
    * @param Collection $cards
-   * @param boolean $public
+   * @param bool $public
    * @param string $src
-   * @param boolean $silent
-   * @param boolean $isSelection
+   * @param bool $silent
+   * @param bool $isSelection
    * @return void
    */
   public static function drawCards($player,
@@ -247,8 +247,8 @@ class Notifications
   /**
    * @param Player $player
    * @param array $card
-   * @param boolean $silent
-   * @param boolean $notifyTargetOnly
+   * @param bool $silent
+   * @param bool $notifyTargetOnly
    * @return void
    */
   public static function discardedCardToDeck($player, $card, $silent = false, $notifyTargetOnly = false)
@@ -273,7 +273,7 @@ class Notifications
   /**
    * @param Player $player
    * @param int[] $cardIds
-   * @param boolean $silent
+   * @param bool $silent
    * @param string $destination
    * @return void
    */

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BANG\Cards;
 
 use BANG\Core\Notifications;
@@ -7,6 +9,7 @@ use BANG\Core\Stack;
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
 use BANG\Managers\Rules;
+use BANG\Models\AbstractCard;
 use BANG\Models\BlueCard;
 use BANG\Models\Player;
 
@@ -39,8 +42,8 @@ class Jail extends BlueCard
       return null;
     }
     // Can be played on anyone except the sheriff
-    $players = Players::getLivingPlayers()->filter(function ($player) {
-      return $player->getRole() != SHERIFF && !$player->hasCardCopyInPlay($this);
+    $players = Players::getLivingPlayers()->filter(function (Player $player) {
+      return $player->getRole() !== SHERIFF && !$player->hasCardCopyInPlay($this);
     });
     return [
       'target_types' => [TARGET_PLAYER],
@@ -53,12 +56,12 @@ class Jail extends BlueCard
     Cards::equip($this->id, $args['player']);
   }
 
-  public function startOfTurn($player)
+  public function startOfTurn(Player $player): void
   {
     $player->addFlipAtom($this);
   }
 
-  public function resolveFlipped($card, $player)
+  public function resolveFlipped(AbstractCard $card, Player $player): void
   {
     $isIgnoreCardsInPlay = Rules::isIgnoreCardsInPlay();
     $player->discardCard($card, true); // Discard a flipped card

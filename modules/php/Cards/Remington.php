@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BANG\Cards;
 
 use BANG\Models\WeaponCard;

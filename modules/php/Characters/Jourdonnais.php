@@ -1,13 +1,19 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Characters;
+
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
 use BANG\Managers\Cards;
 use BANG\Managers\Rules;
+use BANG\Models\AbstractCard;
+use BANG\Models\Player;
 
-class Jourdonnais extends \BANG\Models\Player
+class Jourdonnais extends Player
 {
-  public function __construct($row = null)
+  public function __construct(?array $row = null)
   {
     $this->character = JOURDONNAIS;
     $this->character_name = clienttranslate('Jourdonnais');
@@ -16,13 +22,13 @@ class Jourdonnais extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  protected function abilityHaveBeenUsed()
+  protected function abilityHaveBeenUsed(): bool
   {
     $atom = Stack::top();
     return isset($atom['used']) && in_array($this->character, $atom['used']);
   }
 
-  public function getDefensiveOptions()
+  public function getDefensiveOptions(): array
   {
     $res = parent::getDefensiveOptions();
 
@@ -32,14 +38,14 @@ class Jourdonnais extends \BANG\Models\Player
     return $res;
   }
 
-  public function useAbility()
+  public function useAbility(): void
   {
     Cards::drawForLocation(LOCATION_FLIPPED, 1);
     Stack::suspendCtx();
     $this->addResolveFlippedAtom($this);
   }
 
-  public function resolveFlipped($card)
+  public function resolveFlipped(AbstractCard $card): void
   {
     Notifications::flipCard($this, $card, $this);
     $missedNeeded = Stack::top()['missedNeeded'] ?? 1;

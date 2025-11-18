@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BANG\Cards;
 
 use BANG\Managers\Players;
@@ -31,7 +33,6 @@ class Bang extends BangActionCard
 
   /**
    * Only one bang per turn, unless unlimitedBangs granted by Volcanic or by character
-   * @param Player $player
    */
   public function getPlayOptions(Player $player): ?array
   {
@@ -69,11 +70,7 @@ class Bang extends BangActionCard
     return $playOptions;
   }
 
-  /**
-   * @param Player $player
-   * @return array
-   */
-  private function getBangsWithoutThisCard($player)
+  private function getBangsWithoutThisCard(Player $player): array
   {
     $bangOptions = [ 'targets' => Players::getLivingPlayers($player->getId())->getIds() ];
     return array_values(array_filter($player->getBangCards($bangOptions)['cards'], function ($card) {
