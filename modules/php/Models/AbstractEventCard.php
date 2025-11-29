@@ -26,10 +26,10 @@ class AbstractEventCard implements \JsonSerializable
 
   // Static information about cards
   protected int $type;
-  protected string  $name;
+  protected string $name;
   protected string $text;
   protected int $effect;
-  protected bool $lastCard;
+  protected bool $lastCard = false;
   protected int $expansion;
 
   /*

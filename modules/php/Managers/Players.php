@@ -390,7 +390,7 @@ class Players extends DB_Manager
     return self::get(self::getNextId($player, $includeGhosts));
   }
 
-  public static function getPreviousId(Player $player, bool $includeGhosts = false): Player
+  public static function getPreviousId(Player $player, bool $includeGhosts = false): int
   {
     $players = self::getLivingPlayerIdsStartingWith($player, $includeGhosts);
     return $players[count($players)-1];
