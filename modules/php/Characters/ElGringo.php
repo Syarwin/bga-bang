@@ -36,12 +36,12 @@ class ElGringo extends Player
     if (Rules::isAbilityAvailable() && !$isRussianRouletteActive) {
       $attackerId = Rules::getCurrentPlayerId();
       if ($attackerId != $this->id) {
-        $attackerCharacter = Players::get($attackerId)->getCharacter();
+        $attacker = Players::get($attackerId);
         $attackerIndex = Stack::getFirstIndex(['state' => ST_TRIGGER_ABILITY,
           'pId' => $attackerId
         ]);
         // This is for a specific case when El Gringo loses the Duel and needs to get a card from Suzy AFTER she gets it
-        if ($attackerCharacter === SUZY_LAFAYETTE && $attackerIndex > -1) {
+        if ($attacker->isCharacter(SUZY_LAFAYETTE) && $attackerIndex > -1) {
           Stack::insertAfter(Stack::newAtom(ST_TRIGGER_ABILITY, [
             'pId' => $this->id,
             'amount' => $amount,

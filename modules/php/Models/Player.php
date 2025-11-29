@@ -113,6 +113,11 @@ class Player extends DB_Manager
     return $this->character_name;
   }
 
+  public function isCharacter(int $characterToCheck): bool
+  {
+    return $this->character === $characterToCheck;
+  }
+
   public function isEliminated(): bool
   {
     return $this->eliminated;

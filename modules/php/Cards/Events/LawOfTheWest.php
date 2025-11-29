@@ -77,7 +77,7 @@ class LawOfTheWest extends AbstractEventCard
         [];
       $cardImpacts = $card->getEffect()['impacts'] ?? null;
       $cardType = $card->getType();
-      if ($player->getCharacter() === CALAMITY_JANET && $cardType === CARD_MISSED) {
+      if ($player->isCharacter(CALAMITY_JANET) && $cardType === CARD_MISSED) {
         $cardType = CARD_BANG;
         $cardImpacts = INRANGE;
       }
