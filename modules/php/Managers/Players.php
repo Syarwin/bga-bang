@@ -30,7 +30,11 @@ class Players extends DB_Manager
   public static function setPlayersForTest(array $players): void
   {
     self::$isTest = true;
-    self::$players = new Collection($players);
+    $playersWithKeys = [];
+    foreach ($players as $player) {
+      $playersWithKeys[$player->getId()] = $player;
+    }
+    self::$players = new Collection($playersWithKeys);
   }
 
   protected static function getGame()
@@ -306,6 +310,15 @@ class Players extends DB_Manager
    */
   public static function getPlayerPositions()
   {
+    if (self::$isTest) {
+      $positions = [];
+      $i = 0;
+      foreach (self::$players as $player) {
+        $positions[$player->getId()] = $i++;
+      }
+      return $positions;
+    }
+
     return array_flip(
       self::getObjectListFromDB("SELECT player_id from player WHERE player_eliminated = 0 AND player_unconscious != 1 ORDER BY player_no", true)
     );
