@@ -1,11 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards;
 
-class Winchester extends \BANG\Models\WeaponCard
+use BANG\Models\WeaponCard;
+
+class Winchester extends WeaponCard
 {
-  public function __construct($id = null, $copy = '')
+  public function __construct(?array $params = null)
   {
-    parent::__construct($id, $copy);
+    parent::__construct($params);
     $this->type = CARD_WINCHESTER;
     $this->name = clienttranslate('Winchester');
     $this->text = clienttranslate('Range: 5');

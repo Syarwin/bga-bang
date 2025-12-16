@@ -1,10 +1,16 @@
 <?php
-namespace BANG\Characters;
-use BANG\Managers\Rules;
 
-class SlabtheKiller extends \BANG\Models\Player
+declare(strict_types=1);
+
+namespace BANG\Characters;
+
+use BANG\Managers\Rules;
+use BANG\Models\AbstractCard;
+use BANG\Models\Player;
+
+class SlabtheKiller extends Player
 {
-  public function __construct($row = null)
+  public function __construct(?array $row = null)
   {
     $this->character = SLAB_THE_KILLER;
     $this->character_name = clienttranslate('Slab the Killer');
@@ -13,7 +19,7 @@ class SlabtheKiller extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function getReactAtomForAttack($card, $targetCardId, $secondMissedNeeded)
+  public function getReactAtomForAttack(AbstractCard $card, ?int $targetCardId = null, bool $secondMissedNeeded = false): array
   {
     $secondMissedNeeded = $secondMissedNeeded || ($card->getType() === CARD_BANG && Rules::isAbilityAvailable());
     return parent::getReactAtomForAttack($card, $targetCardId, $secondMissedNeeded);

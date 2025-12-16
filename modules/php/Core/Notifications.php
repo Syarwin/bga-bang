@@ -135,10 +135,10 @@ class Notifications
   /**
    * @param Player $player
    * @param Collection $cards
-   * @param boolean $public
+   * @param bool $public
    * @param string $src
-   * @param boolean $silent
-   * @param boolean $isSelection
+   * @param bool $silent
+   * @param bool $isSelection
    * @return void
    */
   public static function drawCards($player,
@@ -206,8 +206,7 @@ class Notifications
   /**
    * @param Player $player
    * @param Collection $cards
-   * @param string $silent
-   * @param string $msgOthersForced
+   * @param bool $silent
    * @return void
    */
   public static function drawCardFromDiscard($player, $cards, $silent = false)
@@ -248,8 +247,8 @@ class Notifications
   /**
    * @param Player $player
    * @param array $card
-   * @param boolean $silent
-   * @param boolean $notifyTargetOnly
+   * @param bool $silent
+   * @param bool $notifyTargetOnly
    * @return void
    */
   public static function discardedCardToDeck($player, $card, $silent = false, $notifyTargetOnly = false)
@@ -274,7 +273,7 @@ class Notifications
   /**
    * @param Player $player
    * @param int[] $cardIds
-   * @param boolean $silent
+   * @param bool $silent
    * @param string $destination
    * @return void
    */
@@ -409,7 +408,7 @@ class Notifications
     }
   }
 
-  private static function getDataToUpdatePlayer($player)
+  private static function getDataToUpdatePlayer(Player $player)
   {
     return [
       'i18n' => ['role_name'],
@@ -419,17 +418,17 @@ class Notifications
     ];
   }
 
-  private static function getRoleName($n)
+  private static function getRoleName(Player $player): string
   {
     return [
       clienttranslate('Sheriff'),
       clienttranslate('Deputy'),
       clienttranslate('Outlaw'),
       clienttranslate('Renegade'),
-    ][$n->getRole()];
+    ][$player->getRole()];
   }
 
-  public static function reshuffle()
+  public static function reshuffle(): void
   {
     self::notifyAll('reshuffle', clienttranslate('Reshuffling the deck.'), [
       'deckCount' => Cards::getDeckCount(),
@@ -438,10 +437,8 @@ class Notifications
 
   /**
    * characterChosen: send all info about
-   * @param Player $player
-   * @param Player $character
    */
-  public static function characterChosen($player)
+  public static function characterChosen(Player $player): void
   {
     $characterName = $player->getCharName();
     $msg = clienttranslate('${player_name} chose ${character_name} as a character');
@@ -452,11 +449,7 @@ class Notifications
     ]);
   }
 
-  /**
-   * @param AbstractEventCard $eventCard
-   * @param AbstractEventCard $nextEventCard
-   */
-  public static function newEvent($eventCard, $nextEventCard)
+  public static function newEvent(AbstractEventCard $eventCard, AbstractEventCard $nextEventCard): void
   {
     $msg = clienttranslate('${eventActiveName} is now active!');
     self::notifyAll('newEvent', $msg, [
@@ -469,9 +462,8 @@ class Notifications
 
   /**
    * playerUnconscious: send when player died but might be resurrected
-   * @param Player $player
    */
-  public static function playerUnconscious($player)
+  public static function playerUnconscious(Player $player): void
   {
     $msg = clienttranslate('${player_name} is eliminated but might be back at some point...');
     self::notifyAll('playerUnconscious', $msg, [
@@ -479,7 +471,7 @@ class Notifications
     ]);
   }
 
-  public static function playerGuessedIncorrectly($player)
+  public static function playerGuessedIncorrectly(Player $player): void
   {
     $msg = clienttranslate('${player_name} guessed a card color incorrectly thus ending Peyote\'s effect');
     $msgYou = clienttranslate('${You} guessed a card color incorrectly thus ending Peyote\'s effect');
@@ -489,7 +481,7 @@ class Notifications
     ]);
   }
 
-  public static function updateArgs(&$data)
+  public static function updateArgs(array &$data): void
   {
     if (isset($data['player'])) {
       $data['player_id'] = $data['player']->getId();

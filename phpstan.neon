@@ -1,0 +1,16 @@
+parameters:
+    level: 3
+    paths:
+        - tests/constants.php
+        - bang.action.php
+        - bang.game.php
+        - bang.view.php
+        - gameinfos.inc.php
+        - gameoptions.inc.php
+        - material.inc.php
+        - states.inc.php
+        - stats.inc.php
+        - modules
+
+includes:
+    - phpstan-baseline.neon

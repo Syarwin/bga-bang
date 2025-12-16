@@ -1,9 +1,11 @@
 <?php
+
 namespace BANG\Models;
+
 use BANG\Managers\Players;
 use BANG\Managers\Cards;
 use BANG\Core\Notifications;
-use BANG\Managers\Rules;
+use BgaVisibleSystemException;
 
 /*
  * BrownCard: class to handle brown card
@@ -20,42 +22,40 @@ class BrownCard extends AbstractCard
   }
 
   /**
-   * getTargetablePlayers: return the player's id that can be targeted by this card, depending on effect and range
-   * @param Player $player
+   * @return int[] the player's id that can be targeted by this card, depending on effect and range
    */
-  public function getTargetablePlayers($player)
+  public function getTargetablePlayers(Player $player): array
   {
-    $player_ids = [];
     switch ($this->effect['impacts']) {
       case ALL_OTHER:
-        $player_ids = Players::getLivingPlayerIdsStartingWith($player, false, $player->getId());
+        $playerIds = Players::getLivingPlayerIdsStartingWith($player, false, $player->getId());
         break;
       case INRANGE:
-        $player_ids = $player->getPlayersInRange();
+        $playerIds = $player->getPlayersInRange();
         break;
       case SPECIFIC_RANGE:
-        $player_ids = $player->getPlayersInRange($this->effect['range']);
+        $playerIds = $player->getPlayersInRange($this->effect['range']);
         break;
       case ANY:
-        $player_ids = Players::getLivingPlayers()->getIds();
+        $playerIds = Players::getLivingPlayers()->getIds();
         break;
-      case NONE:
-        $player_ids = [];
+      default:
+        $playerIds = [];
         break;
     }
 
     // Cannot bang myself
     if ($this->effect['type'] == BASIC_ATTACK) {
-      $player_ids = array_values(array_diff($player_ids, [$player->getId()]));
+      $playerIds = array_values(array_diff($playerIds, [$player->getId()]));
     }
 
-    return $player_ids;
+    return $playerIds;
   }
 
   /*
    * getPlayOptions
    */
-  public function getPlayOptions($player)
+  public function getPlayOptions(Player $player): ?array
   {
     $playOptions = [];
     switch ($this->effect['type']) {
@@ -87,12 +87,9 @@ class BrownCard extends AbstractCard
   }
 
   /**
-   * @param Player $player
-   * @param array $args
-   * @return void
+   * @throws BgaVisibleSystemException
    */
-
-  public function play($player, $args)
+  public function play(Player $player, array $args): void
   {
     // Played card always go to the discard
     $this->discard();
@@ -105,7 +102,7 @@ class BrownCard extends AbstractCard
         if ($args['secondCardId']) {
           $card = Cards::get($args['secondCardId']);
           if (!in_array($card->getType(), $player->getBangCardTypes())) {
-            throw new \BgaVisibleSystemException('Incorrect card type to play with Bang: ' . $card->getType());
+            throw new BgaVisibleSystemException('Incorrect card type to play with Bang: ' . $card->getType());
           }
           $card->discard();
           Notifications::discardedCard($player, $card);
@@ -117,7 +114,7 @@ class BrownCard extends AbstractCard
         // Drawing from deck
         if (!isset($args['type'])) {
           $player->drawCards($this->effect['amount']);
-          return null;
+          return;
         }
 
         // Drawing/discarding from someone's hand/inplay

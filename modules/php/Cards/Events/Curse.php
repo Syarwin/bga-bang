@@ -1,5 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards\Events;
+
 use BANG\Models\AbstractEventCard;
 
 class Curse extends AbstractEventCard
@@ -17,7 +21,7 @@ class Curse extends AbstractEventCard
   /**
    * {@inheritDoc}
    */
-  public function getSuitOverride()
+  public function getSuitOverride(): ?string
   {
     return 'S';
   }

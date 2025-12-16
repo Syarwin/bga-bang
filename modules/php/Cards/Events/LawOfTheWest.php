@@ -1,13 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards\Events;
+
 use BANG\Core\Globals;
-use BANG\Core\Notifications;
 use BANG\Core\Stack;
 use BANG\Managers\Cards;
 use BANG\Managers\Rules;
-use BANG\Models\AbstractCard;
 use BANG\Models\AbstractEventCard;
 use BANG\Models\Player;
+use BgaVisibleSystemException;
 
 class LawOfTheWest extends AbstractEventCard
 {
@@ -21,29 +24,19 @@ class LawOfTheWest extends AbstractEventCard
     $this->expansion = FISTFUL_OF_CARDS;
   }
 
-  /**
-   * @return array
-   */
-  public function getRules()
+  public function getRules(): array
   {
     return parent::getRules() + [
       RULE_PHASE_ONE_CARDS_DRAW_BEGINNING => 1,
     ];
   }
 
-  /**
-   * @return boolean
-   */
-  public function isPhaseOneSpecialDraw()
+  public function isPhaseOneSpecialDraw(): bool
   {
     return true;
   }
 
-  /**
-   * @param Player $player
-   * @return void
-   */
-  public function drawCardsPhaseOne($player)
+  public function drawCardsPhaseOne(Player $player): void
   {
     $ctx = Stack::getCtx();
     // Looks like a character already have drawn something!
@@ -57,29 +50,20 @@ class LawOfTheWest extends AbstractEventCard
       } else if (count($ctx['cardsDrawnIds']) === 2) {
         Globals::setMustPlayCardId($ctx['cardsDrawnIds'][1]);
       } else {
-        throw new \BgaVisibleSystemException('Incorrect amount of cards drawn before Law Of The West: ' . count($ctx['cardsDrawnIds']));
+        throw new BgaVisibleSystemException('Incorrect amount of cards drawn before Law Of The West: ' . count($ctx['cardsDrawnIds']));
       }
     } else {
       Globals::setMustPlayCardId($this->drawACardPublicly($player));
     }
   }
 
-  /**
-   * @param Player $player
-   * @return int
-   */
-  private function drawACardPublicly($player)
+  private function drawACardPublicly(Player $player): int
   {
     $cards = $player->drawCards(1, true);
     return $cards->first()->getId();
   }
 
-  /**
-   * @param AbstractCard $card
-   * @param Player $player
-   * @return void
-   */
-  public function resolveEffect($player = null)
+  public function resolveEffect(Player $player): void
   {
     if (Globals::getMustPlayCardId() !== 0) {
       $card = Cards::get(Globals::getMustPlayCardId());
@@ -93,7 +77,7 @@ class LawOfTheWest extends AbstractEventCard
         [];
       $cardImpacts = $card->getEffect()['impacts'] ?? null;
       $cardType = $card->getType();
-      if ($player->getCharacter() === CALAMITY_JANET && $cardType === CARD_MISSED) {
+      if ($player->isCharacter(CALAMITY_JANET) && $cardType === CARD_MISSED) {
         $cardType = CARD_BANG;
         $cardImpacts = INRANGE;
       }

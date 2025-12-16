@@ -30,9 +30,8 @@ class GameOptions
 
   /**
    * Are we playing with events which resurrect players at some point?
-   * @return boolean
    */
-  public static function isResurrection()
+  public static function isResurrection(): bool
   {
     $highNoonWithGhosts = self::getOption('optionExpansions') === OPTION_HIGH_NOON_ONLY &&
       self::getOption('optionHighNoon') === OPTION_HIGH_NOON_WITH_GHOST_TOWN;
@@ -45,16 +44,15 @@ class GameOptions
     return $highNoonWithGhosts || $fistfulWithGhosts || $bothWithGhosts || $singleWithGhosts;
   }
 
-  private static function getOption($optionName)
+  private static function getOption($optionName): int
   {
     return (int) bang::get()->getGameStateValue($optionName);
   }
 
   /**
    * isEvents: are events enabled for this game?
-   * @return string
    */
-  public static function isEvents()
+  public static function isEvents(): bool
   {
     return count(array_intersect([HIGH_NOON, FISTFUL_OF_CARDS], self::getExpansions())) > 0;
   }

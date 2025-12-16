@@ -1,12 +1,39 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Core;
 
-/*
+use BANG\Helpers\DB_Manager;
+use function array_key_exists;
+use function json_encode;
+
+/**
  * Globals
+ *
+ * @method static void setStack(object $stack)
+ * @method static object getStack()
+ * @method static void setStackCtx(object $stackCtx)
+ * @method static object getStackCtx()
+ * @method static void setGameIsOver(bool $gameIsOver)
+ * @method static bool getGameIsOver()
+ * @method static void setResurrectionIsPossible(bool $resurrectionIsPossible)
+ * @method static bool getResurrectionIsPossible()
+ * @method static void setRoundNumber(int $roundNumber)
+ * @method static int getRoundNumber()
+ * @method static void setVendettaWasUsed(bool $vendettaWasUsed)
+ * @method static bool getVendettaWasUsed()
+ * @method static void setEliminatedFirstPId(int $eliminatedFirstPId)
+ * @method static int getEliminatedFirstPId()
+ * @method static void setIsMustPlayCard(bool $isMustPlayCard)
+ * @method static bool getIsMustPlayCard()
+ * @method static void setMustPlayCardId(int $mustPlayCardId)
+ * @method static int getMustPlayCardId()
  */
-class Globals extends \BANG\Helpers\DB_Manager
+class Globals extends DB_Manager
 {
   protected static $initialized = false;
+
   protected static $variables = [
     'stack' => 'obj', // DO NOT MODIFY, USED BY STACK ENGINE
     'stackCtx' => 'obj', // DO NOT MODIFY, USED BY STACK ENGINE
@@ -22,17 +49,20 @@ class Globals extends \BANG\Helpers\DB_Manager
   ];
 
   protected static $table = 'global_variables';
+
   protected static $primary = 'name';
+
+  /*
+   * Fetch all existings variables from DB
+   */
+  protected static $data = [];
+
   protected static function cast($row)
   {
     $val = json_decode($row['value'], true);
     return self::$variables[$row['name']] == 'int' ? ((int) $val) : $val;
   }
 
-  /*
-   * Fetch all existings variables from DB
-   */
-  protected static $data = [];
   public static function fetch()
   {
     foreach (
@@ -41,7 +71,7 @@ class Globals extends \BANG\Helpers\DB_Manager
         ->get(false)
       as $name => $variable
     ) {
-      if (\array_key_exists($name, self::$variables)) {
+      if (array_key_exists($name, self::$variables)) {
         self::$data[$name] = $variable;
       }
     }
@@ -52,9 +82,9 @@ class Globals extends \BANG\Helpers\DB_Manager
    * Create and store a global variable declared in this file but not present in DB yet
    *  (only happens when adding globals while a game is running)
    */
-  public static function create($name)
+  public static function create(string $name): void
   {
-    if (!\array_key_exists($name, self::$variables)) {
+    if (!array_key_exists($name, self::$variables)) {
       return;
     }
 
@@ -66,7 +96,7 @@ class Globals extends \BANG\Helpers\DB_Manager
     $val = $defaults[self::$variables[$name]];
     self::DB()->insert([
       'name' => $name,
-      'value' => \json_encode($val),
+      'value' => json_encode($val),
     ]);
     self::$data[$name] = $val;
   }
@@ -80,12 +110,12 @@ class Globals extends \BANG\Helpers\DB_Manager
     if (preg_match('/^([gs]et|inc)([A-Z])(.*)$/', $method, $match)) {
       // Sanity check : does the name correspond to a declared variable ?
       $name = strtolower($match[2]) . $match[3];
-      if (!\array_key_exists($name, self::$variables)) {
+      if (!array_key_exists($name, self::$variables)) {
         throw new \InvalidArgumentException("Property {$name} doesn't exist");
       }
 
       // Create in DB if don't exist yet
-      if (!\array_key_exists($name, self::$data)) {
+      if (!array_key_exists($name, self::$data)) {
         self::create($name);
       }
 
@@ -98,7 +128,7 @@ class Globals extends \BANG\Helpers\DB_Manager
         self::$data[$name] = $value;
         self::DB()->update(
           [
-            'value' => \json_encode($value),
+            'value' => json_encode($value),
           ],
           $name
         );
@@ -113,10 +143,10 @@ class Globals extends \BANG\Helpers\DB_Manager
         return self::$setter(self::$getter() + (empty($args) ? 1 : $args[0]));
       }
     }
-    return undefined;
+    return null;
   }
 
-  public static function enabledStackLogger()
+  public static function enabledStackLogger(): bool
   {
     return false;
   }

@@ -1,11 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards;
 
-class WellsFargo extends \BANG\Models\BrownCard
+use BANG\Models\BrownCard;
+
+class WellsFargo extends BrownCard
 {
-  public function __construct($id = null, $copy = '')
+  public function __construct(?array $params = null)
   {
-    parent::__construct($id, $copy);
+    parent::__construct($params);
     $this->type = CARD_WELLS_FARGO;
     $this->name = clienttranslate('Wells Fargo');
     $this->text = clienttranslate('Draw 3 cards.');

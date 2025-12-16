@@ -14,10 +14,7 @@ class PixiePete  extends \BANG\Models\Player{
     parent::__construct($row);
   }
 
-  /**
-   * @return int
-   */
-  public function defaultCardsToDraw()
+  public function defaultCardsToDraw(): int
   {
       return 3;
   }

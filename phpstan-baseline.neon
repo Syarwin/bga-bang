@@ -1,0 +1,79 @@
+parameters:
+  ignoreErrors:
+    -
+      message: '#^Call to an undefined method bang\:\:actCancelPreSelection\(\)\.$#'
+      identifier: method.notFound
+      count: 1
+      path: bang.action.php
+
+    -
+      message: '#^Access to an undefined property bang\:\:\$bSelectGlobalsForUpdate\.$#'
+      identifier: property.notFound
+      count: 1
+      path: bang.game.php
+
+    -
+      message: '#^Access to an undefined property BANG\\Characters\\LuckyDuke\:\:\$selectedCard\.$#'
+      identifier: property.notFound
+      count: 1
+      path: modules/php/Characters/LuckyDuke.php
+
+    -
+      message: '#^Static call to instance method APP_DbObject\:\:getObjectFromDB\(\)\.$#'
+      identifier: method.staticCall
+      count: 2
+      path: modules/php/Core/Log.php
+
+    -
+      message: '#^Static call to instance method APP_DbObject\:\:getObjectListFromDB\(\)\.$#'
+      identifier: method.staticCall
+      count: 3
+      path: modules/php/Core/Log.php
+
+    -
+      message: '#^Cannot unset offset ''card_name'' on array\{i18n\: array\{''src_name''\}, src_name\: mixed, player\: BANG\\Models\\Player, amount\: int\<0, max\>, cards\: mixed, src\: string, target\: ''hand'', deckCount\: mixed, \.\.\.\}\.$#'
+      identifier: unset.offset
+      count: 1
+      path: modules/php/Core/Notifications.php
+
+    -
+      message: '#^Cannot unset offset ''card_name'' on array\{player\: mixed, player2\: mixed, card\: mixed, amount\: 1, src\: mixed, target\: ''hand'', deckCount\: mixed, ignore\: array\{mixed, mixed\}\}\.$#'
+      identifier: unset.offset
+      count: 1
+      path: modules/php/Core/Notifications.php
+
+    -
+      message: '#^Function mysql_escape_string not found\.$#'
+      identifier: function.notFound
+      count: 2
+      path: modules/php/Helpers/QueryBuilder.php
+
+    -
+      message: '#^Static call to instance method APP_DbObject\:\:getObjectListFromDB\(\)\.$#'
+      identifier: method.staticCall
+      count: 1
+      path: modules/php/Managers/Cards.php
+
+    -
+      message: '#^Static call to instance method APP_DbObject\:\:getObjectListFromDB\(\)\.$#'
+      identifier: method.staticCall
+      count: 2
+      path: modules/php/Managers/Players.php
+
+    -
+      message: '#^Access to an undefined property BANG\\Models\\AbstractCard\:\:\$copy\.$#'
+      identifier: property.notFound
+      count: 1
+      path: modules/php/Models/AbstractCard.php
+
+    -
+      message: '#^Call to an undefined static method BANG\\Managers\\Players\:\:getPlayer\(\)\.$#'
+      identifier: staticMethod.notFound
+      count: 1
+      path: modules/php/Models/BrownCard.php
+
+    -
+      message: '#^Call to an undefined method BANG\\Models\\Player\:\:useAbility\(\)\.$#'
+      identifier: method.notFound
+      count: 1
+      path: modules/php/Models/Player.php

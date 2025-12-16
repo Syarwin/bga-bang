@@ -1,5 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards;
+
 use BANG\Managers\Players;
 use BANG\Managers\Rules;
 use BANG\Models\BangActionCard;
@@ -7,7 +11,7 @@ use BANG\Models\Player;
 
 class Bang extends BangActionCard
 {
-  public function __construct($params = null)
+  public function __construct(?array $params = null)
   {
     parent::__construct($params);
     $this->type = CARD_BANG;
@@ -29,15 +33,16 @@ class Bang extends BangActionCard
 
   /**
    * Only one bang per turn, unless unlimitedBangs granted by Volcanic or by character
-   * @param Player $player
    */
-  public function getPlayOptions($player)
+  public function getPlayOptions(Player $player): ?array
   {
     $aimingCards = Rules::isAimingCards();
     $bangPossible = !Rules::isBangStrictlyForbidden() && ($player->hasUnlimitedBangs() || Rules::getBangsAmountLeft() > 0);
     $bangsWithoutThis = $this->getBangsWithoutThisCard($player);
     $canPlayWithAnotherBang = Rules::isBangCouldBePlayedWithAnotherBang() && $bangsWithoutThis;
-    if (!$aimingCards && !$bangPossible && !$canPlayWithAnotherBang) { return null; }
+    if (!$aimingCards && !$bangPossible && !$canPlayWithAnotherBang) {
+      return null;
+    }
 
     $playOptions = [];
     $targetTypes = [];
@@ -65,11 +70,7 @@ class Bang extends BangActionCard
     return $playOptions;
   }
 
-  /**
-   * @param Player $player
-   * @return array
-   */
-  private function getBangsWithoutThisCard($player)
+  private function getBangsWithoutThisCard(Player $player): array
   {
     $bangOptions = [ 'targets' => Players::getLivingPlayers($player->getId())->getIds() ];
     return array_values(array_filter($player->getBangCards($bangOptions)['cards'], function ($card) {
@@ -77,7 +78,7 @@ class Bang extends BangActionCard
     }));
   }
 
-  public function play($player, $args)
+  public function play(Player $player, array $args): void
   {
     // FAQ, Q07. Sniper doesn't count as Bang! (secondCardId is set)
     // FAQ, Q09, Ricochet doesn't count as Bang! ($args['type'] should be 'player', not 'inPlay')

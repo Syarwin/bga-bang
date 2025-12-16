@@ -1,14 +1,19 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Characters;
+
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
 use BANG\Managers\Cards;
 use BANG\Managers\EventCards;
 use BANG\Managers\Rules;
+use BANG\Models\Player;
 
-class KitCarlson extends \BANG\Models\Player
+class KitCarlson extends Player
 {
-  public function __construct($row = null)
+  public function __construct(?array $row = null)
   {
     $this->character = KIT_CARLSON;
     $this->character_name = clienttranslate('Kit Carlson');
@@ -21,7 +26,7 @@ class KitCarlson extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function drawCardsPhaseOne()
+  public function drawCardsPhaseOne(): void
   {
     $location = Rules::getDrawOrDiscardCardsLocation(LOCATION_DECK);
     $cards = Cards::drawForLocation(LOCATION_SELECTION, 3, $location);
@@ -31,7 +36,7 @@ class KitCarlson extends \BANG\Models\Player
     Notifications::drawCards($this, $cards, $location === LOCATION_DISCARD, $location, true, true);
   }
 
-  public function useAbility($args)
+  public function useAbility(array $args): void
   {
     $location = Rules::getDrawOrDiscardCardsLocation(LOCATION_DECK);
 
@@ -50,7 +55,7 @@ class KitCarlson extends \BANG\Models\Player
     }
   }
 
-  private function putCardsBack($cards, $location)
+  private function putCardsBack(array $cards, string $location): void
   {
     foreach ($cards as $card) {
       if ($location === LOCATION_DECK) {
@@ -63,7 +68,7 @@ class KitCarlson extends \BANG\Models\Player
     }
   }
 
-  public function getPhaseOneRules($defaultAmount, $isAbilityAvailable = true)
+  public function getPhaseOneRules(int $defaultAmount, bool $isAbilityAvailable = true): array
   {
     if ($isAbilityAvailable) {
       return [
@@ -71,8 +76,8 @@ class KitCarlson extends \BANG\Models\Player
         RULE_PHASE_ONE_PLAYER_ABILITY_DRAW => true,
         RULE_PHASE_ONE_CARDS_DRAW_END => $defaultAmount
       ];
-    } else {
-      return parent::getPhaseOneRules($defaultAmount);
     }
+
+    return parent::getPhaseOneRules($defaultAmount);
   }
 }

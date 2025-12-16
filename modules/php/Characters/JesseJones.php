@@ -1,14 +1,19 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Characters;
+
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
 use BANG\Managers\Cards;
 use BANG\Managers\Players;
 use BANG\Managers\Rules;
+use BANG\Models\Player;
 
-class JesseJones extends \BANG\Models\Player
+class JesseJones extends Player
 {
-  public function __construct($row = null)
+  public function __construct(?array $row = null)
   {
     $this->character = JESSE_JONES;
     $this->character_name = clienttranslate('Jesse Jones');
@@ -21,7 +26,7 @@ class JesseJones extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function drawCardsPhaseOne()
+  public function drawCardsPhaseOne(): void
   {
     // TODO : auto skip if argDrawCard only has 'deck' inside
     $ctx = Stack::getCtx();
@@ -42,7 +47,7 @@ class JesseJones extends \BANG\Models\Player
     return ['options' => $options];
   }
 
-  public function useAbility($args)
+  public function useAbility(array $args): void
   {
     if (in_array($args['selected'], [LOCATION_DECK, LOCATION_DISCARD])) {
       $location = Rules::getDrawOrDiscardCardsLocation(LOCATION_DECK);
@@ -66,7 +71,7 @@ class JesseJones extends \BANG\Models\Player
     }
   }
 
-  public function getPhaseOneRules($defaultAmount, $isAbilityAvailable = true)
+  public function getPhaseOneRules(int $defaultAmount, bool $isAbilityAvailable = true): array
   {
     if ($isAbilityAvailable) {
       return [
@@ -74,8 +79,8 @@ class JesseJones extends \BANG\Models\Player
         RULE_PHASE_ONE_PLAYER_ABILITY_DRAW => true,
         RULE_PHASE_ONE_CARDS_DRAW_END => $defaultAmount - 1
       ];
-    } else {
-      return parent::getPhaseOneRules($defaultAmount);
     }
+
+    return parent::getPhaseOneRules($defaultAmount);
   }
 }

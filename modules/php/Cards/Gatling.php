@@ -1,13 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards;
 
 use BANG\Models\BangActionCard;
 
 class Gatling extends BangActionCard
 {
-  public function __construct($id = null, $copy = '')
+  public function __construct(?array $params = null)
   {
-    parent::__construct($id, $copy);
+    parent::__construct($params);
     $this->type = CARD_GATLING;
     $this->name = clienttranslate('Gatling');
     $this->text = clienttranslate('A Bang to all other players');

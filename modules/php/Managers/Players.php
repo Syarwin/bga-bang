@@ -1,23 +1,47 @@
 <?php
+
 namespace BANG\Managers;
-use BANG\Core\Globals;
+
+use BANG\Helpers\DB_Manager;
 use BANG\Helpers\GameOptions;
 use BANG\Models\Player;
 use BANG\Helpers\Collection;
 use bang;
+use feException;
 
 /*
  * Players manager : allows to easily access players ...
  *  a player is an instance of Player class
  */
-class Players extends \BANG\Helpers\DB_Manager
+class Players extends DB_Manager
 {
+  protected static $table = 'player';
+  protected static $primary = 'player_id';
+
+  /** @var bool use for tests only together with $testActiveCard */
+  protected static bool $isTest = false;
+
+  /** @var Collection used for tests only */
+  protected static Collection $players;
+
+  /**
+   * @param Player[] $players
+   */
+  public static function setPlayersForTest(array $players): void
+  {
+    self::$isTest = true;
+    $playersWithKeys = [];
+    foreach ($players as $player) {
+      $playersWithKeys[$player->getId()] = $player;
+    }
+    self::$players = new Collection($playersWithKeys);
+  }
+
   protected static function getGame()
   {
     return bang::get();
   }
-  protected static $table = 'player';
-  protected static $primary = 'player_id';
+
   protected static function cast($row)
   {
     if ((int) $row['player_character_chosen'] === 0) {
@@ -28,7 +52,14 @@ class Players extends \BANG\Helpers\DB_Manager
     }
   }
 
-  public static function setupNewGame($players, $expansions, $options)
+  /**
+   * @param non-empty-array<int, array{player_canal: string, player_name: string, player_avatar: string}> $players
+   * @param array $expansions
+   * @param array $options
+   * @return int|string
+   * @throws feException
+   */
+  public static function setupNewGame(array $players, array $expansions, array $options)
   {
     // Create players
     $gameInfos = self::getGame()->getGameinfos();
@@ -47,8 +78,10 @@ class Players extends \BANG\Helpers\DB_Manager
       'player_autopick_general_store',
     ]);
 
+    $playersCount = count($players);
+
     // Compute roles and shuffle them
-    $roles = array_slice([SHERIFF, OUTLAW, OUTLAW, RENEGADE, DEPUTY, OUTLAW, DEPUTY], 0, count($players));
+    $roles = array_slice([SHERIFF, RENEGADE, OUTLAW, OUTLAW, DEPUTY, OUTLAW, DEPUTY], 0, $playersCount);
     shuffle($roles);
 
     // Handle forced characters
@@ -73,8 +106,6 @@ class Players extends \BANG\Helpers\DB_Manager
     // Fill with random characters
     $characters = array_diff($characters, $charactersToChoice);
     shuffle($characters);
-
-    $playersCount = count($players);
     $needed = $playersCount * 2 - count($charactersToChoice);
     for ($i = 0; $i < $needed; $i++) {
       $charactersToChoice[] = array_pop($characters);
@@ -90,6 +121,7 @@ class Players extends \BANG\Helpers\DB_Manager
 
     $values = [];
     $i = 0;
+    $sheriff = 0;
     foreach ($players as $pId => $player) {
       $color = $gameInfos['player_colors'][$i];
       $canal = $player['player_canal'];
@@ -100,7 +132,7 @@ class Players extends \BANG\Helpers\DB_Manager
       $altCharacterId = array_pop($secondChoices);
       $charChosen = !GameOptions::chooseCharactersManually();
       $bullets = $charChosen ? self::getCharacterBullets($characterId) : null;
-      if ($role == SHERIFF) {
+      if ($role === SHERIFF) {
         if ($charChosen) {
           $bullets++;
         }
@@ -168,14 +200,14 @@ class Players extends \BANG\Helpers\DB_Manager
     return self::get(self::getCurrentId());
   }
 
-  public static function count()
+  public static function count(): int
   {
     return self::DB()->count();
   }
 
-  public static function getUiData($pId)
+  public static function getUiData(int $pId)
   {
-    return self::getAll()->map(function ($player) use ($pId) {
+    return self::getAll()->map(function (Player $player) use ($pId) {
       return $player->getUiData($pId);
     });
   }
@@ -212,7 +244,11 @@ class Players extends \BANG\Helpers\DB_Manager
     ROSE_DOOLAN => 'RoseDoolan',
   ];
 
-  public static function getAvailableCharacters($expansions)
+  /**
+   * @param (BASE_GAME|HIGH_NOON|DODGE_CITY|FISTFUL_OF_CARDS)[] $expansions
+   * @return int[]
+   */
+  public static function getAvailableCharacters(array $expansions): array
   {
     $result = [];
     foreach (self::$classes as $cId => $className) {
@@ -224,7 +260,7 @@ class Players extends \BANG\Helpers\DB_Manager
     return $result;
   }
 
-  public static function getCharacter($cId, $row = null)
+  public static function getCharacter($cId, $row = null): Player
   {
     $className = 'BANG\Characters\\' . self::$classes[$cId];
     return new $className($row);
@@ -274,18 +310,31 @@ class Players extends \BANG\Helpers\DB_Manager
    */
   public static function getPlayerPositions()
   {
+    if (self::$isTest) {
+      $positions = [];
+      $i = 0;
+      foreach (self::$players as $player) {
+        $positions[$player->getId()] = $i++;
+      }
+      return $positions;
+    }
+
     return array_flip(
       self::getObjectListFromDB("SELECT player_id from player WHERE player_eliminated = 0 AND player_unconscious != 1 ORDER BY player_no", true)
     );
   }
 
   /**
-   * returns an array of the ids of all living players
-   * @param int $exceptId
-   * @return Collection
+   * returns Collection of all living players
    */
-  public static function getLivingPlayers($exceptId = null)
+  public static function getLivingPlayers(?int $exceptId = null): Collection
   {
+    if (self::$isTest) {
+      return self::$players->filter(function(Player $player) use ($exceptId) {
+        return $player->getId() !== $exceptId && !$player->isEliminated() && !$player->isUnconscious();
+      });
+    }
+
     $playerIds = self::getLivingPlayerIdsStartingWith(null, false, $exceptId);
     return self::idsArrayToCollection($playerIds);
   }
@@ -296,7 +345,7 @@ class Players extends \BANG\Helpers\DB_Manager
    * @param int|null $exceptId
    * @return array
    */
-  public static function getLivingPlayerIdsStartingWith($player, $includeGhosts = false, $exceptId = null)
+  public static function getLivingPlayerIdsStartingWith($player, $includeGhosts = false, $exceptId = null): array
   {
     $and = '';
     if ($exceptId !== null) {
@@ -338,12 +387,7 @@ class Players extends \BANG\Helpers\DB_Manager
     return new Collection($playersAssoc);
   }
 
-  /**
-   * @param Player $player
-   * @param boolean $includeGhosts
-   * @return int
-   */
-  public static function getNextId($player, $includeGhosts = false)
+  public static function getNextId(Player $player, bool $includeGhosts = false): int
   {
     $playersIds = self::getLivingPlayerIdsStartingWith($player, $includeGhosts);
     // But current player might not be alive already... Let's find them
@@ -354,22 +398,12 @@ class Players extends \BANG\Helpers\DB_Manager
     return $playersIds[$currentIndex + 1];
   }
 
-  /**
-   * @param Player $player
-   * @param boolean $includeGhosts
-   * @return Player
-   */
-  public static function getNext($player, $includeGhosts = false)
+  public static function getNext(Player $player, bool $includeGhosts = false): Player
   {
     return self::get(self::getNextId($player, $includeGhosts));
   }
 
-  /**
-   * @param Player $player
-   * @param boolean $includeGhosts
-   * @return Player
-   */
-  public static function getPreviousId($player, $includeGhosts = false)
+  public static function getPreviousId(Player $player, bool $includeGhosts = false): int
   {
     $players = self::getLivingPlayerIdsStartingWith($player, $includeGhosts);
     return $players[count($players)-1];
@@ -379,9 +413,9 @@ class Players extends \BANG\Helpers\DB_Manager
    * Returns a whole list of all players who agreed to Ghost Town/resurrection possibility disclaimer
    * @return array
    */
-  public static function getNotAgreedToDisclaimerList()
+  public static function getNotAgreedToDisclaimerList(): array
   {
-    $notAgreedToDisclaimer = self::getLivingPlayers()->map(function ($player) {
+    $notAgreedToDisclaimer = self::getLivingPlayers()->map(function (Player $player) {
       return !$player->isAgreedToDisclaimer();
     });
     return array_keys(array_filter($notAgreedToDisclaimer->toAssoc(), 'strlen'));

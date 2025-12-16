@@ -1,5 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards\Events;
+
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
 use BANG\Managers\Players;
@@ -18,7 +22,7 @@ class GhostTown extends AbstractEventCard
     $this->expansion = HIGH_NOON;
   }
 
-  public function resolveEffect($player = null)
+  public function resolveEffect(Player $player): void
   {
     $stack = [ST_PRE_PHASE_ONE, ST_PHASE_ONE_SETUP, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN];
     Stack::setup($stack);
@@ -34,20 +38,12 @@ class GhostTown extends AbstractEventCard
     Notifications::updateDistances();
   }
 
-  /**
-   * @param Player $player
-   * @return int
-   */
-  public function getPhaseOneAmountOfCardsToDraw($player)
+  public function getPhaseOneAmountOfCardsToDraw(Player $player): int
   {
-    return Players::getActive()->getHp() <= 0 ? 3 : $player->defaultCardsToDraw();
+    return $player->getHp() <= 0 ? 3 : $player->defaultCardsToDraw();
   }
 
-  /**
-   * @param null $player
-   * @return boolean
-   */
-  public function isResurrectionEffect($player = null)
+  public function isResurrectionEffect(?Player $player = null): bool
   {
     return true;
   }

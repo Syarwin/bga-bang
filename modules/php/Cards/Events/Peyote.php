@@ -1,5 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards\Events;
+
 use BANG\Core\Stack;
 use BANG\Models\AbstractEventCard;
 use BANG\Models\Player;
@@ -16,10 +20,7 @@ class Peyote extends AbstractEventCard
     $this->expansion = FISTFUL_OF_CARDS;
   }
 
-  /**
-   * @param Player $player
-   */
-  public function resolveEffect($player = null)
+  public function resolveEffect(Player $player): void
   {
     $atom = Stack::newAtom(ST_PEYOTE, [
       'pId' => $player->getId(),
@@ -28,16 +29,12 @@ class Peyote extends AbstractEventCard
     Stack::insertOnTop($atom);
   }
 
-  /**
-   * @param Player $player
-   * @return int
-   */
-  public function getPhaseOneAmountOfCardsToDraw($player)
+  public function getPhaseOneAmountOfCardsToDraw(Player $player): int
   {
     return 0;
   }
 
-  public function isAllowPlayerPhaseOne()
+  public function isAllowPlayerPhaseOne(): bool
   {
     return false;
   }
