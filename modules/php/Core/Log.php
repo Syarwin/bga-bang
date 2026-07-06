@@ -6,7 +6,7 @@ use bang;
  * Log: a class that allows to log some actions
  *   and then fetch these actions latter
  */
-class Log extends \APP_GameClass
+class Log extends \APP_DbObject
 {
   public static function getCurrentTurn()
   {
