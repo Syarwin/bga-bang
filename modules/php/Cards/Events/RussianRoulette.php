@@ -1,9 +1,14 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards\Events;
+
 use BANG\Cards\Bang;
 use BANG\Core\Stack;
 use BANG\Managers\Players;
 use BANG\Models\AbstractEventCard;
+use BANG\Models\Player;
 
 class RussianRoulette extends AbstractEventCard
 {
@@ -17,7 +22,7 @@ class RussianRoulette extends AbstractEventCard
     $this->expansion = FISTFUL_OF_CARDS;
   }
 
-  public function resolveEffect($player = null)
+  public function resolveEffect(Player $player): void
   {
     $players = Players::getLivingPlayersStartingWith($player);
 

@@ -1,5 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards\Events;
+
 use BANG\Core\Stack;
 use BANG\Models\AbstractEventCard;
 use BANG\Models\Player;
@@ -16,11 +20,7 @@ class BloodBrothers extends AbstractEventCard
     $this->expansion = FISTFUL_OF_CARDS;
   }
 
-  /**
-   * @param Player|null $player
-   * @return void
-   */
-  public function resolveEffect($player = null)
+  public function resolveEffect(Player $player): void
   {
     $atom = Stack::newSimpleAtom(ST_BLOOD_BROTHERS, $player->getId());
     Stack::insertOnTop($atom);

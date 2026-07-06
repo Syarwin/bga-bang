@@ -1,6 +1,9 @@
 <?php
+
 namespace BANG\Core;
+
 use bang;
+use BANG\Models\Player;
 
 class Stats
 {
@@ -11,7 +14,7 @@ class Stats
 
   public static function inc($name, $player = null, $value = 1, $log = true)
   {
-    $pId = is_null($player) ? null : ($player instanceof \BANG\Player ? $player->getId() : $player);
+    $pId = is_null($player) ? null : ($player instanceof Player ? $player->getId() : $player);
     bang::get()->incStat($value, $name, $pId);
   }
 
@@ -22,7 +25,7 @@ class Stats
 
   protected static function set($value, $name, $player = null)
   {
-    $pId = is_null($player) ? null : ($player instanceof \WTO\Player ? $player->getId() : $player);
+    $pId = is_null($player) ? null : ($player instanceof Player ? $player->getId() : $player);
     bang::get()->setStat($value, $name, $pId);
   }
 

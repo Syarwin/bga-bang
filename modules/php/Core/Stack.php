@@ -154,7 +154,7 @@ class Stack
   }
 
   /**
-   * @param string $type
+   * @param int $state
    */
   public static function removeAllAtomsWithState($state)
   {

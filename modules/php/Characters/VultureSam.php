@@ -1,12 +1,17 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Characters;
+
 use BANG\Core\Notifications;
 use BANG\Managers\Cards;
 use BANG\Managers\Rules;
+use BANG\Models\Player;
 
-class VultureSam extends \BANG\Models\Player
+class VultureSam extends Player
 {
-  public function __construct($row = null)
+  public function __construct(?array $row = null)
   {
     $this->character = VULTURE_SAM;
     $this->character_name = clienttranslate('Vulture Sam');
@@ -17,7 +22,7 @@ class VultureSam extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function onPlayerPreEliminated($player)
+  public function onPlayerPreEliminated(Player $player): void
   {
     if (Rules::isAbilityAvailable()) {
       // TODO send a single notification?

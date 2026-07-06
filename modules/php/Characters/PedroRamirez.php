@@ -1,13 +1,18 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Characters;
+
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
 use BANG\Managers\Cards;
 use BANG\Managers\Rules;
+use BANG\Models\Player;
 
-class PedroRamirez extends \BANG\Models\Player
+class PedroRamirez extends Player
 {
-  public function __construct($row = null)
+  public function __construct(?array $row = null)
   {
     $this->character = PEDRO_RAMIREZ;
     $this->character_name = clienttranslate('Pedro Ramirez');
@@ -20,7 +25,7 @@ class PedroRamirez extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function drawCardsPhaseOne()
+  public function drawCardsPhaseOne(): void
   {
     if (is_null(Cards::getLastDiscarded())) {
       Rules::incrementPhaseOneDrawEndAmount();
@@ -33,13 +38,13 @@ class PedroRamirez extends \BANG\Models\Player
     }
   }
 
-  public function argDrawCard()
+  public function argDrawCard(): array
   {
     $options = [LOCATION_DECK, LOCATION_DISCARD];
     return ['options' => $options];
   }
 
-  public function useAbility($args)
+  public function useAbility(array $args): void
   {
     if ($args['selected'] === LOCATION_DECK) {
       $cards = Cards::deal($this->id, 1);
@@ -55,7 +60,7 @@ class PedroRamirez extends \BANG\Models\Player
     }
   }
 
-  public function getPhaseOneRules($defaultAmount, $isAbilityAvailable = true)
+  public function getPhaseOneRules(int $defaultAmount, bool $isAbilityAvailable = true): array
   {
     if ($isAbilityAvailable) {
       return [

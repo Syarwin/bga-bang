@@ -1,0 +1,59 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Bang\Tests\CardsGetPlayOptions;
+
+use BANG\Cards\Events\Judge;
+use BANG\Cards\Volcanic;
+use BANG\Managers\EventCards;
+
+final class VolcanicGetPlayOptionsTest extends AbstractCardsGetPlayOptionsTest
+{
+  public function testPlayerHasNoCardsInPlay(): void
+  {
+    $player = $this->createPlayerMockWithNoCardsInPlay(PAUL_REGRET);
+
+    $card = new Volcanic();
+    $playOptions = $card->getPlayOptions($player);
+    $expectedPlayOptions = [
+      'target_types' => [TARGET_NONE]
+    ];
+    $this->assertSame($expectedPlayOptions, $playOptions);
+  }
+
+  public function testPlayerHasSameWeaponInPlay(): void
+  {
+    $player = $this->createPlayerMockWithCardsInPlay(PAUL_REGRET, [CARD_VOLCANIC]);
+
+    $card = new Volcanic();
+    $playOptions = $card->getPlayOptions($player);
+    $expectedPlayOptions = null;
+    $this->assertSame($expectedPlayOptions, $playOptions);
+  }
+
+  public function testPlayerHasOtherWeaponInPlay(): void
+  {
+    $player = $this->createPlayerMockWithCardsInPlay(PAUL_REGRET, [CARD_SCHOFIELD]);
+
+    $card = new Volcanic();
+    $playOptions = $card->getPlayOptions($player);
+    $expectedPlayOptions = [
+      'target_types' => [TARGET_NONE],
+      'confirmationMsg' => 'This weapon will replace the current one. Are you sure?',
+    ];
+    $this->assertSame($expectedPlayOptions, $playOptions);
+  }
+
+  public function testJudgeInPlay(): void
+  {
+    EventCards::setActiveForTest(new Judge());
+
+    $player = $this->createPlayerMockWithNoCardsInPlay(PAUL_REGRET);
+
+    $card = new Volcanic();
+    $playOptions = $card->getPlayOptions($player);
+    $expectedPlayOptions = null;
+    $this->assertSame($expectedPlayOptions, $playOptions);
+  }
+}

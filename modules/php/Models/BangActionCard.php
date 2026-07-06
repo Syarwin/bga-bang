@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Models;
 
 use BANG\Core\Stack;
@@ -8,9 +11,9 @@ use BANG\Core\Stack;
  */
 class BangActionCard extends BrownCard
 {
-  public function react($card, $player)
+  public function react(AbstractCard $card, Player $player): void
   {
-    if ($card->getType() != CARD_BARREL) {
+    if ($card->getType() !== CARD_BARREL) {
       // Barrel knows how to handle this
       $missedNeeded = Stack::top()['missedNeeded'] - 1;
       if ($missedNeeded > 0) {

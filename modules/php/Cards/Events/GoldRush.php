@@ -1,5 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards\Events;
+
 use BANG\Models\AbstractEventCard;
 
 class GoldRush extends AbstractEventCard
@@ -14,7 +18,7 @@ class GoldRush extends AbstractEventCard
     $this->expansion = HIGH_NOON;
   }
 
-  public function nextPlayerCounterClockwise()
+  public function nextPlayerCounterClockwise(): bool
   {
     return true;
   }

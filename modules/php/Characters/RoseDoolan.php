@@ -1,11 +1,15 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Characters;
 
 use BANG\Managers\Rules;
+use BANG\Models\Player;
 
-class RoseDoolan extends \BANG\Models\Player
+class RoseDoolan extends Player
 {
-  public function __construct($row = null)
+  public function __construct(?array $row = null)
   {
     $this->character = ROSE_DOOLAN;
     $this->character_name = clienttranslate('Rose Doolan');
@@ -14,7 +18,7 @@ class RoseDoolan extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function isInRange($enemy, $range)
+  public function isInRange(Player $enemy, int $range): bool
   {
     if (Rules::isAbilityAvailable()) {
       return parent::isInRange($enemy, $range + 1);
@@ -23,7 +27,7 @@ class RoseDoolan extends \BANG\Models\Player
     }
   }
 
-  public function getDistances()
+  public function getDistances(): array
   {
     $dist = parent::getDistances();
     if (Rules::isAbilityAvailable()) {

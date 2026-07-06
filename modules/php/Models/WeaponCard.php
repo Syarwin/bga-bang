@@ -6,7 +6,7 @@ namespace BANG\Models;
  */
 class WeaponCard extends BlueCard
 {
-  public function getPlayOptions($player)
+  public function getPlayOptions(Player $player): ?array
   {
     $options = parent::getPlayOptions($player);
     if ($options != null && $player->getWeapon() != null) {
@@ -20,7 +20,7 @@ class WeaponCard extends BlueCard
     return true;
   }
 
-  public function play($player, $args)
+  public function play(Player $player, array $args): void
   {
     $player->discardWeapon();
     parent::play($player, $args);

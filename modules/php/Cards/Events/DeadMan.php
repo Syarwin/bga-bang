@@ -1,5 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards\Events;
+
 use BANG\Core\Globals;
 use BANG\Core\Notifications;
 use BANG\Core\Stack;
@@ -18,11 +22,7 @@ class DeadMan extends AbstractEventCard
     $this->expansion = FISTFUL_OF_CARDS;
   }
 
-  /**
-   * @param Player $player
-   * @return void
-   */
-  public function resolveEffect($player = null)
+  public function resolveEffect(Player $player): void
   {
     if ($player->getId() === Globals::getEliminatedFirstPId()) {
       $stack = [ST_PRE_PHASE_ONE, ST_PHASE_ONE_SETUP, ST_PLAY_CARD, ST_DISCARD_EXCESS, ST_END_OF_TURN];
@@ -34,11 +34,7 @@ class DeadMan extends AbstractEventCard
     }
   }
 
-  /**
-   * @param Player $player
-   * @return boolean
-   */
-  public function isResurrectionEffect($player = null)
+  public function isResurrectionEffect(?Player $player = null): bool
   {
     if (is_null($player)) return true;
     $eliminatedFirstPId = Globals::getEliminatedFirstPId();

@@ -65,7 +65,7 @@ trait PlayCardTrait
       } else {
         $cardType = $card->getType();
         $mustPlayCardType = Cards::get($mustPlayCardId)->getType();
-        if ($player->getCharacter() === CALAMITY_JANET) {
+        if ($player->isCharacter(CALAMITY_JANET)) {
           if ($cardType === CARD_MISSED) {
             $cardType = CARD_BANG;
           }

@@ -1,5 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards\Events;
+
 use BANG\Core\Notifications;
 use BANG\Models\AbstractEventCard;
 
@@ -15,7 +19,7 @@ class Hangover extends AbstractEventCard
     $this->expansion = HIGH_NOON;
   }
 
-  public function isAbilityAvailable()
+  public function isAbilityAvailable(): bool
   {
     return false;
   }

@@ -1,5 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards\Events;
+
 use BANG\Models\AbstractEventCard;
 
 class Ricochet extends AbstractEventCard
@@ -14,7 +18,7 @@ class Ricochet extends AbstractEventCard
     $this->expansion = FISTFUL_OF_CARDS;
   }
 
-  public function isAimingCards()
+  public function isAimingCards(): bool
   {
       return true;
   }

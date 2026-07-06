@@ -1,13 +1,18 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Characters;
+
 use BANG\Core\Globals;
 use BANG\Core\Notifications;
 use BANG\Managers\Cards;
 use BANG\Managers\Rules;
+use BANG\Models\Player;
 
-class SidKetchum extends \BANG\Models\Player
+class SidKetchum extends Player
 {
-  public function __construct($row = null)
+  public function __construct(?array $row = null)
   {
     $this->character = SID_KETCHUM;
     $this->character_name = clienttranslate('Sid Ketchum');
@@ -16,25 +21,25 @@ class SidKetchum extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  protected function addAbility($t)
+  protected function addAbility(array $options): array
   {
     if ($this->countHand() > 1 && Rules::isAbilityAvailable()) {
-      $t['character'] = SID_KETCHUM;
+      $options['character'] = SID_KETCHUM;
     }
-    return $t;
+    return $options;
   }
 
-  public function getHandOptions($lastCardOnly = false)
+  public function getHandOptions(): array
   {
     return $this->addAbility(parent::getHandOptions());
   }
 
-  public function getBeerOptions()
+  public function getBeerOptions(): array
   {
     return $this->addAbility(parent::getBeerOptions());
   }
 
-  public function useAbility($args)
+  public function useAbility(array $args): void
   {
     Notifications::tell(
       clienttranslate('${player_name} uses the ability of Sid Ketchum by discarding 2 cards to regain 1 life point'),

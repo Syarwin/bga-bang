@@ -1,13 +1,20 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards;
+
 use BANG\Managers\Players;
 use BANG\Core\Stack;
+use BANG\Models\AbstractCard;
+use BANG\Models\BrownCard;
+use BANG\Models\Player;
 
-class Duel extends \BANG\Models\BrownCard
+class Duel extends BrownCard
 {
-  public function __construct($id = null, $copy = '')
+  public function __construct(?array $params = null)
   {
-    parent::__construct($id, $copy);
+    parent::__construct($params);
     $this->type = CARD_DUEL;
     $this->name = clienttranslate('Duel');
     $this->text = clienttranslate(
@@ -26,10 +33,7 @@ class Duel extends \BANG\Models\BrownCard
     ];
   }
 
-  /*
-   *
-   */
-  public function getPlayOptions($player)
+  public function getPlayOptions(Player $player): ?array
   {
     $livings = Players::getLivingPlayers($player->getId());
     return [
@@ -38,7 +42,7 @@ class Duel extends \BANG\Models\BrownCard
     ];
   }
 
-  public function play($player, $args)
+  public function play(Player $player, array $args): void
   {
     parent::play($player, $args);
     $atom = Stack::newAtom(ST_REACT, [
@@ -54,17 +58,17 @@ class Duel extends \BANG\Models\BrownCard
     Stack::insertOnTop($atom);
   }
 
-  public function getReactionOptions($player)
+  public function getReactionOptions(Player $player): array
   {
     return $player->getBangCards();
   }
 
-  public function pass($player)
+  public function pass(Player $player): void
   {
     $player->loseLife();
   }
 
-  public function react($card, $player)
+  public function react(AbstractCard $card, Player $player): void
   {
     $player->discardCard($card);
 

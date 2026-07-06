@@ -1,11 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Characters;
+
 use BANG\Core\Stack;
 use BANG\Managers\Rules;
+use BANG\Models\Player;
 
-class BartCassidy extends \BANG\Models\Player
+class BartCassidy extends Player
 {
-  public function __construct($row = null)
+  public function __construct(?array $row = null)
   {
     $this->character = BART_CASSIDY;
     $this->character_name = clienttranslate('Bart Cassidy');
@@ -14,7 +19,7 @@ class BartCassidy extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function loseLife($amount = 1)
+  public function loseLife(int $amount = 1): void
   {
     parent::loseLife($amount);
     if (Rules::isAbilityAvailable()) {

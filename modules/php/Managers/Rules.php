@@ -1,12 +1,12 @@
 <?php
+
 namespace BANG\Managers;
-use BANG\Core\Globals;
+
 use BANG\Core\Stack;
 use BANG\Helpers\DB_Manager;
 use BANG\Models\AbstractCard;
 use BANG\Models\AbstractEventCard;
 use BANG\Models\Player;
-use bang;
 
 /*
  * Rules: all turn rules and all changes to them according to player role and event and all other factors
@@ -16,11 +16,30 @@ class Rules extends DB_Manager
   protected static $table = 'rules';
   protected static $primary = 'id';
 
+  /** @var bool use for tests only together with $testActiveCard */
+  protected static bool $isTest = false;
+
+  /** @var array<string, bool> used for tests only */
+  protected static array $availableRules = [];
+
+  public static function setAvailableRulesForTest(array $availableRules): void
+  {
+    self::$isTest = true;
+    self::$availableRules = []; // reset
+    foreach ($availableRules as $rule) {
+      self::$availableRules[$rule] = true;
+    }
+  }
+
   /*
    * get: common method for getting a specific rule from the list
    */
   private static function getRule($rule)
   {
+    if (self::$isTest) {
+      return self::$availableRules[$rule] ?? false;
+    }
+
     $ruleRow = self::DB()
       ->orderBy(self::$primary, 'DESC')
       ->select($rule)
@@ -93,10 +112,7 @@ class Rules extends DB_Manager
     return self::getRule(RULE_PHASE_ONE_PLAYER_ABILITY_DRAW) === '1';
   }
 
-  /**
-   * @return boolean
-   */
-  public static function isPhaseOneEventSpecialDraw()
+  public static function isPhaseOneEventSpecialDraw(): bool
   {
     $eventCard = EventCards::getActive();
     return $eventCard && $eventCard->isPhaseOneSpecialDraw();
@@ -146,55 +162,37 @@ class Rules extends DB_Manager
     }
   }
 
-  /**
-   * @return boolean
-   */
-  public static function isDistanceForcedToOne()
+  public static function isDistanceForcedToOne(): bool
   {
     $eventCard = EventCards::getActive();
     return $eventCard && $eventCard->isDistanceForcedToOne();
   }
 
-  /**
-   * @return boolean
-   */
-  public static function isAimingCards()
+  public static function isAimingCards(): bool
   {
     $eventCard = EventCards::getActive();
     return $eventCard && $eventCard->isAimingCards();
   }
 
-  /**
-   * @return boolean
-   */
-  public static function isBangStrictlyForbidden()
+  public static function isBangStrictlyForbidden(): bool
   {
     $activeEvent = EventCards::getActive();
     return $activeEvent && $activeEvent->isBangStrictlyForbidden();
   }
 
-  /**
-   * @return boolean
-   */
-  public static function isBangCouldBePlayedWithAnotherBang()
+  public static function isBangCouldBePlayedWithAnotherBang(): bool
   {
     $activeEvent = EventCards::getActive();
     return $activeEvent && $activeEvent->isBangCouldBePlayedWithAnotherBang();
   }
 
-  /**
-   * @return boolean
-   */
-  public static function isCanPlayBlueGreenCards()
+  public static function isCanPlayBlueGreenCards(): bool
   {
     $activeEvent = EventCards::getActive();
     return !$activeEvent || $activeEvent->isCanPlayBlueGreenCards();
   }
 
-  /**
-   * @return boolean
-   */
-  public static function isAllowPlayerPhaseOne()
+  public static function isAllowPlayerPhaseOne(): bool
   {
     $activeEvent = EventCards::getActive();
     return !$activeEvent || $activeEvent->isAllowPlayerPhaseOne();
@@ -234,11 +232,8 @@ class Rules extends DB_Manager
     ];
   }
 
-  /**
-   * @param int | null $exceptId
-   * @return boolean
-   */
-  public static function isIgnoreCardsInPlay($exceptId = null) {
+  public static function isIgnoreCardsInPlay(?int $exceptId = null): bool
+  {
     // $exceptId would be used for Belle Star later
     $eventCard = EventCards::getActive();
     return $eventCard && $eventCard->isIgnoreCardsInPlay();

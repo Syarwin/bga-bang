@@ -1,16 +1,22 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards;
+
 use BANG\Core\Notifications;
-use BANG\Core\Stack;
 use BANG\Managers\Cards;
 use BANG\Managers\Players;
 use BANG\Managers\Rules;
+use BANG\Models\AbstractCard;
+use BANG\Models\BlueCard;
+use BANG\Models\Player;
 
-class Dynamite extends \BANG\Models\BlueCard
+class Dynamite extends BlueCard
 {
-  public function __construct($id = null, $copy = '')
+  public function __construct(?array $params = null)
   {
-    parent::__construct($id, $copy);
+    parent::__construct($params);
     $this->type = CARD_DYNAMITE;
     $this->name = clienttranslate('Dynamite');
     $this->text = clienttranslate(
@@ -27,14 +33,14 @@ class Dynamite extends \BANG\Models\BlueCard
   /*
    * When activated at the start of turn, flip a card and resolve effect
    */
-  public function startOfTurn($player)
+  public function startOfTurn(Player $player): void
   {
     if (!Rules::isIgnoreCardsInPlay()) {
       $player->addFlipAtom($this);
     }
   }
 
-  public function resolveFlipped($card, $player)
+  public function resolveFlipped(AbstractCard $card, Player $player): void
   {
     $player->discardCard($card, true); // Discard a flipped card
 
@@ -53,7 +59,7 @@ class Dynamite extends \BANG\Models\BlueCard
     }
   }
 
-  public function play($player, $args)
+  public function play(Player $player, array $args): void
   {
     Cards::equip($this->id, $player->getId());
   }

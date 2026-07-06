@@ -1,6 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards\Events;
+
 use BANG\Models\AbstractEventCard;
+use BgaVisibleSystemException;
 
 class AbandonedMine extends AbstractEventCard
 {
@@ -14,11 +19,7 @@ class AbandonedMine extends AbstractEventCard
     $this->expansion = FISTFUL_OF_CARDS;
   }
 
-  /**
-   * @param string $requestedLocation
-   * @return string
-   */
-  public function getDrawCardsLocation($requestedLocation)
+  public function getDrawCardsLocation(string $requestedLocation): string
   {
     switch ($requestedLocation) {
       case LOCATION_DECK:
@@ -26,7 +27,7 @@ class AbandonedMine extends AbstractEventCard
       case LOCATION_DISCARD:
         return LOCATION_DECK;
       default:
-        throw new \BgaVisibleSystemException('Unexpected location to draw from: ' . $requestedLocation);
+        throw new BgaVisibleSystemException('Unexpected location to draw from: ' . $requestedLocation);
     }
   }
 }

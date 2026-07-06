@@ -1,6 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards\Events;
+
 use BANG\Core\Globals;
+use BANG\Models\AbstractCard;
 use BANG\Models\AbstractEventCard;
 use BANG\Models\Player;
 
@@ -16,11 +21,7 @@ class Vendetta extends AbstractEventCard
     $this->expansion = FISTFUL_OF_CARDS;
   }
 
-  /**
-   * @param Player $player
-   * @return void
-   */
-  public function resolveEffect($player = null)
+  public function resolveEffect(Player $player): void
   {
     if (Globals::getVendettaWasUsed()) {
       Globals::setVendettaWasUsed(false);
@@ -30,7 +31,7 @@ class Vendetta extends AbstractEventCard
     }
   }
 
-  public function resolveFlipped($card)
+  public function resolveFlipped(AbstractCard $card): void
   {
     if ($card->getSuit() !== 'H') {
       Globals::setVendettaWasUsed(false);

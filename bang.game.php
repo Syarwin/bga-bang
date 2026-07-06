@@ -88,14 +88,17 @@ class bang extends Table
     return 'bang';
   }
 
-  /*
+  /**
    * setupNewGame:
    *  This method is called only once, when a new game is launched.
    * params:
-   *  - array $bplayers
-   *  - mixed $options
+   * @param array $players
+   * @param array $options
+   * @return void
+   *
+   * @throws feException
    */
-  protected function setupNewGame($bplayers, $options = [])
+  protected function setupNewGame($players, $options = [])
   {
     // Initialize board and cards
     $expansions = array_merge([BASE_GAME], GameOptions::getExpansions());
@@ -105,7 +108,7 @@ class bang extends Table
     }
 
     // Initialize players
-    $sheriff = Players::setupNewGame($bplayers, $expansions, $options);
+    $sheriff = Players::setupNewGame($players, $expansions, $options);
 
     // Initialize round counter
     Globals::setRoundNumber(0);

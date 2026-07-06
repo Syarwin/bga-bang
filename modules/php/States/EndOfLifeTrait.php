@@ -75,7 +75,7 @@ trait EndOfLifeTrait
 
     $cards = $player->getCardsInPlay()->merge($player->getHand());
     $currentEvent = EventCards::getActive();
-    $nextIsPedro = Players::getNext($player, $currentEvent && $currentEvent->isResurrectionEffect())->getCharacter() === PEDRO_RAMIREZ;
+    $nextIsPedro = Players::getNext($player, $currentEvent && $currentEvent->isResurrectionEffect())->isCharacter(PEDRO_RAMIREZ);
     if ($cards->count() > 1 && $nextIsPedro) {
       $this->gamestate->jumpToState(ST_PRE_ELIMINATE);
     } else {
@@ -86,12 +86,12 @@ trait EndOfLifeTrait
   /**
    * Eliminate a player
    */
-  public function stEliminate()
+  public function stEliminate(): void
   {
     $ctx = Stack::getCtx();
     $player = Players::get($ctx['pId']);
     $pId = $player->eliminate();
-    if ($pId === true) {
+    if ($pId === null) {
       Stack::finishState();
     } else {
       $this->gamestate->changeActivePlayer($pId);

@@ -1,5 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards\Events;
+
 use BANG\Models\AbstractEventCard;
 
 class Judge extends AbstractEventCard
@@ -14,10 +18,7 @@ class Judge extends AbstractEventCard
     $this->expansion = FISTFUL_OF_CARDS;
   }
 
-  /**
-   * @return boolean
-   */
-  public function isCanPlayBlueGreenCards()
+  public function isCanPlayBlueGreenCards(): bool
   {
     return false;
   }

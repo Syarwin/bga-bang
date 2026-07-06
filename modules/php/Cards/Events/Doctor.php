@@ -1,7 +1,12 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards\Events;
+
 use BANG\Managers\Players;
 use BANG\Models\AbstractEventCard;
+use BANG\Models\Player;
 
 class Doctor extends AbstractEventCard
 {
@@ -15,7 +20,7 @@ class Doctor extends AbstractEventCard
     $this->expansion = HIGH_NOON;
   }
 
-  public function resolveEffect($player = null)
+  public function resolveEffect(Player $player): void
   {
     $players = Players::getLivingPlayers();
     $minHp = min($players->map(function ($player) { return $player->getHp(); })->toArray());

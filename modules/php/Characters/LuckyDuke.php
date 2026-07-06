@@ -1,13 +1,18 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Characters;
+
 use BANG\Core\Notifications;
 use BANG\Core\Log;
 use BANG\Managers\Cards;
 use BANG\Managers\Rules;
+use BANG\Models\Player;
 
-class LuckyDuke extends \BANG\Models\Player
+class LuckyDuke extends Player
 {
-  public function __construct($row = null)
+  public function __construct(?array $row = null)
   {
     $this->character = LUCKY_DUKE;
     $this->character_name = clienttranslate('Lucky Duke');
@@ -23,7 +28,7 @@ class LuckyDuke extends \BANG\Models\Player
     $this->selectedCard = null;
   }
 
-  public function flip($src, $missedNeeded = null)
+  public function flip($src): void
   {
     if (Rules::isAbilityAvailable()) {
       $cards = Cards::drawForLocation(LOCATION_SELECTION, 2);

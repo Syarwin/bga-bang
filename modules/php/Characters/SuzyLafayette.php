@@ -1,11 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Characters;
+
 use BANG\Core\Stack;
 use BANG\Managers\Rules;
+use BANG\Models\Player;
 
-class SuzyLafayette extends \BANG\Models\Player
+class SuzyLafayette extends Player
 {
-  public function __construct($row = null)
+  public function __construct(?array $row = null)
   {
     $this->character = SUZY_LAFAYETTE;
     $this->character_name = clienttranslate('Suzy Lafayette');
@@ -14,7 +19,7 @@ class SuzyLafayette extends \BANG\Models\Player
     parent::__construct($row);
   }
 
-  public function checkHand()
+  public function checkHand(): void
   {
     if ($this->getHand()->count() == 0 && Rules::isAbilityAvailable() && $this->hp > 0) {
       $ctx = Stack::getCtx();
@@ -27,7 +32,7 @@ class SuzyLafayette extends \BANG\Models\Player
     }
   }
 
-  public function useAbility()
+  public function useAbility(): void
   {
     if ($this->getHand()->count() == 0) {
       $this->drawCards(1);
@@ -37,7 +42,7 @@ class SuzyLafayette extends \BANG\Models\Player
   /**
    * {{@inheritDoc}}
    */
-  public function getDefensiveOptions()
+  public function getDefensiveOptions(): array
   {
     $options = parent::getDefensiveOptions();
     if ($this->getHand()->count() == 1 && isset($options['cards'][0]['amount'])) {

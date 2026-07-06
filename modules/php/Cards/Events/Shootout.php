@@ -1,5 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards\Events;
+
 use BANG\Models\AbstractEventCard;
 
 class Shootout extends AbstractEventCard
@@ -14,7 +18,7 @@ class Shootout extends AbstractEventCard
     $this->expansion = HIGH_NOON;
   }
 
-  public function getBangsAmount()
+  public function getBangsAmount(): int
   {
     return 2;
   }

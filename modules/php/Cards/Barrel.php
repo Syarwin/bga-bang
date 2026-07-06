@@ -1,14 +1,21 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards;
+
 use BANG\Core\Stack;
 use BANG\Core\Notifications;
 use BANG\Managers\Rules;
+use BANG\Models\AbstractCard;
+use BANG\Models\BlueCard;
+use BANG\Models\Player;
 
-class Barrel extends \BANG\Models\BlueCard
+class Barrel extends BlueCard
 {
-  public function __construct($id = null)
+  public function __construct(?array $params = null)
   {
-    parent::__construct($id);
+    parent::__construct($params);
     $this->type = CARD_BARREL;
     $this->name = clienttranslate('Barrel');
     $this->text = clienttranslate("Reveal top card from the deck when you're attacked. If it's a heart it's a miss.");
@@ -21,20 +28,20 @@ class Barrel extends \BANG\Models\BlueCard
     $this->effect = ['type' => DEFENSIVE];
   }
 
-  public function wasPlayed()
+  public function wasPlayed(): bool
   {
     $atom = Stack::top();
     return isset($atom['used']) && in_array($this->type, $atom['used']);
   }
 
-  public function activate($player, $args = [])
+  public function activate(Player $player, array $args = []): void
   {
     Notifications::useCard($player, $this);
     Stack::suspendCtx();
     $player->addFlipAtom($this);
   }
 
-  public function resolveFlipped($card, $player)
+  public function resolveFlipped(AbstractCard $card, Player $player): void
   {
     $missedNeeded = Stack::top()['missedNeeded'] ?? 1;
 

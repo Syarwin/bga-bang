@@ -1,11 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards;
 
-class Schofield extends \BANG\Models\WeaponCard
+use BANG\Models\WeaponCard;
+
+class Schofield extends WeaponCard
 {
-  public function __construct($id = null, $copy = '')
+  public function __construct(?array $params = null)
   {
-    parent::__construct($id, $copy);
+    parent::__construct($params);
     $this->type = CARD_SCHOFIELD;
     $this->name = clienttranslate('Schofield');
     $this->text = clienttranslate('Range: 2');

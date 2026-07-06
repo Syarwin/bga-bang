@@ -17,11 +17,7 @@ trait PeyoteTrait
     ];
   }
 
-  /**
-   * @param boolean $guessedRed
-   * @return void
-   */
-  public function actPeyoteGuess($guessedRed)
+  public function actPeyoteGuess(bool $guessedRed): void
   {
     self::checkAction('actPeyoteGuess');
     $flipped = Cards::drawForLocation(LOCATION_FLIPPED, 1)->first();

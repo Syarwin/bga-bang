@@ -1,5 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards\Events;
+
 use BANG\Core\Notifications;
 use BANG\Models\AbstractEventCard;
 
@@ -15,10 +19,7 @@ class Ambush extends AbstractEventCard
     $this->expansion = FISTFUL_OF_CARDS;
   }
 
-  /**
-   * @return boolean
-   */
-  public function isDistanceForcedToOne()
+  public function isDistanceForcedToOne(): bool
   {
     return true;
   }

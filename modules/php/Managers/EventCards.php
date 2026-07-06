@@ -1,9 +1,11 @@
 <?php
+
 namespace BANG\Managers;
 
 use BANG\Helpers\GameOptions;
 use BANG\Models\AbstractEventCard;
 use BANG\Models\Player;
+use BgaVisibleSystemException;
 
 /*
  * Cards: all utility functions concerning cards are here
@@ -13,6 +15,13 @@ class EventCards extends \BANG\Helpers\Pieces
   protected static $table = 'events';
   protected static $prefix = 'card_';
   protected static $customFields = ['type'];
+
+  /** @var bool use for tests only together with $testActiveCard */
+  protected static bool $isTest = false;
+
+  /** @var AbstractEventCard|null used for tests only */
+  protected static ?AbstractEventCard $testActiveCard = null;
+
   protected static function cast($card)
   {
     return self::getCardByType((int) $card['type'], $card);
@@ -92,7 +101,7 @@ class EventCards extends \BANG\Helpers\Pieces
   public static function getCardByType($cardType, $data = null)
   {
     if (!isset(self::$classes[$cardType])) {
-      throw new \BgaVisibleSystemException("getCardByType: Unknown card $cardType");
+      throw new BgaVisibleSystemException("getCardByType: Unknown card $cardType");
     }
     $name = 'BANG\Cards\Events\\' . self::$classes[$cardType];
     return new $name($data);
@@ -123,11 +132,20 @@ class EventCards extends \BANG\Helpers\Pieces
     return self::countInLocation(LOCATION_EVENTS_DECK);
   }
 
+  public static function setActiveForTest(?AbstractEventCard $eventCard = null): void
+  {
+    self::$isTest = true;
+    self::$testActiveCard = $eventCard;
+  }
+
   /**
    * @return AbstractEventCard|null
    */
   public static function getActive()
   {
+    if (self::$isTest) {
+      return self::$testActiveCard;
+    }
     return GameOptions::isEvents() ? self::getTopOf(LOCATION_EVENTS_DISCARD) : null;
   }
 
@@ -151,18 +169,14 @@ class EventCards extends \BANG\Helpers\Pieces
     return self::getActive();
   }
 
-  /**
-   * @param Player $player
-   * @return boolean
-   */
-  public static function isResurrectionPossible($player = null)
+  public static function isResurrectionPossible(?Player $player = null): bool
   {
     $cards = self::getInLocation(LOCATION_EVENTS_DECK);
     $active = self::getActive();
     if (!is_null($active)) {
       $cards = $cards->push($active);
     }
-    $resurrectionCards = $cards->filter(function ($card) use ($player) {
+    $resurrectionCards = $cards->filter(function (AbstractEventCard $card) use ($player) {
       return $card->isResurrectionEffect($player);
     });
     return count($resurrectionCards) > 0;
@@ -185,7 +199,7 @@ class EventCards extends \BANG\Helpers\Pieces
           FISTFUL_OF_CARDS => CARD_FISTFUL_OF_CARDS,
         ][$currentExpansion];
       default:
-        throw new \BgaVisibleSystemException('$currentEventExpansions does not intersect with $eventExpansions, please report as a bug');
+        throw new BgaVisibleSystemException('$currentEventExpansions does not intersect with $eventExpansions, please report as a bug');
     }
   }
 

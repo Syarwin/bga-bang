@@ -1,5 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards\Events;
+
 use BANG\Core\Stack;
 use BANG\Models\AbstractEventCard;
 use BANG\Models\Player;
@@ -16,10 +20,7 @@ class HardLiquor extends AbstractEventCard
     $this->expansion = FISTFUL_OF_CARDS;
   }
 
-  /**
-   * @param Player $player
-   */
-  public function resolveEffect($player = null)
+  public function resolveEffect(Player $player): void
   {
       $atom = Stack::newAtom(ST_HARD_LIQUOR, [
         'pId' => $player->getId(),
@@ -27,7 +28,7 @@ class HardLiquor extends AbstractEventCard
       Stack::insertOnTop($atom);
   }
 
-  public function isAllowPlayerPhaseOne()
+  public function isAllowPlayerPhaseOne(): bool
   {
     return false;
   }

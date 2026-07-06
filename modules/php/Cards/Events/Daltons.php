@@ -1,8 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards\Events;
+
 use BANG\Core\Stack;
 use BANG\Managers\Players;
 use BANG\Models\AbstractEventCard;
+use BANG\Models\Player;
 
 class Daltons extends AbstractEventCard
 {
@@ -16,7 +21,7 @@ class Daltons extends AbstractEventCard
     $this->expansion = HIGH_NOON;
   }
 
-  public function resolveEffect($player = null)
+  public function resolveEffect(Player $player): void
   {
     $players = Players::getLivingPlayersStartingWith($player);
     $playersWithBlueCards = $players->filter(function ($player) {

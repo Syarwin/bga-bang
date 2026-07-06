@@ -6,7 +6,7 @@ use BANG\Core\Stack;
 
 trait BloodBrothersTrait
 {
-  public function argBloodBrothers()
+  public function argBloodBrothers(): array
   {
     $activePlayer = Players::getActive();
     $otherPlayers = Players::getLivingPlayersStartingWith($activePlayer, false, $activePlayer->getId());
@@ -23,11 +23,7 @@ trait BloodBrothersTrait
     ];
   }
 
-  /**
-   * @param int|null $playerId
-   * @return void
-   */
-  public function stBloodBrothers()
+  public function stBloodBrothers(): void
   {
     $activePlayer = Players::getActive();
     if ($activePlayer->getHp() === 1) {
@@ -45,11 +41,7 @@ trait BloodBrothersTrait
     }
   }
 
-  /**
-   * @param int|null $playerId
-   * @return void
-   */
-  public function actReactBloodBrothers($playerId = null)
+  public function actReactBloodBrothers(?int $playerId = null): void
   {
     self::checkAction('actReactBloodBrothers');
     if ($playerId) {

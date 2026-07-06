@@ -1,12 +1,18 @@
 <?php
+
+declare(strict_types=1);
+
 namespace BANG\Cards;
+
+use BANG\Models\AbstractCard;
+use BANG\Models\BrownCard;
 use BANG\Models\Player;
 
-class Indians extends \BANG\Models\BrownCard
+class Indians extends BrownCard
 {
-  public function __construct($id = null, $copy = '')
+  public function __construct(?array $params = null)
   {
-    parent::__construct($id, $copy);
+    parent::__construct($params);
     $this->type = CARD_INDIANS;
     $this->name = clienttranslate('Indians!');
     $this->text = clienttranslate('All other players discard a BANG! or lose 1 life point.');
@@ -23,30 +29,24 @@ class Indians extends \BANG\Models\BrownCard
     ];
   }
 
-  /**
-   * @param Player $player
-   * @param array $args
-   * @return void
-   */
-
-  public function play($player, $args)
+  public function play(Player $player, array $args): void
   {
     parent::play($player, $args);
     $ids = $player->getOrderedOtherPlayers();
     $player->attack($this, $ids);
   }
 
-  public function getReactionOptions($player)
+  public function getReactionOptions(Player $player): array
   {
     return $player->getBangCards();
   }
 
-  public function pass($player)
+  public function pass(Player $player): void
   {
     $player->loseLife();
   }
 
-  public function react($card, $player)
+  public function react(AbstractCard $card, Player $player): void
   {
     $player->discardCard($card);
   }
