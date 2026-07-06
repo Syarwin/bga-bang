@@ -112,6 +112,7 @@ div.bang-card {
     background-image:url("img/card_borders.png");
     background-size:cover;
     border-radius: 6px;
+    color: black;
 
     .card-name {
     	position:absolute;
@@ -243,5 +244,15 @@ div.bang-card {
   .card-copy-color-override[data-color-override=#{$suitChar}]:not([data-color=#{$suitChar}])::before {
     content:$icon;
     color:$color;
+  }
+}
+
+html[data-theme="dark"] {
+  .card-copy-color {
+    filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.85));
+  }
+
+  #role-card {
+    color: black;
   }
 }

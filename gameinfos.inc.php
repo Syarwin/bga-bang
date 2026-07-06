@@ -12,7 +12,6 @@
   'slow_additional_time' => 50,
   'tie_breaker_description' => '',
   'losers_not_ranked' => true,
-  'is_beta' => 0,
   'is_coop' => 0,
   'player_colors' => ['ff0000', '008000', '0000ff', 'ffa500', '773300', 'ffff00', 'ff00ff'],
   'favorite_colors_support' => true,
@@ -20,7 +19,5 @@
     'min' => 740,
     'max' => null,
   ],
-  'is_sandbox' => false,
-  'turnControl' => 'simple',
 ];
 ?>
