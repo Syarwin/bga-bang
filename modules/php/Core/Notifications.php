@@ -17,14 +17,14 @@ class Notifications
   protected static function notifyAll($name, $msg, $data)
   {
     self::updateArgs($data);
-      bang::get()->notifyAllPlayers($name, $msg, $data);
+    bang::get()->notifyAllPlayers($name, $msg, $data);
   }
 
   protected static function notify($pId, $name, $msg, $data)
   {
     self::updateArgs($data);
     $pId = is_int($pId) ? $pId : $pId->getId();
-      bang::get()->notifyPlayer($pId, $name, $msg, $data);
+    bang::get()->notifyPlayer($pId, $name, $msg, $data);
   }
 
   /**
@@ -439,7 +439,6 @@ class Notifications
   /**
    * characterChosen: send all info about
    * @param Player $player
-   * @param Player $character
    */
   public static function characterChosen($player)
   {
@@ -449,6 +448,7 @@ class Notifications
       'character_name' => $characterName,
       'character' => $player->getUiCharacterSpecificData(),
       'player' => $player,
+      'player_name' => $player->getName(false),
     ]);
   }
 
@@ -493,13 +493,13 @@ class Notifications
   {
     if (isset($data['player'])) {
       $data['player_id'] = $data['player']->getId();
-      $data['player_name'] = $data['player']->getName();
+      $data['player_name'] = !isset($data['player_name']) ? $data['player']->getName() : $data['player_name'];
       unset($data['player']);
     }
 
     if (isset($data['player2'])) {
       $data['player_id2'] = $data['player2']->getId();
-      $data['player_name2'] = $data['player2']->getName();
+      $data['player_name2'] = !isset($data['player_name2']) ? $data['player2']->getName() : $data['player_name2'];
       unset($data['player2']);
     }
 

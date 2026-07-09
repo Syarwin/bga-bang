@@ -78,9 +78,13 @@ class Player extends \BANG\Helpers\DB_Manager
     return $this->no;
   }
 
-  public function getName()
+  public function getName(bool $withCharacter = true): string
   {
-    return $this->name;
+    $name = $this->name;
+    if ($withCharacter && $this->getCharName()) {
+      $name .= ' (' . $this->getCharName() . ')';
+    }
+    return $name;
   }
 
   public function getColor()
